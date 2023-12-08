@@ -2,7 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.mygdx.game.DungeonCrawler;
+import com.mygdx.game.Drop;
 
 // Please note that on macOS your application needs to be started with the -XstartOnFirstThread JVM argument
 public class DesktopLauncher {
@@ -11,7 +11,7 @@ public class DesktopLauncher {
 		config.setForegroundFPS(60);
 		config.setWindowedMode(800, 480);
 		config.useVsync(true);
-		config.setTitle("Dungeon Crawler");
-		new Lwjgl3Application(new DungeonCrawler(), config);
+		config.setTitle("Drop");
+		new Lwjgl3Application(new Drop(), config);
 	}
 }
