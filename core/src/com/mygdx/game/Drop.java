@@ -92,17 +92,14 @@ public class Drop extends ApplicationAdapter {
       for (Iterator<Rectangle> iter = raindrops.iterator(); iter.hasNext(); ) {
          Rectangle raindrop = iter.next();
          raindrop.y -= 200 * Gdx.graphics.getDeltaTime();
-         if(raindrop.y + 64 < 0) {
-            if(raindrop.overlaps(bucket)) {
-               dropSound.play();
-               iter.remove();
-            }
+         if(raindrop.y + 64 < 0) iter.remove();
+         if(raindrop.overlaps(bucket)) {
+            dropSound.play();
             iter.remove();
          }
       }
-
-
    }
+
    private void spawnRaindrop() {
       Rectangle raindrop = new Rectangle();
       raindrop.x = MathUtils.random(0, 800-64);
@@ -111,9 +108,14 @@ public class Drop extends ApplicationAdapter {
       raindrop.height = 64;
       raindrops.add(raindrop);
       lastDropTime = TimeUtils.nanoTime();
-
-
    }
 
-   // rest of class omitted for clarity
+   @Override
+   public void dispose() {
+      dropImage.dispose();
+      bucketImage.dispose();
+      dropSound.dispose();
+      rainMusic.dispose();
+      batch.dispose();
+   }
 }
