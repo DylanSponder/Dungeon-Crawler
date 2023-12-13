@@ -1,31 +1,42 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class DungeonCrawler extends ApplicationAdapter {
 	SpriteBatch batch;
-	Texture img;
+
+	Texture roomBackground;
+
+	private OrthographicCamera camera;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		roomBackground = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetFloor.png"));
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, 800, 480);
+
 	}
 
 	@Override
 	public void render () {
-		ScreenUtils.clear(1, 0, 0, 1);
+
+		camera.update();
+		ScreenUtils.clear(1, 1, 1, 1);
 		batch.begin();
-		batch.draw(img, 0, 0);
+		batch.draw(roomBackground, 1, 1);
 		batch.end();
+
 	}
 	
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
+
 	}
 }
