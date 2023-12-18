@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import java.util.logging.Level;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -48,6 +50,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//create camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 600, 480);
+    LevelParser l = new LevelParser();
+    l.doesWorking("level.csv");
 	}
 
 	@Override
