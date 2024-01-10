@@ -383,4 +383,17 @@ public class DungeonCrawler extends ApplicationAdapter {
 		shape.dispose();
 		return body;
 	}
+	public Body createWall(float x,float y){
+		Body body;
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyDef.BodyType.StaticBody;
+		bodyDef.position.set(x+8,y+8);
+		bodyDef.fixedRotation = true;
+		body = world.createBody(bodyDef);
+		PolygonShape shape = new PolygonShape();
+		shape.setAsBox(8,8);
+		body.createFixture(shape, 1.0f);
+		shape.dispose();
+		return body;
+	}
 }
