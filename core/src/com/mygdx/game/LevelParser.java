@@ -21,6 +21,7 @@ public class LevelParser {
         records.add(Arrays.asList(values));
       }
     }
+    System.out.println("Level data:" + Arrays.toString(records.toArray()));
     return records;
   }
 
