@@ -40,9 +40,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private Sprite playerLeft;
 	private Sprite playerRight;
 
-	float playerSpeed = 100.f;
 	float playerX = 0;
 	float playerY = 0;
+
+	float playerXSpeed = 0;
+
+	float playerYSpeed = 0;
+
 
 	public LevelParser l;
 
@@ -308,13 +312,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 		renderer.render();
 
 		//set camera position to always be centred on the playerSprite
-		camera.position.set(playerX+ playerSprite.getWidth()/2, playerY+ playerSprite.getHeight()/2, 0);
+		camera.position.set(player.getPosition().x+ playerSprite.getWidth()/2, player.getPosition().y+ playerSprite.getHeight()/2, 0);
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 
 		//draw playerSprite by delta speed at current coordinates
 		batch.begin();
-		batch.draw(playerSprite, playerX, playerY, 16, 16);
+		batch.draw(playerSprite, player.getPosition().x-8f, player.getPosition().y-8f, 16, 16);
 		batch.end();
 
 		b2dr.render(world,camera.combined);
@@ -329,7 +333,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public void update(float delta){
 		world.step(1/60f,6,2);
 
-		inputUpdate(delta);
+			inputUpdate(delta);
 	}
 
 	@Override
@@ -340,24 +344,29 @@ public class DungeonCrawler extends ApplicationAdapter {
 	}
 
 	public void inputUpdate(float delta) {
+
+		playerXSpeed = 0;
+		playerYSpeed = 0;
 		//move playerSprite Sprite by delta speed according to button WASD press
 		if (Gdx.input.isKeyPressed(Keys.W)) {
 			//change playerSprite Sprite to upwards facing playerUp Sprite etc
 			playerSprite = playerUp;
-			playerY += Gdx.graphics.getDeltaTime() * playerSpeed;
+			playerYSpeed = 100f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.A)) {
 			playerSprite = playerLeft;
-			playerX -= Gdx.graphics.getDeltaTime() * playerSpeed;
+			playerXSpeed = -100f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.S)) {
 			playerSprite = playerDown;
-			playerY -= Gdx.graphics.getDeltaTime() * playerSpeed;
+			playerYSpeed =-100f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.D)) {
 			playerSprite = playerRight;
-			playerX += Gdx.graphics.getDeltaTime() * playerSpeed;
+			playerXSpeed = 100f;
 		}
+
+		player.setLinearVelocity(playerXSpeed,playerYSpeed);
 	}
 
 	//create player with physical box2D properties
