@@ -216,68 +216,56 @@ public class DungeonCrawler extends ApplicationAdapter {
 				for (int i2 = 0; i2 < layerSize; i2++) {
 					Cell currentCell = new Cell();
 					switch (levelTextures.get(i2)) {
-						case "topLeftFloorTile":
-							currentCell = topLeftFloorTile;
-							break;
-						case "topFloorTile":
-							currentCell = topFloorTile;
-							break;
-						case "topRightFloorTile":
-							currentCell = topRightFloorTile;
-							break;
-						case "leftFloorTile":
-							currentCell = leftFloorTile;
-							break;
 						case "middleFloorTile":
 							currentCell = middleFloorTile;
 							break;
-						case "rightFloorTile":
-							currentCell = rightFloorTile;
-							break;
-						case "bottomLeftFloorTile":
-							currentCell = bottomLeftFloorTile;
-							break;
-						case "bottomFloorTile":
-							currentCell = bottomFloorTile;
-							break;
-						case "bottomRightFloorTile":
-							currentCell = bottomRightFloorTile;
-							break;
 						case "topLeftWallTile":
 							currentCell = topLeftWallTile;
+							Body newTopLeftWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
 							break;
 						case "topWallTile":
 							currentCell = topWallTile;
+							Body newTopWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
 							break;
 						case "topRightWallTile":
 							currentCell = topRightWallTile;
+							Body newTopRightWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
 							break;
 						case "leftWallTile":
 							currentCell = leftWallTile;
+							Body newLeftWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
 							break;
 						case "rightWallTile":
 							currentCell = rightWallTile;
+							Body newRightWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
 							break;
 						case "bottomLeftWallTile":
 							currentCell = bottomLeftWallTile;
+							Body newBottomLeftWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
 							break;
 						case "bottomWallTile":
 							currentCell = bottomWallTile;
+							Body newBottomWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
 							break;
 						case "bottomRightWallTile":
 							currentCell = bottomRightWallTile;
+							Body newBottomRightWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
 							break;
 						case "topLeftTurnTile":
 							currentCell = topLeftTurnTile;
+							Body newTopLeftTurnWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
 							break;
 						case "topRightTurnTile":
 							currentCell = topRightTurnTile;
+							Body newTopRightTurnWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
 							break;
 						case "bottomLeftTurnTile":
 							currentCell = bottomLeftTurnTile;
+							Body newBottomLeftTurnWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
 							break;
 						case "bottomRightTurnTile":
 							currentCell = bottomRightTurnTile;
+							Body newBottomRightTurnWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
 							break;
 					}
 					layer.setCell(i2+16, levelY, currentCell);
@@ -383,6 +371,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		shape.dispose();
 		return body;
 	}
+
 	public Body createWall(float x,float y){
 		Body body;
 		BodyDef bodyDef = new BodyDef();
