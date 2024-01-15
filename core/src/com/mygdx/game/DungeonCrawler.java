@@ -61,6 +61,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	Texture roomHoleTexture;
 
 	private OrthographicCamera camera;
+  final static float DEFAULT_VIEWPORT_WIDTH = 300f;
 
 	@Override
 	public void create() {
@@ -314,7 +315,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 	@Override
 	public void resize(int width, int height) {
-		camera.setToOrtho(false, width/3, height/3);
+    // We multiply the viewport height by the aspect ratio to maintain
+    // correct proportions for objects when drawn.
+    float aspectRatio = (float) height/width;
+    camera.viewportHeight = DEFAULT_VIEWPORT_WIDTH * aspectRatio;
+    camera.viewportWidth = DEFAULT_VIEWPORT_WIDTH;
+    camera.update();
 	}
 
 	//update method for physics, camera and input
