@@ -18,15 +18,15 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch batch;
-	private Stage stage;
+  private SpriteBatch hudBatch;
 	private World world;
 	private Box2DDebugRenderer b2dr;
 	private Body bodyTest;
@@ -61,19 +61,34 @@ public class DungeonCrawler extends ApplicationAdapter {
 	Texture roomHoleTexture;
 
 	private OrthographicCamera camera;
-  final static float DEFAULT_VIEWPORT_WIDTH = 300f;
+  public static final float DEFAULT_VIEWPORT_WIDTH = 300f;
+  public static HUD hud;
 
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
+		hudBatch = new SpriteBatch();
 		world = new World(new Vector2(0,0f),false);
-		stage = new Stage(new ScreenViewport());
 
 		//grab textures
 		playerTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/GoldKnight/SpriteSheet.png"));
 		roomBackground = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/Interior/CustomTileset.png"));
 		roomDoorTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHouse.png"));
 		roomHoleTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHole.png"));
+
+		//get width and height of the game window
+		int h = Gdx.graphics.getHeight();
+		int w = Gdx.graphics.getWidth();
+
+		//create camera and set the viewport
+		camera = new OrthographicCamera(0,0);
+		camera.setToOrtho(false, w/3, h/3);
+
+    // TODO: Add hearts to HUD
+    Viewport vp = new FitViewport(camera.viewportWidth, camera.viewportHeight);
+    hud = new HUD(vp, hudBatch);
+		Texture heartTexture = new Texture(Gdx.files.internal("NinjaAdventure/HUD/Heart.png"));
+    Sprite heartSprite = new Sprite(heartTexture, 16, 16);
 
 		//set starting playerSprite position
 		playerX = Gdx.graphics.getWidth()/30*16;
@@ -126,14 +141,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 		roomBottomRightTurnTexture.setRegion(48,32,16,16);
 
 		doorTexture.setRegion(144,48,16,16);
-
-		//get width and height of the game window
-		int h = Gdx.graphics.getHeight();
-		int w = Gdx.graphics.getWidth();
-
-		//create camera and set the viewport
-		camera = new OrthographicCamera(0,0);
-		camera.setToOrtho(false, w/3, h/3);
 
 		//create an input processor to handle single button events
 		Gdx.input.setInputProcessor(new GameInputProcessor(){
@@ -310,6 +317,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 		batch.draw(playerSprite, player.getPosition().x-8f, player.getPosition().y-8f, 16, 16);
 		batch.end();
 
+		hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
+    hud.stage.draw();
+
 		b2dr.render(world,camera.combined);
 	}
 
@@ -321,6 +331,8 @@ public class DungeonCrawler extends ApplicationAdapter {
     camera.viewportHeight = DEFAULT_VIEWPORT_WIDTH * aspectRatio;
     camera.viewportWidth = DEFAULT_VIEWPORT_WIDTH;
     camera.update();
+    // FIXME: For some reason this affects the scaling of the rest of the game...
+    hud.stage.getViewport().update(width, height);
 	}
 
 	//update method for physics, camera and input
