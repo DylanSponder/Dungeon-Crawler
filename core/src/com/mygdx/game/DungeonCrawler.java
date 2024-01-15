@@ -332,7 +332,7 @@ public class DungeonCrawler extends ApplicationAdapter {
     camera.viewportWidth = DEFAULT_VIEWPORT_WIDTH;
     camera.update();
     // FIXME: For some reason this affects the scaling of the rest of the game...
-    hud.stage.getViewport().update(width, height);
+    // hud.stage.getViewport().update(width, height);
 	}
 
 	//update method for physics, camera and input
