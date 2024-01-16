@@ -29,37 +29,30 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch batch;
-  private SpriteBatch hudBatch;
+  	private SpriteBatch hudBatch;
 	private World world;
 	private Box2DDebugRenderer b2dr;
 	private Body bodyTest;
 	private BodyDef bodyDef;
 	private Fixture playerHitbox;
 	private Body player;
-	Texture playerTexture;
+	private Texture playerTexture;
 	private Sprite playerSprite;
 	private Sprite playerUp;
 	private Sprite playerDown;
 	private Sprite playerLeft;
 	private Sprite playerRight;
-
 	float playerX = 0;
 	float playerY = 0;
 	float playerXSpeed = 0;
 	float playerYSpeed = 0;
-
 	public LevelParser l;
-
 	public RenderRules r;
-
 	private TiledMap map;
-
 	private TiledMapRenderer renderer;
-
-	Texture roomBackground;
-	Texture roomDoorTexture;
-	Texture roomHoleTexture;
-
+	private Texture roomBackground;
+	private Texture roomDoorTexture;
+	private Texture roomHoleTexture;
 	private OrthographicCamera camera;
   public static final float DEFAULT_VIEWPORT_WIDTH = 300f;
   public static HUD hud;
@@ -142,7 +135,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		doorTexture.setRegion(144,48,16,16);
 
-		//create an input processor to handle single button events
+		//create an input processor to handle single button press events
 		Gdx.input.setInputProcessor(new GameInputProcessor(){
 			@Override public boolean scrolled (float amountX, float amountY) {
 				if((camera.zoom>=0.3f&&camera.zoom<=1f)){
@@ -272,21 +265,21 @@ public class DungeonCrawler extends ApplicationAdapter {
 						case "topLeftTurnTile":
 							currentCell = topLeftTurnTile;
 							//Body newTopLeftTurnWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
-							Body newTopLeftTurn = createWallTurn((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16,16f,0f);
+							Body newTopLeftTurn = createWallTurn((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16,15.9f,0.1f);
 							break;
 						case "topRightTurnTile":
 							currentCell = topRightTurnTile;
 							//Body newTopRightTurnWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
-							Body newTopRightTurn = createWallTurn((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16,0f,0f);
+							Body newTopRightTurn = createWallTurn((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16,0.1f,0.1f);
 							break;
 						case "bottomLeftTurnTile":
 							currentCell = bottomLeftTurnTile;
 							//Body newBottomLeftTurnWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
-							Body newBottomLeftTurn = createWallTurn((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16,16f,16f);
+							Body newBottomLeftTurn = createWallTurn((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16,15.9f,15.9f);
 							break;
 						case "bottomRightTurnTile":
 							currentCell = bottomRightTurnTile;
-							Body newBottomRightTurn = createWallTurn((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16,0f,16f);
+							Body newBottomRightTurn = createWallTurn((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16,0.1f,15.9f);
 							break;
 					}
 					layer.setCell(i2+16, levelY, currentCell);
@@ -322,18 +315,20 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//set camera position to always be centred on the playerSprite
 		camera.position.set(player.getPosition().x+ playerSprite.getWidth()/2, player.getPosition().y+ playerSprite.getHeight()/2, 0);
-		camera.update();
-		batch.setProjectionMatrix(camera.combined);
 
-		//draw playerSprite by delta speed at current coordinates
+		//draw playerSprite on player Box2D object
 		batch.begin();
-		batch.draw(playerSprite, player.getPosition().x-8f, player.getPosition().y-4f, 16, 16);
+		batch.draw(playerSprite, player.getPosition().x-8f, player.getPosition().y-7f, 16, 16);
 		batch.end();
 
-		hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
-    hud.stage.draw();
+		//renders all physics object - for debug only
+		//b2dr.render(world,camera.combined);
 
-		b2dr.render(world,camera.combined);
+		camera.update();
+
+		batch.setProjectionMatrix(camera.combined);
+		hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
+    	hud.stage.draw();
 	}
 
 	@Override
@@ -370,39 +365,31 @@ public class DungeonCrawler extends ApplicationAdapter {
 			//change playerSprite Sprite to upwards facing playerUp Sprite etc
 			playerSprite = playerUp;
 			playerYSpeed = 100f;
+
+			//to change the player hitbox - currently unused
+			/*
 			player.destroyFixture(playerHitbox);
 			PolygonShape shape = new PolygonShape();
 			shape.setAsBox(7,7);
 			player.createFixture(shape,1.0f);
+			*/
 		}
 		if (Gdx.input.isKeyPressed(Keys.A)) {
 			playerSprite = playerLeft;
 			playerXSpeed = -100f;
-			player.destroyFixture(playerHitbox);
-			PolygonShape shape = new PolygonShape();
-			shape.setAsBox(6,7);
-			player.createFixture(shape,1.0f);
 		}
 		if (Gdx.input.isKeyPressed(Keys.S)) {
 			playerSprite = playerDown;
 			playerYSpeed =-100f;
-			player.destroyFixture(playerHitbox);
-			PolygonShape shape = new PolygonShape();
-			shape.setAsBox(7,7);
-			player.createFixture(shape,1.0f);
 		}
 		if (Gdx.input.isKeyPressed(Keys.D)) {
 			playerSprite = playerRight;
 			playerXSpeed = 100f;
-			player.destroyFixture(playerHitbox);
-			PolygonShape shape = new PolygonShape();
-			shape.setAsBox(6,7);
-			player.createFixture(shape,1.0f);
 		}
 		player.setLinearVelocity(playerXSpeed,playerYSpeed);
 	}
 
-	//create player with physical box2D properties
+	//create player with physical Box2D properties
 	public Body createPlayer(){
 		Body body;
 		BodyDef bodyDef = new BodyDef();
@@ -411,7 +398,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		bodyDef.fixedRotation = true;
 		body = world.createBody(bodyDef);
 		PolygonShape playerShape = new PolygonShape();
-		playerShape.setAsBox(6,8);
+		playerShape.setAsBox(5.5f,5.5f);
 		playerHitbox = body.createFixture(playerShape, 1.0f);
 		playerShape.dispose();
 		return body;
