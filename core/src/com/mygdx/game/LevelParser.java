@@ -31,8 +31,7 @@ public class LevelParser {
       symbols = read(filename);
       System.out.println(Arrays.toString(symbols.toArray()));
     } catch (Exception e) {
-      System.out.println("FUCK");
-      System.out.println(e);
+      System.out.println("Level loading error: " + e);
     }
   }
 }

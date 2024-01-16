@@ -1,7 +1,10 @@
 package com.mygdx.game;
 
+import java.awt.geom.RectangularShape;
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -31,7 +34,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private Box2DDebugRenderer b2dr;
 	private Body bodyTest;
 	private BodyDef bodyDef;
-
+	private Fixture playerHitbox;
 	private Body player;
 	Texture playerTexture;
 	private Sprite playerSprite;
@@ -42,11 +45,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 	float playerX = 0;
 	float playerY = 0;
-
 	float playerXSpeed = 0;
-
 	float playerYSpeed = 0;
-
 
 	public LevelParser l;
 
@@ -92,7 +92,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//set starting playerSprite position
 		playerX = Gdx.graphics.getWidth()/30*16;
-		playerY = Gdx.graphics.getHeight()/30*16;
+		playerY = Gdx.graphics.getHeight()/30*16-16;
 
 		//outline playerSprite Sprites
 		playerSprite = new Sprite(playerTexture, 0, 0, 16, 16);
@@ -102,7 +102,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		playerRight = new Sprite(playerTexture, 48, 0, 16, 16);
 
 		//create each tile of the room texture as a TextureRegion
-		//-to be moved to another class
+		//TODO move to separate class
 		TextureRegion roomMiddleFloorTexture = new TextureRegion(roomBackground,0,0,16,16);
 
 		TextureRegion roomLeftWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
@@ -123,7 +123,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		TextureRegion holeTexture = new TextureRegion(roomHoleTexture,0,0,16,16);
 
 		//set TextureRegion source coordinates
-		//-to be moved to another class
+		//TODO move to separate class
 		roomMiddleFloorTexture.setRegion(96,16,16,16);
 
 		roomTopLeftWallTexture.setRegion(0,0,16,16);
@@ -145,14 +145,26 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//create an input processor to handle single button events
 		Gdx.input.setInputProcessor(new GameInputProcessor(){
 			@Override public boolean scrolled (float amountX, float amountY) {
-				if(camera.zoom>=0.5&&camera.zoom<=1){
-					camera.zoom+=amountY*0.02f;
+				if((camera.zoom>=0.3f&&camera.zoom<=1f)){
+						if (camera.zoom==1f){
+							if (amountY < 0f){
+								camera.zoom+=amountY*0.02f;
+							}
+						}
+						else if (camera.zoom==0.3f){
+							if (amountY > 0f){
+								camera.zoom+=amountY*0.02f;
+							}
+						}
+						else {
+								camera.zoom+=amountY*0.02f;
+						}
 				}
-				else if(camera.zoom>1){
-					camera.zoom=1;
+				else if(camera.zoom>1f){
+									camera.zoom=1f;
 				}
-				else if(camera.zoom<0.5f){
-					camera.zoom=0.5f;
+				else if(camera.zoom<0.3f){
+									camera.zoom=0.3f;
 				}
 				return true;
 			}
@@ -166,16 +178,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		TiledMapTileLayer layer = new TiledMapTileLayer(100,100, 16,16);
 
 		//initialize cell types
-		//-to be moved to StringToCell
-		Cell topLeftFloorTile = new Cell();
-		Cell topFloorTile = new Cell();
-		Cell topRightFloorTile = new Cell();
-		Cell leftFloorTile = new Cell();
+		//TODO move to StringToCell
 		Cell middleFloorTile = new Cell();
-		Cell rightFloorTile = new Cell();
-		Cell bottomLeftFloorTile = new Cell();
-		Cell bottomFloorTile = new Cell();
-		Cell bottomRightFloorTile = new Cell();
 
 		Cell topLeftWallTile = new Cell();
 		Cell topWallTile = new Cell();
@@ -192,7 +196,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		Cell bottomRightTurnTile = new Cell();
 
 		//set cells to their corresponding tile
-		//-to be moved to StringToCell
+		//TODO move to StringToCell
 		middleFloorTile.setTile(new StaticTiledMapTile(roomMiddleFloorTexture));
 
 		topLeftWallTile.setTile(new StaticTiledMapTile(roomTopLeftWallTexture));
@@ -214,7 +218,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 		RenderRules r = new RenderRules();
 
 		try {
-			List<List<String>> level = l.read("level.csv");
+			Random rand = new Random();
+			int roomRand = rand.nextInt(1,4);
+			System.out.println(roomRand);
+			//List<List<String>> level = l.read("room"+roomRand+".csv");
+			List<List<String>> level = l.read("room.csv");
+
+
 			int levelY = Gdx.graphics.getHeight()/30;
 			int levelSize = level.size();
 			for (int i = 0; i < levelSize; i++) {
@@ -261,19 +271,22 @@ public class DungeonCrawler extends ApplicationAdapter {
 							break;
 						case "topLeftTurnTile":
 							currentCell = topLeftTurnTile;
-							Body newTopLeftTurnWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
+							//Body newTopLeftTurnWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
+							Body newTopLeftTurn = createWallTurn((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16,16f,0f);
 							break;
 						case "topRightTurnTile":
 							currentCell = topRightTurnTile;
-							Body newTopRightTurnWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
+							//Body newTopRightTurnWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
+							Body newTopRightTurn = createWallTurn((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16,0f,0f);
 							break;
 						case "bottomLeftTurnTile":
 							currentCell = bottomLeftTurnTile;
-							Body newBottomLeftTurnWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
+							//Body newBottomLeftTurnWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
+							Body newBottomLeftTurn = createWallTurn((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16,16f,16f);
 							break;
 						case "bottomRightTurnTile":
 							currentCell = bottomRightTurnTile;
-							Body newBottomRightTurnWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
+							Body newBottomRightTurn = createWallTurn((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16,0f,16f);
 							break;
 					}
 					layer.setCell(i2+16, levelY, currentCell);
@@ -314,7 +327,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//draw playerSprite by delta speed at current coordinates
 		batch.begin();
-		batch.draw(playerSprite, player.getPosition().x-8f, player.getPosition().y-8f, 16, 16);
+		batch.draw(playerSprite, player.getPosition().x-8f, player.getPosition().y-4f, 16, 16);
 		batch.end();
 
 		hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
@@ -338,8 +351,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	//update method for physics, camera and input
 	public void update(float delta){
 		world.step(1/60f,6,2);
-
-			inputUpdate(delta);
+		inputUpdate(delta);
 	}
 
 	@Override
@@ -350,28 +362,43 @@ public class DungeonCrawler extends ApplicationAdapter {
 	}
 
 	public void inputUpdate(float delta) {
-
 		playerXSpeed = 0;
 		playerYSpeed = 0;
+
 		//move playerSprite Sprite by delta speed according to button WASD press
 		if (Gdx.input.isKeyPressed(Keys.W)) {
 			//change playerSprite Sprite to upwards facing playerUp Sprite etc
 			playerSprite = playerUp;
 			playerYSpeed = 100f;
+			player.destroyFixture(playerHitbox);
+			PolygonShape shape = new PolygonShape();
+			shape.setAsBox(7,7);
+			player.createFixture(shape,1.0f);
 		}
 		if (Gdx.input.isKeyPressed(Keys.A)) {
 			playerSprite = playerLeft;
 			playerXSpeed = -100f;
+			player.destroyFixture(playerHitbox);
+			PolygonShape shape = new PolygonShape();
+			shape.setAsBox(6,7);
+			player.createFixture(shape,1.0f);
 		}
 		if (Gdx.input.isKeyPressed(Keys.S)) {
 			playerSprite = playerDown;
 			playerYSpeed =-100f;
+			player.destroyFixture(playerHitbox);
+			PolygonShape shape = new PolygonShape();
+			shape.setAsBox(7,7);
+			player.createFixture(shape,1.0f);
 		}
 		if (Gdx.input.isKeyPressed(Keys.D)) {
 			playerSprite = playerRight;
 			playerXSpeed = 100f;
+			player.destroyFixture(playerHitbox);
+			PolygonShape shape = new PolygonShape();
+			shape.setAsBox(6,7);
+			player.createFixture(shape,1.0f);
 		}
-
 		player.setLinearVelocity(playerXSpeed,playerYSpeed);
 	}
 
@@ -383,13 +410,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 		bodyDef.position.set(playerX+8,playerY+8);
 		bodyDef.fixedRotation = true;
 		body = world.createBody(bodyDef);
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(8,8);
-		body.createFixture(shape, 1.0f);
-		shape.dispose();
+		PolygonShape playerShape = new PolygonShape();
+		playerShape.setAsBox(6,8);
+		playerHitbox = body.createFixture(playerShape, 1.0f);
+		playerShape.dispose();
 		return body;
 	}
-
 	public Body createWall(float x,float y){
 		Body body;
 		BodyDef bodyDef = new BodyDef();
@@ -399,6 +425,19 @@ public class DungeonCrawler extends ApplicationAdapter {
 		body = world.createBody(bodyDef);
 		PolygonShape shape = new PolygonShape();
 		shape.setAsBox(8,8);
+		body.createFixture(shape, 1.0f);
+		shape.dispose();
+		return body;
+	}
+	public Body createWallTurn(float x, float y, float offsetX, float offsetY){
+		Body body;
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyDef.BodyType.StaticBody;
+		bodyDef.position.set(x+offsetX,y+offsetY);
+		bodyDef.fixedRotation = true;
+		body = world.createBody(bodyDef);
+		CircleShape shape = new CircleShape();
+		shape.setRadius(16f);
 		body.createFixture(shape, 1.0f);
 		shape.dispose();
 		return body;

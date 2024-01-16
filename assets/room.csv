@@ -1,0 +1,17 @@
+tlw,tw,tw,tw,tw,tw,tw,trw,,,,,
+lw,f,f,f,f,f,f,rw,,,,,
+lw,f,f,f,f,f,f,rw,,,,,
+lw,f,f,f,f,f,f,blt,tw,tw,tw,tw,trw
+lw,f,f,tlt,trt,f,f,f,f,f,f,f,rw
+lw,f,f,rw,lw,f,f,f,f,f,f,f,rw
+lw,f,f,blt,brt,f,f,tlt,bw,trt,f,f,rw
+lw,f,f,f,f,f,f,rw,,lw,f,f,rw
+lw,f,f,f,f,f,f,rw,,lw,f,f,rw
+blw,bw,trt,f,tlt,bw,bw,brw,,lw,f,f,rw
+tlw,tw,brt,f,blt,tw,tw,tw,tw,brt,f,f,rw
+lw,f,f,f,f,f,f,f,f,f,f,f,rw
+lw,f,f,f,f,f,f,f,f,f,f,f,rw
+lw,f,f,f,f,f,tlt,bw,bw,bw,bw,bw,brw
+lw,f,f,f,f,f,rw,,,,,,
+blw,bw,bw,bw,bw,bw,brw,,,,,,
+,,,,,,,,,f,f,f,
