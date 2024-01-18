@@ -29,7 +29,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch batch;
-  	private SpriteBatch hudBatch;
+	private SpriteBatch hudBatch;
 	private World world;
 	private Box2DDebugRenderer b2dr;
 	private Body player;
@@ -47,6 +47,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private Sprite playerAttackDown;
 	private Sprite playerAttackLeft;
 	private Sprite playerAttackRight;
+	private Sprite swordSprite;
 	float playerX = 0;
 	float playerY = 0;
 	float playerXSpeed = 0;
@@ -59,9 +60,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private Texture roomBackground;
 	private Texture roomDoorTexture;
 	private Texture roomHoleTexture;
+	private Texture swordTexture;
 	private OrthographicCamera camera;
-  public static final float DEFAULT_VIEWPORT_WIDTH = 300f;
-  public static HUD hud;
+	public static final float DEFAULT_VIEWPORT_WIDTH = 300f;
+	public static HUD hud;
 
 	@Override
 	public void create() {
@@ -75,6 +77,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		roomBackground = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/Interior/CustomTileset.png"));
 		roomDoorTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHouse.png"));
 		roomHoleTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHole.png"));
+		swordTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/BigSword/SpriteInHand.png"));
 
 		//get width and height of the game window
 		int h = Gdx.graphics.getHeight();
@@ -96,10 +99,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 		playerDown = new Sprite(playerTexture, 0, 0, 16, 16);
 		playerLeft = new Sprite(playerTexture, 32, 0, 16, 16);
 		playerRight = new Sprite(playerTexture, 48, 0, 16, 16);
-		playerAttackUp = new Sprite(playerAttackTexture,16,0,16,16);
-		playerAttackDown = new Sprite(playerAttackTexture,0,0,16,16);
-		playerAttackLeft = new Sprite(playerAttackTexture,32,0,16,16);
-		playerAttackRight = new Sprite(playerAttackTexture,48,0,16,16);
+		playerAttackUp = new Sprite(playerAttackTexture, 16, 0, 16, 16);
+		playerAttackDown = new Sprite(playerAttackTexture, 0, 0, 16, 16);
+		playerAttackLeft = new Sprite(playerAttackTexture, 32, 0, 16, 16);
+		playerAttackRight = new Sprite(playerAttackTexture, 48, 0, 16, 16);
+		swordSprite = new Sprite(swordTexture, 0, 0, 7, 12);
 
 		//create each tile of the room texture as a TextureRegion
 		//TODO move to separate class
@@ -146,8 +150,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(new GameInputProcessor() {
 			@Override
 			public boolean scrolled(float amountX, float amountY) {
-				if ((camera.zoom >= 0.3f && camera.zoom <= 1f)) {
-					if (camera.zoom == 1f) {
+				if ((camera.zoom >= 0.3f && camera.zoom <= 1.3f)) {
+					if (camera.zoom == 1.3f) {
 						if (amountY < 0f) {
 							camera.zoom += amountY * 0.02f;
 						}
@@ -158,25 +162,26 @@ public class DungeonCrawler extends ApplicationAdapter {
 					} else {
 						camera.zoom += amountY * 0.02f;
 					}
-				} else if (camera.zoom > 1f) {
-					camera.zoom = 1f;
+				} else if (camera.zoom > 1.3f) {
+					camera.zoom = 1.3f;
 				} else if (camera.zoom < 0.3f) {
 					camera.zoom = 0.3f;
 				}
 				return true;
 			}
-			public boolean keyDown (int keycode) {
-				if ((keycode == 62 || keycode == 66) && playerAttacking == false){
+
+			public boolean keyDown(int keycode) {
+				if ((keycode == 62 || keycode == 66) && playerAttacking == false) {
 					float playerAttackSpeedInSeconds = 0.4f;
 					playerAttacking = true;
 
 					if (playerSprite.equals(playerDown)) {
 						playerSprite = playerAttackDown;
-					} else 	if (playerSprite.equals(playerUp)) {
+					} else if (playerSprite.equals(playerUp)) {
 						playerSprite = playerAttackUp;
-					} else 	if (playerSprite.equals(playerLeft)) {
+					} else if (playerSprite.equals(playerLeft)) {
 						playerSprite = playerAttackLeft;
-					} else 	if (playerSprite.equals(playerRight)) {
+					} else if (playerSprite.equals(playerRight)) {
 						playerSprite = playerAttackRight;
 					}
 
@@ -184,7 +189,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					pausePlayer = true;
 					playerXSpeed = 0;
 					playerYSpeed = 0;
-					player.setLinearVelocity(playerXSpeed,playerYSpeed);
+					player.setLinearVelocity(playerXSpeed, playerYSpeed);
 
 					//PlayerAttack.playerAttack(2);
 					// write method to detect whether an enemy is within
@@ -197,7 +202,15 @@ public class DungeonCrawler extends ApplicationAdapter {
 						public void run() {
 							//resume player movement after a short delay
 							pausePlayer = false;
-							playerSprite = playerDown;
+							if (playerSprite.equals(playerAttackDown)) {
+								playerSprite = playerDown;
+							} else if (playerSprite.equals(playerAttackUp)) {
+								playerSprite = playerUp;
+							} else if (playerSprite.equals(playerAttackLeft)) {
+								playerSprite = playerLeft;
+							} else if (playerSprite.equals(playerAttackRight)) {
+								playerSprite = playerRight;
+							}
 							playerAttacking = false;
 						}
 					}, playerAttackSpeedInSeconds);
@@ -332,8 +345,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 			//set player starting coordinates according to the position of the level
 			//TODO change levelY to something like room[0].levelY when multiple room support is added so the player spawns in the first generated room of the level.
-			playerX = Gdx.graphics.getWidth()/30 * 16;
-			playerY = levelY*16+levelSize*16-16;
+			playerX = Gdx.graphics.getWidth() / 30 * 16;
+			playerY = levelY * 16 + levelSize * 16 - 16;
 
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -347,7 +360,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	}
 
 	@Override
-	public void render () {
+	public void render() {
 		//clear all assets and replace with background color
 		ScreenUtils.clear(1, 1, 1, 1);
 
@@ -355,7 +368,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		update(Gdx.graphics.getDeltaTime());
 
 		//clear graphics
-		Gdx.gl.glClearColor(0,0,0,1f);
+		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		//set the view of the map to the camera and then render the map
@@ -363,11 +376,22 @@ public class DungeonCrawler extends ApplicationAdapter {
 		renderer.render();
 
 		//set camera position to always be centred on the playerSprite
-		camera.position.set(player.getPosition().x+ playerSprite.getWidth()/2, player.getPosition().y+ playerSprite.getHeight()/2, 0);
+		camera.position.set(player.getPosition().x + playerSprite.getWidth() / 2, player.getPosition().y + playerSprite.getHeight() / 2, 0);
 
 		//draw playerSprite on player Box2D object
 		batch.begin();
-		batch.draw(playerSprite, player.getPosition().x-8f, player.getPosition().y-7f, 16, 16);
+		batch.draw(playerSprite, player.getPosition().x - 8f, player.getPosition().y - 6f, 16, 16);
+		if (playerAttacking == true) {
+			if (playerSprite.equals(playerAttackUp)) {
+				batch.draw(swordSprite, player.getPosition().x - 13f, player.getPosition().y - 3f, 7, 12, 7, 12, 1, 1, 180);
+			} else if (playerSprite.equals(playerAttackDown)) {
+				batch.draw(swordSprite, player.getPosition().x - 6f, player.getPosition().y - 18f, 7, 12, 7, 12, 1, 1, 0);
+			} else if (playerSprite.equals(playerAttackLeft)) {
+				batch.draw(swordSprite, player.getPosition().x - 15f, player.getPosition().y - 18f, 7, 12, 7, 12, 1, 1, 270);
+			} else if (playerSprite.equals(playerAttackRight)) {
+				batch.draw(swordSprite, player.getPosition().x, player.getPosition().y - 11f, 7, 12, 7, 12, 1, 1, 90);
+			}
+		}
 		batch.end();
 
 		//renders all physics object - for debug only
@@ -377,31 +401,31 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		batch.setProjectionMatrix(camera.combined);
 		hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
-    	hud.stage.draw();
+		hud.stage.draw();
 	}
 
 	@Override
 	public void resize(int width, int height) {
-    // We multiply the viewport height by the aspect ratio to maintain
-    // correct proportions for objects when drawn.
-    float aspectRatio = (float) height/width;
-    camera.viewportHeight = DEFAULT_VIEWPORT_WIDTH * aspectRatio;
-    camera.viewportWidth = DEFAULT_VIEWPORT_WIDTH;
-    camera.update();
-    // FIXME: For some reason this affects the scaling of the rest of the game...
-    // hud.stage.getViewport().update(width, height);
+		// We multiply the viewport height by the aspect ratio to maintain
+		// correct proportions for objects when drawn.
+		float aspectRatio = (float) height / width;
+		camera.viewportHeight = DEFAULT_VIEWPORT_WIDTH * aspectRatio;
+		camera.viewportWidth = DEFAULT_VIEWPORT_WIDTH;
+		camera.update();
+		// FIXME: For some reason this affects the scaling of the rest of the game...
+		// hud.stage.getViewport().update(width, height);
 	}
 
 	//update method for physics, camera and input
-	public void update(float delta){
-		world.step(1/60f,6,2);
-		if (pausePlayer==false){
+	public void update(float delta) {
+		world.step(1 / 60f, 6, 2);
+		if (pausePlayer == false) {
 			inputUpdate(delta);
 		}
 	}
 
 	@Override
-	public void dispose () {
+	public void dispose() {
 		batch.dispose();
 		world.dispose();
 		b2dr.dispose();
@@ -431,49 +455,49 @@ public class DungeonCrawler extends ApplicationAdapter {
 		}
 		if (Gdx.input.isKeyPressed(Keys.S)) {
 			playerSprite = playerDown;
-			playerYSpeed =-100f;
+			playerYSpeed = -100f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.D)) {
 			playerSprite = playerRight;
 			playerXSpeed = 100f;
 		}
-		player.setLinearVelocity(playerXSpeed,playerYSpeed);
+		player.setLinearVelocity(playerXSpeed, playerYSpeed);
 	}
 
 	//create player with physical Box2D properties
-	public Body createPlayer(){
+	public Body createPlayer() {
 		Body body;
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
-		bodyDef.position.set(playerX+8,playerY+8);
+		bodyDef.position.set(playerX, playerY);
 		bodyDef.fixedRotation = true;
 		body = world.createBody(bodyDef);
 		PolygonShape playerShape = new PolygonShape();
-		playerShape.setAsBox(5.5f,5.5f);
+		playerShape.setAsBox(6f, 5f);
 		playerHitbox = body.createFixture(playerShape, 1.0f);
 		playerShape.dispose();
 		return body;
 	}
 
-	public Body createWall(float x,float y){
+	public Body createWall(float x, float y) {
 		Body body;
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.StaticBody;
-		bodyDef.position.set(x+8,y+8);
+		bodyDef.position.set(x + 8, y + 8);
 		bodyDef.fixedRotation = true;
 		body = world.createBody(bodyDef);
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(8,8);
+		shape.setAsBox(8, 8);
 		body.createFixture(shape, 1.0f);
 		shape.dispose();
 		return body;
 	}
 
-	public Body createWallTurn(float x, float y, float offsetX, float offsetY){
+	public Body createWallTurn(float x, float y, float offsetX, float offsetY) {
 		Body body;
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.StaticBody;
-		bodyDef.position.set(x+offsetX,y+offsetY);
+		bodyDef.position.set(x + offsetX, y + offsetY);
 		bodyDef.fixedRotation = true;
 		body = world.createBody(bodyDef);
 		CircleShape shape = new CircleShape();
