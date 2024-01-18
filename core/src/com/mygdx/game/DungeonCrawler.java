@@ -1,6 +1,5 @@
 package com.mygdx.game;
 
-import java.awt.geom.RectangularShape;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
@@ -22,6 +21,7 @@ import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.Input.Keys;
@@ -32,20 +32,26 @@ public class DungeonCrawler extends ApplicationAdapter {
   	private SpriteBatch hudBatch;
 	private World world;
 	private Box2DDebugRenderer b2dr;
-	private Body bodyTest;
-	private BodyDef bodyDef;
-	private Fixture playerHitbox;
 	private Body player;
+	private Fixture playerHitbox;
+	private boolean pausePlayer;
+	private boolean playerAttacking;
 	private Texture playerTexture;
+	private Texture playerAttackTexture;
 	private Sprite playerSprite;
 	private Sprite playerUp;
 	private Sprite playerDown;
 	private Sprite playerLeft;
 	private Sprite playerRight;
+	private Sprite playerAttackUp;
+	private Sprite playerAttackDown;
+	private Sprite playerAttackLeft;
+	private Sprite playerAttackRight;
 	float playerX = 0;
 	float playerY = 0;
 	float playerXSpeed = 0;
 	float playerYSpeed = 0;
+	public PlayerAttack PlayerAttack;
 	public LevelParser l;
 	public RenderRules r;
 	private TiledMap map;
@@ -61,10 +67,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public void create() {
 		batch = new SpriteBatch();
 		hudBatch = new SpriteBatch();
-		world = new World(new Vector2(0,0f),false);
+		world = new World(new Vector2(0, 0f), false);
 
 		//grab textures
 		playerTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/GoldKnight/SpriteSheet.png"));
+		playerAttackTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/GoldKnight/SeparateAnim/Attack.png"));
 		roomBackground = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/Interior/CustomTileset.png"));
 		roomDoorTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHouse.png"));
 		roomHoleTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHole.png"));
@@ -74,18 +81,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 		int w = Gdx.graphics.getWidth();
 
 		//create camera and set the viewport
-		camera = new OrthographicCamera(0,0);
-		camera.setToOrtho(false, w/3, h/3);
+		camera = new OrthographicCamera(1000, 1000);
+		camera.setToOrtho(false, w / 3, h / 3);
 
-    // TODO: Add hearts to HUD
-    Viewport vp = new FitViewport(camera.viewportWidth, camera.viewportHeight);
-    hud = new HUD(vp, hudBatch);
+		// TODO: Add hearts to HUD
+		Viewport vp = new FitViewport(camera.viewportWidth, camera.viewportHeight);
+		hud = new HUD(vp, hudBatch);
 		Texture heartTexture = new Texture(Gdx.files.internal("NinjaAdventure/HUD/Heart.png"));
-    Sprite heartSprite = new Sprite(heartTexture, 16, 16);
-
-		//set starting playerSprite position
-		playerX = Gdx.graphics.getWidth()/30*16;
-		playerY = Gdx.graphics.getHeight()/30*16-16;
+		Sprite heartSprite = new Sprite(heartTexture, 16, 16);
 
 		//outline playerSprite Sprites
 		playerSprite = new Sprite(playerTexture, 0, 0, 16, 16);
@@ -93,10 +96,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 		playerDown = new Sprite(playerTexture, 0, 0, 16, 16);
 		playerLeft = new Sprite(playerTexture, 32, 0, 16, 16);
 		playerRight = new Sprite(playerTexture, 48, 0, 16, 16);
+		playerAttackUp = new Sprite(playerAttackTexture,16,0,16,16);
+		playerAttackDown = new Sprite(playerAttackTexture,0,0,16,16);
+		playerAttackLeft = new Sprite(playerAttackTexture,32,0,16,16);
+		playerAttackRight = new Sprite(playerAttackTexture,48,0,16,16);
 
 		//create each tile of the room texture as a TextureRegion
 		//TODO move to separate class
-		TextureRegion roomMiddleFloorTexture = new TextureRegion(roomBackground,0,0,16,16);
+		TextureRegion roomMiddleFloorTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
 
 		TextureRegion roomLeftWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
 		TextureRegion roomRightWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
@@ -113,53 +120,89 @@ public class DungeonCrawler extends ApplicationAdapter {
 		TextureRegion roomBottomRightTurnTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
 
 		TextureRegion doorTexture = new TextureRegion(roomDoorTexture, 0, 0, 16, 16);
-		TextureRegion holeTexture = new TextureRegion(roomHoleTexture,0,0,16,16);
+		TextureRegion holeTexture = new TextureRegion(roomHoleTexture, 0, 0, 16, 16);
 
 		//set TextureRegion source coordinates
 		//TODO move to separate class
-		roomMiddleFloorTexture.setRegion(96,16,16,16);
+		roomMiddleFloorTexture.setRegion(96, 16, 16, 16);
 
-		roomTopLeftWallTexture.setRegion(0,0,16,16);
-		roomTopWallTexture.setRegion(48,0,16,16);
-		roomTopRightWallTexture.setRegion(64,0,16,16);
-		roomLeftWallTexture.setRegion(0,16,16,16);
-		roomRightWallTexture.setRegion(64,16,16,16);
-		roomBottomLeftWallTexture.setRegion(0,64,16,16);
-		roomBottomWallTexture.setRegion(48,64,16,16);
-		roomBottomRightWallTexture.setRegion(64,64,16,16);
+		roomTopLeftWallTexture.setRegion(0, 0, 16, 16);
+		roomTopWallTexture.setRegion(48, 0, 16, 16);
+		roomTopRightWallTexture.setRegion(64, 0, 16, 16);
+		roomLeftWallTexture.setRegion(0, 16, 16, 16);
+		roomRightWallTexture.setRegion(64, 16, 16, 16);
+		roomBottomLeftWallTexture.setRegion(0, 64, 16, 16);
+		roomBottomWallTexture.setRegion(48, 64, 16, 16);
+		roomBottomRightWallTexture.setRegion(64, 64, 16, 16);
 
-		roomTopLeftTurnTexture.setRegion(32,16,16,16);
-		roomTopRightTurnTexture.setRegion(48,16,16,16);
-		roomBottomLeftTurnTexture.setRegion(32,32,16,16);
-		roomBottomRightTurnTexture.setRegion(48,32,16,16);
+		roomTopLeftTurnTexture.setRegion(32, 16, 16, 16);
+		roomTopRightTurnTexture.setRegion(48, 16, 16, 16);
+		roomBottomLeftTurnTexture.setRegion(32, 32, 16, 16);
+		roomBottomRightTurnTexture.setRegion(48, 32, 16, 16);
 
-		doorTexture.setRegion(144,48,16,16);
+		doorTexture.setRegion(144, 48, 16, 16);
 
 		//create an input processor to handle single button press events
-		Gdx.input.setInputProcessor(new GameInputProcessor(){
-			@Override public boolean scrolled (float amountX, float amountY) {
-				if((camera.zoom>=0.3f&&camera.zoom<=1f)){
-						if (camera.zoom==1f){
-							if (amountY < 0f){
-								camera.zoom+=amountY*0.02f;
-							}
+		Gdx.input.setInputProcessor(new GameInputProcessor() {
+			@Override
+			public boolean scrolled(float amountX, float amountY) {
+				if ((camera.zoom >= 0.3f && camera.zoom <= 1f)) {
+					if (camera.zoom == 1f) {
+						if (amountY < 0f) {
+							camera.zoom += amountY * 0.02f;
 						}
-						else if (camera.zoom==0.3f){
-							if (amountY > 0f){
-								camera.zoom+=amountY*0.02f;
-							}
+					} else if (camera.zoom == 0.3f) {
+						if (amountY > 0f) {
+							camera.zoom += amountY * 0.02f;
 						}
-						else {
-								camera.zoom+=amountY*0.02f;
-						}
-				}
-				else if(camera.zoom>1f){
-									camera.zoom=1f;
-				}
-				else if(camera.zoom<0.3f){
-									camera.zoom=0.3f;
+					} else {
+						camera.zoom += amountY * 0.02f;
+					}
+				} else if (camera.zoom > 1f) {
+					camera.zoom = 1f;
+				} else if (camera.zoom < 0.3f) {
+					camera.zoom = 0.3f;
 				}
 				return true;
+			}
+			public boolean keyDown (int keycode) {
+				if ((keycode == 62 || keycode == 66) && playerAttacking == false){
+					float playerAttackSpeedInSeconds = 0.4f;
+					playerAttacking = true;
+
+					if (playerSprite.equals(playerDown)) {
+						playerSprite = playerAttackDown;
+					} else 	if (playerSprite.equals(playerUp)) {
+						playerSprite = playerAttackUp;
+					} else 	if (playerSprite.equals(playerLeft)) {
+						playerSprite = playerAttackLeft;
+					} else 	if (playerSprite.equals(playerRight)) {
+						playerSprite = playerAttackRight;
+					}
+
+					//pause player in place while attacking (attacks must be timed correctly!)
+					pausePlayer = true;
+					playerXSpeed = 0;
+					playerYSpeed = 0;
+					player.setLinearVelocity(playerXSpeed,playerYSpeed);
+
+					//PlayerAttack.playerAttack(2);
+					// write method to detect whether an enemy is within
+					// melee distance of the player,
+					// if so attack with melee,
+					// if not, launch an arrow in player direction
+
+					Timer.schedule(new Timer.Task() {
+						@Override
+						public void run() {
+							//resume player movement after a short delay
+							pausePlayer = false;
+							playerSprite = playerDown;
+							playerAttacking = false;
+						}
+					}, playerAttackSpeedInSeconds);
+				}
+				return false;
 			}
 		});
 
@@ -167,8 +210,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 		TiledMap map = new TiledMap();
 		MapLayers layers = map.getLayers();
 
-		//set map layer dimensions, currently the size of the window itself
-		TiledMapTileLayer layer = new TiledMapTileLayer(100,100, 16,16);
+		//set map layer dimensions
+		//set to 1000 tile layers wide and high but can be changed if required
+		TiledMapTileLayer layer = new TiledMapTileLayer(1000, 1000, 16, 16);
 
 		//initialize cell types
 		//TODO move to StringToCell
@@ -212,13 +256,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		try {
 			Random rand = new Random();
-			int roomRand = rand.nextInt(1,4);
-			System.out.println(roomRand);
+			int roomRand = rand.nextInt(1, 4);
 			//List<List<String>> level = l.read("room"+roomRand+".csv");
 			List<List<String>> level = l.read("room.csv");
 
-
-			int levelY = Gdx.graphics.getHeight()/30;
+			//levelY is what determines the size of the level.
+			//When levelY is either 1000 or 0 the map will be outside the TiledMapTileLayer and thus will not render
+			int levelY = 999;
 			int levelSize = level.size();
 			for (int i = 0; i < levelSize; i++) {
 				List<String> levelTextures = r.translateSymbols(level, i);
@@ -232,60 +276,65 @@ public class DungeonCrawler extends ApplicationAdapter {
 							break;
 						case "topLeftWallTile":
 							currentCell = topLeftWallTile;
-							Body newTopLeftWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
+							Body newTopLeftWall = createWall((i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
 							break;
 						case "topWallTile":
 							currentCell = topWallTile;
-							Body newTopWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
+							Body newTopWall = createWall((i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
 							break;
 						case "topRightWallTile":
 							currentCell = topRightWallTile;
-							Body newTopRightWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
+							Body newTopRightWall = createWall((i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
 							break;
 						case "leftWallTile":
 							currentCell = leftWallTile;
-							Body newLeftWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
+							Body newLeftWall = createWall((i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
 							break;
 						case "rightWallTile":
 							currentCell = rightWallTile;
-							Body newRightWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
+							Body newRightWall = createWall((i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
 							break;
 						case "bottomLeftWallTile":
 							currentCell = bottomLeftWallTile;
-							Body newBottomLeftWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
+							Body newBottomLeftWall = createWall((i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
 							break;
 						case "bottomWallTile":
 							currentCell = bottomWallTile;
-							Body newBottomWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
+							Body newBottomWall = createWall((i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
 							break;
 						case "bottomRightWallTile":
 							currentCell = bottomRightWallTile;
-							Body newBottomRightWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
+							Body newBottomRightWall = createWall((i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
 							break;
 						case "topLeftTurnTile":
 							currentCell = topLeftTurnTile;
 							//Body newTopLeftTurnWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
-							Body newTopLeftTurn = createWallTurn((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16,15.9f,0.1f);
+							Body newTopLeftTurn = createWallTurn((i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 15.9f, 0.1f);
 							break;
 						case "topRightTurnTile":
 							currentCell = topRightTurnTile;
 							//Body newTopRightTurnWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
-							Body newTopRightTurn = createWallTurn((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16,0.1f,0.1f);
+							Body newTopRightTurn = createWallTurn((i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 0.1f, 0.1f);
 							break;
 						case "bottomLeftTurnTile":
 							currentCell = bottomLeftTurnTile;
 							//Body newBottomLeftTurnWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
-							Body newBottomLeftTurn = createWallTurn((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16,15.9f,15.9f);
+							Body newBottomLeftTurn = createWallTurn((i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 15.9f, 15.9f);
 							break;
 						case "bottomRightTurnTile":
 							currentCell = bottomRightTurnTile;
-							Body newBottomRightTurn = createWallTurn((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16,0.1f,15.9f);
+							Body newBottomRightTurn = createWallTurn((i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 0.1f, 15.9f);
 							break;
 					}
-					layer.setCell(i2+16, levelY, currentCell);
+					layer.setCell(i2 + 16, levelY, currentCell);
 				}
 				levelY--;
 			}
+			//set player starting coordinates according to the position of the level
+			//TODO change levelY to something like room[0].levelY when multiple room support is added so the player spawns in the first generated room of the level.
+			playerX = Gdx.graphics.getWidth()/30 * 16;
+			playerY = levelY*16+levelSize*16-16;
+
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -346,7 +395,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 	//update method for physics, camera and input
 	public void update(float delta){
 		world.step(1/60f,6,2);
-		inputUpdate(delta);
+		if (pausePlayer==false){
+			inputUpdate(delta);
+		}
 	}
 
 	@Override
@@ -366,7 +417,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			playerSprite = playerUp;
 			playerYSpeed = 100f;
 
-			//to change the player hitbox - currently unused
+			//code example to change the player hitbox - previously tested but currently unused
 			/*
 			player.destroyFixture(playerHitbox);
 			PolygonShape shape = new PolygonShape();
@@ -403,6 +454,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		playerShape.dispose();
 		return body;
 	}
+
 	public Body createWall(float x,float y){
 		Body body;
 		BodyDef bodyDef = new BodyDef();
@@ -416,6 +468,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		shape.dispose();
 		return body;
 	}
+
 	public Body createWallTurn(float x, float y, float offsetX, float offsetY){
 		Body body;
 		BodyDef bodyDef = new BodyDef();
