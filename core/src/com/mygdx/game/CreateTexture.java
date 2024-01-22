@@ -1,0 +1,49 @@
+package com.mygdx.game;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+public class CreateTexture {
+    Texture heartTexture = new Texture(Gdx.files.internal("NinjaAdventure/HUD/Heart.png"));
+    Texture playerTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/GoldKnight/SpriteSheet.png"));
+    Texture playerAttackTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/GoldKnight/SeparateAnim/Attack.png"));
+    Texture roomBackground = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/Interior/CustomTileset.png"));
+    Texture roomDoorTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHouse.png"));
+    Texture roomHoleTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHole.png"));
+    Texture swordTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/BigSword/SpriteInHand.png"));
+    Texture enemyTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Skull/SpriteSheet.png"));
+
+    TextureRegion roomMiddleFloorTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    TextureRegion roomLeftWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    TextureRegion roomRightWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    TextureRegion roomTopWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    TextureRegion roomBottomWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    TextureRegion roomTopLeftWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    TextureRegion roomTopRightWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    TextureRegion roomBottomLeftWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    TextureRegion roomBottomRightWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    TextureRegion roomTopLeftTurnTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    TextureRegion roomTopRightTurnTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    TextureRegion roomBottomLeftTurnTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    TextureRegion roomBottomRightTurnTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    TextureRegion doorTexture = new TextureRegion(roomDoorTexture, 0, 0, 16, 16);
+    TextureRegion holeTexture = new TextureRegion(roomHoleTexture, 0, 0, 16, 16);
+
+    public void textureRegionBuilder() {
+        roomMiddleFloorTexture.setRegion(96, 16, 16, 16);
+        roomTopLeftWallTexture.setRegion(0, 0, 16, 16);
+        roomTopWallTexture.setRegion(48, 0, 16, 16);
+        roomTopRightWallTexture.setRegion(64, 0, 16, 16);
+        roomLeftWallTexture.setRegion(0, 16, 16, 16);
+        roomRightWallTexture.setRegion(64, 16, 16, 16);
+        roomBottomLeftWallTexture.setRegion(0, 64, 16, 16);
+        roomBottomWallTexture.setRegion(48, 64, 16, 16);
+        roomBottomRightWallTexture.setRegion(64, 64, 16, 16);
+        roomTopLeftTurnTexture.setRegion(32, 16, 16, 16);
+        roomTopRightTurnTexture.setRegion(48, 16, 16, 16);
+        roomBottomLeftTurnTexture.setRegion(32, 32, 16, 16);
+        roomBottomRightTurnTexture.setRegion(48, 32, 16, 16);
+        doorTexture.setRegion(144, 48, 16, 16);
+    }
+}
