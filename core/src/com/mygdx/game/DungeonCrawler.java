@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.Input.Keys;
@@ -75,7 +76,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		camera.setToOrtho(false, w / 3, h / 3);
 
 		// TODO: Add hearts to HUD
-		Viewport vp = new FitViewport(camera.viewportWidth, camera.viewportHeight);
+		Viewport vp = new ExtendViewport(camera.viewportWidth, camera.viewportHeight);
 		hud = new HUD(vp, hudBatch);
 
 		//initialize map
@@ -422,8 +423,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		camera.viewportHeight = DEFAULT_VIEWPORT_WIDTH * aspectRatio;
 		camera.viewportWidth = DEFAULT_VIEWPORT_WIDTH;
 		camera.update();
-		// FIXME: For some reason this affects the scaling of the rest of the game...
-		// hud.stage.getViewport().update(width, height);
+		hud.stage.getViewport().update(width, height, true);
 	}
 
 	//update method for physics, camera and held down inputs
