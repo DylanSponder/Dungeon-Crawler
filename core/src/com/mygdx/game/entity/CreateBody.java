@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.entity;
 
 import com.badlogic.gdx.physics.box2d.*;
 
@@ -17,6 +17,7 @@ public class CreateBody {
         shape.dispose();
         return body;
     }
+
     public static Body createWallTurn(World world, float x, float y, float offsetX, float offsetY) {
       //  world = new World(new Vector2(0, 0f), false);
         Body body;
@@ -31,6 +32,7 @@ public class CreateBody {
         shape.dispose();
         return body;
     }
+
     public Body createSword(World world, Body player, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
@@ -54,6 +56,52 @@ public class CreateBody {
         return swordHitbox;
     }
 
+    public Body createBow(World world, Body player, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(player.getPosition().x+x, player.getPosition().y+y);
+        bodyDef.fixedRotation = false;
+        body = world.createBody(bodyDef);
+        return body;
+    }
+
+    public Fixture createBowHitbox(Body bow,boolean r){
+        PolygonShape bowShape = new PolygonShape();
+        if (r){
+            bowShape.setAsBox(7f, 3.5f);
+        }
+        else {
+            bowShape.setAsBox(3.5f, 7f);
+        }
+        Fixture bowHitbox = bow.createFixture(bowShape, 1.0f);
+        bowShape.dispose();
+        return bowHitbox;
+    }
+
+    public Body createArrow(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(x, y);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        return body;
+    }
+
+    public Fixture createArrowHitbox(Body arrow,boolean r){
+        PolygonShape arrowShape = new PolygonShape();
+        if (r){
+            arrowShape.setAsBox(2.5f, 6.5f);
+        }
+        else {
+            arrowShape.setAsBox(6.5f, 2.5f);
+        }
+        Fixture arrowHitbox = arrow.createFixture(arrowShape, 1.0f);
+        arrowShape.dispose();
+        return arrowHitbox;
+    }
+
     public Body createEnemy(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
@@ -61,12 +109,17 @@ public class CreateBody {
         bodyDef.position.set(x,y);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
+        return body;
+    }
+
+    public Fixture createEnemyHitbox(Body body){
         PolygonShape enemyShape = new PolygonShape();
         enemyShape.setAsBox(6f, 5f);
         Fixture enemyHitbox = body.createFixture(enemyShape, 1.0f);
         enemyShape.dispose();
-        return body;
+        return enemyHitbox;
     }
+
     public Body createPlayer(World world, float playerX, float playerY) {
         Body body;
         BodyDef bodyDef = new BodyDef();
@@ -80,13 +133,4 @@ public class CreateBody {
         playerShape.dispose();
         return body;
     }
-
-    //code example to change the player hitbox - previously tested but currently unused
-    //if hitbox needs to be accessed in DungeonCrawler, create separate method to capture hitbox (see createSwordHitbox)
-			/*
-			player.destroyFixture(playerHitbox);
-			PolygonShape shape = new PolygonShape();
-			shape.setAsBox(7,7);
-			player.createFixture(shape,1.0f);
-			*/
 }

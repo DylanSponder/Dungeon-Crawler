@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class CreateTexture {
@@ -12,6 +13,8 @@ public class CreateTexture {
     Texture roomDoorTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHouse.png"));
     Texture roomHoleTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHole.png"));
     Texture swordTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/BigSword/SpriteInHand.png"));
+    Texture bowTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/Bow/Sprite.png"));
+    Texture arrowTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/Bow/Arrow.png"));
     Texture enemyTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Skull/SpriteSheet.png"));
 
     TextureRegion roomMiddleFloorTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
@@ -29,6 +32,31 @@ public class CreateTexture {
     TextureRegion roomBottomRightTurnTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
     TextureRegion doorTexture = new TextureRegion(roomDoorTexture, 0, 0, 16, 16);
     TextureRegion holeTexture = new TextureRegion(roomHoleTexture, 0, 0, 16, 16);
+
+    Sprite playerSprite = new Sprite(playerTexture, 0, 0, 16, 16);
+    Sprite playerUp = new Sprite(playerTexture, 16, 0, 16, 16);
+    Sprite playerDown = new Sprite(playerTexture, 0, 0, 16, 16);
+    Sprite playerLeft = new Sprite(playerTexture, 32, 0, 16, 16);
+    Sprite playerRight = new Sprite(playerTexture, 48, 0, 16, 16);
+    Sprite playerAttackUp = new Sprite(playerAttackTexture, 16, 0, 16, 16);
+    Sprite playerAttackDown = new Sprite(playerAttackTexture, 0, 0, 16, 16);
+    Sprite playerAttackLeft = new Sprite(playerAttackTexture, 32, 0, 16, 16);
+    Sprite playerAttackRight = new Sprite(playerAttackTexture, 48, 0, 16, 16);
+    Sprite swordSprite = new Sprite(swordTexture, 0, 0, 7, 12);
+    Sprite bowSprite = new Sprite(bowTexture,0,0,15,7);
+    Sprite arrowSprite = new Sprite(arrowTexture,0,0,13,5);
+    //outline enemy sprites
+    Sprite enemySprite = new Sprite(enemyTexture,0,0,16,16);
+    //outline HUD sprites
+    Sprite heartSprite = new Sprite(heartTexture, 16, 16);
+
+    private static CreateTexture instance = null;
+    public static CreateTexture getInstance(){
+        if (instance == null) {
+            instance = new CreateTexture();
+        }
+        return instance;
+    }
 
     public void textureRegionBuilder() {
         roomMiddleFloorTexture.setRegion(96, 16, 16, 16);

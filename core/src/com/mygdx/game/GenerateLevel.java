@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.game.entity.CreateBody;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,7 +32,6 @@ public class GenerateLevel {
         stc.bottomLeftWallTile.setTile(new StaticTiledMapTile(tx.roomBottomLeftWallTexture));
         stc.bottomWallTile.setTile(new StaticTiledMapTile(tx.roomBottomWallTexture));
         stc.bottomRightWallTile.setTile(new StaticTiledMapTile(tx.roomBottomRightWallTexture));
-
         stc.topLeftTurnTile.setTile(new StaticTiledMapTile(tx.roomTopLeftTurnTexture));
         stc.topRightTurnTile.setTile(new StaticTiledMapTile(tx.roomTopRightTurnTexture));
         stc.bottomLeftTurnTile.setTile(new StaticTiledMapTile(tx.roomBottomLeftTurnTexture));
@@ -94,17 +94,14 @@ public class GenerateLevel {
                             break;
                         case "topLeftTurnTile":
                             currentCell = stc.topLeftTurnTile;
-                            //Body newTopLeftTurnWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
                             Body newTopLeftTurn = cr.createWallTurn(world,(i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 15.9f, 0.1f);
                             break;
                         case "topRightTurnTile":
                             currentCell = stc.topRightTurnTile;
-                            //Body newTopRightTurnWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
                             Body newTopRightTurn = cr.createWallTurn(world,(i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 0.1f, 0.1f);
                             break;
                         case "bottomLeftTurnTile":
                             currentCell = stc.bottomLeftTurnTile;
-                            //Body newBottomLeftTurnWall = createWall((i2*16)+16*16,levelY*16+Gdx.graphics.getHeight()/30-16);
                             Body newBottomLeftTurn = cr.createWallTurn(world,(i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 15.9f, 15.9f);
                             break;
                         case "bottomRightTurnTile":
@@ -115,7 +112,6 @@ public class GenerateLevel {
                     layer.setCell(i2 + 16, levelY, currentCell);
                 }
                 levelY--;
-                System.out.println("TEST");
             }
             //set player starting coordinates according to the position of the level
             //TODO change levelY to something like room[0].levelY when multiple room support is added so the player spawns in the first generated room of the level.
