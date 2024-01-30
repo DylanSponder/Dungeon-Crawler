@@ -6,6 +6,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -13,7 +14,11 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.ArrayMap;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.OrderedMap;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -77,7 +82,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		// TODO: Add hearts to HUD
 		Viewport vp = new ExtendViewport(camera.viewportWidth, camera.viewportHeight);
-		hud = new HUD(vp, hudBatch);
+    Image healthSymbol = new Image(new Sprite(tx.heartTexture, 16, 16));
+    Image moneySymbol = new Image(new Sprite(tx.coinTexture, 10, 10)); 
+		hud = new HUD(vp, hudBatch, healthSymbol, moneySymbol);
 
 		//initialize map
 		TiledMap map = new TiledMap();
@@ -283,7 +290,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 						||(fa.getBody().getUserData() == "Wall" && fb.getBody().getUserData() == "Arrow")
 						||(fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Wall")
 				){
-					System.out.println(fa.getBody().getUserData()+" was hit with "+fb.getBody().getUserData());
 					if (fa.getBody().getUserData() == "Arrow"){
 						if (!arrowBodiesCollided.contains(fa.getBody())) {
 							arrowBodiesCollided.add(fa.getBody());
@@ -292,7 +298,18 @@ public class DungeonCrawler extends ApplicationAdapter {
 					else if (fb.getBody().getUserData() == "Arrow") {
 						if (!arrowBodiesCollided.contains(fb.getBody())) {
 							arrowBodiesCollided.add(fb.getBody());
+              hud.health = hud.health - 1;
 						}
+					}
+				}
+				if ((fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Enemy")
+						||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Player")
+				){
+					if (fa.getBody().getUserData() == "Player"){
+              hud.health = hud.health - 1;
+					}
+					else if (fb.getBody().getUserData() == "Player") {
+              hud.health = hud.health - 1;
 					}
 				}
 			}
@@ -405,9 +422,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 		}
 
 		//renders all physics objects - for debug only
-		b2dr.render(world,camera.combined);
+		// b2dr.render(world,camera.combined);
 
 		camera.update();
+
+    hud.update();
 
 		batch.setProjectionMatrix(camera.combined);
 		arrowBatch.setProjectionMatrix(camera.combined);

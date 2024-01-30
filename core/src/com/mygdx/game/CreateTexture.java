@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class CreateTexture {
     Texture heartTexture = new Texture(Gdx.files.internal("NinjaAdventure/HUD/Heart.png"));
+    Texture coinTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Treasure/Coin2.png"));
     Texture playerTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/GoldKnight/SpriteSheet.png"));
     Texture playerAttackTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/GoldKnight/SeparateAnim/Attack.png"));
     Texture roomBackground = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/Interior/CustomTileset.png"));
