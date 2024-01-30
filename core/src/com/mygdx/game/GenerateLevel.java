@@ -6,7 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.game.entity.CreateBody;
+import com.mygdx.game.box2D.CreateBody;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -63,52 +63,65 @@ public class GenerateLevel {
                         case "topLeftWallTile":
                             currentCell = stc.topLeftWallTile;
                             Body newTopLeftWall = cr.createWall(world,(i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                            newTopLeftWall.setUserData("Wall");
                             break;
                         case "topWallTile":
                             currentCell = stc.topWallTile;
                             Body newTopWall = cr.createWall(world,(i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                            newTopWall.setUserData("Wall");
                             break;
                         case "topRightWallTile":
                             currentCell = stc.topRightWallTile;
                             Body newTopRightWall = cr.createWall(world,(i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                            newTopRightWall.setUserData("Wall");
                             break;
                         case "leftWallTile":
                             currentCell = stc.leftWallTile;
                             Body newLeftWall = cr.createWall(world,(i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                            newLeftWall.setUserData("Wall");
                             break;
                         case "rightWallTile":
                             currentCell = stc.rightWallTile;
                             Body newRightWall = cr.createWall(world,(i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                            newRightWall.setUserData("Wall");
                             break;
                         case "bottomLeftWallTile":
                             currentCell = stc.bottomLeftWallTile;
                             Body newBottomLeftWall = cr.createWall(world,(i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                            newBottomLeftWall.setUserData("Wall");
                             break;
                         case "bottomWallTile":
                             currentCell = stc.bottomWallTile;
                             Body newBottomWall = cr.createWall(world,(i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                            newBottomWall.setUserData("Wall");
                             break;
                         case "bottomRightWallTile":
                             currentCell = stc.bottomRightWallTile;
                             Body newBottomRightWall = cr.createWall(world,(i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                            newBottomRightWall.setUserData("Wall");
                             break;
                         case "topLeftTurnTile":
                             currentCell = stc.topLeftTurnTile;
                             Body newTopLeftTurn = cr.createWallTurn(world,(i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 15.9f, 0.1f);
+                            newTopLeftTurn.setUserData("Wall");
                             break;
                         case "topRightTurnTile":
                             currentCell = stc.topRightTurnTile;
                             Body newTopRightTurn = cr.createWallTurn(world,(i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 0.1f, 0.1f);
+                            newTopRightTurn.setUserData("Wall");
                             break;
                         case "bottomLeftTurnTile":
                             currentCell = stc.bottomLeftTurnTile;
                             Body newBottomLeftTurn = cr.createWallTurn(world,(i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 15.9f, 15.9f);
+                            newBottomLeftTurn.setUserData("Wall");
                             break;
                         case "bottomRightTurnTile":
                             currentCell = stc.bottomRightTurnTile;
                             Body newBottomRightTurn = cr.createWallTurn(world,(i2 * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 0.1f, 15.9f);
+                            newBottomRightTurn.setUserData("Wall");
                             break;
                     }
+
                     layer.setCell(i2 + 16, levelY, currentCell);
                 }
                 levelY--;

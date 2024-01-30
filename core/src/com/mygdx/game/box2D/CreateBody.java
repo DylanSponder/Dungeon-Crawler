@@ -1,4 +1,4 @@
-package com.mygdx.game.entity;
+package com.mygdx.game.box2D;
 
 import com.badlogic.gdx.physics.box2d.*;
 
@@ -33,7 +33,7 @@ public class CreateBody {
         return body;
     }
 
-    public Body createSword(World world, Body player, float x, float y) {
+    public Body createSwordBody(World world, Body player, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -56,7 +56,7 @@ public class CreateBody {
         return swordHitbox;
     }
 
-    public Body createBow(World world, Body player, float x, float y) {
+    public Body createBowBody(World world, Body player, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -79,28 +79,6 @@ public class CreateBody {
         return bowHitbox;
     }
 
-    public Body createArrow(World world, float x, float y) {
-        Body body;
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(x, y);
-        bodyDef.fixedRotation = true;
-        body = world.createBody(bodyDef);
-        return body;
-    }
-
-    public Fixture createArrowHitbox(Body arrow,boolean r){
-        PolygonShape arrowShape = new PolygonShape();
-        if (r){
-            arrowShape.setAsBox(2.5f, 6.5f);
-        }
-        else {
-            arrowShape.setAsBox(6.5f, 2.5f);
-        }
-        Fixture arrowHitbox = arrow.createFixture(arrowShape, 1.0f);
-        arrowShape.dispose();
-        return arrowHitbox;
-    }
 
     public Body createEnemy(World world, float x, float y) {
         Body body;
