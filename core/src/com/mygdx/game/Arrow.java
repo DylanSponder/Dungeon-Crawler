@@ -3,16 +3,8 @@ package com.mygdx.game;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.box2D.CreateBody;
-
-import java.util.NavigableMap;
-import java.util.TreeMap;
 
 public class Arrow {
-
-    public CreateBody cr;
-    public CreateTexture tx;
     public static Body arrowBody;
     public String direction;
     static float arrowX;
@@ -26,7 +18,6 @@ public class Arrow {
     public static Body createArrowBody(World world, float x, float y) {
         arrowX = x;
         arrowY = y;
-
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -50,7 +41,6 @@ public class Arrow {
     }
 
     public static void renderArrow (SpriteBatch batch, Sprite arrowSprite, String direction, float x, float y){
-
             if (direction == "Down"){
                 batch.draw(arrowSprite,x-5.5f,y-6.5f,8,5,13,5,1,1,270);
             }
@@ -64,9 +54,4 @@ public class Arrow {
                 batch.draw(arrowSprite,x-6.5f,y-2.5f,13,5,13,5,1,1,0);
         }
     }
-    /*
-    public static void putArrows(NavigableMap arrows, Body body, Arrow arrow){
-        arrows.put(body, arrow);
-    }
-    */
 }

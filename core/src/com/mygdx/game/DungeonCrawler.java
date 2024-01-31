@@ -41,11 +41,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private Arrow arrow;
 	public ArrayList<Arrow> arrows;
 	public ArrayList<Body> arrowBodiesCollided;
-	public HashMap<Body,Arrow> arrowHashMap; //OLD METHOD
 	public ArrayMap<Body, Arrow> arrowArrayMap;
 	private Fixture swordHitbox;
 	private Fixture enemyHitbox;
 	private Fixture arrowHitbox;
+	public boolean reversed;
 	private String direction;
 	private boolean pausePlayer;
 	private boolean playerMeleeAttacking;
@@ -68,6 +68,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		world = new World(new Vector2(0, 0f), false);
 		final CreateBody cr = new CreateBody();
 		ListenerClass lc = new ListenerClass();
+		reversed = false;
 
 		final CreateTexture tx = CreateTexture.getInstance();
 		tx.textureRegionBuilder();
@@ -82,8 +83,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		// TODO: Add hearts to HUD
 		Viewport vp = new ExtendViewport(camera.viewportWidth, camera.viewportHeight);
-    Image healthSymbol = new Image(new Sprite(tx.heartTexture, 16, 16));
-    Image moneySymbol = new Image(new Sprite(tx.coinTexture, 10, 10)); 
+    	Image healthSymbol = new Image(new Sprite(tx.heartTexture, 16, 16));
+		Image moneySymbol = new Image(new Sprite(tx.coinTexture, 10, 10));
 		hud = new HUD(vp, hudBatch, healthSymbol, moneySymbol);
 
 		//initialize map
@@ -117,9 +118,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		enemy.setUserData("Enemy");
 
 		arrowBodiesCollided = new ArrayList<Body>();
-		arrowHashMap = new HashMap<Body,Arrow>();
+		arrowArrayMap = new ArrayMap<Body, Arrow>();
 		arrows = new ArrayList<Arrow>();
-		arrowArrayMap = new ArrayMap<Body,Arrow>();
 
 		//create an input processor to handle single input events - see inputUpdate() for held down inputs
 		Gdx.input.setInputProcessor(new GameInputProcessor() {
@@ -138,7 +138,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 			public boolean keyDown(int keycode) {
 				if ((keycode == 62) && (!playerMeleeAttacking && !playerRangedAttacking)) {
-					float playerMeleeAttackSpeedInSeconds = 0.4f;
+					float playerMeleeAttackSpeedInSeconds = 0.5f;
 					playerMeleeAttacking = true;
 
 					if (tx.playerSprite.equals(tx.playerDown)) {
@@ -197,15 +197,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 
 				if (keycode == 66 && (!playerMeleeAttacking && !playerRangedAttacking)){
-
-					float playerRangedAttackSpeedInSeconds = 0.1f;
+					float playerRangedAttackSpeedInSeconds = 0.5f;
 					playerRangedAttacking = true;
 
 					if (tx.playerSprite.equals(tx.playerDown)) {
 						direction = "Down";
 						tx.playerSprite = tx.playerAttackDown;
 						arrowBody = Arrow.createArrowBody(world,player.getPosition().x-2f,player.getPosition().y-16f);
-						arrowBody.setUserData("Arrow");
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,true);
 						arrowBody.setLinearVelocity(0, -300f);
 					}
@@ -213,16 +211,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 						direction = "Up";
 						tx.playerSprite = tx.playerAttackUp;
 						arrowBody = Arrow.createArrowBody(world,player.getPosition().x-2f,player.getPosition().y+16f);
-						arrowBody.setUserData("Arrow");
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,true);
-
 						arrowBody.setLinearVelocity(0, 300f);
 					}
 					else if (tx.playerSprite.equals(tx.playerLeft)) {
 						direction = "Left";
 						tx.playerSprite = tx.playerAttackLeft;
 						arrowBody = Arrow.createArrowBody(world,player.getPosition().x-16f,player.getPosition().y);
-						arrowBody.setUserData("Arrow");
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,false);
 						arrowBody.setLinearVelocity(-300f, 0);
 					}
@@ -230,23 +225,21 @@ public class DungeonCrawler extends ApplicationAdapter {
 						direction = "Right";
 						tx.playerSprite = tx.playerAttackRight;
 						arrowBody = Arrow.createArrowBody(world,player.getPosition().x+16f,player.getPosition().y);
-						arrowBody.setUserData("Arrow");
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,false);
 						arrowBody.setLinearVelocity(300f, 0);
 					}
+					//only triggers if the player hasn't moved at all yet - player starts facing down
 					else {
 						direction = "Down";
 						tx.playerSprite = tx.playerAttackDown;
 						arrowBody = Arrow.createArrowBody(world,player.getPosition().x-2f,player.getPosition().y-16f);
-						arrowBody.setUserData("Arrow");
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,true);
 						arrowBody.setLinearVelocity(0, -300f);
 					}
-
 					//pause player in place while attacking (attacks must be timed correctly!)
+					arrowBody.setUserData("Arrow");
 					arrows.add(arrow = new Arrow(arrowBody,direction));
 					arrowArrayMap.put(arrowBody, arrow);
-
 
 					pausePlayer = true;
 					PLAYER_HORIZONTAL_SPEED = 0;
@@ -258,7 +251,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 						public void run() {
 							//resume player movement after a short delay and remove sword hitbox
 							pausePlayer = false;
-
 							//reset playerSprite to before the attack input
 							if (tx.playerSprite.equals(tx.playerAttackDown)) {
 								tx.playerSprite = tx.playerDown;
@@ -275,8 +267,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 				return false;
 			}
-
 		});
+
 		world.setContactListener(new ContactListener() {
 			@Override
 			public void beginContact(Contact contact) {
@@ -383,50 +375,42 @@ public class DungeonCrawler extends ApplicationAdapter {
 		if (!arrowArrayMap.isEmpty()) {
 			for (OrderedMap.Entry<Body, Arrow> arrowEntry : arrowArrayMap.entries()) {
 				Body key = arrowEntry.key;
-				Arrow value = arrowEntry.value;
+				//render each individual arrow
 				arrowBatch.begin();
-				Arrow.renderArrow(arrowBatch, tx.arrowSprite, direction, key.getPosition().x, key.getPosition().y);
+				Arrow.renderArrow(arrowBatch, tx.arrowSprite, arrowEntry.value.direction, key.getPosition().x, key.getPosition().y);
 				arrowBatch.end();
 			}
 		}
 
+		//check if there are any arrows
 		if (!arrowArrayMap.isEmpty()){
-
-				System.out.println("Before map reversal: "+arrowArrayMap);
+			//arraymap order needs to be reversed once (Collections.reverseOrder() method not available with ArrayMaps)
+			if (!reversed){
 				arrowArrayMap.reverse();
-				System.out.println("After map reversal: "+arrowArrayMap);
-
-			Iterator<ObjectMap.Entry<Body, Arrow>> arrayMapIt = arrowArrayMap.iterator();
-
-			if (arrayMapIt.hasNext()) {
-				ObjectMap.Entry<Body, Arrow> entry = arrayMapIt.next();
-
-				Body bodyKey = entry.key;
-				Arrow arrowValue = entry.value;
+				reversed = true;
+			}
 				Iterator<Body> bodyIt = arrowBodiesCollided.iterator();
-				if (bodyIt.hasNext()){
-					System.out.println("Entry: " + entry);
+				//iterate through every collided arrow
+				if (bodyIt.hasNext()) {
 					Body collidedBody = bodyIt.next();
-					System.out.println("Collided arrow: "+collidedBody);
-					System.out.println("All collided arrows: "+arrowBodiesCollided);
-					System.out.println("Arrow map current body: "+bodyKey);
-					System.out.println("Arrow map" + arrowArrayMap);
-					if (collidedBody == bodyKey) {
-						world.destroyBody(bodyKey);
-						arrayMapIt.remove(); // avoids a ConcurrentModificationException
-						arrows.remove(arrowValue);
+					//if the arraymap contains the arrow body that collided, remove that arrow from the game
+					if (arrowArrayMap.containsKey(collidedBody)) {
+						arrowArrayMap.removeKey(collidedBody);
+						//remove the arrow Box2D body
+						world.destroyBody(collidedBody);
+						//remove body from arrowBodiesCollided
 						bodyIt.remove();
+						//remove the sprite by removing the Arrow class object
+						arrows.remove(arrowArrayMap.get(collidedBody));
 					}
 				}
 			}
-		}
 
 		//renders all physics objects - for debug only
 		// b2dr.render(world,camera.combined);
 
 		camera.update();
-
-    hud.update();
+    	hud.update();
 
 		batch.setProjectionMatrix(camera.combined);
 		arrowBatch.setProjectionMatrix(camera.combined);
