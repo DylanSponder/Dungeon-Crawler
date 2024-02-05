@@ -80,9 +80,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		// TODO: Add hearts to HUD
 		Viewport vp = new ExtendViewport(camera.viewportWidth, camera.viewportHeight);
-    	Image healthSymbol = new Image(new Sprite(tx.heartTexture, 16, 16));
-		Image moneySymbol = new Image(new Sprite(tx.coinTexture, 10, 10));
-		hud = new HUD(vp, hudBatch, healthSymbol, moneySymbol);
+    // Image healthSymbol = new Image(new Sprite(tx.heartTexture, 16, 16));
+    Image moneySymbol = new Image(new Sprite(tx.coinTexture, 10, 10)); 
+		hud = new HUD(vp, hudBatch, moneySymbol);
 
 		//initialize map
 		TiledMap map = new TiledMap();
@@ -110,6 +110,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		renderer = new OrthogonalTiledMapRenderer(map);
 		b2dr = new Box2DDebugRenderer();
 
+		// player = cr.createPlayer(world, PLAYER_X, PLAYER_Y);
 
 
 		/*
