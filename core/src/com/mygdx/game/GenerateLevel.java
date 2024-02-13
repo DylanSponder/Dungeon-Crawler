@@ -6,7 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.game.box2D.CreateBody;
+import com.mygdx.game.box2D.BodyFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class GenerateLevel {
         LevelParser lp = new LevelParser();
         RenderRules r = new RenderRules();
         final CreateCell stc = new CreateCell();
-        final CreateBody cr = new CreateBody();
+        final BodyFactory cr = new BodyFactory();
         final CreateTexture tx = new CreateTexture();
         tx.textureRegionBuilder();
 

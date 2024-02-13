@@ -34,6 +34,7 @@ public class CreateTexture {
     TextureRegion doorTexture = new TextureRegion(roomDoorTexture, 0, 0, 16, 16);
     TextureRegion holeTexture = new TextureRegion(roomHoleTexture, 0, 0, 16, 16);
 
+    //outline player sprites
     Sprite playerSprite = new Sprite(playerTexture, 0, 0, 16, 16);
     Sprite playerUp = new Sprite(playerTexture, 16, 0, 16, 16);
     Sprite playerDown = new Sprite(playerTexture, 0, 0, 16, 16);
@@ -43,6 +44,7 @@ public class CreateTexture {
     Sprite playerAttackDown = new Sprite(playerAttackTexture, 0, 0, 16, 16);
     Sprite playerAttackLeft = new Sprite(playerAttackTexture, 32, 0, 16, 16);
     Sprite playerAttackRight = new Sprite(playerAttackTexture, 48, 0, 16, 16);
+    //outline weapon sprites
     Sprite swordSprite = new Sprite(swordTexture, 0, 0, 7, 12);
     Sprite bowSprite = new Sprite(bowTexture,0,0,15,7);
     Sprite arrowSprite = new Sprite(arrowTexture,0,0,13,5);

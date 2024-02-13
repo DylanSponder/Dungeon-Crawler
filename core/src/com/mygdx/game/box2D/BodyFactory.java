@@ -2,7 +2,7 @@ package com.mygdx.game.box2D;
 
 import com.badlogic.gdx.physics.box2d.*;
 
-public class CreateBody {
+public class BodyFactory {
 
     public Body createWall(World world, float x, float y) {
         Body body;
@@ -56,6 +56,7 @@ public class CreateBody {
         return swordHitbox;
     }
 
+    //unused - in case we want the bow to have collision in future
     public Body createBowBody(World world, Body player, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
@@ -78,7 +79,6 @@ public class CreateBody {
         bowShape.dispose();
         return bowHitbox;
     }
-
 
     public Body createEnemy(World world, float x, float y) {
         Body body;

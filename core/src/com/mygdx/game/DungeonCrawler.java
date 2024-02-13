@@ -4,6 +4,13 @@ import java.util.*;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ai.GdxAI;
+import com.badlogic.gdx.ai.steer.behaviors.Arrive;
+import com.badlogic.gdx.ai.steer.behaviors.RaycastObstacleAvoidance;
+import com.badlogic.gdx.ai.steer.behaviors.Wander;
+import com.badlogic.gdx.ai.steer.utils.RayConfiguration;
+import com.badlogic.gdx.ai.steer.utils.rays.SingleRayConfiguration;
+import com.badlogic.gdx.ai.utils.Ray;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -16,60 +23,48 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.ArrayMap;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.mygdx.game.box2D.CreateBody;
+import com.mygdx.game.box2D.BodyFactory;
+import com.mygdx.game.entity.Arrow;
+import com.mygdx.game.entity.Box2DSteeringEntity;
 
 public class DungeonCrawler extends ApplicationAdapter {
-	private SpriteBatch batch;
-	private SpriteBatch arrowBatch;
-	private SpriteBatch hudBatch;
+	private SpriteBatch batch, arrowBatch, hudBatch;
 	private World world;
 	private Box2DDebugRenderer b2dr;
-	private Body player;
-	private Body sword;
-	private Body bow;
-	private Body enemy;
-	private Body arrowBody;
+	private Body player, sword, enemy, arrowBody;
 	private Arrow arrow;
 	public ArrayList<Arrow> arrows;
 	public ArrayList<Body> arrowBodiesCollided;
 	public ArrayMap<Body, Arrow> arrowArrayMap;
-	private Fixture swordHitbox;
-	private Fixture enemyHitbox;
-	private Fixture arrowHitbox;
-	public boolean reversed;
-	private String direction;
-	private boolean pausePlayer;
-	private boolean playerMeleeAttacking;
-	private boolean playerRangedAttacking;
-	public float PLAYER_X = 0f;
-	public float PLAYER_Y = 0f;
-	public float PLAYER_HORIZONTAL_SPEED = 0f;
-	public float PLAYER_VERTICAL_SPEED = 0f;
+	private Fixture swordHitbox, enemyHitbox, arrowHitbox;
+	public boolean reversedArrowMap;
+	private String playerDirection;
+	private boolean playerPaused, playerMeleeAttacking, playerRangedAttacking;
+	public float PLAYER_X = 0f, PLAYER_Y = 0f;
+	public float PLAYER_HORIZONTAL_SPEED = 0f, PLAYER_VERTICAL_SPEED = 0f;
 	public int PLAYER_HEALTH = 12;
 	public int ENEMY_HEALTH = 3;
 	private TiledMapRenderer renderer;
 	private OrthographicCamera camera;
 	public static final float DEFAULT_VIEWPORT_WIDTH = 300f;
 	public static HUD hud;
+	Box2DSteeringEntity enemyAI, playerB2D;
 	@Override
 	public void create() {
+		world = new World(new Vector2(0, 0f), false);
 		batch = new SpriteBatch();
 		hudBatch = new SpriteBatch();
 		arrowBatch = new SpriteBatch();
-		world = new World(new Vector2(0, 0f), false);
-		final CreateBody cr = new CreateBody();
+		reversedArrowMap = false;
+		final BodyFactory bf = new BodyFactory();
 		ListenerClass lc = new ListenerClass();
-		reversed = false;
-
 		final CreateTexture tx = CreateTexture.getInstance();
 		tx.textureRegionBuilder();
 
@@ -96,7 +91,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 		TiledMapTileLayer layer = new TiledMapTileLayer(1000, 1000, 16, 16);
 
 		GenerateLevel level = new GenerateLevel();
-
 		List list = level.generateLevel(world,PLAYER_X,PLAYER_Y);
 
 		layer = (TiledMapTileLayer) list.get(0);
@@ -107,11 +101,35 @@ public class DungeonCrawler extends ApplicationAdapter {
 		renderer = new OrthogonalTiledMapRenderer(map);
 		b2dr = new Box2DDebugRenderer();
 
-		player = cr.createPlayer(world, PLAYER_X, PLAYER_Y);
+		player = bf.createPlayer(world, PLAYER_X, PLAYER_Y);
+		playerB2D = new Box2DSteeringEntity(player,10);
 		PLAYER_HEALTH = 12;
 
-		enemy = cr.createEnemy(world,PLAYER_X,PLAYER_Y-100);
-		enemyHitbox = cr.createEnemyHitbox(enemy);
+		enemy = bf.createEnemy(world,PLAYER_X,PLAYER_Y-90);
+		enemyHitbox = bf.createEnemyHitbox(enemy);
+		enemyAI = new Box2DSteeringEntity(enemy, 10);
+		final Arrive<Vector2> arriveSB = new Arrive<Vector2>(enemyAI, playerB2D)
+				.setTimeToTarget(0.001f)
+				.setArrivalTolerance(0f)
+				.setDecelerationRadius(100);
+		enemyAI.setBehaviour(arriveSB);
+
+		final Wander<Vector2> wanderB = new Wander<>(enemyAI)
+				.setWanderRadius(10f)
+				.setWanderOrientation(1f);
+		//enemyAI.setBehaviour(wanderB);
+
+		RayConfiguration ray = new RayConfiguration() {
+			@Override
+			public Ray[] updateRays() {
+				return new Ray[0];
+			}
+		};
+
+		final RaycastObstacleAvoidance raycastB = new RaycastObstacleAvoidance(enemyAI)
+				.setRayConfiguration(ray);
+		//enemyAI.setBehaviour(raycastB);
+
 
 		//set userdata for collision detection
 		player.setUserData("Player");
@@ -143,33 +161,33 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 					if (tx.playerSprite.equals(tx.playerDown)) {
 						tx.playerSprite = tx.playerAttackDown;
-						sword = cr.createSwordBody(world,player,-2.5f,-12f);
+						sword = bf.createSwordBody(world,player,-2.5f,-12f);
 						sword.setUserData("Sword");
-						swordHitbox = cr.createSwordHitbox(sword,false);
+						swordHitbox = bf.createSwordHitbox(sword,false);
 					} else if (tx.playerSprite.equals(tx.playerUp)) {
 						tx.playerSprite = tx.playerAttackUp;
-						sword = cr.createSwordBody(world,player,-2.5f,15);
+						sword = bf.createSwordBody(world,player,-2.5f,15);
 						sword.setUserData("Sword");
-						swordHitbox = cr.createSwordHitbox(sword,false);
+						swordHitbox = bf.createSwordHitbox(sword,false);
 					} else if (tx.playerSprite.equals(tx.playerLeft)) {
 						tx.playerSprite = tx.playerAttackLeft;
-						sword = cr.createSwordBody(world,player,-14f,-2.5f);
+						sword = bf.createSwordBody(world,player,-14f,-2.5f);
 						sword.setUserData("Sword");
-						swordHitbox = cr.createSwordHitbox(sword,true);
+						swordHitbox = bf.createSwordHitbox(sword,true);
 					} else if (tx.playerSprite.equals(tx.playerRight)) {
 						tx.playerSprite = tx.playerAttackRight;
-						sword = cr.createSwordBody(world,player,14,-2.5f);
+						sword = bf.createSwordBody(world,player,14,-2.5f);
 						sword.setUserData("Sword");
-						swordHitbox = cr.createSwordHitbox(sword,true);
+						swordHitbox = bf.createSwordHitbox(sword,true);
 					} else {
 						tx.playerSprite = tx.playerAttackDown;
-						sword = cr.createSwordBody(world,player,-2.5f,-12f);
+						sword = bf.createSwordBody(world,player,-2.5f,-12f);
 						sword.setUserData("Sword");
-						swordHitbox = cr.createSwordHitbox(sword,false);
+						swordHitbox = bf.createSwordHitbox(sword,false);
 					}
 
 					//pause player in place while attacking (attacks must be timed correctly!)
-					pausePlayer = true;
+					playerPaused = true;
 					PLAYER_HORIZONTAL_SPEED = 0;
 					PLAYER_VERTICAL_SPEED = 0;
 					player.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
@@ -178,7 +196,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						@Override
 						public void run() {
 							//resume player movement after a short delay and remove sword hitbox
-							pausePlayer = false;
+							playerPaused = false;
 							sword.destroyFixture(swordHitbox);
 
 							//reset playerSprite to before the attack input
@@ -197,32 +215,32 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 
 				if (keycode == 66 && (!playerMeleeAttacking && !playerRangedAttacking)){
-					float playerRangedAttackSpeedInSeconds = 0.5f;
+					float playerRangedAttackSpeedInSeconds = 0.4f;
 					playerRangedAttacking = true;
 
 					if (tx.playerSprite.equals(tx.playerDown)) {
-						direction = "Down";
+						playerDirection = "Down";
 						tx.playerSprite = tx.playerAttackDown;
 						arrowBody = Arrow.createArrowBody(world,player.getPosition().x-2f,player.getPosition().y-16f);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,true);
 						arrowBody.setLinearVelocity(0, -300f);
 					}
 					else if (tx.playerSprite.equals(tx.playerUp)) {
-						direction = "Up";
+						playerDirection = "Up";
 						tx.playerSprite = tx.playerAttackUp;
 						arrowBody = Arrow.createArrowBody(world,player.getPosition().x-2f,player.getPosition().y+16f);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,true);
 						arrowBody.setLinearVelocity(0, 300f);
 					}
 					else if (tx.playerSprite.equals(tx.playerLeft)) {
-						direction = "Left";
+						playerDirection = "Left";
 						tx.playerSprite = tx.playerAttackLeft;
 						arrowBody = Arrow.createArrowBody(world,player.getPosition().x-16f,player.getPosition().y);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,false);
 						arrowBody.setLinearVelocity(-300f, 0);
 					}
 					else if (tx.playerSprite.equals(tx.playerRight)) {
-						direction = "Right";
+						playerDirection = "Right";
 						tx.playerSprite = tx.playerAttackRight;
 						arrowBody = Arrow.createArrowBody(world,player.getPosition().x+16f,player.getPosition().y);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,false);
@@ -230,7 +248,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 					//only triggers if the player hasn't moved at all yet - player starts facing down
 					else {
-						direction = "Down";
+						playerDirection = "Down";
 						tx.playerSprite = tx.playerAttackDown;
 						arrowBody = Arrow.createArrowBody(world,player.getPosition().x-2f,player.getPosition().y-16f);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,true);
@@ -238,10 +256,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 					//pause player in place while attacking (attacks must be timed correctly!)
 					arrowBody.setUserData("Arrow");
-					arrows.add(arrow = new Arrow(arrowBody,direction));
+					arrows.add(arrow = new Arrow(arrowBody, playerDirection));
 					arrowArrayMap.put(arrowBody, arrow);
 
-					pausePlayer = true;
+					playerPaused = true;
 					PLAYER_HORIZONTAL_SPEED = 0;
 					PLAYER_VERTICAL_SPEED = 0;
 					player.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
@@ -250,7 +268,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						@Override
 						public void run() {
 							//resume player movement after a short delay and remove sword hitbox
-							pausePlayer = false;
+							playerPaused = false;
 							//reset playerSprite to before the attack input
 							if (tx.playerSprite.equals(tx.playerAttackDown)) {
 								tx.playerSprite = tx.playerDown;
@@ -290,7 +308,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 					else if (fb.getBody().getUserData() == "Arrow") {
 						if (!arrowBodiesCollided.contains(fb.getBody())) {
 							arrowBodiesCollided.add(fb.getBody());
-              hud.health = hud.health - 1;
 						}
 					}
 				}
@@ -298,10 +315,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 						||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Player")
 				){
 					if (fa.getBody().getUserData() == "Player"){
-              hud.health = hud.health - 1;
+              			hud.health = hud.health - 1;
 					}
 					else if (fb.getBody().getUserData() == "Player") {
-              hud.health = hud.health - 1;
+						hud.health = hud.health - 1;
 					}
 				}
 			}
@@ -341,7 +358,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//draw playerSprite on player Box2D object
 		batch.draw(tx.playerSprite, player.getPosition().x - 8f, player.getPosition().y - 6f, 16, 16);
 		if (playerMeleeAttacking) {
-			//add the swordSprite to the corresponding attack direction
+			//add the swordSprite to the corresponding attack playerDirection
 			if (tx.playerSprite.equals(tx.playerAttackUp)) {
 				batch.draw(tx.swordSprite, player.getPosition().x - 13f, player.getPosition().y - 3f, 7, 12, 7, 12, 1, 1, 180);
 			} else if (tx.playerSprite.equals(tx.playerAttackDown)) {
@@ -353,7 +370,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 		}
 		if (playerRangedAttacking) {
-			//add the bowSprite and arrowSprite to the corresponding attack direction
+			//add the bowSprite and arrowSprite to the corresponding attack playerDirection
 			if (tx.playerSprite.equals(tx.playerAttackUp)) {
 				batch.draw(tx.bowSprite, player.getPosition().x - 11f, player.getPosition().y - 4f, 8, 10, 14, 7, 1, 1, 180);
 			} else if (tx.playerSprite.equals(tx.playerAttackDown)) {
@@ -371,7 +388,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		batch.draw(tx.enemySprite, enemy.getPosition().x - 8f, enemy.getPosition().y - 7f, 16, 16);
 		batch.end();
 
-
+		//check if there are any arrows
 		if (!arrowArrayMap.isEmpty()) {
 			for (OrderedMap.Entry<Body, Arrow> arrowEntry : arrowArrayMap.entries()) {
 				Body key = arrowEntry.key;
@@ -380,15 +397,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 				Arrow.renderArrow(arrowBatch, tx.arrowSprite, arrowEntry.value.direction, key.getPosition().x, key.getPosition().y);
 				arrowBatch.end();
 			}
-		}
 
-		//check if there are any arrows
-		if (!arrowArrayMap.isEmpty()){
-			//arraymap order needs to be reversed once (Collections.reverseOrder() method not available with ArrayMaps)
-			if (!reversed){
+			//arraymap order needs to be reversedArrowMap once (Collections.reverseOrder() method is not available with ArrayMaps)
+			if (!reversedArrowMap){
 				arrowArrayMap.reverse();
-				reversed = true;
+				reversedArrowMap = true;
 			}
+
 				Iterator<Body> bodyIt = arrowBodiesCollided.iterator();
 				//iterate through every collided arrow
 				if (bodyIt.hasNext()) {
@@ -407,7 +422,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 
 		//renders all physics objects - for debug only
-		// b2dr.render(world,camera.combined);
+		//b2dr.render(world,camera.combined);
 
 		camera.update();
     	hud.update();
@@ -432,7 +447,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 	//update method for physics, camera and held down inputs
 	public void update(float delta) {
 		world.step(1 / 60f, 6, 2);
-		if (!pausePlayer) {
+		enemyAI.update(GdxAI.getTimepiece().getTime());
+		if (!playerPaused) {
 			inputUpdate(delta);
 		}
 	}
