@@ -16,8 +16,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class HUD {
   public Stage stage;
   int topPadding;
-  HealthBar healthBar;
-  int health = 3;
+  public HealthBar healthBar;
 
   public HUD(Viewport vp, SpriteBatch sb, Image moneySymbol) {
     stage = new Stage(vp, sb);
@@ -27,7 +26,7 @@ public class HUD {
     Sprite healthSymbol = new Sprite(tx.heartTexture, 0, 0, 16, 16);
     Sprite healthSymbolHalf = new Sprite(tx.heartTexture, 32, 0, 16, 16);
     Sprite healthSymbolEmpty = new Sprite(tx.heartTexture, 64, 0, 16, 16);
-    healthBar = new HealthBar(health, healthSymbol, healthSymbolHalf, healthSymbolEmpty);
+    healthBar = new HealthBar(3, healthSymbol, healthSymbolHalf, healthSymbolEmpty);
 
     Table moneyTable = new Table();
     table.top();
@@ -44,6 +43,6 @@ public class HUD {
   }
 
   public void update() {
-    healthBar.update(2);
+    healthBar.update();
   }
 }

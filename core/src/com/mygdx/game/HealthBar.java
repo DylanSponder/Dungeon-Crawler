@@ -9,18 +9,26 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class HealthBar extends Table {
   float maxHealth;
-  float currentHealth;
-  Sprite healthSymbol;
-  Sprite healthSymbolHalf;
-  Sprite healthSymbolEmpty;
+  public float currentHealth;
+  TextureRegionDrawable healthSymbol;
+  TextureRegionDrawable healthSymbolHalf;
+  TextureRegionDrawable healthSymbolEmpty;
   ArrayList<Image> actors;
+
+  public void LoseHealth(float health) {
+    float result = currentHealth - health;
+    if (result > -1) {
+      System.out.println("Not: "+result);
+      currentHealth = result;
+    }
+  }
 
   HealthBar(float capacity, Sprite symbol, Sprite symbolHalf, Sprite symbolEmpty) {
     maxHealth = capacity;
     currentHealth = maxHealth;
-    healthSymbol = symbol;
-    healthSymbolHalf = symbolHalf;
-    healthSymbolEmpty = symbolEmpty;
+    healthSymbol = new TextureRegionDrawable(symbol);
+    healthSymbolHalf = new TextureRegionDrawable(symbolHalf);
+    healthSymbolEmpty = new TextureRegionDrawable(symbolEmpty);
     actors = new ArrayList<Image>();
 
     for (int i = 0; i < currentHealth; i++) {
@@ -29,16 +37,13 @@ public class HealthBar extends Table {
     }
   }
 
-  public void update(float playerHealth) {
-    if (currentHealth != playerHealth) {
-      for (int i = actors.size()-1; i > -1; i--) {
-        actors.get(i).setDrawable(new TextureRegionDrawable(healthSymbolEmpty));
-      }
-      // Set last Actor to healthSymbolHalf if playerHealth is fractional
-      // if ((int) playerHealth != playerHealth) {
-      //   actors.get(actors.size()-1).setDrawable(new TextureRegionDrawable(healthSymbolHalf));
-      // }
+  public void update() {
+    // Set last Actor to healthSymbolHalf if playerHealth is fractional
+    if ((int) currentHealth != currentHealth) {
+      actors.get((int) currentHealth).setDrawable(healthSymbolHalf);
     }
-    currentHealth = playerHealth;
+    for (int i = actors.size()-1; i >= currentHealth; i--) {
+      actors.get(i).setDrawable(healthSymbolEmpty);
+    }
   }
 }

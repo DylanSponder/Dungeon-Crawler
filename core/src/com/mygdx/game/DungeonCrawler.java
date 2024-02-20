@@ -78,7 +78,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 		camera = new OrthographicCamera(1000, 1000);
 		camera.setToOrtho(false, w / 3, h / 3);
 
-		// TODO: Add hearts to HUD
 		Viewport vp = new ExtendViewport(camera.viewportWidth, camera.viewportHeight);
     // Image healthSymbol = new Image(new Sprite(tx.heartTexture, 16, 16));
     Image moneySymbol = new Image(new Sprite(tx.coinTexture, 10, 10)); 
@@ -340,10 +339,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 					else {
 						if (fa.getBody().getUserData() == "Player"){
-							hud.health = hud.health - 1;
-						}
-						else if (fb.getBody().getUserData() == "Player") {
-							hud.health = hud.health - 1;
+                hud.healthBar.LoseHealth(0.5f);
 						}
 					}
 				}
@@ -508,7 +504,7 @@ if(enemy.debug) {
 
  */
 
-    	hud.update();
+    hud.update();
 
 		batch.setProjectionMatrix(camera.combined);
 		arrowBatch.setProjectionMatrix(camera.combined);
@@ -544,6 +540,7 @@ if(enemy.debug) {
 	@Override
 	public void dispose() {
 		batch.dispose();
+    hud.stage.dispose();
 		arrowBatch.dispose();
 		world.dispose();
 		b2dr.dispose();
