@@ -26,7 +26,7 @@ public class HUD {
     Sprite healthSymbol = new Sprite(tx.heartTexture, 0, 0, 16, 16);
     Sprite healthSymbolHalf = new Sprite(tx.heartTexture, 32, 0, 16, 16);
     Sprite healthSymbolEmpty = new Sprite(tx.heartTexture, 64, 0, 16, 16);
-    healthBar = new HealthBar(3, healthSymbol, healthSymbolHalf, healthSymbolEmpty);
+    healthBar = new HealthBar(3, healthSymbol, healthSymbolHalf, healthSymbolEmpty, 60);
 
     Table moneyTable = new Table();
     table.top();

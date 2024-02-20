@@ -14,16 +14,25 @@ public class HealthBar extends Table {
   TextureRegionDrawable healthSymbolHalf;
   TextureRegionDrawable healthSymbolEmpty;
   ArrayList<Image> actors;
+  int initialIFrames;
+  int remainingIFrames;
+  boolean vulnerable;
 
   public void LoseHealth(float health) {
-    float result = currentHealth - health;
-    if (result > -1) {
-      System.out.println("Not: "+result);
-      currentHealth = result;
+    if (vulnerable) {
+      float result = currentHealth - health;
+      if (result < -1) {
+        currentHealth = 0;
+      } else {
+        currentHealth = result;
+      }
+      vulnerable = false;
     }
   }
 
-  HealthBar(float capacity, Sprite symbol, Sprite symbolHalf, Sprite symbolEmpty) {
+  HealthBar(float capacity, Sprite symbol, Sprite symbolHalf, Sprite symbolEmpty, int totalIFrames) {
+    vulnerable = true;
+    initialIFrames = totalIFrames;
     maxHealth = capacity;
     currentHealth = maxHealth;
     healthSymbol = new TextureRegionDrawable(symbol);
@@ -42,8 +51,14 @@ public class HealthBar extends Table {
     if ((int) currentHealth != currentHealth) {
       actors.get((int) currentHealth).setDrawable(healthSymbolHalf);
     }
-    for (int i = actors.size()-1; i >= currentHealth; i--) {
+    for (int i = actors.size()-1; i >= currentHealth && i > -1; i--) {
       actors.get(i).setDrawable(healthSymbolEmpty);
+    }
+    if (remainingIFrames == 0) {
+      remainingIFrames = initialIFrames;
+      vulnerable = true;
+    } else {
+      remainingIFrames--;
     }
   }
 }
