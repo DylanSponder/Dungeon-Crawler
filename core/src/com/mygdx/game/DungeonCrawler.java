@@ -5,16 +5,12 @@ import java.util.*;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.GdxAI;
-import com.badlogic.gdx.ai.steer.behaviors.Arrive;
-import com.badlogic.gdx.ai.steer.behaviors.RaycastObstacleAvoidance;
-import com.badlogic.gdx.ai.steer.behaviors.Wander;
-import com.badlogic.gdx.ai.steer.utils.RayConfiguration;
-import com.badlogic.gdx.ai.steer.utils.rays.SingleRayConfiguration;
 import com.badlogic.gdx.ai.utils.Ray;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -32,13 +28,19 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.Arrow;
-import com.mygdx.game.entity.Box2DSteeringEntity;
+import com.mygdx.game.entity.Player;
+import com.mygdx.game.entity.behaviours.fsm.Enemy;
+import com.mygdx.game.entity.behaviours.fsm.EnemyState;
 
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch batch, arrowBatch, hudBatch;
-	private World world;
+	public static World world;
+	private boolean debug;
 	private Box2DDebugRenderer b2dr;
-	private Body player, sword, enemy, arrowBody;
+	private Body sword, arrowBody;
+	public static Player player;
+	private Enemy enemy, enemy2;
+	private EnemyState enemyState;
 	private Arrow arrow;
 	public ArrayList<Arrow> arrows;
 	public ArrayList<Body> arrowBodiesCollided;
@@ -47,15 +49,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public boolean reversedArrowMap;
 	private String playerDirection;
 	private boolean playerPaused, playerMeleeAttacking, playerRangedAttacking;
-	public float PLAYER_X = 0f, PLAYER_Y = 0f;
 	public float PLAYER_HORIZONTAL_SPEED = 0f, PLAYER_VERTICAL_SPEED = 0f;
-	public int PLAYER_HEALTH = 12;
+	public float PLAYER_X = 0f, PLAYER_Y = 0f;
 	public int ENEMY_HEALTH = 3;
 	private TiledMapRenderer renderer;
-	private OrthographicCamera camera;
+	public static OrthographicCamera camera;
 	public static final float DEFAULT_VIEWPORT_WIDTH = 300f;
 	public static HUD hud;
-	Box2DSteeringEntity enemyAI, playerB2D;
+
 	@Override
 	public void create() {
 		world = new World(new Vector2(0, 0f), false);
@@ -63,6 +64,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		hudBatch = new SpriteBatch();
 		arrowBatch = new SpriteBatch();
 		reversedArrowMap = false;
+		player = new Player();
 		final BodyFactory bf = new BodyFactory();
 		ListenerClass lc = new ListenerClass();
 		final CreateTexture tx = CreateTexture.getInstance();
@@ -96,17 +98,23 @@ public class DungeonCrawler extends ApplicationAdapter {
 		layer = (TiledMapTileLayer) list.get(0);
 		PLAYER_X = (float) list.get(1);
 		PLAYER_Y = (float) list.get(2);
+
+		player.createPlayer(world, PLAYER_X, PLAYER_Y);
+
+		enemy = new Enemy( world, PLAYER_X, PLAYER_Y-160);
+
+		//enemy2 = new Enemy( world, PLAYER_X, PLAYER_Y-200);
+
 		//add current layers to the TileMap and assign it a renderer
 		layers.add(layer);
 		renderer = new OrthogonalTiledMapRenderer(map);
 		b2dr = new Box2DDebugRenderer();
 
-		player = bf.createPlayer(world, PLAYER_X, PLAYER_Y);
-		playerB2D = new Box2DSteeringEntity(player,10);
-		PLAYER_HEALTH = 12;
 
-		enemy = bf.createEnemy(world,PLAYER_X,PLAYER_Y-90);
-		enemyHitbox = bf.createEnemyHitbox(enemy);
+
+		/*
+		//enemy = bf.createEnemyBody(world,PLAYER_X,PLAYER_Y-90);
+		//enemyHitbox = bf.createEnemyHitbox(enemy, 6, 5);
 		enemyAI = new Box2DSteeringEntity(enemy, 10);
 		final Arrive<Vector2> arriveSB = new Arrive<Vector2>(enemyAI, playerB2D)
 				.setTimeToTarget(0.001f)
@@ -119,6 +127,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 				.setWanderOrientation(1f);
 		//enemyAI.setBehaviour(wanderB);
 
+
+
 		RayConfiguration ray = new RayConfiguration() {
 			@Override
 			public Ray[] updateRays() {
@@ -129,11 +139,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 		final RaycastObstacleAvoidance raycastB = new RaycastObstacleAvoidance(enemyAI)
 				.setRayConfiguration(ray);
 		//enemyAI.setBehaviour(raycastB);
-
+	*/
 
 		//set userdata for collision detection
-		player.setUserData("Player");
-		enemy.setUserData("Enemy");
+
+		//
 
 		arrowBodiesCollided = new ArrayList<Body>();
 		arrowArrayMap = new ArrayMap<Body, Arrow>();
@@ -161,27 +171,27 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 					if (tx.playerSprite.equals(tx.playerDown)) {
 						tx.playerSprite = tx.playerAttackDown;
-						sword = bf.createSwordBody(world,player,-2.5f,-12f);
+						sword = bf.createSwordBody(world,player.playerBody,-2.5f,-12f);
 						sword.setUserData("Sword");
 						swordHitbox = bf.createSwordHitbox(sword,false);
 					} else if (tx.playerSprite.equals(tx.playerUp)) {
 						tx.playerSprite = tx.playerAttackUp;
-						sword = bf.createSwordBody(world,player,-2.5f,15);
+						sword = bf.createSwordBody(world,player.playerBody,-2.5f,15);
 						sword.setUserData("Sword");
 						swordHitbox = bf.createSwordHitbox(sword,false);
 					} else if (tx.playerSprite.equals(tx.playerLeft)) {
 						tx.playerSprite = tx.playerAttackLeft;
-						sword = bf.createSwordBody(world,player,-14f,-2.5f);
+						sword = bf.createSwordBody(world,player.playerBody,-14f,-2.5f);
 						sword.setUserData("Sword");
 						swordHitbox = bf.createSwordHitbox(sword,true);
 					} else if (tx.playerSprite.equals(tx.playerRight)) {
 						tx.playerSprite = tx.playerAttackRight;
-						sword = bf.createSwordBody(world,player,14,-2.5f);
+						sword = bf.createSwordBody(world,player.playerBody,14,-2.5f);
 						sword.setUserData("Sword");
 						swordHitbox = bf.createSwordHitbox(sword,true);
 					} else {
 						tx.playerSprite = tx.playerAttackDown;
-						sword = bf.createSwordBody(world,player,-2.5f,-12f);
+						sword = bf.createSwordBody(world,player.playerBody,-2.5f,-12f);
 						sword.setUserData("Sword");
 						swordHitbox = bf.createSwordHitbox(sword,false);
 					}
@@ -190,7 +200,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					playerPaused = true;
 					PLAYER_HORIZONTAL_SPEED = 0;
 					PLAYER_VERTICAL_SPEED = 0;
-					player.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
+					player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
 
 					Timer.schedule(new Timer.Task() {
 						@Override
@@ -221,28 +231,28 @@ public class DungeonCrawler extends ApplicationAdapter {
 					if (tx.playerSprite.equals(tx.playerDown)) {
 						playerDirection = "Down";
 						tx.playerSprite = tx.playerAttackDown;
-						arrowBody = Arrow.createArrowBody(world,player.getPosition().x-2f,player.getPosition().y-16f);
+						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-2f,player.playerBody.getPosition().y-16f);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,true);
 						arrowBody.setLinearVelocity(0, -300f);
 					}
 					else if (tx.playerSprite.equals(tx.playerUp)) {
 						playerDirection = "Up";
 						tx.playerSprite = tx.playerAttackUp;
-						arrowBody = Arrow.createArrowBody(world,player.getPosition().x-2f,player.getPosition().y+16f);
+						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-2f,player.playerBody.getPosition().y+16f);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,true);
 						arrowBody.setLinearVelocity(0, 300f);
 					}
 					else if (tx.playerSprite.equals(tx.playerLeft)) {
 						playerDirection = "Left";
 						tx.playerSprite = tx.playerAttackLeft;
-						arrowBody = Arrow.createArrowBody(world,player.getPosition().x-16f,player.getPosition().y);
+						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-16f,player.playerBody.getPosition().y);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,false);
 						arrowBody.setLinearVelocity(-300f, 0);
 					}
 					else if (tx.playerSprite.equals(tx.playerRight)) {
 						playerDirection = "Right";
 						tx.playerSprite = tx.playerAttackRight;
-						arrowBody = Arrow.createArrowBody(world,player.getPosition().x+16f,player.getPosition().y);
+						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x+16f,player.playerBody.getPosition().y);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,false);
 						arrowBody.setLinearVelocity(300f, 0);
 					}
@@ -250,7 +260,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					else {
 						playerDirection = "Down";
 						tx.playerSprite = tx.playerAttackDown;
-						arrowBody = Arrow.createArrowBody(world,player.getPosition().x-2f,player.getPosition().y-16f);
+						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-2f,player.playerBody.getPosition().y-16f);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,true);
 						arrowBody.setLinearVelocity(0, -300f);
 					}
@@ -262,7 +272,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					playerPaused = true;
 					PLAYER_HORIZONTAL_SPEED = 0;
 					PLAYER_VERTICAL_SPEED = 0;
-					player.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
+					player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
 
 					Timer.schedule(new Timer.Task() {
 						@Override
@@ -300,30 +310,56 @@ public class DungeonCrawler extends ApplicationAdapter {
 						||(fa.getBody().getUserData() == "Wall" && fb.getBody().getUserData() == "Arrow")
 						||(fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Wall")
 				){
-					if (fa.getBody().getUserData() == "Arrow"){
+					if (fa.getBody().getUserData() == "Enemy" && fa.getUserData() != "Proximity"
+					|| fa.getBody().getUserData() == "Wall"){
+							if (!arrowBodiesCollided.contains(fb.getBody())) {
+								arrowBodiesCollided.add(fb.getBody());
+							}
+					}
+					else if (fb.getBody().getUserData() == "Enemy" && fb.getUserData() != "Proximity"
+							|| fb.getBody().getUserData() == "Wall") {
 						if (!arrowBodiesCollided.contains(fa.getBody())) {
 							arrowBodiesCollided.add(fa.getBody());
 						}
 					}
-					else if (fb.getBody().getUserData() == "Arrow") {
-						if (!arrowBodiesCollided.contains(fb.getBody())) {
-							arrowBodiesCollided.add(fb.getBody());
-						}
+
+					if (fa.getBody().getUserData() == "Arrow" && fb.getUserData() == "EnemyHitbox"
+					|| fb.getBody().getUserData() == "Arrow" && fa.getUserData() == "EnemyHitbox")
+					{
+						enemy.getStateMachine().changeState(EnemyState.ATTACK);
 					}
+
 				}
 				if ((fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Enemy")
 						||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Player")
 				){
-					if (fa.getBody().getUserData() == "Player"){
-              			hud.health = hud.health - 1;
+					if(fa.getUserData() == "Proximity"||
+					fb.getUserData() == "Proximity"){
+						enemy.getStateMachine().changeState(EnemyState.ATTACK);
 					}
-					else if (fb.getBody().getUserData() == "Player") {
-						hud.health = hud.health - 1;
+					else {
+						if (fa.getBody().getUserData() == "Player"){
+							hud.health = hud.health - 1;
+						}
+						else if (fb.getBody().getUserData() == "Player") {
+							hud.health = hud.health - 1;
+						}
 					}
 				}
 			}
 			@Override
 			public void endContact(Contact contact) {
+				Fixture fa = contact.getFixtureA();
+				Fixture fb = contact.getFixtureB();
+
+				if ((fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Enemy")
+						||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Player")
+				){
+					if(fa.getUserData() == "Proximity"||
+							fb.getUserData() == "Proximity"){
+						enemy.getStateMachine().changeState(EnemyState.WANDER);
+					}
+				}
 			}
 			@Override
 			public void preSolve(Contact contact, Manifold oldManifold) {
@@ -352,40 +388,40 @@ public class DungeonCrawler extends ApplicationAdapter {
 		renderer.render();
 
 		//set camera position to always be centred on the playerSprite
-		camera.position.set(player.getPosition().x + tx.playerSprite.getWidth() / 2, player.getPosition().y + tx.playerSprite.getHeight() / 2, 0);
+		camera.position.set(player.playerBody.getPosition().x + tx.playerSprite.getWidth() / 2, player.playerBody.getPosition().y + tx.playerSprite.getHeight() / 2, 0);
 
 		batch.begin();
 		//draw playerSprite on player Box2D object
-		batch.draw(tx.playerSprite, player.getPosition().x - 8f, player.getPosition().y - 6f, 16, 16);
+		batch.draw(tx.playerSprite, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 6f, 16, 16);
 		if (playerMeleeAttacking) {
 			//add the swordSprite to the corresponding attack playerDirection
 			if (tx.playerSprite.equals(tx.playerAttackUp)) {
-				batch.draw(tx.swordSprite, player.getPosition().x - 13f, player.getPosition().y - 3f, 7, 12, 7, 12, 1, 1, 180);
+				batch.draw(tx.swordSprite, player.playerBody.getPosition().x - 13f, player.playerBody.getPosition().y - 3f, 7, 12, 7, 12, 1, 1, 180);
 			} else if (tx.playerSprite.equals(tx.playerAttackDown)) {
-				batch.draw(tx.swordSprite, player.getPosition().x - 6f, player.getPosition().y - 18f, 7, 12, 7, 12, 1, 1, 0);
+				batch.draw(tx.swordSprite, player.playerBody.getPosition().x - 6f, player.playerBody.getPosition().y - 18f, 7, 12, 7, 12, 1, 1, 0);
 			} else if (tx.playerSprite.equals(tx.playerAttackLeft)) {
-				batch.draw(tx.swordSprite, player.getPosition().x - 15f, player.getPosition().y - 18f, 7, 12, 7, 12, 1, 1, 270);
+				batch.draw(tx.swordSprite, player.playerBody.getPosition().x - 15f, player.playerBody.getPosition().y - 18f, 7, 12, 7, 12, 1, 1, 270);
 			} else if (tx.playerSprite.equals(tx.playerAttackRight)) {
-				batch.draw(tx.swordSprite, player.getPosition().x + 1f, player.getPosition().y - 11f, 7, 12, 7, 12, 1, 1, 90);
+				batch.draw(tx.swordSprite, player.playerBody.getPosition().x + 1f, player.playerBody.getPosition().y - 11f, 7, 12, 7, 12, 1, 1, 90);
 			}
 		}
 		if (playerRangedAttacking) {
 			//add the bowSprite and arrowSprite to the corresponding attack playerDirection
 			if (tx.playerSprite.equals(tx.playerAttackUp)) {
-				batch.draw(tx.bowSprite, player.getPosition().x - 11f, player.getPosition().y - 4f, 8, 10, 14, 7, 1, 1, 180);
+				batch.draw(tx.bowSprite, player.playerBody.getPosition().x - 11f, player.playerBody.getPosition().y - 4f, 8, 10, 14, 7, 1, 1, 180);
 			} else if (tx.playerSprite.equals(tx.playerAttackDown)) {
-				batch.draw(tx.bowSprite, player.getPosition().x - 9f, player.getPosition().y - 13f, 7, 12, 14, 7, 1, 1, 0);
+				batch.draw(tx.bowSprite, player.playerBody.getPosition().x - 9f, player.playerBody.getPosition().y - 13f, 7, 12, 14, 7, 1, 1, 0);
 			} else if (tx.playerSprite.equals(tx.playerAttackLeft)) {
-				batch.draw(tx.bowSprite, player.getPosition().x - 10f, player.getPosition().y - 12f, 7, 12, 14, 7, 1, 1, 270);
+				batch.draw(tx.bowSprite, player.playerBody.getPosition().x - 10f, player.playerBody.getPosition().y - 12f, 7, 12, 14, 7, 1, 1, 270);
 			} else if (tx.playerSprite.equals(tx.playerAttackRight)) {
-				batch.draw(tx.bowSprite, player.getPosition().x - 4f, player.getPosition().y - 12f, 7, 12, 14, 7, 1, 1, 90);
+				batch.draw(tx.bowSprite, player.playerBody.getPosition().x - 4f, player.playerBody.getPosition().y - 12f, 7, 12, 14, 7, 1, 1, 90);
 			}
 		}
 		batch.end();
 
 		//render enemy sprite
 		batch.begin();
-		batch.draw(tx.enemySprite, enemy.getPosition().x - 8f, enemy.getPosition().y - 7f, 16, 16);
+		batch.draw(tx.enemySprite, enemy.enemyBody.getPosition().x - 8f, enemy.enemyBody.getPosition().y - 7f, 16, 16);
 		batch.end();
 
 		//check if there are any arrows
@@ -421,15 +457,62 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 
-		//renders all physics objects - for debug only
-		//b2dr.render(world,camera.combined);
 
-		camera.update();
+		//
+
+		debug = true;
+
+if (debug) {
+	//renders all physics objects - for debug only
+	b2dr.render(world,camera.combined);
+
+	//renders raycast rays
+	Ray<Vector2>[] rays = enemy.rayConfigurations[0].getRays();
+	enemy.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+	enemy.shapeRenderer.setProjectionMatrix(camera.combined);
+	enemy.shapeRenderer.setColor(1, 0, 0, 1);
+	// shapeRenderer.setColor(Color.RED);
+	//transform.idt();
+	//shapeRenderer.setTransformMatrix(transform);
+	for (int i = 0; i < rays.length; i++) {
+		Ray<Vector2> ray = rays[i];
+		enemy.tmp.set(ray.start);
+		enemy.tmp2.set(ray.end);
+		enemy.shapeRenderer.line(enemy.tmp, enemy.tmp2);
+	}
+	enemy.shapeRenderer.end();
+
+
+	camera.update();
+}
+
+
+
+/*
+if(enemy.debug) {
+	enemy.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+	enemy.shapeRenderer.setColor(Color.CORAL);
+
+	//enemy.shapeRenderer.circle(wanderCenter.x, wanderCenter.y - enemy.enemyAI.getPosition().y, enemy.wanderSB.getWanderRadius(), 12);
+	enemy.shapeRenderer.end();
+	// Draw wander target
+	enemy.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+	enemy.shapeRenderer.setColor(Color.CORAL);
+	Vector2 wanderTarget = (Vector2) enemy.wanderSB.getInternalTargetPosition();
+	enemy.shapeRenderer.circle(wanderTarget.x, wanderTarget.y - enemy.enemyAI.getPosition().y, .1f, 6);
+	enemy.shapeRenderer.end();
+
+	enemy.shapeRenderer.setProjectionMatrix(camera.combined);
+}
+
+ */
+
     	hud.update();
 
 		batch.setProjectionMatrix(camera.combined);
 		arrowBatch.setProjectionMatrix(camera.combined);
 		hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
+
 		hud.stage.draw();
 	}
 
@@ -447,7 +530,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 	//update method for physics, camera and held down inputs
 	public void update(float delta) {
 		world.step(1 / 60f, 6, 2);
-		enemyAI.update(GdxAI.getTimepiece().getTime());
+
+		enemy.enemyAI.update(GdxAI.getTimepiece().getTime());
+		enemy.update(GdxAI.getTimepiece().getTime());
+		//GdxAI.getTimepiece().update(delta);
+
 		if (!playerPaused) {
 			inputUpdate(delta);
 		}
@@ -469,20 +556,20 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//move playerSprite Sprite by delta speed according to button WASD press
 		if (Gdx.input.isKeyPressed(Keys.W)||Gdx.input.isKeyPressed(Keys.UP)) {
 			tx.playerSprite = tx.playerUp;
-			PLAYER_VERTICAL_SPEED = 100f;
+			PLAYER_VERTICAL_SPEED = 300f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.A)||Gdx.input.isKeyPressed(Keys.LEFT)) {
 			tx.playerSprite = tx.playerLeft;
-			PLAYER_HORIZONTAL_SPEED = -100f;
+			PLAYER_HORIZONTAL_SPEED = -300f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.S)||Gdx.input.isKeyPressed(Keys.DOWN)) {
 			tx.playerSprite = tx.playerDown;
-			PLAYER_VERTICAL_SPEED = -100f;
+			PLAYER_VERTICAL_SPEED = -300f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.RIGHT)) {
 			tx.playerSprite = tx.playerRight;
-			PLAYER_HORIZONTAL_SPEED = 100f;
+			PLAYER_HORIZONTAL_SPEED = 300f;
 		}
-		player.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
+		player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
 	}
 }

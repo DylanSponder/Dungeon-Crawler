@@ -5,10 +5,12 @@ import com.badlogic.gdx.ai.steer.SteeringAcceleration;
 import com.badlogic.gdx.ai.steer.SteeringBehavior;
 import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.mygdx.game.box2D.Box2DSteeringUtils;
 
 public class Box2DSteeringEntity implements Steerable<Vector2> {
+    public Vector3 halfExtents;
     Body body;
     boolean tagged;
     float boundingRadius;
@@ -21,10 +23,11 @@ public class Box2DSteeringEntity implements Steerable<Vector2> {
         this.body = body;
         this.boundingRadius = boundingRadius;
 
-        this.maxLinearSpeed = 2000;
-        this.maxLinearAcceleration = 2000;
-        this.maxAngularSpeed = 10000;
-        this.maxAngularAcceleration = 10000;
+        this.maxLinearSpeed = 175;
+        this.maxLinearAcceleration = 1000;
+        this.maxAngularSpeed = 1;
+        this.maxAngularAcceleration = 1000;
+
 
         this.tagged = false;
 
@@ -44,9 +47,23 @@ public class Box2DSteeringEntity implements Steerable<Vector2> {
 
         if(!steeringOutput.linear.isZero()){
             Vector2 force = steeringOutput.linear;
-            force.scl(10,10);
+            force.scl(1000,1000);
             body.applyForceToCenter(force, true);
             anyAccelerations = true;
+        }
+
+        if (steeringOutput.angular != 0) {
+            // this method internally scales the torque by deltaTime
+            body.applyTorque(steeringOutput.angular, true);
+            anyAccelerations = true;
+        }
+        else {
+            Vector2 linVel = getLinearVelocity();
+            if (!linVel.isZero(getZeroLinearSpeedThreshold())) {
+                float newOrientation = vectorToAngle(linVel);
+                body.setAngularVelocity((newOrientation - getAngularVelocity()) * delta); // this is superfluous if independentFacing is always true
+                body.setTransform(body.getPosition(), newOrientation);
+            }
         }
 
         if (anyAccelerations){

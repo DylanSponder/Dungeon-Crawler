@@ -1,5 +1,6 @@
 package com.mygdx.game.box2D;
 
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class BodyFactory {
@@ -80,7 +81,7 @@ public class BodyFactory {
         return bowHitbox;
     }
 
-    public Body createEnemy(World world, float x, float y) {
+    public Body createEnemyBody(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -90,15 +91,28 @@ public class BodyFactory {
         return body;
     }
 
-    public Fixture createEnemyHitbox(Body body){
-        PolygonShape enemyShape = new PolygonShape();
-        enemyShape.setAsBox(6f, 5f);
+    public Fixture createEnemyHitbox(Body body, float r){
+        CircleShape enemyShape = new CircleShape();
+        enemyShape.setRadius(r);
+       // PolygonShape enemyShape = new PolygonShape();
+       // enemyShape.setAsBox(x, y);
         Fixture enemyHitbox = body.createFixture(enemyShape, 1.0f);
         enemyShape.dispose();
+        enemyHitbox.setUserData("EnemyHitbox");
         return enemyHitbox;
     }
 
-    public Body createPlayer(World world, float playerX, float playerY) {
+    public Fixture createEnemyDetectionRadius(Body body, float r){
+        CircleShape enemyShape = new CircleShape();
+        enemyShape.setRadius(r);
+        Fixture enemyDetectionHitbox = body.createFixture(enemyShape, 1.0f);
+        enemyShape.dispose();
+        enemyDetectionHitbox.setUserData("Proximity");
+        return enemyDetectionHitbox;
+    }
+
+
+    public Body createPlayerBody(World world, float playerX, float playerY) {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -108,6 +122,7 @@ public class BodyFactory {
         PolygonShape playerShape = new PolygonShape();
         playerShape.setAsBox(6f, 5f);
         Fixture playerHitbox = body.createFixture(playerShape, 1.0f);
+        playerHitbox.setUserData("PlayerHitbox");
         playerShape.dispose();
         return body;
     }
