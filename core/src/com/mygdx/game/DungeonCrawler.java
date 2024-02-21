@@ -338,7 +338,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 					else {
 						if (fa.getBody().getUserData() == "Player"){
-                hud.healthBar.LoseHealth(0.5f);
+                if (hud.healthBar.currentHealth < 2) {
+                  hud.healthBar.GainHealth(1.0f);
+                } else {
+                  hud.healthBar.LoseHealth(0.5f);
+                }
 						}
 					}
 				}

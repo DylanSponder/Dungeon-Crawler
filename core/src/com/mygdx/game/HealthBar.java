@@ -17,16 +17,26 @@ public class HealthBar extends Table {
   int initialIFrames;
   int remainingIFrames;
   boolean vulnerable;
+  int numberOfActors;
 
   public void LoseHealth(float health) {
     if (vulnerable) {
       float result = currentHealth - health;
-      if (result < -1) {
+      if (result < 0) {
         currentHealth = 0;
       } else {
         currentHealth = result;
       }
       vulnerable = false;
+    }
+  }
+
+  public void GainHealth(float health) {
+    float result = currentHealth + health;
+    if (result > maxHealth) {
+      currentHealth = maxHealth;
+    } else {
+      currentHealth = result;
     }
   }
 
@@ -44,20 +54,27 @@ public class HealthBar extends Table {
       actors.add(i, new Image(healthSymbol));
       this.add(actors.get(i));
     }
+    numberOfActors = actors.size();
   }
 
   public void update() {
-    // Set last Actor to healthSymbolHalf if playerHealth is fractional
-    if ((int) currentHealth != currentHealth) {
-      actors.get((int) currentHealth).setDrawable(healthSymbolHalf);
+    for (int i = 0; i < numberOfActors; i++) {
+      System.out.println("health: "+currentHealth);
+      if (i < currentHealth) {
+        actors.get(i).setDrawable(healthSymbol);
+      }
+      if (i > currentHealth-1) {
+        actors.get(i).setDrawable(healthSymbolEmpty);
+      }
+      if (i == (int) currentHealth && (int) currentHealth != currentHealth && currentHealth > 0) {
+        actors.get(i).setDrawable(healthSymbolHalf);
+      }
     }
-    for (int i = actors.size()-1; i >= currentHealth && i > -1; i--) {
-      actors.get(i).setDrawable(healthSymbolEmpty);
-    }
+    System.out.println(remainingIFrames);
     if (remainingIFrames == 0) {
       remainingIFrames = initialIFrames;
       vulnerable = true;
-    } else {
+    } else if (!vulnerable) {
       remainingIFrames--;
     }
   }
