@@ -38,7 +38,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private Box2DDebugRenderer b2dr;
 	private Body sword, arrowBody;
 	public static Player player;
-	private Enemy enemy, enemy2;
+//	private Enemy enemy;
+	public static ArrayList<Enemy> enemies;
 	private EnemyState enemyState;
 	private Arrow arrow;
 	public ArrayList<Arrow> arrows;
@@ -64,6 +65,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		arrowBatch = new SpriteBatch();
 		reversedArrowMap = false;
 		player = new Player();
+		enemies = new ArrayList<>();
 		final BodyFactory bf = new BodyFactory();
 		ListenerClass lc = new ListenerClass();
 		final CreateTexture tx = CreateTexture.getInstance();
@@ -89,15 +91,16 @@ public class DungeonCrawler extends ApplicationAdapter {
 		TiledMapTileLayer layer = new TiledMapTileLayer(1000, 1000, 16, 16);
 
 		GenerateLevel level = new GenerateLevel();
-		List list = level.generateLevel(world,PLAYER_X,PLAYER_Y);
+		level.initLevel();
+		List list = level.generateLevel(0, 0);
+		//List list = level.generateRoom(world, );
 
 		layer = (TiledMapTileLayer) list.get(0);
 		PLAYER_X = (float) list.get(1);
 		PLAYER_Y = (float) list.get(2);
-
 		player.createPlayer(world, PLAYER_X, PLAYER_Y);
 
-		enemy = new Enemy( world, PLAYER_X, PLAYER_Y-160);
+		//enemy = new Enemy( world, PLAYER_X, PLAYER_Y-160);
 
 		//enemy2 = new Enemy( world, PLAYER_X, PLAYER_Y-200);
 
@@ -105,42 +108,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		layers.add(layer);
 		renderer = new OrthogonalTiledMapRenderer(map);
 		b2dr = new Box2DDebugRenderer();
-
-		// player = cr.createPlayer(world, PLAYER_X, PLAYER_Y);
-
-
-		/*
-		//enemy = bf.createEnemyBody(world,PLAYER_X,PLAYER_Y-90);
-		//enemyHitbox = bf.createEnemyHitbox(enemy, 6, 5);
-		enemyAI = new Box2DSteeringEntity(enemy, 10);
-		final Arrive<Vector2> arriveSB = new Arrive<Vector2>(enemyAI, playerB2D)
-				.setTimeToTarget(0.001f)
-				.setArrivalTolerance(0f)
-				.setDecelerationRadius(100);
-		enemyAI.setBehaviour(arriveSB);
-
-		final Wander<Vector2> wanderB = new Wander<>(enemyAI)
-				.setWanderRadius(10f)
-				.setWanderOrientation(1f);
-		//enemyAI.setBehaviour(wanderB);
-
-
-
-		RayConfiguration ray = new RayConfiguration() {
-			@Override
-			public Ray[] updateRays() {
-				return new Ray[0];
-			}
-		};
-
-		final RaycastObstacleAvoidance raycastB = new RaycastObstacleAvoidance(enemyAI)
-				.setRayConfiguration(ray);
-		//enemyAI.setBehaviour(raycastB);
-	*/
-
-		//set userdata for collision detection
-
-		//
+		debug = false;
 
 		arrowBodiesCollided = new ArrayList<Body>();
 		arrowArrayMap = new ArrayMap<Body, Arrow>();
@@ -162,6 +130,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 				return true;
 			}
 			public boolean keyDown(int keycode) {
+				//TODO: make it 1
+				System.out.println("Keycode: "+ keycode);
+				if (keycode == 8){
+
+				}
+
 				if ((keycode == 62) && (!playerMeleeAttacking && !playerRangedAttacking)) {
 					float playerMeleeAttackSpeedInSeconds = 0.5f;
 					playerMeleeAttacking = true;
@@ -300,7 +274,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				Fixture fa = contact.getFixtureA();
 				Fixture fb = contact.getFixtureB();
 
-				System.out.println(fa.getBody().getUserData()+" was hit with "+fb.getBody().getUserData());
+				//System.out.println(fa.getBody().getUserData()+" was hit with "+fb.getBody().getUserData());
 
 				if ((fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Enemy")
 						||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Arrow")
@@ -323,7 +297,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 					if (fa.getBody().getUserData() == "Arrow" && fb.getUserData() == "EnemyHitbox"
 					|| fb.getBody().getUserData() == "Arrow" && fa.getUserData() == "EnemyHitbox")
 					{
-						enemy.getStateMachine().changeState(EnemyState.ATTACK);
+						for (Enemy e : enemies){
+							if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()){
+								e.getStateMachine().changeState(EnemyState.ATTACK);
+							}
+						}
 					}
 
 				}
@@ -332,7 +310,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 				){
 					if(fa.getUserData() == "Proximity"||
 					fb.getUserData() == "Proximity"){
-						enemy.getStateMachine().changeState(EnemyState.ATTACK);
+						for (Enemy e : enemies){
+							if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()){
+								e.getStateMachine().changeState(EnemyState.ATTACK);
+							}
+						}
 					}
 					else {
 						if (fa.getBody().getUserData() == "Player"){
@@ -355,7 +337,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 				){
 					if(fa.getUserData() == "Proximity"||
 							fb.getUserData() == "Proximity"){
-						enemy.getStateMachine().changeState(EnemyState.WANDER);
+						for (Enemy e : enemies){
+							if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()){
+								e.getStateMachine().changeState(EnemyState.WANDER);
+							}
+						}
 					}
 				}
 			}
@@ -418,9 +404,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 		batch.end();
 
 		//render enemy sprite
-		batch.begin();
-		batch.draw(tx.enemySprite, enemy.enemyBody.getPosition().x - 8f, enemy.enemyBody.getPosition().y - 7f, 16, 16);
-		batch.end();
+		for (Enemy e : enemies) {
+			batch.begin();
+			batch.draw(tx.enemySprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+			batch.end();
+		}
 
 		//check if there are any arrows
 		if (!arrowArrayMap.isEmpty()) {
@@ -455,14 +443,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 
-
-		//
-
-		debug = true;
-
+/*
 if (debug) {
 	//renders all physics objects - for debug only
-	b2dr.render(world,camera.combined);
 
 	//renders raycast rays
 	Ray<Vector2>[] rays = enemy.rayConfigurations[0].getRays();
@@ -480,13 +463,8 @@ if (debug) {
 	}
 	enemy.shapeRenderer.end();
 
-
-	camera.update();
 }
 
-
-
-/*
 if(enemy.debug) {
 	enemy.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 	enemy.shapeRenderer.setColor(Color.CORAL);
@@ -504,8 +482,9 @@ if(enemy.debug) {
 }
 
  */
-
-    hud.update();
+		//b2dr.render(world,camera.combined);
+		camera.update();
+		hud.update();
 
 		batch.setProjectionMatrix(camera.combined);
 		arrowBatch.setProjectionMatrix(camera.combined);
@@ -529,8 +508,11 @@ if(enemy.debug) {
 	public void update(float delta) {
 		world.step(1 / 60f, 6, 2);
 
-		enemy.enemyAI.update(GdxAI.getTimepiece().getTime());
-		enemy.update(GdxAI.getTimepiece().getTime());
+		for (Enemy e : enemies){
+			e.enemyAI.update(GdxAI.getTimepiece().getTime());
+			e.update(GdxAI.getTimepiece().getTime());
+		}
+
 		//GdxAI.getTimepiece().update(delta);
 
 		if (!playerPaused) {
@@ -541,7 +523,7 @@ if(enemy.debug) {
 	@Override
 	public void dispose() {
 		batch.dispose();
-    hud.stage.dispose();
+   	 	hud.stage.dispose();
 		arrowBatch.dispose();
 		world.dispose();
 		b2dr.dispose();
@@ -555,19 +537,19 @@ if(enemy.debug) {
 		//move playerSprite Sprite by delta speed according to button WASD press
 		if (Gdx.input.isKeyPressed(Keys.W)||Gdx.input.isKeyPressed(Keys.UP)) {
 			tx.playerSprite = tx.playerUp;
-			PLAYER_VERTICAL_SPEED = 300f;
+			PLAYER_VERTICAL_SPEED = 100f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.A)||Gdx.input.isKeyPressed(Keys.LEFT)) {
 			tx.playerSprite = tx.playerLeft;
-			PLAYER_HORIZONTAL_SPEED = -300f;
+			PLAYER_HORIZONTAL_SPEED = -100f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.S)||Gdx.input.isKeyPressed(Keys.DOWN)) {
 			tx.playerSprite = tx.playerDown;
-			PLAYER_VERTICAL_SPEED = -300f;
+			PLAYER_VERTICAL_SPEED = -100f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.RIGHT)) {
 			tx.playerSprite = tx.playerRight;
-			PLAYER_HORIZONTAL_SPEED = 300f;
+			PLAYER_HORIZONTAL_SPEED = 100f;
 		}
 		player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
 	}

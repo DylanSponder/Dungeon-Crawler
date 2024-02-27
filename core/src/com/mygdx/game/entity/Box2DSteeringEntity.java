@@ -61,7 +61,7 @@ public class Box2DSteeringEntity implements Steerable<Vector2> {
             Vector2 linVel = getLinearVelocity();
             if (!linVel.isZero(getZeroLinearSpeedThreshold())) {
                 float newOrientation = vectorToAngle(linVel);
-                body.setAngularVelocity((newOrientation - getAngularVelocity()) * delta); // this is superfluous if independentFacing is always true
+                body.setAngularVelocity((newOrientation - getAngularVelocity()) * delta);
                 body.setTransform(body.getPosition(), newOrientation);
             }
         }

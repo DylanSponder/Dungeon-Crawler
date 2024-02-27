@@ -20,7 +20,6 @@ public class BodyFactory {
     }
 
     public static Body createWallTurn(World world, float x, float y, float offsetX, float offsetY) {
-      //  world = new World(new Vector2(0, 0f), false);
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -33,6 +32,21 @@ public class BodyFactory {
         shape.dispose();
         return body;
     }
+
+    public static Body createObstacle(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 8, y + 8);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        CircleShape shape = new CircleShape();
+        shape.setRadius(8f);
+        body.createFixture(shape, 1.0f);
+        shape.dispose();
+        return body;
+    }
+
 
     public Body createSwordBody(World world, Body player, float x, float y) {
         Body body;
@@ -108,6 +122,7 @@ public class BodyFactory {
         Fixture enemyDetectionHitbox = body.createFixture(enemyShape, 1.0f);
         enemyShape.dispose();
         enemyDetectionHitbox.setUserData("Proximity");
+        enemyDetectionHitbox.isSensor();
         return enemyDetectionHitbox;
     }
 

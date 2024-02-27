@@ -1,7 +1,11 @@
 package com.mygdx.game;
 
+import com.mygdx.game.entity.behaviours.fsm.Enemy;
+
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
+import com.mygdx.game.entity.behaviours.fsm.Enemy;
 
 public class RenderRules {
     public List<String> translateSymbols(List<List<String>> level,int layer) {
@@ -28,43 +32,17 @@ public class RenderRules {
                         "","","","","","","","","","","","","",""
                         );
         int index = 0;
+        //Pattern floorItems = Pattern.compile("f.");
+
+
+      //  if (floorItems.matches("f.","f+")) {
+        //    System.out.println("Huzzah");
+
             List<String> levelLayer = level.get(layer);
             for (String i : levelLayer) {
                 switch (levelLayer.get(index)) {
-                    case "tlf":
-                        drawableLevelLayer.set(index, "topLeftFloorTile");
-                        index++;
-                        break;
-                    case "tf":
-                        drawableLevelLayer.set(index, "topFloorTile");
-                        index++;
-                        break;
-                    case "trf":
-                        drawableLevelLayer.set(index, "topRightFloorTile");
-                        index++;
-                        break;
-                    case "lf":
-                        drawableLevelLayer.set(index, "leftFloorTile");
-                        index++;
-                        break;
                     case "f":
                         drawableLevelLayer.set(index, "middleFloorTile");
-                        index++;
-                        break;
-                    case "rf":
-                        drawableLevelLayer.set(index, "rightFloorTile");
-                        index++;
-                        break;
-                    case "blf":
-                        drawableLevelLayer.set(index, "bottomLeftFloorTile");
-                        index++;
-                        break;
-                    case "bf":
-                        drawableLevelLayer.set(index, "bottomFloorTile");
-                        index++;
-                        break;
-                    case "brf":
-                        drawableLevelLayer.set(index, "bottomRightFloorTile");
                         index++;
                         break;
                     case "tlw":
@@ -119,10 +97,41 @@ public class RenderRules {
                         drawableLevelLayer.set(index, "");
                         index++;
                         break;
+                    default:
+                        if (levelLayer.get(index).matches("[f].+")) {
+                            StringBuffer sb = new StringBuffer(levelLayer.get(index));
+                            sb.delete(0, 1);
+                            String str = sb.toString();
+
+                            switch (str) {
+                                case "door":
+                                    drawableLevelLayer.set(index, "door");
+                                case "enemy":
+                                    drawableLevelLayer.set(index, "enemy");
+                                    break;
+                                case "hpot":
+                                    //TODO: add potion item
+                                    drawableLevelLayer.set(index, "middleFloorTile");
+                                    break;
+                                case "ob1":
+                                    drawableLevelLayer.set(index, "obstacle1");
+                                    break;
+                                case "ob2":
+                                    drawableLevelLayer.set(index, "obstacle2");
+                                    break;
+                                case "ob3":
+                                    drawableLevelLayer.set(index, "obstacle3");
+                                    break;
+                                case "trap":
+                                    break;
+                             }
+                        }
+                        index++;
+                        break;
                 }
             }
         level.add(drawableLevelLayer);
-        System.out.println("Drawable level layer " +(layer+1) + ": "+drawableLevelLayer);
+       // System.out.println("Drawable level layer " +(layer+1) + ": "+drawableLevelLayer);
         return drawableLevelLayer;
     }
 }

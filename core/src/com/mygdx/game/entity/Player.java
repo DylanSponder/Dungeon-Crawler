@@ -20,8 +20,6 @@ public class Player {
         BodyFactory bf = new BodyFactory();
 
         playerBody = bf.createPlayerBody(world, PLAYER_X, PLAYER_Y);
-        System.out.println(PLAYER_X);
-        System.out.println(PLAYER_Y);
         playerB2D = new Box2DSteeringEntity(playerBody,10);
 
         playerBody.setUserData("Player");

@@ -5,6 +5,7 @@ import com.badlogic.gdx.ai.utils.Ray;
 import com.badlogic.gdx.ai.utils.RaycastCollisionDetector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
@@ -49,8 +50,18 @@ public class Box2dRaycastCollisionDetector implements RaycastCollisionDetector<V
 
         @Override
         public float reportRayFixture (Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
-            if (outputCollision != null) outputCollision.set(point, normal);
-            collided = true;
+
+            //checks to see if the body this ray collided with was a sensor e.g. a detectionRadius
+            if (!fixture.isSensor()){
+                if (outputCollision != null) outputCollision.set(point, normal);
+                collided = true;
+                if (fixture.getBody().getType() == BodyDef.BodyType.DynamicBody){
+                    //System.out.println("I'm colliding with a dynamic object!");
+                }
+                else if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody){
+                    //System.out.println("I'm colliding with a static object!");
+                }
+            }
             return fraction;
         }
     }

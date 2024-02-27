@@ -7,6 +7,9 @@ import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.badlogic.gdx.ai.msg.Telegram;
 import com.badlogic.gdx.ai.msg.Telegraph;
+import com.badlogic.gdx.ai.pfa.Connection;
+import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
+import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.ai.steer.SteeringBehavior;
 import com.badlogic.gdx.ai.steer.behaviors.Arrive;
 import com.badlogic.gdx.ai.steer.behaviors.BlendedSteering;
@@ -28,6 +31,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.BinaryHeap;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.DungeonCrawler;
@@ -40,45 +44,31 @@ import com.mygdx.game.entity.Player;
 import static com.mygdx.game.DungeonCrawler.camera;
 
 public class Enemy {
-
     private StateMachine<Enemy, EnemyState> stateMachine;
-
     public Body enemyBody, enemyDetectionBody;
-    public Stage stage;
     public Fixture enemyHitbox;
     public Fixture enemyDetectionRadius;
     public Box2DSteeringEntity enemyAI;
-
     public ShapeRenderer shapeRenderer;
-    protected Matrix4 transform = new Matrix4();
     public Vector2 tmp = new Vector2();
     public Vector2 tmp2 = new Vector2();
-
     public RayConfigurationBase<Vector2>[] rayConfigurations;
     public RaycastObstacleAvoidance<Vector2> raycastObstacleAvoidanceSB;
-    //public Wander wanderSB;
     public Arrive arriveSB;
-    //public Wander wanderSB;
     public BlendedSteering blendedSteeringSB;
     public Vector2 wanderCenter;
-
     float ENEMY_HEALTH = 3;
-    boolean wandering;
-    boolean attacking;
-    public static float detectionRadius;
     public boolean debug;
     public Wander<Vector2> wanderSB;
+    public IndexedGraph worldMap;
 
     public Enemy(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
         shapeRenderer = new ShapeRenderer();
-       // wanderSB = new Wander(enemyAI);
 
         Viewport vp = new ExtendViewport(camera.viewportWidth, camera.viewportHeight);
-        stage = new Stage(vp);
 
         ENEMY_HEALTH = 3;
-        detectionRadius = 40;
 
         //creates an enemy with a body, hitbox and steering entity
         enemyBody = bodyFactory.createEnemyBody(world, x, y);
@@ -86,7 +76,7 @@ public class Enemy {
         enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 7.5f);
 
 
-        enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody,100);
+        enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 100);
         enemyDetectionRadius.setSensor(true);
         enemyAI = new Box2DSteeringEntity(enemyBody, 10);
 
@@ -95,29 +85,65 @@ public class Enemy {
         this.enemyBody.setUserData("Enemy");
 
         debug = false;
+/*
+        IndexedAStarPathFinder pathFinder;
 
+        FlatTiledNode startNode = worldMap.getNode(enemyAI.getBody().getPosition().x, enemyAI.getBody().getPosition().y);
+        FlatTiledNode endNode = worldMap.getNode(DungeonCrawler.player.playerBody.getPosition().x, DungeonCrawler.player.playerBody.getPosition().y);
+
+        pathFinder.searchNodePath(startNode, endNode, heuristic, path);
+        worldMap = new IndexedGraph() {
+            @Override
+            public Array<Connection> getConnections(Object fromNode) {
+                return null;
+            }
+
+            @Override
+            public int getIndex(Object node) {
+                return 0;
+            }
+
+            @Override
+            public int getNodeCount() {
+                return 0;
+            }
+        };
+        IndexedGraph indexedGraph =  new IndexedGraph() {
+            @Override
+            public int getIndex(Object node) {
+                return 0;
+            }
+
+            @Override
+            public int getNodeCount() {
+                return 0;
+            }
+
+            @Override
+            public Array<Connection> getConnections(Object fromNode) {
+                return null;
+            }
+        };
+ */
     }
 
     public Wander<Vector2> wander(Box2DSteeringEntity owner, float wanderOrientation) {
-        wanderSB = new Wander<Vector2>(owner) //
-                .setFaceEnabled(false) // We want to use Face internally (independent facing is on)
-                //.setAlignTolerance(0.001f) // Used by Face
-               // .setDecelerationRadius(1) // Used by Face
-                .setTimeToTarget(0.1f) // Used by Face
-                .setWanderOffset(3) //
+        wanderSB = new Wander<Vector2>(owner)
+                .setFaceEnabled(false)
+                //.setAlignTolerance(0.001f)
+               // .setDecelerationRadius(1)
+                .setTimeToTarget(0.1f)
+                .setWanderOffset(3)
                 .setWanderOrientation(wanderOrientation)
-                .setWanderRadius(1.5f) //
+                .setWanderRadius(1.5f)
                 .setWanderRate(MathUtils.PI2 * 4)
                 .setLimiter(new LinearAccelerationLimiter(80));
         debug = true;
 
-      //
-
         wanderCenter = wanderSB.getWanderCenter();
-        System.out.println("HELLO "+ wanderCenter);
+        //System.out.println("HELLO "+ wanderCenter);
 
         BlendedSteering blendedSteering = blendSteering(wanderSB,1,4);
-       // BlendedSteering blendedSteering = enemy.blendSteering(wander, 1, 4);
         enemyAI.setBehaviour(blendedSteering);
 
 

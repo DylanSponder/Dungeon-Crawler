@@ -32,6 +32,10 @@ public class CreateTexture {
     TextureRegion roomTopRightTurnTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
     TextureRegion roomBottomLeftTurnTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
     TextureRegion roomBottomRightTurnTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    TextureRegion obstacle1Texture = new TextureRegion(roomBackground, 0,0,16,16);
+    TextureRegion obstacle2Texture = new TextureRegion(roomBackground, 0,0,16,16);
+    TextureRegion obstacle3Texture = new TextureRegion(roomBackground, 0,0,16,16);
+
     TextureRegion doorTexture = new TextureRegion(roomDoorTexture, 0, 0, 16, 16);
     TextureRegion holeTexture = new TextureRegion(roomHoleTexture, 0, 0, 16, 16);
 
@@ -77,6 +81,9 @@ public class CreateTexture {
         roomTopRightTurnTexture.setRegion(48, 16, 16, 16);
         roomBottomLeftTurnTexture.setRegion(32, 32, 16, 16);
         roomBottomRightTurnTexture.setRegion(48, 32, 16, 16);
+        obstacle1Texture.setRegion(80,64,16,16);
+        obstacle2Texture.setRegion(96,64,16,16);
+        obstacle3Texture.setRegion(112,64,16,16);
         doorTexture.setRegion(144, 48, 16, 16);
     }
 }

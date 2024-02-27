@@ -16,4 +16,7 @@ public class CreateCell {
     TiledMapTileLayer.Cell topRightTurnTile = new TiledMapTileLayer.Cell();
     TiledMapTileLayer.Cell bottomLeftTurnTile = new TiledMapTileLayer.Cell();
     TiledMapTileLayer.Cell bottomRightTurnTile = new TiledMapTileLayer.Cell();
+    TiledMapTileLayer.Cell obstacle1 = new TiledMapTileLayer.Cell();
+    TiledMapTileLayer.Cell obstacle2 = new TiledMapTileLayer.Cell();
+    TiledMapTileLayer.Cell obstacle3 = new TiledMapTileLayer.Cell();
 }
