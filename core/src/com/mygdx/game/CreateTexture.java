@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class CreateTexture {
     Texture heartTexture = new Texture(Gdx.files.internal("NinjaAdventure/HUD/Heart.png"));
+    Texture potionTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Potion/LifePot.png"));
     Texture coinTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Treasure/Coin2.png"));
     Texture playerTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/GoldKnight/SpriteSheet.png"));
     Texture playerAttackTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/GoldKnight/SeparateAnim/Attack.png"));
@@ -52,6 +53,7 @@ public class CreateTexture {
     Sprite enemySprite = new Sprite(enemyTexture,0,0,16,16);
     //outline HUD sprites
     Sprite heartSprite = new Sprite(heartTexture, 16, 16);
+    Sprite potionSprite = new Sprite(potionTexture, 16, 16);
 
     private static CreateTexture instance = null;
     public static CreateTexture getInstance(){

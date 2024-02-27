@@ -78,9 +78,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		camera.setToOrtho(false, w / 3, h / 3);
 
 		Viewport vp = new ExtendViewport(camera.viewportWidth, camera.viewportHeight);
-    // Image healthSymbol = new Image(new Sprite(tx.heartTexture, 16, 16));
-    Image moneySymbol = new Image(new Sprite(tx.coinTexture, 10, 10)); 
-		hud = new HUD(vp, hudBatch, moneySymbol);
+		hud = new HUD(vp, hudBatch);
 
 		//initialize map
 		TiledMap map = new TiledMap();

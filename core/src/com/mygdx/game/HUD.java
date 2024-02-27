@@ -18,26 +18,33 @@ public class HUD {
   int topPadding;
   public HealthBar healthBar;
 
-  public HUD(Viewport vp, SpriteBatch sb, Image moneySymbol) {
+  public HUD(Viewport vp, SpriteBatch sb) {
     stage = new Stage(vp, sb);
+
     Table table = new Table();
+    table.top();
+    table.setFillParent(true);
 
     CreateTexture tx = CreateTexture.getInstance();
     Sprite healthSymbol = new Sprite(tx.heartTexture, 0, 0, 16, 16);
     Sprite healthSymbolHalf = new Sprite(tx.heartTexture, 32, 0, 16, 16);
     Sprite healthSymbolEmpty = new Sprite(tx.heartTexture, 64, 0, 16, 16);
-    healthBar = new HealthBar(3, healthSymbol, healthSymbolHalf, healthSymbolEmpty, 100);
-
-    Table moneyTable = new Table();
-    table.top();
-    table.setFillParent(true);
+    healthBar = new HealthBar(3, healthSymbol, healthSymbolHalf, healthSymbolEmpty, 1000);
     
-    Label moneyAmount = new Label("0", new LabelStyle(new BitmapFont(), Color.YELLOW));
-    moneyTable.add(moneyAmount).padRight(2);
-    moneyTable.add(moneySymbol);
+    Table moneyTable = new Table();
+    Label moneyAmount = new Label("100", new LabelStyle(new BitmapFont(), Color.YELLOW));
+    moneyTable.add(moneyAmount);
+    Image moneySymbol = new Image(new Sprite(tx.coinTexture, 10, 10)); 
+    moneyTable.add(moneySymbol).padLeft(2);
 
-    table.add(healthBar).padRight(130);
-    table.add(moneyTable);
+    Table potionTable = new Table();
+    Image potionSymbol = new Image(new Sprite(tx.potionTexture, 9, 11));
+    potionTable.add(potionSymbol);
+
+    float spacing = 50f;
+    table.add(healthBar).spaceLeft(spacing).spaceRight(spacing);
+    table.add(potionTable).center();
+    table.add(moneyTable).spaceLeft(spacing).spaceRight(spacing);
 
     stage.addActor(table);
   }
