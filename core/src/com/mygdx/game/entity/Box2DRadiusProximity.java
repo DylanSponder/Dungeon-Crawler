@@ -5,9 +5,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Box2dRadiusProximity extends Box2dSquareAABBProximity {
+public class Box2DRadiusProximity extends Box2DSquareAABBProximity {
 
-    public Box2dRadiusProximity (Steerable<Vector2> owner, World world, float detectionRadius) {
+    public Box2DRadiusProximity(Steerable<Vector2> owner, World world, float detectionRadius) {
         super(owner, world, detectionRadius);
     }
 

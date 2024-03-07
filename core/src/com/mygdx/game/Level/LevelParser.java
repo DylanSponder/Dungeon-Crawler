@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.level;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -21,7 +21,7 @@ public class LevelParser {
         records.add(Arrays.asList(values));
       }
     }
-    System.out.println("Level data:" + Arrays.toString(records.toArray()));
+    //System.out.println("Level data:" + Arrays.toString(records.toArray()));
     return records;
   }
 

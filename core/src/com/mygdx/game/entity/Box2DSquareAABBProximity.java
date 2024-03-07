@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Box2dSquareAABBProximity implements Proximity<Vector2>, QueryCallback {
+public class Box2DSquareAABBProximity implements Proximity<Vector2>, QueryCallback {
 
     protected Steerable<Vector2> owner;
     protected World world;
@@ -18,7 +18,7 @@ public class Box2dSquareAABBProximity implements Proximity<Vector2>, QueryCallba
 
     private static final AABB aabb = new AABB();
 
-    public Box2dSquareAABBProximity (Steerable<Vector2> owner, World world, float detectionRadius) {
+    public Box2DSquareAABBProximity(Steerable<Vector2> owner, World world, float detectionRadius) {
         this.owner = owner;
         this.world = world;
         this.detectionRadius = detectionRadius;

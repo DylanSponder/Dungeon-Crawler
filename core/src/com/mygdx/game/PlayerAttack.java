@@ -1,6 +1,6 @@
 package com.mygdx.game;
 
-public class PlayerAttack{
+public class PlayerAttack extends GameInputProcessor {
 
     public void playerAttack(int playerOrientation){
 

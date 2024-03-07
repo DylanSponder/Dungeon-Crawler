@@ -4,19 +4,15 @@ import java.util.*;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.GdxAI;
-import com.badlogic.gdx.ai.utils.Ray;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -29,7 +25,8 @@ import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.Arrow;
 import com.mygdx.game.entity.Player;
 import com.mygdx.game.entity.behaviours.fsm.Enemy;
-import com.mygdx.game.entity.behaviours.fsm.EnemyState;
+import com.mygdx.game.level.GenerateLevel;
+import com.mygdx.game.level.InitLevel;
 
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch batch, arrowBatch, hudBatch;
@@ -38,12 +35,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private Box2DDebugRenderer b2dr;
 	private Body sword, arrowBody;
 	public static Player player;
-//	private Enemy enemy;
 	public static ArrayList<Enemy> enemies;
-	private EnemyState enemyState;
 	private Arrow arrow;
 	public ArrayList<Arrow> arrows;
-	public ArrayList<Body> arrowBodiesCollided;
+	public static ArrayList<Body> arrowBodiesCollided;
 	public ArrayMap<Body, Arrow> arrowArrayMap;
 	private Fixture swordHitbox, enemyHitbox, arrowHitbox;
 	public boolean reversedArrowMap;
@@ -52,6 +47,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public float PLAYER_HORIZONTAL_SPEED = 0f, PLAYER_VERTICAL_SPEED = 0f;
 	public float PLAYER_X = 0f, PLAYER_Y = 0f;
 	public int ENEMY_HEALTH = 3;
+	private TiledMapTileLayer layer;
 	private TiledMapRenderer renderer;
 	public static OrthographicCamera camera;
 	public static final float DEFAULT_VIEWPORT_WIDTH = 300f;
@@ -67,8 +63,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		player = new Player();
 		enemies = new ArrayList<>();
 		final BodyFactory bf = new BodyFactory();
-		ListenerClass lc = new ListenerClass();
 		final CreateTexture tx = CreateTexture.getInstance();
+		GameContactListener lc = new GameContactListener();
 		tx.textureRegionBuilder();
 
 		//get width and height of the game window
@@ -90,19 +86,19 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//set to 1000 tile layers wide and high but can be changed if required
 		TiledMapTileLayer layer = new TiledMapTileLayer(1000, 1000, 16, 16);
 
+		//world.setContactListener(rlc);
 		GenerateLevel level = new GenerateLevel();
-		level.initLevel();
+		InitLevel initLevel = new InitLevel();
+		initLevel.InitializeLevel();
+		//level.initLevel();
 		List list = level.generateLevel(0, 0);
+
 		//List list = level.generateRoom(world, );
 
 		layer = (TiledMapTileLayer) list.get(0);
 		PLAYER_X = (float) list.get(1);
 		PLAYER_Y = (float) list.get(2);
 		player.createPlayer(world, PLAYER_X, PLAYER_Y);
-
-		//enemy = new Enemy( world, PLAYER_X, PLAYER_Y-160);
-
-		//enemy2 = new Enemy( world, PLAYER_X, PLAYER_Y-200);
 
 		//add current layers to the TileMap and assign it a renderer
 		layers.add(layer);
@@ -115,23 +111,25 @@ public class DungeonCrawler extends ApplicationAdapter {
 		arrows = new ArrayList<Arrow>();
 
 		//create an input processor to handle single input events - see inputUpdate() for held down inputs
+		camera.zoom= 1f;
 		Gdx.input.setInputProcessor(new GameInputProcessor() {
 			@Override
 			public boolean scrolled(float amountX, float amountY) {
-				if ((camera.zoom >= 0.3f && camera.zoom <= 1.3f)) {
-					if (camera.zoom == 1.3f) {
+				//camera zoom should be between 0.3 and 1.3 - may be changed during testing
+				if ((camera.zoom >= 0.3f && camera.zoom <= 10f)) {
+					if (camera.zoom == 10f) {
 						if (amountY < 0f) {camera.zoom += amountY * 0.02f;}
 					} else if (camera.zoom == 0.3f) {
 						if (amountY > 0f) {camera.zoom += amountY * 0.02f;}}
 					else {camera.zoom += amountY * 0.02f;}
 				}
-				else if (camera.zoom > 1.3f) {camera.zoom = 1.3f;}
+				else if (camera.zoom > 10f) {camera.zoom = 10f;}
 				else if (camera.zoom < 0.3f) {camera.zoom = 0.3f;}
 				return true;
 			}
 			public boolean keyDown(int keycode) {
 				//TODO: make it 1
-				System.out.println("Keycode: "+ keycode);
+				//System.out.println("Keycode: "+ keycode);
 				if (keycode == 8){
 
 				}
@@ -267,91 +265,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				return false;
 			}
 		});
-
-		world.setContactListener(new ContactListener() {
-			@Override
-			public void beginContact(Contact contact) {
-				Fixture fa = contact.getFixtureA();
-				Fixture fb = contact.getFixtureB();
-
-				//System.out.println(fa.getBody().getUserData()+" was hit with "+fb.getBody().getUserData());
-
-				if ((fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Enemy")
-						||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Arrow")
-						||(fa.getBody().getUserData() == "Wall" && fb.getBody().getUserData() == "Arrow")
-						||(fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Wall")
-				){
-					if (fa.getBody().getUserData() == "Enemy" && fa.getUserData() != "Proximity"
-					|| fa.getBody().getUserData() == "Wall"){
-							if (!arrowBodiesCollided.contains(fb.getBody())) {
-								arrowBodiesCollided.add(fb.getBody());
-							}
-					}
-					else if (fb.getBody().getUserData() == "Enemy" && fb.getUserData() != "Proximity"
-							|| fb.getBody().getUserData() == "Wall") {
-						if (!arrowBodiesCollided.contains(fa.getBody())) {
-							arrowBodiesCollided.add(fa.getBody());
-						}
-					}
-
-					if (fa.getBody().getUserData() == "Arrow" && fb.getUserData() == "EnemyHitbox"
-					|| fb.getBody().getUserData() == "Arrow" && fa.getUserData() == "EnemyHitbox")
-					{
-						for (Enemy e : enemies){
-							if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()){
-								e.getStateMachine().changeState(EnemyState.ATTACK);
-							}
-						}
-					}
-
-				}
-				if ((fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Enemy")
-						||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Player")
-				){
-					if(fa.getUserData() == "Proximity"||
-					fb.getUserData() == "Proximity"){
-						for (Enemy e : enemies){
-							if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()){
-								e.getStateMachine().changeState(EnemyState.ATTACK);
-							}
-						}
-					}
-					else {
-						if (fa.getBody().getUserData() == "Player"){
-                if (hud.healthBar.currentHealth < 2) {
-                  hud.healthBar.GainHealth(1.0f);
-                } else {
-                  hud.healthBar.LoseHealth(0.5f);
-                }
-						}
-					}
-				}
-			}
-			@Override
-			public void endContact(Contact contact) {
-				Fixture fa = contact.getFixtureA();
-				Fixture fb = contact.getFixtureB();
-
-				if ((fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Enemy")
-						||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Player")
-				){
-					if(fa.getUserData() == "Proximity"||
-							fb.getUserData() == "Proximity"){
-						for (Enemy e : enemies){
-							if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()){
-								e.getStateMachine().changeState(EnemyState.WANDER);
-							}
-						}
-					}
-				}
-			}
-			@Override
-			public void preSolve(Contact contact, Manifold oldManifold) {
-			}
-			@Override
-			public void postSolve(Contact contact, ContactImpulse impulse) {
-			}
-		});
+		world.setContactListener(lc);
 	}
 
 	@Override
@@ -462,27 +376,10 @@ if (debug) {
 		enemy.shapeRenderer.line(enemy.tmp, enemy.tmp2);
 	}
 	enemy.shapeRenderer.end();
-
-}
-
-if(enemy.debug) {
-	enemy.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-	enemy.shapeRenderer.setColor(Color.CORAL);
-
-	//enemy.shapeRenderer.circle(wanderCenter.x, wanderCenter.y - enemy.enemyAI.getPosition().y, enemy.wanderSB.getWanderRadius(), 12);
-	enemy.shapeRenderer.end();
-	// Draw wander target
-	enemy.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-	enemy.shapeRenderer.setColor(Color.CORAL);
-	Vector2 wanderTarget = (Vector2) enemy.wanderSB.getInternalTargetPosition();
-	enemy.shapeRenderer.circle(wanderTarget.x, wanderTarget.y - enemy.enemyAI.getPosition().y, .1f, 6);
-	enemy.shapeRenderer.end();
-
-	enemy.shapeRenderer.setProjectionMatrix(camera.combined);
 }
 
  */
-		//b2dr.render(world,camera.combined);
+		b2dr.render(world,camera.combined);
 		camera.update();
 		hud.update();
 
@@ -523,7 +420,7 @@ if(enemy.debug) {
 	@Override
 	public void dispose() {
 		batch.dispose();
-   	 	hud.stage.dispose();
+		hud.stage.dispose();
 		arrowBatch.dispose();
 		world.dispose();
 		b2dr.dispose();

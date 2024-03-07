@@ -59,7 +59,7 @@ public class HealthBar extends Table {
 
   public void update() {
     for (int i = 0; i < numberOfActors; i++) {
-      System.out.println("health: "+currentHealth);
+      //System.out.println("health: "+currentHealth);
       if (i < currentHealth) {
         actors.get(i).setDrawable(healthSymbol);
       }
@@ -70,7 +70,7 @@ public class HealthBar extends Table {
         actors.get(i).setDrawable(healthSymbolHalf);
       }
     }
-    System.out.println(remainingIFrames);
+    //System.out.println(remainingIFrames);
     if (remainingIFrames == 0) {
       remainingIFrames = initialIFrames;
       vulnerable = true;

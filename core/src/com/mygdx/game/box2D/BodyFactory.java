@@ -126,6 +126,22 @@ public class BodyFactory {
         return enemyDetectionHitbox;
     }
 
+    public static Fixture createRoom(World world, int roomX, int roomY, int h, int w){
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(roomX, roomY);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        PolygonShape roomShape = new PolygonShape();
+        roomShape.setAsBox(w, h);
+        Fixture roomHitbox = body.createFixture(roomShape, 1.0f);
+        roomShape.dispose();
+        roomHitbox.setUserData("Room");
+        roomHitbox.isSensor();
+        return roomHitbox;
+    }
+
 
     public Body createPlayerBody(World world, float playerX, float playerY) {
         Body body;

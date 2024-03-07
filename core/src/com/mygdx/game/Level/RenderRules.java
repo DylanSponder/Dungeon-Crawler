@@ -1,16 +1,14 @@
-package com.mygdx.game;
+package com.mygdx.game.level;
 
-import com.mygdx.game.entity.behaviours.fsm.Enemy;
-
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
-import com.mygdx.game.entity.behaviours.fsm.Enemy;
 
 public class RenderRules {
     public List<String> translateSymbols(List<List<String>> level,int layer) {
 
-        List<String> drawableLevelLayer = Arrays.asList
+        //TODO: old implementation - remove if unused in future
+        List<String> drawableLevelLayer2 = Arrays.asList
                 ("","","","","","","","","","","","","","","","",
                         "","","","","","","","","","","","","","",
                         "","","","","","","","","","","","","","",
@@ -31,70 +29,70 @@ public class RenderRules {
                         "","","","","","","","","","","","","","",
                         "","","","","","","","","","","","","",""
                         );
+
+
+        //current implementation
+        List<String> drawableLevelLayer = new ArrayList<>();
+
         int index = 0;
-        //Pattern floorItems = Pattern.compile("f.");
-
-
-      //  if (floorItems.matches("f.","f+")) {
-        //    System.out.println("Huzzah");
 
             List<String> levelLayer = level.get(layer);
             for (String i : levelLayer) {
                 switch (levelLayer.get(index)) {
                     case "f":
-                        drawableLevelLayer.set(index, "middleFloorTile");
+                        drawableLevelLayer.add(index, "middleFloorTile");
                         index++;
                         break;
                     case "tlw":
-                        drawableLevelLayer.set(index, "topLeftWallTile");
+                        drawableLevelLayer.add(index, "topLeftWallTile");
                         index++;
                         break;
                     case "tw":
-                        drawableLevelLayer.set(index, "topWallTile");
+                        drawableLevelLayer.add(index, "topWallTile");
                         index++;
                         break;
                     case "trw":
-                        drawableLevelLayer.set(index, "topRightWallTile");
+                        drawableLevelLayer.add(index, "topRightWallTile");
                         index++;
                         break;
                     case "lw":
-                        drawableLevelLayer.set(index, "leftWallTile");
+                        drawableLevelLayer.add(index, "leftWallTile");
                         index++;
                         break;
                     case "rw":
-                        drawableLevelLayer.set(index, "rightWallTile");
+                        drawableLevelLayer.add(index, "rightWallTile");
                         index++;
                         break;
                     case "blw":
-                        drawableLevelLayer.set(index, "bottomLeftWallTile");
+                        drawableLevelLayer.add(index, "bottomLeftWallTile");
                         index++;
                         break;
                     case "bw":
-                        drawableLevelLayer.set(index, "bottomWallTile");
+                        drawableLevelLayer.add(index, "bottomWallTile");
                         index++;
                         break;
                     case "brw":
-                        drawableLevelLayer.set(index, "bottomRightWallTile");
+                        drawableLevelLayer.add(index, "bottomRightWallTile");
                         index++;
                         break;
                     case "tlt":
-                        drawableLevelLayer.set(index, "topLeftTurnTile");
+                        drawableLevelLayer.add(index, "topLeftTurnTile");
                         index++;
                         break;
                     case "trt":
-                        drawableLevelLayer.set(index, "topRightTurnTile");
+                        drawableLevelLayer.add(index, "topRightTurnTile");
                         index++;
                         break;
                     case "blt":
-                        drawableLevelLayer.set(index, "bottomLeftTurnTile");
+                        drawableLevelLayer.add(index, "bottomLeftTurnTile");
                         index++;
                         break;
                     case "brt":
-                        drawableLevelLayer.set(index, "bottomRightTurnTile");
+                        drawableLevelLayer.add(index, "bottomRightTurnTile");
                         index++;
                         break;
                     case "":
-                        drawableLevelLayer.set(index, "");
+                        drawableLevelLayer.add(index, "");
                         index++;
                         break;
                     default:
@@ -105,22 +103,22 @@ public class RenderRules {
 
                             switch (str) {
                                 case "door":
-                                    drawableLevelLayer.set(index, "door");
+                                    drawableLevelLayer.add(index, "door");
                                 case "enemy":
-                                    drawableLevelLayer.set(index, "enemy");
+                                    drawableLevelLayer.add(index, "enemy");
                                     break;
                                 case "hpot":
                                     //TODO: add potion item
-                                    drawableLevelLayer.set(index, "middleFloorTile");
+                                    drawableLevelLayer.add(index, "middleFloorTile");
                                     break;
                                 case "ob1":
-                                    drawableLevelLayer.set(index, "obstacle1");
+                                    drawableLevelLayer.add(index, "obstacle1");
                                     break;
                                 case "ob2":
-                                    drawableLevelLayer.set(index, "obstacle2");
+                                    drawableLevelLayer.add(index, "obstacle2");
                                     break;
                                 case "ob3":
-                                    drawableLevelLayer.set(index, "obstacle3");
+                                    drawableLevelLayer.add(index, "obstacle3");
                                     break;
                                 case "trap":
                                     break;

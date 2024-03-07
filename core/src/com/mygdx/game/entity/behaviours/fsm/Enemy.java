@@ -1,14 +1,7 @@
 package com.mygdx.game.entity.behaviours.fsm;
 
-import com.badlogic.gdx.ai.GdxAI;
-import com.badlogic.gdx.ai.Timepiece;
-import com.badlogic.gdx.ai.btree.BehaviorTree;
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.StateMachine;
-import com.badlogic.gdx.ai.msg.Telegram;
-import com.badlogic.gdx.ai.msg.Telegraph;
-import com.badlogic.gdx.ai.pfa.Connection;
-import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.ai.steer.SteeringBehavior;
 import com.badlogic.gdx.ai.steer.behaviors.Arrive;
@@ -18,28 +11,19 @@ import com.badlogic.gdx.ai.steer.behaviors.Wander;
 import com.badlogic.gdx.ai.steer.limiters.LinearAccelerationLimiter;
 import com.badlogic.gdx.ai.steer.utils.rays.CentralRayWithWhiskersConfiguration;
 import com.badlogic.gdx.ai.steer.utils.rays.RayConfigurationBase;
-import com.badlogic.gdx.ai.utils.Ray;
 import com.badlogic.gdx.ai.utils.RaycastCollisionDetector;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.BinaryHeap;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.Box2DSteeringEntity;
-import com.mygdx.game.entity.Box2dRadiusProximity;
-import com.mygdx.game.entity.Box2dRaycastCollisionDetector;
-import com.mygdx.game.entity.Player;
+import com.mygdx.game.entity.Box2DRaycastCollisionDetector;
 
 import static com.mygdx.game.DungeonCrawler.camera;
 
@@ -164,7 +148,7 @@ public class Enemy {
                         15f, 15 * MathUtils.degreesToRadians)};
         rayConfigurations = localRayConfigurations;
 
-        RaycastCollisionDetector<Vector2> raycastCollisionDetector = new Box2dRaycastCollisionDetector(DungeonCrawler.world);
+        RaycastCollisionDetector<Vector2> raycastCollisionDetector = new Box2DRaycastCollisionDetector(DungeonCrawler.world);
         raycastObstacleAvoidanceSB = new RaycastObstacleAvoidance<Vector2>(enemyAI, rayConfigurations[0],
                 raycastCollisionDetector, 200);
 
