@@ -443,5 +443,24 @@ public class DungeonCrawler extends ApplicationAdapter {
 			PLAYER_HORIZONTAL_SPEED = 10000000f;
 		}
 		player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
+
+    // Use potion 
+    if (Gdx.input.isKeyPressed(Keys.NUM_1)) {
+      if (hud.inventory.Size > 0) {
+        hud.inventory.usePotion(1);
+        hud.healthBar.GainHealth(3);
+      }
+    }
+ 
+    // (For Debugging) Add potion
+    if (Gdx.input.isKeyPressed(Keys.NUM_9)) {
+      hud.inventory.addPotion();
+    }
+
+    // (For Debugging) Damage player
+    if (Gdx.input.isKeyPressed(Keys.NUM_0)) {
+      hud.healthBar.LoseHealth(0.5f);
+    }
+
 	}
 }

@@ -1,7 +1,5 @@
 package com.mygdx.game.level;
 
-import com.sun.tools.javac.jvm.Gen;
-
 public class SetRoomXandY {
 
     //this class holds two functions which are almost the same - the difference being:
