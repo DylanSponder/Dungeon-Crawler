@@ -47,7 +47,7 @@ public enum EnemyState implements State<Enemy> {
         public void update(final Enemy enemy) {
             //System.out.println(enemy.enemyAI.getLinearVelocity());
             if (enemy.enemyAI.getLinearVelocity().x < 0.5 && enemy.enemyAI.getLinearVelocity().y < 0.5){
-                System.out.println("Ack! I'm stuck!");
+                //System.out.println("Ack! I'm stuck!");
                 /*
                 final float stuckTimer = 2f;
                 float ori = enemy.enemyAI.getOrientation();
@@ -76,7 +76,7 @@ public enum EnemyState implements State<Enemy> {
 
         @Override
         public void exit(Enemy enemy) {
-            System.out.println("No longer attacking the player");
+            //System.out.println("No longer attacking the player");
         }
 
         @Override

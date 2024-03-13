@@ -358,9 +358,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 
 /*
-if (debug) {
-	//renders all physics objects - for debug only
-
 	//renders raycast rays
 	Ray<Vector2>[] rays = enemy.rayConfigurations[0].getRays();
 	enemy.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
@@ -376,7 +373,6 @@ if (debug) {
 		enemy.shapeRenderer.line(enemy.tmp, enemy.tmp2);
 	}
 	enemy.shapeRenderer.end();
-}
 
  */
 		b2dr.render(world,camera.combined);
@@ -410,8 +406,6 @@ if (debug) {
 			e.update(GdxAI.getTimepiece().getTime());
 		}
 
-		//GdxAI.getTimepiece().update(delta);
-
 		if (!playerPaused) {
 			inputUpdate(delta);
 		}
@@ -434,19 +428,19 @@ if (debug) {
 		//move playerSprite Sprite by delta speed according to button WASD press
 		if (Gdx.input.isKeyPressed(Keys.W)||Gdx.input.isKeyPressed(Keys.UP)) {
 			tx.playerSprite = tx.playerUp;
-			PLAYER_VERTICAL_SPEED = 100f;
+			PLAYER_VERTICAL_SPEED = 10000000f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.A)||Gdx.input.isKeyPressed(Keys.LEFT)) {
 			tx.playerSprite = tx.playerLeft;
-			PLAYER_HORIZONTAL_SPEED = -100f;
+			PLAYER_HORIZONTAL_SPEED = -10000000f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.S)||Gdx.input.isKeyPressed(Keys.DOWN)) {
 			tx.playerSprite = tx.playerDown;
-			PLAYER_VERTICAL_SPEED = -100f;
+			PLAYER_VERTICAL_SPEED = -10000000f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.RIGHT)) {
 			tx.playerSprite = tx.playerRight;
-			PLAYER_HORIZONTAL_SPEED = 100f;
+			PLAYER_HORIZONTAL_SPEED = 10000000f;
 		}
 		player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
 	}

@@ -10,19 +10,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InitLevel {
-
     public LevelParser lp;
     public RenderRules rr;
     public CreateCell cr;
     public BodyFactory bf;
     public CreateTexture tx;
     public PickDirection pd;
+    public SetRoomXandY xy;
     public TiledMapTileLayer layer;
     public int roomX, levelY;
     public int shortestRow, longestRow, currentRow, previousLongestRow;
+    public int doorDirection, previousDoorDirection, roomSize, currentRoomSize, previousRoomSize;
+    public int testRoomX, testLevelY;
     public int[] doorDirections;
-    public List<Room> rooms;
+    public List<Room> rooms, testRooms;
     public List<Integer> layerSizes;
+    public ArrayList list;
 
     public void InitializeLevel() {
         lp = new LevelParser();
@@ -33,7 +36,9 @@ public class InitLevel {
         tx = new CreateTexture();
         tx.textureRegionBuilder();
         pd = new PickDirection();
+        xy = new SetRoomXandY();
 
+        //sets tiles to their appropriate texture
         cr.middleFloorTile.setTile(new StaticTiledMapTile(tx.roomMiddleFloorTexture));
         cr.topLeftWallTile.setTile(new StaticTiledMapTile(tx.roomTopLeftWallTexture));
         cr.topWallTile.setTile(new StaticTiledMapTile(tx.roomTopWallTexture));
@@ -59,8 +64,12 @@ public class InitLevel {
         layer = new TiledMapTileLayer(1000, 1000, 16, 16);
 
         //changed to 499 from 999 to allow rooms to spawn above and below instead of just downwards
+        //list = new ArrayList();
+        testRoomX = 499;
+        testLevelY = 499;
         roomX = 499;
         levelY = 499;
+        testRooms = new ArrayList<>();
         rooms = new ArrayList<>();
         currentRow = 0;
         longestRow = 0;

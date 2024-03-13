@@ -8,6 +8,7 @@ import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.behaviours.fsm.Enemy;
 
 import java.io.IOException;
+import java.sql.SQLSyntaxErrorException;
 import java.util.*;
 
 import static com.mygdx.game.DungeonCrawler.world;
@@ -17,111 +18,203 @@ public class GenerateLevel {
     private BodyFactory bf;
     private CreateTexture tx;
     private PickDirection pd;
+    private SetRoomXandY xy;
     private float PLAYER_X, PLAYER_Y;
     private TiledMapTileLayer layer;
-    private int roomX, levelY, previousRoomX, previousLevelY;
-    private int testRoomX, testLevelY;
+    public static int roomX, levelY, testRoomX, testLevelY;
+    public int initialTestRoomX, initialTestLevelY;
+    public int previousRoomX, previousLevelY, shortestRow, longestRow, currentRow, previousLongestRow;
+    public int random, doorDirection, previousDoorDirection, roomSize, currentRoomSize, previousRoomSize;
+    public int testPreviousLongestRow, testLongestRow, testPreviousRoomSize,testCurrentRoomSize, testPreviousRoomX, testPreviousLevelY, testCurrentRow;
     private boolean intersecting;
     private List<Integer> xValues, yValues;
-    //public List<Room> rooms;
-    public int shortestRow, longestRow, currentRow, previousLongestRow;
-    private int doorDirection, previousDoorDirection, roomSize, currentRoomSize, previousRoomSize;
+    public List<Room> rooms, testRooms;
     private List layerSizes;
+    private ArrayList list;
     private int[] doorDirections;
     public Fixture roomHitbox;
+    public boolean failed;
 
-public List generateLevel(float PLAYER_X, float PLAYER_Y) {
+public ArrayList generateLevel(float PLAYER_X, float PLAYER_Y) {
     init = new InitLevel();
     init.InitializeLevel();
     pd = new PickDirection();
+    xy = new SetRoomXandY();
     layer = init.layer;
     roomX = init.roomX;
     levelY = init.levelY;
+    testRoomX = init.testRoomX;
+    testLevelY = init.testLevelY;
 
     //sets the total number of rooms to generate
     // int numRooms = (int) (Math.random() * 10 + 3);
-    int numRooms = 10;
+    int numRooms = 20;
 
     //System.out.println("Random number of rooms generated: " + numRooms);
 
-    List list = null;
     for (int i = 0; i < numRooms; i++) {
-        System.out.println("TEST");
         if (i == 0) {
-            list = generateRoom(world, true, 0);
-            doorDirection = pd.pickDirection(0);
+            doorDirection = pd.pickInitialDirection(0);
+            //random = (int)(Math.random() * 3 + 1);
+            //generateRoom(world, true, doorDirection);
+            testGenerateRoom(true);
+            //list = generateRoom(world, true, 0);
+
         } else {
             if (doorDirection == 1) {
-                doorDirection = pd.pickDirection(1);
-                list = generateRoom(world, false, doorDirection);
-                System.out.println("STARTING ROOM");
+                doorDirection = pd.pickInitialDirection(1);
+                testGenerateRoom(false);
+                //list = generateRoom(world, false, doorDirection);
             } else if (doorDirection == 2) {
-                doorDirection = pd.pickDirection(2);
-                if (doorDirection == 2) {
-                    levelY = levelY - roomSize;
-                }
-                list = generateRoom(world, false, doorDirection);
+                doorDirection = pd.pickInitialDirection(2);
+
+              //  if (doorDirection == 2) {
+               //     levelY = levelY - roomSize;
+              //  }
+
+                testGenerateRoom(false);
+                //list = generateRoom(world, false, doorDirection);
             } else if (doorDirection == 3) {
-                doorDirection = pd.pickDirection(3);
-                list = generateRoom(world, false, doorDirection);
+                doorDirection = pd.pickInitialDirection(3);
+                testGenerateRoom(false);
             } else if (doorDirection == 4) {
-                doorDirection = pd.pickDirection(4);
-                list = generateRoom(world, false, doorDirection);
+                doorDirection = pd.pickInitialDirection(4);
+                testGenerateRoom(false);
             }
         }
     }
+    for (Room r : init.testRooms) {
+
+        System.out.println(
+                "ROOM " + (init.testRooms.indexOf(r) + 1) +
+                " X1: " + init.testRooms.get(init.testRooms.indexOf(r)).x1 +
+                " X2: " + init.testRooms.get(init.testRooms.indexOf(r)).x2 +
+                " Y1: " + init.testRooms.get(init.testRooms.indexOf(r)).y1 +
+                " Y2: " + init.testRooms.get(init.testRooms.indexOf(r)).y2 +
+                " Longest Row: " + init.testRooms.get(init.testRooms.indexOf(r)).longestRow +
+                " Room Size: " + init.testRooms.get(init.testRooms.indexOf(r)).roomSize
+        );
+
+    }
+
+
+
+
     return list;
 }
+    public List testGenerateRoom(boolean startingRoom){
+        random = (int)(Math.random() * 3 + 1);
 
-    public int setNextRoomDimensions(int doorDirection){
-        //1 is up, 2 is right, 3 is down, 4 is left
-        if (doorDirection == 1){
-            levelY = levelY + (previousRoomSize + currentRoomSize);
+        try {
+            List<List<String>> room = init.lp.read("Rooms/room"+random+".csv");
+
+            if (previousRoomSize == 0) {
+                testPreviousRoomSize = room.size();
+                testPreviousLongestRow = 0;
+                testCurrentRoomSize = room.size();
+            }
+            else {
+                testPreviousRoomSize = currentRoomSize;
+                testPreviousLongestRow = longestRow;
+                testPreviousRoomX = roomX;
+                testPreviousLevelY  = levelY;
+                testCurrentRoomSize = room.size();
+            }
+            testLongestRow = 0;
+            for (int columnNum = 0; columnNum < testCurrentRoomSize; columnNum++) {
+                testCurrentRow = room.get(columnNum).size();
+                if (testLongestRow < testCurrentRow){
+                    testLongestRow = testCurrentRow;
+                }
+            }
+            failed = false;
+            checkForIntersection(startingRoom);
+            while (failed) {
+                doorDirection = pd.pickNewDirection(doorDirection);
+                checkForIntersection(startingRoom);
+            }
+
+        } catch (
+                IOException e) {
+            throw new RuntimeException(e);
         }
-        else if (doorDirection == 2) {
-            levelY = levelY + (previousRoomSize);
-            roomX = roomX + previousLongestRow;
-        }
-        else if (doorDirection == 3){
-            //nothing needs to be done here - rooms naturally generate going downwards
-        }
-        else if (doorDirection == 4){
-            levelY = levelY + currentRoomSize;
-            roomX = roomX - longestRow;
-        }
-        return doorDirection;
+        return list;
     }
 
-    public int checkRoomForIntersection(int doorDirection) {
-        //1 is up, 2 is right, 3 is down, 4 is left
-        if (doorDirection == 1){
-            testLevelY = levelY + (previousRoomSize + currentRoomSize);
+    public boolean checkForIntersection(boolean startingRoom) {
+
+        initialTestLevelY = testLevelY;
+        initialTestRoomX = testRoomX;
+
+
+        xy.checkRoomForIntersection(startingRoom, doorDirection, testRoomX, testLevelY, testPreviousRoomSize, testCurrentRoomSize, testPreviousLongestRow, testLongestRow);
+
+        int h = testCurrentRoomSize;
+        int w = testLongestRow;
+
+        int x1 = testRoomX;
+        int x2 = testRoomX + w;
+        int y1 = testLevelY;
+        int y2 = testLevelY - h;
+
+        //create a room object with the dimensions of the room to-be generated
+        Room newRoom = new Room();
+        newRoom.x1 = x1;
+        newRoom.x2 = x2;
+        newRoom.y1 = y1;
+        newRoom.y2 = y2;
+        newRoom.roomSize = testCurrentRoomSize;
+        newRoom.longestRow = testLongestRow;
+
+        if (!(init.testRooms.contains(newRoom))){
+            init.testRooms.add(newRoom);
         }
-        else if (doorDirection == 2) {
-            testLevelY = levelY + (previousRoomSize);
-            testRoomX = roomX + previousLongestRow;
-        }
-        else if (doorDirection == 3){
-            //nothing needs to be done here - rooms naturally generate going downwards
-        }
-        else if (doorDirection == 4){
-            testLevelY = levelY + currentRoomSize;
-            testRoomX = roomX - longestRow;
-        }
-        return doorDirection;
+
+        failed = false;
+
+            for (Room r : init.testRooms) {
+                //checks first to see if the current room is NOT evaluating against itself
+                if (!(x1 == r.x1 && x2 == r.x2 && y1 == r.y1 && y2 == r.y2)){
+                    if ((x2 > r.x1 && x2 <= r.x2) && (y1 > r.y2 && y2 < r.y1)){
+                        System.out.println("LEFT INTERSECTION WITH ROOM: " + (init.testRooms.indexOf(r)+1));
+                        System.out.println("ROOM X1: " + x1 + " OLD ROOM X1: " + r.x1);
+                        System.out.println("ROOM X2: " + x2 + " OLD ROOM X2: " + r.x2);
+                        System.out.println("ROOM Y1: " + y1 + " OLD ROOM Y1: " + r.y1);
+                        System.out.println("ROOM Y2: " + y2 + " OLD ROOM Y2: " + r.y2);
+
+                        testLevelY = initialTestLevelY;
+                        testRoomX = initialTestRoomX;
+
+                        return failed = true;
+                    }
+                    else if ((x1 < r.x2 && x1 >= r.x1) && (y1 > r.y2 && y2 < r.y1)){
+                        System.out.println("RIGHT INTERSECTION WITH ROOM: " + + (init.testRooms.indexOf(r)+1));
+                        System.out.println("ROOM X1: " + x1 + " OLD ROOM X1: " + r.x1);
+                        System.out.println("ROOM X2: " + x2 + " OLD ROOM X2: " + r.x2);
+                        System.out.println("ROOM Y1: " + y1 + " OLD ROOM Y1: " + r.y1);
+                        System.out.println("ROOM Y2: " + y2 + " OLD ROOM Y2: " + r.y2);
+
+                        testLevelY = initialTestLevelY;
+                        testRoomX = initialTestRoomX;
+
+                        return failed = true;
+                    }
+                }
+            }
+        list = generateRoom(world, startingRoom, doorDirection);
+        return failed;
     }
 
-    public List generateRoom(World world, boolean startingRoom, int doorDirection) {
+    public ArrayList generateRoom(World world, boolean startingRoom, int doorDirection) {
 
         //randomly pick from available prefabs
-        int random = (int)(Math.random() * 3 + 1);
+        //int random = (int)(Math.random() * 3 + 1);
 
         try {
             List<List<String>> room = init.lp.read("Rooms/room"+random+".csv");
 
             //levelY is what determines the size of the level.
             //When levelY is either 1000 or 0 the map will be outside the TiledMapTileLayer and thus will not render
-
             if (previousRoomSize == 0) {
                 previousRoomSize = room.size();
                 previousLongestRow = 0;
@@ -142,49 +235,12 @@ public List generateLevel(float PLAYER_X, float PLAYER_Y) {
                 }
             }
 
+            xy.setNextRoomDimensions(doorDirection, roomX, levelY, previousRoomSize, currentRoomSize, previousLongestRow, longestRow);
 
-           // checkRoomForIntersection(doorDirection);
-
-            int h = currentRoomSize;
-            int w = longestRow;
-
-            int x1 = roomX;
-            int x2 = roomX + w;
-            int y1 = levelY;
-            int y2 = levelY - h;
-
-            //create a room object with the dimensions of the room to-be generated
-            Room newRoom = new Room();
-            newRoom.x1 = x1;
-            newRoom.x2 = x2;
-            newRoom.y1 = y1;
-            newRoom.y2 = y2;
-
-            for (Room r : init.rooms) {
-
-                if (((x2 > r.x1 && x2 <= r.x2) && ((y1 > r.y2) && (y2 < r.y1)))){
-                    System.out.println("INTERSECTION LEFT");
-                    //pickNewDirection(doorDirection);
-                    //checkRoomForIntersection(doorDirection);
-                    //intersecting = true;
-                }
-                else if ((x1 < r.x2 && x1 >= r.x1) && ((y1 > r.y2) && (y2 < r.y1))){
-                    System.out.println("INTERSECTION RIGHT");
-                    //pickNewDirection(doorDirection);
-                    //checkRoomForIntersection(doorDirection);
-                    //intersecting = true;
-                }
-                else {
-
-                }
-            }
-            setNextRoomDimensions(doorDirection);
-
-            init.rooms.add(newRoom);
-
+            //xy.resetDimensions();
 
             //create a box with the dimensions of the to-be-generated room - originally intended for collision detection but cannot be used that way
-            //will instead be used for detecting if the player has entered a room for opening and clsoing doors
+            //will instead be used for detecting if the player has entered a room for opening and closing doors
             roomHitbox = bf.createRoom(world, ((roomX*16)+16*16)+(longestRow*16)/2, (levelY *16-(currentRoomSize*16)/2)+16, currentRoomSize*16/2, longestRow*16/2);
             roomHitbox.setSensor(true);
 
@@ -303,7 +359,7 @@ public List generateLevel(float PLAYER_X, float PLAYER_Y) {
             throw new RuntimeException(e);
         }
         //add current layers to the TileMap and assign it a renderer
-        List list = new ArrayList();
+        list = new ArrayList();
         list.add(layer);
         list.add(PLAYER_X);
         list.add(PLAYER_Y);

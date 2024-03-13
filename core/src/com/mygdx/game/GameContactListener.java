@@ -69,11 +69,10 @@ public class GameContactListener implements ContactListener {
         //if two rooms contact during room generation, abort and choose a new direction
         if ((fa.getUserData() == "Room") || (fa.getUserData() == "Room")) {
             // && (fb.getUserData() != "Wall" || fb.getUserData() !="Enemy" || fb.getUserData() != "Player"))
-            System.out.println("Player has left or entered a room");
+            //System.out.println("Entity has left or entered a room");
         }
-
-
     }
+
     @Override
     public void endContact(Contact contact) {
         Fixture fa = contact.getFixtureA();
@@ -92,9 +91,11 @@ public class GameContactListener implements ContactListener {
             }
         }
     }
+
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
     }
+
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
     }
