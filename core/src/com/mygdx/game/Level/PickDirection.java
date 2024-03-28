@@ -1,10 +1,15 @@
 package com.mygdx.game.level;
 
+import com.sun.tools.javac.jvm.Gen;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class PickDirection {
 
     private InitLevel init;
+    private GenerateLevel gen;
     private int doorDirection, previousDoorDirection;
 
     public int pickInitialDirection(int doorDirection) {
@@ -16,19 +21,19 @@ public class PickDirection {
             init.doorDirections = new int[] {1,2,3,4};
         }
         if (doorDirection == 1){
-            previousDoorDirection = 1;
+           // previousDoorDirection = 1;
             init.doorDirections = new int[] {1,2,4};
         }
         if (doorDirection == 2){
-            previousDoorDirection = 2;
+           // previousDoorDirection = 2;
             init.doorDirections = new int[] {1,2,3};
         }
         if (doorDirection == 3){
-            previousDoorDirection = 3;
+           // previousDoorDirection = 3;
             init.doorDirections = new int[] {2,3,4};
         }
         if (doorDirection == 4){
-            previousDoorDirection = 4;
+           // previousDoorDirection = 4;
             init.doorDirections = new int[] {1,3,4};
         }
         nextDirection = new Random().nextInt(init.doorDirections.length);
@@ -89,7 +94,7 @@ public class PickDirection {
 
         nextDirection = new Random().nextInt(init.doorDirections.length);
         nextDirection = init.doorDirections[nextDirection];
-        System.out.println("NEW DIRECTION: " + nextDirection);
+        System.out.println("NEW DIRECTION TAKEN: " + nextDirection);
 
         return nextDirection;
     }

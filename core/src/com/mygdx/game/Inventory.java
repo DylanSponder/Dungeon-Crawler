@@ -47,7 +47,7 @@ public class Inventory extends Table {
   }
 
   public void update() {
-    System.out.println(CooldownRemaining);
+    //System.out.println(CooldownRemaining);
     if (WaitingForCooldown && CooldownRemaining > 0) {
       CooldownRemaining--;
     } else {

@@ -4,9 +4,11 @@ import java.util.*;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.GdxAI;
+import com.badlogic.gdx.ai.utils.Ray;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -357,25 +359,28 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 
-/*
-	//renders raycast rays
-	Ray<Vector2>[] rays = enemy.rayConfigurations[0].getRays();
-	enemy.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-	enemy.shapeRenderer.setProjectionMatrix(camera.combined);
-	enemy.shapeRenderer.setColor(1, 0, 0, 1);
-	// shapeRenderer.setColor(Color.RED);
-	//transform.idt();
-	//shapeRenderer.setTransformMatrix(transform);
-	for (int i = 0; i < rays.length; i++) {
-		Ray<Vector2> ray = rays[i];
-		enemy.tmp.set(ray.start);
-		enemy.tmp2.set(ray.end);
-		enemy.shapeRenderer.line(enemy.tmp, enemy.tmp2);
-	}
-	enemy.shapeRenderer.end();
+		debug = true;
+		if (debug){
+			for (Enemy enemy: enemies){
+				//renders raycast rays
+				Ray<Vector2>[] rays = enemy.rayConfigurations[0].getRays();
+				enemy.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+				enemy.shapeRenderer.setProjectionMatrix(camera.combined);
+				enemy.shapeRenderer.setColor(1, 0, 0, 1);
+				// shapeRenderer.setColor(Color.RED);
+				//transform.idt();
+				//shapeRenderer.setTransformMatrix(transform);
+				for (int i = 0; i < rays.length; i++) {
+					Ray<Vector2> ray = rays[i];
+					enemy.tmp.set(ray.start);
+					enemy.tmp2.set(ray.end);
+					enemy.shapeRenderer.line(enemy.tmp, enemy.tmp2);
+				}
+				enemy.shapeRenderer.end();
+			}
+			b2dr.render(world,camera.combined);
+		}
 
- */
-		b2dr.render(world,camera.combined);
 		camera.update();
 		hud.update();
 

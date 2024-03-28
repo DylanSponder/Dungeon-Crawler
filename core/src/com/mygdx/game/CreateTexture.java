@@ -37,7 +37,36 @@ public class CreateTexture {
     public TextureRegion obstacle2Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion obstacle3Texture = new TextureRegion(roomBackground, 0,0,16,16);
 
-    TextureRegion doorTexture = new TextureRegion(roomDoorTexture, 0, 0, 16, 16);
+    public TextureRegion doorTopLeftWallTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion doorTopRightWallTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion doorLeftUpperWallTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion doorLeftLowerWallTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion doorRightUpperWallTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion doorRightLowerWallTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion doorBottomLeftWallTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion doorBottomRightWallTexture = new TextureRegion(roomBackground, 0,0,16,16);
+
+    public TextureRegion doorTopLeftTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion doorTopRightTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion doorTopLeftOpenTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion doorTopRightOpenTexture = new TextureRegion(roomBackground, 0,0,16,16);
+
+    public TextureRegion doorLeftUpperTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion doorLeftLowerTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion doorLeftUpperOpenTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion doorLeftLowerOpenTexture = new TextureRegion(roomBackground, 0,0,16,16);
+
+    public TextureRegion doorRightUpperTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion doorRightLowerTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion doorRightUpperOpenTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion doorRightLowerOpenTexture = new TextureRegion(roomBackground, 0,0,16,16);
+
+    public TextureRegion doorBottomLeftTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion doorBottomRightTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion doorBottomLeftOpenTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion doorBottomRightOpenTexture = new TextureRegion(roomBackground, 0,0,16,16);
+
+    //TextureRegion doorTexture = new TextureRegion(roomDoorTexture, 0, 0, 16, 16);
     TextureRegion holeTexture = new TextureRegion(roomHoleTexture, 0, 0, 16, 16);
 
     //outline player sprites
@@ -85,6 +114,35 @@ public class CreateTexture {
         obstacle1Texture.setRegion(80,64,16,16);
         obstacle2Texture.setRegion(96,64,16,16);
         obstacle3Texture.setRegion(112,64,16,16);
-        doorTexture.setRegion(144, 48, 16, 16);
+        //.setRegion(144, 48, 16, 16);
+
+        doorTopLeftTexture.setRegion(128, 0, 16, 16);
+        doorTopRightTexture.setRegion(144, 0, 16, 16);
+        doorTopLeftOpenTexture.setRegion(128, 16, 16, 16);
+        doorTopRightOpenTexture.setRegion(144, 32, 16, 16);
+
+        doorLeftUpperTexture.setRegion(160, 32, 16, 16);
+        doorLeftLowerTexture.setRegion(160, 48, 16, 16);
+        doorLeftUpperOpenTexture.setRegion(160, 0, 16, 16);
+        doorLeftLowerOpenTexture.setRegion(160, 16, 16, 16);
+
+        doorRightUpperTexture.setRegion(176, 32, 16, 16);
+        doorRightLowerTexture.setRegion(176, 48, 16, 16);
+        doorRightUpperOpenTexture.setRegion(176, 0, 16, 16);
+        doorRightLowerOpenTexture.setRegion(176, 16, 16, 16);
+
+        doorBottomLeftTexture.setRegion(128, 32, 16, 16);
+        doorBottomRightTexture.setRegion(144, 32, 16, 16);
+        doorBottomLeftOpenTexture.setRegion(128, 48, 16, 16);
+        doorBottomRightOpenTexture.setRegion(144, 48, 16, 16);
+
+        doorTopLeftWallTexture.setRegion(16, 0, 16, 16);
+        doorTopRightWallTexture.setRegion(32, 0, 16, 16);
+        doorLeftUpperWallTexture.setRegion(0, 32, 16, 16);
+        doorLeftLowerWallTexture.setRegion(0, 48, 16, 16);
+        doorRightUpperWallTexture.setRegion(64, 32, 16, 16);
+        doorRightLowerWallTexture.setRegion(64, 48, 16, 16);
+        doorBottomLeftWallTexture.setRegion(16, 64, 16, 16);
+        doorBottomRightWallTexture.setRegion(32, 64, 16, 16);
     }
 }
