@@ -8,7 +8,6 @@ import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.behaviours.fsm.Enemy;
 
 import java.io.IOException;
-import java.sql.SQLSyntaxErrorException;
 import java.util.*;
 
 import static com.mygdx.game.DungeonCrawler.world;
@@ -27,7 +26,7 @@ public class GenerateLevel {
     public int previousRoomX, previousLevelY, longestRow, currentRow, previousLongestRow, rollbackIndex, roomsIndex;
     public int random, doorDirection, previousDoorDirection, roomSize, currentRoomSize, previousRoomSize;
     public int testPreviousLongestRow, testLongestRow, testPreviousRoomSize, testCurrentRoomSize, testPreviousRoomX, testPreviousLevelY, testCurrentRow;
-    private boolean intersecting, startingRoom;
+    private boolean intersecting, startingRoom, roomHitboxCreated;
     private int doorTop, doorBottom, doorLeft, doorRight;
     private List<Integer> xValues, yValues;
     public List<Room> rooms, testRooms;
@@ -54,12 +53,18 @@ public class GenerateLevel {
         testRoomX = init.testRoomX;
         testLevelY = init.testLevelY;
         roomsIndex = -1;
+        roomHitboxCreated = false;
         //testRooms = init.testRooms;
         //rolledbackRooms = new ArrayList();
 
         //sets the total number of rooms to generate
-        int numRooms = 15;
+        //int numRooms = 15;
        // int numRooms = (int) (Math.random() * 2 + 1);
+
+        int min = 8;
+        int max = 10;
+        int numRooms = (int)(Math.random() * (max - min + 1)) + min;
+
 
         System.out.println("Random number of rooms generated: " + numRooms);
 
@@ -78,6 +83,7 @@ public class GenerateLevel {
         for (int r = 0; r < init.testRooms.size(); r++) {
             if (r-1 == -1){
                 startingRoom = true;
+                roomHitboxCreated = false;
                 list = generateRoom(
                         world,
                         startingRoom,
@@ -93,6 +99,7 @@ public class GenerateLevel {
             else {
                 if (r != init.testRooms.size()-1){
                     startingRoom = false;
+                    roomHitboxCreated = false;
                     list = generateRoom(
                             world,
                             startingRoom,
@@ -106,6 +113,7 @@ public class GenerateLevel {
                 }
                 else {
                     startingRoom = false;
+                    roomHitboxCreated = false;
                     list = generateRoom(
                             world,
                             startingRoom,
@@ -213,6 +221,7 @@ public class GenerateLevel {
 
         //create a room object with the dimensions of the room to-be generated
         Room newRoom = new Room();
+        newRoom.index = roomsIndex;
         newRoom.x1 = x1;
         newRoom.x2 = x2;
         newRoom.y1 = y1;
@@ -268,17 +277,15 @@ public class GenerateLevel {
         return failed = false;
     }
 
-    public ArrayList generateRoom(World world, boolean startingRoom, Room r, int roomNum, int doorDirection, int previousDoorDirection, int nextDirection, int roomX, int levelY, int currentRoomSize, int previousRoomSize, int longestRow, int previousLongestRow) {
-        //testGenerateRoom(startingRoom);
-        //nextDirection = pd.pickInitialDirection(doorDirection);
+    public ArrayList generateRoom(World world,
+                                  boolean startingRoom,
+                                  Room r, int roomNum,
+                                  int doorDirection, int previousDoorDirection, int nextDirection,
+                                  int roomX, int levelY,
+                                  int currentRoomSize, int previousRoomSize,
+                                  int longestRow, int previousLongestRow) {
 
-
-       // doors.AlignDoors(startingRoom, r, init.testRooms, roomX, levelY);
-
-        if (doorDirection == 1){
-           //String s = r.doorLocations.get("TopLeft");
-
-        }
+        //doors.AlignDoors(startingRoom, r, init.testRooms, init.testRooms.indexOf(r), r.doorLocations, roomX, levelY);
 
         System.out.println("CURRENT DIRECTION: " + doorDirection + " PREVIOUS DIRECTION: " + previousDoorDirection + " NEXT DIRECTION: " + nextDirection);
 
@@ -286,6 +293,8 @@ public class GenerateLevel {
         doorBottom = 0;
         doorLeft = 0;
         doorRight = 0;
+
+        int roomIndex =  init.testRooms.indexOf(r);
 
         //randomly pick from available prefabs
         //int random = (int)(Math.random() * 3 + 1);
@@ -305,14 +314,17 @@ public class GenerateLevel {
 
          //   xy.setNextRoomDimensions(doorDirection, roomX, levelY, previousRoomSize, currentRoomSize, previousLongestRow, longestRow);
 
-            //create a box with the dimensions of the to-be-generated room - originally intended for collision detection but cannot be used that way
-            //will instead be used for detecting if the player has entered a room for opening and closing doors
-            roomHitbox = bf.createRoom(world, ((roomX * 16) + 16 * 16) + (longestRow * 16) / 2, (levelY * 16 - (currentRoomSize * 16) / 2) + 16, currentRoomSize * 16 / 2, longestRow * 16 / 2);
-            roomHitbox.setSensor(true);
-
             for (int columnNum = 0; columnNum < currentRoomSize; columnNum++) {
+                //TODO: USE TRANSLATE SYMBOLS TO SHIFT X OR Y VALUES TO MATCH DOOR COORDINATES BY GIVING ROOM DOOR LOCATIONS THEIR X AND Y VALUES RESPECTIVELY
+                List<String> levelTextures = init.rr.translateSymbols(room, columnNum, init.testRooms.indexOf(r), init.testRooms.get(roomsIndex).doorLocations, roomX, levelY);
 
-                List<String> levelTextures = init.rr.translateSymbols(room, columnNum);
+                if (!roomHitboxCreated){
+                    //create a box with the dimensions of the to-be-generated room - originally intended for collision detection but cannot be used that way
+                    //will instead be used for detecting if the player has entered a room for opening and closing doors
+                    roomHitbox = bf.createRoom(world, ((roomX * 16) + 16 * 16) + (longestRow * 16) / 2, (levelY * 16 - (currentRoomSize * 16) / 2) + 16, currentRoomSize * 16 / 2, longestRow * 16 / 2);
+                    roomHitbox.setSensor(true);
+                    roomHitboxCreated = true;
+                }
 
                 int layerSize = levelTextures.size();
                 init.layerSizes.add(layerSize);
@@ -389,60 +401,153 @@ public class GenerateLevel {
                             DungeonCrawler.enemies.add(enemy);
                             break;
                         case "doorTopLeftWall":
-                            currentCell = init.cr.doorTopLeftWall;
-                            Body newDoorTopLeftWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
-                            newDoorTopLeftWall.setUserData("Wall");
-                            break;
+                            if (((nextDirection == 1 || doorDirection == 3))) {
+                                currentCell = init.cr.doorTopLeftWall;
+                                Body newDoorTopLeftWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newDoorTopLeftWall.setUserData("Wall");
+                                break;
+                            }
+                            else {
+                                currentCell = init.cr.topWallTile;
+                                Body newTopWallCover = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newTopWallCover.setUserData("Wall");
+                                break;
+                            }
                         case "doorTopRightWall":
-                            currentCell = init.cr.doorTopRightWall;
-                            Body newDoorTopRightWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
-                            newDoorTopRightWall.setUserData("Wall");
-                            break;
+                            if (((nextDirection == 1 || doorDirection == 3))) {
+                                currentCell = init.cr.doorTopRightWall;
+                                Body newDoorTopRightWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newDoorTopRightWall.setUserData("Wall");
+                                break;
+                            }
+                            else {
+                                currentCell = init.cr.topWallTile;
+                                Body newTopWallCover = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newTopWallCover.setUserData("Wall");
+                                break;
+                            }
                         case "doorLeftUpperWall":
-                            currentCell = init.cr.doorLeftUpperWall;
-                            Body newDoorLeftUpperWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
-                            newDoorLeftUpperWall.setUserData("Wall");
-                            break;
+                            if (doorLeft <= 1 && ((nextDirection == 4 || doorDirection == 2))) {
+                                currentCell = init.cr.doorLeftUpperWall;
+                                Body newDoorLeftUpperWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newDoorLeftUpperWall.setUserData("Wall");
+                                break;
+                            }
+                            else {
+                                currentCell = init.cr.leftWallTile;
+                                Body newLeftWallCover = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newLeftWallCover.setUserData("Wall");
+                                break;
+                            }
                         case "doorLeftLowerWall":
-                            currentCell = init.cr.doorLeftLowerWall;
-                            Body newDoorLeftLowerWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
-                            newDoorLeftLowerWall.setUserData("Wall");
-                            break;
+                            if (doorLeft <= 1 && ((nextDirection == 4 || doorDirection == 2))) {
+                                currentCell = init.cr.doorLeftLowerWall;
+                                Body newDoorLeftLowerWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newDoorLeftLowerWall.setUserData("Wall");
+                                break;
+                            }
+                            else {
+                                currentCell = init.cr.leftWallTile;
+                                Body newLeftWallCover = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newLeftWallCover.setUserData("Wall");
+                                break;
+                            }
                         case "doorRightUpperWall":
-                            currentCell = init.cr.doorRightUpperWall;
-                            Body newDoorRightUpperWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
-                            newDoorRightUpperWall.setUserData("Wall");
-                            break;
+                            if (doorTop <= 1 && ((nextDirection == 1 || doorDirection == 3))) {
+                                currentCell = init.cr.doorRightUpperWall;
+                                Body newDoorRightUpperWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newDoorRightUpperWall.setUserData("Wall");
+                                break;
+                            }
+                            else {
+                                currentCell = init.cr.rightWallTile;
+                                Body newRightWallCover = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newRightWallCover.setUserData("Wall");
+                                break;
+                            }
+
                         case "doorRightLowerWall":
-                            currentCell = init.cr.doorRightLowerWall;
-                            Body newDoorRightLowerWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
-                            newDoorRightLowerWall.setUserData("Wall");
-                            break;
+                            if (doorTop <= 1 && ((nextDirection == 1 || doorDirection == 3))) {
+                                currentCell = init.cr.doorRightLowerWall;
+                                Body newDoorRightLowerWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newDoorRightLowerWall.setUserData("Wall");
+                                break;
+                            }
+                            else {
+                                currentCell = init.cr.rightWallTile;
+                                Body newRightWallCover = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newRightWallCover.setUserData("Wall");
+                                break;
+                            }
+
                         case "doorBottomLeftWall":
-                            currentCell = init.cr.doorBottomLeftWall;
-                            Body newDoorBottomLeftWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
-                            newDoorBottomLeftWall.setUserData("Wall");
-                            break;
+                            if (doorBottom <= 1 && ((nextDirection == 3 || doorDirection == 1))) {
+                                currentCell = init.cr.doorBottomLeftWall;
+                                Body newDoorBottomLeftWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newDoorBottomLeftWall.setUserData("Wall");
+                                break;
+                            }
+                            else {
+                                currentCell = init.cr.bottomWallTile;
+                                Body newBottomWallCover = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newBottomWallCover.setUserData("Wall");
+                                break;
+                            }
+
                         case "doorBottomRightWall":
-                            currentCell = init.cr.doorBottomRightWall;
-                            Body newDoorBottomRightWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
-                            newDoorBottomRightWall.setUserData("Wall");
-                            break;
+                            if (doorBottom <= 1 && ((nextDirection == 3 || doorDirection == 1))) {
+                                currentCell = init.cr.doorBottomRightWall;
+                                Body newDoorBottomRightWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newDoorBottomRightWall.setUserData("Wall");
+                                break;
+                            }
+                            else {
+                                currentCell = init.cr.bottomWallTile;
+                                Body newBottomWallCover = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newBottomWallCover.setUserData("Wall");
+                                break;
+                            }
                         case "doorTopLeft":
                            //TODO: Create a comma splitter that isolates X and Y values, for door manipulation
                             if (doorTop <= 1  && ((nextDirection == 1 || doorDirection == 3))) {
-                                System.out.println("CURRENT DIRECTION: "+doorDirection + " PREVIOUS DIRECTION: "+ previousDoorDirection + " NEXT DIRECTION: " + nextDirection);
+                                System.out.println("CURRENT DIRECTION: " + doorDirection + " PREVIOUS DIRECTION: " + previousDoorDirection + " NEXT DIRECTION: " + nextDirection);
                                 String topLeftX = Integer.toString((roomX + i) + 16);
                                 String topLeftY = Integer.toString(levelY);
                                 String topLeft = topLeftX + "," + topLeftY;
                                 r.doorLocations.put("TopLeft", topLeft);
-                                //System.out.println("DOOR LOCATION: " + (r.doorLocations).get("TopLeft"));
-                                currentCell = init.cr.doorTopLeft;
-                                doorTop++;
-                                break;
-                            }
-                            else {
-                                 currentCell = init.cr.topWallTile; break;
+                                if (!startingRoom) {
+                                    //1 is up, 2 is right, 3 is down, 4 is left
+                                    int currentRoomX = r.x1;
+                                    int currentRoomY = r.y1;
+
+                                    //int currentDoorX = (roomX + i) + 16;
+
+                                    if (!(roomIndex+1> init.testRooms.size())){
+
+
+                                       // int nextDoorX = init.testRooms.get(roomIndex + 1).x1;
+                                       // int nextDoorY = init.testRooms.get(roomIndex + 1).y1;
+
+                                      //  init.testRooms.get(roomIndex + 1).x1 = nextDoorX + currentRoomX;
+                                    }
+                                    else {
+
+                                    }
+
+                                    // String s = rooms.get(roomIndex).doorLocations.get("TopLeft");
+                                    // s.split(",");
+
+
+                                    //System.out.println("DOOR LOCATION: " + (r.doorLocations).get("TopLeft"));
+                                    currentCell = init.cr.doorTopLeft;
+                                    doorTop++;
+                                    break;
+                                } else {
+                                    currentCell = init.cr.topWallTile;
+                                    Body newTopWallCover = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                    newTopWallCover.setUserData("Wall");
+                                    break;
+                                }
                             }
                         case "doorTopRight":
                             if (doorTop <= 1 && ((nextDirection == 1 || doorDirection == 3))) {
@@ -456,7 +561,10 @@ public class GenerateLevel {
                                 break;
                             }
                             else {
-                                currentCell = init.cr.topWallTile; break;
+                                currentCell = init.cr.topWallTile;
+                                Body newTopWallCover = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newTopWallCover.setUserData("Wall");
+                                break;
                             }
                         case "doorLeftUpper":
                             if (doorLeft <= 1 && ((nextDirection == 4 || doorDirection == 2))) {
@@ -470,7 +578,10 @@ public class GenerateLevel {
                                 break;
                             }
                             else {
-                                currentCell = init.cr.leftWallTile; break;
+                                currentCell = init.cr.leftWallTile;
+                                Body newLeftWallCover = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newLeftWallCover.setUserData("Wall");
+                                break;
                             }
                         case "doorLeftLower":
                             if (doorLeft <= 1 && ((nextDirection == 4 || doorDirection == 2))) {
@@ -484,7 +595,10 @@ public class GenerateLevel {
                                 break;
                             }
                             else {
-                                currentCell = init.cr.leftWallTile; break;
+                                currentCell = init.cr.leftWallTile;
+                                Body newLeftWallCover = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newLeftWallCover.setUserData("Wall");
+                                break;
                             }
                         case "doorRightUpper":
                             if (doorRight <= 1 && ((nextDirection == 2 || doorDirection == 4))) {
@@ -498,7 +612,10 @@ public class GenerateLevel {
                                 break;
                             }
                             else {
-                                currentCell = init.cr.rightWallTile; break;
+                                currentCell = init.cr.rightWallTile;
+                                Body newRightWallCover = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newRightWallCover.setUserData("Wall");
+                                break;
                             }
                         case "doorRightLower":
                             if (doorRight <= 1 && ((nextDirection == 2 || doorDirection == 4))) {
@@ -512,7 +629,10 @@ public class GenerateLevel {
                                 break;
                             }
                             else {
-                                currentCell = init.cr.rightWallTile; break;
+                                currentCell = init.cr.rightWallTile;
+                                Body newRightWallCover = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newRightWallCover.setUserData("Wall");
+                            break;
                             }
                         case "doorBottomLeft":
                             if (doorBottom <= 1 && ((nextDirection == 3 || doorDirection == 1))) {
@@ -526,7 +646,10 @@ public class GenerateLevel {
                                 break;
                             }
                             else {
-                                currentCell = init.cr.bottomWallTile; break;
+                                currentCell = init.cr.bottomWallTile;
+                                Body newBottomWallCover = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newBottomWallCover.setUserData("Wall");
+                                break;
                             }
                         case "doorBottomRight":
                             if (doorBottom <= 1 && (nextDirection == 3 || doorDirection == 1)) {
@@ -540,7 +663,10 @@ public class GenerateLevel {
                                 break;
                             }
                             else {
-                               currentCell = init.cr.bottomWallTile; break;
+                               currentCell = init.cr.bottomWallTile;
+                               Body newBottomWallCover = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                                newBottomWallCover.setUserData("Wall");
+                               break;
                             }
                         case "obstacle1":
                             currentCell = init.cr.obstacle1;

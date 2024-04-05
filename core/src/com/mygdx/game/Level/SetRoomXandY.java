@@ -45,9 +45,4 @@ public class SetRoomXandY {
         }
         return doorDirection;
     }
-
-    public void resetDimensions() {
-        GenerateLevel.testLevelY = GenerateLevel.levelY;
-        GenerateLevel.testRoomX = GenerateLevel.roomX;
-    }
 }

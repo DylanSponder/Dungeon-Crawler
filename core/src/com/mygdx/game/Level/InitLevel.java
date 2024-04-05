@@ -7,6 +7,7 @@ import com.mygdx.game.CreateTexture;
 import com.mygdx.game.box2D.BodyFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class InitLevel {
@@ -56,6 +57,36 @@ public class InitLevel {
         cr.obstacle2.setTile(new StaticTiledMapTile(tx.obstacle2Texture));
         cr.obstacle3.setTile(new StaticTiledMapTile(tx.obstacle3Texture));
 
+        cr.doorTopLeftWall.setTile(new StaticTiledMapTile(tx.doorTopLeftWallTexture));
+        cr.doorTopRightWall.setTile(new StaticTiledMapTile(tx.doorTopRightWallTexture));
+        cr.doorLeftUpperWall.setTile(new StaticTiledMapTile(tx.doorLeftUpperWallTexture));
+        cr.doorLeftLowerWall.setTile(new StaticTiledMapTile(tx.doorLeftLowerWallTexture));
+        cr.doorRightUpperWall.setTile(new StaticTiledMapTile(tx.doorRightUpperWallTexture));
+        cr.doorRightLowerWall.setTile(new StaticTiledMapTile(tx.doorRightLowerWallTexture));
+        cr.doorBottomLeftWall.setTile(new StaticTiledMapTile(tx.doorBottomLeftWallTexture));
+        cr.doorBottomRightWall.setTile(new StaticTiledMapTile(tx.doorBottomRightWallTexture));
+
+        cr.doorTopLeft.setTile(new StaticTiledMapTile(tx.doorTopLeftTexture));
+        cr.doorTopRight.setTile(new StaticTiledMapTile(tx.doorTopRightTexture));
+        cr.doorTopLeftOpen.setTile(new StaticTiledMapTile(tx.doorTopLeftOpenTexture));
+        cr.doorTopRightOpen.setTile(new StaticTiledMapTile(tx.doorTopRightOpenTexture));
+
+        cr.doorLeftUpper.setTile(new StaticTiledMapTile(tx.doorLeftUpperTexture));
+        cr.doorLeftLower.setTile(new StaticTiledMapTile(tx.doorLeftLowerTexture));
+        cr.doorLeftUpperOpen.setTile(new StaticTiledMapTile(tx.doorLeftUpperOpenTexture));
+        cr.doorLeftLowerOpen.setTile(new StaticTiledMapTile(tx.doorLeftLowerOpenTexture));
+
+        cr.doorRightUpper.setTile(new StaticTiledMapTile(tx.doorRightUpperTexture));
+        cr.doorRightLower.setTile(new StaticTiledMapTile(tx.doorRightLowerTexture));
+        cr.doorRightUpperOpen.setTile(new StaticTiledMapTile(tx.doorRightUpperOpenTexture));
+        cr.doorRightLowerOpen.setTile(new StaticTiledMapTile(tx.doorRightLowerOpenTexture));
+
+        cr.doorBottomLeft.setTile(new StaticTiledMapTile(tx.doorBottomLeftTexture));
+        cr.doorBottomRight.setTile(new StaticTiledMapTile(tx.doorBottomRightTexture));
+        cr.doorBottomLeftOpen.setTile(new StaticTiledMapTile(tx.doorBottomLeftOpenTexture));
+        cr.doorBottomRightOpen.setTile(new StaticTiledMapTile(tx.doorBottomRightOpenTexture));
+
+
         //initialize map
         TiledMap map = new TiledMap();
 
@@ -75,5 +106,6 @@ public class InitLevel {
         longestRow = 0;
         doorDirections = new int[] {1,2,3,4};
         layerSizes = new ArrayList<>();
+        //doorLocations = new HashMap();
     }
 }

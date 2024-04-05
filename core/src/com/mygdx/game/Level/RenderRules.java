@@ -4,10 +4,13 @@ import com.sun.org.apache.xerces.internal.impl.xs.SchemaSymbols;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class RenderRules {
-    public List<String> translateSymbols(List<List<String>> level,int layer) {
+    public List<String> translateSymbols(List<List<String>> level, int layer, int roomsIndex, HashMap map, int roomX, int levelY) {
+
+
 
         //current implementation
         List<String> drawableLevelLayer = new ArrayList<>();
@@ -104,6 +107,12 @@ public class RenderRules {
                         break;
                     case "doortl":
                         drawableLevelLayer.add(index, "doorTopLeft");
+
+                        String topLeftX = Integer.toString((roomX + index) + 16);
+                        String topLeftY = Integer.toString(levelY);
+                        String topLeft = topLeftX + "," + topLeftY;
+                        map.put("TopLeft", topLeft);
+                        System.out.println("X TO CURRENT ROOM DOOR" + map.get("TopLeft"));
                         index++;
                         break;
                     case "doortr":
