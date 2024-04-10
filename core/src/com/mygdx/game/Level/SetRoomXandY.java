@@ -10,18 +10,18 @@ public class SetRoomXandY {
         if (!startingRoom) {
             //1 is up, 2 is right, 3 is down, 4 is left
             if (doorDirection == 1){
-                GenerateLevel.testLevelY = levelY + currentRoomSize;
+                GenerateLevel.testLevelY = levelY + currentRoomSize + 4;
             }
             else if (doorDirection == 2) {
-                //GenerateLevel.testLevelY = GenerateLevel.testLevelY + currentRoomSize;
-                GenerateLevel.testRoomX = roomX + previousLongestRow;
+                //GenerateLevel.testLevelY = Gene rateLevel.testLevelY + currentRoomSize;
+                GenerateLevel.testRoomX = roomX + previousLongestRow + 4;
             }
             else if (doorDirection == 3){
-                GenerateLevel.testLevelY = GenerateLevel.testLevelY - (previousRoomSize);
+                GenerateLevel.testLevelY = GenerateLevel.testLevelY - (previousRoomSize) - 4;
             }
             else if (doorDirection == 4){
                 GenerateLevel.testLevelY = levelY + (currentRoomSize - previousRoomSize);
-                GenerateLevel.testRoomX = roomX - longestRow;
+                GenerateLevel.testRoomX = roomX - longestRow - 4;
             }
         }
         return doorDirection;
@@ -33,8 +33,8 @@ public class SetRoomXandY {
             GenerateLevel.levelY = levelY + (previousRoomSize + currentRoomSize);
         }
         else if (doorDirection == 2) {
-            GenerateLevel.levelY = levelY + (previousRoomSize);
-            GenerateLevel.roomX = roomX + previousLongestRow;
+            GenerateLevel.levelY = levelY + previousRoomSize;
+            GenerateLevel.roomX = roomX + previousLongestRow * 2;
         }
         else if (doorDirection == 3){
             //nothing needs to be done here - rooms naturally generate downwards (levelY increments down by 1 to place each row)

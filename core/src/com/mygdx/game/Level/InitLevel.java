@@ -7,7 +7,6 @@ import com.mygdx.game.CreateTexture;
 import com.mygdx.game.box2D.BodyFactory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class InitLevel {
@@ -24,7 +23,7 @@ public class InitLevel {
     public int doorDirection, previousDoorDirection, roomSize, currentRoomSize, previousRoomSize;
     public int testRoomX, testLevelY;
     public int[] doorDirections;
-    public List<Room> rooms, testRooms;
+    public List<Room> rooms, roomList;
     public List<Integer> layerSizes;
     public ArrayList list;
 
@@ -100,7 +99,7 @@ public class InitLevel {
         testLevelY = 499;
         roomX = 499;
         levelY = 499;
-        testRooms = new ArrayList<>();
+        roomList = new ArrayList<>();
         rooms = new ArrayList<>();
         currentRow = 0;
         longestRow = 0;

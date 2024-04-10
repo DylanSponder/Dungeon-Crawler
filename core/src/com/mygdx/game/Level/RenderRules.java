@@ -1,16 +1,12 @@
 package com.mygdx.game.level;
 
-import com.sun.org.apache.xerces.internal.impl.xs.SchemaSymbols;
-
+import javax.accessibility.AccessibleStateSet;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 public class RenderRules {
-    public List<String> translateSymbols(List<List<String>> level, int layer, int roomsIndex, HashMap map, int roomX, int levelY) {
-
-
+    public List<String> translateSymbols(List<List<String>> level, int layer, int roomsIndex, HashMap<String, String> map, int roomX, int levelY) {
 
         //current implementation
         List<String> drawableLevelLayer = new ArrayList<>();
@@ -107,12 +103,6 @@ public class RenderRules {
                         break;
                     case "doortl":
                         drawableLevelLayer.add(index, "doorTopLeft");
-
-                        String topLeftX = Integer.toString((roomX + index) + 16);
-                        String topLeftY = Integer.toString(levelY);
-                        String topLeft = topLeftX + "," + topLeftY;
-                        map.put("TopLeft", topLeft);
-                        System.out.println("X TO CURRENT ROOM DOOR" + map.get("TopLeft"));
                         index++;
                         break;
                     case "doortr":
@@ -182,7 +172,7 @@ public class RenderRules {
                              }
                         }
                         else {
-                            if (i != ""){
+                            if (!i.equals("")){
                                 System.out.println("UNKNOWN TILE: " + "'" + i + "'");
                                 drawableLevelLayer.add(index, "");
                                 index++;
@@ -196,5 +186,173 @@ public class RenderRules {
         level.add(drawableLevelLayer);
        // System.out.println("Drawable level layer " +(layer+1) + ": "+drawableLevelLayer);
         return drawableLevelLayer;
+    }
+
+
+
+    public HashMap<String, String> translateSymbolsToFindDoors(List<List<String>> level, int layer, int roomsIndex, int doorDirection, HashMap<String, String> map, int roomX, int levelY) {
+        //System.out.println("TEST WORKED");
+        //current implementation
+        List<String> drawableLevelLayer = new ArrayList<>();
+
+        int index = 0;
+
+        List<String> levelLayer = level.get(layer);
+        for (String i : levelLayer) {
+            // (int i = 0; i < layerSize; i++)
+            switch (levelLayer.get(index)) {
+                case "f":
+                    index++;
+                    break;
+                case "tlw":
+                    index++;
+                    break;
+                case "tw":
+                    index++;
+                    break;
+                case "trw":
+                    index++;
+                    break;
+                case "lw":
+                    index++;
+                    break;
+                case "rw":
+                    index++;
+                    break;
+                case "blw":
+                    index++;
+                    break;
+                case "bw":
+                    index++;
+                    break;
+                case "brw":
+                    index++;
+                    break;
+                case "tlt":
+                    index++;
+                    break;
+                case "trt":
+                    index++;
+                    break;
+                case "blt":
+                    index++;
+                    break;
+                case "brt":
+                    index++;
+                    break;
+                case "dtl":
+                    index++;
+                    break;
+                case "dtr":
+                    index++;
+                    break;
+                case "dlu":
+                    index++;
+                    break;
+                case "dll":
+                    index++;
+                    break;
+                case "dru":
+                    index++;
+                    break;
+                case "drl":
+                    index++;
+                    break;
+                case "dbl":
+                    index++;
+                    break;
+                case "dbr":
+                    index++;
+                    break;
+                case "doortl":
+                    if (doorDirection==1) {
+                        //String topLeftX = Integer.toString((roomX + index) + 16);
+                        String topLeftX = Integer.toString(roomX);
+                        String topLeftY = Integer.toString(levelY);
+                        String topLeft = topLeftX + "," + topLeftY;
+                        map.put("TopLeft", topLeft);
+                        //System.out.println(map.get("TopLeft") + " MAP TOPLEFT DOOR X AND Y VALUES");
+                    }
+                    index++;
+                    break;
+                case "doortr":
+                    if (doorDirection==1) {
+                        String topRightX = Integer.toString(roomX);
+                        String topRightY = Integer.toString(levelY);
+                        String topRight = topRightX + "," + topRightY;
+                        map.put("TopRight", topRight);
+                        //System.out.println(map.get("TopRight") + " MAP TOPRIGHT DOOR X AND Y VALUES");
+                    }
+                    index++;
+                    break;
+                case "doorlu":
+                    if (doorDirection==4) {
+                        String upperLeftX = Integer.toString(roomX);
+                        String upperLeftY = Integer.toString(levelY);
+                        String upperLeft = upperLeftX + "," + upperLeftY;
+                        map.put("UpperLeft", upperLeft);
+                        //System.out.println(map.get("UpperLeft") + " MAP UPPERLEFT DOOR X AND Y VALUES");
+                    }
+                    index++;
+                    break;
+                case "doorll":
+                    if (doorDirection==4) {
+                        String lowerLeftX = Integer.toString(roomX);
+                        String lowerLeftY = Integer.toString(levelY);
+                        String lowerLeft = lowerLeftX + "," + lowerLeftY;
+                        map.put("LowerLeft", lowerLeft);
+                        //System.out.println(map.get("LowerLeft") + " MAP LOWERLEFT DOOR X AND Y VALUES");
+                    }
+                    index++;
+                    break;
+                case "doorru":
+                    if (doorDirection==2) {
+                        String upperRightX = Integer.toString(roomX);
+                        String upperRightY = Integer.toString(levelY);
+                        String upperRight = upperRightX + "," + upperRightY;
+                        map.put("UpperRight", upperRight);
+                        //System.out.println(map.get("UpperRight") + " MAP UPPERRIGHT DOOR X AND Y VALUES");
+                    }
+                    index++;
+                    break;
+                case "doorrl":
+                    if (doorDirection==2) {
+                        String lowerRightX = Integer.toString(roomX);
+                        String lowerRightY = Integer.toString(levelY);
+                        String lowerRight = lowerRightX + "," + lowerRightY;
+                        map.put("LowerRight", lowerRight);
+                        //System.out.println(map.get("LowerRight") + " MAP LOWERRIGHT DOOR X AND Y VALUES");
+                    }
+                    index++;
+                    break;
+                case "doorbl":
+                    if (doorDirection==3) {
+                        String bottomLeftX = Integer.toString(roomX);
+                        String bottomLeftY = Integer.toString(levelY);
+                        String bottomLeft = bottomLeftX + "," + bottomLeftY;
+                        map.put("BottomLeft", bottomLeft);
+                        //System.out.println(map.get("BottomLeft") + " MAP BOTTOMLEFT DOOR X AND Y VALUES");
+                    }
+                    index++;
+                    break;
+                case "doorbr":
+                    if (doorDirection==3) {
+                        String bottomRightX = Integer.toString(roomX);
+                        String bottomRightY = Integer.toString(levelY);
+                        String bottomRight = bottomRightX + "," + bottomRightY;
+                        map.put("BottomRight", bottomRight);
+                        //System.out.println(map.get("BottomRight") + " MAP BOTTOMRIGHT DOOR X AND Y VALUES");
+                    }
+                    index++;
+                    break;
+                //default:
+                //    System.out.println("DEFAULT");
+                //   break;
+            }
+            roomX++;
+        }
+        //level.add(drawableLevelLayer);
+        // System.out.println("Drawable level layer " +(layer+1) + ": "+drawableLevelLayer);
+        return map;
     }
 }

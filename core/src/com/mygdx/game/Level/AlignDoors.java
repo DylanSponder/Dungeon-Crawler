@@ -9,7 +9,7 @@ public class AlignDoors {
     private int currentRoomX, currentRoomY;
 
     public void AlignDoors(boolean startingRoom, Room r, List<Room> rooms, int roomIndex, HashMap<String, String> map, int roomX, int levelY) {
-        // init.testRooms.get()
+        // init.roomList.get()
         init = new InitLevel();
         if (!startingRoom) {
             //1 is up, 2 is right, 3 is down, 4 is left

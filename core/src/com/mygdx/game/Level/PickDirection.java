@@ -38,11 +38,11 @@ public class PickDirection {
         }
         nextDirection = new Random().nextInt(init.doorDirections.length);
         nextDirection = init.doorDirections[nextDirection];
-        System.out.println("INITIAL DOOR DIRECTION IS: "+nextDirection);
+        System.out.println("DOOR DIRECTION IS: "+nextDirection);
         return nextDirection;
     }
 
-    public int pickNewDirection(int doorDirection) {
+    public int pickNewDirection(int doorDirection, int previousDoorDirection) {
         int nextDirection = doorDirection;
 
         switch (doorDirection) {
@@ -94,7 +94,7 @@ public class PickDirection {
 
         nextDirection = new Random().nextInt(init.doorDirections.length);
         nextDirection = init.doorDirections[nextDirection];
-        System.out.println("NEW DIRECTION TAKEN: " + nextDirection);
+        System.out.println("OLD DIRECTION: " + doorDirection + " NEW DIRECTION TAKEN: " + nextDirection);
 
         return nextDirection;
     }
