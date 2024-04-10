@@ -10,18 +10,18 @@ public class SetRoomXandY {
         if (!startingRoom) {
             //1 is up, 2 is right, 3 is down, 4 is left
             if (doorDirection == 1){
-                GenerateLevel.testLevelY = levelY + currentRoomSize + 4;
+                GenerateLevel.testLevelY = GenerateLevel.testLevelY + currentRoomSize + 4;
             }
             else if (doorDirection == 2) {
                 //GenerateLevel.testLevelY = Gene rateLevel.testLevelY + currentRoomSize;
-                GenerateLevel.testRoomX = roomX + previousLongestRow + 4;
+                GenerateLevel.testRoomX = GenerateLevel.testRoomX + previousLongestRow + 4;
             }
             else if (doorDirection == 3){
                 GenerateLevel.testLevelY = GenerateLevel.testLevelY - (previousRoomSize) - 4;
             }
             else if (doorDirection == 4){
-                GenerateLevel.testLevelY = levelY + (currentRoomSize - previousRoomSize);
-                GenerateLevel.testRoomX = roomX - longestRow - 4;
+                GenerateLevel.testLevelY = GenerateLevel.testLevelY + (currentRoomSize - previousRoomSize);
+                GenerateLevel.testRoomX = GenerateLevel.testRoomX - longestRow - 4;
             }
         }
         return doorDirection;

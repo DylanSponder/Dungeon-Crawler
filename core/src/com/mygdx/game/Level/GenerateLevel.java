@@ -55,8 +55,8 @@ public class GenerateLevel {
         roomsIndex = 0;
         roomHitboxCreated = false;
 
-        int min = 8;
-        int max = 10;
+        int min = 20;
+        int max = 30;
         int numRooms = (int)(Math.random() * (max - min + 1)) + min;
 
         path = new ArrayList(){};
@@ -188,7 +188,7 @@ public class GenerateLevel {
                 testCurrentRoomSize = roomFile.size();
             } else {
                 testPreviousRoomSize = testCurrentRoomSize;
-                testPreviousLongestRow = longestRow;
+                testPreviousLongestRow = testLongestRow;
                 testPreviousRoomX = roomX;
                 testPreviousLevelY = levelY;
                 testCurrentRoomSize = roomFile.size();
