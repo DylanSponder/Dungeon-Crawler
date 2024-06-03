@@ -57,11 +57,7 @@ public class GameContactListener implements ContactListener {
             }
             else {
                 if (fa.getBody().getUserData() == "Player"){
-                    if (hud.healthBar.currentHealth < 2) {
-                        hud.healthBar.GainHealth(1.0f);
-                    } else {
-                        hud.healthBar.LoseHealth(0.5f);
-                    }
+                    hud.healthBar.LoseHealth(0.5f);
                 }
             }
         }
