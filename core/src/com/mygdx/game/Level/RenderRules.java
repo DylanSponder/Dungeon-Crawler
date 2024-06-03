@@ -109,7 +109,7 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "doorTopRight");
                         index++;
                         break;
-                    case "doorlu":
+                    case "doorul":
                         drawableLevelLayer.add(index, "doorLeftUpper");
                         index++;
                         break;
@@ -117,11 +117,11 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "doorLeftLower");
                         index++;
                         break;
-                    case "doorru":
+                    case "doorur":
                         drawableLevelLayer.add(index, "doorRightUpper");
                         index++;
                         break;
-                    case "doorrl":
+                    case "doorlr":
                         drawableLevelLayer.add(index, "doorRightLower");
                         index++;
                         break;
@@ -190,7 +190,7 @@ public class RenderRules {
 
 
 
-    public HashMap<String, String> translateSymbolsToFindDoors(List<List<String>> level, int layer, int roomsIndex, int doorDirection, HashMap<String, String> map, int roomX, int levelY) {
+    public HashMap<String, String> translateSymbolsToFindDoors(List<List<String>> level, int layer, int roomsIndex, int doorDirection, int previousDoorDirection, HashMap<String, String> map, int roomX, int levelY) {
         //System.out.println("TEST WORKED");
         //current implementation
         List<String> drawableLevelLayer = new ArrayList<>();
@@ -265,89 +265,74 @@ public class RenderRules {
                     index++;
                     break;
                 case "doortl":
-                    if (doorDirection==1) {
+                        //TODO: Make function in AlignDoors that takes roomX levelY, current and previous direction
                         //String topLeftX = Integer.toString((roomX + index) + 16);
                         String topLeftX = Integer.toString(roomX);
                         String topLeftY = Integer.toString(levelY);
                         String topLeft = topLeftX + "," + topLeftY;
                         map.put("TopLeft", topLeft);
                         //System.out.println(map.get("TopLeft") + " MAP TOPLEFT DOOR X AND Y VALUES");
-                    }
                     index++;
                     break;
                 case "doortr":
-                    if (doorDirection==1) {
                         String topRightX = Integer.toString(roomX);
                         String topRightY = Integer.toString(levelY);
                         String topRight = topRightX + "," + topRightY;
                         map.put("TopRight", topRight);
                         //System.out.println(map.get("TopRight") + " MAP TOPRIGHT DOOR X AND Y VALUES");
-                    }
                     index++;
                     break;
-                case "doorlu":
-                    if (doorDirection==4) {
+                case "doorul":
                         String upperLeftX = Integer.toString(roomX);
                         String upperLeftY = Integer.toString(levelY);
                         String upperLeft = upperLeftX + "," + upperLeftY;
                         map.put("UpperLeft", upperLeft);
                         //System.out.println(map.get("UpperLeft") + " MAP UPPERLEFT DOOR X AND Y VALUES");
-                    }
                     index++;
                     break;
                 case "doorll":
-                    if (doorDirection==4) {
                         String lowerLeftX = Integer.toString(roomX);
                         String lowerLeftY = Integer.toString(levelY);
                         String lowerLeft = lowerLeftX + "," + lowerLeftY;
                         map.put("LowerLeft", lowerLeft);
                         //System.out.println(map.get("LowerLeft") + " MAP LOWERLEFT DOOR X AND Y VALUES");
-                    }
                     index++;
                     break;
-                case "doorru":
-                    if (doorDirection==2) {
+                case "doorur":
                         String upperRightX = Integer.toString(roomX);
                         String upperRightY = Integer.toString(levelY);
                         String upperRight = upperRightX + "," + upperRightY;
                         map.put("UpperRight", upperRight);
                         //System.out.println(map.get("UpperRight") + " MAP UPPERRIGHT DOOR X AND Y VALUES");
-                    }
                     index++;
                     break;
-                case "doorrl":
-                    if (doorDirection==2) {
+                case "doorlr":
                         String lowerRightX = Integer.toString(roomX);
                         String lowerRightY = Integer.toString(levelY);
                         String lowerRight = lowerRightX + "," + lowerRightY;
                         map.put("LowerRight", lowerRight);
                         //System.out.println(map.get("LowerRight") + " MAP LOWERRIGHT DOOR X AND Y VALUES");
-                    }
                     index++;
                     break;
                 case "doorbl":
-                    if (doorDirection==3) {
                         String bottomLeftX = Integer.toString(roomX);
                         String bottomLeftY = Integer.toString(levelY);
                         String bottomLeft = bottomLeftX + "," + bottomLeftY;
                         map.put("BottomLeft", bottomLeft);
                         //System.out.println(map.get("BottomLeft") + " MAP BOTTOMLEFT DOOR X AND Y VALUES");
-                    }
                     index++;
                     break;
                 case "doorbr":
-                    if (doorDirection==3) {
                         String bottomRightX = Integer.toString(roomX);
                         String bottomRightY = Integer.toString(levelY);
                         String bottomRight = bottomRightX + "," + bottomRightY;
                         map.put("BottomRight", bottomRight);
                         //System.out.println(map.get("BottomRight") + " MAP BOTTOMRIGHT DOOR X AND Y VALUES");
-                    }
                     index++;
                     break;
-                //default:
-                //    System.out.println("DEFAULT");
-                //   break;
+                default:
+                    index++;
+                    break;
             }
             roomX++;
         }

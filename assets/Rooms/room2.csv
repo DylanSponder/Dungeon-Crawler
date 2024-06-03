@@ -4,8 +4,8 @@ lw,f,f,f,f,f,f,f,f,rw
 lw,f,f,f,fob1,fob1,f,f,f,rw
 lw,f,f,fob1,f,f,fob1,f,f,rw
 dlu,f,f,f,f,f,f,f,f,dru
-doorlu,f,f,f,f,f,f,f,f,doorru
-doorll,f,f,f,f,f,f,f,f,doorrl
+doorul,f,f,f,f,f,f,f,f,doorur
+doorll,f,f,f,f,f,f,f,f,doorlr
 dll,f,f,fob1,f,f,fob1,f,f,drl
 lw,f,f,f,fob1,fob1,f,f,f,rw
 lw,f,f,f,f,f,f,f,f,rw

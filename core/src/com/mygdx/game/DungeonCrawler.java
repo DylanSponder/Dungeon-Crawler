@@ -118,14 +118,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 			@Override
 			public boolean scrolled(float amountX, float amountY) {
 				//camera zoom should be between 0.3 and 1.3 - may be changed during testing
-				if ((camera.zoom >= 0.3f && camera.zoom <= 10f)) {
-					if (camera.zoom == 10f) {
-						if (amountY < 0f) {camera.zoom += amountY * 0.02f;}
+				if ((camera.zoom >= 0.3f && camera.zoom <= 12f)) {
+					if (camera.zoom == 12f) {
+						if (amountY < 0f) {camera.zoom += amountY * 0.1f;}
 					} else if (camera.zoom == 0.3f) {
-						if (amountY > 0f) {camera.zoom += amountY * 0.02f;}}
-					else {camera.zoom += amountY * 0.02f;}
+						if (amountY > 0f) {camera.zoom += amountY * 0.1f;}}
+					else {camera.zoom += amountY * 0.1f;}
 				}
-				else if (camera.zoom > 10f) {camera.zoom = 10f;}
+				else if (camera.zoom > 12f) {camera.zoom = 12f;}
 				else if (camera.zoom < 0.3f) {camera.zoom = 0.3f;}
 				return true;
 			}
@@ -359,7 +359,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 
-		debug = true;
+		debug = false;
 		if (debug){
 			for (Enemy enemy: enemies){
 				//renders raycast rays

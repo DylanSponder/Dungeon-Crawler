@@ -95,10 +95,10 @@ public class InitLevel {
 
         //changed to 499 from 999 to allow rooms to spawn above and below instead of just downwards
         //list = new ArrayList();
-        testRoomX = 499;
-        testLevelY = 499;
-        roomX = 499;
-        levelY = 499;
+        testRoomX = 500;
+        testLevelY = 500;
+        roomX = 500;
+        levelY = 500;
         roomList = new ArrayList<>();
         rooms = new ArrayList<>();
         currentRow = 0;

@@ -38,7 +38,7 @@ public class PickDirection {
         }
         nextDirection = new Random().nextInt(init.doorDirections.length);
         nextDirection = init.doorDirections[nextDirection];
-        System.out.println("DOOR DIRECTION IS: "+nextDirection);
+        //System.out.println("DOOR DIRECTION IS: "+nextDirection);
         return nextDirection;
     }
 
@@ -94,7 +94,7 @@ public class PickDirection {
 
         nextDirection = new Random().nextInt(init.doorDirections.length);
         nextDirection = init.doorDirections[nextDirection];
-        System.out.println("OLD DIRECTION: " + doorDirection + " NEW DIRECTION TAKEN: " + nextDirection);
+        //System.out.println("OLD DIRECTION: " + doorDirection + " NEW DIRECTION TAKEN: " + nextDirection);
 
         return nextDirection;
     }

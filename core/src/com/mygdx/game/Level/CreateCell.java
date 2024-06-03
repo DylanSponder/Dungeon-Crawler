@@ -45,7 +45,6 @@ public class CreateCell {
     public TiledMapTileLayer.Cell doorBottomLeftWall;
     public TiledMapTileLayer.Cell doorBottomRightWall;
 
-
     public void InitializeCells() {
         middleFloorTile = new TiledMapTileLayer.Cell();
         topLeftWallTile = new TiledMapTileLayer.Cell();
