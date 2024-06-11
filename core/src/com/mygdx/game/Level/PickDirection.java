@@ -1,7 +1,5 @@
 package com.mygdx.game.level;
 
-import com.sun.tools.javac.jvm.Gen;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
