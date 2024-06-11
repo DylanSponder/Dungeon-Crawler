@@ -359,7 +359,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 
-		debug = false;
+		debug = true;
 		if (debug){
 			for (Enemy enemy: enemies){
 				//renders raycast rays

@@ -28,7 +28,8 @@ public class SetRoomXandY {
     }
 
     public int setNextRoomDimensions(int doorDirection, int roomX, int levelY, int previousRoomSize, int currentRoomSize, int previousLongestRow, int longestRow){
-        //1 is up, 2 is right, 3 is down, 4 is left
+        //room placement directions
+        // - 1 is up, 2 is right, 3 is down, 4 is left
         if (doorDirection == 1){
             GenerateLevel.levelY = levelY + (previousRoomSize + currentRoomSize);
         }
@@ -37,7 +38,8 @@ public class SetRoomXandY {
             GenerateLevel.roomX = roomX + previousLongestRow * 2;
         }
         else if (doorDirection == 3){
-            //nothing needs to be done here - rooms naturally generate downwards (levelY increments down by 1 to place each row)
+            //why nothing needs to be done here:
+            // - rooms naturally generate downwards (levelY increments down by 1 to place each row)
         }
         else if (doorDirection == 4){
             GenerateLevel.levelY = levelY + currentRoomSize;
