@@ -3,7 +3,15 @@ package com.mygdx.game.entity.behaviours.fsm;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
 import com.badlogic.gdx.ai.steer.behaviors.*;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.mygdx.game.DungeonCrawler;
+
+import java.util.Iterator;
+
+import static com.mygdx.game.DungeonCrawler.*;
 
 public enum EnemyState implements State<Enemy> {
 
@@ -81,6 +89,38 @@ public enum EnemyState implements State<Enemy> {
 
         @Override
         public boolean onMessage(Enemy entity, Telegram telegram) {
+            return false;
+        }
+    },
+
+    DIE() {
+        @Override
+        public void enter (Enemy enemy){
+            //world.destroyBody(enemy.enemyBody);
+
+            Iterator<Enemy> enemyIt = enemies.iterator();
+
+            if (enemyIt.hasNext()) {
+                //enemyIt.remove();
+                //deadEnemies.remove(enemy.enemyBody);
+                enemies.remove(enemy);
+
+                //enemy.enemyBody.destroyFixture(enemy.enemyHitbox);
+
+            }
+        }
+        @Override
+        public void update(Enemy enemy) {
+
+        }
+
+        @Override
+        public void exit(Enemy enemy) {
+
+        }
+
+        @Override
+        public boolean onMessage(Enemy enemy, Telegram telegram) {
             return false;
         }
     };

@@ -35,20 +35,20 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static World world;
 	private boolean debug;
 	private Box2DDebugRenderer b2dr;
-	private Body sword, arrowBody;
 	public static Player player;
-	public static ArrayList<Enemy> enemies;
+	private String playerDirection;
+	private boolean playerPaused, playerMeleeAttacking, playerRangedAttacking;
 	private Arrow arrow;
 	public ArrayList<Arrow> arrows;
 	public static ArrayList<Body> arrowBodiesCollided;
 	public ArrayMap<Body, Arrow> arrowArrayMap;
-	private Fixture swordHitbox, enemyHitbox, arrowHitbox;
 	public boolean reversedArrowMap;
-	private String playerDirection;
-	private boolean playerPaused, playerMeleeAttacking, playerRangedAttacking;
+	private Body sword, arrowBody;
+	private Fixture swordHitbox, enemyHitbox, arrowHitbox;
+	public static ArrayList<Enemy> enemies;
+	public static ArrayList<Body> deadEnemies;
 	public float PLAYER_HORIZONTAL_SPEED = 0f, PLAYER_VERTICAL_SPEED = 0f;
 	public float PLAYER_X = 0f, PLAYER_Y = 0f;
-	public int ENEMY_HEALTH = 3;
 	private TiledMapTileLayer layer;
 	private TiledMapRenderer renderer;
 	public static OrthographicCamera camera;
@@ -64,6 +64,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		reversedArrowMap = false;
 		player = new Player();
 		enemies = new ArrayList<>();
+		deadEnemies = new ArrayList<Body>();
 		final BodyFactory bf = new BodyFactory();
 		final CreateTexture tx = CreateTexture.getInstance();
 		GameContactListener lc = new GameContactListener();
@@ -358,7 +359,24 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 				}
 			}
+		/*
+		for (Enemy e: enemies){
+			Iterator<Body> enemyIt = deadEnemies.iterator();
 
+			if (enemyIt.hasNext()) {
+				//enemyIt.remove();
+				//deadEnemies.remove(enemy.enemyBody);
+				enemyIt.remove();
+				enemies.remove(e);
+
+				//e.enemyBody.destroyFixture(e.enemyHitbox);
+				break;
+			}
+		}
+
+		 */
+
+		//toggle to enable or disable collision boxes
 		debug = true;
 		if (debug){
 			for (Enemy enemy: enemies){
@@ -433,19 +451,19 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//move playerSprite Sprite by delta speed according to button WASD press
 		if (Gdx.input.isKeyPressed(Keys.W)||Gdx.input.isKeyPressed(Keys.UP)) {
 			tx.playerSprite = tx.playerUp;
-			PLAYER_VERTICAL_SPEED = 10000000f;
+			PLAYER_VERTICAL_SPEED = 1000f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.A)||Gdx.input.isKeyPressed(Keys.LEFT)) {
 			tx.playerSprite = tx.playerLeft;
-			PLAYER_HORIZONTAL_SPEED = -10000000f;
+			PLAYER_HORIZONTAL_SPEED = -1000f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.S)||Gdx.input.isKeyPressed(Keys.DOWN)) {
 			tx.playerSprite = tx.playerDown;
-			PLAYER_VERTICAL_SPEED = -10000000f;
+			PLAYER_VERTICAL_SPEED = -1000f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.RIGHT)) {
 			tx.playerSprite = tx.playerRight;
-			PLAYER_HORIZONTAL_SPEED = 10000000f;
+			PLAYER_HORIZONTAL_SPEED = 1000f;
 		}
 		player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
 

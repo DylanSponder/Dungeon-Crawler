@@ -26,6 +26,7 @@ import com.mygdx.game.entity.Box2DSteeringEntity;
 import com.mygdx.game.entity.Box2DRaycastCollisionDetector;
 
 import static com.mygdx.game.DungeonCrawler.camera;
+import static com.mygdx.game.DungeonCrawler.enemies;
 
 public class Enemy {
     private StateMachine<Enemy, EnemyState> stateMachine;
@@ -41,7 +42,7 @@ public class Enemy {
     public Arrive arriveSB;
     public BlendedSteering blendedSteeringSB;
     public Vector2 wanderCenter;
-    float ENEMY_HEALTH = 3;
+    public int ENEMY_HEALTH;
     public boolean debug;
     public Wander<Vector2> wanderSB;
     public IndexedGraph worldMap;
@@ -141,6 +142,12 @@ public class Enemy {
                 .setDecelerationRadius(0);
         return arriveSB;
     }
+
+    public void die() {
+
+
+    }
+
 
     public RaycastObstacleAvoidance avoidObstacle(){
         RayConfigurationBase<Vector2>[] localRayConfigurations = new RayConfigurationBase[] {

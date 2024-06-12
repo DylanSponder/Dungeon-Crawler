@@ -1,6 +1,6 @@
 tlw,tw,tw,dtl,doortl,doortr,dtr,tw,tw,trw
-lw,f,f,f,f,f,f,f,f,rw
-lw,f,f,f,f,f,f,f,f,rw
+lw,fob2,fob3,f,f,f,f,fob3,fob2,rw
+lw,fob3,f,f,f,f,f,f,fob3,rw
 lw,f,f,f,fob1,fob1,f,f,f,rw
 lw,f,f,fob1,f,f,fob1,f,f,rw
 dlu,f,f,f,f,f,f,f,f,dru
@@ -8,6 +8,6 @@ doorul,f,f,f,f,f,f,f,f,doorur
 doorll,f,f,f,f,f,f,f,f,doorlr
 dll,f,f,fob1,f,f,fob1,f,f,drl
 lw,f,f,f,fob1,fob1,f,f,f,rw
-lw,f,f,f,f,f,f,f,f,rw
-lw,f,f,f,f,f,f,f,f,rw
+lw,fob3,f,f,f,f,f,f,fob3,rw
+lw,fob2,fob3,f,f,f,f,fob3,fob2,rw
 blw,bw,bw,dbl,doorbl,doorbr,dbr,bw,bw,brw

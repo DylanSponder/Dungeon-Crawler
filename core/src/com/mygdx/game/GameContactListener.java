@@ -67,6 +67,8 @@ public class GameContactListener implements ContactListener {
             // && (fb.getUserData() != "Wall" || fb.getUserData() !="Enemy" || fb.getUserData() != "Player"))
             //System.out.println("Entity has left or entered a room");
         }
+
+
     }
 
     @Override
@@ -82,6 +84,54 @@ public class GameContactListener implements ContactListener {
                 for (Enemy e : enemies){
                     if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()){
                         e.getStateMachine().changeState(EnemyState.WANDER);
+                    }
+                }
+            }
+        }
+        if ((fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Enemy")
+                ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Arrow")
+        ) {
+            if(fa.getUserData() != "Proximity" &&
+                    fb.getUserData() != "Proximity"){
+            for (Enemy e : enemies) {
+                if (e.enemyBody == fa.getBody()) {
+
+                        e.ENEMY_HEALTH--;
+                        if (e.ENEMY_HEALTH < 1) {
+                            if (!deadEnemies.contains(fa.getBody())) {
+                                //arrowBodiesCollided.add(fa.getBody());
+                                deadEnemies.add(fa.getBody());
+                            }
+                            e.getStateMachine().changeState(EnemyState.DIE);
+
+                        break;
+                    }
+
+
+                    /*
+                    if (e.ENEMY_HEALTH == 0) {
+                        deadEnemies.add(fa.getBody());
+                        e.getStateMachine().changeState(EnemyState.DIE);
+                    }
+                    */
+                } else if (e.enemyBody == fb.getBody()) {
+
+                    e.ENEMY_HEALTH--;
+                    if (e.ENEMY_HEALTH < 1) {
+                        if (!deadEnemies.contains(fb.getBody())) {
+                            //arrowBodiesCollided.add(fa.getBody());
+                            deadEnemies.add(fb.getBody());
+                        }
+                        e.getStateMachine().changeState(EnemyState.DIE);
+
+                        break;
+                    /*
+                    if (e.ENEMY_HEALTH == 0) {
+                        deadEnemies.add(fa.getBody());
+                        e.getStateMachine().changeState(EnemyState.DIE);
+                    }
+                    */
+                        }
                     }
                 }
             }

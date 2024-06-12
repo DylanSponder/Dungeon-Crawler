@@ -1,6 +1,5 @@
 package com.mygdx.game.level;
 
-import javax.accessibility.AccessibleStateSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
