@@ -337,7 +337,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				arrowBatch.end();
 			}
 
-			//arraymap order needs to be reversedArrowMap once (Collections.reverseOrder() method is not available with ArrayMaps)
+			//array map order needs to be reversedArrowMap once (Collections.reverseOrder() method is not available with ArrayMaps)
 			if (!reversedArrowMap){
 				arrowArrayMap.reverse();
 				reversedArrowMap = true;
@@ -347,7 +347,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				//iterate through every collided arrow
 				if (bodyIt.hasNext()) {
 					Body collidedBody = bodyIt.next();
-					//if the arraymap contains the arrow body that collided, remove that arrow from the game
+					//if the array map contains the arrow body that collided, remove that arrow from the game
 					if (arrowArrayMap.containsKey(collidedBody)) {
 						arrowArrayMap.removeKey(collidedBody);
 						//remove the arrow Box2D body
@@ -359,6 +359,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 				}
 			}
+		for (Body body : deadEnemies)
+		{
+			world.destroyBody(body);
+		}
+
+		deadEnemies.clear();
 		/*
 		for (Enemy e: enemies){
 			Iterator<Body> enemyIt = deadEnemies.iterator();
@@ -380,7 +386,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		debug = true;
 		if (debug){
 			for (Enemy enemy: enemies){
-				//renders raycast rays
+				//renders ray cast rays
 				Ray<Vector2>[] rays = enemy.rayConfigurations[0].getRays();
 				enemy.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 				enemy.shapeRenderer.setProjectionMatrix(camera.combined);
@@ -430,7 +436,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		}
 
 		if (!playerPaused) {
-			inputUpdate(delta);
+			inputUpdate();
 		}
 	}
 
@@ -443,7 +449,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		b2dr.dispose();
 	}
 
-	public void inputUpdate(float delta) {
+	public void inputUpdate() {
 		final CreateTexture tx = CreateTexture.getInstance();
 		PLAYER_HORIZONTAL_SPEED = 0;
 		PLAYER_VERTICAL_SPEED = 0;
@@ -451,19 +457,19 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//move playerSprite Sprite by delta speed according to button WASD press
 		if (Gdx.input.isKeyPressed(Keys.W)||Gdx.input.isKeyPressed(Keys.UP)) {
 			tx.playerSprite = tx.playerUp;
-			PLAYER_VERTICAL_SPEED = 1000f;
+			PLAYER_VERTICAL_SPEED = 100f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.A)||Gdx.input.isKeyPressed(Keys.LEFT)) {
 			tx.playerSprite = tx.playerLeft;
-			PLAYER_HORIZONTAL_SPEED = -1000f;
+			PLAYER_HORIZONTAL_SPEED = -100f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.S)||Gdx.input.isKeyPressed(Keys.DOWN)) {
 			tx.playerSprite = tx.playerDown;
-			PLAYER_VERTICAL_SPEED = -1000f;
+			PLAYER_VERTICAL_SPEED = -100f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.RIGHT)) {
 			tx.playerSprite = tx.playerRight;
-			PLAYER_HORIZONTAL_SPEED = 1000f;
+			PLAYER_HORIZONTAL_SPEED = 100f;
 		}
 		player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
 

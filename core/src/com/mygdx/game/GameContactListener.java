@@ -101,6 +101,7 @@ public class GameContactListener implements ContactListener {
                             if (!deadEnemies.contains(fa.getBody())) {
                                 //arrowBodiesCollided.add(fa.getBody());
                                 deadEnemies.add(fa.getBody());
+
                             }
                             e.getStateMachine().changeState(EnemyState.DIE);
 

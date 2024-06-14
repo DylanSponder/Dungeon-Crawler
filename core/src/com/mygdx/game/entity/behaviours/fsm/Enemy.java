@@ -25,8 +25,7 @@ import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.Box2DSteeringEntity;
 import com.mygdx.game.entity.Box2DRaycastCollisionDetector;
 
-import static com.mygdx.game.DungeonCrawler.camera;
-import static com.mygdx.game.DungeonCrawler.enemies;
+import static com.mygdx.game.DungeonCrawler.*;
 
 public class Enemy {
     private StateMachine<Enemy, EnemyState> stateMachine;
@@ -59,7 +58,6 @@ public class Enemy {
         enemyBody = bodyFactory.createEnemyBody(world, x, y);
         enemyDetectionBody = bodyFactory.createEnemyBody(world, x, y);
         enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 7.5f);
-
 
         enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 100);
         enemyDetectionRadius.setSensor(true);
@@ -143,9 +141,9 @@ public class Enemy {
         return arriveSB;
     }
 
-    public void die() {
-
-
+    public void die(Body enemyBody) {
+        //world.destroyBody(enemyBody);
+        //enemyBody.destroyFixture(enemyHitbox);
     }
 
 

@@ -118,7 +118,8 @@ public class GenerateLevel {
             //newRoom.directionTaken = init.roomList.get(i).directionTaken;
             roomsIndex++;
             newRoom.index = i;
-            int random = (int) (Math.random() * 3 + 1);
+            //room number randomizer
+            int random = (int) (Math.random() * /*upper limit->*/ 3 + 1);
             newRoom.roomNum = random;
            // init.roomList.get(i).roomNum = random;
         }
@@ -202,6 +203,7 @@ public class GenerateLevel {
                             init.roomList.get(r).roomSize, init.roomList.get(r - 1).roomSize,
                             init.roomList.get(r).longestRow, init.roomList.get(r - 1).longestRow
                     );
+                    //TODO simplify to one function
                     if ((r + 1 < 11)) {
                         if (init.roomList.get(r+1).directionTaken == 1) {
                             HashMap<String, String> doorMap =  init.roomList.get(r).doorLocations;
@@ -572,11 +574,16 @@ public class GenerateLevel {
 
                 xOffset = doorResult;
 
+
+                System.out.println("1 taken offset: " + xOffset);
+
+
                 init.roomList.get(roomIndex).x1 = init.roomList.get(roomIndex).x1 + xOffset;
                 init.roomList.get(roomIndex).x2 = init.roomList.get(roomIndex).x2 + xOffset;
                 if (path.get(roomIndex+1) == 2 || path.get(roomIndex+1) == 4) {
                     testRoomX = testRoomX + xOffset;
                 }
+
 
                 locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
             }
@@ -615,6 +622,8 @@ public class GenerateLevel {
 
                 init.roomList.get(roomIndex).y1 = init.roomList.get(roomIndex).y1 + yOffset;
                 init.roomList.get(roomIndex).y2 = init.roomList.get(roomIndex).y2 + yOffset;
+
+                testLevelY = testLevelY + yOffset;
                 if (path.get(roomIndex+1) == 1 || path.get(roomIndex+1) == 3) {
                  //   testLevelY = testLevelY + yOffset;
                 }
@@ -622,18 +631,18 @@ public class GenerateLevel {
             }
             if (doorDirection==3) {
                 /*
-                //gets the top left and right door locations from the doormap and de-concatenates them
+                //gets the top left and right door locations from the door map and de-concatenates them
                 String doorTopLeft = doorMap.get("TopLeft");
                 String[] doorTopLeftXY = doorTopLeft.split(",");
                 String doorTopLeftX = doorTopLeftXY[0].toString();
                 String doorTopLeftY = doorTopLeftXY[1].toString();
-                //   System.out.println("DOOR TOP LEFT X COORDS: "  + doorTopLeftX + " DOOR TOP LEFT Y COORDS: " + doorTopLeftY);
+                //   System.out.println("DOOR TOP LEFT X CO ORDS: "  + doorTopLeftX + " DOOR TOP LEFT Y CO ORDS: " + doorTopLeftY);
 
                 String doorTopRight = doorMap.get("TopRight");
                 String[] doorTopRightXY = doorTopRight.split(",");
                 String doorTopRightX = doorTopRightXY[0].toString();
                 String doorTopRightY = doorTopRightXY[1].toString();
-                //  System.out.println("DOOR TOP RIGHT X COORDS: "  + doorTopRightX + " DOOR TOP RIGHT Y COORDS: " + doorTopRightY);
+                //  System.out.println("DOOR TOP RIGHT X CO ORDS: "  + doorTopRightX + " DOOR TOP RIGHT Y CO ORDS: " + doorTopRightY);
                  */
 
                 String doorTopLeft = doorMap.get("TopLeft");
@@ -674,6 +683,7 @@ public class GenerateLevel {
                 }
 
                 xOffset = doorResult;
+                yOffset = xOffset;
                 System.out.println("3 taken offset: " + xOffset);
 
                 init.roomList.get(roomIndex).x1 = init.roomList.get(roomIndex).x1 + xOffset;
@@ -685,6 +695,13 @@ public class GenerateLevel {
                     //    init.roomList.get(roomIndex+1).x1 = init.roomList.get(roomIndex+1).x1 + xOffset;
                     //    init.roomList.get(roomIndex+1).x2 = init.roomList.get(roomIndex+1).x2 + xOffset;
                     //System.out.println(init.roomList.get(roomIndex+1).x1);
+                }
+                //TODO Fix this
+                else if ((path.get(roomIndex-1) == 2)) {
+                    System.out.println("2 was previous direction");
+                    //init.roomList.get(roomIndex).y1 = init.roomList.get(roomIndex).y1 + yOffset;
+                    //init.roomList.get(roomIndex).y2 = init.roomList.get(roomIndex).y2 + yOffset;
+
                 }
 
 
@@ -750,7 +767,7 @@ public class GenerateLevel {
                 if (testLongestRow < testCurrentRow) {
                     testLongestRow = testCurrentRow;
                 }
-                //TODO: GET X AND Y VALUES - ASSIGN X TO X1 AT FIRST AND Y TO LEVELY AT FIRST - MOVE AS IN GENERATELEVEL FUNCTION
+                //TODO: GET X AND Y VALUES - ASSIGN X TO X1 AT FIRST AND Y TO LEVEL Y AT FIRST - MOVE AS IN GENERATE LEVEL FUNCTION
                 if (startingRoom) {
                     doorMap = init.rr.translateSymbolsToFindDoors(roomFile, rowNum, roomIndex, path.get(roomIndex), path.get(roomIndex), init.roomList.get(roomIndex).doorLocations, x1, doorY);
                 }
@@ -973,7 +990,7 @@ public class GenerateLevel {
                                 break;
                             }
                         case "doorBottomRightWall":
-                            if (doorBottom <= 1 && ((nextDirection == 3 || doorDirection == 1))) {
+                            if (doorBottom <= 1 && (nextDirection == 3 || doorDirection == 1)) {
                                 currentCell = init.cr.doorBottomRightWall;
                                 Body newDoorBottomRightWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                                 newDoorBottomRightWall.setUserData("Wall");
@@ -1150,9 +1167,30 @@ public class GenerateLevel {
 
                     if (startingRoom) {
                         //set player starting coordinates according to the position of the first generated room
+                        //int playerXAsFloat = Integer.parseInt(init.roomList.get(0).doorLocations.get("UpperLeft")) * 16 - (init.roomList.get(0).longestRow / 2)-1;
+                        //float playerXAsFloat = Float.parseFloat((init.roomList.get(0).doorLocations.get("UpperLeft")));
 
-                        PLAYER_Y = init.roomList.get(0).y1 * 16;
-                        PLAYER_X = init.roomList.get(0).x1 * 16;
+                        String doorUpperLeft = (init.roomList.get(0).doorLocations.get("TopLeft"));
+                        String[] doorUpperLeftXY = doorUpperLeft.split(",");
+                        String doorUpperLeftX = doorUpperLeftXY[0].toString();
+                        System.out.println("DOOR UPPER LEFT UNTOUCHED" + doorUpperLeftX);
+                        double doorUpperLeftXAsDouble = Float.parseFloat(doorUpperLeftX) * 1.65;
+                        String test = String.valueOf(doorUpperLeftXAsDouble);
+                        float doorUpperLeftXAsFloat = Float.parseFloat(test);
+                        PLAYER_X = (doorUpperLeftXAsFloat * 10);
+
+                        String doorUpperLeftY = doorUpperLeftXY[1].toString();
+                        float doorUpperLeftYAsFloat = Float.parseFloat(doorUpperLeftY);
+                        PLAYER_Y = doorUpperLeftYAsFloat * 16 - (1 * 16);
+
+                        System.out.println("player x: " + PLAYER_X);
+                        System.out.println("player y" + PLAYER_Y);
+
+                        //PLAYER_X = playerXAsFloat * 16 - (init.roomList.get(0).longestRow / 2)-1;
+                        //float playerYAsFloat = Float.parseFloat(init.roomList.get(0).doorLocations.get("TopLeft"));
+                        //PLAYER_Y = playerYAsFloat * 16 + (init.roomList.get(0).longestRow / 2)+1;
+                        //PLAYER_Y = init.roomList.get(0).y1 * 16;
+                        //PLAYER_X = init.roomList.get(0).x1 * 16;
                         startingRoom = false;
 
                         /*

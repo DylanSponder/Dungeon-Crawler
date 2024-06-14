@@ -104,7 +104,7 @@ public enum EnemyState implements State<Enemy> {
                 //enemyIt.remove();
                 //deadEnemies.remove(enemy.enemyBody);
                 enemies.remove(enemy);
-
+                enemy.die(enemy.enemyBody);
                 //enemy.enemyBody.destroyFixture(enemy.enemyHitbox);
 
             }
