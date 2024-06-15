@@ -68,6 +68,7 @@ public class BodyFactory {
         }
         Fixture swordHitbox = sword.createFixture(swordShape, 1.0f);
         swordShape.dispose();
+        swordHitbox.setUserData("Sword");
         return swordHitbox;
     }
 

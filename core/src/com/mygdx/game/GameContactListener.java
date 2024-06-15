@@ -15,7 +15,7 @@ public class GameContactListener implements ContactListener {
 
         //System.out.println(fa.getBody().getUserData()+" was hit with "+fb.getBody().getUserData());
 
-        if ((fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Enemy")
+        if (    (fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Enemy")
                 ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Arrow")
                 ||(fa.getBody().getUserData() == "Wall" && fb.getBody().getUserData() == "Arrow")
                 ||(fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Wall")
@@ -44,10 +44,10 @@ public class GameContactListener implements ContactListener {
             }
 
         }
-        if ((fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Enemy")
+        if (    (fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Enemy")
                 ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Player")
         ){
-            if(fa.getUserData() == "Proximity"||
+            if( fa.getUserData() == "Proximity"||
                     fb.getUserData() == "Proximity"){
                 for (Enemy e : enemies){
                     if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()){
@@ -63,38 +63,21 @@ public class GameContactListener implements ContactListener {
         }
 
         //if two rooms contact during room generation, abort and choose a new direction
-        if ((fa.getUserData() == "Room") || (fa.getUserData() == "Room")) {
+        if (    (fa.getUserData() == "Room") || (fa.getUserData() == "Room")) {
             // && (fb.getUserData() != "Wall" || fb.getUserData() !="Enemy" || fb.getUserData() != "Player"))
             //System.out.println("Entity has left or entered a room");
         }
 
-
-    }
-
-    @Override
-    public void endContact(Contact contact) {
-        Fixture fa = contact.getFixtureA();
-        Fixture fb = contact.getFixtureB();
-
-        if ((fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Enemy")
-                ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Player")
-        ){
-            if(fa.getUserData() == "Proximity"||
-                    fb.getUserData() == "Proximity"){
-                for (Enemy e : enemies){
-                    if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()){
-                        e.getStateMachine().changeState(EnemyState.WANDER);
-                    }
-                }
-            }
-        }
-        if ((fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Enemy")
+        if (    (fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Enemy")
                 ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Arrow")
+                ||
+                ((fa.getBody().getUserData() == "Sword" && fb.getBody().getUserData() == "Enemy")
+                        ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Sword"))
         ) {
             if(fa.getUserData() != "Proximity" &&
                     fb.getUserData() != "Proximity"){
-            for (Enemy e : enemies) {
-                if (e.enemyBody == fa.getBody()) {
+                for (Enemy e : enemies) {
+                    if (e.enemyBody == fa.getBody()) {
 
                         e.ENEMY_HEALTH--;
                         if (e.ENEMY_HEALTH < 1) {
@@ -105,8 +88,8 @@ public class GameContactListener implements ContactListener {
                             }
                             e.getStateMachine().changeState(EnemyState.DIE);
 
-                        break;
-                    }
+                            break;
+                        }
 
 
                     /*
@@ -115,17 +98,17 @@ public class GameContactListener implements ContactListener {
                         e.getStateMachine().changeState(EnemyState.DIE);
                     }
                     */
-                } else if (e.enemyBody == fb.getBody()) {
+                    } else if (e.enemyBody == fb.getBody()) {
 
-                    e.ENEMY_HEALTH--;
-                    if (e.ENEMY_HEALTH < 1) {
-                        if (!deadEnemies.contains(fb.getBody())) {
-                            //arrowBodiesCollided.add(fa.getBody());
-                            deadEnemies.add(fb.getBody());
-                        }
-                        e.getStateMachine().changeState(EnemyState.DIE);
+                        e.ENEMY_HEALTH--;
+                        if (e.ENEMY_HEALTH < 1) {
+                            if (!deadEnemies.contains(fb.getBody())) {
+                                //arrowBodiesCollided.add(fa.getBody());
+                                deadEnemies.add(fb.getBody());
+                            }
+                            e.getStateMachine().changeState(EnemyState.DIE);
 
-                        break;
+                            break;
                     /*
                     if (e.ENEMY_HEALTH == 0) {
                         deadEnemies.add(fa.getBody());
@@ -137,6 +120,27 @@ public class GameContactListener implements ContactListener {
                 }
             }
         }
+
+    }
+
+    @Override
+    public void endContact(Contact contact) {
+        Fixture fa = contact.getFixtureA();
+        Fixture fb = contact.getFixtureB();
+
+        if (    (fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Enemy")
+                ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Player")
+        ){
+            if  (fa.getUserData() == "Proximity"||
+                    fb.getUserData() == "Proximity"){
+                for (Enemy e : enemies){
+                    if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()){
+                        e.getStateMachine().changeState(EnemyState.WANDER);
+                    }
+                }
+            }
+        }
+
     }
 
     @Override
