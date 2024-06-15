@@ -135,7 +135,7 @@ public class Enemy {
 
     public Arrive<Vector2> attack() {
          arriveSB = new Arrive<Vector2>(enemyAI, DungeonCrawler.player.playerB2D)
-                .setTimeToTarget(0.010f)
+                .setTimeToTarget(0.004f)
                 .setArrivalTolerance(1f)
                 .setDecelerationRadius(0);
         return arriveSB;

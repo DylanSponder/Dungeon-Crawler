@@ -820,6 +820,7 @@ public class GenerateLevel {
             for (int rowNum = 0; rowNum < currentRoomSize; rowNum++) {
                 List<String> levelTextures = init.rr.translateSymbols(room, rowNum, init.roomList.indexOf(r), init.roomList.get(init.roomList.indexOf(r)).doorLocations, roomX, levelY);
 
+                //TODO NEXT \/ CREATE DOOR AREA HITBOX
                 if (!roomHitboxCreated){
                     //create a box with the dimensions of the to-be-generated room - originally intended for collision detection but cannot be used that way
                     //will instead be used for detecting if the player has entered a room for opening and closing doors
@@ -937,7 +938,7 @@ public class GenerateLevel {
                                 break;
                             }
                         case "doorLeftLowerWall":
-                            if (doorLeft <= 1 && ((nextDirection == 4 || doorDirection == 2))) {
+                            if (doorLeft <= 2 && ((nextDirection == 4 || doorDirection == 2))) {
                                 currentCell = init.cr.doorLeftLowerWall;
                                 Body newDoorLeftLowerWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                                 newDoorLeftLowerWall.setUserData("Wall");
@@ -950,7 +951,7 @@ public class GenerateLevel {
                                 break;
                             }
                         case "doorRightUpperWall":
-                            if (doorTop <= 1 && ((nextDirection == 1 || doorDirection == 3))) {
+                            if (((nextDirection == 2 || doorDirection == 4))) {
                                 currentCell = init.cr.doorRightUpperWall;
                                 Body newDoorRightUpperWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                                 newDoorRightUpperWall.setUserData("Wall");
@@ -964,7 +965,7 @@ public class GenerateLevel {
                             }
 
                         case "doorRightLowerWall":
-                            if (doorTop <= 1 && ((nextDirection == 1 || doorDirection == 3))) {
+                            if (((nextDirection == 2 || doorDirection == 4))) {
                                 currentCell = init.cr.doorRightLowerWall;
                                 Body newDoorRightLowerWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                                 newDoorRightLowerWall.setUserData("Wall");
@@ -990,7 +991,7 @@ public class GenerateLevel {
                                 break;
                             }
                         case "doorBottomRightWall":
-                            if (doorBottom <= 1 && (nextDirection == 3 || doorDirection == 1)) {
+                            if (doorBottom <= 2 && (nextDirection == 3 || doorDirection == 1)) {
                                 currentCell = init.cr.doorBottomRightWall;
                                 Body newDoorBottomRightWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                                 newDoorBottomRightWall.setUserData("Wall");
@@ -1091,7 +1092,7 @@ public class GenerateLevel {
                             break;
                         case "doorRightLower":
                             if (!startingRoom) {
-                            if (doorRight <= 1 && ((nextDirection == 2 || doorDirection == 4))) {
+                            if (doorRight <= 2 && ((nextDirection == 2 || doorDirection == 4))) {
 
                                 //System.out.println("DOOR LOCATION: " + (r.doorLocations).get("LowerRight"));
                                 currentCell = init.cr.doorRightLower;
@@ -1177,7 +1178,7 @@ public class GenerateLevel {
                         double doorUpperLeftXAsDouble = Float.parseFloat(doorUpperLeftX) * 1.65;
                         String test = String.valueOf(doorUpperLeftXAsDouble);
                         float doorUpperLeftXAsFloat = Float.parseFloat(test);
-                        PLAYER_X = (doorUpperLeftXAsFloat * 10);
+                        PLAYER_X = (doorUpperLeftXAsFloat * 10) + 16;
 
                         String doorUpperLeftY = doorUpperLeftXY[1].toString();
                         float doorUpperLeftYAsFloat = Float.parseFloat(doorUpperLeftY);

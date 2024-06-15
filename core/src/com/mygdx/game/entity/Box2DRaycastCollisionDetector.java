@@ -57,6 +57,10 @@ public class Box2DRaycastCollisionDetector implements RaycastCollisionDetector<V
                 collided = true;
                 if (fixture.getBody().getType() == BodyDef.BodyType.DynamicBody){
                     //System.out.println("I'm colliding with a dynamic object!");
+                    //System.out.println(fixture.getBody().getUserData());
+                    if (fixture.getBody().getUserData() == "Player") {
+
+                    }
                 }
                 else if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody){
                     //System.out.println("I'm colliding with a static object!");
