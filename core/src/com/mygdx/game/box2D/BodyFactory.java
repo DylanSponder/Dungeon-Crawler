@@ -128,6 +128,37 @@ public class BodyFactory {
         return enemyDetectionHitbox;
     }
 
+    public Body createShopBody(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(x,y);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        return body;
+    }
+
+    public Fixture createShopHitbox(Body body, float r){
+        CircleShape enemyShape = new CircleShape();
+        enemyShape.setRadius(r);
+        // PolygonShape enemyShape = new PolygonShape();
+        // enemyShape.setAsBox(x, y);
+        Fixture enemyHitbox = body.createFixture(enemyShape, 1.0f);
+        enemyShape.dispose();
+        enemyHitbox.setUserData("EnemyHitbox");
+        return enemyHitbox;
+    }
+
+    public Fixture createShopDetectionRadius(Body body, float r){
+        CircleShape enemyShape = new CircleShape();
+        enemyShape.setRadius(r);
+        Fixture enemyDetectionHitbox = body.createFixture(enemyShape, 1.0f);
+        enemyShape.dispose();
+        enemyDetectionHitbox.setUserData("Proximity");
+        enemyDetectionHitbox.isSensor();
+        return enemyDetectionHitbox;
+    }
+
     public static Fixture createRoom(World world, int roomX, int roomY, int h, int w){
         Body body;
         BodyDef bodyDef = new BodyDef();

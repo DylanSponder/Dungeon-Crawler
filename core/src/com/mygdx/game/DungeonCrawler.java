@@ -26,6 +26,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.Arrow;
 import com.mygdx.game.entity.Player;
+import com.mygdx.game.entity.Shopkeeper;
 import com.mygdx.game.entity.behaviours.fsm.Enemy;
 import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.InitLevel;
@@ -46,6 +47,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private Body sword, arrowBody;
 	private Fixture swordHitbox, enemyHitbox, arrowHitbox;
 	public static ArrayList<Enemy> enemies;
+	public static ArrayList<Shopkeeper> shopkeepers;
 	public static ArrayList<Body> deadEnemies;
 	public float PLAYER_HORIZONTAL_SPEED = 0f, PLAYER_VERTICAL_SPEED = 0f;
 	public float PLAYER_X = 0f, PLAYER_Y = 0f;
@@ -65,6 +67,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		player = new Player();
 		enemies = new ArrayList<>();
 		deadEnemies = new ArrayList<Body>();
+		shopkeepers = new ArrayList<>();
 		final BodyFactory bf = new BodyFactory();
 		final CreateTexture tx = CreateTexture.getInstance();
 		GameContactListener lc = new GameContactListener();
@@ -329,6 +332,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 		for (Enemy e : enemies) {
 			batch.begin();
 			batch.draw(tx.enemySprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+			batch.end();
+		}
+
+		for (Shopkeeper s : shopkeepers) {
+			batch.begin();
+			batch.draw(tx.shopkeeperSprite, s.shopBody.getPosition().x - 8f, s.shopBody.getPosition().y - 7f, 16, 16);
 			batch.end();
 		}
 
