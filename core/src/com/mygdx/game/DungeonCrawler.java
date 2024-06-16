@@ -281,6 +281,16 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 	@Override
 	public void render() {
+    // kill game when playerhealth is 0
+    if (hud.healthBar.currentHealth == 0) {
+      Gdx.app.exit();
+    }
+
+    // WIN IF KILL
+    if (enemies.isEmpty()) {
+      hud.winnerWinnerChickenDinner();
+    }
+    
 		final CreateTexture tx = CreateTexture.getInstance();
 		//clear all assets and replace with background color
 		ScreenUtils.clear(1, 1, 1, 1);
@@ -517,5 +527,8 @@ public class DungeonCrawler extends ApplicationAdapter {
       hud.healthBar.LoseHealth(0.5f);
     }
 
+    if (Gdx.input.isKeyPressed(Keys.NUM_8)) {
+      enemies.clear();
+    }
 	}
 }

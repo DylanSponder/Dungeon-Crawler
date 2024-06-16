@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class HUD {
@@ -46,6 +47,16 @@ public class HUD {
     table.add(moneyTable);
 
     stage.addActor(table);
+  }
+
+  public void winnerWinnerChickenDinner() {
+    stage.clear();
+    Table winTable = new Table();
+    winTable.top();
+    winTable.setFillParent(true);
+    Label winWords = new Label("YOU WIN BRODIE!!!!!!!!!!", new LabelStyle(new BitmapFont(), Color.YELLOW));
+    winTable.add(winWords);
+    stage.addActor(winTable);
   }
 
   public void update() {
