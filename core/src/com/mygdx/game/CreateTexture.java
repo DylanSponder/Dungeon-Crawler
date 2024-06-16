@@ -19,6 +19,7 @@ public class CreateTexture {
     Texture bowTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/Bow/Sprite.png"));
     Texture arrowTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/Bow/Arrow.png"));
     Texture enemyTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Skull/SpriteSheet.png"));
+    Texture shopkeeperTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/OldMan3/OldMan3.png"));
 
     public TextureRegion roomMiddleFloorTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomLeftWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
@@ -88,6 +89,7 @@ public class CreateTexture {
     //outline HUD sprites
     Sprite heartSprite = new Sprite(heartTexture, 16, 16);
     Sprite potionSprite = new Sprite(potionTexture, 16, 16);
+    Sprite shopkeeperSprite = new Sprite(shopkeeperTexture, 0,0, 16, 16);
 
     private static CreateTexture instance = null;
     public static CreateTexture getInstance(){

@@ -138,7 +138,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 
 				if ((keycode == 62) && (!playerMeleeAttacking && !playerRangedAttacking)) {
-					float playerMeleeAttackSpeedInSeconds = 0.5f;
+					float playerMeleeAttackSpeedInSeconds = 0.4f;
 					playerMeleeAttacking = true;
 
 					if (tx.playerSprite.equals(tx.playerDown)) {
@@ -146,26 +146,31 @@ public class DungeonCrawler extends ApplicationAdapter {
 						sword = bf.createSwordBody(world,player.playerBody,-2.5f,-12f);
 						sword.setUserData("Sword");
 						swordHitbox = bf.createSwordHitbox(sword,false);
+						swordHitbox.setSensor(true);
 					} else if (tx.playerSprite.equals(tx.playerUp)) {
 						tx.playerSprite = tx.playerAttackUp;
 						sword = bf.createSwordBody(world,player.playerBody,-2.5f,15);
 						sword.setUserData("Sword");
 						swordHitbox = bf.createSwordHitbox(sword,false);
+						swordHitbox.setSensor(true);
 					} else if (tx.playerSprite.equals(tx.playerLeft)) {
 						tx.playerSprite = tx.playerAttackLeft;
 						sword = bf.createSwordBody(world,player.playerBody,-14f,-2.5f);
 						sword.setUserData("Sword");
 						swordHitbox = bf.createSwordHitbox(sword,true);
+						swordHitbox.setSensor(true);
 					} else if (tx.playerSprite.equals(tx.playerRight)) {
 						tx.playerSprite = tx.playerAttackRight;
 						sword = bf.createSwordBody(world,player.playerBody,14,-2.5f);
 						sword.setUserData("Sword");
 						swordHitbox = bf.createSwordHitbox(sword,true);
+						swordHitbox.setSensor(true);
 					} else {
 						tx.playerSprite = tx.playerAttackDown;
 						sword = bf.createSwordBody(world,player.playerBody,-2.5f,-12f);
 						sword.setUserData("Sword");
 						swordHitbox = bf.createSwordHitbox(sword,false);
+						swordHitbox.setSensor(true);
 					}
 
 					//pause player in place while attacking (attacks must be timed correctly!)
@@ -205,28 +210,28 @@ public class DungeonCrawler extends ApplicationAdapter {
 						tx.playerSprite = tx.playerAttackDown;
 						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-2f,player.playerBody.getPosition().y-16f);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,true);
-						arrowBody.setLinearVelocity(0, -300f);
+						arrowBody.setLinearVelocity(0, -500f);
 					}
 					else if (tx.playerSprite.equals(tx.playerUp)) {
 						playerDirection = "Up";
 						tx.playerSprite = tx.playerAttackUp;
 						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-2f,player.playerBody.getPosition().y+16f);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,true);
-						arrowBody.setLinearVelocity(0, 300f);
+						arrowBody.setLinearVelocity(0, 500f);
 					}
 					else if (tx.playerSprite.equals(tx.playerLeft)) {
 						playerDirection = "Left";
 						tx.playerSprite = tx.playerAttackLeft;
 						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-16f,player.playerBody.getPosition().y);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,false);
-						arrowBody.setLinearVelocity(-300f, 0);
+						arrowBody.setLinearVelocity(-500f, 0);
 					}
 					else if (tx.playerSprite.equals(tx.playerRight)) {
 						playerDirection = "Right";
 						tx.playerSprite = tx.playerAttackRight;
 						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x+16f,player.playerBody.getPosition().y);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,false);
-						arrowBody.setLinearVelocity(300f, 0);
+						arrowBody.setLinearVelocity(500f, 0);
 					}
 					//only triggers if the player hasn't moved at all yet - player starts facing down
 					else {
@@ -403,6 +408,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 				enemy.shapeRenderer.end();
 			}
 			b2dr.render(world,camera.combined);
+
+			//TODO Add debug button to Scene
+
 		}
 
 		camera.update();
@@ -454,22 +462,31 @@ public class DungeonCrawler extends ApplicationAdapter {
 		PLAYER_HORIZONTAL_SPEED = 0;
 		PLAYER_VERTICAL_SPEED = 0;
 
+		if (Gdx.input.isKeyPressed(Keys.W)||Gdx.input.isKeyPressed(Keys.UP)
+			&& (Gdx.input.isKeyPressed(Keys.A)||Gdx.input.isKeyPressed(Keys.LEFT)
+
+
+		)) {
+
+
+		}
+
 		//move playerSprite Sprite by delta speed according to button WASD press
 		if (Gdx.input.isKeyPressed(Keys.W)||Gdx.input.isKeyPressed(Keys.UP)) {
 			tx.playerSprite = tx.playerUp;
-			PLAYER_VERTICAL_SPEED = 100f;
+			PLAYER_VERTICAL_SPEED = 80f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.A)||Gdx.input.isKeyPressed(Keys.LEFT)) {
 			tx.playerSprite = tx.playerLeft;
-			PLAYER_HORIZONTAL_SPEED = -100f;
+			PLAYER_HORIZONTAL_SPEED = -80f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.S)||Gdx.input.isKeyPressed(Keys.DOWN)) {
 			tx.playerSprite = tx.playerDown;
-			PLAYER_VERTICAL_SPEED = -100f;
+			PLAYER_VERTICAL_SPEED = -80f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.RIGHT)) {
 			tx.playerSprite = tx.playerRight;
-			PLAYER_HORIZONTAL_SPEED = 100f;
+			PLAYER_HORIZONTAL_SPEED = 80f;
 		}
 		player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
 
