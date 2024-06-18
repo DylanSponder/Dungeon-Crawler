@@ -12,18 +12,24 @@ import com.badlogic.gdx.ai.steer.limiters.LinearAccelerationLimiter;
 import com.badlogic.gdx.ai.steer.utils.rays.CentralRayWithWhiskersConfiguration;
 import com.badlogic.gdx.ai.steer.utils.rays.RayConfigurationBase;
 import com.badlogic.gdx.ai.utils.RaycastCollisionDetector;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.Box2DSteeringEntity;
 import com.mygdx.game.entity.Box2DRaycastCollisionDetector;
+import com.mygdx.game.HUD;
 
 import static com.mygdx.game.DungeonCrawler.*;
 
@@ -45,6 +51,7 @@ public class Enemy {
     public boolean debug;
     public Wander<Vector2> wanderSB;
     public IndexedGraph worldMap;
+    public HUD hud;
 
     public Enemy(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
@@ -142,8 +149,7 @@ public class Enemy {
     }
 
     public void die(Body enemyBody) {
-        //world.destroyBody(enemyBody);
-        //enemyBody.destroyFixture(enemyHitbox);
+
     }
 
 

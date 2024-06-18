@@ -1,6 +1,11 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.mygdx.game.entity.behaviours.fsm.Enemy;
 import com.mygdx.game.entity.behaviours.fsm.EnemyState;
 
@@ -87,6 +92,7 @@ public class GameContactListener implements ContactListener {
 
                             }
                             e.getStateMachine().changeState(EnemyState.DIE);
+                            hud.updateGold(1);
 
                             break;
                         }
@@ -107,7 +113,7 @@ public class GameContactListener implements ContactListener {
                                 deadEnemies.add(fb.getBody());
                             }
                             e.getStateMachine().changeState(EnemyState.DIE);
-
+                            hud.updateGold(1);
                             break;
                     /*
                     if (e.ENEMY_HEALTH == 0) {

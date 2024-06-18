@@ -3,10 +3,14 @@ package com.mygdx.game.entity.behaviours.fsm;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
 import com.badlogic.gdx.ai.steer.behaviors.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.mygdx.game.DungeonCrawler;
 
 import java.util.Iterator;
@@ -106,6 +110,7 @@ public enum EnemyState implements State<Enemy> {
                 enemies.remove(enemy);
                 enemy.die(enemy.enemyBody);
                 //enemy.enemyBody.destroyFixture(enemy.enemyHitbox);
+
 
             }
         }

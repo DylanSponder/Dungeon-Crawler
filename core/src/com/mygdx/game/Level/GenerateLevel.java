@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.*;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.behaviours.fsm.Enemy;
+import com.mygdx.game.entity.Shopkeeper;
 
 import java.io.IOException;
 import java.util.*;
@@ -119,7 +120,7 @@ public class GenerateLevel {
             roomsIndex++;
             newRoom.index = i;
             //room number randomizer
-            int random = (int) (Math.random() * /*upper limit->*/ 3 + 1);
+            int random = (int) (Math.random() * /*upper limit->*/ 5 + 1);
             newRoom.roomNum = random;
            // init.roomList.get(i).roomNum = random;
         }
@@ -1160,6 +1161,11 @@ public class GenerateLevel {
                             currentCell = init.cr.middleFloorTile;
                             Enemy enemy = new Enemy(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                             DungeonCrawler.enemies.add(enemy);
+                            break;
+                        case "shop":
+                            currentCell = init.cr.middleFloorTile;
+                            Shopkeeper shopkeeper = new Shopkeeper(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                            DungeonCrawler.shopkeepers.add(shopkeeper);
                             break;
                     }
 
