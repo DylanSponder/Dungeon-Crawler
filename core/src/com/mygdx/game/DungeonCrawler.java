@@ -149,30 +149,35 @@ public class DungeonCrawler extends ApplicationAdapter {
 						sword = bf.createSwordBody(world,player.playerBody,-2.5f,-12f);
 						sword.setUserData("Sword");
 						swordHitbox = bf.createSwordHitbox(sword,false);
+						swordHitbox.setUserData("Down");
 						swordHitbox.setSensor(true);
 					} else if (tx.playerSprite.equals(tx.playerUp)) {
 						tx.playerSprite = tx.playerAttackUp;
 						sword = bf.createSwordBody(world,player.playerBody,-2.5f,15);
 						sword.setUserData("Sword");
 						swordHitbox = bf.createSwordHitbox(sword,false);
+						swordHitbox.setUserData("Up");
 						swordHitbox.setSensor(true);
 					} else if (tx.playerSprite.equals(tx.playerLeft)) {
 						tx.playerSprite = tx.playerAttackLeft;
 						sword = bf.createSwordBody(world,player.playerBody,-14f,-2.5f);
 						sword.setUserData("Sword");
 						swordHitbox = bf.createSwordHitbox(sword,true);
+						swordHitbox.setUserData("Left");
 						swordHitbox.setSensor(true);
 					} else if (tx.playerSprite.equals(tx.playerRight)) {
 						tx.playerSprite = tx.playerAttackRight;
 						sword = bf.createSwordBody(world,player.playerBody,14,-2.5f);
 						sword.setUserData("Sword");
 						swordHitbox = bf.createSwordHitbox(sword,true);
+						swordHitbox.setUserData("Right");
 						swordHitbox.setSensor(true);
 					} else {
 						tx.playerSprite = tx.playerAttackDown;
 						sword = bf.createSwordBody(world,player.playerBody,-2.5f,-12f);
 						sword.setUserData("Sword");
 						swordHitbox = bf.createSwordHitbox(sword,false);
+						swordHitbox.setUserData("Down");
 						swordHitbox.setSensor(true);
 					}
 
@@ -213,6 +218,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						tx.playerSprite = tx.playerAttackDown;
 						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-2f,player.playerBody.getPosition().y-16f);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,true);
+						arrowHitbox.setUserData("Down");
 						arrowBody.setLinearVelocity(0, -500f);
 					}
 					else if (tx.playerSprite.equals(tx.playerUp)) {
@@ -220,6 +226,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						tx.playerSprite = tx.playerAttackUp;
 						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-2f,player.playerBody.getPosition().y+16f);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,true);
+						arrowHitbox.setUserData("Up");
 						arrowBody.setLinearVelocity(0, 500f);
 					}
 					else if (tx.playerSprite.equals(tx.playerLeft)) {
@@ -227,6 +234,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						tx.playerSprite = tx.playerAttackLeft;
 						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-16f,player.playerBody.getPosition().y);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,false);
+						arrowHitbox.setUserData("Left");
 						arrowBody.setLinearVelocity(-500f, 0);
 					}
 					else if (tx.playerSprite.equals(tx.playerRight)) {
@@ -234,6 +242,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						tx.playerSprite = tx.playerAttackRight;
 						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x+16f,player.playerBody.getPosition().y);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,false);
+						arrowHitbox.setUserData("Right");
 						arrowBody.setLinearVelocity(500f, 0);
 					}
 					//only triggers if the player hasn't moved at all yet - player starts facing down
@@ -242,6 +251,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						tx.playerSprite = tx.playerAttackDown;
 						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-2f,player.playerBody.getPosition().y-16f);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,true);
+						arrowHitbox.setUserData("Down");
 						arrowBody.setLinearVelocity(0, -300f);
 					}
 					//pause player in place while attacking (attacks must be timed correctly!)

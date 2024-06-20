@@ -30,7 +30,7 @@ public class HUD {
   public HUD(Viewport vp, SpriteBatch sb) {
     stage = new Stage(vp, sb);
 
-    totalGold = 100;
+    totalGold = 0;
     totalGoldAsString = String.valueOf(totalGold);
 
     Table table = new Table();
@@ -64,7 +64,7 @@ public class HUD {
   public void winnerWinnerChickenDinner() {
     stage.clear();
     Table winTable = new Table();
-    winTable.top();
+    winTable.center();
     winTable.setFillParent(true);
     Label winWords = new Label("YOU WIN BRODIE!!!!!!!!!!", new LabelStyle(new BitmapFont(), Color.YELLOW));
     winTable.add(winWords);
