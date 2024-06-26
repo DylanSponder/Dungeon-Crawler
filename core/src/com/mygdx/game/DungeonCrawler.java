@@ -25,7 +25,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.Arrow;
-import com.mygdx.game.entity.Player;
+import com.mygdx.game.entity.behaviours.fsm.Player;
 import com.mygdx.game.entity.Shopkeeper;
 import com.mygdx.game.entity.behaviours.fsm.Enemy;
 import com.mygdx.game.level.GenerateLevel;
@@ -213,6 +213,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						tx.playerSprite = tx.playerAttackDown;
 						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-2f,player.playerBody.getPosition().y-16f);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,true);
+						arrowHitbox.setUserData("Down");
 						arrowBody.setLinearVelocity(0, -500f);
 					}
 					else if (tx.playerSprite.equals(tx.playerUp)) {
@@ -220,6 +221,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						tx.playerSprite = tx.playerAttackUp;
 						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-2f,player.playerBody.getPosition().y+16f);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,true);
+						arrowHitbox.setUserData("Up");
 						arrowBody.setLinearVelocity(0, 500f);
 					}
 					else if (tx.playerSprite.equals(tx.playerLeft)) {
@@ -227,6 +229,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						tx.playerSprite = tx.playerAttackLeft;
 						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-16f,player.playerBody.getPosition().y);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,false);
+						arrowHitbox.setUserData("Left");
 						arrowBody.setLinearVelocity(-500f, 0);
 					}
 					else if (tx.playerSprite.equals(tx.playerRight)) {
@@ -234,6 +237,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						tx.playerSprite = tx.playerAttackRight;
 						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x+16f,player.playerBody.getPosition().y);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,false);
+						arrowHitbox.setUserData("Right");
 						arrowBody.setLinearVelocity(500f, 0);
 					}
 					//only triggers if the player hasn't moved at all yet - player starts facing down
@@ -242,6 +246,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						tx.playerSprite = tx.playerAttackDown;
 						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-2f,player.playerBody.getPosition().y-16f);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,true);
+						arrowHitbox.setUserData("Down");
 						arrowBody.setLinearVelocity(0, -300f);
 					}
 					//pause player in place while attacking (attacks must be timed correctly!)

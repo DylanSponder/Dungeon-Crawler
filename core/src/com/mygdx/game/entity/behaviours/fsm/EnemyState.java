@@ -100,18 +100,11 @@ public enum EnemyState implements State<Enemy> {
     DIE() {
         @Override
         public void enter (Enemy enemy){
-            //world.destroyBody(enemy.enemyBody);
-
             Iterator<Enemy> enemyIt = enemies.iterator();
 
             if (enemyIt.hasNext()) {
-                //enemyIt.remove();
-                //deadEnemies.remove(enemy.enemyBody);
                 enemies.remove(enemy);
                 enemy.die(enemy.enemyBody);
-                //enemy.enemyBody.destroyFixture(enemy.enemyHitbox);
-
-
             }
         }
         @Override

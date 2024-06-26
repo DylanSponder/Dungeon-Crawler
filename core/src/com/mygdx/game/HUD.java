@@ -9,11 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.IdentityMap;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.level.CreateCell;
-import sun.tools.jconsole.Tab;
 
 public class HUD {
   public Stage stage;
@@ -30,7 +26,7 @@ public class HUD {
   public HUD(Viewport vp, SpriteBatch sb) {
     stage = new Stage(vp, sb);
 
-    totalGold = 100;
+    totalGold = 0;
     totalGoldAsString = String.valueOf(totalGold);
 
     Table table = new Table();
@@ -64,7 +60,7 @@ public class HUD {
   public void winnerWinnerChickenDinner() {
     stage.clear();
     Table winTable = new Table();
-    winTable.top();
+    winTable.center();
     winTable.setFillParent(true);
     Label winWords = new Label("YOU WIN BRODIE!!!!!!!!!!", new LabelStyle(new BitmapFont(), Color.YELLOW));
     winTable.add(winWords);

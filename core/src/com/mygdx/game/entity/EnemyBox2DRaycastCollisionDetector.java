@@ -10,17 +10,17 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Box2DRaycastCollisionDetector implements RaycastCollisionDetector<Vector2> {
+public class EnemyBox2DRaycastCollisionDetector implements RaycastCollisionDetector<Vector2> {
 
     World world;
     Box2dRaycastCallback callback;
 
-    public Box2DRaycastCollisionDetector(World world) {
+    public EnemyBox2DRaycastCollisionDetector(World world) {
 
         this(world, new Box2dRaycastCallback());
     }
 
-    public Box2DRaycastCollisionDetector(World world, Box2dRaycastCallback callback) {
+    public EnemyBox2DRaycastCollisionDetector(World world, Box2dRaycastCallback callback) {
         this.world = world;
         this.callback = callback;
     }

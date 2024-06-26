@@ -1,0 +1,12 @@
+﻿,,tlw,brt,fdoor,fdoor,blt,trw,,
+,tlw,brw,f,f,f,f,blw,trw,
+tlw,brw,f,f,f,f,f,f,blw,trw
+lw,f,f,f,f,fenemy,f,f,f,rw
+brt,f,f,f,f,f,f,f,f,blt
+fdoor,f,f,f,fob1,fob2,f,f,f,fdoor
+fdoor,f,f,f,fob3,fob1,f,f,f,fdoor
+trt,f,f,f,f,f,f,f,f,tlt
+lw,f,f,f,fenemy,f,f,f,f,rw
+blw,trw,f,f,f,f,f,f,tlw,brw
+,blw,trw,f,f,f,f,tlw,brw,
+,,blw,trt,fdoor,fdoor,tlt,brw,,

@@ -8,8 +8,8 @@
 tlw,tw,tw,tw,tw,tw,tw,brt,f,f,f,f,blt,tw,tw,tw,tw,tw,tw,trw
 lw,f,f,f,f,f,f,f,fob2,f,f,fob3,f,f,f,f,f,f,f,rw
 dlu,f,fob2,f,fob1,f,fob3,f,f,f,f,f,f,fob1,f,f,f,fob2,f,dru
-doorul,f,f,f,f,fenemy,f,f,f,f,f,f,f,f,fenemy,fob1,f,f,f,doorur
-doorll,f,f,f,f,f,f,f,f,f,f,f,f,f,f,fob3,f,f,f,doorlr
+doorul,f,f,tlt,trt,fenemy,f,f,f,f,f,f,f,f,fenemy,tlt,trt,f,f,doorur
+doorll,f,f,blt,brt,f,f,f,f,f,f,f,f,f,f,blt,brt,f,f,doorlr
 dll,f,fob3,f,fob2,f,fob1,f,f,f,f,f,f,fob2,f,f,f,fob3,f,drl
 lw,f,f,f,f,f,f,f,fob1,f,f,fob2,f,f,f,f,f,f,f,rw
 blw,bw,bw,bw,bw,bw,bw,trt,f,f,f,f,tlt,bw,bw,bw,bw,bw,bw,brw
