@@ -149,30 +149,35 @@ public class DungeonCrawler extends ApplicationAdapter {
 						sword = bf.createSwordBody(world,player.playerBody,-2.5f,-12f);
 						sword.setUserData("Sword");
 						swordHitbox = bf.createSwordHitbox(sword,false);
+						swordHitbox.setUserData("Down");
 						swordHitbox.setSensor(true);
 					} else if (tx.playerSprite.equals(tx.playerUp)) {
 						tx.playerSprite = tx.playerAttackUp;
 						sword = bf.createSwordBody(world,player.playerBody,-2.5f,15);
 						sword.setUserData("Sword");
 						swordHitbox = bf.createSwordHitbox(sword,false);
+						swordHitbox.setUserData("Up");
 						swordHitbox.setSensor(true);
 					} else if (tx.playerSprite.equals(tx.playerLeft)) {
 						tx.playerSprite = tx.playerAttackLeft;
 						sword = bf.createSwordBody(world,player.playerBody,-14f,-2.5f);
 						sword.setUserData("Sword");
 						swordHitbox = bf.createSwordHitbox(sword,true);
+						swordHitbox.setUserData("Left");
 						swordHitbox.setSensor(true);
 					} else if (tx.playerSprite.equals(tx.playerRight)) {
 						tx.playerSprite = tx.playerAttackRight;
 						sword = bf.createSwordBody(world,player.playerBody,14,-2.5f);
 						sword.setUserData("Sword");
 						swordHitbox = bf.createSwordHitbox(sword,true);
+						swordHitbox.setUserData("Right");
 						swordHitbox.setSensor(true);
 					} else {
 						tx.playerSprite = tx.playerAttackDown;
 						sword = bf.createSwordBody(world,player.playerBody,-2.5f,-12f);
 						sword.setUserData("Sword");
 						swordHitbox = bf.createSwordHitbox(sword,false);
+						swordHitbox.setUserData("Down");
 						swordHitbox.setSensor(true);
 					}
 
