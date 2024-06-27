@@ -12,6 +12,7 @@ public class Player {
     public float PLAYER_X = 0f, PLAYER_Y = 0f;
 
     public Body playerBody;
+    public int currentRoom;
 
     public Player() {
         PLAYER_HEALTH = 12;

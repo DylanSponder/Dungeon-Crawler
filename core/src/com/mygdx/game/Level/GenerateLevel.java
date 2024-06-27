@@ -120,7 +120,7 @@ public class GenerateLevel {
             roomsIndex++;
             newRoom.index = i;
             //room number randomizer
-            int random = (int) (Math.random() * /*upper limit->*/ 5 + 1);
+            int random = (int) (Math.random() * /*upper limit->*/ 4 + 1);
             newRoom.roomNum = random;
            // init.roomList.get(i).roomNum = random;
         }
@@ -148,7 +148,7 @@ public class GenerateLevel {
                         world,
                         startingRoom,
                         init.roomList.get(r),
-                        init.roomList.get(r).roomNum,
+                        0,
                         init.roomList.get(r).index,
                         path.get(r), 0, init.roomList.get(r + 1).directionTaken,
                         init.roomList.get(r).x1, init.roomList.get(r).y1,
@@ -825,9 +825,9 @@ public class GenerateLevel {
                 if (!roomHitboxCreated){
                     //create a box with the dimensions of the to-be-generated room - originally intended for collision detection but cannot be used that way
                     //will instead be used for detecting if the player has entered a room for opening and closing doors
-                    roomHitbox = bf.createRoom(world, ((roomX * 16) + 16 * 16) + (longestRow * 16) / 2, (levelY * 16 - (currentRoomSize * 16) / 2) + 16, currentRoomSize * 16 / 2, longestRow * 16 / 2);
-                    roomHitbox.setSensor(true);
-                    roomHitboxCreated = true;
+                    init.roomList.get(roomIndex).roomHitbox = bf.createRoom(roomIndex, world, ((roomX * 16) + 16 * 16) + (longestRow * 16) / 2, (levelY * 16 - (currentRoomSize * 16) / 2) + 16, currentRoomSize * 16 / 2, longestRow * 16 / 2);
+                    init.roomList.get(roomIndex).roomHitbox .setSensor(true);
+                    //roomHitboxCreated = true;
                 }
 
                 int layerSize = levelTextures.size();
@@ -1160,6 +1160,7 @@ public class GenerateLevel {
                         case "enemy":
                             currentCell = init.cr.middleFloorTile;
                             Enemy enemy = new Enemy(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                            init.roomList.get(roomIndex).enemyCounter++;
                             DungeonCrawler.enemies.add(enemy);
                             break;
                         case "shop":

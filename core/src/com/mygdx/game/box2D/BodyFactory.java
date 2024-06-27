@@ -159,7 +159,7 @@ public class BodyFactory {
         return enemyDetectionHitbox;
     }
 
-    public static Fixture createRoom(World world, int roomX, int roomY, int h, int w){
+    public static Fixture createRoom(int roomIndex, World world, int roomX, int roomY, int h, int w){
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -170,7 +170,8 @@ public class BodyFactory {
         roomShape.setAsBox(w, h);
         Fixture roomHitbox = body.createFixture(roomShape, 1.0f);
         roomShape.dispose();
-        roomHitbox.setUserData("Room");
+        body.setUserData("Room-"+roomIndex);
+        roomHitbox.setUserData("Room-"+roomIndex);
         roomHitbox.isSensor();
         return roomHitbox;
     }

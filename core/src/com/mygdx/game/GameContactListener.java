@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.mygdx.game.entity.Arrow;
 import com.mygdx.game.entity.behaviours.fsm.Enemy;
 import com.mygdx.game.entity.behaviours.fsm.EnemyState;
+import com.mygdx.game.level.GenerateLevel;
 
 import static com.mygdx.game.DungeonCrawler.*;
 
@@ -69,10 +70,14 @@ public class GameContactListener implements ContactListener {
             }
         }
 
-        //if two rooms contact during room generation, abort and choose a new direction
-        if (    (fa.getUserData() == "Room") || (fa.getUserData() == "Room")) {
+        if (fa.getBody().getUserData().toString().startsWith("Room")) {
             // && (fb.getUserData() != "Wall" || fb.getUserData() !="Enemy" || fb.getUserData() != "Player"))
-            //System.out.println("Entity has left or entered a room");
+            if (fb.getBody().getUserData() == "Player") {
+                System.out.println("Player has entered/touched a room");
+                String[] roomIndexAsString =  fa.getBody().getUserData().toString().split("-");
+                int roomIndex = Integer.parseInt(roomIndexAsString[1]);
+                player.currentRoom = roomIndex;
+            }
         }
 
         if ((fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Enemy")
@@ -117,6 +122,7 @@ public class GameContactListener implements ContactListener {
                             }
                             e.getStateMachine().changeState(EnemyState.DIE);
                             hud.updateGold(1);
+                           // GenerateLevel.init.roomList.get()
 
                             break;
                         }
@@ -148,6 +154,11 @@ public class GameContactListener implements ContactListener {
                                 deadEnemies.add(fb.getBody());
                             }
                             e.getStateMachine().changeState(EnemyState.DIE);
+                            GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter--;
+                            if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter == 0){
+                                System.out.println("All enemies in this room are doneso!");
+
+                            }
                             hud.updateGold(1);
                             break;
                         }
