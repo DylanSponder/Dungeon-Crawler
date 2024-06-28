@@ -118,7 +118,6 @@ public class GameContactListener implements ContactListener {
                             if (!deadEnemies.contains(fa.getBody())) {
                                 //arrowBodiesCollided.add(fa.getBody());
                                 deadEnemies.add(fa.getBody());
-
                             }
                             e.getStateMachine().changeState(EnemyState.DIE);
                             hud.updateGold(1);
@@ -157,7 +156,6 @@ public class GameContactListener implements ContactListener {
                             GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter--;
                             if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter == 0){
                                 System.out.println("All enemies in this room are doneso!");
-
                             }
                             hud.updateGold(1);
                             break;
@@ -166,7 +164,6 @@ public class GameContactListener implements ContactListener {
                 }
             }
         }
-
     }
 
     @Override
