@@ -23,10 +23,10 @@ public class Box2DSteeringEntity implements Steerable<Vector2> {
         this.body = body;
         this.boundingRadius = boundingRadius;
 
-        this.maxLinearSpeed = 175;
-        this.maxLinearAcceleration = 1000;
-        this.maxAngularSpeed = 1;
-        this.maxAngularAcceleration = 1000;
+        this.maxLinearSpeed = 160;
+        this.maxLinearAcceleration = 2000;
+        this.maxAngularSpeed = 50;
+        this.maxAngularAcceleration = 2000;
 
 
         this.tagged = false;

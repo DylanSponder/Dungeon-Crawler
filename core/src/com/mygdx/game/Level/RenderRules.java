@@ -270,6 +270,7 @@ public class RenderRules {
                 case "doortl":
                         //TODO: Make function in AlignDoors that takes roomX levelY, current and previous direction
                         //String topLeftX = Integer.toString((roomX + index) + 16);
+                        map.remove("TopLeft");
                         String topLeftX = Integer.toString(roomX);
                         String topLeftY = Integer.toString(levelY);
                         String topLeft = topLeftX + "," + topLeftY;
@@ -278,6 +279,7 @@ public class RenderRules {
                     index++;
                     break;
                 case "doortr":
+                    map.remove("TopRight");
                         String topRightX = Integer.toString(roomX);
                         String topRightY = Integer.toString(levelY);
                         String topRight = topRightX + "," + topRightY;
@@ -286,6 +288,7 @@ public class RenderRules {
                     index++;
                     break;
                 case "doorul":
+                    map.remove("UpperLeft");
                         String upperLeftX = Integer.toString(roomX);
                         String upperLeftY = Integer.toString(levelY);
                         String upperLeft = upperLeftX + "," + upperLeftY;
@@ -294,6 +297,7 @@ public class RenderRules {
                     index++;
                     break;
                 case "doorll":
+                    map.remove("LowerLeft");
                         String lowerLeftX = Integer.toString(roomX);
                         String lowerLeftY = Integer.toString(levelY);
                         String lowerLeft = lowerLeftX + "," + lowerLeftY;
@@ -302,6 +306,7 @@ public class RenderRules {
                     index++;
                     break;
                 case "doorur":
+                    map.remove("UpperRight");
                         String upperRightX = Integer.toString(roomX);
                         String upperRightY = Integer.toString(levelY);
                         String upperRight = upperRightX + "," + upperRightY;
@@ -310,6 +315,7 @@ public class RenderRules {
                     index++;
                     break;
                 case "doorlr":
+                    map.remove("LowerRight");
                         String lowerRightX = Integer.toString(roomX);
                         String lowerRightY = Integer.toString(levelY);
                         String lowerRight = lowerRightX + "," + lowerRightY;
@@ -318,6 +324,7 @@ public class RenderRules {
                     index++;
                     break;
                 case "doorbl":
+                    map.remove("BottomLeft");
                         String bottomLeftX = Integer.toString(roomX);
                         String bottomLeftY = Integer.toString(levelY);
                         String bottomLeft = bottomLeftX + "," + bottomLeftY;
@@ -326,6 +333,7 @@ public class RenderRules {
                     index++;
                     break;
                 case "doorbr":
+                    map.remove("BottomRight");
                         String bottomRightX = Integer.toString(roomX);
                         String bottomRightY = Integer.toString(levelY);
                         String bottomRight = bottomRightX + "," + bottomRightY;

@@ -50,8 +50,8 @@ public enum EnemyState implements State<Enemy> {
         @Override
         public void enter(Enemy enemy) {
             enemy.enemyAI.setBehaviour(null);
-            Arrive attack = enemy.attack();
-            BlendedSteering blendedAttackSteering = enemy.blendSteering(attack, 1, 4);
+            Seek attack = enemy.attack();
+            BlendedSteering blendedAttackSteering = enemy.blendSteering(attack, 2, 4);
             enemy.enemyAI.setBehaviour(blendedAttackSteering);
         }
 

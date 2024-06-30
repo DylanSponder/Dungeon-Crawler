@@ -4,10 +4,7 @@ import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.ai.steer.SteeringBehavior;
-import com.badlogic.gdx.ai.steer.behaviors.Arrive;
-import com.badlogic.gdx.ai.steer.behaviors.BlendedSteering;
-import com.badlogic.gdx.ai.steer.behaviors.RaycastObstacleAvoidance;
-import com.badlogic.gdx.ai.steer.behaviors.Wander;
+import com.badlogic.gdx.ai.steer.behaviors.*;
 import com.badlogic.gdx.ai.steer.limiters.LinearAccelerationLimiter;
 import com.badlogic.gdx.ai.steer.utils.rays.CentralRayWithWhiskersConfiguration;
 import com.badlogic.gdx.ai.steer.utils.rays.RayConfigurationBase;
@@ -39,7 +36,7 @@ public class Enemy {
     public Vector2 tmp2 = new Vector2();
     public RayConfigurationBase<Vector2>[] rayConfigurations;
     public RaycastObstacleAvoidance<Vector2> raycastObstacleAvoidanceSB;
-    public Arrive arriveSB;
+    public Seek seekSB;
     public BlendedSteering blendedSteeringSB;
     public Vector2 wanderCenter;
     public int ENEMY_HEALTH;
@@ -135,12 +132,10 @@ public class Enemy {
         return wanderSB;
     }
 
-    public Arrive<Vector2> attack() {
-         arriveSB = new Arrive<Vector2>(enemyAI, DungeonCrawler.player.playerB2D)
-                .setTimeToTarget(0.004f)
-                .setArrivalTolerance(1f)
-                .setDecelerationRadius(0);
-        return arriveSB;
+    public Seek<Vector2> attack() {
+         seekSB = new Seek<Vector2>(enemyAI, DungeonCrawler.player.playerB2D);
+
+        return seekSB;
     }
 
     public void die(Body enemyBody) {

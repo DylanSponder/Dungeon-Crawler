@@ -41,6 +41,7 @@ public class GenerateLevel {
     public Fixture roomHitbox;
     public boolean failed;
     public Room rollbackRoom;
+    private HashMap<String, String> doorMapPrevious;
 
     public ArrayList generateLevel(float PLAYER_X, float PLAYER_Y) {
         init = new InitLevel();
@@ -528,23 +529,29 @@ public class GenerateLevel {
         newRoom.y2 = y2;
         newRoom.directionTaken = doorDirection;
 
+        doorResult = 0;
+
+        System.out.println("CURRENT ROOM: "+roomIndex);
+       // System.out.println("DOOR MAP PREVIOUS ROOM INDEX " + (roomIndex-1) + ": " + doorMapPrevious);
+        xOffset = 0;
+        yOffset = 0;
+
 
         if (startingRoom) {
-
+            doorMapPrevious =  init.roomList.get(roomIndex).doorLocations;
 
         }
         else {
-            doorResult = 0;
-            HashMap<String, String> doorMapPrevious =  init.roomList.get(roomIndex-1).doorLocations;
-            System.out.println("CURRENT ROOM: "+roomIndex);
-            System.out.println("DOOR MAP PREVIOUS ROOM INDEX " + (roomIndex-1) + ": " + doorMapPrevious);
+            doorMapPrevious =  init.roomList.get(roomIndex-1).doorLocations;
+        }
 
             if (doorDirection==1) {
                 String doorTopLeft = doorMapPrevious.get("TopLeft");
                 String[] doorTopLeftXY = doorTopLeft.split(",");
                 String doorTopLeftX = doorTopLeftXY[0].toString();
-                //String doorTopLeftY = doorTopLeftXY[1].toString();
+                String doorTopLeftY = doorTopLeftXY[1].toString();
                 int doorTopLeftXAsInt = Integer.parseInt(doorTopLeftX);
+                int doorTopLeftYAsInt = Integer.parseInt(doorTopLeftY);
 
                 String doorTopRight = doorMapPrevious.get("TopRight");
                 String[] doorTopRightXY = doorTopRight.split(",");
@@ -555,8 +562,9 @@ public class GenerateLevel {
                 String doorBottomLeft = doorMap.get("BottomLeft");
                 String[] doorBottomLeftXY = doorBottomLeft.split(",");
                 String doorBottomLeftX = doorBottomLeftXY[0].toString();
-                //String doorBottomLeftY = doorBottomLeftXY[1].toString();
+                String doorBottomLeftY = doorBottomLeftXY[1].toString();
                 int doorBottomLeftXAsInt = Integer.parseInt(doorBottomLeftX);
+                int doorBottomLeftYAsInt = Integer.parseInt(doorBottomLeftY);
 
                 String doorBottomRight = doorMap.get("BottomRight");
                 String[] doorBottomRightXY = doorBottomRight.split(",");
@@ -573,11 +581,13 @@ public class GenerateLevel {
                     doorResult = doorResult * -1;
                 }
 
+                yOffset = doorTopLeftYAsInt - doorBottomLeftYAsInt + 4;
+                System.out.println("YOFFSET----> "+ yOffset);
+
                 xOffset = doorResult;
 
 
-                System.out.println("1 taken offset: " + xOffset);
-
+                System.out.println("XOFFSET---->: " + xOffset);
 
                 init.roomList.get(roomIndex).x1 = init.roomList.get(roomIndex).x1 + xOffset;
                 init.roomList.get(roomIndex).x2 = init.roomList.get(roomIndex).x2 + xOffset;
@@ -631,6 +641,7 @@ public class GenerateLevel {
                 locateDoors(roomIndex, init.roomList.get(roomIndex).x1+xOffset, init.roomList.get(roomIndex).y1);
             }
             if (doorDirection==3) {
+
                 /*
                 //gets the top left and right door locations from the door map and de-concatenates them
                 String doorTopLeft = doorMap.get("TopLeft");
@@ -698,12 +709,12 @@ public class GenerateLevel {
                     //System.out.println(init.roomList.get(roomIndex+1).x1);
                 }
                 //TODO Fix this
-                else if ((path.get(roomIndex-1) == 2)) {
-                    System.out.println("2 was previous direction");
+              //  else if ((path.get(roomIndex-1) == 2)) {
+                //    System.out.println("2 was previous direction");
                     //init.roomList.get(roomIndex).y1 = init.roomList.get(roomIndex).y1 + yOffset;
                     //init.roomList.get(roomIndex).y2 = init.roomList.get(roomIndex).y2 + yOffset;
 
-                }
+                //}
 
 
                 //System.out.println(init.roomList.get(roomIndex).x1);
@@ -750,11 +761,9 @@ public class GenerateLevel {
                     //   testLevelY = testLevelY + yOffset;
                 }
 
-                locateDoors(roomIndex, init.roomList.get(roomIndex).x1+xOffset, init.roomList.get(roomIndex).y1);
+                locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
 
             }
-        }
-
         return failed = false;
     }
 
@@ -827,7 +836,7 @@ public class GenerateLevel {
                     //will instead be used for detecting if the player has entered a room for opening and closing doors
                     init.roomList.get(roomIndex).roomHitbox = bf.createRoom(roomIndex, world, ((roomX * 16) + 16 * 16) + (longestRow * 16) / 2, (levelY * 16 - (currentRoomSize * 16) / 2) + 16, currentRoomSize * 16 / 2, longestRow * 16 / 2);
                     init.roomList.get(roomIndex).roomHitbox .setSensor(true);
-                    //roomHitboxCreated = true;
+                    roomHitboxCreated = true;
                 }
 
                 int layerSize = levelTextures.size();
