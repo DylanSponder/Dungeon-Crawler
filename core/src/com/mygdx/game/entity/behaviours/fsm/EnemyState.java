@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.mygdx.game.CreateTexture;
 import com.mygdx.game.DungeonCrawler;
 
 import java.util.Iterator;
@@ -51,8 +52,8 @@ public enum EnemyState implements State<Enemy> {
         public void enter(Enemy enemy) {
             enemy.enemyAI.setBehaviour(null);
             Seek attack = enemy.attack();
-            BlendedSteering blendedAttackSteering = enemy.blendSteering(attack, 2, 4);
-            enemy.enemyAI.setBehaviour(blendedAttackSteering);
+          //  BlendedSteering blendedAttackSteering = enemy.blendSteering(attack, 3, 6);
+            enemy.enemyAI.setBehaviour(attack);
         }
 
         @Override
@@ -98,13 +99,17 @@ public enum EnemyState implements State<Enemy> {
     },
 
     DIE() {
+        final CreateTexture tx = CreateTexture.getInstance();
         @Override
         public void enter (Enemy enemy){
+            Skull skull = new Skull(world, enemy.enemyBody.getPosition().x, enemy.enemyBody.getPosition().y);
+
             Iterator<Enemy> enemyIt = enemies.iterator();
 
             if (enemyIt.hasNext()) {
+                //enemy.die(enemy.enemyBody.getPosition().x, enemy.enemyBody.getPosition().y);
                 enemies.remove(enemy);
-                enemy.die(enemy.enemyBody);
+            //    skull.createSkull();
             }
         }
         @Override

@@ -44,6 +44,7 @@ public class Enemy {
     public Wander<Vector2> wanderSB;
     public IndexedGraph worldMap;
     public HUD hud;
+    public Skull skull;
 
     public Enemy(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
@@ -58,7 +59,7 @@ public class Enemy {
         enemyDetectionBody = bodyFactory.createEnemyBody(world, x, y);
         enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 7.5f);
 
-        enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 100);
+        enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 75);
         enemyDetectionRadius.setSensor(true);
         enemyAI = new Box2DSteeringEntity(enemyBody, 10);
 
@@ -134,11 +135,10 @@ public class Enemy {
 
     public Seek<Vector2> attack() {
          seekSB = new Seek<Vector2>(enemyAI, DungeonCrawler.player.playerB2D);
-
-        return seekSB;
+         return seekSB;
     }
 
-    public void die(Body enemyBody) {
+    public void die(float x, float y) {
 
     }
 

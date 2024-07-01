@@ -37,6 +37,7 @@ public class Arrow {
         }
         Fixture arrowHitbox = arrow.createFixture(arrowShape, 1.0f);
         arrowShape.dispose();
+        arrowHitbox.setSensor(true);
         return arrowHitbox;
     }
 

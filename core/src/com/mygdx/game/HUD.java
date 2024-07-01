@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class HUD {
   public Stage stage;
+  public Stage subStage;
   int topPadding;
   public HealthBar healthBar;
   public Inventory inventory;
@@ -21,10 +22,12 @@ public class HUD {
   private Image moneySymbol;
   public int totalGold;
   public String totalGoldAsString;
+  private Label winWords;
   //private CreateTexture tx;
 
   public HUD(Viewport vp, SpriteBatch sb) {
     stage = new Stage(vp, sb);
+    subStage = new Stage(vp, sb);
 
     totalGold = 0;
     totalGoldAsString = String.valueOf(totalGold);
@@ -62,9 +65,15 @@ public class HUD {
     Table winTable = new Table();
     winTable.center();
     winTable.setFillParent(true);
-    Label winWords = new Label("YOU WIN BRODIE!!!!!!!!!!", new LabelStyle(new BitmapFont(), Color.YELLOW));
+    if (DungeonCrawler.debug) {
+      winWords = new Label("YOU WIN BRODIE!!!!!!!!!!", new LabelStyle(new BitmapFont(), Color.YELLOW));
+    }
+    else {
+      winWords = new Label("YOU WIN BRODIE!!!!!!!!!!", new LabelStyle(new BitmapFont(), Color.YELLOW));
+    }
+
     winTable.add(winWords);
-    stage.addActor(winTable);
+    subStage.addActor(winTable);
   }
 
   public void updateGold(int gold) {

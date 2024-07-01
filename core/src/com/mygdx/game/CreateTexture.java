@@ -18,7 +18,8 @@ public class CreateTexture {
     Texture swordTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/BigSword/SpriteInHand.png"));
     Texture bowTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/Bow/Sprite.png"));
     Texture arrowTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/Bow/Arrow.png"));
-    Texture enemyTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Skull/SpriteSheet.png"));
+    Texture enemySkullTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Skull/SpriteSheet.png"));
+    Texture enemyEyeTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Skull/SpriteSheet.png"));
     Texture shopkeeperTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/OldMan3/SpriteSheet.png"));
 
     public TextureRegion roomMiddleFloorTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
@@ -37,6 +38,7 @@ public class CreateTexture {
     public TextureRegion obstacle1Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion obstacle2Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion obstacle3Texture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion skullTexture = new TextureRegion(roomBackground, 0,0,16,16);
 
     public TextureRegion doorTopLeftWallTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion doorTopRightWallTexture = new TextureRegion(roomBackground, 0,0,16,16);
@@ -85,11 +87,13 @@ public class CreateTexture {
     Sprite bowSprite = new Sprite(bowTexture,0,0,15,7);
     Sprite arrowSprite = new Sprite(arrowTexture,0,0,13,5);
     //outline enemy sprites
-    Sprite enemySprite = new Sprite(enemyTexture,0,0,16,16);
+    Sprite enemySprite = new Sprite(enemySkullTexture,0,0,16,16);
+    Sprite enemyEyeSprite = new Sprite(enemySkullTexture,0,0,16,16);
     //outline HUD sprites
     Sprite heartSprite = new Sprite(heartTexture, 16, 16);
     Sprite potionSprite = new Sprite(potionTexture, 16, 16);
     Sprite shopkeeperSprite = new Sprite(shopkeeperTexture, 0,0, 16, 16);
+    Sprite skullSprite = new Sprite(skullTexture, 176,64, 16, 16);
 
     private static CreateTexture instance = null;
     public static CreateTexture getInstance(){

@@ -61,10 +61,10 @@ public class BodyFactory {
     public Fixture createSwordHitbox(Body sword,boolean r){
         PolygonShape swordShape = new PolygonShape();
         if (r){
-            swordShape.setAsBox(6f, 2.5f);
+            swordShape.setAsBox(5f, 2.5f);
         }
         else {
-            swordShape.setAsBox(2.5f, 6f);
+            swordShape.setAsBox(2.5f, 5f);
         }
         Fixture swordHitbox = sword.createFixture(swordShape, 1.0f);
         swordShape.dispose();
@@ -103,6 +103,15 @@ public class BodyFactory {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x,y);
         bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        return body;
+    }
+
+    public Body createSkullBody(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x,y);
         body = world.createBody(bodyDef);
         return body;
     }
