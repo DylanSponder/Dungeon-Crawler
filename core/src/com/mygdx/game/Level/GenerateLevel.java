@@ -7,10 +7,12 @@ import com.mygdx.game.*;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.behaviours.fsm.Enemy;
 import com.mygdx.game.entity.Shopkeeper;
+import com.mygdx.game.entity.behaviours.fsm.Tutorial;
 
 import java.io.IOException;
 import java.util.*;
 
+import static com.mygdx.game.DungeonCrawler.tutorial;
 import static com.mygdx.game.DungeonCrawler.world;
 
 public class GenerateLevel {
@@ -1163,6 +1165,16 @@ public class GenerateLevel {
                             currentCell = init.cr.obstacle3;
                             Body newObstacle3 = bf.createObstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                             newObstacle3.setUserData("Wall");
+                            break;
+                        case "tuto":
+                            currentCell = init.cr.middleFloorTile;
+                            Tutorial t = new Tutorial(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                            tutorial.add(t);
+                            //Body tutorialBody = bf.createTutorialBody(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                            //currentCell.setFlipVertically(true);
+                            //currentCell.setFlipHorizontally(true);
+                            //Body newBottomRightWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                            //newBottomRightWall.setUserData("Wall");
                             break;
 
                             //entities

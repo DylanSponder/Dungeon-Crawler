@@ -44,6 +44,7 @@ public class CreateCell {
     public TiledMapTileLayer.Cell doorRightLowerWall;
     public TiledMapTileLayer.Cell doorBottomLeftWall;
     public TiledMapTileLayer.Cell doorBottomRightWall;
+    public TiledMapTileLayer.Cell tutorialTile;
 
     public void InitializeCells() {
         middleFloorTile = new TiledMapTileLayer.Cell();
@@ -62,6 +63,7 @@ public class CreateCell {
         obstacle1 = new TiledMapTileLayer.Cell();
         obstacle2 = new TiledMapTileLayer.Cell();
         obstacle3 = new TiledMapTileLayer.Cell();
+        tutorialTile = new TiledMapTileLayer.Cell();
 
         doorTopLeftWall = new TiledMapTileLayer.Cell();
         doorTopRightWall = new TiledMapTileLayer.Cell();

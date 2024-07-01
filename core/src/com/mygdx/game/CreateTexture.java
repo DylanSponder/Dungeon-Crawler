@@ -21,6 +21,7 @@ public class CreateTexture {
     Texture enemySkullTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Skull/SpriteSheet.png"));
     Texture enemyEyeTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Skull/SpriteSheet.png"));
     Texture shopkeeperTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/OldMan3/SpriteSheet.png"));
+    Texture tutorialTexture = new Texture(Gdx.files.internal("NinjaAdventure/HUD/Tuto.png"));
 
     public TextureRegion roomMiddleFloorTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomLeftWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
@@ -39,6 +40,7 @@ public class CreateTexture {
     public TextureRegion obstacle2Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion obstacle3Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion skullTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion tutoTexture = new TextureRegion(tutorialTexture, 0,0,87,57);
 
     public TextureRegion doorTopLeftWallTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion doorTopRightWallTexture = new TextureRegion(roomBackground, 0,0,16,16);
@@ -94,6 +96,7 @@ public class CreateTexture {
     Sprite potionSprite = new Sprite(potionTexture, 16, 16);
     Sprite shopkeeperSprite = new Sprite(shopkeeperTexture, 0,0, 16, 16);
     Sprite skullSprite = new Sprite(skullTexture, 176,64, 16, 16);
+    Sprite tutorialSprite = new Sprite(tutorialTexture, 0,0, 96, 64);
 
     private static CreateTexture instance = null;
     public static CreateTexture getInstance(){
@@ -150,5 +153,7 @@ public class CreateTexture {
         doorRightLowerWallTexture.setRegion(64, 48, 16, 16);
         doorBottomLeftWallTexture.setRegion(16, 64, 16, 16);
         doorBottomRightWallTexture.setRegion(32, 64, 16, 16);
+
+        tutoTexture.setRegion(0, 0, 87, 57);
     }
 }

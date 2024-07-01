@@ -27,6 +27,7 @@ import com.mygdx.game.entity.behaviours.fsm.Player;
 import com.mygdx.game.entity.Shopkeeper;
 import com.mygdx.game.entity.behaviours.fsm.Enemy;
 import com.mygdx.game.entity.behaviours.fsm.Skull;
+import com.mygdx.game.entity.behaviours.fsm.Tutorial;
 import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.InitLevel;
 
@@ -47,6 +48,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private Fixture swordHitbox, enemyHitbox, arrowHitbox;
 	public static ArrayList<Enemy> enemies;
 	public static ArrayList<Shopkeeper> shopkeepers;
+	public static ArrayList<Tutorial> tutorial;
 	public static ArrayList<Body> deadEnemies;
 	public static ArrayList<Skull> enemySkulls;
 	public float PLAYER_HORIZONTAL_SPEED = 0f, PLAYER_VERTICAL_SPEED = 0f;
@@ -69,6 +71,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		deadEnemies = new ArrayList<Body>();
 		enemySkulls = new ArrayList<Skull>();
 		shopkeepers = new ArrayList<>();
+		tutorial = new ArrayList<>();
 		final BodyFactory bf = new BodyFactory();
 		final CreateTexture tx = CreateTexture.getInstance();
 		GameContactListener lc = new GameContactListener();
@@ -320,6 +323,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//set camera position to always be centred on the playerSprite
 		camera.position.set(player.playerBody.getPosition().x + tx.playerSprite.getWidth() / 2, player.playerBody.getPosition().y + tx.playerSprite.getHeight() / 2, 0);
 
+		for (Tutorial t : tutorial) {
+			batch.begin();
+			batch.draw(tx.tutorialTexture, t.tutorialBody.getPosition().x - 16f, t.tutorialBody.getPosition().y+7f, 96, 64);
+			batch.end();
+		}
+
 		batch.begin();
 		//draw playerSprite on player Box2D object
 		batch.draw(tx.playerSprite, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 6f, 16, 16);
@@ -369,6 +378,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 			batch.draw(tx.shopkeeperSprite, s.shopBody.getPosition().x - 8f, s.shopBody.getPosition().y - 7f, 16, 16);
 			batch.end();
 		}
+
+
 
 		//check if there are any arrows
 		if (!arrowArrayMap.isEmpty()) {

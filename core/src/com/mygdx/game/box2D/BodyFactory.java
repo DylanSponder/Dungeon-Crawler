@@ -147,6 +147,16 @@ public class BodyFactory {
         return body;
     }
 
+    public Body createTutorialBody(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x,y);
+        //bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        return body;
+    }
+
     public Fixture createShopHitbox(Body body, float r){
         CircleShape enemyShape = new CircleShape();
         enemyShape.setRadius(r);

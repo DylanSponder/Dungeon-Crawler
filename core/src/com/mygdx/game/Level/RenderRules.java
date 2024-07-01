@@ -152,6 +152,10 @@ public class RenderRules {
                                     drawableLevelLayer.add(index, "shop");
                                     index++;
                                     break;
+                                case "tuto":
+                                    drawableLevelLayer.add(index, "tuto");
+                                    index++;
+                                    break;
                                 case "hpot":
                                     //TODO: add potion item
                                     drawableLevelLayer.add(index, "middleFloorTile");
