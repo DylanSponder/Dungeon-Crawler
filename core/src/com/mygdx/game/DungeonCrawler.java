@@ -329,6 +329,15 @@ public class DungeonCrawler extends ApplicationAdapter {
 			batch.end();
 		}
 
+		if (!enemySkulls.isEmpty()) {
+			for (Skull s : enemySkulls) {
+				s.createSkull();
+				batch.begin();
+				batch.draw(tx.skullSprite, s.skullBody.getPosition().x - 8f, s.skullBody.getPosition().y - 7f, 16, 16);
+				batch.end();
+			}
+		}
+
 		batch.begin();
 		//draw playerSprite on player Box2D object
 		batch.draw(tx.playerSprite, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 6f, 16, 16);
@@ -365,21 +374,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 			batch.end();
 		}
 
-		if (!enemySkulls.isEmpty()) {
-			for (Skull s : enemySkulls) {
-				batch.begin();
-				batch.draw(tx.skullSprite, s.skullBody.getPosition().x - 8f, s.skullBody.getPosition().y - 7f, 16, 16);
-				batch.end();
-			}
-		}
-
 		for (Shopkeeper s : shopkeepers) {
 			batch.begin();
 			batch.draw(tx.shopkeeperSprite, s.shopBody.getPosition().x - 8f, s.shopBody.getPosition().y - 7f, 16, 16);
 			batch.end();
 		}
-
-
 
 		//check if there are any arrows
 		if (!arrowArrayMap.isEmpty()) {
@@ -439,7 +438,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		 */
 
 		//toggle to enable or disable collision boxes
-		debug = true;
+		debug = false;
 		if (debug){
 			for (Enemy enemy: enemies){
 				//renders ray cast rays

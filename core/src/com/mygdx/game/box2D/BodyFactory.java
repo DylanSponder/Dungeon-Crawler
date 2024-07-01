@@ -114,13 +114,34 @@ public class BodyFactory {
         bodyDef.position.set(x,y);
         body = world.createBody(bodyDef);
         return body;
+        /*
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 8f, y + 8f);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        CircleShape shape = new CircleShape();
+        shape.setRadius(8.5f);
+        body.createFixture(shape, 1.0f);
+        shape.dispose();
+        return body;
+         */
+    }
+
+    public Fixture createSkullHitbox(Body body, float r) {
+        CircleShape skullShape = new CircleShape();
+        skullShape.setRadius(r);
+        Fixture skullHitbox = body.createFixture(skullShape, 1.0f);
+        skullShape.dispose();
+        skullHitbox.setUserData("EnemyHitbox");
+        skullHitbox.setSensor(true);
+        return skullHitbox;
     }
 
     public Fixture createEnemyHitbox(Body body, float r){
         CircleShape enemyShape = new CircleShape();
         enemyShape.setRadius(r);
-       // PolygonShape enemyShape = new PolygonShape();
-       // enemyShape.setAsBox(x, y);
         Fixture enemyHitbox = body.createFixture(enemyShape, 1.0f);
         enemyShape.dispose();
         enemyHitbox.setUserData("EnemyHitbox");

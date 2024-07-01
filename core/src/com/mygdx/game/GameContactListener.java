@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.mygdx.game.entity.Arrow;
 import com.mygdx.game.entity.behaviours.fsm.Enemy;
 import com.mygdx.game.entity.behaviours.fsm.EnemyState;
+import com.mygdx.game.entity.behaviours.fsm.Skull;
 import com.mygdx.game.level.GenerateLevel;
 
 import static com.mygdx.game.DungeonCrawler.*;
@@ -113,19 +114,19 @@ public class GameContactListener implements ContactListener {
                                 break;
                             case "DownArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY-30);
+                                e.enemyBody.setLinearVelocity(velX, velY-40);
                                 break;
                             case "UpArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY+30);
+                                e.enemyBody.setLinearVelocity(velX, velY+40);
                                 break;
                             case "LeftArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX-30, velY);
+                                e.enemyBody.setLinearVelocity(velX-40, velY);
                                 break;
                             case "RightArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX+30, velY);
+                                e.enemyBody.setLinearVelocity(velX+40, velY);
                                 break;
                             default:
                                 break;
@@ -139,6 +140,7 @@ public class GameContactListener implements ContactListener {
                                 //arrowBodiesCollided.add(fa.getBody());
                                 deadEnemies.add(fa.getBody());
                             }
+                            enemySkulls.add(new Skull(world, fa.getBody().getPosition().x, fa.getBody().getPosition().y));
                             e.getStateMachine().changeState(EnemyState.DIE);
                             hud.updateGold(1);
                            // GenerateLevel.init.roomList.get()
@@ -168,15 +170,15 @@ public class GameContactListener implements ContactListener {
                                 break;
                             case "DownArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY-30);
+                                e.enemyBody.setLinearVelocity(velX, velY-40);
                                 break;
                             case "UpArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY+30);
+                                e.enemyBody.setLinearVelocity(velX, velY+40);
                                 break;
                             case "LeftArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX-30, velY);
+                                e.enemyBody.setLinearVelocity(velX-40, velY);
                                 break;
                             case "RightArrow":
                                 e.ENEMY_HEALTH--;
@@ -191,6 +193,9 @@ public class GameContactListener implements ContactListener {
                                 //arrowBodiesCollided.add(fa.getBody());
                                 deadEnemies.add(fb.getBody());
                             }
+                            Skull s = new Skull(world, fb.getBody().getPosition().x, fb.getBody().getPosition().y);
+                           // s.createSkull();
+                            enemySkulls.add(s);
                             e.getStateMachine().changeState(EnemyState.DIE);
                             GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter--;
                             if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter == 0){
