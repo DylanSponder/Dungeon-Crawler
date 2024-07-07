@@ -47,11 +47,26 @@ public class BodyFactory {
         return body;
     }
 
+    public Body createBoneBody(World world, Body skull, float x, float y) {
+        Body boneBody;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(skull.getPosition().x, skull.getPosition().y);
+        bodyDef.fixedRotation = false;
+        boneBody = world.createBody(bodyDef);
+        PolygonShape boneShape = new PolygonShape();
+        boneShape.setAsBox(2.5f, 5f);
+        Fixture boneHitbox = boneBody.createFixture(boneShape, 1.0f);
+        boneShape.dispose();
+        boneHitbox.setUserData("Bone");
+        boneHitbox.isSensor();
+        return boneBody;
+    }
 
     public Body createSwordBody(World world, Body player, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(player.getPosition().x+x, player.getPosition().y+y);
         bodyDef.fixedRotation = false;
         body = world.createBody(bodyDef);

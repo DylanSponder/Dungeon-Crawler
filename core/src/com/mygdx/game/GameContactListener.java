@@ -1,17 +1,12 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.mygdx.game.entity.Arrow;
 import com.mygdx.game.entity.behaviours.fsm.Enemy;
 import com.mygdx.game.entity.behaviours.fsm.EnemyState;
 import com.mygdx.game.entity.behaviours.fsm.Skull;
 import com.mygdx.game.level.GenerateLevel;
+
+import java.util.Iterator;
 
 import static com.mygdx.game.DungeonCrawler.*;
 
@@ -81,7 +76,7 @@ public class GameContactListener implements ContactListener {
             }
         }
 
-        if ((fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Enemy")
+        if ((fa.getBody().getUserData().toString().startsWith("Arrow") && fb.getBody().getUserData() == "Enemy")
                 ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData().toString().startsWith("Arrow"))
                 ||
                 ((fa.getBody().getUserData() == "Sword" && fb.getBody().getUserData() == "Enemy")
@@ -97,36 +92,36 @@ public class GameContactListener implements ContactListener {
                         float velY = e.enemyBody.getLinearVelocity().y;
                         switch (fbData) {
                             case "DownSword":
-                                e.ENEMY_HEALTH = e.ENEMY_HEALTH - 3;
+                                e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
                                 e.enemyBody.setLinearVelocity(velX, velY-120);
                                 break;
                             case "UpSword":
-                                e.ENEMY_HEALTH = e.ENEMY_HEALTH - 3;
+                                e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
                                 e.enemyBody.setLinearVelocity(velX, velY+120);
                                 break;
                             case "LeftSword":
-                                e.ENEMY_HEALTH = e.ENEMY_HEALTH - 3;
+                                e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
                                 e.enemyBody.setLinearVelocity(velX-120, velY);
                                 break;
                             case "RightSword":
-                                e.ENEMY_HEALTH = e.ENEMY_HEALTH - 3;
+                                e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
                                 e.enemyBody.setLinearVelocity(velX+120, velY);
                                 break;
                             case "DownArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY-40);
+                                e.enemyBody.setLinearVelocity(velX, velY-45);
                                 break;
                             case "UpArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY+40);
+                                e.enemyBody.setLinearVelocity(velX, velY+45);
                                 break;
                             case "LeftArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX-40, velY);
+                                e.enemyBody.setLinearVelocity(velX-45, velY);
                                 break;
                             case "RightArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX+40, velY);
+                                e.enemyBody.setLinearVelocity(velX+45, velY);
                                 break;
                             default:
                                 break;
@@ -136,15 +131,20 @@ public class GameContactListener implements ContactListener {
                         System.out.println(e.enemyBody.getLinearVelocity());
 
                         if (e.ENEMY_HEALTH < 1) {
-                            if (!deadEnemies.contains(fa.getBody())) {
+                            if (!deadEnemyBodies.contains(fa.getBody())) {
                                 //arrowBodiesCollided.add(fa.getBody());
-                                deadEnemies.add(fa.getBody());
+                                deadEnemyBodies.add(fa.getBody());
                             }
                             enemySkulls.add(new Skull(world, fa.getBody().getPosition().x, fa.getBody().getPosition().y));
                             e.getStateMachine().changeState(EnemyState.DIE);
                             hud.updateGold(1);
-                           // GenerateLevel.init.roomList.get()
-
+                            /*
+                            GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter--;
+                            if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter == 0){
+                                GenerateLevel.init.roomList.get(player.currentRoom).unlockDoor(world, GenerateLevel.init.roomList.get(player.currentRoom));
+                                System.out.println("All enemies in this room are dead!");
+                            }
+                             */
                             break;
                         }
                     } else if (e.enemyBody == fb.getBody()) {
@@ -170,43 +170,85 @@ public class GameContactListener implements ContactListener {
                                 break;
                             case "DownArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY-40);
+                                e.enemyBody.setLinearVelocity(velX, velY-45);
                                 break;
                             case "UpArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY+40);
+                                e.enemyBody.setLinearVelocity(velX, velY+45);
                                 break;
                             case "LeftArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX-40, velY);
+                                e.enemyBody.setLinearVelocity(velX-45, velY);
                                 break;
                             case "RightArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX+40, velY);
+                                e.enemyBody.setLinearVelocity(velX+45, velY);
                                 break;
                             default:
                                 break;
                         }
 
                         if (e.ENEMY_HEALTH < 1) {
-                            if (!deadEnemies.contains(fb.getBody())) {
+                            if (!deadEnemyBodies.contains(fb.getBody())) {
                                 //arrowBodiesCollided.add(fa.getBody());
-                                deadEnemies.add(fb.getBody());
+                                deadEnemyBodies.add(fb.getBody());
                             }
-                            Skull s = new Skull(world, fb.getBody().getPosition().x, fb.getBody().getPosition().y);
-                           // s.createSkull();
-                            enemySkulls.add(s);
+                            enemySkulls.add(new Skull(world, fb.getBody().getPosition().x, fb.getBody().getPosition().y));
                             e.getStateMachine().changeState(EnemyState.DIE);
+                            hud.updateGold(1);
                             GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter--;
                             if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter == 0){
-                                System.out.println("All enemies in this room are doneso!");
+                                GenerateLevel.init.roomList.get(player.currentRoom).unlockDoor(world, GenerateLevel.init.roomList.get(player.currentRoom));
+                                System.out.println("All enemies in this room are dead!");
                             }
-                            hud.updateGold(1);
+
                             break;
                         }
                     }
                 }
             }
+        }
+            if (((fa.getBody().getUserData().toString().startsWith("Arrow") && fb.getBody().getUserData() == "Skull")
+                    ||(fa.getBody().getUserData() == "Skull" && fb.getBody().getUserData().toString().startsWith("Arrow")))
+                    ||
+                    ((fa.getBody().getUserData() == "Sword" && fb.getBody().getUserData() == "Skull")
+                            ||(fa.getBody().getUserData() == "Skull" && fb.getBody().getUserData() == "Sword"))
+            ) {
+            if (fa.getBody().getUserData() == "Skull") {
+                Iterator<Skull> skullIt = enemySkulls.iterator();
+                if (skullIt.hasNext()) {
+                    Skull skull = skullIt.next();
+                if (skull.skullBody == fa.getBody()){
+                    skull.SKULL_HEALTH--;
+                }
+                if (skull.SKULL_HEALTH <= 0) {
+                    if (!brokenSkullBodies.contains(fa.getBody())) {
+                        brokenSkullBodies.add(fa.getBody());
+                    }
+                }
+            }
+            } else
+                if (fb.getBody().getUserData() == "Skull") {
+                Iterator<Skull> skullIt = enemySkulls.iterator();
+                if (skullIt.hasNext()) {
+                    Skull skull = skullIt.next();
+                    if (skull.skullBody == fb.getBody()){
+                        skull.SKULL_HEALTH--;
+                    }
+                    if (skull.SKULL_HEALTH <= 0) {
+                        if (!brokenSkullBodies.contains(fb.getBody())) {
+                            brokenSkullBodies.add(fb.getBody());
+                        }
+                    }
+                }
+            }
+            //CreateBone x 3
+            //TODO: Assign random orientation to each bone and random speed between two values
+
+            //Bone b = new Bone(world, fa.getBody(), fb.getBody().getPosition().x, fb.getBody().getPosition().y);
+            // s.createSkull();
+            //enemySkulls.add(s);
+
         }
     }
 

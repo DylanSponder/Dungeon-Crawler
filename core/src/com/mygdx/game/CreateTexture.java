@@ -19,7 +19,7 @@ public class CreateTexture {
     Texture bowTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/Bow/Sprite.png"));
     Texture arrowTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/Bow/Arrow.png"));
     Texture enemySkullTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Skull/SpriteSheet.png"));
-    Texture enemyEyeTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Skull/SpriteSheet.png"));
+    Texture enemyEyeTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Eye/Eye.png"));
     Texture shopkeeperTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/OldMan3/SpriteSheet.png"));
     Texture tutorialTexture = new Texture(Gdx.files.internal("NinjaAdventure/HUD/Tuto.png"));
 
@@ -40,6 +40,7 @@ public class CreateTexture {
     public TextureRegion obstacle2Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion obstacle3Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion skullTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion boneTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion tutoTexture = new TextureRegion(tutorialTexture, 0,0,87,57);
 
     public TextureRegion doorTopLeftWallTexture = new TextureRegion(roomBackground, 0,0,16,16);
@@ -90,12 +91,13 @@ public class CreateTexture {
     Sprite arrowSprite = new Sprite(arrowTexture,0,0,13,5);
     //outline enemy sprites
     Sprite enemySprite = new Sprite(enemySkullTexture,0,0,16,16);
-    Sprite enemyEyeSprite = new Sprite(enemySkullTexture,0,0,16,16);
+    Sprite enemyEyeSprite = new Sprite(enemyEyeTexture,0,0,16,16);
     //outline HUD sprites
     Sprite heartSprite = new Sprite(heartTexture, 16, 16);
     Sprite potionSprite = new Sprite(potionTexture, 16, 16);
     Sprite shopkeeperSprite = new Sprite(shopkeeperTexture, 0,0, 16, 16);
     Sprite skullSprite = new Sprite(skullTexture, 176,64, 16, 16);
+    Sprite boneSprite = new Sprite(boneTexture, 192,64, 16, 16);
     Sprite tutorialSprite = new Sprite(tutorialTexture, 0,0, 96, 64);
 
     private static CreateTexture instance = null;

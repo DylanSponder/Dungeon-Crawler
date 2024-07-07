@@ -1,10 +1,12 @@
 package com.mygdx.game.level;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entity.behaviours.fsm.Enemy;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,8 +23,11 @@ public class Room {
         doorLocations = new HashMap();
     }
 
-    public void unlockDoors() {
+    public void unlockDoor(World world, Room room) {
+        System.out.println("Unlocking doors...");
+        String s = room.doorLocations.get("TopLeft");
 
+        //world.getBodies(new Array<Body>());
 
     }
 }

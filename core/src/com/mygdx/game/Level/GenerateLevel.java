@@ -123,8 +123,13 @@ public class GenerateLevel {
             roomsIndex++;
             newRoom.index = i;
             //room number randomizer
-            int random = (int) (Math.random() * /*upper limit->*/ 4 + 1);
-            newRoom.roomNum = random;
+            if (i == 0){
+                newRoom.roomNum = 0;
+            }
+            else {
+                int random = (int) (Math.random() * /*upper limit->*/ 4 + 1);
+                newRoom.roomNum = random;
+            }
            // init.roomList.get(i).roomNum = random;
         }
 
@@ -191,6 +196,7 @@ public class GenerateLevel {
                         float corridorStartY = Integer.parseInt(doorTopLeftY);
                         cc.CreateCorridor(init.roomList.get(r).roomLayer, world,init.roomList.get(init.roomList.get(r).index).x1-3, corridorStartY+1, false);
                     }
+                    init.roomList.get(r).unlockDoor(world, init.roomList.get(r));
                 }
             } else {
                 if (r != init.roomList.size() - 1) {
@@ -1166,17 +1172,12 @@ public class GenerateLevel {
                             Body newObstacle3 = bf.createObstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                             newObstacle3.setUserData("Wall");
                             break;
+                            //tutorial in starting room
                         case "tuto":
                             currentCell = init.cr.middleFloorTile;
                             Tutorial t = new Tutorial(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                             tutorial.add(t);
-                            //Body tutorialBody = bf.createTutorialBody(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
-                            //currentCell.setFlipVertically(true);
-                            //currentCell.setFlipHorizontally(true);
-                            //Body newBottomRightWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
-                            //newBottomRightWall.setUserData("Wall");
                             break;
-
                             //entities
                         case "enemy":
                             currentCell = init.cr.middleFloorTile;
@@ -1196,13 +1197,10 @@ public class GenerateLevel {
 
                     if (startingRoom) {
                         //set player starting coordinates according to the position of the first generated room
-                        //int playerXAsFloat = Integer.parseInt(init.roomList.get(0).doorLocations.get("UpperLeft")) * 16 - (init.roomList.get(0).longestRow / 2)-1;
-                        //float playerXAsFloat = Float.parseFloat((init.roomList.get(0).doorLocations.get("UpperLeft")));
-
                         String doorUpperLeft = (init.roomList.get(0).doorLocations.get("TopLeft"));
                         String[] doorUpperLeftXY = doorUpperLeft.split(",");
                         String doorUpperLeftX = doorUpperLeftXY[0].toString();
-                        System.out.println("DOOR UPPER LEFT UNTOUCHED" + doorUpperLeftX);
+
                         double doorUpperLeftXAsDouble = Float.parseFloat(doorUpperLeftX) * 1.65;
                         String test = String.valueOf(doorUpperLeftXAsDouble);
                         float doorUpperLeftXAsFloat = Float.parseFloat(test);
@@ -1210,23 +1208,12 @@ public class GenerateLevel {
 
                         String doorUpperLeftY = doorUpperLeftXY[1].toString();
                         float doorUpperLeftYAsFloat = Float.parseFloat(doorUpperLeftY);
-                        PLAYER_Y = doorUpperLeftYAsFloat * 16 - (1 * 16);
+                        PLAYER_Y = doorUpperLeftYAsFloat * 16 - (1 * 16) - 64;
 
                         System.out.println("player x: " + PLAYER_X);
                         System.out.println("player y" + PLAYER_Y);
 
-                        //PLAYER_X = playerXAsFloat * 16 - (init.roomList.get(0).longestRow / 2)-1;
-                        //float playerYAsFloat = Float.parseFloat(init.roomList.get(0).doorLocations.get("TopLeft"));
-                        //PLAYER_Y = playerYAsFloat * 16 + (init.roomList.get(0).longestRow / 2)+1;
-                        //PLAYER_Y = init.roomList.get(0).y1 * 16;
-                        //PLAYER_X = init.roomList.get(0).x1 * 16;
                         startingRoom = false;
-
-                        /*
-                        PLAYER_X = ((roomX + i) * 16) + Gdx.graphics.getHeight() / 30;
-                        PLAYER_Y = (levelY * 16 + currentRoomSize * 16 - 16) + Gdx.graphics.getHeight() / 30;
-                        //player.createPlayer(world, PLAYER_X, PLAYER_Y);
-                         */
                     }
                 }
                 //lower Y by 1 to move down one row

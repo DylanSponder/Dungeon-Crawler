@@ -57,7 +57,7 @@ public class Enemy {
         //creates an enemy with a body, hitbox and steering entity
         enemyBody = bodyFactory.createEnemyBody(world, x, y);
         enemyDetectionBody = bodyFactory.createEnemyBody(world, x, y);
-        enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 7.5f);
+        enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 7f);
 
         enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 75);
         enemyDetectionRadius.setSensor(true);

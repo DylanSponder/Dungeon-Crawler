@@ -103,13 +103,12 @@ public enum EnemyState implements State<Enemy> {
         @Override
         public void enter (Enemy enemy){
             Skull skull = new Skull(world, enemy.enemyBody.getPosition().x, enemy.enemyBody.getPosition().y);
-
             Iterator<Enemy> enemyIt = enemies.iterator();
 
             if (enemyIt.hasNext()) {
                 //enemy.die(enemy.enemyBody.getPosition().x, enemy.enemyBody.getPosition().y);
                 enemies.remove(enemy);
-            //    skull.createSkull();
+                //skull.createSkull();
             }
         }
         @Override
