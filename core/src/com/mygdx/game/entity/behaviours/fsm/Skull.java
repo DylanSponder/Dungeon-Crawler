@@ -15,7 +15,7 @@ public class Skull {
     public Fixture skullHitbox;
     public float skullX, skullY;
     public boolean skullCreated;
-    public int SKULL_HEALTH;
+    public float SKULL_HEALTH;
     //public World world;
 
     public Skull(World world, float x, float y) {
@@ -23,7 +23,7 @@ public class Skull {
       //  DungeonCrawler.enemySkulls.add(this);
         this.skullX = x;
         this.skullY = y;
-        this.SKULL_HEALTH = 2;
+        this.SKULL_HEALTH = 1.5f;
         this.skullCreated = false;
     }
 

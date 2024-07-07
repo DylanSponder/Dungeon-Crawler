@@ -355,7 +355,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		for (Bone b : bones) {
 			batch.begin();
-			batch.draw(tx.boneSprite, b.boneBody.getPosition().x, b.boneBody.getPosition().y, 16, 16);
+			batch.draw(tx.boneSprite, b.boneBody.getPosition().x-6.5f, b.boneBody.getPosition().y-7.5f, 16, 16);
 			batch.end();
 		}
 
