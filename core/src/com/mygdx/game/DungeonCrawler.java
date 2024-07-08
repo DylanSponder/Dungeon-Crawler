@@ -468,7 +468,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		 */
 
 		//toggle to enable or disable collision boxes
-		debug = true;
+		debug = false;
 		if (debug){
 			for (Enemy enemy: enemies){
 				//renders ray cast rays

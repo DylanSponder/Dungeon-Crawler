@@ -23,7 +23,7 @@ public class Skull {
       //  DungeonCrawler.enemySkulls.add(this);
         this.skullX = x;
         this.skullY = y;
-        this.SKULL_HEALTH = 1.5f;
+        this.SKULL_HEALTH = 1f;
         this.skullCreated = false;
     }
 
