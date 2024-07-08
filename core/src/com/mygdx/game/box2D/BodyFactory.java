@@ -55,7 +55,7 @@ public class BodyFactory {
         bodyDef.fixedRotation = false;
         boneBody = world.createBody(bodyDef);
         PolygonShape boneShape = new PolygonShape();
-        boneShape.setAsBox(3.5f, 5.5f);
+        boneShape.setAsBox(5.5f, 3.5f);
         Fixture boneHitbox = boneBody.createFixture(boneShape, 1.0f);
         boneShape.dispose();
         boneHitbox.setUserData("Bone");

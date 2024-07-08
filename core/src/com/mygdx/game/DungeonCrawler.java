@@ -353,9 +353,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 
+		double radians = Math.PI/180;
+		String stringR = String.valueOf(radians);
+		float radiansF = Float.parseFloat(stringR);
+
 		for (Bone b : bones) {
 			batch.begin();
-			batch.draw(tx.boneSprite, b.boneBody.getPosition().x-6.5f, b.boneBody.getPosition().y-7.5f, 16, 16);
+			batch.draw(tx.boneSprite, b.boneBody.getPosition().x-7f, b.boneBody.getPosition().y-8.5f, 7f, 8.5f,16,16,1,1,b.boneBody.getAngle()*57.3f);
+			//tx.boneSprite.setRotation(b.boneBody.getAngle());
 			batch.end();
 		}
 

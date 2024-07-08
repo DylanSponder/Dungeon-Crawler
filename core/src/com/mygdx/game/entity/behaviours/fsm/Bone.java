@@ -33,7 +33,7 @@ public class Bone {
 
         this.boneBody.applyLinearImpulse(0,0,0,0,true);
 
-        this.boneBody.setAngularVelocity(30);
+        this.boneBody.setAngularVelocity(10);
 
         //this.boneHitbox = bodyFactory.createBone(world, boneBody, skullBody.getPosition().x, skullBody.getPosition().y);
 
