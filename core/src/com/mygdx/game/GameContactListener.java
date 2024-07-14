@@ -48,8 +48,11 @@ public class GameContactListener implements ContactListener {
             }
 
         }
-        if (    (fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Enemy")
-                ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Player")
+        if (    ((fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Enemy")
+                ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Player"))
+                || ((fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Bone")
+                ||(fa.getBody().getUserData() == "Bone" && fb.getBody().getUserData() == "Player"))
+
         ){
             if( fa.getUserData() == "Proximity"||
                     fb.getUserData() == "Proximity"){
@@ -60,9 +63,9 @@ public class GameContactListener implements ContactListener {
                 }
             }
             else {
-                if (fa.getBody().getUserData() == "Player"){
+
                     hud.healthBar.LoseHealth(0.5f);
-                }
+
             }
         }
 
@@ -136,6 +139,7 @@ public class GameContactListener implements ContactListener {
                                 deadEnemyBodies.add(fa.getBody());
                             }
                             enemySkulls.add(new Skull(world, fa.getBody().getPosition().x, fa.getBody().getPosition().y));
+                            //skullArrayMap.put();
                             e.getStateMachine().changeState(EnemyState.DIE);
                             hud.updateGold(1);
                             /*
