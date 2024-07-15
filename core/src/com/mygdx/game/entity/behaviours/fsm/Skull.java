@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.Arrow;
@@ -20,12 +21,22 @@ public class Skull {
     public float skullX, skullY;
     public boolean skullCreated;
     public float SKULL_HEALTH;
+    public float iFrames = 1;
+    public boolean skullIFrame;
 
     public Skull(World world, float x, float y) {
         this.skullX = x;
         this.skullY = y;
-        this.SKULL_HEALTH = 1f;
+        this.SKULL_HEALTH = 1.5f;
         this.skullCreated = false;
+        this.skullIFrame = true;
+
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                skullIFrame = false;
+            }
+        }, iFrames);
     }
 
     public Body createSkull(ArrayMap<Body, Skull> skullArrayMap) {

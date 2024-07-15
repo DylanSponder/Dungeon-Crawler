@@ -350,9 +350,15 @@ public class DungeonCrawler extends ApplicationAdapter {
 		if (!skullArrayMap.isEmpty()) {
 			for (OrderedMap.Entry<Body, Skull> skullEntry : skullArrayMap.entries()) {
 				Body key = skullEntry.key;
+				Skull value = skullEntry.value;
 				//render each individual skull
 				skullBatch.begin();
-				Skull.renderSkull(skullBatch, tx.skullSprite, key.getPosition().x, key.getPosition().y);
+				if (value.SKULL_HEALTH < 1.5f){
+					Skull.renderSkull(skullBatch, tx.damagedSkullSprite, key.getPosition().x, key.getPosition().y);
+				}else {
+					Skull.renderSkull(skullBatch, tx.skullSprite, key.getPosition().x, key.getPosition().y);
+				}
+
 				skullBatch.end();
 			}
 

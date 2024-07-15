@@ -97,6 +97,7 @@ public class CreateTexture {
     Sprite potionSprite = new Sprite(potionTexture, 16, 16);
     Sprite shopkeeperSprite = new Sprite(shopkeeperTexture, 0,0, 16, 16);
     Sprite skullSprite = new Sprite(skullTexture, 176,64, 16, 16);
+    Sprite damagedSkullSprite = new Sprite(skullTexture, 192,48, 16, 16);
     Sprite boneSprite = new Sprite(boneTexture, 192,64, 16, 16);
     Sprite tutorialSprite = new Sprite(tutorialTexture, 0,0, 96, 64);
 

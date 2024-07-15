@@ -65,13 +65,13 @@ public class GameContactListener implements ContactListener {
             else {
                 hud.healthBar.LoseHealth(0.5f);
                 if (fa.getBody().getUserData() == "Bone") {
-                    player.playerBody.applyLinearImpulse(fa.getBody().getLinearVelocity().x*3, fa.getBody().getLinearVelocity().y*3, 0, 0, true);
+                    player.playerBody.applyLinearImpulse(fa.getBody().getLinearVelocity().x*20, fa.getBody().getLinearVelocity().y*20, 0, 0, true);
                     if (!boneBodiesCollided.contains(fa.getBody())) {
                         boneBodiesCollided.add(fa.getBody());
                     }
                 }
                 else if (fb.getBody().getUserData() == "Bone"){
-                    player.playerBody.applyLinearImpulse(fb.getBody().getLinearVelocity().x*3, fb.getBody().getLinearVelocity().y*3, 0, 0, true);
+                    player.playerBody.applyLinearImpulse(fb.getBody().getLinearVelocity().x*20, fb.getBody().getLinearVelocity().y*20, 0, 0, true);
                     if (!boneBodiesCollided.contains(fb.getBody())) {
                         boneBodiesCollided.add(fb.getBody());
                     }
@@ -247,36 +247,69 @@ public class GameContactListener implements ContactListener {
                             ||(fa.getBody().getUserData() == "Skull" && fb.getBody().getUserData() == "Sword"))
             ) {
             if (fa.getBody().getUserData() == "Skull") {
-                //TODO Fix so it can be any skull, not just the next in the sequence
-                Iterator<Skull> skullIt = enemySkulls.iterator();
-                if (skullIt.hasNext()) {
-                    Skull skull = skullIt.next();
-                if (skull.skullBody == fa.getBody()){
-                    skull.SKULL_HEALTH--;
-                }
-                if (skull.SKULL_HEALTH <= 0) {
-                    if (!brokenSkullBodies.contains(fa.getBody())) {
-                        brokenSkullBodies.add(fa.getBody());
+                for (Skull s : enemySkulls) {
+                    if (s.skullBody == fa.getBody() && !s.skullIFrame) {
+                        if (s.SKULL_HEALTH > 0) {
+                            s.SKULL_HEALTH--;
+                            if (s.SKULL_HEALTH <= 0) {
+                                brokenSkullBodies.add(fa.getBody());
+                                break;
+                            }
+                            break;
+                        }
                     }
                 }
+
             }
-            } else
-                if (fb.getBody().getUserData() == "Skull") {
-                Iterator<Skull> skullIt = enemySkulls.iterator();
-                if (skullIt.hasNext()) {
-                    Skull skull = skullIt.next();
-                    if (skull.skullBody == fb.getBody()){
-                        skull.SKULL_HEALTH--;
-                    }
-                    if (skull.SKULL_HEALTH <= 0) {
-                        if (!brokenSkullBodies.contains(fb.getBody())) {
-                            brokenSkullBodies.add(fb.getBody());
+            else if (fb.getBody().getUserData() == "Skull") {
+                for (Skull s : enemySkulls) {
+                    if (s.skullBody == fb.getBody() && !s.skullIFrame) {
+                        if (s.SKULL_HEALTH > 0) {
+                            s.SKULL_HEALTH--;
+                            if (s.SKULL_HEALTH <= 0) {
+                                brokenSkullBodies.add(fb.getBody());
+                                break;
+                            }
+                            break;
                         }
                     }
                 }
             }
         }
     }
+
+                    /*
+                Iterator<Skull> skullIt = enemySkulls.iterator();
+                while (skullIt.hasNext()) {
+                    Skull skull = skullIt.next();
+                if (skull.skullBody == fa.getBody() && skull.SKULL_HEALTH > 0){
+                    skull.SKULL_HEALTH--;
+                    break;
+                }
+                if (skull.SKULL_HEALTH <= 0) {
+                    if (!brokenSkullBodies.contains(fa.getBody())) {
+                        brokenSkullBodies.add(fa.getBody());
+                        break;
+                    }
+                }
+            }
+            } else
+                if (fb.getBody().getUserData() == "Skull") {
+                Iterator<Skull> skullIt = enemySkulls.iterator();
+                while (skullIt.hasNext()) {
+                    Skull skull = skullIt.next();
+                    if (skull.skullBody == fb.getBody() && skull.SKULL_HEALTH > 0){
+                        skull.SKULL_HEALTH--;
+                        break;
+                    }
+                    if (skull.SKULL_HEALTH <= 0) {
+                        if (!brokenSkullBodies.contains(fb.getBody())) {
+                            brokenSkullBodies.add(fb.getBody());
+                            break;
+                        }
+                    }
+                }
+                 */
 
     @Override
     public void endContact(Contact contact) {
