@@ -52,8 +52,8 @@ public class GameContactListener implements ContactListener {
                 ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Player"))
                 || ((fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Bone")
                 ||(fa.getBody().getUserData() == "Bone" && fb.getBody().getUserData() == "Player"))
-
         ){
+            //if player enters enemy detection range, attack player
             if( fa.getUserData() == "Proximity"||
                     fb.getUserData() == "Proximity"){
                 for (Enemy e : enemies){
@@ -63,9 +63,37 @@ public class GameContactListener implements ContactListener {
                 }
             }
             else {
-
-                    hud.healthBar.LoseHealth(0.5f);
-
+                hud.healthBar.LoseHealth(0.5f);
+                if (fa.getBody().getUserData() == "Bone") {
+                    player.playerBody.applyLinearImpulse(fa.getBody().getLinearVelocity().x*3, fa.getBody().getLinearVelocity().y*3, 0, 0, true);
+                    if (!boneBodiesCollided.contains(fa.getBody())) {
+                        boneBodiesCollided.add(fa.getBody());
+                    }
+                }
+                else if (fb.getBody().getUserData() == "Bone"){
+                    player.playerBody.applyLinearImpulse(fb.getBody().getLinearVelocity().x*3, fb.getBody().getLinearVelocity().y*3, 0, 0, true);
+                    if (!boneBodiesCollided.contains(fb.getBody())) {
+                        boneBodiesCollided.add(fb.getBody());
+                    }
+                }
+            }
+        }
+        else if ((fa.getBody().getUserData() == "Bone" && (fb.getBody().getUserData() != "Proximity" && (fa.getUserData() != "Arrow" && fb.getUserData() != "Sword")
+                ||((fa.getUserData() != "Sword" &&  fa.getUserData() != "Arrow") && fa.getBody().getUserData() != "Proximity" && fb.getBody().getUserData() == "Bone")
+        ))
+        )
+        {
+            if (((fa.getBody().getUserData() == "Enemy" && fa.getBody().getUserData() != "Proximity")
+                    || fa.getBody().getUserData() == "Wall") && fb.getBody().getUserData() == "Bone") {
+                if (!boneBodiesCollided.contains(fb.getBody())) {
+                    boneBodiesCollided.add(fb.getBody());
+                }
+            }
+            else if (((fb.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() != "Proximity")
+                    || fb.getBody().getUserData() == "Wall") && fa.getBody().getUserData() == "Bone") {
+                if (!boneBodiesCollided.contains(fa.getBody())) {
+                    boneBodiesCollided.add(fa.getBody());
+                }
             }
         }
 
@@ -219,6 +247,7 @@ public class GameContactListener implements ContactListener {
                             ||(fa.getBody().getUserData() == "Skull" && fb.getBody().getUserData() == "Sword"))
             ) {
             if (fa.getBody().getUserData() == "Skull") {
+                //TODO Fix so it can be any skull, not just the next in the sequence
                 Iterator<Skull> skullIt = enemySkulls.iterator();
                 if (skullIt.hasNext()) {
                     Skull skull = skullIt.next();
@@ -246,13 +275,6 @@ public class GameContactListener implements ContactListener {
                     }
                 }
             }
-            //CreateBone x 3
-            //TODO: Assign random orientation to each bone and random speed between two values
-
-            //Bone b = new Bone(world, fa.getBody(), fb.getBody().getPosition().x, fb.getBody().getPosition().y);
-            // s.createSkull();
-            //enemySkulls.add(s);
-
         }
     }
 

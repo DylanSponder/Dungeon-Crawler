@@ -29,7 +29,7 @@ import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.InitLevel;
 
 public class DungeonCrawler extends ApplicationAdapter {
-	private SpriteBatch batch, arrowBatch, hudBatch, skullBatch;
+	private SpriteBatch batch, arrowBatch, hudBatch, skullBatch, boneBatch;
 	public static World world;
 	public static boolean debug;
 	private Box2DDebugRenderer b2dr;
@@ -38,9 +38,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private boolean playerPaused, playerMeleeAttacking, playerRangedAttacking;
 	private Arrow arrow;
 	public ArrayList<Arrow> arrows;
-	public static ArrayList<Body> arrowBodiesCollided;
+	public static ArrayList<Body> arrowBodiesCollided, boneBodiesCollided;
 	public ArrayMap<Body, Arrow> arrowArrayMap;
 	public ArrayMap<Body, Skull> skullArrayMap;
+	public ArrayMap<Body, Bone> boneArrayMap;
 	public Body arrayMapSkullBody;
 	public boolean reversedArrowMap;
 	private Body sword, arrowBody;
@@ -68,6 +69,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		hudBatch = new SpriteBatch();
 		arrowBatch = new SpriteBatch();
 		skullBatch = new SpriteBatch();
+		boneBatch = new SpriteBatch();
 		reversedArrowMap = false;
 		player = new Player();
 		enemies = new ArrayList<>();
@@ -123,8 +125,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 		debug = false;
 
 		arrowBodiesCollided = new ArrayList<Body>();
+		boneBodiesCollided = new ArrayList<Body>();
 		arrowArrayMap = new ArrayMap<Body, Arrow>();
 		skullArrayMap = new ArrayMap<Body, Skull>();
+		boneArrayMap = new ArrayMap<Body, Bone>();
 		arrows = new ArrayList<Arrow>();
 
 		//create an input processor to handle single input events - see inputUpdate() for held down inputs
@@ -359,14 +363,50 @@ public class DungeonCrawler extends ApplicationAdapter {
 					Bone bone = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y);
 					bone.createBone();
 					bones.add(bone);
+					boneArrayMap.put(bone.boneBody, bone);
+
+					Bone bone2 = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y);
+					bone2.createBone();
+					bones.add(bone2);
+					boneArrayMap.put(bone2.boneBody, bone2);
 
 					world.destroyBody(skull.skullBody);
 					skullIt.remove();
 					enemySkulls.remove(skull);
 					brokenSkullBodies.remove(skull);
 					skullArrayMap.removeKey(skull.skullBody);
-
 				}
+			}
+		}
+
+		if (!boneArrayMap.isEmpty()) {
+			for (OrderedMap.Entry<Body, Bone> boneEntry : boneArrayMap.entries()) {
+				Body key = boneEntry.key;
+				//Bone value = boneEntry.value;
+				//render each individual bone
+				boneBatch.begin();
+				Bone.renderBone(boneBatch, tx.boneSprite, key.getPosition().x, key.getPosition().y, key.getAngle());
+				boneBatch.end();
+
+				//boneBatch.draw(tx.boneSprite, b.boneBody.getPosition().x - 7f, b.boneBody.getPosition().y - 8.5f, 7f, 8.5f, 16, 16, 1, 1, b.boneBody.getAngle() * 57.3f);
+				//Skull.renderSkull(skullBatch, tx.skullSprite, key.getPosition().x, key.getPosition().y);
+			}
+
+			Iterator<Body> boneIt = boneBodiesCollided.iterator();
+			if (boneIt.hasNext()) {
+				Body boneBody = boneIt.next();
+				if (boneArrayMap.containsKey(boneBody)) {
+					boneArrayMap.removeKey(boneBody);
+					boneIt.remove();
+					world.destroyBody(boneBody);
+				//	skullIt.remove();
+				//	enemySkulls.remove(skull);
+				//	brokenSkullBodies.remove(skull);
+				//	skullArrayMap.removeKey(skull.skullBody);
+					bones.remove(boneBody);
+				}
+
+
 			}
 		}
 
@@ -375,12 +415,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		float radiansF = Float.parseFloat(stringR);
 
 	//	if (!enemySkulls.isEmpty()) {
-			for (Bone b : bones) {
-				batch.begin();
-				batch.draw(tx.boneSprite, b.boneBody.getPosition().x - 7f, b.boneBody.getPosition().y - 8.5f, 7f, 8.5f, 16, 16, 1, 1, b.boneBody.getAngle() * 57.3f);
-				//tx.boneSprite.setRotation(b.boneBody.getAngle());
-				batch.end();
-			}
+
 	//	}
 
 
@@ -487,7 +522,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		 */
 
 		//toggle to enable or disable collision boxes
-		debug = false;
+		debug = true;
 		if (debug){
 			for (Enemy enemy: enemies){
 				//renders ray cast rays
@@ -518,6 +553,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		batch.setProjectionMatrix(camera.combined);
 		arrowBatch.setProjectionMatrix(camera.combined);
 		skullBatch.setProjectionMatrix(camera.combined);
+		boneBatch.setProjectionMatrix(camera.combined);
 		hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
 
 		hud.stage.draw();
@@ -572,6 +608,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		hud.stage.dispose();
 		arrowBatch.dispose();
 		skullBatch.dispose();
+		boneBatch.dispose();
 		world.dispose();
 		b2dr.dispose();
 	}

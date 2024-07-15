@@ -1,5 +1,7 @@
 package com.mygdx.game.entity.behaviours.fsm;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -29,24 +31,26 @@ public class Bone {
     }
 
     public void createBone() {
-        //TODO: Create bones that fly out of a skull when destroyed because skulls contain bones OK don't question it
         BodyFactory bodyFactory = new BodyFactory();
 
         this.boneBody = bodyFactory.createBoneBody(world, skullBody, boneX, boneY);
 
         //this.boneBody.applyLinearImpulse(0,0,0,0,true);
 
-        this.boneBody.setAngularVelocity(15);
+        this.boneBody.setAngularVelocity(20);
 
         this.outVector = Box2DSteeringUtils.angleToVector(this.outVector, this.orientation);
 
-
-        this.boneBody.setLinearVelocity(this.outVector.x*30,this.outVector.y*30);
+        this.boneBody.setLinearVelocity(this.outVector.x*40,this.outVector.y*40);
 
         //this.boneHitbox = bodyFactory.createBone(world, boneBody, skullBody.getPosition().x, skullBody.getPosition().y);
 
         this.boneBody.setUserData("Bone");
 
         this.boneCreated = true;
+        }
+
+        public static void renderBone(SpriteBatch batch, Sprite boneSprite, float x, float y, float rotation) {
+            batch.draw(boneSprite, x - 7f, y - 8.5f, 7f, 8.5f, 16, 16, 1, 1, rotation * 57.3f);
         }
     }
