@@ -56,10 +56,10 @@ public class BodyFactory {
         boneBody = world.createBody(bodyDef);
         PolygonShape boneShape = new PolygonShape();
         boneShape.setAsBox(5.5f, 3.5f);
-        Fixture boneHitbox = boneBody.createFixture(boneShape, 1.0f);
+        Fixture boneHitbox = boneBody.createFixture(boneShape, 0f);
         boneShape.dispose();
         boneHitbox.setUserData("Bone");
-        boneHitbox.isSensor();
+        boneHitbox.setSensor(true);
         return boneBody;
     }
 

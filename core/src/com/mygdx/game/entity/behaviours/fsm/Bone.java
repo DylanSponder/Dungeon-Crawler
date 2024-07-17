@@ -22,12 +22,20 @@ public class Bone {
     public Body skullBody;
     public float orientation;
     public Vector2 outVector;
+    public float vecMulti;
 
-    public Bone(World world, Body skullBody, float x, float y) {
+    public Bone(World world, Body skullBody, float x, float y, boolean multiplied, float initialAngle) {
         this.boneX = x;
         this.boneY = y;
         this.skullBody = skullBody;
-        this.orientation = MathUtils.random(-MathUtils.PI, MathUtils.PI);
+        if (!multiplied) {
+            this.orientation = MathUtils.random(-MathUtils.PI, MathUtils.PI);
+        }
+        else {
+            float testAngle = MathUtils.random(-MathUtils.PI, MathUtils.PI);
+            this.orientation = initialAngle * 2 + testAngle;
+        }
+
         this.outVector = new Vector2();
     }
 
@@ -38,11 +46,13 @@ public class Bone {
 
         //this.boneBody.applyLinearImpulse(0,0,0,0,true);
 
-        this.boneBody.setAngularVelocity(20);
+        this.boneBody.setAngularVelocity(9f);
 
         this.outVector = Box2DSteeringUtils.angleToVector(this.outVector, this.orientation);
 
-        this.boneBody.setLinearVelocity(this.outVector.x*40,this.outVector.y*40);
+        this.vecMulti = MathUtils.random(20, 25);
+
+        this.boneBody.setLinearVelocity(this.outVector.x*vecMulti,this.outVector.y*vecMulti);
 
         //this.boneHitbox = bodyFactory.createBone(world, boneBody, skullBody.getPosition().x, skullBody.getPosition().y);
 
@@ -52,6 +62,7 @@ public class Bone {
         }
 
         public static void renderBone(SpriteBatch batch, Sprite boneSprite, float x, float y, float rotation) {
-            batch.draw(boneSprite, x - 7f, y - 8.5f, 7f, 8.5f, 16, 16, 1, 1, rotation * 57.3f);
+        //57.3f
+            batch.draw(boneSprite, x - 7f, y - 8.5f, 7f, 8.5f, 16, 16, 1f, 1f, rotation * 57.3f);
         }
     }

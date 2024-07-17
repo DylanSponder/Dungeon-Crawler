@@ -65,23 +65,21 @@ public class GameContactListener implements ContactListener {
             else {
                 hud.healthBar.LoseHealth(0.5f);
                 if (fa.getBody().getUserData() == "Bone") {
-                    player.playerBody.applyLinearImpulse(fa.getBody().getLinearVelocity().x*20, fa.getBody().getLinearVelocity().y*20, 0, 0, true);
-                    if (!boneBodiesCollided.contains(fa.getBody())) {
-                        boneBodiesCollided.add(fa.getBody());
-                    }
+                    player.playerBody.applyLinearImpulse(fa.getBody().getLinearVelocity().x*100, fa.getBody().getLinearVelocity().y*100, 0, 0, true);
+                //    if (!boneBodiesCollided.contains(fa.getBody())) {
+                //        boneBodiesCollided.add(fa.getBody());
+                //    }
                 }
                 else if (fb.getBody().getUserData() == "Bone"){
-                    player.playerBody.applyLinearImpulse(fb.getBody().getLinearVelocity().x*20, fb.getBody().getLinearVelocity().y*20, 0, 0, true);
-                    if (!boneBodiesCollided.contains(fb.getBody())) {
-                        boneBodiesCollided.add(fb.getBody());
-                    }
+                    player.playerBody.applyLinearImpulse(fb.getBody().getLinearVelocity().x*100, fb.getBody().getLinearVelocity().y*100, 0, 0, true);
+                //    if (!boneBodiesCollided.contains(fb.getBody())) {
+                //        boneBodiesCollided.add(fb.getBody());
+                //    }
                 }
             }
         }
-        else if ((fa.getBody().getUserData() == "Bone" && (fb.getBody().getUserData() != "Proximity" && (fa.getUserData() != "Arrow" && fb.getUserData() != "Sword")
-                ||((fa.getUserData() != "Sword" &&  fa.getUserData() != "Arrow") && fa.getBody().getUserData() != "Proximity" && fb.getBody().getUserData() == "Bone")
-        ))
-        )
+        else if ((fa.getBody().getUserData() == "Bone" && fb.getBody().getUserData() != "Proximity" && fb.getBody().getUserData() != "Bone" && fb.getUserData() != "Sword" && !fb.getBody().getUserData().toString().startsWith("Arrow"))
+                ||(fb.getBody().getUserData() == "Bone" && fa.getBody().getUserData() != "Proximity" && fa.getBody().getUserData() != "Bone" && fa.getUserData() != "Sword" && !fa.getBody().getUserData().toString().startsWith("Arrow")))
         {
             if (((fa.getBody().getUserData() == "Enemy" && fa.getBody().getUserData() != "Proximity")
                     || fa.getBody().getUserData() == "Wall") && fb.getBody().getUserData() == "Bone") {

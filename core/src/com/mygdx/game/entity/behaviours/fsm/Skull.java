@@ -21,7 +21,7 @@ public class Skull {
     public float skullX, skullY;
     public boolean skullCreated;
     public float SKULL_HEALTH;
-    public float iFrames = 1;
+    public float iFrames = 1.5f;
     public boolean skullIFrame;
 
     public Skull(World world, float x, float y) {
@@ -30,16 +30,15 @@ public class Skull {
         this.SKULL_HEALTH = 1.5f;
         this.skullCreated = false;
         this.skullIFrame = true;
+    }
 
+    public Body createSkull(ArrayMap<Body, Skull> skullArrayMap) {
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
                 skullIFrame = false;
             }
         }, iFrames);
-    }
-
-    public Body createSkull(ArrayMap<Body, Skull> skullArrayMap) {
 
         BodyFactory bodyFactory = new BodyFactory();
 

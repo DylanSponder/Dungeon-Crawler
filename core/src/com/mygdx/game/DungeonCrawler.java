@@ -31,7 +31,7 @@ import com.mygdx.game.level.InitLevel;
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch batch, arrowBatch, hudBatch, skullBatch, boneBatch;
 	public static World world;
-	public static boolean debug;
+	public static boolean debug = true;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -122,7 +122,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 		layers.add(layer);
 		renderer = new OrthogonalTiledMapRenderer(map);
 		b2dr = new Box2DDebugRenderer();
-		debug = false;
 
 		arrowBodiesCollided = new ArrayList<Body>();
 		boneBodiesCollided = new ArrayList<Body>();
@@ -366,15 +365,22 @@ public class DungeonCrawler extends ApplicationAdapter {
 			if (skullIt.hasNext()) {
 				Skull skull = skullIt.next();
 				if (brokenSkullBodies.contains(skull.skullBody)) {
-					Bone bone = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y);
+					Bone bone = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, false, 0);
 					bone.createBone();
 					bones.add(bone);
 					boneArrayMap.put(bone.boneBody, bone);
 
-					Bone bone2 = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y);
+					Bone bone2 = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, true, bone.orientation);
 					bone2.createBone();
 					bones.add(bone2);
 					boneArrayMap.put(bone2.boneBody, bone2);
+
+					/* turns out 3 is just one too many bones - functionality still useful for other purposes
+					Bone bone3 = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, true, bone2.orientation);
+					bone3.createBone();
+					bones.add(bone3);
+					boneArrayMap.put(bone3.boneBody, bone3);
+					 */
 
 					world.destroyBody(skull.skullBody);
 					skullIt.remove();
@@ -528,7 +534,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		 */
 
 		//toggle to enable or disable collision boxes
-		debug = true;
+
 		if (debug){
 			for (Enemy enemy: enemies){
 				//renders ray cast rays
@@ -702,7 +708,11 @@ public class DungeonCrawler extends ApplicationAdapter {
     }
 
     if (Gdx.input.isKeyPressed(Keys.NUM_8)) {
-      enemies.clear();
-    }
+		for (Enemy e : enemies)
+		if (!deadEnemyBodies.contains(e.enemyBody)) {
+			deadEnemyBodies.add(e.enemyBody);
+		}
+		enemies.clear();
+	}
 	}
 }
