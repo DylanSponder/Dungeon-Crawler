@@ -6,8 +6,6 @@ import com.mygdx.game.entity.behaviours.fsm.EnemyState;
 import com.mygdx.game.entity.behaviours.fsm.Skull;
 import com.mygdx.game.level.GenerateLevel;
 
-import java.util.Iterator;
-
 import static com.mygdx.game.DungeonCrawler.*;
 
 public class GameContactListener implements ContactListener {
@@ -66,28 +64,29 @@ public class GameContactListener implements ContactListener {
                 hud.healthBar.LoseHealth(0.5f);
                 if (fa.getBody().getUserData() == "Bone") {
                     player.playerBody.applyLinearImpulse(fa.getBody().getLinearVelocity().x*100, fa.getBody().getLinearVelocity().y*100, 0, 0, true);
-                //    if (!boneBodiesCollided.contains(fa.getBody())) {
-                //        boneBodiesCollided.add(fa.getBody());
-                //    }
+                    if (!boneBodiesCollided.contains(fa.getBody())) {
+                        boneBodiesCollided.add(fa.getBody());
+                    }
                 }
-                else if (fb.getBody().getUserData() == "Bone"){
+                else if (fb.getBody().getUserData() == "Bone") {
                     player.playerBody.applyLinearImpulse(fb.getBody().getLinearVelocity().x*100, fb.getBody().getLinearVelocity().y*100, 0, 0, true);
-                //    if (!boneBodiesCollided.contains(fb.getBody())) {
-                //        boneBodiesCollided.add(fb.getBody());
-                //    }
+                    if (!boneBodiesCollided.contains(fb.getBody())) {
+                        boneBodiesCollided.add(fb.getBody());
+                    }
                 }
             }
         }
-        else if ((fa.getBody().getUserData() == "Bone" && fb.getBody().getUserData() != "Proximity" && fb.getBody().getUserData() != "Bone" && fb.getUserData() != "Sword" && !fb.getBody().getUserData().toString().startsWith("Arrow"))
-                ||(fb.getBody().getUserData() == "Bone" && fa.getBody().getUserData() != "Proximity" && fa.getBody().getUserData() != "Bone" && fa.getUserData() != "Sword" && !fa.getBody().getUserData().toString().startsWith("Arrow")))
+        //author writes worst code ever, asked to leave the dev pub :(
+        else if ((fa.getBody().getUserData() == "Bone" && fb.getUserData() != "Proximity" && fb.getBody().getUserData() != "Bone" && fb.getBody().getUserData() != "Sword" && !fb.getBody().getUserData().toString().startsWith("Arrow"))
+                ||(fb.getBody().getUserData() == "Bone" && fa.getUserData() != "Proximity" && fa.getBody().getUserData() != "Bone" && fa.getBody().getUserData() != "Sword" && !fa.getBody().getUserData().toString().startsWith("Arrow")))
         {
-            if (((fa.getBody().getUserData() == "Enemy" && fa.getBody().getUserData() != "Proximity")
+            if (((fa.getBody().getUserData() == "Enemy" && fa.getUserData() != "Proximity")
                     || fa.getBody().getUserData() == "Wall") && fb.getBody().getUserData() == "Bone") {
                 if (!boneBodiesCollided.contains(fb.getBody())) {
                     boneBodiesCollided.add(fb.getBody());
                 }
             }
-            else if (((fb.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() != "Proximity")
+            else if (((fb.getBody().getUserData() == "Enemy" && fb.getUserData() != "Proximity")
                     || fb.getBody().getUserData() == "Wall") && fa.getBody().getUserData() == "Bone") {
                 if (!boneBodiesCollided.contains(fa.getBody())) {
                     boneBodiesCollided.add(fa.getBody());
@@ -228,7 +227,7 @@ public class GameContactListener implements ContactListener {
                             hud.updateGold(1);
                             GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter--;
                             if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter == 0){
-                                GenerateLevel.init.roomList.get(player.currentRoom).unlockDoor(world, GenerateLevel.init.roomList.get(player.currentRoom));
+                                GenerateLevel.init.roomList.get(player.currentRoom).unlockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom));
                                 System.out.println("All enemies in this room are dead!");
                             }
 
@@ -244,6 +243,7 @@ public class GameContactListener implements ContactListener {
                     ((fa.getBody().getUserData() == "Sword" && fb.getBody().getUserData() == "Skull")
                             ||(fa.getBody().getUserData() == "Skull" && fb.getBody().getUserData() == "Sword"))
             ) {
+                System.out.println(fa.getBody().getUserData()+" was hit with "+fb.getBody().getUserData());
             if (fa.getBody().getUserData() == "Skull") {
                 for (Skull s : enemySkulls) {
                     if (s.skullBody == fa.getBody() && !s.skullIFrame) {
@@ -326,7 +326,6 @@ public class GameContactListener implements ContactListener {
                 }
             }
         }
-
     }
 
     @Override

@@ -33,7 +33,7 @@ public class Bone {
         }
         else {
             float testAngle = MathUtils.random(-MathUtils.PI, MathUtils.PI);
-            this.orientation = initialAngle * 2 + testAngle;
+            this.orientation = initialAngle + testAngle;
         }
 
         this.outVector = new Vector2();
@@ -46,11 +46,11 @@ public class Bone {
 
         //this.boneBody.applyLinearImpulse(0,0,0,0,true);
 
-        this.boneBody.setAngularVelocity(9f);
+        this.boneBody.setAngularVelocity(8f);
 
         this.outVector = Box2DSteeringUtils.angleToVector(this.outVector, this.orientation);
 
-        this.vecMulti = MathUtils.random(20, 25);
+        this.vecMulti = MathUtils.random(25, 35);
 
         this.boneBody.setLinearVelocity(this.outVector.x*vecMulti,this.outVector.y*vecMulti);
 
@@ -63,6 +63,6 @@ public class Bone {
 
         public static void renderBone(SpriteBatch batch, Sprite boneSprite, float x, float y, float rotation) {
         //57.3f
-            batch.draw(boneSprite, x - 7f, y - 8.5f, 7f, 8.5f, 16, 16, 1f, 1f, rotation * 57.3f);
+            batch.draw(boneSprite, x - 8f, y - 7.5f, 8f, 7.5f, 16, 16, 1f, 1f, rotation * 57.3f);
         }
     }

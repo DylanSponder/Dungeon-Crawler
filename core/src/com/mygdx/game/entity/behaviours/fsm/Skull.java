@@ -21,7 +21,7 @@ public class Skull {
     public float skullX, skullY;
     public boolean skullCreated;
     public float SKULL_HEALTH;
-    public float iFrames = 1.5f;
+    public float iFrames = 1f;
     public boolean skullIFrame;
 
     public Skull(World world, float x, float y) {
@@ -55,10 +55,6 @@ public class Skull {
         skullArrayMap.put(skullBody, this);
 
         return this.skullBody;
-    }
-
-    public void removeSkull(Body body) {
-
     }
 
     public static void  renderSkull(SpriteBatch batch, Sprite skullSprite, float x, float y) {

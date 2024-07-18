@@ -370,10 +370,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 					bones.add(bone);
 					boneArrayMap.put(bone.boneBody, bone);
 
+
 					Bone bone2 = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, true, bone.orientation);
 					bone2.createBone();
 					bones.add(bone2);
 					boneArrayMap.put(bone2.boneBody, bone2);
+
 
 					/* turns out 3 is just one too many bones - functionality still useful for other purposes
 					Bone bone3 = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, true, bone2.orientation);
