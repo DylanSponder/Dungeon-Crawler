@@ -86,6 +86,12 @@ public class InitLevel {
         cr.doorBottomLeftOpen.setTile(new StaticTiledMapTile(tx.doorBottomLeftOpenTexture));
         cr.doorBottomRightOpen.setTile(new StaticTiledMapTile(tx.doorBottomRightOpenTexture));
 
+        /*
+        cr.lockUp.setTile(new StaticTiledMapTile(tx.lockUpTexture));
+        cr.lockDown.setTile(new StaticTiledMapTile(tx.lockDownTexture));
+        cr.lockLeft.setTile(new StaticTiledMapTile(tx.lockLeftTexture));
+        cr.lockRight.setTile(new StaticTiledMapTile(tx.lockRightTexture));
+         */
 
         //initialize map
         TiledMap map = new TiledMap();

@@ -23,8 +23,10 @@ public class Skull {
     public float SKULL_HEALTH;
     public float iFrames = 1f;
     public boolean skullIFrame;
+    private World world;
 
     public Skull(World world, float x, float y) {
+        this.world = world;
         this.skullX = x;
         this.skullY = y;
         this.SKULL_HEALTH = 1.5f;
@@ -44,7 +46,7 @@ public class Skull {
 
         //this.boneBody = bodyFactory.createSkullBody(DungeonCrawler.world,boneX,boneY);
 
-        this.skullBody = bodyFactory.createSkullBody(DungeonCrawler.world,skullX,skullY);
+        this.skullBody = bodyFactory.createSkullBody(world,skullX,skullY);
 
         this.skullBody.setUserData("Skull");
 

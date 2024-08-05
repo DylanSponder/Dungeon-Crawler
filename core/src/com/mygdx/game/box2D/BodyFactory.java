@@ -19,6 +19,25 @@ public class BodyFactory {
         return body;
     }
 
+    public Body createDoorBody(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 8, y + 8);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        return body;
+    }
+
+    public Fixture createDoorHitbox(Body body) {
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(8, 8);
+        Fixture fixture = body.createFixture(shape, 1.0f);
+        shape.dispose();
+        return fixture;
+    }
+
+
     public static Body createWallTurn(World world, float x, float y, float offsetX, float offsetY) {
         Body body;
         BodyDef bodyDef = new BodyDef();
@@ -129,19 +148,6 @@ public class BodyFactory {
         bodyDef.position.set(x,y);
         body = world.createBody(bodyDef);
         return body;
-        /*
-        Body body;
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(x + 8f, y + 8f);
-        bodyDef.fixedRotation = true;
-        body = world.createBody(bodyDef);
-        CircleShape shape = new CircleShape();
-        shape.setRadius(8.5f);
-        body.createFixture(shape, 1.0f);
-        shape.dispose();
-        return body;
-         */
     }
 
     public Fixture createSkullHitbox(Body body, float r) {

@@ -50,7 +50,7 @@ public class Bone {
 
         this.outVector = Box2DSteeringUtils.angleToVector(this.outVector, this.orientation);
 
-        this.vecMulti = MathUtils.random(25, 35);
+        this.vecMulti = MathUtils.random(35, 45);
 
         this.boneBody.setLinearVelocity(this.outVector.x*vecMulti,this.outVector.y*vecMulti);
 

@@ -13,7 +13,7 @@ public class CreateTexture {
     Texture playerTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/GoldKnight/SpriteSheet.png"));
     Texture playerAttackTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/GoldKnight/SeparateAnim/Attack.png"));
     Texture roomBackground = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/Interior/CustomTileset.png"));
-    Texture roomDoorTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHouse.png"));
+    //Texture roomDoorTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHouse.png"));
     Texture roomHoleTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHole.png"));
     Texture swordTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/BigSword/SpriteInHand.png"));
     Texture bowTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/Bow/Sprite.png"));
@@ -42,6 +42,10 @@ public class CreateTexture {
     public TextureRegion skullTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion boneTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion tutoTexture = new TextureRegion(tutorialTexture, 0,0,87,57);
+    public TextureRegion lockUpTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion lockDownTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion lockLeftTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion lockRightTexture = new TextureRegion(roomBackground, 0,0,16,16);
 
     public TextureRegion doorTopLeftWallTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion doorTopRightWallTexture = new TextureRegion(roomBackground, 0,0,16,16);
@@ -126,7 +130,6 @@ public class CreateTexture {
         obstacle1Texture.setRegion(80,64,16,16);
         obstacle2Texture.setRegion(96,64,16,16);
         obstacle3Texture.setRegion(112,64,16,16);
-        //.setRegion(144, 48, 16, 16);
 
         doorTopLeftTexture.setRegion(128, 0, 16, 16);
         doorTopRightTexture.setRegion(144, 0, 16, 16);
@@ -156,6 +159,13 @@ public class CreateTexture {
         doorRightLowerWallTexture.setRegion(64, 48, 16, 16);
         doorBottomLeftWallTexture.setRegion(16, 64, 16, 16);
         doorBottomRightWallTexture.setRegion(32, 64, 16, 16);
+
+        /*
+        lockUpTexture.setRegion(160, 64, 16, 16);
+        lockDownTexture.setRegion(192, 32, 16, 16);
+        lockLeftTexture.setRegion(192, 16, 16, 16);
+        lockRightTexture.setRegion(192, 0, 16, 16);
+         */
 
         tutoTexture.setRegion(0, 0, 87, 57);
     }

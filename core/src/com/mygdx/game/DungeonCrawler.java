@@ -38,10 +38,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private boolean playerPaused, playerMeleeAttacking, playerRangedAttacking;
 	private Arrow arrow;
 	public ArrayList<Arrow> arrows;
-	public static ArrayList<Body> arrowBodiesCollided, boneBodiesCollided;
+	public static ArrayList<Body> arrowBodiesCollided, boneBodiesCollided, skullBodiesDestroyed;
 	public ArrayMap<Body, Arrow> arrowArrayMap;
 	public ArrayMap<Body, Skull> skullArrayMap;
 	public ArrayMap<Body, Bone> boneArrayMap;
+	public ArrayMap<String, Lock> lockMap;
 	public Body arrayMapSkullBody;
 	public boolean reversedArrowMap;
 	private Body sword, arrowBody;
@@ -125,6 +126,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		arrowBodiesCollided = new ArrayList<Body>();
 		boneBodiesCollided = new ArrayList<Body>();
+		skullBodiesDestroyed = new ArrayList<Body>();
 		arrowArrayMap = new ArrayMap<Body, Arrow>();
 		skullArrayMap = new ArrayMap<Body, Skull>();
 		boneArrayMap = new ArrayMap<Body, Bone>();
@@ -205,7 +207,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 							playerPaused = false;
 							sword.destroyFixture(swordHitbox);
 
-
 							//reset playerSprite to before the attack input
 							if (tx.playerSprite.equals(tx.playerAttackDown)) {
 								tx.playerSprite = tx.playerDown;
@@ -216,7 +217,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 							} else if (tx.playerSprite.equals(tx.playerAttackRight)) {
 								tx.playerSprite = tx.playerRight;
 							}
-
 
 							playerMeleeAttacking = false;
 						}
@@ -370,12 +370,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 					bones.add(bone);
 					boneArrayMap.put(bone.boneBody, bone);
 
-
 					Bone bone2 = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, true, bone.orientation);
 					bone2.createBone();
 					bones.add(bone2);
 					boneArrayMap.put(bone2.boneBody, bone2);
-
 
 					/* turns out 3 is just one too many bones - functionality still useful for other purposes
 					Bone bone3 = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, true, bone2.orientation);

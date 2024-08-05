@@ -65,15 +65,9 @@ public class HUD {
     Table winTable = new Table();
     winTable.center();
     winTable.setFillParent(true);
-    if (DungeonCrawler.debug) {
-      winWords = new Label("YOU WIN BRODIE!!!!!!!!!!", new LabelStyle(new BitmapFont(), Color.YELLOW));
-    }
-    else {
-      winWords = new Label("YOU WIN BRODIE!!!!!!!!!!", new LabelStyle(new BitmapFont(), Color.YELLOW));
-    }
-
+    winWords = new Label("YOU WIN BRODIE!!!!!!!!!!", new LabelStyle(new BitmapFont(), Color.YELLOW));
     winTable.add(winWords);
-    subStage.addActor(winTable);
+    stage.addActor(winTable);
   }
 
   public void updateGold(int gold) {

@@ -44,6 +44,10 @@ public class CreateCell {
     public TiledMapTileLayer.Cell doorRightLowerWall;
     public TiledMapTileLayer.Cell doorBottomLeftWall;
     public TiledMapTileLayer.Cell doorBottomRightWall;
+    public TiledMapTileLayer.Cell lockUp;
+    public TiledMapTileLayer.Cell lockDown;
+    public TiledMapTileLayer.Cell lockLeft;
+    public TiledMapTileLayer.Cell lockRight;
     public TiledMapTileLayer.Cell tutorialTile;
 
     public void InitializeCells() {
@@ -93,5 +97,13 @@ public class CreateCell {
         doorBottomRight = new TiledMapTileLayer.Cell();
         doorBottomLeftOpen = new TiledMapTileLayer.Cell();
         doorBottomRightOpen = new TiledMapTileLayer.Cell();
+
+        /*
+        lockUp = new TiledMapTileLayer.Cell();
+        lockDown = new TiledMapTileLayer.Cell();
+        lockLeft = new TiledMapTileLayer.Cell();
+        lockRight = new TiledMapTileLayer.Cell();
+         */
+
     }
 }
