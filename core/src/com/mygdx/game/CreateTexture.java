@@ -42,10 +42,11 @@ public class CreateTexture {
     public TextureRegion skullTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion boneTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion tutoTexture = new TextureRegion(tutorialTexture, 0,0,87,57);
-    public TextureRegion lockUpTexture = new TextureRegion(roomBackground, 0,0,16,16);
-    public TextureRegion lockDownTexture = new TextureRegion(roomBackground, 0,0,16,16);
-    public TextureRegion lockLeftTexture = new TextureRegion(roomBackground, 0,0,16,16);
-    public TextureRegion lockRightTexture = new TextureRegion(roomBackground, 0,0,16,16);
+
+    public TextureRegion lockUpTexture = new TextureRegion(roomBackground, 160,64,16,16);
+    public TextureRegion lockDownTexture = new TextureRegion(roomBackground, 192,32,16,16);
+    public TextureRegion lockLeftTexture = new TextureRegion(roomBackground, 192,16,16,16);
+    public TextureRegion lockRightTexture = new TextureRegion(roomBackground, 192,0,16,16);
 
     public TextureRegion doorTopLeftWallTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion doorTopRightWallTexture = new TextureRegion(roomBackground, 0,0,16,16);
@@ -105,6 +106,11 @@ public class CreateTexture {
     Sprite boneSprite = new Sprite(boneTexture, 192,64, 16, 16);
     Sprite tutorialSprite = new Sprite(tutorialTexture, 0,0, 96, 64);
 
+    Sprite lockUpSprite = new Sprite(lockUpTexture, 160, 64, 16, 16);
+    Sprite lockDownSprite = new Sprite(lockUpTexture, 192, 32, 16, 16);
+    Sprite lockLeftSprite = new Sprite(lockUpTexture, 192, 16, 16, 16);
+    Sprite lockRightSprite = new Sprite(lockUpTexture, 192, 0, 16, 16);
+
     private static CreateTexture instance = null;
     public static CreateTexture getInstance(){
         if (instance == null) {
@@ -161,10 +167,7 @@ public class CreateTexture {
         doorBottomRightWallTexture.setRegion(32, 64, 16, 16);
 
         /*
-        lockUpTexture.setRegion(160, 64, 16, 16);
-        lockDownTexture.setRegion(192, 32, 16, 16);
-        lockLeftTexture.setRegion(192, 16, 16, 16);
-        lockRightTexture.setRegion(192, 0, 16, 16);
+
          */
 
         tutoTexture.setRegion(0, 0, 87, 57);

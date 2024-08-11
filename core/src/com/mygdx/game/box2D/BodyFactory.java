@@ -26,6 +26,7 @@ public class BodyFactory {
         bodyDef.position.set(x + 8, y + 8);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
+        body.setUserData("Door");
         return body;
     }
 
@@ -34,9 +35,20 @@ public class BodyFactory {
         shape.setAsBox(8, 8);
         Fixture fixture = body.createFixture(shape, 1.0f);
         shape.dispose();
+        fixture.setSensor(true);
         return fixture;
     }
 
+    public Body createLockBody(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 8, y + 8);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        body.setUserData("Lock");
+        return body;
+    }
 
     public static Body createWallTurn(World world, float x, float y, float offsetX, float offsetY) {
         Body body;

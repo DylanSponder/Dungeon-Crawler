@@ -5,6 +5,7 @@ import com.mygdx.game.entity.behaviours.fsm.Enemy;
 import com.mygdx.game.entity.behaviours.fsm.EnemyState;
 import com.mygdx.game.entity.behaviours.fsm.Skull;
 import com.mygdx.game.level.GenerateLevel;
+import com.sun.tools.javac.jvm.Gen;
 
 import java.util.Iterator;
 
@@ -23,6 +24,8 @@ public class GameContactListener implements ContactListener {
                 ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Arrow")
                 ||(fa.getBody().getUserData() == "Wall" && fb.getBody().getUserData() == "Arrow")
                 ||(fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Wall")
+                ||(fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Door")
+                ||(fa.getBody().getUserData() == "Door" && fb.getBody().getUserData() == "Arrow")
         ){
             if (fa.getBody().getUserData() == "Enemy" && fa.getUserData() != "Proximity"
                     || fa.getBody().getUserData() == "Wall"){
@@ -32,6 +35,16 @@ public class GameContactListener implements ContactListener {
             }
             else if (fb.getBody().getUserData() == "Enemy" && fb.getUserData() != "Proximity"
                     || fb.getBody().getUserData() == "Wall") {
+                if (!arrowBodiesCollided.contains(fa.getBody())) {
+                    arrowBodiesCollided.add(fa.getBody());
+                }
+            }
+            else if (fa.getBody().getUserData() == "Door"){
+                if (!arrowBodiesCollided.contains(fb.getBody())) {
+                    arrowBodiesCollided.add(fb.getBody());
+                }
+            }
+            else if (fb.getBody().getUserData() == "Door") {
                 if (!arrowBodiesCollided.contains(fa.getBody())) {
                     arrowBodiesCollided.add(fa.getBody());
                 }
@@ -63,6 +76,7 @@ public class GameContactListener implements ContactListener {
                 }
             }
             else {
+                //we want to destroy the bone when it hits a wall, or a player but
                 hud.healthBar.LoseHealth(0.5f);
                 if (fa.getBody().getUserData() == "Bone") {
                     player.playerBody.applyLinearImpulse(fa.getBody().getLinearVelocity().x*100, fa.getBody().getLinearVelocity().y*100, 0, 0, true);
@@ -94,9 +108,9 @@ public class GameContactListener implements ContactListener {
                 }
             }
         }
-        //author writes worst code ever, asked to leave the dev pub :(
         else if ((fa.getBody().getUserData() == "Bone" && fb.getUserData() != "Proximity" && fb.getBody().getUserData() != "Bone" && fb.getBody().getUserData() != "Sword" && !fb.getBody().getUserData().toString().startsWith("Arrow"))
-                ||(fb.getBody().getUserData() == "Bone" && fa.getUserData() != "Proximity" && fa.getBody().getUserData() != "Bone" && fa.getBody().getUserData() != "Sword" && !fa.getBody().getUserData().toString().startsWith("Arrow")))
+                ||(fb.getBody().getUserData() == "Bone" && fa.getUserData() != "Proximity" && fa.getBody().getUserData() != "Bone" && fa.getBody().getUserData() != "Sword" && !fa.getBody().getUserData().toString().startsWith("Arrow"))
+        )
         {
             if (((fa.getBody().getUserData() == "Enemy" && fa.getUserData() != "Proximity")
                     || fa.getBody().getUserData() == "Wall") && fb.getBody().getUserData() == "Bone") {
@@ -119,6 +133,12 @@ public class GameContactListener implements ContactListener {
                 String[] roomIndexAsString =  fa.getBody().getUserData().toString().split("-");
                 int roomIndex = Integer.parseInt(roomIndexAsString[1]);
                 player.currentRoom = roomIndex;
+                if (player.currentRoom != 0){
+                    //player must be touching a room but not a door
+                    if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter != 0){
+                        GenerateLevel.init.roomList.get(player.currentRoom).lockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom));
+                    }
+                }
             }
         }
 
@@ -185,13 +205,14 @@ public class GameContactListener implements ContactListener {
                             //skullArrayMap.put();
                             e.getStateMachine().changeState(EnemyState.DIE);
                             hud.updateGold(1);
-                            /*
+
                             GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter--;
                             if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter == 0){
-                                GenerateLevel.init.roomList.get(player.currentRoom).unlockDoor(world, GenerateLevel.init.roomList.get(player.currentRoom));
+                                GenerateLevel.init.roomList.get(player.currentRoom).unlockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom), false);
+                                //GenerateLevel.init.roomList.get(player.currentRoom+1).unlockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom+1), false);
                                 System.out.println("All enemies in this room are dead!");
                             }
-                             */
+
                             break;
                         }
                     } else if (e.enemyBody == fb.getBody()) {
@@ -245,7 +266,7 @@ public class GameContactListener implements ContactListener {
                             hud.updateGold(1);
                             GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter--;
                             if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter == 0){
-                            //    GenerateLevel.init.roomList.get(player.currentRoom).unlockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom));
+                                GenerateLevel.init.roomList.get(player.currentRoom).unlockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom), false);
                                 System.out.println("All enemies in this room are dead!");
                             }
 

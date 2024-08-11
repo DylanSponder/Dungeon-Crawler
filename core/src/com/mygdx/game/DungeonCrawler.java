@@ -7,6 +7,7 @@ import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.ai.utils.Ray;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
@@ -27,11 +28,12 @@ import com.mygdx.game.entity.behaviours.fsm.*;
 import com.mygdx.game.entity.Shopkeeper;
 import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.InitLevel;
+import com.mygdx.game.level.Room;
 
 public class DungeonCrawler extends ApplicationAdapter {
-	private SpriteBatch batch, arrowBatch, hudBatch, skullBatch, boneBatch;
+	private SpriteBatch batch, arrowBatch, hudBatch, skullBatch, boneBatch, lockBatch;
 	public static World world;
-	public static boolean debug = true;
+	public static boolean debug = false;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -53,6 +55,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Body> brokenSkullBodies;
 	public static ArrayList<Bone> bones;
 	public static ArrayList<Shopkeeper> shopkeepers;
+	public static ArrayList<Lock> locks;
 	public static ArrayList<Tutorial> tutorial;
 	public float PLAYER_HORIZONTAL_SPEED = 0f, PLAYER_VERTICAL_SPEED = 0f;
 	public float PLAYER_X = 0f, PLAYER_Y = 0f;
@@ -71,6 +74,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		arrowBatch = new SpriteBatch();
 		skullBatch = new SpriteBatch();
 		boneBatch = new SpriteBatch();
+		lockBatch = new SpriteBatch();
 		reversedArrowMap = false;
 		player = new Player();
 		enemies = new ArrayList<>();
@@ -80,6 +84,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		bones = new ArrayList<Bone>();
 		shopkeepers = new ArrayList<>();
 		tutorial = new ArrayList<>();
+		locks = new ArrayList<>();
 
 		final BodyFactory bf = new BodyFactory();
 		final CreateTexture tx = CreateTexture.getInstance();
@@ -266,7 +271,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-2f,player.playerBody.getPosition().y-16f);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,true);
 						arrowHitbox.setUserData("DownArrow");
-						arrowBody.setLinearVelocity(0, -300f);
+						arrowBody.setLinearVelocity(0, -500f);
 					}
 					//pause player in place while attacking (attacks must be timed correctly!)
 					arrowBody.setUserData("Arrow");
@@ -417,8 +422,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 				//	skullArrayMap.removeKey(skull.skullBody);
 					bones.remove(boneBody);
 				}
-
-
 			}
 		}
 
@@ -473,7 +476,17 @@ public class DungeonCrawler extends ApplicationAdapter {
 			batch.end();
 		}
 
-		//check if there are any arrows
+		for (Room r : GenerateLevel.init.roomList) {
+			for (Lock l : r.locks) {
+				if (l.visible) {
+					lockBatch.begin();
+					Lock.renderLock(lockBatch, l.direction, l.lockBody.getPosition().x, l.lockBody.getPosition().y);
+					lockBatch.end();
+				}
+			}
+		}
+
+		//check if there are any fired arrows
 		if (!arrowArrayMap.isEmpty()) {
 			for (OrderedMap.Entry<Body, Arrow> arrowEntry : arrowArrayMap.entries()) {
 				Body key = arrowEntry.key;
@@ -510,11 +523,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 			world.destroyBody(body);
 		}
 
-
-
 		deadEnemyBodies.clear();
 		//brokenSkullBodies.clear();
-
 
 		/*
 		for (Enemy e: enemies){
@@ -530,8 +540,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				break;
 			}
 		}
-
-		 */
+		*/
 
 		//toggle to enable or disable collision boxes
 
@@ -566,6 +575,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		arrowBatch.setProjectionMatrix(camera.combined);
 		skullBatch.setProjectionMatrix(camera.combined);
 		boneBatch.setProjectionMatrix(camera.combined);
+		lockBatch.setProjectionMatrix(camera.combined);
 		hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
 
 		hud.stage.draw();
@@ -621,6 +631,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		arrowBatch.dispose();
 		skullBatch.dispose();
 		boneBatch.dispose();
+		lockBatch.dispose();
 		world.dispose();
 		b2dr.dispose();
 	}
