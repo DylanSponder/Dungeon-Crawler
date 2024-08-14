@@ -194,7 +194,7 @@ public class GenerateLevel {
                         float corridorStartY = Integer.parseInt(doorTopLeftY);
                         cc.CreateCorridor(init.roomList.get(r).roomLayer, world,init.roomList.get(init.roomList.get(r).index).x1-3, corridorStartY+1, false);
                     }
-                    init.roomList.get(r).unlockDoors(world, init.roomList.get(r));
+                    init.roomList.get(r).unlockAllDoors(world, init.roomList.get(r), startingRoom);
                 }
             } else {
                 if (r != init.roomList.size() - 1) {
@@ -245,6 +245,7 @@ public class GenerateLevel {
                             float corridorStartY = Integer.parseInt(doorTopLeftY);
                             cc.CreateCorridor(init.roomList.get(r).roomLayer, world,init.roomList.get(init.roomList.get(r).index).x1-3, corridorStartY+1, false);
                         }
+
                     }
                 } else {
                     startingRoom = false;
@@ -279,6 +280,15 @@ public class GenerateLevel {
         }
 
         System.out.println("PATH AFTER: " + path);
+
+        for (Room r : init.roomList) {
+            r.createLocks(world);
+
+            if (r.roomNum > 0) {
+                r.lockDoors(world, r);
+            }
+        }
+
         return list;
     }
 
@@ -767,7 +777,7 @@ public class GenerateLevel {
                     //   testLevelY = testLevelY + yOffset;
                 }
 
-                locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1 + yOffset);
+                locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
 
             }
         return failed = false;
@@ -840,7 +850,7 @@ public class GenerateLevel {
                 if (!roomHitboxCreated){
                     //create a box with the dimensions of the to-be-generated room - originally intended for collision detection but cannot be used that way
                     //will instead be used for detecting if the player has entered a room for opening and closing doors
-                    init.roomList.get(roomIndex).roomHitbox = bf.createRoom(roomIndex, world, ((roomX * 16) + 16 * 16) + (longestRow * 16) / 2, (levelY * 16 - (currentRoomSize * 16) / 2) + 16, currentRoomSize * 16 / 2, longestRow * 16 / 2);
+                    init.roomList.get(roomIndex).roomHitbox = bf.createRoom(roomIndex, world, (((roomX * 16) + 16 * 16) + (longestRow * 16) / 2), ((levelY * 16 - (currentRoomSize * 16) / 2) + 16), currentRoomSize * 16 / 2-16, (longestRow * 16 / 2)-16);
                     init.roomList.get(roomIndex).roomHitbox.setSensor(true);
                     roomHitboxCreated = true;
                 }
@@ -1028,6 +1038,7 @@ public class GenerateLevel {
                                 Door newDoorTopLeft = new Door(world, "TopLeft", init.roomList.get(roomIndex).doorLocations.get("TopLeft"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                                 newDoorTopLeft.createDoor();
                                 init.roomList.get(roomIndex).doorArrayMap.put("TopLeft", newDoorTopLeft);
+                                init.roomList.get(roomIndex).doors.add(newDoorTopLeft);
                                 //init.roomList.get(roomIndex).doors.add(newDoorTopLeft);
                               //  Body newDoorWallLeft = init.bf.createDoorBody(world, (((roomX + i) * 16)) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                               //  init.roomList.get(roomIndex).doorFixtures.add(newDoorWallLeft);
@@ -1051,6 +1062,7 @@ public class GenerateLevel {
                                     Door newDoorTopRight = new Door(world, "TopRight", init.roomList.get(roomIndex).doorLocations.get("TopRight"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                                     newDoorTopRight.createDoor();
                                     init.roomList.get(roomIndex).doorArrayMap.put("TopRight", newDoorTopRight);
+                                    init.roomList.get(roomIndex).doors.add(newDoorTopRight);
 
                                     currentCell = init.cr.doorTopRight;
                                     doorTop++;
@@ -1071,6 +1083,7 @@ public class GenerateLevel {
                                     Door newDoorLeftUpper = new Door(world, "UpperLeft", init.roomList.get(roomIndex).doorLocations.get("UpperLeft"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                                     newDoorLeftUpper.createDoor();
                                     init.roomList.get(roomIndex).doorArrayMap.put("UpperLeft", newDoorLeftUpper);
+                                    init.roomList.get(roomIndex).doors.add(newDoorLeftUpper);
 
                                     //System.out.println("DOOR LOCATION: " + (r.doorLocations).get("UpperLeft"));
                                     currentCell = init.cr.doorLeftUpper;
@@ -1092,6 +1105,7 @@ public class GenerateLevel {
                                     Door newDoorLeftLower = new Door(world, "LowerLeft", init.roomList.get(roomIndex).doorLocations.get("LowerLeft"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                                     newDoorLeftLower.createDoor();
                                     init.roomList.get(roomIndex).doorArrayMap.put("LowerLeft", newDoorLeftLower);
+                                    init.roomList.get(roomIndex).doors.add(newDoorLeftLower);
 
                                     //System.out.println("DOOR LOCATION: " + (r.doorLocations).get("LowerLeft"));
                                     currentCell = init.cr.doorLeftLower;
@@ -1112,6 +1126,7 @@ public class GenerateLevel {
                                     Door newDoorRightUpper = new Door(world, "UpperRight", init.roomList.get(roomIndex).doorLocations.get("UpperRight"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                                     newDoorRightUpper.createDoor();
                                     init.roomList.get(roomIndex).doorArrayMap.put("UpperRight", newDoorRightUpper);
+                                    init.roomList.get(roomIndex).doors.add(newDoorRightUpper);
 
                                     //System.out.println("DOOR LOCATION: " + (r.doorLocations).get("UpperRight"));
                                     currentCell = init.cr.doorRightUpper;
@@ -1133,6 +1148,7 @@ public class GenerateLevel {
                                 Door newDoorRightLower = new Door(world, "LowerRight", init.roomList.get(roomIndex).doorLocations.get("LowerRight"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                                 newDoorRightLower.createDoor();
                                 init.roomList.get(roomIndex).doorArrayMap.put("LowerRight", newDoorRightLower);
+                                init.roomList.get(roomIndex).doors.add(newDoorRightLower);
 
                                 //System.out.println("DOOR LOCATION: " + (r.doorLocations).get("LowerRight"));
                                 currentCell = init.cr.doorRightLower;
@@ -1154,6 +1170,7 @@ public class GenerateLevel {
                                 Door newDoorBottomLeft = new Door(world, "BottomLeft", init.roomList.get(roomIndex).doorLocations.get("BottomLeft"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                                 newDoorBottomLeft.createDoor();
                                 init.roomList.get(roomIndex).doorArrayMap.put("BottomLeft", newDoorBottomLeft);
+                                init.roomList.get(roomIndex).doors.add(newDoorBottomLeft);
 
                                     //System.out.println("DOOR LOCATION: " + (r.doorLocations).get("BottomLeft"));
                                     currentCell = init.cr.doorBottomLeft;
@@ -1174,6 +1191,7 @@ public class GenerateLevel {
                                 Door newDoorBottomRight = new Door(world, "BottomRight", init.roomList.get(roomIndex).doorLocations.get("BottomRight"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                                 newDoorBottomRight.createDoor();
                                 init.roomList.get(roomIndex).doorArrayMap.put("BottomRight", newDoorBottomRight);
+                                init.roomList.get(roomIndex).doors.add(newDoorBottomRight);
 
                                 //System.out.println("DOOR LOCATION: " + (r.doorLocations).get("BottomRight"));
                                 currentCell = init.cr.doorBottomRight;

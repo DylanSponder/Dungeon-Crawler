@@ -1,5 +1,7 @@
 package com.mygdx.game.level;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
@@ -37,11 +39,13 @@ public class Door {
 
      this.doorBody = bodyFactory.createDoorBody(world, doorX, doorY);
 
-     this.doorBody.setUserData(doorName);
-
      this.doorHitbox = bodyFactory.createDoorHitbox(doorBody);
 
+     this.doorHitbox.setUserData(doorName);
+
     }
+
+
 
     //old method for corridor/door alignment
     /*

@@ -5,7 +5,6 @@ import com.mygdx.game.entity.behaviours.fsm.Enemy;
 import com.mygdx.game.entity.behaviours.fsm.EnemyState;
 import com.mygdx.game.entity.behaviours.fsm.Skull;
 import com.mygdx.game.level.GenerateLevel;
-import com.sun.tools.javac.jvm.Gen;
 
 import java.util.Iterator;
 
@@ -61,6 +60,20 @@ public class GameContactListener implements ContactListener {
             }
 
         }
+
+        if (    (fa.getBody().getUserData() == "Door" && fb.getBody().getUserData() == "Player")
+                ||(fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Door")
+        )
+        {
+            if (fa.getBody().getUserData() == "Door"){
+
+            }
+            if (fb.getBody().getUserData() == "Door"){
+
+            }
+        }
+
+
         if (    ((fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Enemy")
                 ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Player"))
                 || ((fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Bone")
@@ -133,6 +146,7 @@ public class GameContactListener implements ContactListener {
                 String[] roomIndexAsString =  fa.getBody().getUserData().toString().split("-");
                 int roomIndex = Integer.parseInt(roomIndexAsString[1]);
                 player.currentRoom = roomIndex;
+                System.out.println("Current room the player is standing in: " + player.currentRoom);
                 if (player.currentRoom != 0){
                     //player must be touching a room but not a door
                     if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter != 0){
@@ -208,7 +222,7 @@ public class GameContactListener implements ContactListener {
 
                             GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter--;
                             if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter == 0){
-                                GenerateLevel.init.roomList.get(player.currentRoom).unlockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom), false);
+                                GenerateLevel.init.roomList.get(player.currentRoom).unlockAllDoors(world, GenerateLevel.init.roomList.get(player.currentRoom), false);
                                 //GenerateLevel.init.roomList.get(player.currentRoom+1).unlockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom+1), false);
                                 System.out.println("All enemies in this room are dead!");
                             }
@@ -265,11 +279,12 @@ public class GameContactListener implements ContactListener {
                             e.getStateMachine().changeState(EnemyState.DIE);
                             hud.updateGold(1);
                             GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter--;
-                            if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter == 0){
-                                GenerateLevel.init.roomList.get(player.currentRoom).unlockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom), false);
+                            if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter < 1){
+                                GenerateLevel.init.roomList.get(player.currentRoom).unlockAllDoors(world, GenerateLevel.init.roomList.get(player.currentRoom), false);
+                                //we want to lock doors behind the player - but disabling for now for testing
+                                //GenerateLevel.init.roomList.get(player.currentRoom-1).lockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom-1));
                                 System.out.println("All enemies in this room are dead!");
                             }
-
                             break;
                         }
                     }
@@ -351,7 +366,7 @@ public class GameContactListener implements ContactListener {
         }
     }
 
-                    /*
+                /*
                 Iterator<Skull> skullIt = enemySkulls.iterator();
                 while (skullIt.hasNext()) {
                     Skull skull = skullIt.next();
@@ -401,7 +416,30 @@ public class GameContactListener implements ContactListener {
                 }
             }
         }
+
+        if (fa.getBody().getUserData().toString().startsWith("Room")) {
+            // && (fb.getUserData() != "Wall" || fb.getUserData() !="Enemy" || fb.getUserData() != "Player"))
+            if (fb.getBody().getUserData() == "Player") {
+                System.out.println("Player has left a room");
+                String[] roomIndexAsString =  fa.getBody().getUserData().toString().split("-");
+                int roomIndex = Integer.parseInt(roomIndexAsString[1]);
+                //player.currentRoom = roomIndex;
+                System.out.println("Player current room + 1: " + (player.currentRoom + 1));
+              //  if (player.currentRoom != 0){
+                    //player must be touching a room but not a door
+                //    if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter != 0){
+                        //GenerateLevel.init.roomList.get(player.currentRoom).lockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom));
+                        GenerateLevel.init.roomList.get(player.currentRoom).unlockDoor(world, GenerateLevel.init.roomList.get(player.currentRoom+1),false);
+
+                //    }
+              //  }
+            }
+        }
+
+
     }
+
+
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {

@@ -106,10 +106,12 @@ public class CreateTexture {
     Sprite boneSprite = new Sprite(boneTexture, 192,64, 16, 16);
     Sprite tutorialSprite = new Sprite(tutorialTexture, 0,0, 96, 64);
 
+    /*
     Sprite lockUpSprite = new Sprite(lockUpTexture, 160, 64, 16, 16);
     Sprite lockDownSprite = new Sprite(lockUpTexture, 192, 32, 16, 16);
     Sprite lockLeftSprite = new Sprite(lockUpTexture, 192, 16, 16, 16);
     Sprite lockRightSprite = new Sprite(lockUpTexture, 192, 0, 16, 16);
+    */
 
     private static CreateTexture instance = null;
     public static CreateTexture getInstance(){
@@ -165,10 +167,6 @@ public class CreateTexture {
         doorRightLowerWallTexture.setRegion(64, 48, 16, 16);
         doorBottomLeftWallTexture.setRegion(16, 64, 16, 16);
         doorBottomRightWallTexture.setRegion(32, 64, 16, 16);
-
-        /*
-
-         */
 
         tutoTexture.setRegion(0, 0, 87, 57);
     }

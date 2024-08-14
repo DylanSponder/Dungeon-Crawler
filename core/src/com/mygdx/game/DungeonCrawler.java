@@ -7,7 +7,6 @@ import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.ai.utils.Ray;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
@@ -33,7 +32,7 @@ import com.mygdx.game.level.Room;
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch batch, arrowBatch, hudBatch, skullBatch, boneBatch, lockBatch;
 	public static World world;
-	public static boolean debug = false;
+	public static boolean debug = true;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -143,14 +142,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 			@Override
 			public boolean scrolled(float amountX, float amountY) {
 				//camera zoom should be between 0.3 and 1.3 - may be changed during testing
-				if ((camera.zoom >= 0.3f && camera.zoom <= 12f)) {
-					if (camera.zoom == 12f) {
+				if ((camera.zoom >= 0.3f && camera.zoom <= 24f)) {
+					if (camera.zoom == 24f) {
 						if (amountY < 0f) {camera.zoom += amountY * 0.1f;}
 					} else if (camera.zoom == 0.3f) {
 						if (amountY > 0f) {camera.zoom += amountY * 0.1f;}}
 					else {camera.zoom += amountY * 0.1f;}
 				}
-				else if (camera.zoom > 12f) {camera.zoom = 12f;}
+				else if (camera.zoom > 24f) {camera.zoom = 24f;}
 				else if (camera.zoom < 0.3f) {camera.zoom = 0.3f;}
 				return true;
 			}
@@ -310,7 +309,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 	@Override
 	public void render() {
-    // kill game when playerhealth is 0
+    // kill game when player health is 0
     if (hud.healthBar.currentHealth == 0) {
       Gdx.app.exit();
     }
@@ -719,11 +718,12 @@ public class DungeonCrawler extends ApplicationAdapter {
     }
 
     if (Gdx.input.isKeyPressed(Keys.NUM_8)) {
-		for (Enemy e : enemies)
-		if (!deadEnemyBodies.contains(e.enemyBody)) {
-			deadEnemyBodies.add(e.enemyBody);
+		for (Enemy e : enemies) {
+			if (!deadEnemyBodies.contains(e.enemyBody)) {
+				deadEnemyBodies.add(e.enemyBody);
+			}
+			enemies.clear();
+			}
 		}
-		enemies.clear();
-	}
 	}
 }
