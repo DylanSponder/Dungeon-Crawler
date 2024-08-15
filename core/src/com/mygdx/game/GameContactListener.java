@@ -150,7 +150,7 @@ public class GameContactListener implements ContactListener {
                 if (player.currentRoom != 0){
                     //player must be touching a room but not a door
                     if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter != 0){
-                        GenerateLevel.init.roomList.get(player.currentRoom).lockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom));
+                        GenerateLevel.init.roomList.get(player.currentRoom).lockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom), true);
                     }
                 }
             }

@@ -284,8 +284,11 @@ public class GenerateLevel {
         for (Room r : init.roomList) {
             r.createLocks(world);
 
-            if (r.roomNum > 0) {
-                r.lockDoors(world, r);
+            if (r.roomNum == 0 && !DungeonCrawler.debug) {
+                r.lockDoor(world, r);
+            }
+            else if (r.roomNum > 0) {
+                r.lockDoors(world, r, false);
             }
         }
 
@@ -1232,6 +1235,7 @@ public class GenerateLevel {
                             currentCell = init.cr.middleFloorTile;
                             Enemy enemy = new Enemy(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                             init.roomList.get(roomIndex).enemyCounter++;
+                            enemy.room = roomIndex;
                             DungeonCrawler.enemies.add(enemy);
                             break;
                         case "shop":

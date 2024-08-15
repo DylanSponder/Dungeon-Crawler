@@ -32,7 +32,7 @@ import com.mygdx.game.level.Room;
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch batch, arrowBatch, hudBatch, skullBatch, boneBatch, lockBatch;
 	public static World world;
-	public static boolean debug = true;
+	public static boolean debug = false;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -719,6 +719,7 @@ public class DungeonCrawler extends ApplicationAdapter {
       hud.healthBar.LoseHealth(0.5f);
     }
 
+	/* causes ConcurrentModificationException do not use
     if (Gdx.input.isKeyPressed(Keys.NUM_8)) {
 		for (Enemy e : enemies) {
 			if (!deadEnemyBodies.contains(e.enemyBody)) {
@@ -727,5 +728,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 			enemies.clear();
 			}
 		}
+	 */
 	}
 }

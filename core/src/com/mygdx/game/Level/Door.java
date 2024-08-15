@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.game.CreateTexture;
 import com.mygdx.game.box2D.BodyFactory;
 
 public class Door {
@@ -43,6 +44,26 @@ public class Door {
 
      this.doorHitbox.setUserData(doorName);
 
+    }
+
+    public static void renderOpen(SpriteBatch batch, int direction, float x, float y) {
+
+        final CreateTexture tx = CreateTexture.getInstance();
+
+        if (direction == 3){
+            batch.draw(tx.doorBottomLeftOpenTexture,x,y-8,0,0,16,16,1,1,0);
+            batch.draw(tx.doorBottomRightOpenTexture,x,y-8,0,0,16,16,1,1,0);
+            //repeat method from here - make sure sprite batch is above player
+        }
+        else if (direction == 1){
+            batch.draw(tx.lockUpTexture,x,y-8,0,0,16,16,1,1,0);
+        }
+        else if (direction == 4){
+            batch.draw(tx.lockLeftTexture,x-8,y-16,0,0,16,16,1,1,0);
+        }
+        else if (direction == 2){
+            batch.draw(tx.lockRightTexture,x-8,y-16,0,0,16,16,1,1,0);
+        }
     }
 
 
