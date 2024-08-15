@@ -45,6 +45,7 @@ public class Enemy {
     public IndexedGraph worldMap;
     public HUD hud;
     public Skull skull;
+    public int room;
 
     public Enemy(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();

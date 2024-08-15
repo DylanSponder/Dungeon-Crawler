@@ -220,8 +220,8 @@ public class GameContactListener implements ContactListener {
                             e.getStateMachine().changeState(EnemyState.DIE);
                             hud.updateGold(1);
 
-                            GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter--;
-                            if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter == 0){
+                            GenerateLevel.init.roomList.get(e.room).enemyCounter--;
+                            if (GenerateLevel.init.roomList.get(e.room).enemyCounter < 1){
                                 GenerateLevel.init.roomList.get(player.currentRoom).unlockAllDoors(world, GenerateLevel.init.roomList.get(player.currentRoom), false);
                                 //GenerateLevel.init.roomList.get(player.currentRoom+1).unlockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom+1), false);
                                 System.out.println("All enemies in this room are dead!");
@@ -278,8 +278,8 @@ public class GameContactListener implements ContactListener {
                             enemySkulls.add(new Skull(world, fb.getBody().getPosition().x, fb.getBody().getPosition().y));
                             e.getStateMachine().changeState(EnemyState.DIE);
                             hud.updateGold(1);
-                            GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter--;
-                            if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter < 1){
+                            GenerateLevel.init.roomList.get(e.room).enemyCounter--;
+                            if (GenerateLevel.init.roomList.get(e.room).enemyCounter < 1){
                                 GenerateLevel.init.roomList.get(player.currentRoom).unlockAllDoors(world, GenerateLevel.init.roomList.get(player.currentRoom), false);
                                 //we want to lock doors behind the player - but disabling for now for testing
                                 //GenerateLevel.init.roomList.get(player.currentRoom-1).lockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom-1));

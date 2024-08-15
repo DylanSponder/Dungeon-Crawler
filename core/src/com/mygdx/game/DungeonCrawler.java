@@ -432,6 +432,16 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 	//	}
 
+		for (Room r : GenerateLevel.init.roomList) {
+			for (Lock l : r.locks) {
+				if (l.visible) {
+					lockBatch.begin();
+					Lock.renderLock(lockBatch, l.direction, l.lockBody.getPosition().x, l.lockBody.getPosition().y);
+					lockBatch.end();
+				}
+			}
+		}
+
 
 		batch.begin();
 		//draw playerSprite on player Box2D object
@@ -475,15 +485,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			batch.end();
 		}
 
-		for (Room r : GenerateLevel.init.roomList) {
-			for (Lock l : r.locks) {
-				if (l.visible) {
-					lockBatch.begin();
-					Lock.renderLock(lockBatch, l.direction, l.lockBody.getPosition().x, l.lockBody.getPosition().y);
-					lockBatch.end();
-				}
-			}
-		}
+
 
 		//check if there are any fired arrows
 		if (!arrowArrayMap.isEmpty()) {
@@ -570,11 +572,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 		camera.update();
 		hud.update();
 
-		batch.setProjectionMatrix(camera.combined);
 		arrowBatch.setProjectionMatrix(camera.combined);
 		skullBatch.setProjectionMatrix(camera.combined);
 		boneBatch.setProjectionMatrix(camera.combined);
 		lockBatch.setProjectionMatrix(camera.combined);
+		batch.setProjectionMatrix(camera.combined);
 		hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
 
 		hud.stage.draw();
