@@ -614,6 +614,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			e.update(GdxAI.getTimepiece().getTime());
 		}
 
+		/*
 		if (Gdx.input.isKeyPressed(Keys.ANY_KEY) && (!Gdx.input.getInputProcessor().keyUp(-1))) {
 			input = true;
 		}
@@ -634,6 +635,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 
 			}
+		 */
+
+		if (!playerPaused) {
+			inputUpdate();
+		}
 		//input = true;
 	}
 
@@ -652,7 +658,67 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 	public void inputUpdate() {
 		final CreateTexture tx = CreateTexture.getInstance();
-		float inputDelay = 0.05f;
+
+
+		PLAYER_HORIZONTAL_SPEED = 0;
+		PLAYER_VERTICAL_SPEED = 0;
+
+		if (Gdx.input.isKeyPressed(Keys.W)||Gdx.input.isKeyPressed(Keys.UP)
+				&& (Gdx.input.isKeyPressed(Keys.A)||Gdx.input.isKeyPressed(Keys.LEFT)
+
+
+		)) {
+
+
+		}
+
+		//move playerSprite Sprite by delta speed according to button WASD press
+		if (Gdx.input.isKeyPressed(Keys.W)||Gdx.input.isKeyPressed(Keys.UP)) {
+			tx.playerSprite = tx.playerUp;
+			PLAYER_VERTICAL_SPEED = 80f;
+		}
+		if (Gdx.input.isKeyPressed(Keys.A)||Gdx.input.isKeyPressed(Keys.LEFT)) {
+			tx.playerSprite = tx.playerLeft;
+			PLAYER_HORIZONTAL_SPEED = -80f;
+		}
+		if (Gdx.input.isKeyPressed(Keys.S)||Gdx.input.isKeyPressed(Keys.DOWN)) {
+			tx.playerSprite = tx.playerDown;
+			PLAYER_VERTICAL_SPEED = -80f;
+		}
+		if (Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.RIGHT)) {
+			tx.playerSprite = tx.playerRight;
+			PLAYER_HORIZONTAL_SPEED = 80f;
+		}
+		player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
+
+    // Use potion 
+    if (Gdx.input.isKeyPressed(Keys.NUM_1)) {
+      if (hud.inventory.Size > 0) {
+        hud.inventory.usePotion(1);
+        hud.healthBar.GainHealth(3);
+      }
+    }
+ 
+    // (For Debugging) Add potion
+    if (Gdx.input.isKeyPressed(Keys.NUM_9)) {
+      hud.inventory.addPotion();
+    }
+
+    // (For Debugging) Damage player
+    if (Gdx.input.isKeyPressed(Keys.NUM_0)) {
+      hud.healthBar.LoseHealth(0.5f);
+    }
+
+	if (Gdx.input.isKeyPressed(Keys.NUM_2)) {
+		camera.zoom = 1f;
+	}
+
+	if (Gdx.input.isKeyPressed(Keys.NUM_3)) {
+		camera.zoom = 20f;
+	}
+
+			/*
+		float inputDelay = 0.2f;
 		if (moving && (!playerRangedAttacking || !playerMeleeAttacking)
 		&&(Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP)
 		|| Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT)
@@ -676,12 +742,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 				Timer.schedule(new Timer.Task() {
 					@Override
 					public void run() {
-						//resume player movement after a short delay and remove sword hitbox
 						playerPaused = true;
 						PLAYER_HORIZONTAL_SPEED = 0;
 						PLAYER_VERTICAL_SPEED = 0;
 					}
 				}, inputDelay);
+
 				playerPaused = false;
 
 			//playerPaused = false;
@@ -714,32 +780,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
 
-    // Use potion 
-    if (Gdx.input.isKeyPressed(Keys.NUM_1)) {
-      if (hud.inventory.Size > 0) {
-        hud.inventory.usePotion(1);
-        hud.healthBar.GainHealth(3);
-      }
-    }
- 
-    // (For Debugging) Add potion
-    if (Gdx.input.isKeyPressed(Keys.NUM_9)) {
-      hud.inventory.addPotion();
-    }
-
-    // (For Debugging) Damage player
-    if (Gdx.input.isKeyPressed(Keys.NUM_0)) {
-      hud.healthBar.LoseHealth(0.5f);
-    }
-
-	if (Gdx.input.isKeyPressed(Keys.NUM_2)) {
-		camera.zoom = 1f;
-	}
-
-	if (Gdx.input.isKeyPressed(Keys.NUM_3)) {
-		camera.zoom = 20f;
-	}
-
+		 */
 
 	/* causes ConcurrentModificationException do not use
     if (Gdx.input.isKeyPressed(Keys.NUM_8)) {
