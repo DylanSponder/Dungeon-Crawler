@@ -25,12 +25,13 @@ import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.Arrow;
 import com.mygdx.game.entity.behaviours.fsm.*;
 import com.mygdx.game.entity.Shopkeeper;
+import com.mygdx.game.level.Door;
 import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.InitLevel;
 import com.mygdx.game.level.Room;
 
 public class DungeonCrawler extends ApplicationAdapter {
-	private SpriteBatch batch, arrowBatch, hudBatch, skullBatch, boneBatch, lockBatch;
+	private SpriteBatch batch, arrowBatch, hudBatch, skullBatch, boneBatch, lockBatch, doorBatch;
 	public static World world;
 	public static boolean debug = false;
 	private Box2DDebugRenderer b2dr;
@@ -73,6 +74,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		arrowBatch = new SpriteBatch();
 		skullBatch = new SpriteBatch();
 		boneBatch = new SpriteBatch();
+		doorBatch = new SpriteBatch();
 		lockBatch = new SpriteBatch();
 		reversedArrowMap = false;
 		player = new Player();
@@ -433,6 +435,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	//	}
 
 		for (Room r : GenerateLevel.init.roomList) {
+			//render door locks when a player enters a new room with enemies
 			for (Lock l : r.locks) {
 				if (l.visible) {
 					lockBatch.begin();
@@ -440,8 +443,16 @@ public class DungeonCrawler extends ApplicationAdapter {
 					lockBatch.end();
 				}
 			}
-		}
 
+			for (Door d : r.doors) {
+				//render open doors here
+				if (d.open) {
+					doorBatch.begin();
+					d.renderOpen(doorBatch, r.directionTaken, d.doorX, d.doorY);
+					doorBatch.end();
+				}
+			}
+		}
 
 		batch.begin();
 		//draw playerSprite on player Box2D object
@@ -575,10 +586,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 		arrowBatch.setProjectionMatrix(camera.combined);
 		skullBatch.setProjectionMatrix(camera.combined);
 		boneBatch.setProjectionMatrix(camera.combined);
-		lockBatch.setProjectionMatrix(camera.combined);
-		batch.setProjectionMatrix(camera.combined);
-		hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
 
+		batch.setProjectionMatrix(camera.combined);
+		lockBatch.setProjectionMatrix(camera.combined);
+		doorBatch.setProjectionMatrix(camera.combined);
+		hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
 		hud.stage.draw();
 	}
 
@@ -633,6 +645,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		skullBatch.dispose();
 		boneBatch.dispose();
 		lockBatch.dispose();
+		doorBatch.dispose();
 		world.dispose();
 		b2dr.dispose();
 	}
@@ -718,6 +731,15 @@ public class DungeonCrawler extends ApplicationAdapter {
     if (Gdx.input.isKeyPressed(Keys.NUM_0)) {
       hud.healthBar.LoseHealth(0.5f);
     }
+
+	if (Gdx.input.isKeyPressed(Keys.NUM_2)) {
+		camera.zoom = 1f;
+	}
+
+	if (Gdx.input.isKeyPressed(Keys.NUM_3)) {
+		camera.zoom = 20f;
+	}
+
 
 	/* causes ConcurrentModificationException do not use
     if (Gdx.input.isKeyPressed(Keys.NUM_8)) {

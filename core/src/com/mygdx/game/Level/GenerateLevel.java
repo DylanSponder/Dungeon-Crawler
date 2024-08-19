@@ -287,8 +287,8 @@ public class GenerateLevel {
             if (r.roomNum == 0 && !DungeonCrawler.debug) {
                 r.lockDoor(world, r);
             }
-            else if (r.roomNum > 0) {
-                r.lockDoors(world, r, false);
+            if (r.roomNum > 0) {
+                r.lockAllDoors(world, r, false);
             }
         }
 
@@ -558,7 +558,6 @@ public class GenerateLevel {
 
         if (startingRoom) {
             doorMapPrevious =  init.roomList.get(roomIndex).doorLocations;
-
         }
         else {
             doorMapPrevious =  init.roomList.get(roomIndex-1).doorLocations;
@@ -614,8 +613,7 @@ public class GenerateLevel {
                     testRoomX = testRoomX + xOffset;
                 }
 
-
-                locateDoors(roomIndex, init.roomList.get(roomIndex).x1+xOffset, init.roomList.get(roomIndex).y1);
+                locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
             }
             if (doorDirection==2) {
                 String doorUpperRight = doorMapPrevious.get("UpperRight");
@@ -706,23 +704,24 @@ public class GenerateLevel {
 
                 if (doorTopLeftXAsInt > doorBottomLeftXAsInt){
                     doorResult = doorBottomLeftXAsInt - doorTopLeftXAsInt;
-
+                    xOffset = doorResult;
+                    System.out.println("Top X Larger, Offset: " + xOffset);
                 }
                 else if (doorBottomLeftXAsInt > doorTopLeftXAsInt) {
                     doorResult = doorTopLeftXAsInt - doorBottomLeftXAsInt;
                     doorResult = doorResult * -1;
+                    xOffset = doorResult;
+                    System.out.println("Bottom X Larger, Offset: " + xOffset);
                 }
 
-                xOffset = doorResult;
-                yOffset = xOffset;
-                System.out.println("3 taken offset: " + xOffset);
+
 
                 init.roomList.get(roomIndex).x1 = init.roomList.get(roomIndex).x1 + xOffset;
                 init.roomList.get(roomIndex).x2 = init.roomList.get(roomIndex).x2 + xOffset;
 
                 if ((path.get(roomIndex+1) == 2 || path.get(roomIndex+1) == 4) && roomIndex+1<init.roomList.size()) {
                     //System.out.println(init.roomList.get(roomIndex+1).x1);
-                    testRoomX = testRoomX + xOffset;
+                   // testRoomX = testRoomX + xOffset;
                     //    init.roomList.get(roomIndex+1).x1 = init.roomList.get(roomIndex+1).x1 + xOffset;
                     //    init.roomList.get(roomIndex+1).x2 = init.roomList.get(roomIndex+1).x2 + xOffset;
                     //System.out.println(init.roomList.get(roomIndex+1).x1);
@@ -737,7 +736,7 @@ public class GenerateLevel {
 
 
                 //System.out.println(init.roomList.get(roomIndex).x1);
-                locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
+                locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1+yOffset);
                 //System.out.println(init.roomList.get(roomIndex).x1);
 
             }
@@ -824,7 +823,6 @@ public class GenerateLevel {
                                   int longestRow, int previousLongestRow) {
 
         //doors.AlignDoors(startingRoom, r, init.roomList, init.roomList.indexOf(r), r.doorLocations, roomX, levelY);
-
         //System.out.println("INDEX: " + roomIndex);
         //System.out.println("CURRENT DIRECTION: " + doorDirection + " PREVIOUS DIRECTION: " + previousDoorDirection + " NEXT DIRECTION: " + nextDirection);
 
@@ -833,16 +831,10 @@ public class GenerateLevel {
         doorLeft = 0;
         doorRight = 0;
 
-        //int roomIndex =  init.roomList.indexOf(r);
-
-        //randomly pick from available prefabs
-        //int random = (int)(Math.random() * 3 + 1);
-
         try {
             List<List<String>> room = init.lp.read("Rooms/room" + roomNum + ".csv");
             //levelY is what determines the size of the level.
             //When levelY is either 1000 or 0 the map will be outside the TiledMapTileLayer and thus will not render
-
 
          //   xy.setNextRoomDimensions(doorDirection, roomX, levelY, previousRoomSize, currentRoomSize, previousLongestRow, longestRow);
 

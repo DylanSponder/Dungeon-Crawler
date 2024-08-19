@@ -142,7 +142,7 @@ public class CreateTexture {
         doorTopLeftTexture.setRegion(128, 0, 16, 16);
         doorTopRightTexture.setRegion(144, 0, 16, 16);
         doorTopLeftOpenTexture.setRegion(128, 16, 16, 16);
-        doorTopRightOpenTexture.setRegion(144, 32, 16, 16);
+        doorTopRightOpenTexture.setRegion(144, 16, 16, 16);
 
         doorLeftUpperTexture.setRegion(160, 32, 16, 16);
         doorLeftLowerTexture.setRegion(160, 48, 16, 16);

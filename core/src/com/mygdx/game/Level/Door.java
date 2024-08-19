@@ -1,6 +1,5 @@
 package com.mygdx.game.level;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -15,23 +14,16 @@ public class Door {
     private World world;
     public Body doorBody;
     public Fixture doorHitbox;
+    public boolean open, locked;
+    public String textureName;
 
     public Door(World world, String doorName, String doorLocation, float x, float y) {
      this.world = world;
      this.doorName = doorName;
      this.doorX = x;
      this.doorY = y;
-     /*
-          String[] doorXYString = doorLocation.split(",");
-     String doorX = doorXYString[0];
-     this.doorX = Integer.valueOf(doorX);
-     System.out.println(doorX);
-
-     String doorY = doorXYString[1];
-     this.doorY = Integer.valueOf(doorY);
-        System.out.println(doorY);
-      */
-
+     this.open = false;
+     this.locked = false;
     }
 
     public void createDoor() {
@@ -45,28 +37,36 @@ public class Door {
      this.doorHitbox.setUserData(doorName);
 
     }
-
-    public static void renderOpen(SpriteBatch batch, int direction, float x, float y) {
+    //renders the open door texture for the respective door on top of the door cell but below the player
+    public void renderOpen(SpriteBatch batch, int direction, float x, float y) {
 
         final CreateTexture tx = CreateTexture.getInstance();
 
-        if (direction == 3){
-            batch.draw(tx.doorBottomLeftOpenTexture,x,y-8,0,0,16,16,1,1,0);
-            batch.draw(tx.doorBottomRightOpenTexture,x,y-8,0,0,16,16,1,1,0);
-            //repeat method from here - make sure sprite batch is above player
-        }
-        else if (direction == 1){
-            batch.draw(tx.lockUpTexture,x,y-8,0,0,16,16,1,1,0);
-        }
-        else if (direction == 4){
-            batch.draw(tx.lockLeftTexture,x-8,y-16,0,0,16,16,1,1,0);
-        }
-        else if (direction == 2){
-            batch.draw(tx.lockRightTexture,x-8,y-16,0,0,16,16,1,1,0);
-        }
+            if (doorName == "BottomLeft") {
+                batch.draw(tx.doorBottomLeftOpenTexture,x,y,0,0,16,16,1,1,0);
+            }
+            if (doorName == "BottomRight") {
+                batch.draw(tx.doorBottomRightOpenTexture,x,y,0,0,16,16,1,1,0);
+            }
+            if (doorName == "TopLeft") {
+                batch.draw(tx.doorTopLeftOpenTexture,x,y,0,0,16,16,1,1,0);
+            }
+            if (doorName == "TopRight") {
+                batch.draw(tx.doorTopRightOpenTexture,x,y,0,0,16,16,1,1,0);
+            }
+            if (doorName == "UpperRight") {
+                batch.draw(tx.doorRightUpperOpenTexture,x,y,0,0,16,16,1,1,0);
+            }
+            if (doorName == "LowerRight") {
+                batch.draw(tx.doorRightLowerOpenTexture,x,y,0,0,16,16,1,1,0);
+            }
+            if (doorName == "UpperLeft") {
+                batch.draw(tx.doorLeftUpperOpenTexture,x,y,0,0,16,16,1,1,0);
+            }
+            if (doorName == "LowerLeft") {
+                batch.draw(tx.doorLeftLowerOpenTexture,x,y,0,0,16,16,1,1,0);
+            }
     }
-
-
 
     //old method for corridor/door alignment
     /*

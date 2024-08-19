@@ -4,20 +4,23 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.entity.behaviours.fsm.Enemy;
 import com.mygdx.game.entity.behaviours.fsm.EnemyState;
 import com.mygdx.game.entity.behaviours.fsm.Skull;
+import com.mygdx.game.level.Door;
 import com.mygdx.game.level.GenerateLevel;
+import com.mygdx.game.level.Room;
 
 import java.util.Iterator;
 
 import static com.mygdx.game.DungeonCrawler.*;
 
 public class GameContactListener implements ContactListener {
+    //there is a lot of lazy branches here - most collisions only need to be handled once
+    // (static bodies like walls will never be the object that is colliding with a dynamic body for instance)
+    // many redundancies should be re-written and if-statements made into switches
 
     @Override
     public void beginContact(Contact contact) {
         Fixture fa = contact.getFixtureA();
         Fixture fb = contact.getFixtureB();
-
-        //System.out.println(fa.getBody().getUserData()+" was hit with "+fb.getBody().getUserData());
 
         if (    (fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Enemy")
                 ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Arrow")
@@ -39,13 +42,29 @@ public class GameContactListener implements ContactListener {
                 }
             }
             else if (fa.getBody().getUserData() == "Door"){
-                if (!arrowBodiesCollided.contains(fb.getBody())) {
-                    arrowBodiesCollided.add(fb.getBody());
+                for (Room r : GenerateLevel.init.roomList) {
+                    for (Door d : r.doors) {
+                        if (d.doorBody == fa.getBody()) {
+                            if (!d.open) {
+                                if (!arrowBodiesCollided.contains(fb.getBody())) {
+                                    arrowBodiesCollided.add(fb.getBody());
+                                }
+                            }
+                        }
+                    }
                 }
             }
             else if (fb.getBody().getUserData() == "Door") {
-                if (!arrowBodiesCollided.contains(fa.getBody())) {
-                    arrowBodiesCollided.add(fa.getBody());
+                for (Room r : GenerateLevel.init.roomList) {
+                    for (Door d : r.doors) {
+                        if (d.doorBody == fb.getBody()) {
+                            if (!d.open) {
+                                if (!arrowBodiesCollided.contains(fa.getBody())) {
+                                    arrowBodiesCollided.add(fa.getBody());
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
@@ -66,10 +85,28 @@ public class GameContactListener implements ContactListener {
         )
         {
             if (fa.getBody().getUserData() == "Door"){
+                for (Room r : GenerateLevel.init.roomList) {
+                    for (Door d : r.doors) {
+                        if (d.doorBody == fa.getBody()) {
+                            if (!d.locked) {
+                                d.open = true;
+                            }
+                            //Door.renderOpen(fa.getBody());
+                        }
+                    }
+                }
 
             }
             if (fb.getBody().getUserData() == "Door"){
-
+                for (Room r : GenerateLevel.init.roomList) {
+                    for (Door d : r.doors) {
+                        if (d.doorBody == fa.getBody()) {
+                            if (!d.locked) {
+                                d.open = true;
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -142,15 +179,13 @@ public class GameContactListener implements ContactListener {
         if (fa.getBody().getUserData().toString().startsWith("Room")) {
             // && (fb.getUserData() != "Wall" || fb.getUserData() !="Enemy" || fb.getUserData() != "Player"))
             if (fb.getBody().getUserData() == "Player") {
-                System.out.println("Player has entered/touched a room");
                 String[] roomIndexAsString =  fa.getBody().getUserData().toString().split("-");
                 int roomIndex = Integer.parseInt(roomIndexAsString[1]);
                 player.currentRoom = roomIndex;
-                System.out.println("Current room the player is standing in: " + player.currentRoom);
                 if (player.currentRoom != 0){
                     //player must be touching a room but not a door
                     if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter != 0){
-                        GenerateLevel.init.roomList.get(player.currentRoom).lockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom), true);
+                        GenerateLevel.init.roomList.get(player.currentRoom).lockAllDoors(world, GenerateLevel.init.roomList.get(player.currentRoom), true);
                     }
                 }
             }
@@ -297,8 +332,6 @@ public class GameContactListener implements ContactListener {
                     ((fa.getBody().getUserData() == "Sword" && fb.getBody().getUserData() == "Skull")
                             ||(fa.getBody().getUserData() == "Skull" && fb.getBody().getUserData() == "Sword"))
             ) {
-                System.out.println(fa.getBody().getUserData()+" was hit with "+fb.getBody().getUserData());
-
                 if (fa.getBody().getUserData() == "Skull") {
                 Iterator<Skull> skullIt = enemySkulls.iterator();
                 while (skullIt.hasNext()) {
@@ -420,26 +453,44 @@ public class GameContactListener implements ContactListener {
         if (fa.getBody().getUserData().toString().startsWith("Room")) {
             // && (fb.getUserData() != "Wall" || fb.getUserData() !="Enemy" || fb.getUserData() != "Player"))
             if (fb.getBody().getUserData() == "Player") {
-                System.out.println("Player has left a room");
                 String[] roomIndexAsString =  fa.getBody().getUserData().toString().split("-");
                 int roomIndex = Integer.parseInt(roomIndexAsString[1]);
                 //player.currentRoom = roomIndex;
-                System.out.println("Player current room + 1: " + (player.currentRoom + 1));
-              //  if (player.currentRoom != 0){
+                if (player.currentRoom <= 9){
                     //player must be touching a room but not a door
                 //    if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter != 0){
                         //GenerateLevel.init.roomList.get(player.currentRoom).lockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom));
                         GenerateLevel.init.roomList.get(player.currentRoom).unlockDoor(world, GenerateLevel.init.roomList.get(player.currentRoom+1),false);
-
                 //    }
-              //  }
+                }
             }
         }
 
+        if ((fa.getBody().getUserData() == "Door" && fb.getBody().getUserData() == "Player")
+            ||(fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Door")
+        )
+        {
+            if (fa.getBody().getUserData() == "Door"){
+                for (Room r : GenerateLevel.init.roomList) {
+                    for (Door d : r.doors) {
+                        if (d.doorBody == fa.getBody()) {
+                            d.open = false;
+                        }
+                    }
+                }
 
+            }
+            if (fb.getBody().getUserData() == "Door"){
+                for (Room r : GenerateLevel.init.roomList) {
+                    for (Door d : r.doors) {
+                        if (d.doorBody == fa.getBody()) {
+                            d.open = false;
+                        }
+                    }
+                }
+            }
+        }
     }
-
-
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
