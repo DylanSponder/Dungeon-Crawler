@@ -46,13 +46,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public ArrayMap<Body, Bone> boneArrayMap;
 	public ArrayMap<String, Lock> lockMap;
 	public Body arrayMapSkullBody;
-	public boolean reversedArrowMap;
+	public boolean reversedArrowMap, reversedSkullMap;
 	private Body sword, arrowBody;
 	private Fixture swordHitbox, enemyHitbox, arrowHitbox;
 	public static ArrayList<Enemy> enemies;
 	public static ArrayList<Body> deadEnemyBodies;
 	public static ArrayList<Skull> enemySkulls;
-	public static ArrayList<Body> brokenSkullBodies;
+	public static ArrayList<Skull> brokenSkulls;
 	public static ArrayList<Bone> bones;
 	public static ArrayList<Shopkeeper> shopkeepers;
 	public static ArrayList<Lock> locks;
@@ -64,7 +64,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static OrthographicCamera camera;
 	public static final float DEFAULT_VIEWPORT_WIDTH = 300f;
 	public static HUD hud;
-	public boolean input, moving;
 
 	@Override
 	public void create() {
@@ -77,11 +76,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 		doorBatch = new SpriteBatch();
 		lockBatch = new SpriteBatch();
 		reversedArrowMap = false;
+		reversedSkullMap = false;
 		player = new Player();
 		enemies = new ArrayList<>();
 		deadEnemyBodies = new ArrayList<Body>();
 		enemySkulls = new ArrayList<Skull>();
-		brokenSkullBodies = new ArrayList<Body>();
+		brokenSkulls = new ArrayList<Skull>();
 		bones = new ArrayList<Bone>();
 		shopkeepers = new ArrayList<>();
 		tutorial = new ArrayList<>();
@@ -345,11 +345,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 			batch.end();
 		}
 
-			for (Skull s : enemySkulls) {
-				if (!s.skullCreated) {
-					arrayMapSkullBody = s.createSkull(skullArrayMap);
-				}
-				skullArrayMap.put(arrayMapSkullBody,s);
+		for (Skull s : enemySkulls) {
+			if (!s.skullCreated) {
+			//	arrayMapSkullBody = s.createSkull(skullArrayMap);
+				skullArrayMap.put(s.createSkull(skullArrayMap),s);
+			}
+
 		}
 
 		if (!skullArrayMap.isEmpty()) {
@@ -359,18 +360,22 @@ public class DungeonCrawler extends ApplicationAdapter {
 				//render each individual skull
 				skullBatch.begin();
 				if (value.SKULL_HEALTH < 1.5f){
-					Skull.renderSkull(skullBatch, tx.damagedSkullSprite, key.getPosition().x, key.getPosition().y);
+					Skull.renderSkull(skullBatch, tx.damagedSkullSprite, skullEntry.key.getPosition().x, skullEntry.key.getPosition().y);
 				}else {
-					Skull.renderSkull(skullBatch, tx.skullSprite, key.getPosition().x, key.getPosition().y);
+					Skull.renderSkull(skullBatch, tx.skullSprite, skullEntry.key.getPosition().x, skullEntry.key.getPosition().y);
 				}
-
 				skullBatch.end();
 			}
 
-			Iterator<Skull> skullIt = enemySkulls.iterator();
+			if (!reversedSkullMap){
+				skullArrayMap.reverse();
+				reversedSkullMap = true;
+			}
+
+			Iterator<Skull> skullIt = brokenSkulls.iterator();
 			if (skullIt.hasNext()) {
 				Skull skull = skullIt.next();
-				if (brokenSkullBodies.contains(skull.skullBody)) {
+				if (brokenSkulls.contains(skull)) {
 					Bone bone = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, false, 0);
 					bone.createBone();
 					bones.add(bone);
@@ -381,18 +386,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 					bones.add(bone2);
 					boneArrayMap.put(bone2.boneBody, bone2);
 
-					/* turns out 3 is just one too many bones - functionality still useful for other purposes
-					Bone bone3 = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, true, bone2.orientation);
-					bone3.createBone();
-					bones.add(bone3);
-					boneArrayMap.put(bone3.boneBody, bone3);
-					 */
-
+					enemySkulls.remove(skull);
+					skullArrayMap.removeKey(skull.skullBody);
 					world.destroyBody(skull.skullBody);
 					skullIt.remove();
-					enemySkulls.remove(skull);
-					brokenSkullBodies.remove(skull);
-					skullArrayMap.removeKey(skull.skullBody);
+					//brokenSkullBodies.remove(body);
 				}
 			}
 		}
@@ -409,6 +407,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 				//boneBatch.draw(tx.boneSprite, b.boneBody.getPosition().x - 7f, b.boneBody.getPosition().y - 8.5f, 7f, 8.5f, 16, 16, 1, 1, b.boneBody.getAngle() * 57.3f);
 				//Skull.renderSkull(skullBatch, tx.skullSprite, key.getPosition().x, key.getPosition().y);
 			}
+
+
 
 			Iterator<Body> boneIt = boneBodiesCollided.iterator();
 			if (boneIt.hasNext()) {
@@ -659,18 +659,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public void inputUpdate() {
 		final CreateTexture tx = CreateTexture.getInstance();
 
-
 		PLAYER_HORIZONTAL_SPEED = 0;
 		PLAYER_VERTICAL_SPEED = 0;
-
-		if (Gdx.input.isKeyPressed(Keys.W)||Gdx.input.isKeyPressed(Keys.UP)
-				&& (Gdx.input.isKeyPressed(Keys.A)||Gdx.input.isKeyPressed(Keys.LEFT)
-
-
-		)) {
-
-
-		}
 
 		//move playerSprite Sprite by delta speed according to button WASD press
 		if (Gdx.input.isKeyPressed(Keys.W)||Gdx.input.isKeyPressed(Keys.UP)) {

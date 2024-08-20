@@ -22,26 +22,24 @@ public class GameContactListener implements ContactListener {
         Fixture fa = contact.getFixtureA();
         Fixture fb = contact.getFixtureB();
 
-        if (    (fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Enemy")
-                ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Arrow")
-                ||(fa.getBody().getUserData() == "Wall" && fb.getBody().getUserData() == "Arrow")
-                ||(fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Wall")
-                ||(fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Door")
-                ||(fa.getBody().getUserData() == "Door" && fb.getBody().getUserData() == "Arrow")
-        ){
+        if ((fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Enemy")
+                || (fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Arrow")
+                || (fa.getBody().getUserData() == "Wall" && fb.getBody().getUserData() == "Arrow")
+                || (fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Wall")
+                || (fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Door")
+                || (fa.getBody().getUserData() == "Door" && fb.getBody().getUserData() == "Arrow")
+        ) {
             if (fa.getBody().getUserData() == "Enemy" && fa.getUserData() != "Proximity"
-                    || fa.getBody().getUserData() == "Wall"){
+                    || fa.getBody().getUserData() == "Wall") {
                 if (!arrowBodiesCollided.contains(fb.getBody())) {
                     arrowBodiesCollided.add(fb.getBody());
                 }
-            }
-            else if (fb.getBody().getUserData() == "Enemy" && fb.getUserData() != "Proximity"
+            } else if (fb.getBody().getUserData() == "Enemy" && fb.getUserData() != "Proximity"
                     || fb.getBody().getUserData() == "Wall") {
                 if (!arrowBodiesCollided.contains(fa.getBody())) {
                     arrowBodiesCollided.add(fa.getBody());
                 }
-            }
-            else if (fa.getBody().getUserData() == "Door"){
+            } else if (fa.getBody().getUserData() == "Door") {
                 for (Room r : GenerateLevel.init.roomList) {
                     for (Door d : r.doors) {
                         if (d.doorBody == fa.getBody()) {
@@ -53,8 +51,7 @@ public class GameContactListener implements ContactListener {
                         }
                     }
                 }
-            }
-            else if (fb.getBody().getUserData() == "Door") {
+            } else if (fb.getBody().getUserData() == "Door") {
                 for (Room r : GenerateLevel.init.roomList) {
                     for (Door d : r.doors) {
                         if (d.doorBody == fb.getBody()) {
@@ -69,10 +66,9 @@ public class GameContactListener implements ContactListener {
             }
 
             if (fa.getBody().getUserData() == "Arrow" && fb.getUserData() == "EnemyHitbox"
-                    || fb.getBody().getUserData() == "Arrow" && fa.getUserData() == "EnemyHitbox")
-            {
-                for (Enemy e : enemies){
-                    if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()){
+                    || fb.getBody().getUserData() == "Arrow" && fa.getUserData() == "EnemyHitbox") {
+                for (Enemy e : enemies) {
+                    if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()) {
                         e.getStateMachine().changeState(EnemyState.ATTACK);
                     }
                 }
@@ -80,24 +76,26 @@ public class GameContactListener implements ContactListener {
 
         }
 
-        if (    (fa.getBody().getUserData() == "Door" && fb.getBody().getUserData() == "Player")
-                ||(fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Door")
-        )
-        {
-            if (fa.getBody().getUserData() == "Door"){
+        if ((fa.getBody().getUserData() == "Door" && fb.getBody().getUserData() == "Player")
+                || (fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Door")
+                || ((fa.getBody().getUserData() == "Door" && fb.getBody().getUserData() == "Enemy")
+                || (fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Door"))
+        ) {
+            if (fa.getBody().getUserData() == "Door"
+                    && (fb.getUserData() != "Proximity")) {
                 for (Room r : GenerateLevel.init.roomList) {
                     for (Door d : r.doors) {
                         if (d.doorBody == fa.getBody()) {
                             if (!d.locked) {
                                 d.open = true;
                             }
-                            //Door.renderOpen(fa.getBody());
                         }
                     }
                 }
 
             }
-            if (fb.getBody().getUserData() == "Door"){
+            if (fb.getBody().getUserData() == "Door"
+                    && (fa.getUserData() != "Proximity")) {
                 for (Room r : GenerateLevel.init.roomList) {
                     for (Door d : r.doors) {
                         if (d.doorBody == fa.getBody()) {
@@ -111,64 +109,56 @@ public class GameContactListener implements ContactListener {
         }
 
 
-        if (    ((fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Enemy")
-                ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Player"))
+        if (((fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Enemy")
+                || (fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Player"))
                 || ((fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Bone")
-                ||(fa.getBody().getUserData() == "Bone" && fb.getBody().getUserData() == "Player"))
-        ){
+                || (fa.getBody().getUserData() == "Bone" && fb.getBody().getUserData() == "Player"))
+        ) {
             //if player enters enemy detection range, attack player
-            if( fa.getUserData() == "Proximity"||
-                    fb.getUserData() == "Proximity"){
-                for (Enemy e : enemies){
-                    if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()){
+            if (fa.getUserData() == "Proximity" ||
+                    fb.getUserData() == "Proximity") {
+                for (Enemy e : enemies) {
+                    if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()) {
                         e.getStateMachine().changeState(EnemyState.ATTACK);
                     }
                 }
-            }
-            else {
+            } else {
                 //we want to destroy the bone when it hits a wall, or a player but
                 hud.healthBar.LoseHealth(0.5f);
                 if (fa.getBody().getUserData() == "Bone") {
-                    player.playerBody.applyLinearImpulse(fa.getBody().getLinearVelocity().x*100, fa.getBody().getLinearVelocity().y*100, 0, 0, true);
+                    player.playerBody.applyLinearImpulse(fa.getBody().getLinearVelocity().x * 100, fa.getBody().getLinearVelocity().y * 100, 0, 0, true);
                     if (!boneBodiesCollided.contains(fa.getBody())) {
                         boneBodiesCollided.add(fa.getBody());
                     }
-                }
-                else if (fb.getBody().getUserData() == "Bone") {
-                    player.playerBody.applyLinearImpulse(fb.getBody().getLinearVelocity().x*100, fb.getBody().getLinearVelocity().y*100, 0, 0, true);
+                } else if (fb.getBody().getUserData() == "Bone") {
+                    player.playerBody.applyLinearImpulse(fb.getBody().getLinearVelocity().x * 100, fb.getBody().getLinearVelocity().y * 100, 0, 0, true);
                     if (!boneBodiesCollided.contains(fa.getBody())) {
                         boneBodiesCollided.add(fa.getBody());
                     }
-                }
-                else if (fa.getBody().getUserData() == "Enemy") {
-                    player.playerBody.applyLinearImpulse(fa.getBody().getLinearVelocity().x*50, fa.getBody().getLinearVelocity().y*50, 0, 0, true);
-                    fa.getBody().applyLinearImpulse(-fb.getBody().getLinearVelocity().x*2, -fb.getBody().getLinearVelocity().y*2, 0, 0, true);
+                } else if (fa.getBody().getUserData() == "Enemy") {
+                    player.playerBody.applyLinearImpulse(fa.getBody().getLinearVelocity().x * 50, fa.getBody().getLinearVelocity().y * 50, 0, 0, true);
+                    fa.getBody().applyLinearImpulse(-fb.getBody().getLinearVelocity().x * 2, -fb.getBody().getLinearVelocity().y * 2, 0, 0, true);
 
-                }
-                else if (fb.getBody().getUserData() == "Enemy") {
-                    player.playerBody.applyLinearImpulse(fb.getBody().getLinearVelocity().x*50, fb.getBody().getLinearVelocity().y*50, 0, 0, true);
+                } else if (fb.getBody().getUserData() == "Enemy") {
+                    player.playerBody.applyLinearImpulse(fb.getBody().getLinearVelocity().x * 50, fb.getBody().getLinearVelocity().y * 50, 0, 0, true);
 
                     if (fa.getBody().getLinearVelocity().x < 10 && fa.getBody().getLinearVelocity().y < 10) {
 
-                        fa.getBody().applyLinearImpulse(-fb.getBody().getLinearVelocity().x, -fb.getBody().getLinearVelocity().y+150, 0, 0, true);
-                    }
-                    else {
-                        fa.getBody().applyLinearImpulse(-fb.getBody().getLinearVelocity().x+150, -fb.getBody().getLinearVelocity().y+150, 0, 0, true);
+                        fa.getBody().applyLinearImpulse(-fb.getBody().getLinearVelocity().x, -fb.getBody().getLinearVelocity().y + 150, 0, 0, true);
+                    } else {
+                        fa.getBody().applyLinearImpulse(-fb.getBody().getLinearVelocity().x + 150, -fb.getBody().getLinearVelocity().y + 150, 0, 0, true);
                     }
                 }
             }
-        }
-        else if ((fa.getBody().getUserData() == "Bone" && fb.getUserData() != "Proximity" && fb.getBody().getUserData() != "Bone" && fb.getBody().getUserData() != "Sword" && !fb.getBody().getUserData().toString().startsWith("Arrow"))
-                ||(fb.getBody().getUserData() == "Bone" && fa.getUserData() != "Proximity" && fa.getBody().getUserData() != "Bone" && fa.getBody().getUserData() != "Sword" && !fa.getBody().getUserData().toString().startsWith("Arrow"))
-        )
-        {
+        } else if ((fa.getBody().getUserData() == "Bone" && fb.getUserData() != "Proximity" && fb.getBody().getUserData() != "Bone" && fb.getBody().getUserData() != "Sword" && !fb.getBody().getUserData().toString().startsWith("Arrow"))
+                || (fb.getBody().getUserData() == "Bone" && fa.getUserData() != "Proximity" && fa.getBody().getUserData() != "Bone" && fa.getBody().getUserData() != "Sword" && !fa.getBody().getUserData().toString().startsWith("Arrow"))
+        ) {
             if (((fa.getBody().getUserData() == "Enemy" && fa.getUserData() != "Proximity")
                     || fa.getBody().getUserData() == "Wall") && fb.getBody().getUserData() == "Bone") {
                 if (!boneBodiesCollided.contains(fb.getBody())) {
                     boneBodiesCollided.add(fb.getBody());
                 }
-            }
-            else if (((fb.getBody().getUserData() == "Enemy" && fb.getUserData() != "Proximity")
+            } else if (((fb.getBody().getUserData() == "Enemy" && fb.getUserData() != "Proximity")
                     || fb.getBody().getUserData() == "Wall") && fa.getBody().getUserData() == "Bone") {
                 if (!boneBodiesCollided.contains(fa.getBody())) {
                     boneBodiesCollided.add(fa.getBody());
@@ -179,12 +169,12 @@ public class GameContactListener implements ContactListener {
         if (fa.getBody().getUserData().toString().startsWith("Room")) {
             // && (fb.getUserData() != "Wall" || fb.getUserData() !="Enemy" || fb.getUserData() != "Player"))
             if (fb.getBody().getUserData() == "Player") {
-                String[] roomIndexAsString =  fa.getBody().getUserData().toString().split("-");
+                String[] roomIndexAsString = fa.getBody().getUserData().toString().split("-");
                 int roomIndex = Integer.parseInt(roomIndexAsString[1]);
                 player.currentRoom = roomIndex;
-                if (player.currentRoom != 0){
+                if (player.currentRoom != 0) {
                     //player must be touching a room but not a door
-                    if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter != 0){
+                    if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter != 0) {
                         GenerateLevel.init.roomList.get(player.currentRoom).lockAllDoors(world, GenerateLevel.init.roomList.get(player.currentRoom), true);
                     }
                 }
@@ -192,13 +182,13 @@ public class GameContactListener implements ContactListener {
         }
 
         if ((fa.getBody().getUserData().toString().startsWith("Arrow") && fb.getBody().getUserData() == "Enemy")
-                ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData().toString().startsWith("Arrow"))
+                || (fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData().toString().startsWith("Arrow"))
                 ||
                 ((fa.getBody().getUserData() == "Sword" && fb.getBody().getUserData() == "Enemy")
-                        ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Sword"))
+                        || (fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Sword"))
         ) {
-            if(fa.getUserData() != "Proximity" &&
-                    fb.getUserData() != "Proximity"){
+            if (fa.getUserData() != "Proximity" &&
+                    fb.getUserData() != "Proximity") {
                 for (Enemy e : enemies) {
                     if (e.enemyBody == fa.getBody()) {
 
@@ -208,41 +198,41 @@ public class GameContactListener implements ContactListener {
                         switch (fbData) {
                             case "DownSword":
                                 e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
-                                e.enemyBody.setLinearVelocity(velX, velY-120);
+                                e.enemyBody.setLinearVelocity(velX, velY - 120);
                                 break;
                             case "UpSword":
                                 e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
-                                e.enemyBody.setLinearVelocity(velX, velY+120);
+                                e.enemyBody.setLinearVelocity(velX, velY + 120);
                                 break;
                             case "LeftSword":
                                 e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
-                                e.enemyBody.setLinearVelocity(velX-120, velY);
+                                e.enemyBody.setLinearVelocity(velX - 120, velY);
                                 break;
                             case "RightSword":
                                 e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
-                                e.enemyBody.setLinearVelocity(velX+120, velY);
+                                e.enemyBody.setLinearVelocity(velX + 120, velY);
                                 break;
                             case "DownArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY-70);
+                                e.enemyBody.setLinearVelocity(velX, velY - 70);
                                 break;
                             case "UpArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY+70);
+                                e.enemyBody.setLinearVelocity(velX, velY + 70);
                                 break;
                             case "LeftArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX-70, velY);
+                                e.enemyBody.setLinearVelocity(velX - 70, velY);
                                 break;
                             case "RightArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX+70, velY);
+                                e.enemyBody.setLinearVelocity(velX + 70, velY);
                                 break;
                             default:
                                 break;
                         }
                         //e.enemyBody.applyForceToCenter(0,0, true);
-                        e.enemyBody.setLinearVelocity(0,0);
+                        e.enemyBody.setLinearVelocity(0, 0);
                         System.out.println(e.enemyBody.getLinearVelocity());
 
                         if (e.ENEMY_HEALTH < 1) {
@@ -256,10 +246,9 @@ public class GameContactListener implements ContactListener {
                             hud.updateGold(1);
 
                             GenerateLevel.init.roomList.get(e.room).enemyCounter--;
-                            if (GenerateLevel.init.roomList.get(e.room).enemyCounter < 1){
+                            if (GenerateLevel.init.roomList.get(e.room).enemyCounter < 1) {
                                 GenerateLevel.init.roomList.get(player.currentRoom).unlockAllDoors(world, GenerateLevel.init.roomList.get(player.currentRoom), false);
                                 //GenerateLevel.init.roomList.get(player.currentRoom+1).unlockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom+1), false);
-                                System.out.println("All enemies in this room are dead!");
                             }
 
                             break;
@@ -271,35 +260,35 @@ public class GameContactListener implements ContactListener {
                         switch (faData) {
                             case "DownSword":
                                 e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
-                                e.enemyBody.setLinearVelocity(velX, velY-120);
+                                e.enemyBody.setLinearVelocity(velX, velY - 120);
                                 break;
                             case "UpSword":
                                 e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
-                                e.enemyBody.setLinearVelocity(velX, velY+120);
+                                e.enemyBody.setLinearVelocity(velX, velY + 120);
                                 break;
                             case "LeftSword":
                                 e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
-                                e.enemyBody.setLinearVelocity(velX-120, velY);
+                                e.enemyBody.setLinearVelocity(velX - 120, velY);
                                 break;
                             case "RightSword":
                                 e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
-                                e.enemyBody.setLinearVelocity(velX+120, velY);
+                                e.enemyBody.setLinearVelocity(velX + 120, velY);
                                 break;
                             case "DownArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY-70);
+                                e.enemyBody.setLinearVelocity(velX, velY - 70);
                                 break;
                             case "UpArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY+70);
+                                e.enemyBody.setLinearVelocity(velX, velY + 70);
                                 break;
                             case "LeftArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX-70, velY);
+                                e.enemyBody.setLinearVelocity(velX - 70, velY);
                                 break;
                             case "RightArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX+70, velY);
+                                e.enemyBody.setLinearVelocity(velX + 70, velY);
                                 break;
                             default:
                                 break;
@@ -314,7 +303,7 @@ public class GameContactListener implements ContactListener {
                             e.getStateMachine().changeState(EnemyState.DIE);
                             hud.updateGold(1);
                             GenerateLevel.init.roomList.get(e.room).enemyCounter--;
-                            if (GenerateLevel.init.roomList.get(e.room).enemyCounter < 1){
+                            if (GenerateLevel.init.roomList.get(e.room).enemyCounter < 1) {
                                 GenerateLevel.init.roomList.get(player.currentRoom).unlockAllDoors(world, GenerateLevel.init.roomList.get(player.currentRoom), false);
                                 //we want to lock doors behind the player - but disabling for now for testing
                                 //GenerateLevel.init.roomList.get(player.currentRoom-1).lockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom-1));
@@ -326,45 +315,26 @@ public class GameContactListener implements ContactListener {
                 }
             }
         }
-            if (((fa.getBody().getUserData().toString().startsWith("Arrow") && fb.getBody().getUserData() == "Skull")
-                    ||(fa.getBody().getUserData() == "Skull" && fb.getBody().getUserData().toString().startsWith("Arrow")))
-                    ||
-                    ((fa.getBody().getUserData() == "Sword" && fb.getBody().getUserData() == "Skull")
-                            ||(fa.getBody().getUserData() == "Skull" && fb.getBody().getUserData() == "Sword"))
-            ) {
-                if (fa.getBody().getUserData() == "Skull") {
-                Iterator<Skull> skullIt = enemySkulls.iterator();
-                while (skullIt.hasNext()) {
-                    Skull nextSkull = skullIt.next();
-                    if (fa.getBody() == nextSkull.skullBody && !nextSkull.skullIFrame) {
-                        if (nextSkull.SKULL_HEALTH > 0) {
-                            nextSkull.SKULL_HEALTH--;
-                            if (nextSkull.SKULL_HEALTH <= 0) {
-                                brokenSkullBodies.add(fa.getBody());
-                                skullIt.remove();
-                                break;
-                            }
-                            break;
+        if (((fa.getBody().getUserData().toString().startsWith("Arrow") && fb.getBody().getUserData() == "Skull")
+                || (fa.getBody().getUserData() == "Skull" && fb.getBody().getUserData().toString().startsWith("Arrow")))
+                ||
+                ((fa.getBody().getUserData() == "Sword" && fb.getBody().getUserData() == "Skull")
+                        || (fa.getBody().getUserData() == "Skull" && fb.getBody().getUserData() == "Sword"))
+        ) {
+            if (fb.getBody().getUserData() == "Skull") {
+                for (Skull s : enemySkulls) {
+                    if (fb.getBody() == s.skullBody && !s.skullIFrame) {
+                        if (s.SKULL_HEALTH > 0) {
+                            s.SKULL_HEALTH--;
+                            if (s.SKULL_HEALTH <= 0) {
+                                brokenSkulls.add(s);
                             }
                         }
                     }
                 }
-                if (fb.getBody().getUserData() == "Skull") {
-                Iterator<Skull> skullIt = enemySkulls.iterator();
-                while (skullIt.hasNext()) {
-                    Skull nextSkull = skullIt.next();
-                    if (fb.getBody() == nextSkull.skullBody && !nextSkull.skullIFrame) {
-                        if (nextSkull.SKULL_HEALTH > 0) {
-                            nextSkull.SKULL_HEALTH--;
-                            if (nextSkull.SKULL_HEALTH <= 0) {
-                                brokenSkullBodies.add(fb.getBody());
-                                break;
-                            }
-                            break;
-                            }
-                        }
-                    }
-                }
+            }
+        }
+
               /*
             if (fa.getBody().getUserData() == "Skull") {
                 for (Skull s : enemySkulls) {
@@ -396,7 +366,7 @@ public class GameContactListener implements ContactListener {
             }
 
                */
-        }
+
     }
 
                 /*
@@ -468,6 +438,8 @@ public class GameContactListener implements ContactListener {
 
         if ((fa.getBody().getUserData() == "Door" && fb.getBody().getUserData() == "Player")
             ||(fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Door")
+                || ((fa.getBody().getUserData() == "Door" && fb.getBody().getUserData() == "Enemy")
+                ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Door"))
         )
         {
             if (fa.getBody().getUserData() == "Door"){
