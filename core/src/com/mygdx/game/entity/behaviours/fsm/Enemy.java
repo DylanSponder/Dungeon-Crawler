@@ -8,6 +8,7 @@ import com.badlogic.gdx.ai.steer.behaviors.*;
 import com.badlogic.gdx.ai.steer.limiters.LinearAccelerationLimiter;
 import com.badlogic.gdx.ai.steer.utils.rays.CentralRayWithWhiskersConfiguration;
 import com.badlogic.gdx.ai.steer.utils.rays.RayConfigurationBase;
+import com.badlogic.gdx.ai.steer.utils.rays.SingleRayConfiguration;
 import com.badlogic.gdx.ai.utils.RaycastCollisionDetector;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
@@ -22,6 +23,7 @@ import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.Box2DSteeringEntity;
 import com.mygdx.game.entity.EnemyBox2DRaycastCollisionDetector;
 import com.mygdx.game.HUD;
+import com.mygdx.game.entity.PlayerBox2DRaycastCollisionDetector;
 
 import static com.mygdx.game.DungeonCrawler.*;
 
@@ -125,11 +127,9 @@ public class Enemy {
         debug = true;
 
         wanderCenter = wanderSB.getWanderCenter();
-        //System.out.println("HELLO "+ wanderCenter);
 
-        BlendedSteering blendedSteering = blendSteering(wanderSB,1,4);
+        BlendedSteering blendedSteering = blendSteering(wanderSB,avoidObstacle(), 1,4);
         enemyAI.setBehaviour(blendedSteering);
-
 
         return wanderSB;
     }
@@ -138,11 +138,6 @@ public class Enemy {
          seekSB = new Seek<Vector2>(enemyAI, DungeonCrawler.player.playerB2D);
          return seekSB;
     }
-
-    public void die(float x, float y) {
-
-    }
-
 
     public RaycastObstacleAvoidance avoidObstacle(){
         RayConfigurationBase<Vector2>[] localRayConfigurations = new RayConfigurationBase[] {
@@ -157,7 +152,20 @@ public class Enemy {
         return raycastObstacleAvoidanceSB;
     }
 
-    public BlendedSteering blendSteering(SteeringBehavior behaviour, float weight1, float weight2) {
+    public RaycastObstacleAvoidance detectPlayer(){
+        RayConfigurationBase<Vector2>[] localRayConfigurations = new RayConfigurationBase[] {
+                new SingleRayConfiguration(enemyAI, 75f)};
+        rayConfigurations = localRayConfigurations;
+
+        RaycastCollisionDetector<Vector2> raycastCollisionDetector = new PlayerBox2DRaycastCollisionDetector(DungeonCrawler.world);
+        raycastObstacleAvoidanceSB = new RaycastObstacleAvoidance<Vector2>(enemyAI, rayConfigurations[0],
+                raycastCollisionDetector, 200);
+
+        return raycastObstacleAvoidanceSB;
+    }
+
+
+    public BlendedSteering blendSteering(SteeringBehavior behaviour, SteeringBehavior behaviour2, float weight1, float weight2) {
 
 
         BlendedSteering<Vector2> blendedSteeringSB = new BlendedSteering<Vector2>(enemyAI);

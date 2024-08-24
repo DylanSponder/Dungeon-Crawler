@@ -60,12 +60,12 @@ public class HUD {
     stage.addActor(table);
   }
 
-  public void winnerWinnerChickenDinner() {
+  public void winGame() {
     stage.clear();
     Table winTable = new Table();
     winTable.center();
     winTable.setFillParent(true);
-    winWords = new Label("YOU WIN BRODIE!!!!!!!!!!", new LabelStyle(new BitmapFont(), Color.YELLOW));
+    winWords = new Label("You win!", new LabelStyle(new BitmapFont(), Color.YELLOW));
     winTable.add(winWords);
     stage.addActor(winTable);
   }

@@ -55,7 +55,6 @@ public class Room {
     }
 
     public void unlockAllDoors(World world, Room room, boolean startingRoom) {
-        System.out.println("Unlocking doors...");
 
         if (startingRoom) {
             switch (room.directionTaken) {
@@ -145,7 +144,6 @@ public class Room {
     }
 
     public void lockAllDoors(World world, Room room, boolean visible) {
-        System.out.println("Locking all doors in room " + room.roomNum);
         for (Door d : room.doors) {
             d.doorHitbox.setSensor(false);
             if (visible) {
@@ -158,7 +156,6 @@ public class Room {
     }
 
     public void lockDoor(World world, Room room) {
-        System.out.println("Locking door in room " + room.roomNum);
         switch (room.directionTaken) {
             case 1:
                 Door bottomLeftDoor = room.doorArrayMap.get("BottomLeft");

@@ -27,7 +27,7 @@ public enum EnemyState implements State<Enemy> {
             float orientation = MathUtils.random(-MathUtils.PI, MathUtils.PI);
             enemy.enemyAI.setBehaviour(null);
             Wander wander = enemy.wander(enemy.enemyAI, orientation);
-            BlendedSteering blendedWanderSteering = enemy.blendSteering(wander, 2.5f, 2);
+            BlendedSteering blendedWanderSteering = enemy.blendSteering(wander, enemy.avoidObstacle(), 2.5f, 2);
             enemy.enemyAI.setBehaviour(blendedWanderSteering);
         }
 
