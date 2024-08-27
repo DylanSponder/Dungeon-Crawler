@@ -1,6 +1,5 @@
-package com.mygdx.game.entity.behaviours.fsm;
+package com.mygdx.game.entity;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -8,11 +7,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.Timer;
-import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
-import com.mygdx.game.entity.Arrow;
-
-import static com.mygdx.game.DungeonCrawler.enemySkulls;
 
 public class Skull {
 
@@ -21,7 +16,7 @@ public class Skull {
     public float skullX, skullY;
     public boolean skullCreated;
     public float SKULL_HEALTH;
-    public float iFrames = 1f;
+    public float iFrames = 0.8f;
     public boolean skullIFrame;
     private World world;
 
@@ -59,7 +54,7 @@ public class Skull {
         return this.skullBody;
     }
 
-    public static void  renderSkull(SpriteBatch batch, Sprite skullSprite, float x, float y) {
+    public static void renderSkull(SpriteBatch batch, Sprite skullSprite, float x, float y) {
 
         batch.draw(skullSprite, x - 8f, y - 7f, 176,64, 16, 16, 1,1 ,0);
 

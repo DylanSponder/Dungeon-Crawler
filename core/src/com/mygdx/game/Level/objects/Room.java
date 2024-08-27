@@ -1,10 +1,9 @@
-package com.mygdx.game.level;
+package com.mygdx.game.level.objects;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ArrayMap;
-import com.mygdx.game.entity.behaviours.fsm.Lock;
 
 import java.util.ArrayList;
 import java.util.HashMap;

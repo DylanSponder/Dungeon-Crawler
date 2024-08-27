@@ -3,12 +3,10 @@ package com.mygdx.game;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.entity.behaviours.fsm.Enemy;
 import com.mygdx.game.entity.behaviours.fsm.EnemyState;
-import com.mygdx.game.entity.behaviours.fsm.Skull;
-import com.mygdx.game.level.Door;
+import com.mygdx.game.entity.Skull;
+import com.mygdx.game.level.objects.Door;
 import com.mygdx.game.level.GenerateLevel;
-import com.mygdx.game.level.Room;
-
-import java.util.Iterator;
+import com.mygdx.game.level.objects.Room;
 
 import static com.mygdx.game.DungeonCrawler.*;
 
@@ -28,14 +26,18 @@ public class GameContactListener implements ContactListener {
                 || (fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Wall")
                 || (fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Door")
                 || (fa.getBody().getUserData() == "Door" && fb.getBody().getUserData() == "Arrow")
+                || (fa.getBody().getUserData() == "Pot" && fb.getBody().getUserData() == "Arrow")
+                || (fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Pot")
         ) {
             if (fa.getBody().getUserData() == "Enemy" && fa.getUserData() != "Proximity"
-                    || fa.getBody().getUserData() == "Wall") {
+                    || fa.getBody().getUserData() == "Wall"
+                    || fa.getBody().getUserData() == "Pot") {
                 if (!arrowBodiesCollided.contains(fb.getBody())) {
                     arrowBodiesCollided.add(fb.getBody());
                 }
             } else if (fb.getBody().getUserData() == "Enemy" && fb.getUserData() != "Proximity"
-                    || fb.getBody().getUserData() == "Wall") {
+                    || fb.getBody().getUserData() == "Wall"
+                    || fb.getBody().getUserData() == "Pot") {
                 if (!arrowBodiesCollided.contains(fa.getBody())) {
                     arrowBodiesCollided.add(fa.getBody());
                 }
@@ -92,7 +94,6 @@ public class GameContactListener implements ContactListener {
                         }
                     }
                 }
-
             }
             if (fb.getBody().getUserData() == "Door"
                     && (fa.getUserData() != "Proximity")) {
@@ -108,7 +109,7 @@ public class GameContactListener implements ContactListener {
             }
         }
 
-
+        //bone branch needs to be revisited - faulty logic is causing bones not to get destroyed
         if (((fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Enemy")
                 || (fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Player"))
                 || ((fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Bone")
@@ -123,7 +124,6 @@ public class GameContactListener implements ContactListener {
                     }
                 }
             } else {
-                //we want to destroy the bone when it hits a wall, or a player but
                 hud.healthBar.LoseHealth(0.5f);
                 if (fa.getBody().getUserData() == "Bone") {
                     player.playerBody.applyLinearImpulse(fa.getBody().getLinearVelocity().x * 100, fa.getBody().getLinearVelocity().y * 100, 0, 0, true);
@@ -132,8 +132,8 @@ public class GameContactListener implements ContactListener {
                     }
                 } else if (fb.getBody().getUserData() == "Bone") {
                     player.playerBody.applyLinearImpulse(fb.getBody().getLinearVelocity().x * 100, fb.getBody().getLinearVelocity().y * 100, 0, 0, true);
-                    if (!boneBodiesCollided.contains(fa.getBody())) {
-                        boneBodiesCollided.add(fa.getBody());
+                    if (!boneBodiesCollided.contains(fb.getBody())) {
+                        boneBodiesCollided.add(fb.getBody());
                     }
                 } else if (fa.getBody().getUserData() == "Enemy") {
                     player.playerBody.applyLinearImpulse(fa.getBody().getLinearVelocity().x * 50, fa.getBody().getLinearVelocity().y * 50, 0, 0, true);
@@ -143,25 +143,53 @@ public class GameContactListener implements ContactListener {
                     player.playerBody.applyLinearImpulse(fb.getBody().getLinearVelocity().x * 50, fb.getBody().getLinearVelocity().y * 50, 0, 0, true);
 
                     if (fa.getBody().getLinearVelocity().x < 10 && fa.getBody().getLinearVelocity().y < 10) {
-
                         fa.getBody().applyLinearImpulse(-fb.getBody().getLinearVelocity().x, -fb.getBody().getLinearVelocity().y + 150, 0, 0, true);
                     } else {
                         fa.getBody().applyLinearImpulse(-fb.getBody().getLinearVelocity().x + 150, -fb.getBody().getLinearVelocity().y + 150, 0, 0, true);
                     }
                 }
             }
-        } else if ((fa.getBody().getUserData() == "Bone" && fb.getUserData() != "Proximity" && fb.getBody().getUserData() != "Bone" && fb.getBody().getUserData() != "Sword" && !fb.getBody().getUserData().toString().startsWith("Arrow"))
+        }
+
+        if ((fa.getBody().getUserData() == "Bone" && fb.getUserData() != "Proximity" && fb.getBody().getUserData() != "Bone" && fb.getBody().getUserData() != "Sword" && !fb.getBody().getUserData().toString().startsWith("Arrow"))
                 || (fb.getBody().getUserData() == "Bone" && fa.getUserData() != "Proximity" && fa.getBody().getUserData() != "Bone" && fa.getBody().getUserData() != "Sword" && !fa.getBody().getUserData().toString().startsWith("Arrow"))
         ) {
-            if (((fa.getBody().getUserData() == "Enemy" && fa.getUserData() != "Proximity")
-                    || fa.getBody().getUserData() == "Wall") && fb.getBody().getUserData() == "Bone") {
-                if (!boneBodiesCollided.contains(fb.getBody())) {
-                    boneBodiesCollided.add(fb.getBody());
+            if ((((fa.getBody().getUserData() == "Enemy" && fa.getUserData() != "Proximity")
+                    || fa.getBody().getUserData() == "Wall")
+                    || fa.getBody().getUserData() == "Door")
+                    && fb.getBody().getUserData() == "Bone") {
+
+                if (fa.getBody().getUserData() == "Door"){
+                    for (Room r : GenerateLevel.init.roomList) {
+                        for (Door d : r.doors) {
+                            if (d.doorBody == fa.getBody()) {
+                                if (!d.open) {
+                                    if (!boneBodiesCollided.contains(fb.getBody())) {
+                                        boneBodiesCollided.add(fb.getBody());
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-            } else if (((fb.getBody().getUserData() == "Enemy" && fb.getUserData() != "Proximity")
-                    || fb.getBody().getUserData() == "Wall") && fa.getBody().getUserData() == "Bone") {
-                if (!boneBodiesCollided.contains(fa.getBody())) {
-                    boneBodiesCollided.add(fa.getBody());
+
+            } else if ((((fb.getBody().getUserData() == "Enemy" && fb.getUserData() != "Proximity")
+                        || fb.getBody().getUserData() == "Wall")
+                        || fb.getBody().getUserData() == "Door")
+                        && fa.getBody().getUserData() == "Bone") {
+
+                if (fb.getBody().getUserData() == "Door"){
+                    for (Room r : GenerateLevel.init.roomList) {
+                        for (Door d : r.doors) {
+                            if (d.doorBody == fb.getBody()) {
+                                if (!d.open) {
+                                    if (!boneBodiesCollided.contains(fa.getBody())) {
+                                        boneBodiesCollided.add(fa.getBody());
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -334,73 +362,7 @@ public class GameContactListener implements ContactListener {
                 }
             }
         }
-
-              /*
-            if (fa.getBody().getUserData() == "Skull") {
-                for (Skull s : enemySkulls) {
-                    if (s.skullBody == fa.getBody() && !s.skullIFrame) {
-                        if (s.SKULL_HEALTH > 0) {
-                            s.SKULL_HEALTH--;
-                            if (s.SKULL_HEALTH <= 0) {
-                                brokenSkullBodies.add(fa.getBody());
-                                break;
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-            else if (fb.getBody().getUserData() == "Skull") {
-                for (Skull s : enemySkulls) {
-                    if (s.skullBody == fb.getBody() && !s.skullIFrame) {
-                        if (s.SKULL_HEALTH > 0) {
-                            s.SKULL_HEALTH--;
-                            if (s.SKULL_HEALTH <= 0) {
-                                brokenSkullBodies.add(fb.getBody());
-                                break;
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-
-               */
-
     }
-
-                /*
-                Iterator<Skull> skullIt = enemySkulls.iterator();
-                while (skullIt.hasNext()) {
-                    Skull skull = skullIt.next();
-                if (skull.skullBody == fa.getBody() && skull.SKULL_HEALTH > 0){
-                    skull.SKULL_HEALTH--;
-                    break;
-                }
-                if (skull.SKULL_HEALTH <= 0) {
-                    if (!brokenSkullBodies.contains(fa.getBody())) {
-                        brokenSkullBodies.add(fa.getBody());
-                        break;
-                    }
-                }
-            }
-            } else
-                if (fb.getBody().getUserData() == "Skull") {
-                Iterator<Skull> skullIt = enemySkulls.iterator();
-                while (skullIt.hasNext()) {
-                    Skull skull = skullIt.next();
-                    if (skull.skullBody == fb.getBody() && skull.SKULL_HEALTH > 0){
-                        skull.SKULL_HEALTH--;
-                        break;
-                    }
-                    if (skull.SKULL_HEALTH <= 0) {
-                        if (!brokenSkullBodies.contains(fb.getBody())) {
-                            brokenSkullBodies.add(fb.getBody());
-                            break;
-                        }
-                    }
-                }
-                 */
 
     @Override
     public void endContact(Contact contact) {

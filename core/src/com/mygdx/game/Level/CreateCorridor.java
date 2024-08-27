@@ -10,18 +10,8 @@ public class CreateCorridor {
     private BodyFactory bf;
     private CreateCell cr;
     private InitLevel init;
-    //private TiledMapTileLayer layer;
 
     public void CreateCorridor (TiledMapTileLayer layer, World world, float doorX, float doorY, boolean upDown){
-        System.out.println("CREATE CORRIDOR");
-        System.out.println("DOOR X" + doorX);
-        System.out.println("DOOR Y" + doorY);
-
-        //init = new InitLevel();
-        //init.InitializeLevel();
-        //layer = init.layer;
-        //bf = init.bf;
-        //cr = init.cr;
         if (upDown) {
             for(int i=0;i<4;i++) {
                 int doorXasInt = (int) doorX;
@@ -35,16 +25,11 @@ public class CreateCorridor {
 
                 TiledMapTileLayer.Cell newLeftCorridorFloorCell;
                 newLeftCorridorFloorCell = GenerateLevel.init.cr.middleFloorTile;
-                //Body newLeftCorridorFloor = GenerateLevel.init.bf.createWall(world, doorX+1, doorY);
                 layer.setCell(doorXasInt+16, doorYAsInt-i, newLeftCorridorFloorCell);
-                //newLeftCorridorFloor.setUserData("CorridorFloor");
 
                 TiledMapTileLayer.Cell newRightCorridorFloorCell;
                 newRightCorridorFloorCell = GenerateLevel.init.cr.middleFloorTile;
-                //Body newRightCorridorFloor = GenerateLevel.init.bf.createWall(world, doorX+2, doorY);
                 layer.setCell(doorXasInt+17, doorYAsInt-i, newRightCorridorFloorCell);
-                //newRightCorridorFloor.setUserData("CorridorFloor");
-
 
                 TiledMapTileLayer.Cell newRightCorridorWallCell;
                 newRightCorridorWallCell = GenerateLevel.init.cr.rightWallTile;
@@ -70,18 +55,14 @@ public class CreateCorridor {
                     for (int iMiddle = 0; iMiddle<4; iMiddle++) {
                         TiledMapTileLayer.Cell newMiddleFloorCorridorCell;
                         newMiddleFloorCorridorCell = GenerateLevel.init.cr.middleFloorTile;
-                        //Body newMiddleFloorCorridor = GenerateLevel.init.bf.createWall(world, ((doorX + iMiddle) * 16) + 15*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16);
                         layer.setCell(doorXasInt+15+iMiddle, doorYAsInt-i+1, newMiddleFloorCorridorCell);
-                        //newMiddleFloorCorridor.setUserData("Wall");
                     }
                 }
                 if (i == 3){
                     for (int iMiddle = 0; iMiddle<4; iMiddle++) {
                         TiledMapTileLayer.Cell newMiddleFloorCorridorCell;
                         newMiddleFloorCorridorCell = GenerateLevel.init.cr.middleFloorTile;
-                        //Body newMiddleFloorCorridor = GenerateLevel.init.bf.createWall(world, ((doorX + iMiddle) * 16) + 15*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16);
                         layer.setCell(doorXasInt+15+iMiddle, doorYAsInt-i+1, newMiddleFloorCorridorCell);
-                        //newMiddleFloorCorridor.setUserData("Wall");
                     }
                 }
                 if (i == 4){

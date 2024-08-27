@@ -1,4 +1,4 @@
-package com.mygdx.game.entity;
+package com.mygdx.game.entity.utils;
 
 import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.ai.steer.SteeringAcceleration;

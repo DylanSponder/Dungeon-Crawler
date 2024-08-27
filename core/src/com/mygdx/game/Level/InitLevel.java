@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.mygdx.game.CreateTexture;
 import com.mygdx.game.box2D.BodyFactory;
+import com.mygdx.game.level.objects.Room;
 
 import java.util.ArrayList;
 import java.util.List;

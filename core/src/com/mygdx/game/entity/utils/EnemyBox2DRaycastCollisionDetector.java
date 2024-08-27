@@ -1,4 +1,4 @@
-package com.mygdx.game.entity;
+package com.mygdx.game.entity.utils;
 
 import com.badlogic.gdx.ai.utils.Collision;
 import com.badlogic.gdx.ai.utils.Ray;
@@ -10,17 +10,17 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class PlayerBox2DRaycastCollisionDetector implements RaycastCollisionDetector<Vector2> {
+public class EnemyBox2DRaycastCollisionDetector implements RaycastCollisionDetector<Vector2> {
 
     World world;
     Box2dRaycastCallback callback;
 
-    public PlayerBox2DRaycastCollisionDetector(World world) {
+    public EnemyBox2DRaycastCollisionDetector(World world) {
 
         this(world, new Box2dRaycastCallback());
     }
 
-    public PlayerBox2DRaycastCollisionDetector(World world, Box2dRaycastCallback callback) {
+    public EnemyBox2DRaycastCollisionDetector(World world, Box2dRaycastCallback callback) {
         this.world = world;
         this.callback = callback;
     }

@@ -3,7 +3,7 @@ package com.mygdx.game.entity.behaviours.fsm;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.box2D.BodyFactory;
-import com.mygdx.game.entity.Box2DSteeringEntity;
+import com.mygdx.game.entity.utils.Box2DSteeringEntity;
 
 public class Player {
     public int PLAYER_HEALTH = 12;

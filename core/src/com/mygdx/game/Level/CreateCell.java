@@ -98,12 +98,5 @@ public class CreateCell {
         doorBottomLeftOpen = new TiledMapTileLayer.Cell();
         doorBottomRightOpen = new TiledMapTileLayer.Cell();
 
-        /*
-        lockUp = new TiledMapTileLayer.Cell();
-        lockDown = new TiledMapTileLayer.Cell();
-        lockLeft = new TiledMapTileLayer.Cell();
-        lockRight = new TiledMapTileLayer.Cell();
-         */
-
     }
 }

@@ -1,4 +1,4 @@
-package com.mygdx.game.entity.behaviours.fsm;
+package com.mygdx.game.entity;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

@@ -1,4 +1,4 @@
-package com.mygdx.game.level;
+package com.mygdx.game.level.objects;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -15,7 +15,6 @@ public class Door {
     public Body doorBody;
     public Fixture doorHitbox;
     public boolean open, locked;
-    public String textureName;
 
     public Door(World world, String doorName, String doorLocation, float x, float y) {
      this.world = world;

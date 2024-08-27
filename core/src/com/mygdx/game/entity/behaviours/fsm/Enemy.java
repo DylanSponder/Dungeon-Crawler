@@ -20,10 +20,11 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
-import com.mygdx.game.entity.Box2DSteeringEntity;
-import com.mygdx.game.entity.EnemyBox2DRaycastCollisionDetector;
+import com.mygdx.game.entity.Skull;
+import com.mygdx.game.entity.utils.Box2DSteeringEntity;
+import com.mygdx.game.entity.utils.EnemyBox2DRaycastCollisionDetector;
 import com.mygdx.game.HUD;
-import com.mygdx.game.entity.PlayerBox2DRaycastCollisionDetector;
+import com.mygdx.game.entity.utils.PlayerBox2DRaycastCollisionDetector;
 
 import static com.mygdx.game.DungeonCrawler.*;
 

@@ -23,17 +23,21 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.Arrow;
+import com.mygdx.game.entity.Bone;
+import com.mygdx.game.entity.Skull;
+import com.mygdx.game.entity.Tutorial;
 import com.mygdx.game.entity.behaviours.fsm.*;
-import com.mygdx.game.entity.Shopkeeper;
-import com.mygdx.game.level.Door;
+import com.mygdx.game.level.objects.Door;
 import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.InitLevel;
-import com.mygdx.game.level.Room;
+import com.mygdx.game.level.objects.Lock;
+import com.mygdx.game.level.objects.Pot;
+import com.mygdx.game.level.objects.Room;
 
 public class DungeonCrawler extends ApplicationAdapter {
-	private SpriteBatch playerBatch, arrowBatch, enemyBatch, hudBatch, tutoBatch, skullBatch, boneBatch, lockBatch, doorBatch;
+	private SpriteBatch playerBatch, arrowBatch, enemyBatch, potBatch, hudBatch, tutoBatch, skullBatch, boneBatch, lockBatch, doorBatch;
 	public static World world;
-	public static boolean debug = true;
+	public static boolean debug = false;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -41,25 +45,20 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private Body sword, arrowBody;
 	private Arrow arrow;
 	public ArrayList<Arrow> arrows;
-	public static ArrayList<Body> arrowBodiesCollided, boneBodiesCollided, skullBodiesDestroyed;
+	public static ArrayList<Body> arrowBodiesCollided, boneBodiesCollided, skullBodiesDestroyed, deadEnemyBodies;
 	public ArrayMap<Body, Arrow> arrowArrayMap;
 	public ArrayMap<Body, Skull> skullArrayMap;
 	public ArrayMap<Body, Bone> boneArrayMap;
-	public ArrayMap<String, Lock> lockMap;
-	public Body arrayMapSkullBody;
 	public boolean reversedArrowMap, reversedSkullMap;
-	private Fixture swordHitbox, enemyHitbox, arrowHitbox;
+	private Fixture swordHitbox, arrowHitbox;
 	public static ArrayList<Enemy> enemies;
-	public static ArrayList<Body> deadEnemyBodies;
-	public static ArrayList<Skull> enemySkulls;
-	public static ArrayList<Skull> brokenSkulls;
+	public static ArrayList<Skull> enemySkulls, brokenSkulls;
 	public static ArrayList<Bone> bones;
 	public static ArrayList<Shopkeeper> shopkeepers;
 	public static ArrayList<Lock> locks;
 	public static ArrayList<Tutorial> tutorial;
-	public float PLAYER_HORIZONTAL_SPEED = 0f, PLAYER_VERTICAL_SPEED = 0f;
-	public float PLAYER_X = 0f, PLAYER_Y = 0f;
-	private TiledMapTileLayer layer;
+	public static ArrayList<Pot> pots;
+	public float PLAYER_HORIZONTAL_SPEED = 0f, PLAYER_VERTICAL_SPEED = 0f, PLAYER_X = 0f, PLAYER_Y = 0f;
 	private TiledMapRenderer renderer;
 	public static OrthographicCamera camera;
 	public static final float DEFAULT_VIEWPORT_WIDTH = 300f;
@@ -77,6 +76,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		boneBatch = new SpriteBatch();
 		doorBatch = new SpriteBatch();
 		lockBatch = new SpriteBatch();
+		potBatch = new SpriteBatch();
 		reversedArrowMap = false;
 		reversedSkullMap = false;
 		player = new Player();
@@ -88,6 +88,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		shopkeepers = new ArrayList<>();
 		tutorial = new ArrayList<>();
 		locks = new ArrayList<>();
+		pots = new ArrayList<>();
 
 		final BodyFactory bf = new BodyFactory();
 		final CreateTexture tx = CreateTexture.getInstance();
@@ -355,6 +356,36 @@ public class DungeonCrawler extends ApplicationAdapter {
 			tutoBatch.end();
 		}
 
+
+
+		double radians = Math.PI/180;
+		String stringR = String.valueOf(radians);
+		float radiansF = Float.parseFloat(stringR);
+
+	//	if (!enemySkulls.isEmpty()) {
+
+	//	}
+
+		for (Room r : GenerateLevel.init.roomList) {
+			for (Door d : r.doors) {
+				//render open doors here
+				if (d.open) {
+					doorBatch.begin();
+					d.renderOpen(doorBatch, r.directionTaken, d.doorX, d.doorY);
+					doorBatch.end();
+				}
+			}
+
+			//render door locks when a player enters a new room with enemies
+			for (Lock l : r.locks) {
+				if (l.visible) {
+					lockBatch.begin();
+					Lock.renderLock(lockBatch, l.direction, l.lockBody.getPosition().x, l.lockBody.getPosition().y);
+					lockBatch.end();
+				}
+			}
+		}
+
 		//adds all skulls that have been created to the array map for manipulation
 		for (Skull s : enemySkulls) {
 			if (!s.skullCreated) {
@@ -434,32 +465,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 		}
 
-		double radians = Math.PI/180;
-		String stringR = String.valueOf(radians);
-		float radiansF = Float.parseFloat(stringR);
-
-	//	if (!enemySkulls.isEmpty()) {
-
-	//	}
-
-		for (Room r : GenerateLevel.init.roomList) {
-			//render door locks when a player enters a new room with enemies
-			for (Lock l : r.locks) {
-				if (l.visible) {
-					lockBatch.begin();
-					Lock.renderLock(lockBatch, l.direction, l.lockBody.getPosition().x, l.lockBody.getPosition().y);
-					lockBatch.end();
-				}
-			}
-
-			for (Door d : r.doors) {
-				//render open doors here
-				if (d.open) {
-					doorBatch.begin();
-					d.renderOpen(doorBatch, r.directionTaken, d.doorX, d.doorY);
-					doorBatch.end();
-				}
-			}
+		for (Pot p : pots) {
+			potBatch.begin();
+			potBatch.draw(tx.amphoraSprite, p.potBody.getPosition().x-8f, p.potBody.getPosition().y-8f, 16, 16);
+			//Pot.renderPot(potBatch, p.potBody.getPosition().x - 8f, p.potBody.getPosition().y - 8f);
+			potBatch.end();
 		}
 
 		playerBatch.begin();
@@ -580,6 +590,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		enemyBatch.setProjectionMatrix(camera.combined);
 		lockBatch.setProjectionMatrix(camera.combined);
 		doorBatch.setProjectionMatrix(camera.combined);
+		potBatch.setProjectionMatrix(camera.combined);
 		hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
 		hud.stage.draw();
 	}
@@ -604,33 +615,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 			e.update(GdxAI.getTimepiece().getTime());
 		}
 
-		/*
-		if (Gdx.input.isKeyPressed(Keys.ANY_KEY) && (!Gdx.input.getInputProcessor().keyUp(-1))) {
-			input = true;
-		}
-		else {
-			input = false;
-		}
-
-			if (input && ((!playerMeleeAttacking) && (!playerRangedAttacking))) {
-		if (	   Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP)
-				|| Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT)
-				|| Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DOWN)
-				|| Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT))  {
-					inputUpdate();
-					moving = true;
-				}
-				else {
-					moving = false;
-				}
-
-			}
-		 */
-
 		if (!playerPaused) {
 			inputUpdate();
 		}
-		//input = true;
 	}
 
 	@Override
@@ -642,6 +629,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		boneBatch.dispose();
 		lockBatch.dispose();
 		doorBatch.dispose();
+		potBatch.dispose();
 		world.dispose();
 		b2dr.dispose();
 	}
@@ -655,21 +643,31 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//move playerSprite Sprite by delta speed according to button WASD press
 		if (Gdx.input.isKeyPressed(Keys.W)||Gdx.input.isKeyPressed(Keys.UP)) {
 			tx.playerSprite = tx.playerUp;
-			PLAYER_VERTICAL_SPEED = 80f;
+			PLAYER_VERTICAL_SPEED = 1f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.A)||Gdx.input.isKeyPressed(Keys.LEFT)) {
 			tx.playerSprite = tx.playerLeft;
-			PLAYER_HORIZONTAL_SPEED = -80f;
+			PLAYER_HORIZONTAL_SPEED = -1f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.S)||Gdx.input.isKeyPressed(Keys.DOWN)) {
 			tx.playerSprite = tx.playerDown;
-			PLAYER_VERTICAL_SPEED = -80f;
+			PLAYER_VERTICAL_SPEED = -1f;
 		}
 		if (Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.RIGHT)) {
 			tx.playerSprite = tx.playerRight;
-			PLAYER_HORIZONTAL_SPEED = 80f;
+			PLAYER_HORIZONTAL_SPEED = 1f;
 		}
+
+		//create a movement vector and normalize it for diagonal movement
+		Vector2 vec = new Vector2(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
+		vec.nor();
+
+		//multiply to get desired speed
+		PLAYER_HORIZONTAL_SPEED = vec.x * 80f;
+		PLAYER_VERTICAL_SPEED = vec.y * 80f;
+
 		player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
+
 
     // Use potion 
     if (Gdx.input.isKeyPressed(Keys.NUM_1)) {
@@ -695,84 +693,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 	if (Gdx.input.isKeyPressed(Keys.NUM_3)) {
 		camera.zoom = 10f;
-	}
-
-
-
-			/*
-		float inputDelay = 0.2f;
-		if (moving && (!playerRangedAttacking || !playerMeleeAttacking)
-		&&(Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP)
-		|| Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT)
-		|| Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DOWN)
-		|| Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT))) {
-
-			//move playerSprite Sprite by delta speed according to button WASD press
-			if (Gdx.input.isKeyPressed(Keys.W)||Gdx.input.isKeyPressed(Keys.UP)) {
-				tx.playerSprite = tx.playerUp;
-			}
-			if (Gdx.input.isKeyPressed(Keys.A)||Gdx.input.isKeyPressed(Keys.LEFT)) {
-				tx.playerSprite = tx.playerLeft;
-			}
-			if (Gdx.input.isKeyPressed(Keys.S)||Gdx.input.isKeyPressed(Keys.DOWN)) {
-				tx.playerSprite = tx.playerDown;
-			}
-			if (Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.RIGHT)) {
-				tx.playerSprite = tx.playerRight;
-			}
-
-				Timer.schedule(new Timer.Task() {
-					@Override
-					public void run() {
-						playerPaused = true;
-						PLAYER_HORIZONTAL_SPEED = 0;
-						PLAYER_VERTICAL_SPEED = 0;
-					}
-				}, inputDelay);
-
-				playerPaused = false;
-
-			//playerPaused = false;
-
-			player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
-
-			//move playerSprite Sprite by delta speed according to button WASD press
-			if (Gdx.input.isKeyPressed(Keys.W)||Gdx.input.isKeyPressed(Keys.UP)
-			&& Gdx.input.isKeyPressed(Keys.ANY_KEY) && moving) {
-				PLAYER_VERTICAL_SPEED = 80f;
-			}
-			if (Gdx.input.isKeyPressed(Keys.A)||Gdx.input.isKeyPressed(Keys.LEFT)
-					&& Gdx.input.isKeyPressed(Keys.ANY_KEY) && moving) {
-				PLAYER_HORIZONTAL_SPEED = -80f;
-			}
-			if (Gdx.input.isKeyPressed(Keys.S)||Gdx.input.isKeyPressed(Keys.DOWN)
-					&& Gdx.input.isKeyPressed(Keys.ANY_KEY) && moving) {
-				PLAYER_VERTICAL_SPEED = -80f;
-			}
-			if (Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.RIGHT)
-					&& Gdx.input.isKeyPressed(Keys.ANY_KEY) && moving) {
-				PLAYER_HORIZONTAL_SPEED = 80f;
-			}
-
 		}
-		else if (playerRangedAttacking || playerMeleeAttacking) {
-			PLAYER_HORIZONTAL_SPEED = 0;
-			PLAYER_VERTICAL_SPEED = 0;
-		}
-
-		player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
-
-		 */
-
-	/* causes ConcurrentModificationException do not use
-    if (Gdx.input.isKeyPressed(Keys.NUM_8)) {
-		for (Enemy e : enemies) {
-			if (!deadEnemyBodies.contains(e.enemyBody)) {
-				deadEnemyBodies.add(e.enemyBody);
-			}
-			enemies.clear();
-			}
-		}
-	 */
 	}
 }

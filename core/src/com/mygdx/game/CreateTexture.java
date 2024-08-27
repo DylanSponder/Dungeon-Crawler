@@ -39,6 +39,10 @@ public class CreateTexture {
     public TextureRegion obstacle1Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion obstacle2Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion obstacle3Texture = new TextureRegion(roomBackground, 0,0,16,16);
+
+    public TextureRegion amphoraTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion damagedAmphoraTexture = new TextureRegion(roomBackground, 0,0,16,16);
+
     public TextureRegion skullTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion boneTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion tutoTexture = new TextureRegion(tutorialTexture, 0,0,87,57);
@@ -104,14 +108,11 @@ public class CreateTexture {
     Sprite skullSprite = new Sprite(skullTexture, 176,64, 16, 16);
     Sprite damagedSkullSprite = new Sprite(skullTexture, 192,48, 16, 16);
     Sprite boneSprite = new Sprite(boneTexture, 192,64, 16, 16);
-    Sprite tutorialSprite = new Sprite(tutorialTexture, 0,0, 96, 64);
 
-    /*
-    Sprite lockUpSprite = new Sprite(lockUpTexture, 160, 64, 16, 16);
-    Sprite lockDownSprite = new Sprite(lockUpTexture, 192, 32, 16, 16);
-    Sprite lockLeftSprite = new Sprite(lockUpTexture, 192, 16, 16, 16);
-    Sprite lockRightSprite = new Sprite(lockUpTexture, 192, 0, 16, 16);
-    */
+    Sprite amphoraSprite = new Sprite(amphoraTexture, 208,0, 16, 16);
+    Sprite damagedAmphoraSprite = new Sprite(damagedAmphoraTexture, 224,0, 16, 16);
+
+    Sprite tutorialSprite = new Sprite(tutorialTexture, 0,0, 96, 64);
 
     private static CreateTexture instance = null;
     public static CreateTexture getInstance(){

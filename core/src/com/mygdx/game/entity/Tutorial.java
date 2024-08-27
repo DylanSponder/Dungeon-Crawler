@@ -1,4 +1,4 @@
-package com.mygdx.game.entity.behaviours.fsm;
+package com.mygdx.game.entity;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
