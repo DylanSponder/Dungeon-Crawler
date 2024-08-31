@@ -13,6 +13,7 @@ public class Player {
 
     public Body playerBody;
     public int currentRoom;
+    public boolean touchingRoom;
 
     public Player() {
         PLAYER_HEALTH = 12;

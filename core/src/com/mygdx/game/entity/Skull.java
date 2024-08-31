@@ -16,7 +16,7 @@ public class Skull {
     public float skullX, skullY;
     public boolean skullCreated;
     public float SKULL_HEALTH;
-    public float iFrames = 0.8f;
+    public float iFrames = 0.7f;
     public boolean skullIFrame;
     private World world;
 

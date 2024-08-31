@@ -1,10 +1,14 @@
 package com.mygdx.game;
 import java.util.*;
 
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.ai.utils.Ray;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -28,11 +32,11 @@ import com.mygdx.game.entity.Skull;
 import com.mygdx.game.entity.Tutorial;
 import com.mygdx.game.entity.behaviours.fsm.*;
 import com.mygdx.game.level.objects.Door;
-import com.mygdx.game.level.GenerateLevel;
-import com.mygdx.game.level.InitLevel;
 import com.mygdx.game.level.objects.Lock;
 import com.mygdx.game.level.objects.Pot;
 import com.mygdx.game.level.objects.Room;
+import com.mygdx.game.level.GenerateLevel;
+import com.mygdx.game.level.InitLevel;
 
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch playerBatch, arrowBatch, enemyBatch, potBatch, hudBatch, tutoBatch, skullBatch, boneBatch, lockBatch, doorBatch;
@@ -63,6 +67,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static OrthographicCamera camera;
 	public static final float DEFAULT_VIEWPORT_WIDTH = 300f;
 	public static HUD hud;
+	public static Music roomClear, swordSlash;
+	public RayHandler rayHandler;
+	private PointLight playerTorch;
 
 	@Override
 	public void create() {
@@ -90,10 +97,17 @@ public class DungeonCrawler extends ApplicationAdapter {
 		locks = new ArrayList<>();
 		pots = new ArrayList<>();
 
+
+
+		roomClear = Gdx.audio.newMusic(Gdx.files.internal("NinjaAdventure/Sounds/Menu/Accept.wav"));
+		//swordSlash = Gdx.audio.newMusic(Gdx.files.internal("Sounds/slash.mp3"));
+
 		final BodyFactory bf = new BodyFactory();
 		final CreateTexture tx = CreateTexture.getInstance();
 		GameContactListener lc = new GameContactListener();
 		tx.textureRegionBuilder();
+		final CreateSound cs = new CreateSound();
+		cs.createSound();
 
 		//get width and height of the game window
 		int h = Gdx.graphics.getHeight();
@@ -128,10 +142,22 @@ public class DungeonCrawler extends ApplicationAdapter {
 		PLAYER_Y = (float) list.get(2);
 		player.createPlayer(world, PLAYER_X, PLAYER_Y);
 
+
+
 		//add current layers to the TileMap and assign it a renderer
 		layers.add(layer);
+
 		renderer = new OrthogonalTiledMapRenderer(map);
 		b2dr = new Box2DDebugRenderer();
+
+		rayHandler = new RayHandler(world);
+		rayHandler.setAmbientLight(0f, 0f, 0f, 0.01f);
+
+		playerTorch = new PointLight(rayHandler, 1000, new Color(0.3f,0.25f,0,0.75f), 100, PLAYER_X, PLAYER_Y);
+		playerTorch.attachToBody(player.playerBody);
+		playerTorch.setSoftnessLength(75);
+		//playerTorch.isSoft();
+		//playerTorch.setXray(true);
 
 		arrowBodiesCollided = new ArrayList<Body>();
 		boneBodiesCollided = new ArrayList<Body>();
@@ -214,6 +240,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 					PLAYER_HORIZONTAL_SPEED = 0;
 					PLAYER_VERTICAL_SPEED = 0;
 					player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
+					//CreateSound.slash.play();
+					roomClear.play();
+					//swordSlash.setLooping(true);
+					//swordSlash.play();
+					//swordSlash.setVolume(1f);
+					//swordSlash.dispose();
 
 					Timer.schedule(new Timer.Task() {
 						@Override
@@ -321,6 +353,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 	@Override
 	public void render() {
+
     // kill game when player health is 0
     if (hud.healthBar.currentHealth == 0) {
       Gdx.app.exit();
@@ -338,9 +371,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//update game physics, camera and held down inputs
 		update(Gdx.graphics.getDeltaTime());
 
+		rayHandler.render();
+
 		//clear graphics
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		//rayHandler.render();
 
 		//set the view of the map to the camera and then render the map
 		renderer.setView(camera);
@@ -581,7 +618,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		camera.update();
 		hud.update();
-
+		rayHandler.render();
+		rayHandler.setCombinedMatrix(camera);
 		playerBatch.setProjectionMatrix(camera.combined);
 		arrowBatch.setProjectionMatrix(camera.combined);
 		skullBatch.setProjectionMatrix(camera.combined);
@@ -609,6 +647,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 	//update method for physics, camera and held down inputs
 	public void update(float delta) {
 		world.step(1 / 60f, 6, 2);
+		//rayHandler.setCombinedMatrix(camera.combined);
+		rayHandler.update();
+		rayHandler.setCombinedMatrix(camera);
+
+
 
 		for (Enemy e : enemies){
 			e.enemyAI.update(GdxAI.getTimepiece().getTime());
@@ -630,6 +673,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		lockBatch.dispose();
 		doorBatch.dispose();
 		potBatch.dispose();
+		rayHandler.dispose();
 		world.dispose();
 		b2dr.dispose();
 	}
@@ -668,24 +712,17 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
 
+if (debug) {
 
-    // Use potion 
-    if (Gdx.input.isKeyPressed(Keys.NUM_1)) {
-      if (hud.inventory.Size > 0) {
-        hud.inventory.usePotion(1);
-        hud.healthBar.GainHealth(3);
-      }
-    }
- 
-    // (For Debugging) Add potion
-    if (Gdx.input.isKeyPressed(Keys.NUM_9)) {
-      hud.inventory.addPotion();
-    }
+	// (For Debugging) Add potion
+	if (Gdx.input.isKeyPressed(Keys.NUM_9)) {
+		hud.inventory.addPotion();
+	}
 
-    // (For Debugging) Damage player
-    if (Gdx.input.isKeyPressed(Keys.NUM_0)) {
-      hud.healthBar.LoseHealth(0.5f);
-    }
+	// (For Debugging) Damage player
+	if (Gdx.input.isKeyPressed(Keys.NUM_0)) {
+		hud.healthBar.LoseHealth(0.5f);
+	}
 
 	if (Gdx.input.isKeyPressed(Keys.NUM_2)) {
 		camera.zoom = 1f;
@@ -693,6 +730,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 	if (Gdx.input.isKeyPressed(Keys.NUM_3)) {
 		camera.zoom = 10f;
+	}
+}
+    // Use potion 
+    if (Gdx.input.isKeyPressed(Keys.NUM_1)) {
+		if (hud.inventory.Size > 0) {
+			hud.inventory.usePotion(1);
+			hud.healthBar.GainHealth(3);
+			}
 		}
 	}
 }

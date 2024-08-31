@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.entity.behaviours.fsm.Enemy;
 import com.mygdx.game.entity.behaviours.fsm.EnemyState;
@@ -7,6 +8,7 @@ import com.mygdx.game.entity.Skull;
 import com.mygdx.game.level.objects.Door;
 import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.objects.Room;
+import com.mygdx.game.CreateSound;
 
 import static com.mygdx.game.DungeonCrawler.*;
 
@@ -109,7 +111,7 @@ public class GameContactListener implements ContactListener {
             }
         }
 
-        //bone branch needs to be revisited - faulty logic is causing bones not to get destroyed
+        //bone branch needs to be revisited - faulty logic is causing bones not to get destroyed somewhere here
         if (((fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Enemy")
                 || (fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Player"))
                 || ((fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Bone")
@@ -196,16 +198,10 @@ public class GameContactListener implements ContactListener {
 
         if (fa.getBody().getUserData().toString().startsWith("Room")) {
             // && (fb.getUserData() != "Wall" || fb.getUserData() !="Enemy" || fb.getUserData() != "Player"))
+            String[] roomIndexAsString = fa.getBody().getUserData().toString().split("-");
+            player.currentRoom = Integer.parseInt(roomIndexAsString[1]);
             if (fb.getBody().getUserData() == "Player") {
-                String[] roomIndexAsString = fa.getBody().getUserData().toString().split("-");
-                int roomIndex = Integer.parseInt(roomIndexAsString[1]);
-                player.currentRoom = roomIndex;
-                if (player.currentRoom != 0) {
-                    //player must be touching a room but not a door
-                    if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter != 0) {
-                        GenerateLevel.init.roomList.get(player.currentRoom).lockAllDoors(world, GenerateLevel.init.roomList.get(player.currentRoom), true);
-                    }
-                }
+                player.touchingRoom = true;
             }
         }
 
@@ -276,7 +272,8 @@ public class GameContactListener implements ContactListener {
                             GenerateLevel.init.roomList.get(e.room).enemyCounter--;
                             if (GenerateLevel.init.roomList.get(e.room).enemyCounter < 1) {
                                 GenerateLevel.init.roomList.get(player.currentRoom).unlockAllDoors(world, GenerateLevel.init.roomList.get(player.currentRoom), false);
-                                //GenerateLevel.init.roomList.get(player.currentRoom+1).unlockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom+1), false);
+                                DungeonCrawler.roomClear.play();
+                                DungeonCrawler.roomClear.dispose();
                             }
 
                             break;
@@ -324,7 +321,6 @@ public class GameContactListener implements ContactListener {
 
                         if (e.ENEMY_HEALTH < 1) {
                             if (!deadEnemyBodies.contains(fb.getBody())) {
-                                //arrowBodiesCollided.add(fa.getBody());
                                 deadEnemyBodies.add(fb.getBody());
                             }
                             enemySkulls.add(new Skull(world, fb.getBody().getPosition().x, fb.getBody().getPosition().y));
@@ -333,9 +329,8 @@ public class GameContactListener implements ContactListener {
                             GenerateLevel.init.roomList.get(e.room).enemyCounter--;
                             if (GenerateLevel.init.roomList.get(e.room).enemyCounter < 1) {
                                 GenerateLevel.init.roomList.get(player.currentRoom).unlockAllDoors(world, GenerateLevel.init.roomList.get(player.currentRoom), false);
-                                //we want to lock doors behind the player - but disabling for now for testing
-                                //GenerateLevel.init.roomList.get(player.currentRoom-1).lockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom-1));
-                                System.out.println("All enemies in this room are dead!");
+                                DungeonCrawler.roomClear.play();
+                                DungeonCrawler.roomClear.dispose();
                             }
                             break;
                         }
@@ -383,20 +378,15 @@ public class GameContactListener implements ContactListener {
         }
 
         if (fa.getBody().getUserData().toString().startsWith("Room")) {
-            // && (fb.getUserData() != "Wall" || fb.getUserData() !="Enemy" || fb.getUserData() != "Player"))
             if (fb.getBody().getUserData() == "Player") {
-                String[] roomIndexAsString =  fa.getBody().getUserData().toString().split("-");
-                int roomIndex = Integer.parseInt(roomIndexAsString[1]);
-                //player.currentRoom = roomIndex;
+                player.touchingRoom = false;
                 if (player.currentRoom <= 9){
-                    //player must be touching a room but not a door
-                //    if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter != 0){
-                        //GenerateLevel.init.roomList.get(player.currentRoom).lockDoors(world, GenerateLevel.init.roomList.get(player.currentRoom));
                         GenerateLevel.init.roomList.get(player.currentRoom).unlockDoor(world, GenerateLevel.init.roomList.get(player.currentRoom+1),false);
-                //    }
                 }
             }
         }
+
+
 
         if ((fa.getBody().getUserData() == "Door" && fb.getBody().getUserData() == "Player")
             ||(fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Door")
@@ -420,6 +410,18 @@ public class GameContactListener implements ContactListener {
                         if (d.doorBody == fa.getBody()) {
                             d.open = false;
                         }
+                    }
+                }
+            }
+        }
+
+        if (fa.getBody().getUserData() == "Door" && fb.getBody().getUserData() == "Player"
+                || (fa.getBody().getUserData() == "Door" && fb.getBody().getUserData() == "Door")) {
+            //player must be touching a room but not a door
+            if (fb.getBody().getUserData() == "Player" && player.touchingRoom) {
+                if (player.currentRoom != 0) {
+                    if (GenerateLevel.init.roomList.get(player.currentRoom).enemyCounter != 0) {
+                        GenerateLevel.init.roomList.get(player.currentRoom).lockAllDoors(world, GenerateLevel.init.roomList.get(player.currentRoom), true);
                     }
                 }
             }
