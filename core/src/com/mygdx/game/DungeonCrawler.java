@@ -97,8 +97,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 		locks = new ArrayList<>();
 		pots = new ArrayList<>();
 
-
-
 		roomClear = Gdx.audio.newMusic(Gdx.files.internal("NinjaAdventure/Sounds/Menu/Accept.wav"));
 		//swordSlash = Gdx.audio.newMusic(Gdx.files.internal("Sounds/slash.mp3"));
 
@@ -135,14 +133,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//level.initLevel();
 		List list = level.generateLevel(0, 0);
 
-		//List list = level.generateRoom(world, );
-
 		layer = (TiledMapTileLayer) list.get(0);
 		PLAYER_X = (float) list.get(1);
 		PLAYER_Y = (float) list.get(2);
 		player.createPlayer(world, PLAYER_X, PLAYER_Y);
-
-
 
 		//add current layers to the TileMap and assign it a renderer
 		layers.add(layer);
@@ -150,12 +144,17 @@ public class DungeonCrawler extends ApplicationAdapter {
 		renderer = new OrthogonalTiledMapRenderer(map);
 		b2dr = new Box2DDebugRenderer();
 
+		//create the Box2D ray handler
 		rayHandler = new RayHandler(world);
-		rayHandler.setAmbientLight(0f, 0f, 0f, 0.01f);
+		rayHandler.setAmbientLight(0f, 0f, 0f, 0.001f);
+		if(debug) {
+			rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
+		}
 
-		playerTorch = new PointLight(rayHandler, 1000, new Color(0.3f,0.25f,0,0.75f), 100, PLAYER_X, PLAYER_Y);
+		//create a point light and attach it to the player
+		playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f,0.20f,0,0.75f), 100, PLAYER_X, PLAYER_Y);
 		playerTorch.attachToBody(player.playerBody);
-		playerTorch.setSoftnessLength(75);
+		playerTorch.setSoftnessLength(65);
 		//playerTorch.isSoft();
 		//playerTorch.setXray(true);
 

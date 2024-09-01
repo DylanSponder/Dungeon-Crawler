@@ -13,15 +13,18 @@ import com.mygdx.game.box2D.BodyFactory;
         public Body potBody;
         public Fixture potHitbox;
         public boolean damaged;
+        public float POT_HEALTH;
 
         public Pot(World world, float x, float y) {
             this.world = world;
             this.potX = x;
             this.potY = y;
             this.damaged = false;
+            this.POT_HEALTH = 2;
         }
 
         public void createPot() {
+            //creates and activates the pots hitbox for collisions
             BodyFactory bodyFactory = new BodyFactory();
 
             this.potBody = bodyFactory.createPot(world, potX, potY);
