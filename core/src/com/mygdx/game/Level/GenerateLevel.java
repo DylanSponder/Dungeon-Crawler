@@ -1209,7 +1209,6 @@ public class GenerateLevel {
                         case "pot":
                             currentCell = init.cr.middleFloorTile;
                             Pot p = new Pot(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
-                            p.createPot();
                             pots.add(p);
                             break;
                             //entities
