@@ -41,7 +41,7 @@ import com.mygdx.game.level.InitLevel;
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch playerBatch, arrowBatch, enemyBatch, potBatch, hudBatch, tutoBatch, skullBatch, boneBatch, lockBatch, doorBatch;
 	public static World world;
-	public static boolean debug = false;
+	public static boolean debug = true;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -53,7 +53,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public ArrayMap<Body, Arrow> arrowArrayMap;
 	public ArrayMap<Body, Skull> skullArrayMap;
 	public ArrayMap<Body, Bone> boneArrayMap;
-	public boolean reversedArrowMap, reversedSkullMap;
+	//public ArrayMap<Body, Potion> potionArrayMap;
+	public ArrayMap<Body, Pot> potArrayMap;
+	public boolean reversedArrowMap, reversedSkullMap, reversedPotMap;
 	private Fixture swordHitbox, arrowHitbox;
 	public static ArrayList<Enemy> enemies;
 	public static ArrayList<Skull> enemySkulls, brokenSkulls;
@@ -61,7 +63,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Shopkeeper> shopkeepers;
 	public static ArrayList<Lock> locks;
 	public static ArrayList<Tutorial> tutorial;
-	public static ArrayList<Pot> pots;
+	public static ArrayList<Pot> pots, brokenPots;
 	public float PLAYER_HORIZONTAL_SPEED = 0f, PLAYER_VERTICAL_SPEED = 0f, PLAYER_X = 0f, PLAYER_Y = 0f;
 	private TiledMapRenderer renderer;
 	public static OrthographicCamera camera;
@@ -86,6 +88,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		potBatch = new SpriteBatch();
 		reversedArrowMap = false;
 		reversedSkullMap = false;
+		reversedPotMap = false;
 		player = new Player();
 		enemies = new ArrayList<>();
 		deadEnemyBodies = new ArrayList<Body>();
@@ -96,6 +99,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		tutorial = new ArrayList<>();
 		locks = new ArrayList<>();
 		pots = new ArrayList<>();
+		brokenPots = new ArrayList<>();
+		potArrayMap = new ArrayMap<>();
 
 		roomClear = Gdx.audio.newMusic(Gdx.files.internal("NinjaAdventure/Sounds/Menu/Accept.wav"));
 		//swordSlash = Gdx.audio.newMusic(Gdx.files.internal("Sounds/slash.mp3"));
@@ -429,6 +434,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 		}
 
+		GameObjectDestroyer skullBasher9000 = new GameObjectDestroyer();
+		//skullBasher9000.destroyObject(skullArrayMap,brokenSkulls,enemySkulls,Skull.class,);
+
 		if (!skullArrayMap.isEmpty()) {
 			for (OrderedMap.Entry<Body, Skull> skullEntry : skullArrayMap.entries()) {
 				Skull value = skullEntry.value;
@@ -501,11 +509,56 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 		}
 
+		/*
 		for (Pot p : pots) {
 			potBatch.begin();
 			potBatch.draw(tx.amphoraSprite, p.potBody.getPosition().x-8f, p.potBody.getPosition().y-8f, 16, 16);
 			//Pot.renderPot(potBatch, p.potBody.getPosition().x - 8f, p.potBody.getPosition().y - 8f);
 			potBatch.end();
+		}
+		 */
+
+		for (Pot p : pots) {
+			if (!p.potCreated) {
+				potArrayMap.put(p.createPot(potArrayMap),p);
+			}
+		}
+
+		if (!potArrayMap.isEmpty()) {
+			for (OrderedMap.Entry<Body, Pot> potEntry : potArrayMap.entries()) {
+				Pot value = potEntry.value;
+				//render each skull
+				potBatch.begin();
+				if (value.POT_HEALTH < 1.5f){
+					Skull.renderSkull(potBatch, tx.damagedAmphoraSprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+				}else {
+					Skull.renderSkull(potBatch, tx.amphoraSprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+				}
+				potBatch.end();
+			}
+
+			if (!reversedPotMap){
+				potArrayMap.reverse();
+				reversedPotMap = true;
+			}
+
+			Iterator<Pot> potIt = brokenPots.iterator();
+			if (potIt.hasNext()) {
+				Pot pot = potIt.next();
+				if (brokenPots.contains(pot)) {
+					/*
+					Potion potion = new Potion(world, pot.potBody, pot.potBody.getPosition().x, pot.potBody.getPosition().y, false, 0);
+					potion.createPotion();
+					potions.add(potion);
+					potionArrayMap.put(potion.potionBody, potion);
+					 */
+
+					pots.remove(pot);
+					potArrayMap.removeKey(pot.potBody);
+					world.destroyBody(pot.potBody);
+					potIt.remove();
+				}
+			}
 		}
 
 		playerBatch.begin();

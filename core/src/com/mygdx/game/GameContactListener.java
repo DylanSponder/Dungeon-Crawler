@@ -7,6 +7,7 @@ import com.mygdx.game.entity.behaviours.fsm.EnemyState;
 import com.mygdx.game.entity.Skull;
 import com.mygdx.game.level.objects.Door;
 import com.mygdx.game.level.GenerateLevel;
+import com.mygdx.game.level.objects.Pot;
 import com.mygdx.game.level.objects.Room;
 import com.mygdx.game.CreateSound;
 
@@ -205,11 +206,31 @@ public class GameContactListener implements ContactListener {
             }
         }
 
+        if(((fa.getBody().getUserData() == "Pot" && fb.getBody().getUserData() == "Sword")
+                || (fa.getBody().getUserData() == "Sword" && fb.getBody().getUserData() == "Pot"))
+                || ((fa.getBody().getUserData() == "Pot" && fb.getBody().getUserData().toString().startsWith("Arrow"))
+                || (fa.getBody().getUserData().toString().startsWith("Arrow") && fb.getBody().getUserData() == "Pot"))){
+            if (fb.getBody().getUserData() == "Pot") {
+                for (Pot p : pots) {
+                    if (fb.getBody() == p.potBody) {
+                        System.out.println("POT");
+                        if (p.POT_HEALTH >= 1) {
+                            p.POT_HEALTH--;
+                            if (p.POT_HEALTH <= 0) {
+                                brokenPots.add(p);
+                                System.out.println("POT BROKEN");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         if ((fa.getBody().getUserData().toString().startsWith("Arrow") && fb.getBody().getUserData() == "Enemy")
                 || (fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData().toString().startsWith("Arrow"))
                 ||
                 ((fa.getBody().getUserData() == "Sword" && fb.getBody().getUserData() == "Enemy")
-                        || (fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Sword"))
+                || (fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Sword"))
         ) {
             if (fa.getUserData() != "Proximity" &&
                     fb.getUserData() != "Proximity") {
@@ -339,10 +360,9 @@ public class GameContactListener implements ContactListener {
             }
         }
         if (((fa.getBody().getUserData().toString().startsWith("Arrow") && fb.getBody().getUserData() == "Skull")
-                || (fa.getBody().getUserData() == "Skull" && fb.getBody().getUserData().toString().startsWith("Arrow")))
-                ||
-                ((fa.getBody().getUserData() == "Sword" && fb.getBody().getUserData() == "Skull")
-                        || (fa.getBody().getUserData() == "Skull" && fb.getBody().getUserData() == "Sword"))
+            || (fa.getBody().getUserData() == "Skull" && fb.getBody().getUserData().toString().startsWith("Arrow")))
+            || ((fa.getBody().getUserData() == "Sword" && fb.getBody().getUserData() == "Skull")
+            || (fa.getBody().getUserData() == "Skull" && fb.getBody().getUserData() == "Sword"))
         ) {
             if (fb.getBody().getUserData() == "Skull") {
                 for (Skull s : enemySkulls) {
