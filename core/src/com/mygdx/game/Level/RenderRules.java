@@ -157,7 +157,6 @@ public class RenderRules {
                                     index++;
                                     break;
                                 case "pot":
-                                    //TODO: add potion item
                                     drawableLevelLayer.add(index, "pot");
                                     index++;
                                     break;

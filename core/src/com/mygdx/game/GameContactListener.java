@@ -138,6 +138,7 @@ public class GameContactListener implements ContactListener {
                     if (!boneBodiesCollided.contains(fb.getBody())) {
                         boneBodiesCollided.add(fb.getBody());
                     }
+                    //TODO: fix
                 } else if (fa.getBody().getUserData() == "Enemy") {
                     player.playerBody.applyLinearImpulse(fa.getBody().getLinearVelocity().x * 50, fa.getBody().getLinearVelocity().y * 50, 0, 0, true);
                     fa.getBody().applyLinearImpulse(-fb.getBody().getLinearVelocity().x * 2, -fb.getBody().getLinearVelocity().y * 2, 0, 0, true);
@@ -213,12 +214,10 @@ public class GameContactListener implements ContactListener {
             if (fb.getBody().getUserData() == "Pot") {
                 for (Pot p : pots) {
                     if (fb.getBody() == p.potBody) {
-                        System.out.println("POT");
                         if (p.POT_HEALTH >= 1) {
                             p.POT_HEALTH--;
                             if (p.POT_HEALTH <= 0) {
                                 brokenPots.add(p);
-                                System.out.println("POT BROKEN");
                             }
                         }
                     }
