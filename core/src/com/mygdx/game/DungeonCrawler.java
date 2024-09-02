@@ -38,7 +38,7 @@ import com.mygdx.game.level.InitLevel;
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch playerBatch, arrowBatch, enemyBatch, potBatch, hudBatch, tutoBatch, skullBatch, boneBatch, lockBatch, doorBatch;
 	public static World world;
-	public static boolean debug = true;
+	public static boolean debug = false;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -137,7 +137,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		rayHandler = new RayHandler(world);
 		rayHandler.setAmbientLight(0f, 0f, 0f, 0.001f);
 		if(debug) {
-			//rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
+			rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
 		}
 
 		//world.setContactListener(rlc);
@@ -158,7 +158,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 
 		//create a point light and attach it to the player
-		playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f,0.20f,0,0.75f), 100, PLAYER_X, PLAYER_Y);
+		playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f,0.20f,0,0.55f), 90, PLAYER_X, PLAYER_Y);
 		playerTorch.attachToBody(player.playerBody);
 		playerTorch.setSoftnessLength(65);
 		//playerTorch.isSoft();
@@ -177,16 +177,18 @@ public class DungeonCrawler extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(new GameInputProcessor() {
 			@Override
 			public boolean scrolled(float amountX, float amountY) {
-				//camera zoom should be between 0.3 and 1.3 - may be changed during testing
-				if ((camera.zoom >= 0.3f && camera.zoom <= 24f)) {
-					if (camera.zoom == 24f) {
-						if (amountY < 0f) {camera.zoom += amountY * 0.1f;}
-					} else if (camera.zoom == 0.3f) {
-						if (amountY > 0f) {camera.zoom += amountY * 0.1f;}}
-					else {camera.zoom += amountY * 0.1f;}
+				if (debug) {
+					//camera zoom should be between 0.3 and 1.3 - may be changed during testing
+					if ((camera.zoom >= 0.3f && camera.zoom <= 24f)) {
+						if (camera.zoom == 24f) {
+							if (amountY < 0f) {camera.zoom += amountY * 0.1f;}
+						} else if (camera.zoom == 0.3f) {
+							if (amountY > 0f) {camera.zoom += amountY * 0.1f;}}
+						else {camera.zoom += amountY * 0.1f;}
+					}
+					else if (camera.zoom > 24f) {camera.zoom = 24f;}
+					else if (camera.zoom < 0.3f) {camera.zoom = 0.3f;}
 				}
-				else if (camera.zoom > 24f) {camera.zoom = 24f;}
-				else if (camera.zoom < 0.3f) {camera.zoom = 0.3f;}
 				return true;
 			}
 			public boolean keyDown(int keycode) {

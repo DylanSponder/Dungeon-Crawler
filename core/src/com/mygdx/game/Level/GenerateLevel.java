@@ -1,5 +1,6 @@
 package com.mygdx.game.level;
 
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.physics.box2d.*;
@@ -11,6 +12,7 @@ import com.mygdx.game.level.objects.Pot;
 import com.mygdx.game.entity.Tutorial;
 import com.mygdx.game.level.objects.Door;
 import com.mygdx.game.level.objects.Room;
+import com.mygdx.game.level.objects.Torch;
 
 import java.io.IOException;
 import java.util.*;
@@ -1206,6 +1208,38 @@ public class GenerateLevel {
                             Tutorial t = new Tutorial(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                             tutorial.add(t);
                             break;
+                        case "torl":
+                            currentCell = init.cr.torchWallLeftTile;
+                            Body newTorchWallLeft = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                            newTorchWallLeft.setUserData("Wall");
+                            Torch torL = new Torch(rayHandler, world, (((roomX + i) * 16) + 16 * 16) + 6, (levelY * 16 + Gdx.graphics.getHeight() / 30 - 16)+8);
+                            torches.add(torL);
+                            torL.createTorch(4);
+                            break;
+                        case "torr":
+                            currentCell = init.cr.torchWallRightTile;
+                            Body newTorchWallRight = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                            newTorchWallRight.setUserData("Wall");
+                            Torch torR = new Torch(rayHandler, world, (((roomX + i) * 16) + 16 * 16) + 10, (levelY * 16 + Gdx.graphics.getHeight() / 30 - 16)+8);
+                            torches.add(torR);
+                            torR.createTorch(2);
+                            break;
+                        case "toru":
+                            currentCell = init.cr.torchWallUpTile;
+                            Body newTorchWallUp = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                            newTorchWallUp.setUserData("Wall");
+                            Torch torU = new Torch(rayHandler, world, (((roomX + i) * 16) + 16 * 16) + 8, (levelY * 16 + Gdx.graphics.getHeight() / 30 - 16)+15);
+                            torches.add(torU);
+                            torU.createTorch(1);
+                            break;
+                        case "tord":
+                            currentCell = init.cr.torchWallDownTile;
+                            Body newTorchWallDown = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                            newTorchWallDown.setUserData("Wall");
+                            Torch torD = new Torch(rayHandler, world, (((roomX + i) * 16) + 16 * 16) + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 10);
+                            torches.add(torD);
+                            torD.createTorch(3);
+                            break;
                         case "pot":
                             currentCell = init.cr.middleFloorTile;
                             Pot p = new Pot(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
@@ -1242,7 +1276,7 @@ public class GenerateLevel {
 
                         String doorUpperLeftY = doorUpperLeftXY[1].toString();
                         float doorUpperLeftYAsFloat = Float.parseFloat(doorUpperLeftY);
-                        PLAYER_Y = doorUpperLeftYAsFloat * 16 - (1 * 16) - 64;
+                        PLAYER_Y = doorUpperLeftYAsFloat * 16 - (1 * 16);
 
                         startingRoom = false;
                     }

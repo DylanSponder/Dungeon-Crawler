@@ -132,6 +132,22 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "doorBottomRight");
                         index++;
                         break;
+                    case "torl":
+                        drawableLevelLayer.add(index, "torl");
+                        index++;
+                        break;
+                    case "torr":
+                        drawableLevelLayer.add(index, "torr");
+                        index++;
+                        break;
+                    case "toru":
+                        drawableLevelLayer.add(index, "toru");
+                        index++;
+                        break;
+                    case "tord":
+                        drawableLevelLayer.add(index, "tord");
+                        index++;
+                        break;
                     default:
                         if (i == "" || i == " " || i == null || i.isEmpty()){
                             drawableLevelLayer.add(index, "");

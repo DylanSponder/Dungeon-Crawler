@@ -10,8 +10,8 @@ public class CreateTexture {
     Texture potionTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Potion/LifePot.png"));
     Texture emptySlotTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Potion/Empty.png"));
     Texture coinTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Treasure/Coin2.png"));
-    Texture playerTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/GoldKnight/SpriteSheet.png"));
-    Texture playerAttackTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/GoldKnight/SeparateAnim/Attack.png"));
+    Texture playerTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/Knight/SpriteSheet.png"));
+    Texture playerAttackTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/Knight/SeparateAnim/Attack.png"));
     Texture roomBackground = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/Interior/CustomTileset.png"));
     //Texture roomDoorTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHouse.png"));
     Texture roomHoleTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHole.png"));

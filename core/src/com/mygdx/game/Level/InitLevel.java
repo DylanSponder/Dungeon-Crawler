@@ -72,6 +72,11 @@ public class InitLevel {
         cr.doorTopLeftOpen.setTile(new StaticTiledMapTile(tx.doorTopLeftOpenTexture));
         cr.doorTopRightOpen.setTile(new StaticTiledMapTile(tx.doorTopRightOpenTexture));
 
+        cr.torchWallLeftTile.setTile(new StaticTiledMapTile(tx.torchLeftTexture));
+        cr.torchWallRightTile.setTile(new StaticTiledMapTile(tx.torchRightTexture));
+        cr.torchWallUpTile.setTile(new StaticTiledMapTile(tx.torchUpTexture));
+        cr.torchWallDownTile.setTile(new StaticTiledMapTile(tx.torchDownTexture));
+
         cr.doorLeftUpper.setTile(new StaticTiledMapTile(tx.doorLeftUpperTexture));
         cr.doorLeftLower.setTile(new StaticTiledMapTile(tx.doorLeftLowerTexture));
         cr.doorLeftUpperOpen.setTile(new StaticTiledMapTile(tx.doorLeftUpperOpenTexture));
