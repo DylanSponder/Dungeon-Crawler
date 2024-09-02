@@ -31,17 +31,14 @@ import com.mygdx.game.entity.Bone;
 import com.mygdx.game.entity.Skull;
 import com.mygdx.game.entity.Tutorial;
 import com.mygdx.game.entity.behaviours.fsm.*;
-import com.mygdx.game.level.objects.Door;
-import com.mygdx.game.level.objects.Lock;
-import com.mygdx.game.level.objects.Pot;
-import com.mygdx.game.level.objects.Room;
+import com.mygdx.game.level.objects.*;
 import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.InitLevel;
 
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch playerBatch, arrowBatch, enemyBatch, potBatch, hudBatch, tutoBatch, skullBatch, boneBatch, lockBatch, doorBatch;
 	public static World world;
-	public static boolean debug = false;
+	public static boolean debug = true;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -64,13 +61,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Lock> locks;
 	public static ArrayList<Tutorial> tutorial;
 	public static ArrayList<Pot> pots, brokenPots;
+	public static ArrayList<Torch> torches;
 	public float PLAYER_HORIZONTAL_SPEED = 0f, PLAYER_VERTICAL_SPEED = 0f, PLAYER_X = 0f, PLAYER_Y = 0f;
 	private TiledMapRenderer renderer;
 	public static OrthographicCamera camera;
 	public static final float DEFAULT_VIEWPORT_WIDTH = 300f;
 	public static HUD hud;
 	public static Music roomClear, swordSlash;
-	public RayHandler rayHandler;
+	public static RayHandler rayHandler;
 	private PointLight playerTorch;
 
 	@Override
@@ -101,6 +99,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		pots = new ArrayList<>();
 		brokenPots = new ArrayList<>();
 		potArrayMap = new ArrayMap<>();
+		torches = new ArrayList<>();
 
 		roomClear = Gdx.audio.newMusic(Gdx.files.internal("NinjaAdventure/Sounds/Menu/Accept.wav"));
 		//swordSlash = Gdx.audio.newMusic(Gdx.files.internal("Sounds/slash.mp3"));
@@ -131,6 +130,16 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//set to 1000 tile layers wide and high but can be changed if required
 		TiledMapTileLayer layer = new TiledMapTileLayer(1000, 1000, 16, 16);
 
+		renderer = new OrthogonalTiledMapRenderer(map);
+		b2dr = new Box2DDebugRenderer();
+
+		//create the Box2D ray handler
+		rayHandler = new RayHandler(world);
+		rayHandler.setAmbientLight(0f, 0f, 0f, 0.001f);
+		if(debug) {
+			//rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
+		}
+
 		//world.setContactListener(rlc);
 		GenerateLevel level = new GenerateLevel();
 		InitLevel initLevel = new InitLevel();
@@ -146,15 +155,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//add current layers to the TileMap and assign it a renderer
 		layers.add(layer);
 
-		renderer = new OrthogonalTiledMapRenderer(map);
-		b2dr = new Box2DDebugRenderer();
 
-		//create the Box2D ray handler
-		rayHandler = new RayHandler(world);
-		rayHandler.setAmbientLight(0f, 0f, 0f, 0.001f);
-		if(debug) {
-			rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
-		}
 
 		//create a point light and attach it to the player
 		playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f,0.20f,0,0.75f), 100, PLAYER_X, PLAYER_Y);

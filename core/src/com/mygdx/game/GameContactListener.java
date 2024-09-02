@@ -23,6 +23,18 @@ public class GameContactListener implements ContactListener {
         Fixture fa = contact.getFixtureA();
         Fixture fb = contact.getFixtureB();
 
+        String faAsString = fa.getBody().getUserData().toString();
+
+        //TODO: finish switch statement
+        switch (faAsString) {
+            case "Arrow":
+                break;
+            case "Sword":
+                break;
+            case "Enemy":
+                break;
+        }
+
         if ((fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Enemy")
                 || (fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Arrow")
                 || (fa.getBody().getUserData() == "Wall" && fb.getBody().getUserData() == "Arrow")
@@ -203,6 +215,13 @@ public class GameContactListener implements ContactListener {
             String[] roomIndexAsString = fa.getBody().getUserData().toString().split("-");
             player.currentRoom = Integer.parseInt(roomIndexAsString[1]);
             if (fb.getBody().getUserData() == "Player") {
+                player.touchingRoom = true;
+            }
+        } else if (fb.getBody().getUserData().toString().startsWith("Room")) {
+            // && (fb.getUserData() != "Wall" || fb.getUserData() !="Enemy" || fb.getUserData() != "Player"))
+            String[] roomIndexAsString = fb.getBody().getUserData().toString().split("-");
+            player.currentRoom = Integer.parseInt(roomIndexAsString[1]);
+            if (fa.getBody().getUserData() == "Player") {
                 player.touchingRoom = true;
             }
         }

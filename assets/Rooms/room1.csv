@@ -1,7 +1,7 @@
-tlw,tw,tw,tw,tw,tw,dtl,doortl,doortr,dtr,tw,tw,tw,tw,tw,trw
+tlw,tw,tw,toru,tw,tw,dtl,doortl,doortr,dtr,tw,toru,tw,tw,tw,trw
 lw,fob1,f,f,f,f,fob1,f,f,fob1,f,f,f,fenemy,fob1,rw
 lw,fenemy,f,fob1,fob1,f,fob1,f,f,fob1,f,fob1,fob1,f,f,rw
-lw,f,fob1,f,fob2,f,fpot,f,f,fpot,f,fob2,f,fob1,f,rw
+torl,f,fob1,f,fob2,f,fpot,f,f,fpot,f,fob2,f,fob1,f,torr
 lw,f,fob1,fob1,f,f,fob3,f,f,fob2,f,f,fob1,fob1,f,rw
 lw,f,f,f,f,fob2,f,f,f,f,fob1,f,f,f,f,rw
 dlu,fob1,fob1,fpot,fob2,f,fenemy,fob2,fob3,fenemy,f,fob1,fpot,fob1,fob1,dru
@@ -10,7 +10,7 @@ doorll,f,f,f,f,f,fob3,blt,brt,fob3,f,f,f,f,f,doorlr
 dll,fob1,fob1,fpot,fob1,f,fenemy,fob2,fob2,fenemy,f,fob1,fpot,fob1,fob1,drl
 lw,f,f,f,f,fob2,f,f,f,f,fob3,f,f,f,f,rw
 lw,f,fob1,fob3,f,f,fob3,f,f,fob3,f,f,fob3,fob1,f,rw
-lw,f,fob1,f,fob3,f,fpot,f,f,fpot,f,fob2,f,fob1,f,rw
+torl,f,fob1,f,fob3,f,fpot,f,f,fpot,f,fob2,f,fob1,f,torr
 lw,fenemy,f,fob1,fob1,f,fob1,f,f,fob1,f,fob1,fob1,f,f,rw
 lw,fob1,f,f,f,f,fob1,f,f,fob1,f,f,f,fenemy,fob1,rw
-blw,bw,bw,bw,bw,bw,dbl,doorbl,doorbr,dbr,bw,bw,bw,bw,bw,brw
+blw,bw,bw,tord,bw,bw,dbl,doorbl,doorbr,dbr,bw,tord,bw,bw,bw,brw

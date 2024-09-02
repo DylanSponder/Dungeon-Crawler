@@ -47,6 +47,11 @@ public class CreateTexture {
     public TextureRegion boneTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion tutoTexture = new TextureRegion(tutorialTexture, 0,0,87,57);
 
+    public TextureRegion torchLeftTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion torchRightTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion torchUpTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion torchDownTexture = new TextureRegion(roomBackground, 0,0,16,16);
+
     public TextureRegion lockUpTexture = new TextureRegion(roomBackground, 160,64,16,16);
     public TextureRegion lockDownTexture = new TextureRegion(roomBackground, 192,32,16,16);
     public TextureRegion lockLeftTexture = new TextureRegion(roomBackground, 192,16,16,16);
@@ -170,5 +175,10 @@ public class CreateTexture {
         doorBottomRightWallTexture.setRegion(32, 64, 16, 16);
 
         tutoTexture.setRegion(0, 0, 87, 57);
+
+        torchLeftTexture.setRegion(208, 32, 16, 16);
+        torchRightTexture.setRegion(224, 32, 16, 16);
+        torchUpTexture.setRegion(208, 48, 16, 16);
+        torchDownTexture.setRegion(224, 48, 16, 16);
     }
 }
