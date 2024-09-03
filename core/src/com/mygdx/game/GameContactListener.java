@@ -8,6 +8,7 @@ import com.mygdx.game.entity.Skull;
 import com.mygdx.game.level.objects.Door;
 import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.objects.Pot;
+import com.mygdx.game.level.objects.Potion;
 import com.mygdx.game.level.objects.Room;
 import com.mygdx.game.CreateSound;
 
@@ -32,6 +33,15 @@ public class GameContactListener implements ContactListener {
             case "Sword":
                 break;
             case "Enemy":
+                break;
+            case "Player":
+                if (fb.getBody().getUserData() == "Potion"){
+                    for (Potion p : potions) {
+                        if (p.potionBody == fb.getBody()){
+                            collectedPotions.add(p);
+                        }
+                    }
+                }
                 break;
         }
 

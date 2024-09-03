@@ -36,7 +36,7 @@ import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.InitLevel;
 
 public class DungeonCrawler extends ApplicationAdapter {
-	private SpriteBatch playerBatch, arrowBatch, enemyBatch, potBatch, hudBatch, tutoBatch, skullBatch, boneBatch, lockBatch, doorBatch;
+	private SpriteBatch playerBatch, arrowBatch, enemyBatch, potBatch, hudBatch, tutoBatch, skullBatch, boneBatch, lockBatch, doorBatch, potionBatch;
 	public static World world;
 	public static boolean debug = false;
 	private Box2DDebugRenderer b2dr;
@@ -50,9 +50,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public ArrayMap<Body, Arrow> arrowArrayMap;
 	public ArrayMap<Body, Skull> skullArrayMap;
 	public ArrayMap<Body, Bone> boneArrayMap;
-	//public ArrayMap<Body, Potion> potionArrayMap;
+	public ArrayMap<Body, Potion> potionArrayMap;
 	public ArrayMap<Body, Pot> potArrayMap;
-	public boolean reversedArrowMap, reversedSkullMap, reversedPotMap;
+	public boolean reversedArrowMap, reversedSkullMap, reversedPotMap, reversedPotionMap;
 	private Fixture swordHitbox, arrowHitbox;
 	public static ArrayList<Enemy> enemies;
 	public static ArrayList<Skull> enemySkulls, brokenSkulls;
@@ -61,6 +61,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Lock> locks;
 	public static ArrayList<Tutorial> tutorial;
 	public static ArrayList<Pot> pots, brokenPots;
+	public static ArrayList<Potion> potions, collectedPotions;
 	public static ArrayList<Torch> torches;
 	public float PLAYER_HORIZONTAL_SPEED = 0f, PLAYER_VERTICAL_SPEED = 0f, PLAYER_X = 0f, PLAYER_Y = 0f;
 	private TiledMapRenderer renderer;
@@ -84,6 +85,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		doorBatch = new SpriteBatch();
 		lockBatch = new SpriteBatch();
 		potBatch = new SpriteBatch();
+		potionBatch = new SpriteBatch();
 		reversedArrowMap = false;
 		reversedSkullMap = false;
 		reversedPotMap = false;
@@ -100,6 +102,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		brokenPots = new ArrayList<>();
 		potArrayMap = new ArrayMap<>();
 		torches = new ArrayList<>();
+		potions = new ArrayList<>();
+		collectedPotions = new ArrayList<>();
 
 		roomClear = Gdx.audio.newMusic(Gdx.files.internal("NinjaAdventure/Sounds/Menu/Accept.wav"));
 		//swordSlash = Gdx.audio.newMusic(Gdx.files.internal("Sounds/slash.mp3"));
@@ -171,6 +175,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		skullArrayMap = new ArrayMap<Body, Skull>();
 		boneArrayMap = new ArrayMap<Body, Bone>();
 		arrows = new ArrayList<Arrow>();
+		potionArrayMap = new ArrayMap<Body, Potion>();
 
 		//create an input processor to handle single input events - see inputUpdate() for held down inputs
 		camera.zoom= 1f;
@@ -191,7 +196,185 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 				return true;
 			}
+			public boolean touchDown(int x, int y, int pointer, int button) {
+
+				if (button == 0 && (!playerMeleeAttacking && !playerRangedAttacking)) {
+					//if player presses left mouse attack with the sword
+					float playerMeleeAttackSpeedInSeconds = 0.4f;
+					playerMeleeAttacking = true;
+
+					if (tx.playerSprite.equals(tx.playerDown)) {
+						tx.playerSprite = tx.playerAttackDown;
+						sword = bf.createSwordBody(world, player.playerBody, -2.5f, -12f);
+						swordHitbox = bf.createSwordHitbox(sword, false);
+						swordHitbox.setUserData("DownSword");
+						swordHitbox.setSensor(true);
+					} else if (tx.playerSprite.equals(tx.playerUp)) {
+						tx.playerSprite = tx.playerAttackUp;
+						sword = bf.createSwordBody(world, player.playerBody, -2.5f, 15);
+						swordHitbox = bf.createSwordHitbox(sword, false);
+						swordHitbox.setUserData("UpSword");
+						swordHitbox.setSensor(true);
+					} else if (tx.playerSprite.equals(tx.playerLeft)) {
+						tx.playerSprite = tx.playerAttackLeft;
+						sword = bf.createSwordBody(world, player.playerBody, -14f, -2.5f);
+						swordHitbox = bf.createSwordHitbox(sword, true);
+						swordHitbox.setUserData("LeftSword");
+						swordHitbox.setSensor(true);
+					} else if (tx.playerSprite.equals(tx.playerRight)) {
+						tx.playerSprite = tx.playerAttackRight;
+						sword = bf.createSwordBody(world, player.playerBody, 14, -2.5f);
+						swordHitbox = bf.createSwordHitbox(sword, true);
+						swordHitbox.setUserData("RightSword");
+						swordHitbox.setSensor(true);
+					} else {
+						tx.playerSprite = tx.playerAttackDown;
+						sword = bf.createSwordBody(world, player.playerBody, -2.5f, -12f);
+						swordHitbox = bf.createSwordHitbox(sword, false);
+						swordHitbox.setUserData("DownSword");
+						swordHitbox.setSensor(true);
+					}
+
+					sword.setUserData("Sword");
+
+					//pause player in place while attacking (attacks must be timed correctly!)
+					playerPaused = true;
+					PLAYER_HORIZONTAL_SPEED = 0;
+					PLAYER_VERTICAL_SPEED = 0;
+					player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
+					//CreateSound.slash.play();
+					roomClear.play();
+					//swordSlash.setLooping(true);
+					//swordSlash.play();
+					//swordSlash.setVolume(1f);
+					//swordSlash.dispose();
+
+					Timer.schedule(new Timer.Task() {
+						@Override
+						public void run() {
+							//resume player movement after a short delay and remove sword hitbox
+							playerPaused = false;
+							sword.destroyFixture(swordHitbox);
+
+							//reset playerSprite to before the attack input
+							if (tx.playerSprite.equals(tx.playerAttackDown)) {
+								tx.playerSprite = tx.playerDown;
+							} else if (tx.playerSprite.equals(tx.playerAttackUp)) {
+								tx.playerSprite = tx.playerUp;
+							} else if (tx.playerSprite.equals(tx.playerAttackLeft)) {
+								tx.playerSprite = tx.playerLeft;
+							} else if (tx.playerSprite.equals(tx.playerAttackRight)) {
+								tx.playerSprite = tx.playerRight;
+							}
+
+							playerMeleeAttacking = false;
+						}
+					}, playerMeleeAttackSpeedInSeconds);
+				}
+
+				//if player presses right mouse attack with a bow
+				if (button == 1 && (!playerMeleeAttacking && !playerRangedAttacking)) {
+					float playerRangedAttackSpeedInSeconds = 0.35f;
+					playerRangedAttacking = true;
+
+					if (tx.playerSprite.equals(tx.playerDown)) {
+						playerDirection = "Down";
+						tx.playerSprite = tx.playerAttackDown;
+						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y - 14f);
+						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
+						arrowHitbox.setUserData("DownArrow");
+						arrowBody.setLinearVelocity(0, -500f);
+					} else if (tx.playerSprite.equals(tx.playerUp)) {
+						playerDirection = "Up";
+						tx.playerSprite = tx.playerAttackUp;
+						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y + 14f);
+						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
+						arrowHitbox.setUserData("UpArrow");
+						arrowBody.setLinearVelocity(0, 500f);
+					} else if (tx.playerSprite.equals(tx.playerLeft)) {
+						playerDirection = "Left";
+						tx.playerSprite = tx.playerAttackLeft;
+						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 14f, player.playerBody.getPosition().y);
+						arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
+						arrowHitbox.setUserData("LeftArrow");
+						arrowBody.setLinearVelocity(-500f, 0);
+					} else if (tx.playerSprite.equals(tx.playerRight)) {
+						playerDirection = "Right";
+						tx.playerSprite = tx.playerAttackRight;
+						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x + 14f, player.playerBody.getPosition().y);
+						arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
+						arrowHitbox.setUserData("RightArrow");
+						arrowBody.setLinearVelocity(500f, 0);
+					}
+					//only triggers if the player hasn't moved at all yet - player starts facing down
+					else {
+						playerDirection = "Down";
+						tx.playerSprite = tx.playerAttackDown;
+						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y - 16f);
+						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
+						arrowHitbox.setUserData("DownArrow");
+						arrowBody.setLinearVelocity(0, -500f);
+					}
+					//pause player in place while attacking (attacks must be timed correctly!)
+					arrowBody.setUserData("Arrow");
+					arrows.add(arrow = new Arrow(arrowBody, playerDirection));
+					arrowArrayMap.put(arrowBody, arrow);
+
+					playerPaused = true;
+					PLAYER_HORIZONTAL_SPEED = 0;
+					PLAYER_VERTICAL_SPEED = 0;
+					player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
+
+					Timer.schedule(new Timer.Task() {
+						@Override
+						public void run() {
+							//resume player movement after a short delay and remove sword hitbox
+							playerPaused = false;
+							//reset playerSprite to before the attack input
+							if (tx.playerSprite.equals(tx.playerAttackDown)) {
+								tx.playerSprite = tx.playerDown;
+							} else if (tx.playerSprite.equals(tx.playerAttackUp)) {
+								tx.playerSprite = tx.playerUp;
+							} else if (tx.playerSprite.equals(tx.playerAttackLeft)) {
+								tx.playerSprite = tx.playerLeft;
+							} else if (tx.playerSprite.equals(tx.playerAttackRight)) {
+								tx.playerSprite = tx.playerRight;
+							}
+							playerRangedAttacking = false;
+						}
+					}, playerRangedAttackSpeedInSeconds);
+				}
+				return true;
+			}
 			public boolean keyDown(int keycode) {
+
+				if (debug) {
+
+					// (For Debugging) Add potion
+					if (keycode == 16) {
+						hud.inventory.addPotion();
+					}
+
+					// (For Debugging) Damage player
+					if (keycode == 7) {
+						hud.healthBar.LoseHealth(0.5f);
+					}
+
+					if (keycode == 9) {
+						camera.zoom = 1f;
+					}
+
+					if (keycode == 10) {
+						camera.zoom = 10f;
+					}
+				}
+				// Use potion
+				if (keycode == 8) {
+					if (hud.inventory.Size > 0) {
+						hud.inventory.usePotion(1);
+						hud.healthBar.GainHealth(2);
+					}
+				}
 
 				//pressing '6' shows debug data
 				if (keycode == 13) {
@@ -204,7 +387,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 
 				//if player presses space attack with the sword
-				if ((keycode == 62) && (!playerMeleeAttacking && !playerRangedAttacking)) {
+				if (((keycode == 62)) && (!playerMeleeAttacking && !playerRangedAttacking)) {
 					float playerMeleeAttackSpeedInSeconds = 0.4f;
 					playerMeleeAttacking = true;
 
@@ -285,7 +468,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					if (tx.playerSprite.equals(tx.playerDown)) {
 						playerDirection = "Down";
 						tx.playerSprite = tx.playerAttackDown;
-						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-2f,player.playerBody.getPosition().y-16f);
+						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-2f,player.playerBody.getPosition().y-14f);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,true);
 						arrowHitbox.setUserData("DownArrow");
 						arrowBody.setLinearVelocity(0, -500f);
@@ -293,7 +476,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					else if (tx.playerSprite.equals(tx.playerUp)) {
 						playerDirection = "Up";
 						tx.playerSprite = tx.playerAttackUp;
-						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-2f,player.playerBody.getPosition().y+16f);
+						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-2f,player.playerBody.getPosition().y+14f);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,true);
 						arrowHitbox.setUserData("UpArrow");
 						arrowBody.setLinearVelocity(0, 500f);
@@ -301,7 +484,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					else if (tx.playerSprite.equals(tx.playerLeft)) {
 						playerDirection = "Left";
 						tx.playerSprite = tx.playerAttackLeft;
-						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-16f,player.playerBody.getPosition().y);
+						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x-14f,player.playerBody.getPosition().y);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,false);
 						arrowHitbox.setUserData("LeftArrow");
 						arrowBody.setLinearVelocity(-500f, 0);
@@ -309,7 +492,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					else if (tx.playerSprite.equals(tx.playerRight)) {
 						playerDirection = "Right";
 						tx.playerSprite = tx.playerAttackRight;
-						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x+16f,player.playerBody.getPosition().y);
+						arrowBody = Arrow.createArrowBody(world,player.playerBody.getPosition().x+14f,player.playerBody.getPosition().y);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody,false);
 						arrowHitbox.setUserData("RightArrow");
 						arrowBody.setLinearVelocity(500f, 0);
@@ -437,6 +620,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 		}
 
+		//destructible objects safe removers - Skulls - Arrows - Pots - Potions
+
 		GameObjectDestroyer skullBasher9000 = new GameObjectDestroyer();
 		//skullBasher9000.destroyObject(skullArrayMap,brokenSkulls,enemySkulls,Skull.class,);
 
@@ -497,29 +682,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 					boneIt.remove();
 					world.destroyBody(boneBody);
 					bones.remove(boneBody);
-
-					/*
-						if (arrowArrayMap.containsKey(collidedBody)) {
-						arrowArrayMap.removeKey(collidedBody);
-						//remove the arrow Box2D body
-						world.destroyBody(collidedBody);
-						//remove body from arrowBodiesCollided
-						bodyIt.remove();
-						//remove the sprite by removing the Arrow class object
-						arrows.remove(arrowArrayMap.get(collidedBody));
-					 */
 				}
 			}
 		}
 
-		/*
-		for (Pot p : pots) {
-			potBatch.begin();
-			potBatch.draw(tx.amphoraSprite, p.potBody.getPosition().x-8f, p.potBody.getPosition().y-8f, 16, 16);
-			//Pot.renderPot(potBatch, p.potBody.getPosition().x - 8f, p.potBody.getPosition().y - 8f);
-			potBatch.end();
-		}
-		 */
 
 		for (Pot p : pots) {
 			if (!p.potCreated) {
@@ -530,36 +696,86 @@ public class DungeonCrawler extends ApplicationAdapter {
 		if (!potArrayMap.isEmpty()) {
 			for (OrderedMap.Entry<Body, Pot> potEntry : potArrayMap.entries()) {
 				Pot value = potEntry.value;
-				//render each skull
+				//render each pot
 				potBatch.begin();
-				if (value.POT_HEALTH < 1.5f){
-					Skull.renderSkull(potBatch, tx.damagedAmphoraSprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+				if (value.POT_HEALTH < 1.5f) {
+					if (value.type == 1) {
+						Pot.renderPot(potBatch, tx.damagedAmphoraSprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+					}
+					else {
+						Pot.renderPot(potBatch, tx.damagedAmphora2Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+					}
+
 				}else {
-					Skull.renderSkull(potBatch, tx.amphoraSprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+					if (value.type == 1) {
+						Pot.renderPot(potBatch, tx.amphoraSprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+					}
+
+					if (!reversedPotMap){
+						potArrayMap.reverse();
+						reversedPotMap = true;
+					}
+					else {
+						Pot.renderPot(potBatch, tx.amphora2Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+					}
 				}
 				potBatch.end();
-			}
-
-			if (!reversedPotMap){
-				potArrayMap.reverse();
-				reversedPotMap = true;
 			}
 
 			Iterator<Pot> potIt = brokenPots.iterator();
 			if (potIt.hasNext()) {
 				Pot pot = potIt.next();
 				if (brokenPots.contains(pot)) {
-					/*
-					Potion potion = new Potion(world, pot.potBody, pot.potBody.getPosition().x, pot.potBody.getPosition().y, false, 0);
-					potion.createPotion();
-					potions.add(potion);
-					potionArrayMap.put(potion.potionBody, potion);
-					 */
+					//one in five chance to get a potion from a pot - subject to change
+					int min = 1;
+					int max = 5;
+					int potionChance = (int) (Math.random() * (max - min + 1)) + min;
+					if (potionChance == 5) {
+						//create potion object
+						Potion potion = new Potion(world, pot.potBody.getPosition().x, pot.potBody.getPosition().y, 1);
+						potion.createPotion(potionArrayMap, rayHandler);
+						potions.add(potion);
+						potionArrayMap.put(potion.potionBody, potion);
+					}
+
 
 					pots.remove(pot);
 					potArrayMap.removeKey(pot.potBody);
 					world.destroyBody(pot.potBody);
 					potIt.remove();
+				}
+			}
+		}
+
+		//THE GREAT POT VS POTION LINE ---------------------------------------------------------------------------------
+
+		if (!potionArrayMap.isEmpty()) {
+			for (OrderedMap.Entry<Body, Potion> potionEntry : potionArrayMap.entries()) {
+				Potion value = potionEntry.value;
+				//render each potion
+				potionBatch.begin();
+					if (value.type == 1) {
+						Potion.renderPotion(potionBatch, tx.potionSprite, potionEntry.key.getPosition().x, potionEntry.key.getPosition().y);
+					}
+				potionBatch.end();
+			}
+
+			if (!reversedPotionMap){
+				potionArrayMap.reverse();
+				reversedPotionMap = true;
+			}
+
+			Iterator<Potion> potionIt = collectedPotions.iterator();
+			if (potionIt.hasNext()) {
+				Potion potion = potionIt.next();
+				if (collectedPotions.contains(potion)) {
+
+					hud.inventory.addPotion();
+					potion.potionLight.remove();
+					potions.remove(potion);
+					potionArrayMap.removeKey(potion.potionBody);
+					world.destroyBody(potion.potionBody);
+					potionIt.remove();
 				}
 			}
 		}
@@ -684,6 +900,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		lockBatch.setProjectionMatrix(camera.combined);
 		doorBatch.setProjectionMatrix(camera.combined);
 		potBatch.setProjectionMatrix(camera.combined);
+		potionBatch.setProjectionMatrix(camera.combined);
 		hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
 		hud.stage.draw();
 	}
@@ -728,6 +945,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		lockBatch.dispose();
 		doorBatch.dispose();
 		potBatch.dispose();
+		potionBatch.dispose();
 		rayHandler.dispose();
 		world.dispose();
 		b2dr.dispose();
@@ -767,32 +985,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
 
-if (debug) {
 
-	// (For Debugging) Add potion
-	if (Gdx.input.isKeyPressed(Keys.NUM_9)) {
-		hud.inventory.addPotion();
-	}
-
-	// (For Debugging) Damage player
-	if (Gdx.input.isKeyPressed(Keys.NUM_0)) {
-		hud.healthBar.LoseHealth(0.5f);
-	}
-
-	if (Gdx.input.isKeyPressed(Keys.NUM_2)) {
-		camera.zoom = 1f;
-	}
-
-	if (Gdx.input.isKeyPressed(Keys.NUM_3)) {
-		camera.zoom = 10f;
-	}
-}
-    // Use potion 
-    if (Gdx.input.isKeyPressed(Keys.NUM_1)) {
-		if (hud.inventory.Size > 0) {
-			hud.inventory.usePotion(1);
-			hud.healthBar.GainHealth(3);
-			}
-		}
 	}
 }

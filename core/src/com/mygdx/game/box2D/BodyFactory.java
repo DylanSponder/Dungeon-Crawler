@@ -92,6 +92,21 @@ public class BodyFactory {
         return body;
     }
 
+    public static Body createPotion(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x, y);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        CircleShape shape = new CircleShape();
+        shape.setRadius(5.5f);
+        Fixture potionFixture = body.createFixture(shape, 1.0f);
+        shape.dispose();
+        potionFixture.setSensor(true);
+        return body;
+    }
+
     public Body createBoneBody(World world, Body skull, float x, float y) {
         Body boneBody;
         BodyDef bodyDef = new BodyDef();
@@ -134,6 +149,7 @@ public class BodyFactory {
     }
 
     //unused - in case we want the bow to have collision in future
+    //TODO - IMPLEMENT AS SHIELD ITEM
     public Body createBowBody(World world, Body player, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();

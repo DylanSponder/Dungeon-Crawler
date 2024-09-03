@@ -41,6 +41,7 @@ public class CreateTexture {
     public TextureRegion obstacle3Texture = new TextureRegion(roomBackground, 0,0,16,16);
 
     public TextureRegion amphoraTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion amphora2Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion damagedAmphoraTexture = new TextureRegion(roomBackground, 0,0,16,16);
 
     public TextureRegion skullTexture = new TextureRegion(roomBackground, 0,0,16,16);
@@ -115,7 +116,9 @@ public class CreateTexture {
     Sprite boneSprite = new Sprite(boneTexture, 192,64, 16, 16);
 
     Sprite amphoraSprite = new Sprite(amphoraTexture, 208,0, 16, 16);
+    Sprite amphora2Sprite = new Sprite(amphoraTexture, 208,16, 16, 16);
     Sprite damagedAmphoraSprite = new Sprite(damagedAmphoraTexture, 224,0, 16, 16);
+    Sprite damagedAmphora2Sprite = new Sprite(damagedAmphoraTexture, 224,16, 16, 16);
 
     Sprite tutorialSprite = new Sprite(tutorialTexture, 0,0, 96, 64);
 
@@ -175,6 +178,8 @@ public class CreateTexture {
         doorBottomRightWallTexture.setRegion(32, 64, 16, 16);
 
         tutoTexture.setRegion(0, 0, 87, 57);
+
+        potionSprite.setRegion(0, 0, 9, 11);
 
         torchLeftTexture.setRegion(208, 32, 16, 16);
         torchRightTexture.setRegion(224, 32, 16, 16);
