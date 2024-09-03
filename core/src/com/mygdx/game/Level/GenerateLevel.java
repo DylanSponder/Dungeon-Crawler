@@ -74,6 +74,7 @@ public class GenerateLevel {
             //path.add(1);
         }
 
+
         boolean temp;
         temp = attemptLevelGen();
         while (!temp) {
@@ -1242,8 +1243,13 @@ public class GenerateLevel {
                             break;
                         case "pot":
                             currentCell = init.cr.middleFloorTile;
-                            Pot p = new Pot(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                            Pot p = new Pot(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 1);
                             pots.add(p);
+                            break;
+                        case "pot2":
+                            currentCell = init.cr.middleFloorTile;
+                            Pot p2 = new Pot(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 2);
+                            pots.add(p2);
                             break;
                             //entities
                         case "enemy":

@@ -176,6 +176,10 @@ public class RenderRules {
                                     drawableLevelLayer.add(index, "pot");
                                     index++;
                                     break;
+                                case "pot2":
+                                    drawableLevelLayer.add(index, "pot2");
+                                    index++;
+                                    break;
                                 case "heal":
                                     //TODO: add potion item
                                     drawableLevelLayer.add(index, "middleFloorTile");

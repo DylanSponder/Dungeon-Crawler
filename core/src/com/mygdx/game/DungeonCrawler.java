@@ -139,7 +139,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//create the Box2D ray handler
 		rayHandler = new RayHandler(world);
-		rayHandler.setAmbientLight(0f, 0f, 0f, 0.001f);
+		rayHandler.setAmbientLight(0f, 0f, 0f, 0.020f);
 		if(debug) {
 			rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
 		}
@@ -158,8 +158,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//add current layers to the TileMap and assign it a renderer
 		layers.add(layer);
-
-
 
 		//create a point light and attach it to the player
 		playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f,0.20f,0,0.55f), 90, PLAYER_X, PLAYER_Y);
@@ -574,7 +572,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		renderer.render();
 
 		//set camera position to always be centred on the playerSprite
-		camera.position.set(player.playerBody.getPosition().x + tx.playerSprite.getWidth() / 2, player.playerBody.getPosition().y + tx.playerSprite.getHeight() / 2, 0);
+		camera.position.set(player.playerBody.getPosition().x + tx.playerSprite.getWidth() / 2 - 8, player.playerBody.getPosition().y + tx.playerSprite.getHeight() / 2 - 8, 0);
 
 		//tutorial texture in the starting room
 		for (Tutorial t : tutorial) {
@@ -710,14 +708,15 @@ public class DungeonCrawler extends ApplicationAdapter {
 					if (value.type == 1) {
 						Pot.renderPot(potBatch, tx.amphoraSprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
 					}
+					else {
+						Pot.renderPot(potBatch, tx.amphora2Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+					}
 
 					if (!reversedPotMap){
 						potArrayMap.reverse();
 						reversedPotMap = true;
 					}
-					else {
-						Pot.renderPot(potBatch, tx.amphora2Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
-					}
+
 				}
 				potBatch.end();
 			}
@@ -726,16 +725,22 @@ public class DungeonCrawler extends ApplicationAdapter {
 			if (potIt.hasNext()) {
 				Pot pot = potIt.next();
 				if (brokenPots.contains(pot)) {
-					//one in five chance to get a potion from a pot - subject to change
+					//one in 7 chance to get a potion from a pot - subject to change
 					int min = 1;
-					int max = 5;
+					int max = 10;
 					int potionChance = (int) (Math.random() * (max - min + 1)) + min;
-					if (potionChance == 5) {
+					if (potionChance == 10) {
 						//create potion object
 						Potion potion = new Potion(world, pot.potBody.getPosition().x, pot.potBody.getPosition().y, 1);
 						potion.createPotion(potionArrayMap, rayHandler);
 						potions.add(potion);
 						potionArrayMap.put(potion.potionBody, potion);
+					} else if (potionChance == 1) {
+						//create heart object
+						//Heart heart = new Heart(world, heart.heartBody.getPosition().x, heart.heartBody.getPosition().y, 1);
+						//heart.createHeart(heartArrayMap, rayHandler);
+						//hearts.add(heart);
+						//heartArrayMap.put(heart.heartBody, heart);
 					}
 
 
@@ -980,8 +985,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		vec.nor();
 
 		//multiply to get desired speed
-		PLAYER_HORIZONTAL_SPEED = vec.x * 80f;
-		PLAYER_VERTICAL_SPEED = vec.y * 80f;
+		PLAYER_HORIZONTAL_SPEED = vec.x * 70f;
+		PLAYER_VERTICAL_SPEED = vec.y * 70f;
 
 		player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
 

@@ -1,7 +1,10 @@
-tlw,toru,dtl,doortl,doortr,dtr,toru,trw
-dlu,f,f,f,f,f,f,dru
-doorul,f,f,f,f,f,f,doorur
-doorll,f,f,f,f,f,f,doorlr
-dll,f,f,f,f,f,f,drl
-lw,fpot2,ftuto,f,f,f,fpot,rw
-blw,tord,dbl,doorbl,doorbr,dbr,tord,brw
+tlw,toru,tw,dtl,doortl,doortr,dtr,tw,toru,trw
+lw,f,f,f,f,f,f,f,f,rw
+torl,f,f,f,f,f,f,f,f,torr
+dlu,f,f,f,f,f,f,f,f,dru
+doorul,f,f,f,f,f,f,f,f,doorur
+doorll,f,f,f,f,f,f,f,f,doorlr
+dll,f,f,ftuto,f,f,f,f,f,drl
+torl,f,f,f,f,f,f,f,f,torr
+lw,f,f,f,f,f,f,f,f,rw
+blw,tord,bw,dbl,doorbl,doorbr,dbr,bw,tord,brw

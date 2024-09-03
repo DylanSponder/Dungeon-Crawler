@@ -1,5 +1,6 @@
 package com.mygdx.game.level.objects;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -15,8 +16,10 @@ public class Pot {
         public Fixture potHitbox;
         public boolean potCreated, damaged;
         public float POT_HEALTH;
+        public int type;
 
-        public Pot(World world, float x, float y) {
+        public Pot(World world, float x, float y, int type) {
+            this.type = type;
             this.world = world;
             this.potX = x;
             this.potY = y;
@@ -40,10 +43,8 @@ public class Pot {
             return this.potBody;
         }
 
-        public static void renderPot(SpriteBatch batch, float x, float y) {
+        public static void renderPot(SpriteBatch batch, Sprite potSprite, float x, float y) {
 
-            final CreateTexture tx = CreateTexture.getInstance();
-
-          //  batch.draw(tx.amphoraSprite,x,y,0,0,16,16,1,1,0);
+            batch.draw(potSprite,x - 8f,y - 8f,0,0,16,16,1,1,0);
         }
     }
