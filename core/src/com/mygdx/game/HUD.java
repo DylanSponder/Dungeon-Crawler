@@ -45,7 +45,7 @@ public class HUD {
     moneyTable = new Table();
     moneyAmount = new Label(totalGoldAsString, new LabelStyle(new BitmapFont(), Color.YELLOW));
     moneyTable.add(moneyAmount);
-    moneySymbol = new Image(new Sprite(tx.coinTexture, 10, 10));
+    moneySymbol = new Image(new Sprite(tx.coinTexture, 16, 16));
     moneyTable.add(moneySymbol).padLeft(2);
 
     Sprite potionSymbol = new Sprite(tx.potionTexture, 9, 11);
@@ -65,7 +65,7 @@ public class HUD {
     Table winTable = new Table();
     winTable.center();
     winTable.setFillParent(true);
-    winWords = new Label("You win!", new LabelStyle(new BitmapFont(), Color.YELLOW));
+    winWords = new Label("Dungeon Cleared", new LabelStyle(new BitmapFont(), Color.YELLOW));
     winTable.add(winWords);
     stage.addActor(winTable);
   }
@@ -79,7 +79,7 @@ public class HUD {
     totalGoldAsString  = String.valueOf(totalGold);
     moneyAmount = new Label(totalGoldAsString, new LabelStyle(new BitmapFont(), Color.YELLOW));
     moneyTable.add(moneyAmount);
-    moneySymbol = new Image(new Sprite(tx.coinTexture, 10, 10));
+    moneySymbol = new Image(new Sprite(tx.coinTexture, 16, 16));
     moneyTable.add(moneySymbol).padLeft(2);
   }
 

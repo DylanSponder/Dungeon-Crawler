@@ -736,6 +736,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 						potions.add(potion);
 						potionArrayMap.put(potion.potionBody, potion);
 					} else if (potionChance == 1) {
+						Bone bone = new Bone(world, pot.potBody, pot.potBody.getPosition().x, pot.potBody.getPosition().y, false, 0);
+						bone.createBone();
+						bones.add(bone);
+						boneArrayMap.put(bone.boneBody, bone);
+
 						//create heart object
 						//Heart heart = new Heart(world, heart.heartBody.getPosition().x, heart.heartBody.getPosition().y, 1);
 						//heart.createHeart(heartArrayMap, rayHandler);
