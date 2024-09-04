@@ -24,19 +24,19 @@ public class Torch {
     public void createTorch(int direction) {
 
         if (direction == 1){
-            ConeLight torch = new ConeLight(rayHandler, 10, new Color(0.25f,0.20f,0,1f), 70,torchX,torchY, 270,90);
+            ConeLight torch = new ConeLight(rayHandler, 10, new Color(0.25f,0.20f,0,0.85f), 80,torchX,torchY, 270,90);
             torch.setXray(true);
         }
         if (direction == 2){
-            ConeLight torch = new ConeLight(rayHandler, 10, new Color(0.25f,0.20f,0,1f), 70,torchX,torchY, 180,90);
+            ConeLight torch = new ConeLight(rayHandler, 10, new Color(0.25f,0.20f,0,0.85f), 80,torchX,torchY, 180,90);
             torch.setXray(true);
         }
         if (direction == 3){
-            ConeLight torch = new ConeLight(rayHandler, 10, new Color(0.25f,0.20f,0,1f), 70,torchX,torchY, 90,90);
+            ConeLight torch = new ConeLight(rayHandler, 10, new Color(0.25f,0.20f,0,0.85f), 80,torchX,torchY, 90,90);
             torch.setXray(true);
         }
         if (direction == 4){
-            ConeLight torch = new ConeLight(rayHandler, 10, new Color(0.25f,0.20f,0,1f), 70,torchX,torchY, 0,90);
+            ConeLight torch = new ConeLight(rayHandler, 10, new Color(0.25f,0.20f,0,0.85f), 80,torchX,torchY, 0,90);
             torch.setXray(true);
         }
 
