@@ -22,6 +22,42 @@ public enum EnemyState implements State<Enemy> {
             Wander wander = enemy.wander(enemy.enemyAI, orientation);
             BlendedSteering blendedWanderSteering = enemy.blendSteering(wander, enemy.avoidObstacle(), 2.5f, 2);
             enemy.enemyAI.setBehaviour(blendedWanderSteering);
+            //BlendedSteering blendedWanderSteering = enemy.blendTripleSteering(wander, enemy.avoidObstacle(), enemy.detectPlayer(), 2.5f, 2.5f, 0.5f);
+            //enemy.enemyAI.setBehaviour(blendedWanderSteering);
+            //BlendedSteering blendedSightSteering = enemy.blendSteering(enemy.detectPlayer(), 2.5f, 2);
+            //enemy.playerDetectionRay.setBehaviour(enemy.detectPlayer());
+        }
+
+        @Override
+        public void update(Enemy enemy) {
+
+        }
+
+        @Override
+        public void exit(Enemy enemy) {
+
+        }
+
+        @Override
+        public boolean onMessage(Enemy enemy, Telegram telegram) {
+            return false;
+        }
+    },
+
+    DETECT() {
+        @Override
+        public void enter(Enemy enemy) {
+            //set a random orientation for the enemy
+            float orientation = MathUtils.random(-MathUtils.PI, MathUtils.PI);
+            enemy.playerDetectionRay.setBehaviour(null);
+            Wander wander = enemy.wander(enemy.enemyAI, orientation);
+            //BlendedSteering blendedWanderSteering = enemy.blendSteering(wander, enemy.avoidObstacle(), 2.5f, 2);
+            //enemy.enemyAI.setBehaviour(blendedWanderSteering);
+            //BlendedSteering blendedWanderSteering = enemy.blendTripleSteering(wander, enemy.avoidObstacle(), enemy.detectPlayer(), 2.5f, 2.5f, 0.5f);
+            //enemy.enemyAI.setBehaviour(blendedWanderSteering);
+            //BlendedSteering blendedSightSteering = enemy.blendSteering(wander, enemy.detectPlayer(), 2.5f, 2);
+            //enemy.playerDetectionRay.setBehaviour(blendedSightSteering);
+            enemy.playerDetectionRay.setBehaviour(enemy.detectPlayer());
         }
 
         @Override

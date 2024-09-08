@@ -1,5 +1,6 @@
 package com.mygdx.game.entity.behaviours.fsm;
 
+import box2dLight.PointLight;
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
@@ -9,19 +10,18 @@ import com.badlogic.gdx.ai.steer.limiters.LinearAccelerationLimiter;
 import com.badlogic.gdx.ai.steer.utils.rays.CentralRayWithWhiskersConfiguration;
 import com.badlogic.gdx.ai.steer.utils.rays.RayConfigurationBase;
 import com.badlogic.gdx.ai.steer.utils.rays.SingleRayConfiguration;
+import com.badlogic.gdx.ai.utils.Ray;
 import com.badlogic.gdx.ai.utils.RaycastCollisionDetector;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.Skull;
-import com.mygdx.game.entity.utils.Box2DSteeringEntity;
+import com.mygdx.game.entity.utils.EnemyBox2DSteeringEntity;
 import com.mygdx.game.entity.utils.EnemyBox2DRaycastCollisionDetector;
 import com.mygdx.game.HUD;
 import com.mygdx.game.entity.utils.PlayerBox2DRaycastCollisionDetector;
@@ -30,15 +30,16 @@ import static com.mygdx.game.DungeonCrawler.*;
 
 public class Enemy {
     private StateMachine<Enemy, EnemyState> stateMachine;
-    public Body enemyBody, enemyDetectionBody;
+    public Body enemyBody, enemyDetectionBody, enemyPlayerDetectionBody;
     public Fixture enemyHitbox;
     public Fixture enemyDetectionRadius;
-    public Box2DSteeringEntity enemyAI;
+    public EnemyBox2DSteeringEntity enemyAI, playerDetectionRay;
+    //public PlayerBox2DRaycastCollisionDetector playerDetectionRay;
     public ShapeRenderer shapeRenderer;
     public Vector2 tmp = new Vector2();
     public Vector2 tmp2 = new Vector2();
-    public RayConfigurationBase<Vector2>[] rayConfigurations;
-    public RaycastObstacleAvoidance<Vector2> raycastObstacleAvoidanceSB;
+    public RayConfigurationBase<Vector2>[] rayConfigurations, rayConfigurations2;
+    public RaycastObstacleAvoidance<Vector2> raycastObstacleAvoidanceSB, raycastPlayerDetectionSB;
     public Seek seekSB;
     public BlendedSteering blendedSteeringSB;
     public Vector2 wanderCenter;
@@ -49,6 +50,7 @@ public class Enemy {
     public HUD hud;
     public Skull skull;
     public int room;
+    public boolean playerSighted;
 
     public Enemy(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
@@ -61,11 +63,15 @@ public class Enemy {
         //creates an enemy with a body, hitbox and steering entity
         enemyBody = bodyFactory.createEnemyBody(world, x, y);
         enemyDetectionBody = bodyFactory.createEnemyBody(world, x, y);
+
         enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 7f);
 
-        enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 75);
+        enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 45);
+
         enemyDetectionRadius.setSensor(true);
-        enemyAI = new Box2DSteeringEntity(enemyBody, 10);
+
+        enemyAI = new EnemyBox2DSteeringEntity(enemyBody, 10);
+        playerDetectionRay = new EnemyBox2DSteeringEntity(enemyBody,10);
 
         stateMachine = new DefaultStateMachine<Enemy, EnemyState>(this, EnemyState.WANDER);
         stateMachine.changeState(EnemyState.WANDER);
@@ -114,12 +120,12 @@ public class Enemy {
  */
     }
 
-    public Wander<Vector2> wander(Box2DSteeringEntity owner, float wanderOrientation) {
+    public Wander<Vector2> wander(EnemyBox2DSteeringEntity owner, float wanderOrientation) {
         wanderSB = new Wander<Vector2>(owner)
                 .setFaceEnabled(false)
                 //.setAlignTolerance(0.001f)
-               // .setDecelerationRadius(1)
-                .setTimeToTarget(0.1f)
+                .setDecelerationRadius(5)
+                .setTimeToTarget(0.2f)
                 .setWanderOffset(3)
                 .setWanderOrientation(wanderOrientation)
                 .setWanderRadius(1.5f)
@@ -141,8 +147,9 @@ public class Enemy {
     }
 
     public RaycastObstacleAvoidance avoidObstacle(){
+
         RayConfigurationBase<Vector2>[] localRayConfigurations = new RayConfigurationBase[] {
-                new CentralRayWithWhiskersConfiguration<Vector2>(enemyAI, 17.5f,
+                new CentralRayWithWhiskersConfiguration<Vector2>(enemyAI, 20f,
                         15f, 15 * MathUtils.degreesToRadians)};
         rayConfigurations = localRayConfigurations;
 
@@ -154,25 +161,76 @@ public class Enemy {
     }
 
     public RaycastObstacleAvoidance detectPlayer(){
+
+        //Ray<Vector2> ray = new Ray<>(enemyBody.getPosition(),player.playerBody.getPosition());
+
+        Vector2 translatedCoords = new Vector2();
+        translatedCoords.x = enemyBody.getPosition().x + 8f;
+        translatedCoords.x = enemyBody.getPosition().y - 8f;
+        world.rayCast(new RayCastCallback() {
+                          @Override
+                          public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
+                              System.out.println(fixture.getBody().getUserData());
+                              if (!fixture.isSensor()) {
+                                  if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody) {
+                                      System.out.println("STATIC BODY");
+                                      System.out.println(fixture.getBody().getUserData());
+                                      return 1;
+                                  }
+
+                                  }
+                              else {
+                                  //TODO THIS NEEDS TO HIT ENEMIES INSTEAD - OPPOSITE OF ORIGINAL APPROACH
+                                  //System.out.println(fixture.);
+                                  playerSighted = false;
+                                  if (fixture.getBody().getUserData() != "Player") {
+                                      System.out.println("NOT A PLAYER BUT DYNAMIC");
+                                      return 0;
+                                  } else if (fixture.getBody().getUserData() == "Player") {
+                                      System.out.println("PLAYER SIGHTED! NO OBSTRUCTION");
+                                      playerSighted = true;
+                                      return 0;
+                                  }
+                                  return 0;
+                              }
+                              return 1;
+                          }
+                      },
+                translatedCoords, player.playerBody.getPosition());
+
+        /*
         RayConfigurationBase<Vector2>[] localRayConfigurations = new RayConfigurationBase[] {
-                new SingleRayConfiguration(enemyAI, 75f)};
-        rayConfigurations = localRayConfigurations;
+                new SingleRayConfiguration(playerDetectionRay, 50f)};
 
-        RaycastCollisionDetector<Vector2> raycastCollisionDetector = new PlayerBox2DRaycastCollisionDetector(DungeonCrawler.world);
-        raycastObstacleAvoidanceSB = new RaycastObstacleAvoidance<Vector2>(enemyAI, rayConfigurations[0],
+
+        rayConfigurations2 = localRayConfigurations;
+         */
+        /*
+                RaycastCollisionDetector<Vector2> raycastCollisionDetector = new PlayerBox2DRaycastCollisionDetector(DungeonCrawler.world);
+        raycastPlayerDetectionSB = new RaycastObstacleAvoidance<Vector2>(playerDetectionRay, rayConfigurations2[0],
                 raycastCollisionDetector, 200);
-
-        return raycastObstacleAvoidanceSB;
+         */
+        return raycastPlayerDetectionSB;
     }
 
 
     public BlendedSteering blendSteering(SteeringBehavior behaviour, SteeringBehavior behaviour2, float weight1, float weight2) {
 
-
         BlendedSteering<Vector2> blendedSteeringSB = new BlendedSteering<Vector2>(enemyAI);
         blendedSteeringSB
                 .add(behaviour,weight1)
                 .add(avoidObstacle(),weight2);
+
+        return blendedSteeringSB;
+    }
+
+    public BlendedSteering blendTripleSteering(SteeringBehavior behaviour, SteeringBehavior behaviour2, SteeringBehavior behaviour3, float weight1, float weight2, float weight3) {
+
+        BlendedSteering<Vector2> blendedSteeringSB = new BlendedSteering<Vector2>(enemyAI);
+        blendedSteeringSB
+                .add(behaviour,weight1)
+                .add(avoidObstacle(),weight2)
+                .add(behaviour3, weight3);
 
         return blendedSteeringSB;
     }

@@ -9,6 +9,11 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.game.DungeonCrawler;
+import com.mygdx.game.entity.behaviours.fsm.Enemy;
+import com.mygdx.game.entity.behaviours.fsm.EnemyState;
+
+import static com.mygdx.game.DungeonCrawler.enemies;
 
 public class EnemyBox2DRaycastCollisionDetector implements RaycastCollisionDetector<Vector2> {
 
@@ -50,21 +55,30 @@ public class EnemyBox2DRaycastCollisionDetector implements RaycastCollisionDetec
 
         @Override
         public float reportRayFixture (Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
+            //we need to get the first collided object between the enemy and the player
 
+            //System.out.println(fixture.getBody().getUserData());
+            boolean hitWall = false;
             //checks to see if the body this ray collided with was a sensor e.g. a detectionRadius
             if (!fixture.isSensor()){
                 if (outputCollision != null) outputCollision.set(point, normal);
-                collided = true;
-                if (fixture.getBody().getType() == BodyDef.BodyType.DynamicBody){
+
+                if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody){
+                    collided = true;
+                    for (Enemy e : enemies) {
+                        if (e.enemyBody == fixture.getBody() && !hitWall) {
+                            hitWall = true;
+                            System.out.println("WANDERING");
+                            e.getStateMachine().changeState(EnemyState.WANDER);
+                        }
+                    }
+                    //System.out.println("I'm colliding with a static object!");
+                } else if (fixture.getBody().getType() == BodyDef.BodyType.DynamicBody){
                     //System.out.println("I'm colliding with a dynamic object!");
                     //System.out.println(fixture.getBody().getUserData());
-                    if (fixture.getBody().getUserData() == "Player") {
 
-                    }
                 }
-                else if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody){
-                    //System.out.println("I'm colliding with a static object!");
-                }
+
             }
             return fraction;
         }

@@ -8,11 +8,8 @@ import com.mygdx.game.*;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.behaviours.fsm.Enemy;
 import com.mygdx.game.entity.behaviours.fsm.Shopkeeper;
-import com.mygdx.game.level.objects.Pot;
+import com.mygdx.game.level.objects.*;
 import com.mygdx.game.entity.Tutorial;
-import com.mygdx.game.level.objects.Door;
-import com.mygdx.game.level.objects.Room;
-import com.mygdx.game.level.objects.Torch;
 
 import java.io.IOException;
 import java.util.*;
@@ -1189,19 +1186,27 @@ public class GenerateLevel {
                             }
                             break;
                         case "obstacle1":
-                            currentCell = init.cr.obstacle1;
-                            Body newObstacle1 = bf.createObstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
-                            newObstacle1.setUserData("Wall");
+                            currentCell = init.cr.middleFloorTile;
+                            //Body newObstacle1 = bf.createObstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                            Obstacle newObstacle1 = new Obstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 1);
+                            Body ob1Body = newObstacle1.createObstacle();
+                            obstacles.add(newObstacle1);
                             break;
                         case "obstacle2":
-                            currentCell = init.cr.obstacle2;
-                            Body newObstacle2 = bf.createObstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
-                            newObstacle2.setUserData("Wall");
+                            currentCell = init.cr.middleFloorTile;
+                            Obstacle newObstacle2 = new Obstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 2);
+                            Body ob2Body = newObstacle2.createObstacle();
+                            obstacles.add(newObstacle2);
+                            //Body newObstacle2 = bf.createObstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                            //newObstacle2.setUserData("Obstacle");
                             break;
                         case "obstacle3":
-                            currentCell = init.cr.obstacle3;
-                            Body newObstacle3 = bf.createObstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
-                            newObstacle3.setUserData("Wall");
+                            currentCell = init.cr.middleFloorTile;
+                            Obstacle newObstacle3 = new Obstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 3);
+                            Body ob3Body = newObstacle3.createObstacle();
+                            //Body newObstacle3 = bf.createObstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                            //newObstacle3.setUserData("Obstacle");
+                            obstacles.add(newObstacle3);
                             break;
                             //tutorial in starting room
                         case "tuto":

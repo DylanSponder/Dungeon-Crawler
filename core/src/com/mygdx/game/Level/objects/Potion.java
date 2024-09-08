@@ -41,7 +41,10 @@ public class Potion {
 
             this.potionCreated = true;
 
-            this.potionLight = new PointLight(rayHandler, 100, new Color(1f,0.1f,0,0.45f), 40, potionX, potionY);
+            Color potionLightColor = new Color(Color.SCARLET);
+            potionLightColor.a = 0.4f;
+
+            this.potionLight = new PointLight(rayHandler, 100, potionLightColor, 40, potionX, potionY);
             this.potionLight.setXray(true);
 
             return this.potionBody;

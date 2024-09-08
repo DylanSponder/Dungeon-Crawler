@@ -135,6 +135,7 @@ public class GameContactListener implements ContactListener {
         }
 
         //bone branch needs to be revisited - faulty logic is causing bones not to get destroyed somewhere here
+        //split into two if-statements
         if (((fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Enemy")
                 || (fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Player"))
                 || ((fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Bone")
@@ -145,7 +146,9 @@ public class GameContactListener implements ContactListener {
                     fb.getUserData() == "Proximity") {
                 for (Enemy e : enemies) {
                     if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()) {
-                        e.getStateMachine().changeState(EnemyState.ATTACK);
+                       // e.getStateMachine().changeState(EnemyState.ATTACK);
+                        e.getStateMachine().changeState(EnemyState.DETECT);
+                        System.out.println("DETECTING PLAYER");
                     }
                 }
             } else {
@@ -419,6 +422,7 @@ public class GameContactListener implements ContactListener {
                     fb.getUserData() == "Proximity"){
                 for (Enemy e : enemies){
                     if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()){
+                        System.out.println("WANDERING...");
                         e.getStateMachine().changeState(EnemyState.WANDER);
                     }
                 }

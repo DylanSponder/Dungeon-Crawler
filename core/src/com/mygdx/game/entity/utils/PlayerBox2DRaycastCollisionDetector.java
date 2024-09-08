@@ -9,6 +9,11 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.game.DungeonCrawler;
+import com.mygdx.game.entity.behaviours.fsm.Enemy;
+import com.mygdx.game.entity.behaviours.fsm.EnemyState;
+
+import static com.mygdx.game.DungeonCrawler.enemies;
 
 public class PlayerBox2DRaycastCollisionDetector implements RaycastCollisionDetector<Vector2> {
 
@@ -50,16 +55,23 @@ public class PlayerBox2DRaycastCollisionDetector implements RaycastCollisionDete
 
         @Override
         public float reportRayFixture (Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
-
             //checks to see if the body this ray collided with was a sensor e.g. a detectionRadius
             if (!fixture.isSensor()){
+
                 if (outputCollision != null) outputCollision.set(point, normal);
-                collided = true;
+                //collided = true;
                 if (fixture.getBody().getType() == BodyDef.BodyType.DynamicBody){
+                    System.out.println(fixture.getBody().getUserData());
                     //System.out.println("I'm colliding with a dynamic object!");
                     //System.out.println(fixture.getBody().getUserData());
-                    if (fixture.getBody().getUserData() == "Player") {
-
+                        if (fixture.getBody().getUserData() == "Player") {
+                            for (Enemy e : enemies) {
+                                if (e.enemyBody == fixture.getBody()) {
+                                    System.out.println("ATTACKING");
+                                    //e.getStateMachine().changeState(EnemyState.ATTACK);
+                                }
+                            }
+                            System.out.println("PLAYER SIGHTED");
                     }
                 }
                 else if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody){

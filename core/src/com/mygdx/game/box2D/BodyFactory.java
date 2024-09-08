@@ -275,7 +275,8 @@ public class BodyFactory {
         roomShape.dispose();
         body.setUserData("Room-"+roomIndex);
         roomHitbox.setUserData("Room-"+roomIndex);
-        roomHitbox.isSensor();
+        //roomHitbox.isSensor();
+        roomHitbox.setSensor(true);
         return roomHitbox;
     }
 
@@ -290,6 +291,7 @@ public class BodyFactory {
         PolygonShape playerShape = new PolygonShape();
         playerShape.setAsBox(6f, 5f);
         Fixture playerHitbox = body.createFixture(playerShape, 1.0f);
+        body.setUserData("Player");
         playerHitbox.setUserData("PlayerHitbox");
         playerShape.dispose();
         return body;

@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -22,6 +23,8 @@ public class CreateTexture {
     Texture enemyEyeTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Eye/Eye.png"));
     Texture shopkeeperTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/OldMan3/SpriteSheet.png"));
     Texture tutorialTexture = new Texture(Gdx.files.internal("NinjaAdventure/HUD/Tuto.png"));
+    Texture fireAnimationSheet = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/Fire.png"));
+    //Texture columnsSheet = new Texture(Gdx.files.internal("");
 
     public TextureRegion roomMiddleFloorTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomLeftWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
@@ -43,6 +46,11 @@ public class CreateTexture {
     public TextureRegion amphoraTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion amphora2Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion damagedAmphoraTexture = new TextureRegion(roomBackground, 0,0,16,16);
+
+    public TextureRegion fireTexture = new TextureRegion(fireAnimationSheet,0,0,16,16);
+    public Animation<TextureRegion> fireAnimation = new Animation<TextureRegion>(0.5f,fireTexture);
+
+    public TextureRegion columnsTexture;
 
     public TextureRegion skullTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion boneTexture = new TextureRegion(roomBackground, 0,0,16,16);
@@ -96,6 +104,12 @@ public class CreateTexture {
     Sprite playerDown = new Sprite(playerTexture, 0, 0, 16, 16);
     Sprite playerLeft = new Sprite(playerTexture, 32, 0, 16, 16);
     Sprite playerRight = new Sprite(playerTexture, 48, 0, 16, 16);
+
+    Sprite playerUpRightLean = new Sprite(playerTexture, 0, 64, 16, 16);
+    Sprite playerUpLeftLean = new Sprite(playerTexture, 16, 64, 16, 16);
+    Sprite playerDownLeftLean = new Sprite(playerTexture, 32, 64, 16, 16);
+    Sprite playerDownRightLean = new Sprite(playerTexture, 48, 64, 16, 16);
+
     Sprite playerAttackUp = new Sprite(playerAttackTexture, 16, 0, 16, 16);
     Sprite playerAttackDown = new Sprite(playerAttackTexture, 0, 0, 16, 16);
     Sprite playerAttackLeft = new Sprite(playerAttackTexture, 32, 0, 16, 16);
@@ -114,6 +128,10 @@ public class CreateTexture {
     Sprite skullSprite = new Sprite(skullTexture, 176,64, 16, 16);
     Sprite damagedSkullSprite = new Sprite(skullTexture, 192,48, 16, 16);
     Sprite boneSprite = new Sprite(boneTexture, 192,64, 16, 16);
+
+    Sprite obstacle1Sprite = new Sprite(obstacle1Texture,80,48,16,16);
+    Sprite obstacle2Sprite = new Sprite(obstacle2Texture,96,48,16,16);
+    Sprite obstacle3Sprite = new Sprite(obstacle3Texture,112,48,16,16);
 
     Sprite amphoraSprite = new Sprite(amphoraTexture, 208,0, 16, 16);
     Sprite amphora2Sprite = new Sprite(amphoraTexture, 208,16, 16, 16);
@@ -144,9 +162,10 @@ public class CreateTexture {
         roomTopRightTurnTexture.setRegion(48, 16, 16, 16);
         roomBottomLeftTurnTexture.setRegion(32, 32, 16, 16);
         roomBottomRightTurnTexture.setRegion(48, 32, 16, 16);
-        obstacle1Texture.setRegion(80,64,16,16);
-        obstacle2Texture.setRegion(96,64,16,16);
-        obstacle3Texture.setRegion(112,64,16,16);
+        //deprecated - changed to sprite
+        //obstacle1Texture.setRegion(80,64,16,16);
+        //obstacle2Texture.setRegion(96,64,16,16);
+        //obstacle3Texture.setRegion(112,64,16,16);
 
         doorTopLeftTexture.setRegion(128, 0, 16, 16);
         doorTopRightTexture.setRegion(144, 0, 16, 16);
@@ -181,9 +200,9 @@ public class CreateTexture {
 
         potionSprite.setRegion(0, 0, 9, 11);
 
-        torchLeftTexture.setRegion(208, 32, 16, 16);
-        torchRightTexture.setRegion(224, 32, 16, 16);
-        torchUpTexture.setRegion(208, 48, 16, 16);
-        torchDownTexture.setRegion(224, 48, 16, 16);
+        torchLeftTexture.setRegion(16, 32, 16, 16);
+        torchRightTexture.setRegion(16, 48, 16, 16);
+        torchUpTexture.setRegion(32, 48, 16, 16);
+        torchDownTexture.setRegion(48, 48, 16, 16);
     }
 }
