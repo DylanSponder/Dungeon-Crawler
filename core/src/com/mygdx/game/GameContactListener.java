@@ -189,6 +189,7 @@ public class GameContactListener implements ContactListener {
                     && fb.getBody().getUserData() == "Bone") {
 
                 if (fa.getBody().getUserData() == "Door"){
+                    System.out.println("DOOR FIX A");
                     for (Room r : GenerateLevel.init.roomList) {
                         for (Door d : r.doors) {
                             if (d.doorBody == fa.getBody()) {
@@ -201,6 +202,12 @@ public class GameContactListener implements ContactListener {
                         }
                     }
                 }
+                else if (fa.getBody().getUserData() == "Wall"){
+                    System.out.println("WALL FIX A");
+                    if (!boneBodiesCollided.contains(fb.getBody())) {
+                        boneBodiesCollided.add(fb.getBody());
+                    }
+                }
 
             } else if ((((fb.getBody().getUserData() == "Enemy" && fb.getUserData() != "Proximity")
                         || fb.getBody().getUserData() == "Wall")
@@ -208,6 +215,7 @@ public class GameContactListener implements ContactListener {
                         && fa.getBody().getUserData() == "Bone") {
 
                 if (fb.getBody().getUserData() == "Door"){
+                    System.out.println("DOOR FIX B");
                     for (Room r : GenerateLevel.init.roomList) {
                         for (Door d : r.doors) {
                             if (d.doorBody == fb.getBody()) {
@@ -218,6 +226,12 @@ public class GameContactListener implements ContactListener {
                                 }
                             }
                         }
+                    }
+                }
+                else if (fa.getBody().getUserData() == "Wall"){
+                    System.out.println("WALL FIX B");
+                    if (!boneBodiesCollided.contains(fa.getBody())) {
+                        boneBodiesCollided.add(fa.getBody());
                     }
                 }
             }
@@ -381,8 +395,8 @@ public class GameContactListener implements ContactListener {
                             GenerateLevel.init.roomList.get(e.room).enemyCounter--;
                             if (GenerateLevel.init.roomList.get(e.room).enemyCounter < 1) {
                                 GenerateLevel.init.roomList.get(player.currentRoom).unlockAllDoors(world, GenerateLevel.init.roomList.get(player.currentRoom), false);
-                                DungeonCrawler.roomClear.play();
-                                DungeonCrawler.roomClear.dispose();
+                                //DungeonCrawler.roomClear.play();
+                                //DungeonCrawler.roomClear.dispose();
                             }
                             break;
                         }

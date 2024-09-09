@@ -173,8 +173,8 @@ public class Enemy {
                               System.out.println(fixture.getBody().getUserData());
                               if (!fixture.isSensor()) {
                                   if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody) {
-                                      System.out.println("STATIC BODY");
-                                      System.out.println(fixture.getBody().getUserData());
+                                      //System.out.println("STATIC BODY");
+                                      //System.out.println(fixture.getBody().getUserData());
                                       return 1;
                                   }
 
@@ -184,10 +184,10 @@ public class Enemy {
                                   //System.out.println(fixture.);
                                   playerSighted = false;
                                   if (fixture.getBody().getUserData() != "Player") {
-                                      System.out.println("NOT A PLAYER BUT DYNAMIC");
+                                      //System.out.println("NOT A PLAYER BUT DYNAMIC");
                                       return 0;
                                   } else if (fixture.getBody().getUserData() == "Player") {
-                                      System.out.println("PLAYER SIGHTED! NO OBSTRUCTION");
+                                      //System.out.println("PLAYER SIGHTED! NO OBSTRUCTION");
                                       playerSighted = true;
                                       return 0;
                                   }

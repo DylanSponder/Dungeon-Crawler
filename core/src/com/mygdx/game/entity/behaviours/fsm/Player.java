@@ -23,9 +23,11 @@ public class Player {
     public Body playerBody;
     public int currentRoom;
     public boolean touchingRoom;
+    public boolean midAnimationFrame;
 
     public Player() {
         PLAYER_HEALTH = 12;
+        midAnimationFrame = false;
     }
 
     public Body createPlayer(World world, float PLAYER_X, float PLAYER_Y){

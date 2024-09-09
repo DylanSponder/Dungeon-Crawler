@@ -7,15 +7,16 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class CreateTexture {
-    Texture heartTexture = new Texture(Gdx.files.internal("NinjaAdventure/HUD/Heart.png"));
-    Texture potionTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Potion/LifePot.png"));
+    //TODO Link all textures to HellasDungeon path
+    Texture heartTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Heart.png"));
+    Texture potionTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/LifePot.png"));
     Texture emptySlotTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Potion/Empty.png"));
-    Texture coinTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Treasure/Coin2Preview.png"));
-    Texture playerTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/Knight/SpriteSheet.png"));
-    Texture playerAttackTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/Knight/SeparateAnim/Attack.png"));
+    Texture coinTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Coin2Preview.png"));
+    Texture playerTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SpriteSheet.png"));
+    Texture playerAttackTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/Attack.png"));
     Texture roomBackground = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/Interior/CustomTileset.png"));
     //Texture roomDoorTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHouse.png"));
-    Texture roomHoleTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHole.png"));
+    //Texture roomHoleTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHole.png"));
     Texture swordTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/BigSword/SpriteInHand.png"));
     Texture bowTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/Bow/Sprite.png"));
     Texture arrowTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/Bow/Arrow.png"));
@@ -24,7 +25,7 @@ public class CreateTexture {
     Texture shopkeeperTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/OldMan3/SpriteSheet.png"));
     Texture tutorialTexture = new Texture(Gdx.files.internal("NinjaAdventure/HUD/Tuto.png"));
     Texture fireAnimationSheet = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/Fire.png"));
-    //Texture columnsSheet = new Texture(Gdx.files.internal("");
+    Texture columnsTextureSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Columns.png"));
 
     public TextureRegion roomMiddleFloorTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomLeftWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
@@ -50,7 +51,15 @@ public class CreateTexture {
     public TextureRegion fireTexture = new TextureRegion(fireAnimationSheet,0,0,16,16);
     public Animation<TextureRegion> fireAnimation = new Animation<TextureRegion>(0.5f,fireTexture);
 
-    public TextureRegion columnsTexture;
+    public TextureRegion colTop1 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion colTop2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion colTop3 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion colStem = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion colStemDamaged1 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion colStemDamaged2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion colBase = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion pedestal1 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion pedestal2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
 
     public TextureRegion skullTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion boneTexture = new TextureRegion(roomBackground, 0,0,16,16);
@@ -96,7 +105,7 @@ public class CreateTexture {
     public TextureRegion doorBottomRightOpenTexture = new TextureRegion(roomBackground, 0,0,16,16);
 
     //TextureRegion doorTexture = new TextureRegion(roomDoorTexture, 0, 0, 16, 16);
-    TextureRegion holeTexture = new TextureRegion(roomHoleTexture, 0, 0, 16, 16);
+    //TextureRegion holeTexture = new TextureRegion(roomHoleTexture, 0, 0, 16, 16);
 
     //outline player sprites
     Sprite playerSprite = new Sprite(playerTexture, 0, 0, 16, 16);
@@ -166,6 +175,16 @@ public class CreateTexture {
         //obstacle1Texture.setRegion(80,64,16,16);
         //obstacle2Texture.setRegion(96,64,16,16);
         //obstacle3Texture.setRegion(112,64,16,16);
+
+        colTop1.setRegion(0, 0, 16, 16);
+        colTop2.setRegion(16, 0, 16, 16);
+        colTop3.setRegion(32, 0, 16, 16);
+        colStem.setRegion(0, 16, 16, 16);
+        colStemDamaged1.setRegion(16, 16, 16, 16);
+        colStemDamaged2.setRegion(32, 16, 16, 16);
+        colBase.setRegion(0, 32, 16, 16);
+        pedestal1.setRegion(16, 32, 16, 16);
+        pedestal2.setRegion(32, 32, 16, 16);
 
         doorTopLeftTexture.setRegion(128, 0, 16, 16);
         doorTopRightTexture.setRegion(144, 0, 16, 16);

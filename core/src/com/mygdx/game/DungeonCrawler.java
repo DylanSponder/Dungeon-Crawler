@@ -13,7 +13,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -43,6 +45,7 @@ import javax.swing.*;
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch playerBatch, arrowBatch, enemyBatch, potBatch, hudBatch, tutoBatch;
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch;
+	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch;
 	public static World world;
 	public static boolean debug = true;
 	private Box2DDebugRenderer b2dr;
@@ -80,6 +83,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private PointLight playerTorch;
 	private BitmapFont.BitmapFontData bmfData;
 	private BitmapFont bmf;
+	private boolean leanDown = false, leanUp = false, leanLeft = false, leanRight = false, leanUpLeft = false, leanUpRight = false;
 
 	@Override
 	public void create() {
@@ -87,6 +91,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//bmf.getData();
 		//bmfData.setGlyphRegion();
 		//bmfData = new BitmapFont.BitmapFontData();
+		//bmf = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/GreekAlphabet-export.fnt"));
 
 		world = new World(new Vector2(0, 0f), false);
 		playerBatch = new SpriteBatch();
@@ -101,6 +106,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 		potBatch = new SpriteBatch();
 		potionBatch = new SpriteBatch();
 		obstacleBatch = new SpriteBatch();
+		columnTopBatch = new SpriteBatch();
+		columnStemBatch = new SpriteBatch();
+		columnBaseBatch = new SpriteBatch();
 		reversedArrowMap = false;
 		reversedSkullMap = false;
 		reversedPotMap = false;
@@ -121,7 +129,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		collectedPotions = new ArrayList<>();
 		obstacles = new ArrayList<>();
 
-		roomClear = Gdx.audio.newMusic(Gdx.files.internal("NinjaAdventure/Sounds/Menu/Accept.wav"));
+		//roomClear = Gdx.audio.newMusic(Gdx.files.internal("NinjaAdventure/Sounds/Menu/Accept.wav"));
 		//swordSlash = Gdx.audio.newMusic(Gdx.files.internal("Sounds/slash.mp3"));
 
 		final BodyFactory bf = new BodyFactory();
@@ -241,7 +249,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 				if (button == 0 && (!playerMeleeAttacking && !playerRangedAttacking)) {
 					//if player presses left mouse attack with the sword
-					float playerMeleeAttackSpeedInSeconds = 0.4f;
+					float playerMeleeAttackSpeedInSeconds = 0.45f;
 					playerMeleeAttacking = true;
 
 					if (tx.playerSprite.equals(tx.playerDown)) {
@@ -284,7 +292,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					PLAYER_VERTICAL_SPEED = 0;
 					player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
 					//CreateSound.slash.play();
-					roomClear.play();
+					//roomClear.play();
 					//swordSlash.setLooping(true);
 					//swordSlash.play();
 					//swordSlash.setVolume(1f);
@@ -315,7 +323,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 				//if player presses right mouse attack with a bow
 				if (button == 1 && (!playerMeleeAttacking && !playerRangedAttacking)) {
-					float playerRangedAttackSpeedInSeconds = 2f;
+					float playerRangedAttackSpeedInSeconds = 0.57f;
 					playerRangedAttacking = true;
 
 					if (tx.playerSprite.equals(tx.playerDown)) {
@@ -430,7 +438,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 				//if player presses space attack with the sword
 				if (((keycode == 62)) && (!playerMeleeAttacking && !playerRangedAttacking)) {
-					float playerMeleeAttackSpeedInSeconds = 0.4f;
+					float playerMeleeAttackSpeedInSeconds = 0.45f;
 					playerMeleeAttacking = true;
 
 					if (tx.playerSprite.equals(tx.playerDown)) {
@@ -473,7 +481,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					PLAYER_VERTICAL_SPEED = 0;
 					player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
 					//CreateSound.slash.play();
-					roomClear.play();
+					//roomClear.play();
 					//swordSlash.setLooping(true);
 					//swordSlash.play();
 					//swordSlash.setVolume(1f);
@@ -504,7 +512,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 				//if player presses enter attack with a bow
 				if (keycode == 66 && (!playerMeleeAttacking && !playerRangedAttacking)) {
-					float playerRangedAttackSpeedInSeconds = 0.35f;
+					float playerRangedAttackSpeedInSeconds = 0.57f;
 					playerRangedAttacking = true;
 
 					if (tx.playerSprite.equals(tx.playerDown)) {
@@ -514,7 +522,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
 						arrowHitbox.setUserData("DownArrow");
 						arrowBody.setLinearVelocity(0, -500f);
-					} else if (tx.playerSprite.equals(tx.playerUp) || tx.playerSprite.equals(tx.playerUpLeftLean) || tx.playerSprite.equals(tx.playerUpRightLean)) {
+					} else if (tx.playerSprite.equals(tx.playerUp)) {
 						playerDirection = "Up";
 						tx.playerSprite = tx.playerAttackUp;
 						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y + 14f);
@@ -703,27 +711,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 		}
 
-		if (!boneArrayMap.isEmpty()) {
-			for (OrderedMap.Entry<Body, Bone> boneEntry : boneArrayMap.entries()) {
-				Body key = boneEntry.key;
-				//render each bone
-				boneBatch.begin();
-				Bone.renderBone(boneBatch, tx.boneSprite, key.getPosition().x, key.getPosition().y, key.getAngle());
-				boneBatch.end();
-			}
-
-			Iterator<Body> boneIt = boneBodiesCollided.iterator();
-			if (boneIt.hasNext()) {
-				Body boneBody = boneIt.next();
-				if (boneArrayMap.containsKey(boneBody)) {
-					boneArrayMap.removeKey(boneBody);
-					boneIt.remove();
-					world.destroyBody(boneBody);
-					bones.remove(boneBody);
-				}
-			}
-		}
-
 		for (Pot p : pots) {
 			if (!p.potCreated) {
 				potArrayMap.put(p.createPot(potArrayMap), p);
@@ -840,6 +827,27 @@ public class DungeonCrawler extends ApplicationAdapter {
 					break;
 			}
 			obstacleBatch.end();
+		}
+
+		if (!boneArrayMap.isEmpty()) {
+			for (OrderedMap.Entry<Body, Bone> boneEntry : boneArrayMap.entries()) {
+				Body key = boneEntry.key;
+				//render each bone
+				boneBatch.begin();
+				Bone.renderBone(boneBatch, tx.boneSprite, key.getPosition().x, key.getPosition().y, key.getAngle());
+				boneBatch.end();
+			}
+
+			Iterator<Body> boneIt = boneBodiesCollided.iterator();
+			if (boneIt.hasNext()) {
+				Body boneBody = boneIt.next();
+				if (boneArrayMap.containsKey(boneBody)) {
+					boneArrayMap.removeKey(boneBody);
+					boneIt.remove();
+					world.destroyBody(boneBody);
+					bones.remove(boneBody);
+				}
+			}
 		}
 
 		playerBatch.begin();
@@ -982,7 +990,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 		doorBatch.setProjectionMatrix(camera.combined);
 		potBatch.setProjectionMatrix(camera.combined);
 		potionBatch.setProjectionMatrix(camera.combined);
-
+		columnBaseBatch.setProjectionMatrix(camera.combined);
+		columnStemBatch.setProjectionMatrix(camera.combined);
+		columnTopBatch.setProjectionMatrix(camera.combined);
 		hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
 		hud.stage.draw();
 	}
@@ -1026,6 +1036,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 		doorBatch.dispose();
 		potBatch.dispose();
 		potionBatch.dispose();
+		columnBaseBatch.dispose();
+		columnStemBatch.dispose();
+		columnTopBatch.dispose();
 		rayHandler.dispose();
 		world.dispose();
 		b2dr.dispose();
@@ -1033,14 +1046,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 	public void inputUpdate() {
 		final CreateTexture tx = CreateTexture.getInstance();
-
-		boolean leanDown;
-		boolean leanUp;
-		boolean leanLeft;
-		boolean leanRight;
-		boolean leanUpLeft;
-		boolean leanUpRight;
-
 		leanUp = false;
 		leanDown = false;
 		leanLeft = false;
@@ -1051,58 +1056,84 @@ public class DungeonCrawler extends ApplicationAdapter {
 		PLAYER_HORIZONTAL_SPEED = 0;
 		PLAYER_VERTICAL_SPEED = 0;
 
+		//slighter slower speed than the fastest human reaction times
+		float movementDelay = 0.013f;
+
 		//move playerSprite Sprite by delta speed according to button WASD press
 		if (Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP)) {
+			PLAYER_VERTICAL_SPEED = 1f;
+			leanUp = true;
 			if (leanLeft){
+				PLAYER_HORIZONTAL_SPEED = -1f;
 				tx.playerSprite = tx.playerUpLeftLean;
 			} else if (leanRight) {
+				PLAYER_HORIZONTAL_SPEED = 1f;
 				tx.playerSprite = tx.playerUpRightLean;
 			}
 			else {
-				tx.playerSprite = tx.playerDown;
+				Timer.schedule(new Timer.Task() {
+					@Override
+					public void run() {
+						tx.playerSprite = tx.playerUp;
+					}
+				}, movementDelay);
 			}
-			PLAYER_VERTICAL_SPEED = 1f;
-			leanUp = true;
-
-			tx.playerSprite = tx.playerUp;
 		}
 
 
 		if (Gdx.input.isKeyPressed(Keys.A)||Gdx.input.isKeyPressed(Keys.LEFT)) {
 			PLAYER_HORIZONTAL_SPEED = -1f;
+			leanLeft = true;
 			if (leanDown) {
+				PLAYER_VERTICAL_SPEED = -1f;
 				tx.playerSprite = tx.playerDownLeftLean;
 			} else if (leanUp) {
+				PLAYER_VERTICAL_SPEED = 1f;
 				tx.playerSprite = tx.playerUpLeftLean;
 			} else {
-				tx.playerSprite = tx.playerLeft;
+				Timer.schedule(new Timer.Task() {
+					@Override
+					public void run() {
+						tx.playerSprite = tx.playerLeft;
+					}
+				}, movementDelay);
 			}
-			leanLeft = true;
 		}
-		if (Gdx.input.isKeyPressed(Keys.S)||Gdx.input.isKeyPressed(Keys.DOWN)) {
-			if (leanLeft){
-				tx.playerSprite = tx.playerDownLeftLean;
-			} else if (leanRight) {
-				tx.playerSprite = tx.playerDownRightLean;
-			}
-			else {
-				tx.playerSprite = tx.playerDown;
-			}
 
+
+		if (Gdx.input.isKeyPressed(Keys.S)||Gdx.input.isKeyPressed(Keys.DOWN)) {
 			PLAYER_VERTICAL_SPEED = -1f;
 			leanDown = true;
+			if (leanLeft) {
+				PLAYER_HORIZONTAL_SPEED = -1f;
+				tx.playerSprite = tx.playerDownLeftLean;
+			} else if (leanRight) {
+				PLAYER_HORIZONTAL_SPEED = 1f;
+				tx.playerSprite = tx.playerDownRightLean;
+			} else {
+				Timer.schedule(new Timer.Task() {
+					@Override
+					public void run() {
+						tx.playerSprite = tx.playerDown;
+					}
+				}, movementDelay);
+			}
 		}
 		if (Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.RIGHT)) {
-			PLAYER_HORIZONTAL_SPEED = -1f;
-			if (leanDown) {
-				tx.playerSprite = tx.playerDownRightLean;
-			} else if (leanUp){
-				tx.playerSprite = tx.playerUpRightLean;
-			} else {
-				tx.playerSprite = tx.playerRight;
-			}
 			PLAYER_HORIZONTAL_SPEED = 1f;
 			leanRight = true;
+			if (leanDown) {
+				tx.playerSprite = tx.playerDownRightLean;
+			} else if (leanUp) {
+				tx.playerSprite = tx.playerUpRightLean;
+			} else {
+				Timer.schedule(new Timer.Task() {
+					@Override
+					public void run() {
+						tx.playerSprite = tx.playerRight;
+					}
+				}, movementDelay);
+			}
 		}
 
 		//create a movement vector and normalize it for diagonal movement
@@ -1114,7 +1145,5 @@ public class DungeonCrawler extends ApplicationAdapter {
 		PLAYER_VERTICAL_SPEED = vec.y * 70f;
 
 		player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
-
-
 	}
 }
