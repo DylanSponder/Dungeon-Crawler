@@ -43,7 +43,7 @@ import com.mygdx.game.level.InitLevel;
 import javax.swing.*;
 
 public class DungeonCrawler extends ApplicationAdapter {
-	private SpriteBatch playerBatch, arrowBatch, enemyBatch, potBatch, hudBatch, tutoBatch;
+	private SpriteBatch playerBatch, arrowBatch, enemyBatch, potBatch, hudBatch, tutoBatch, fontBatch;
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch;
 	public static World world;
@@ -87,11 +87,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 	@Override
 	public void create() {
-		//bmf = new BitmapFont();
-		//bmf.getData();
-		//bmfData.setGlyphRegion();
-		//bmfData = new BitmapFont.BitmapFontData();
-		//bmf = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/GreekAlphabet-export.fnt"));
+
 
 		world = new World(new Vector2(0, 0f), false);
 		playerBatch = new SpriteBatch();
@@ -109,6 +105,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		columnTopBatch = new SpriteBatch();
 		columnStemBatch = new SpriteBatch();
 		columnBaseBatch = new SpriteBatch();
+		fontBatch = new SpriteBatch();
 		reversedArrowMap = false;
 		reversedSkullMap = false;
 		reversedPotMap = false;
@@ -138,6 +135,23 @@ public class DungeonCrawler extends ApplicationAdapter {
 		tx.textureRegionBuilder();
 		final CreateSound cs = new CreateSound();
 		cs.createSound();
+
+		//FileHandle file = new FileHandle("");
+		//bmfData = new BitmapFont.BitmapFontData();
+		//bmfData.fontFile = file;
+		//bmf = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/GreekAlphabet-export.fnt"));
+
+		//bmf = new BitmapFont(bmfData.fontFile,tx.fontTexture);
+
+		//bmf = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/GreekAlphabetConcise-export.fnt"),
+		//		Gdx.files.internal("HellasDungeon/Font/GreekAlphabetConcise-export.png"), false);
+
+		bmf = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/HellasFontStylized-final.fnt"),
+				Gdx.files.internal("HellasDungeon/Font/HellasFontStylized-final.png"), false);
+
+
+		//bmf.getData();
+		//bmfData.setGlyphRegion();
 
 		//get width and height of the game window
 		int h = Gdx.graphics.getHeight();
@@ -936,6 +950,15 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		deadEnemyBodies.clear();
 
+		String str = new String();
+		str = "TEST";
+		String padded = String.format("%-20s", str);
+
+		fontBatch.begin();
+		bmf.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+		bmf.draw(fontBatch, "THIS IS A TEST MESSAGE", player.playerBody.getPosition().x, player.playerBody.getPosition().y);
+		fontBatch.end();
+
 		//toggle to enable or disable collision boxes
 
 		if (debug) {
@@ -993,6 +1016,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		columnBaseBatch.setProjectionMatrix(camera.combined);
 		columnStemBatch.setProjectionMatrix(camera.combined);
 		columnTopBatch.setProjectionMatrix(camera.combined);
+		fontBatch.setProjectionMatrix(camera.combined);
 		hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
 		hud.stage.draw();
 	}

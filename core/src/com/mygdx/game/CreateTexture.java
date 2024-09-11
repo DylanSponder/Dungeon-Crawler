@@ -23,9 +23,12 @@ public class CreateTexture {
     Texture enemySkullTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Skull/SpriteSheet.png"));
     Texture enemyEyeTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Eye/Eye.png"));
     Texture shopkeeperTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/OldMan3/SpriteSheet.png"));
-    Texture tutorialTexture = new Texture(Gdx.files.internal("NinjaAdventure/HUD/Tuto.png"));
+    Texture tutorialTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Tuto.png"));
     Texture fireAnimationSheet = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/Fire.png"));
     Texture columnsTextureSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Columns.png"));
+
+    //Texture font = new Texture(Gdx.files.internal("HellasDungeon/Font/GreekAlphabet.png"));
+    //public TextureRegion fontTexture = new TextureRegion(font,0,0,16,16);
 
     public TextureRegion roomMiddleFloorTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomLeftWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
@@ -103,6 +106,7 @@ public class CreateTexture {
     public TextureRegion doorBottomRightTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion doorBottomLeftOpenTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion doorBottomRightOpenTexture = new TextureRegion(roomBackground, 0,0,16,16);
+
 
     //TextureRegion doorTexture = new TextureRegion(roomDoorTexture, 0, 0, 16, 16);
     //TextureRegion holeTexture = new TextureRegion(roomHoleTexture, 0, 0, 16, 16);
@@ -185,6 +189,8 @@ public class CreateTexture {
         colBase.setRegion(0, 32, 16, 16);
         pedestal1.setRegion(16, 32, 16, 16);
         pedestal2.setRegion(32, 32, 16, 16);
+
+
 
         doorTopLeftTexture.setRegion(128, 0, 16, 16);
         doorTopRightTexture.setRegion(144, 0, 16, 16);

@@ -1,5 +1,7 @@
 package com.mygdx.game.level;
 
+import com.mygdx.game.DungeonCrawler;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -160,18 +162,22 @@ public class RenderRules {
                             String str = sb.toString();
 
                             switch (str) {
+                                    //enemy
                                 case "enemy":
                                     drawableLevelLayer.add(index, "enemy");
                                     index++;
                                     break;
+                                    //shopkeeper entity
                                 case "shop":
                                     drawableLevelLayer.add(index, "shop");
                                     index++;
                                     break;
+                                    //tutorial text in starting room
                                 case "tuto":
                                     drawableLevelLayer.add(index, "tuto");
                                     index++;
                                     break;
+                                    //pots
                                 case "pot":
                                     drawableLevelLayer.add(index, "pot");
                                     index++;
@@ -180,11 +186,49 @@ public class RenderRules {
                                     drawableLevelLayer.add(index, "pot2");
                                     index++;
                                     break;
+                                    //potion - unused as is never placed in natural generation
                                 case "heal":
-                                    //TODO: add potion item
                                     drawableLevelLayer.add(index, "middleFloorTile");
                                     index++;
                                     break;
+                                    //columns
+                                case "col1":
+                                    drawableLevelLayer.add(index, "col1");
+                                    index++;
+                                    break;
+                                case "col2":
+                                    drawableLevelLayer.add(index, "col2");
+                                    index++;
+                                    break;
+                                case "col3":
+                                    drawableLevelLayer.add(index, "col3");
+                                    index++;
+                                    break;
+                                case "col4":
+                                    drawableLevelLayer.add(index, "col4");
+                                    index++;
+                                    break;
+                                case "col5":
+                                    drawableLevelLayer.add(index, "col5");
+                                    index++;
+                                    break;
+                                case "col6":
+                                    drawableLevelLayer.add(index, "col6");
+                                    index++;
+                                    break;
+                                case "col7":
+                                    drawableLevelLayer.add(index, "col7");
+                                    index++;
+                                    break;
+                                case "col8":
+                                    drawableLevelLayer.add(index, "col8");
+                                    index++;
+                                    break;
+                                case "col9":
+                                    drawableLevelLayer.add(index, "col9");
+                                    index++;
+                                    break;
+                                    //obstacles
                                 case "ob1":
                                     drawableLevelLayer.add(index, "obstacle1");
                                     index++;
@@ -202,6 +246,70 @@ public class RenderRules {
                                     break;
                              }
                         }
+                        else if (levelLayer.get(index).matches("t+w+.+")) {
+                        StringBuffer sb2 = new StringBuffer(i);
+                        sb2.delete(0, 2);
+                        String str = sb2.toString();
+                        System.out.println(str);
+                        switch (str) {
+                            case "col1":
+                                drawableLevelLayer.add(index, "twCol1");
+                                index++;
+                                break;
+                            case "col2":
+                                drawableLevelLayer.add(index, "twCol2");
+                                index++;
+                                break;
+                            case "col3":
+                                drawableLevelLayer.add(index, "twCol3");
+                                index++;
+                                break;
+                            case "col4":
+                                drawableLevelLayer.add(index, "twColStem");
+                                index++;
+                                break;
+                            case "col5":
+                                drawableLevelLayer.add(index, "twColStem2");
+                                index++;
+                                break;
+                            case "col6":
+                                drawableLevelLayer.add(index, "twColStem3");
+                                index++;
+                                break;
+                        }
+                    }
+                        else if (levelLayer.get(index).matches("t+o+r+u+.+")) {
+                            StringBuffer sb2 = new StringBuffer(i);
+                            sb2.delete(0, 2);
+                            String str = sb2.toString();
+                            System.out.println(str);
+                            switch (str) {
+                                case "col1":
+                                    drawableLevelLayer.add(index, "colTop1");
+                                    index++;
+                                    break;
+                                case "col2":
+                                    drawableLevelLayer.add(index, "colTop2");
+                                    index++;
+                                    break;
+                                case "col3":
+                                    drawableLevelLayer.add(index, "colTop3");
+                                    index++;
+                                    break;
+                                case "col4":
+                                    drawableLevelLayer.add(index, "colStem");
+                                    index++;
+                                    break;
+                                case "col5":
+                                    drawableLevelLayer.add(index, "colStem2");
+                                    index++;
+                                    break;
+                                case "col6":
+                                    drawableLevelLayer.add(index, "colStem3");
+                                    index++;
+                                    break;
+                            }
+                        }
                         else {
                             if (!i.equals("")){
                                 System.out.println("UNKNOWN TILE: " + "'" + i + "'");
@@ -218,8 +326,6 @@ public class RenderRules {
        // System.out.println("Drawable level layer " +(layer+1) + ": "+drawableLevelLayer);
         return drawableLevelLayer;
     }
-
-
 
     public HashMap<String, String> translateSymbolsToFindDoors(List<List<String>> level, int layer, int roomsIndex, int doorDirection, int previousDoorDirection, HashMap<String, String> map, int roomX, int levelY) {
         //System.out.println("TEST WORKED");

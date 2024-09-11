@@ -53,9 +53,9 @@ public class InitLevel {
         cr.topRightTurnTile.setTile(new StaticTiledMapTile(tx.roomTopRightTurnTexture));
         cr.bottomLeftTurnTile.setTile(new StaticTiledMapTile(tx.roomBottomLeftTurnTexture));
         cr.bottomRightTurnTile.setTile(new StaticTiledMapTile(tx.roomBottomRightTurnTexture));
-        cr.obstacle1.setTile(new StaticTiledMapTile(tx.obstacle1Texture));
-        cr.obstacle2.setTile(new StaticTiledMapTile(tx.obstacle2Texture));
-        cr.obstacle3.setTile(new StaticTiledMapTile(tx.obstacle3Texture));
+        //cr.obstacle1.setTile(new StaticTiledMapTile(tx.obstacle1Texture));
+        //cr.obstacle2.setTile(new StaticTiledMapTile(tx.obstacle2Texture));
+        //cr.obstacle3.setTile(new StaticTiledMapTile(tx.obstacle3Texture));
         cr.tutorialTile.setTile(new StaticTiledMapTile(tx.tutoTexture));
 
         cr.doorTopLeftWall.setTile(new StaticTiledMapTile(tx.doorTopLeftWallTexture));
