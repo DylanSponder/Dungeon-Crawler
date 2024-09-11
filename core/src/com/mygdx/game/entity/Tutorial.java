@@ -20,6 +20,6 @@ public class Tutorial {
         //shopDetectionRadius = bodyFactory.createShopDetectionRadius(shopBody, 100);
         //shopDetectionRadius.setSensor(true);
 
-        this.tutorialBody.setUserData("Shopkeeper");
+        this.tutorialBody.setUserData("Tutorial");
     }
 }

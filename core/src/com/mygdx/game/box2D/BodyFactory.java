@@ -1,6 +1,5 @@
 package com.mygdx.game.box2D;
 
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class BodyFactory {
@@ -173,7 +172,7 @@ public class BodyFactory {
         return bowHitbox;
     }
 
-    public Body createEnemyBody(World world, float x, float y) {
+    public Body createSimpleBody(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -248,7 +247,7 @@ public class BodyFactory {
         // enemyShape.setAsBox(x, y);
         Fixture enemyHitbox = body.createFixture(enemyShape, 1.0f);
         enemyShape.dispose();
-        enemyHitbox.setUserData("EnemyHitbox");
+        enemyHitbox.setUserData("ShopHitbox");
         return enemyHitbox;
     }
 
@@ -257,7 +256,7 @@ public class BodyFactory {
         enemyShape.setRadius(r);
         Fixture enemyDetectionHitbox = body.createFixture(enemyShape, 1.0f);
         enemyShape.dispose();
-        enemyDetectionHitbox.setUserData("Proximity");
+        enemyDetectionHitbox.setUserData("ShopSell");
         enemyDetectionHitbox.isSensor();
         return enemyDetectionHitbox;
     }

@@ -8,14 +8,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.ai.utils.Ray;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -39,8 +36,6 @@ import com.mygdx.game.level.CreateCell;
 import com.mygdx.game.level.objects.*;
 import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.InitLevel;
-
-import javax.swing.*;
 
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch playerBatch, arrowBatch, enemyBatch, potBatch, hudBatch, tutoBatch, fontBatch;
@@ -82,8 +77,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static RayHandler rayHandler;
 	private PointLight playerTorch;
 	private BitmapFont.BitmapFontData bmfData;
-	private BitmapFont bmf;
+	public static BitmapFont defaultFont;
+	public static ArrayList<Text> messages;
+
 	private boolean leanDown = false, leanUp = false, leanLeft = false, leanRight = false, leanUpLeft = false, leanUpRight = false;
+	private float fade;
 
 	@Override
 	public void create() {
@@ -123,8 +121,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 		potArrayMap = new ArrayMap<>();
 		torches = new ArrayList<>();
 		potions = new ArrayList<>();
-		collectedPotions = new ArrayList<>();
-		obstacles = new ArrayList<>();
+		collectedPotions = new ArrayList<Potion>();
+		obstacles = new ArrayList<Obstacle>();
+		fade = 1f;
+		messages = new ArrayList<Text>();
 
 		//roomClear = Gdx.audio.newMusic(Gdx.files.internal("NinjaAdventure/Sounds/Menu/Accept.wav"));
 		//swordSlash = Gdx.audio.newMusic(Gdx.files.internal("Sounds/slash.mp3"));
@@ -139,18 +139,25 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//FileHandle file = new FileHandle("");
 		//bmfData = new BitmapFont.BitmapFontData();
 		//bmfData.fontFile = file;
-		//bmf = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/GreekAlphabet-export.fnt"));
+		//defaultFont = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/GreekAlphabet-export.fnt"));
 
-		//bmf = new BitmapFont(bmfData.fontFile,tx.fontTexture);
+		//defaultFont = new BitmapFont(bmfData.fontFile,tx.fontTexture);
 
-		//bmf = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/GreekAlphabetConcise-export.fnt"),
+		//defaultFont = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/GreekAlphabetConcise-export.fnt"),
 		//		Gdx.files.internal("HellasDungeon/Font/GreekAlphabetConcise-export.png"), false);
 
-		bmf = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/HellasFontStylized-final.fnt"),
+		defaultFont = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/HellasFontStylized-final.fnt"),
 				Gdx.files.internal("HellasDungeon/Font/HellasFontStylized-final.png"), false);
 
+		Color c = new Color();
+		c.set(1,1,1,1);
+		//Text t =  new Text(defaultFont, "TEST MESSAGE", c, false);
+		//messages.add(t);
 
-		//bmf.getData();
+		Text level1StartText =  new Text(defaultFont, "CLAY CATACOMBS", c, true, 1f, 0.045f, true,false,null);
+		messages.add(level1StartText);
+
+		//defaultFont.getData();
 		//bmfData.setGlyphRegion();
 
 		//get width and height of the game window
@@ -263,7 +270,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 				if (button == 0 && (!playerMeleeAttacking && !playerRangedAttacking)) {
 					//if player presses left mouse attack with the sword
-					float playerMeleeAttackSpeedInSeconds = 0.45f;
+					float playerMeleeAttackSpeedInSeconds = 0.40f;
 					playerMeleeAttacking = true;
 
 					if (tx.playerSprite.equals(tx.playerDown)) {
@@ -337,7 +344,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 				//if player presses right mouse attack with a bow
 				if (button == 1 && (!playerMeleeAttacking && !playerRangedAttacking)) {
-					float playerRangedAttackSpeedInSeconds = 0.57f;
+					float playerRangedAttackSpeedInSeconds = 0.50f;
 					playerRangedAttacking = true;
 
 					if (tx.playerSprite.equals(tx.playerDown)) {
@@ -452,7 +459,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 				//if player presses space attack with the sword
 				if (((keycode == 62)) && (!playerMeleeAttacking && !playerRangedAttacking)) {
-					float playerMeleeAttackSpeedInSeconds = 0.45f;
+					float playerMeleeAttackSpeedInSeconds = 0.40f;
 					playerMeleeAttacking = true;
 
 					if (tx.playerSprite.equals(tx.playerDown)) {
@@ -526,7 +533,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 				//if player presses enter attack with a bow
 				if (keycode == 66 && (!playerMeleeAttacking && !playerRangedAttacking)) {
-					float playerRangedAttackSpeedInSeconds = 0.57f;
+					float playerRangedAttackSpeedInSeconds = 0.50f;
 					playerRangedAttacking = true;
 
 					if (tx.playerSprite.equals(tx.playerDown)) {
@@ -605,420 +612,416 @@ public class DungeonCrawler extends ApplicationAdapter {
 	@Override
 	public void render() {
 
-		// kill game when player health is 0
-		if (hud.healthBar.currentHealth == 0) {
-			Gdx.app.exit();
-		}
+			// kill game when player health is 0
+			if (hud.healthBar.currentHealth == 0) {
+				Gdx.app.exit();
+			}
 
-		// win the game if all enemies are dead
-		if (enemies.isEmpty()) {
-			hud.winGame();
-		}
+			// win the game if all enemies are dead
+			if (enemies.isEmpty()) {
+				hud.winGame();
+			}
 
-		final CreateTexture tx = CreateTexture.getInstance();
-		//clear all assets and replace with background color
-		ScreenUtils.clear(1, 1, 1, 1);
+			final CreateTexture tx = CreateTexture.getInstance();
+			//clear all assets and replace with background color
+			ScreenUtils.clear(1, 1, 1, 1);
 
-		//update game physics, camera and held down inputs
-		update(Gdx.graphics.getDeltaTime());
+			//update game physics, camera and held down inputs
+			update(Gdx.graphics.getDeltaTime());
 
-		rayHandler.render();
+			rayHandler.render();
 
-		//clear graphics
-		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			//clear graphics
+			Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		//rayHandler.render();
+			//rayHandler.render();
 
-		//set the view of the map to the camera and then render the map
-		renderer.setView(camera);
-		renderer.render();
+			//set the view of the map to the camera and then render the map
+			renderer.setView(camera);
+			renderer.render();
 
-		//set camera position to always be centred on the playerSprite
-		camera.position.set(player.playerBody.getPosition().x + tx.playerSprite.getWidth() / 2 - 8, player.playerBody.getPosition().y + tx.playerSprite.getHeight() / 2 - 8, 0);
+			//set camera position to always be centred on the playerSprite
+			camera.position.set(player.playerBody.getPosition().x + tx.playerSprite.getWidth() / 2 - 8, player.playerBody.getPosition().y + tx.playerSprite.getHeight() / 2 - 8, 0);
 
-		//tutorial texture in the starting room
-		for (Tutorial t : tutorial) {
-			tutoBatch.begin();
-			tutoBatch.draw(tx.tutorialTexture, t.tutorialBody.getPosition().x - 16f, t.tutorialBody.getPosition().y + 7f, 96, 64);
-			tutoBatch.end();
-		}
+			//tutorial texture in the starting room
+			for (Tutorial t : tutorial) {
+				tutoBatch.begin();
+				tutoBatch.draw(tx.tutorialTexture, t.tutorialBody.getPosition().x - 16f, t.tutorialBody.getPosition().y + 7f, 96, 64);
+				tutoBatch.end();
+			}
 
 
-		double radians = Math.PI / 180;
-		String stringR = String.valueOf(radians);
-		float radiansF = Float.parseFloat(stringR);
+			double radians = Math.PI / 180;
+			String stringR = String.valueOf(radians);
+			float radiansF = Float.parseFloat(stringR);
 
-		//	if (!enemySkulls.isEmpty()) {
+			//	if (!enemySkulls.isEmpty()) {
 
-		//	}
+			//	}
 
-		for (Room r : GenerateLevel.init.roomList) {
-			for (Door d : r.doors) {
-				//render open doors here
-				if (d.open) {
-					doorBatch.begin();
-					d.renderOpen(doorBatch, r.directionTaken, d.doorX, d.doorY);
-					doorBatch.end();
+			for (Room r : GenerateLevel.init.roomList) {
+				for (Door d : r.doors) {
+					//render open doors here
+					if (d.open) {
+						doorBatch.begin();
+						d.renderOpen(doorBatch, r.directionTaken, d.doorX, d.doorY);
+						doorBatch.end();
+					}
+				}
+
+				//render door locks when a player enters a new room with enemies
+				for (Lock l : r.locks) {
+					if (l.visible) {
+						lockBatch.begin();
+						Lock.renderLock(lockBatch, l.direction, l.lockBody.getPosition().x, l.lockBody.getPosition().y);
+						lockBatch.end();
+					}
 				}
 			}
 
-			//render door locks when a player enters a new room with enemies
-			for (Lock l : r.locks) {
-				if (l.visible) {
-					lockBatch.begin();
-					Lock.renderLock(lockBatch, l.direction, l.lockBody.getPosition().x, l.lockBody.getPosition().y);
-					lockBatch.end();
+			//adds all skulls that have been created to the array map for manipulation
+			for (Skull s : enemySkulls) {
+				if (!s.skullCreated) {
+					skullArrayMap.put(s.createSkull(skullArrayMap), s);
 				}
 			}
-		}
 
-		//adds all skulls that have been created to the array map for manipulation
-		for (Skull s : enemySkulls) {
-			if (!s.skullCreated) {
-				skullArrayMap.put(s.createSkull(skullArrayMap), s);
-			}
-		}
+			//destructible objects safe removers - Skulls - Arrows - Pots - Potions
 
-		//destructible objects safe removers - Skulls - Arrows - Pots - Potions
+			GameObjectDestroyer skullBasher9000 = new GameObjectDestroyer();
+			//skullBasher9000.destroyObject(skullArrayMap,brokenSkulls,enemySkulls,Skull.class,);
 
-		GameObjectDestroyer skullBasher9000 = new GameObjectDestroyer();
-		//skullBasher9000.destroyObject(skullArrayMap,brokenSkulls,enemySkulls,Skull.class,);
-
-		if (!skullArrayMap.isEmpty()) {
-			for (OrderedMap.Entry<Body, Skull> skullEntry : skullArrayMap.entries()) {
-				Skull value = skullEntry.value;
-				//render each skull
-				skullBatch.begin();
-				if (value.SKULL_HEALTH < 1.5f) {
-					Skull.renderSkull(skullBatch, tx.damagedSkullSprite, skullEntry.key.getPosition().x, skullEntry.key.getPosition().y);
-				} else {
-					Skull.renderSkull(skullBatch, tx.skullSprite, skullEntry.key.getPosition().x, skullEntry.key.getPosition().y);
-				}
-				skullBatch.end();
-			}
-
-			if (!reversedSkullMap) {
-				skullArrayMap.reverse();
-				reversedSkullMap = true;
-			}
-
-			Iterator<Skull> skullIt = brokenSkulls.iterator();
-			if (skullIt.hasNext()) {
-				Skull skull = skullIt.next();
-				if (brokenSkulls.contains(skull)) {
-					Bone bone = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, false, 0);
-					bone.createBone();
-					bones.add(bone);
-					boneArrayMap.put(bone.boneBody, bone);
-
-					Bone bone2 = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, true, bone.orientation);
-					bone2.createBone();
-					bones.add(bone2);
-					boneArrayMap.put(bone2.boneBody, bone2);
-
-					enemySkulls.remove(skull);
-					skullArrayMap.removeKey(skull.skullBody);
-					world.destroyBody(skull.skullBody);
-					skullIt.remove();
-				}
-			}
-		}
-
-		for (Pot p : pots) {
-			if (!p.potCreated) {
-				potArrayMap.put(p.createPot(potArrayMap), p);
-			}
-		}
-
-		if (!potArrayMap.isEmpty()) {
-			for (OrderedMap.Entry<Body, Pot> potEntry : potArrayMap.entries()) {
-				Pot value = potEntry.value;
-				//render each pot
-				potBatch.begin();
-				if (value.POT_HEALTH < 1.5f) {
-					if (value.type == 1) {
-						Pot.renderPot(potBatch, tx.damagedAmphoraSprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+			if (!skullArrayMap.isEmpty()) {
+				for (OrderedMap.Entry<Body, Skull> skullEntry : skullArrayMap.entries()) {
+					Skull value = skullEntry.value;
+					//render each skull
+					skullBatch.begin();
+					if (value.SKULL_HEALTH < 1.5f) {
+						Skull.renderSkull(skullBatch, tx.damagedSkullSprite, skullEntry.key.getPosition().x, skullEntry.key.getPosition().y);
 					} else {
-						Pot.renderPot(potBatch, tx.damagedAmphora2Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+						Skull.renderSkull(skullBatch, tx.skullSprite, skullEntry.key.getPosition().x, skullEntry.key.getPosition().y);
 					}
-				} else {
-					if (value.type == 1) {
-						Pot.renderPot(potBatch, tx.amphoraSprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
-					} else {
-						Pot.renderPot(potBatch, tx.amphora2Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
-					}
-
-					if (!reversedPotMap) {
-						potArrayMap.reverse();
-						reversedPotMap = true;
-					}
-
+					skullBatch.end();
 				}
-				potBatch.end();
-			}
 
-			Iterator<Pot> potIt = brokenPots.iterator();
-			if (potIt.hasNext()) {
-				Pot pot = potIt.next();
-				if (brokenPots.contains(pot)) {
-					//one in 7 chance to get a potion from a pot - subject to change
-					int min = 1;
-					int max = 10;
-					int potionChance = (int) (Math.random() * (max - min + 1)) + min;
-					if (potionChance == 10) {
-						//create potion object
-						Potion potion = new Potion(world, pot.potBody.getPosition().x, pot.potBody.getPosition().y, 1);
-						potion.createPotion(potionArrayMap, rayHandler);
-						potions.add(potion);
-						potionArrayMap.put(potion.potionBody, potion);
-					} else if (potionChance == 1) {
-						Bone bone = new Bone(world, pot.potBody, pot.potBody.getPosition().x, pot.potBody.getPosition().y, false, 0);
+				if (!reversedSkullMap) {
+					skullArrayMap.reverse();
+					reversedSkullMap = true;
+				}
+
+				Iterator<Skull> skullIt = brokenSkulls.iterator();
+				if (skullIt.hasNext()) {
+					Skull skull = skullIt.next();
+					if (brokenSkulls.contains(skull)) {
+						Bone bone = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, false, 0);
 						bone.createBone();
 						bones.add(bone);
 						boneArrayMap.put(bone.boneBody, bone);
 
-						//create heart object
-						//Heart heart = new Heart(world, heart.heartBody.getPosition().x, heart.heartBody.getPosition().y, 1);
-						//heart.createHeart(heartArrayMap, rayHandler);
-						//hearts.add(heart);
-						//heartArrayMap.put(heart.heartBody, heart);
+						Bone bone2 = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, true, bone.orientation);
+						bone2.createBone();
+						bones.add(bone2);
+						boneArrayMap.put(bone2.boneBody, bone2);
+
+						enemySkulls.remove(skull);
+						skullArrayMap.removeKey(skull.skullBody);
+						world.destroyBody(skull.skullBody);
+						skullIt.remove();
 					}
-
-
-					pots.remove(pot);
-					potArrayMap.removeKey(pot.potBody);
-					world.destroyBody(pot.potBody);
-					potIt.remove();
 				}
 			}
-		}
 
-		//THE GREAT POT VS POTION LINE ---------------------------------------------------------------------------------
-
-		if (!potionArrayMap.isEmpty()) {
-			for (OrderedMap.Entry<Body, Potion> potionEntry : potionArrayMap.entries()) {
-				Potion value = potionEntry.value;
-				//render each potion
-				potionBatch.begin();
-				if (value.type == 1) {
-					Potion.renderPotion(potionBatch, tx.potionSprite, potionEntry.key.getPosition().x, potionEntry.key.getPosition().y);
-				}
-				potionBatch.end();
-			}
-
-			if (!reversedPotionMap) {
-				potionArrayMap.reverse();
-				reversedPotionMap = true;
-			}
-
-			Iterator<Potion> potionIt = collectedPotions.iterator();
-			if (potionIt.hasNext()) {
-				Potion potion = potionIt.next();
-				if (collectedPotions.contains(potion)) {
-
-					hud.inventory.addPotion();
-					potion.potionLight.remove();
-					potions.remove(potion);
-					potionArrayMap.removeKey(potion.potionBody);
-					world.destroyBody(potion.potionBody);
-					potionIt.remove();
+			for (Pot p : pots) {
+				if (!p.potCreated) {
+					potArrayMap.put(p.createPot(potArrayMap), p);
 				}
 			}
-		}
 
-		for (Obstacle o : obstacles) {
-			obstacleBatch.begin();
-			switch (o.type){
-				case 1:
-					obstacleBatch.draw(tx.obstacle1Sprite, o.obBody.getPosition().x - 8f, o.obBody.getPosition().y - 7f, 16, 16);
-					break;
-				case 2:
-					obstacleBatch.draw(tx.obstacle2Sprite, o.obBody.getPosition().x - 8f, o.obBody.getPosition().y - 7f, 16, 16);
-					break;
-				case 3:
-					obstacleBatch.draw(tx.obstacle3Sprite, o.obBody.getPosition().x - 8f, o.obBody.getPosition().y - 7f, 16, 16);
-					break;
-			}
-			obstacleBatch.end();
-		}
+			if (!potArrayMap.isEmpty()) {
+				for (OrderedMap.Entry<Body, Pot> potEntry : potArrayMap.entries()) {
+					Pot value = potEntry.value;
+					//render each pot
+					potBatch.begin();
+					if (value.POT_HEALTH < 1.5f) {
+						if (value.type == 1) {
+							Pot.renderPot(potBatch, tx.damagedAmphoraSprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+						} else {
+							Pot.renderPot(potBatch, tx.damagedAmphora2Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+						}
+					} else {
+						if (value.type == 1) {
+							Pot.renderPot(potBatch, tx.amphoraSprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+						} else {
+							Pot.renderPot(potBatch, tx.amphora2Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+						}
 
-		if (!boneArrayMap.isEmpty()) {
-			for (OrderedMap.Entry<Body, Bone> boneEntry : boneArrayMap.entries()) {
-				Body key = boneEntry.key;
-				//render each bone
-				boneBatch.begin();
-				Bone.renderBone(boneBatch, tx.boneSprite, key.getPosition().x, key.getPosition().y, key.getAngle());
-				boneBatch.end();
-			}
+						if (!reversedPotMap) {
+							potArrayMap.reverse();
+							reversedPotMap = true;
+						}
 
-			Iterator<Body> boneIt = boneBodiesCollided.iterator();
-			if (boneIt.hasNext()) {
-				Body boneBody = boneIt.next();
-				if (boneArrayMap.containsKey(boneBody)) {
-					boneArrayMap.removeKey(boneBody);
-					boneIt.remove();
-					world.destroyBody(boneBody);
-					bones.remove(boneBody);
+					}
+					potBatch.end();
+				}
+
+				Iterator<Pot> potIt = brokenPots.iterator();
+				if (potIt.hasNext()) {
+					Pot pot = potIt.next();
+					if (brokenPots.contains(pot)) {
+						//one in 7 chance to get a potion from a pot - subject to change
+						int min = 1;
+						int max = 10;
+						int potionChance = (int) (Math.random() * (max - min + 1)) + min;
+						if (potionChance == 10) {
+							//create potion object
+							Potion potion = new Potion(world, pot.potBody.getPosition().x, pot.potBody.getPosition().y, 1);
+							potion.createPotion(potionArrayMap, rayHandler);
+							potions.add(potion);
+							potionArrayMap.put(potion.potionBody, potion);
+						} else if (potionChance == 1) {
+							Bone bone = new Bone(world, pot.potBody, pot.potBody.getPosition().x, pot.potBody.getPosition().y, false, 0);
+							bone.createBone();
+							bones.add(bone);
+							boneArrayMap.put(bone.boneBody, bone);
+
+							//create heart object
+							//Heart heart = new Heart(world, heart.heartBody.getPosition().x, heart.heartBody.getPosition().y, 1);
+							//heart.createHeart(heartArrayMap, rayHandler);
+							//hearts.add(heart);
+							//heartArrayMap.put(heart.heartBody, heart);
+						}
+
+
+						pots.remove(pot);
+						potArrayMap.removeKey(pot.potBody);
+						world.destroyBody(pot.potBody);
+						potIt.remove();
+					}
 				}
 			}
-		}
 
-		playerBatch.begin();
-		//draw playerSprite on player Box2D object
-		playerBatch.draw(tx.playerSprite, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 6f, 16, 16);
-		if (playerMeleeAttacking) {
-			//add the swordSprite to the corresponding attack playerDirection
-			if (tx.playerSprite.equals(tx.playerAttackUp)) {
-				playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 13f, player.playerBody.getPosition().y - 3f, 7, 12, 7, 12, 1, 1, 180);
-			} else if (tx.playerSprite.equals(tx.playerAttackDown)) {
-				playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 6f, player.playerBody.getPosition().y - 18f, 7, 12, 7, 12, 1, 1, 0);
-			} else if (tx.playerSprite.equals(tx.playerAttackLeft)) {
-				playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 15f, player.playerBody.getPosition().y - 18f, 7, 12, 7, 12, 1, 1, 270);
-			} else if (tx.playerSprite.equals(tx.playerAttackRight)) {
-				playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x + 1f, player.playerBody.getPosition().y - 11f, 7, 12, 7, 12, 1, 1, 90);
-			}
-		}
-		if (playerRangedAttacking) {
-			//add the bowSprite and arrowSprite to the corresponding attack playerDirection
-			if (tx.playerSprite.equals(tx.playerAttackUp)) {
-				playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 11f, player.playerBody.getPosition().y - 4f, 8, 10, 14, 7, 1, 1, 180);
-			} else if (tx.playerSprite.equals(tx.playerAttackDown)) {
-				playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 9f, player.playerBody.getPosition().y - 13f, 7, 12, 14, 7, 1, 1, 0);
-			} else if (tx.playerSprite.equals(tx.playerAttackLeft)) {
-				playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 10f, player.playerBody.getPosition().y - 12f, 7, 12, 14, 7, 1, 1, 270);
-			} else if (tx.playerSprite.equals(tx.playerAttackRight)) {
-				playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 4f, player.playerBody.getPosition().y - 12f, 7, 12, 14, 7, 1, 1, 90);
-			}
-		}
-		playerBatch.end();
+			//THE GREAT POT VS POTION LINE ---------------------------------------------------------------------------------
 
-		//render enemy sprite
-		for (Enemy e : enemies) {
-			if (e.playerSighted){
-				e.getStateMachine().changeState(EnemyState.ATTACK);
-				e.playerSighted = false;
-			}
-			enemyBatch.begin();
-			enemyBatch.draw(tx.enemySprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
-			enemyBatch.end();
-		}
+			if (!potionArrayMap.isEmpty()) {
+				for (OrderedMap.Entry<Body, Potion> potionEntry : potionArrayMap.entries()) {
+					Potion value = potionEntry.value;
+					//render each potion
+					potionBatch.begin();
+					if (value.type == 1) {
+						Potion.renderPotion(potionBatch, tx.potionSprite, potionEntry.key.getPosition().x, potionEntry.key.getPosition().y);
+					}
+					potionBatch.end();
+				}
 
-		for (Shopkeeper s : shopkeepers) {
+				if (!reversedPotionMap) {
+					potionArrayMap.reverse();
+					reversedPotionMap = true;
+				}
+
+				Iterator<Potion> potionIt = collectedPotions.iterator();
+				if (potionIt.hasNext()) {
+					Potion potion = potionIt.next();
+					if (collectedPotions.contains(potion)) {
+
+						hud.inventory.addPotion();
+						potion.potionLight.remove();
+						potions.remove(potion);
+						potionArrayMap.removeKey(potion.potionBody);
+						world.destroyBody(potion.potionBody);
+						potionIt.remove();
+					}
+				}
+			}
+
+			for (Obstacle o : obstacles) {
+				obstacleBatch.begin();
+				switch (o.type){
+					case 1:
+						obstacleBatch.draw(tx.obstacle1Sprite, o.obBody.getPosition().x - 8f, o.obBody.getPosition().y - 7f, 16, 16);
+						break;
+					case 2:
+						obstacleBatch.draw(tx.obstacle2Sprite, o.obBody.getPosition().x - 8f, o.obBody.getPosition().y - 7f, 16, 16);
+						break;
+					case 3:
+						obstacleBatch.draw(tx.obstacle3Sprite, o.obBody.getPosition().x - 8f, o.obBody.getPosition().y - 7f, 16, 16);
+						break;
+				}
+				obstacleBatch.end();
+			}
+
+			if (!boneArrayMap.isEmpty()) {
+				for (OrderedMap.Entry<Body, Bone> boneEntry : boneArrayMap.entries()) {
+					Body key = boneEntry.key;
+					//render each bone
+					boneBatch.begin();
+					Bone.renderBone(boneBatch, tx.boneSprite, key.getPosition().x, key.getPosition().y, key.getAngle());
+					boneBatch.end();
+				}
+
+				Iterator<Body> boneIt = boneBodiesCollided.iterator();
+				if (boneIt.hasNext()) {
+					Body boneBody = boneIt.next();
+					if (boneArrayMap.containsKey(boneBody)) {
+						boneArrayMap.removeKey(boneBody);
+						boneIt.remove();
+						world.destroyBody(boneBody);
+						bones.remove(boneBody);
+					}
+				}
+			}
+
 			playerBatch.begin();
-			playerBatch.draw(tx.shopkeeperSprite, s.shopBody.getPosition().x - 8f, s.shopBody.getPosition().y - 7f, 16, 16);
+			//draw playerSprite on player Box2D object
+			playerBatch.draw(tx.playerSprite, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 6f, 16, 16);
+			if (playerMeleeAttacking) {
+				//add the swordSprite to the corresponding attack playerDirection
+				if (tx.playerSprite.equals(tx.playerAttackUp)) {
+					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 13f, player.playerBody.getPosition().y - 3f, 7, 12, 7, 12, 1, 1, 180);
+				} else if (tx.playerSprite.equals(tx.playerAttackDown)) {
+					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 6f, player.playerBody.getPosition().y - 18f, 7, 12, 7, 12, 1, 1, 0);
+				} else if (tx.playerSprite.equals(tx.playerAttackLeft)) {
+					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 15f, player.playerBody.getPosition().y - 18f, 7, 12, 7, 12, 1, 1, 270);
+				} else if (tx.playerSprite.equals(tx.playerAttackRight)) {
+					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x + 1f, player.playerBody.getPosition().y - 11f, 7, 12, 7, 12, 1, 1, 90);
+				}
+			}
+			if (playerRangedAttacking) {
+				//add the bowSprite and arrowSprite to the corresponding attack playerDirection
+				if (tx.playerSprite.equals(tx.playerAttackUp)) {
+					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 11f, player.playerBody.getPosition().y - 4f, 8, 10, 14, 7, 1, 1, 180);
+				} else if (tx.playerSprite.equals(tx.playerAttackDown)) {
+					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 9f, player.playerBody.getPosition().y - 13f, 7, 12, 14, 7, 1, 1, 0);
+				} else if (tx.playerSprite.equals(tx.playerAttackLeft)) {
+					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 10f, player.playerBody.getPosition().y - 12f, 7, 12, 14, 7, 1, 1, 270);
+				} else if (tx.playerSprite.equals(tx.playerAttackRight)) {
+					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 4f, player.playerBody.getPosition().y - 12f, 7, 12, 14, 7, 1, 1, 90);
+				}
+			}
 			playerBatch.end();
-		}
 
-
-
-		//check if there are any fired arrows
-		if (!arrowArrayMap.isEmpty()) {
-			for (OrderedMap.Entry<Body, Arrow> arrowEntry : arrowArrayMap.entries()) {
-				Body key = arrowEntry.key;
-				//render each individual arrow
-				arrowBatch.begin();
-				Arrow.renderArrow(arrowBatch, tx.arrowSprite, arrowEntry.value.direction, key.getPosition().x, key.getPosition().y);
-				arrowBatch.end();
-			}
-
-			//array map order needs to be reversedArrowMap once (Collections.reverseOrder() method is not available with ArrayMaps)
-			if (!reversedArrowMap) {
-				arrowArrayMap.reverse();
-				reversedArrowMap = true;
-			}
-
-			Iterator<Body> bodyIt = arrowBodiesCollided.iterator();
-			//iterate through every collided arrow
-			if (bodyIt.hasNext()) {
-				Body collidedBody = bodyIt.next();
-				//if the array map contains the arrow body that collided, remove that arrow from the game
-				if (arrowArrayMap.containsKey(collidedBody)) {
-					arrowArrayMap.removeKey(collidedBody);
-					//remove the arrow Box2D body
-					world.destroyBody(collidedBody);
-					//remove body from arrowBodiesCollided
-					bodyIt.remove();
-					//remove the sprite by removing the Arrow class object
-					arrows.remove(arrowArrayMap.get(collidedBody));
+			//render enemy sprite
+			for (Enemy e : enemies) {
+				if (e.playerSighted){
+					e.getStateMachine().changeState(EnemyState.ATTACK);
+					e.playerSighted = false;
 				}
+				enemyBatch.begin();
+				enemyBatch.draw(tx.enemySprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+				enemyBatch.end();
 			}
-		}
-		for (Body body : deadEnemyBodies) {
-			world.destroyBody(body);
-		}
 
-		deadEnemyBodies.clear();
+			for (Shopkeeper s : shopkeepers) {
+				playerBatch.begin();
+				playerBatch.draw(tx.shopkeeperSprite, s.shopBody.getPosition().x - 8f, s.shopBody.getPosition().y - 7f, 16, 16);
+				playerBatch.end();
+			}
 
-		String str = new String();
-		str = "TEST";
-		String padded = String.format("%-20s", str);
 
-		fontBatch.begin();
-		bmf.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-		bmf.draw(fontBatch, "THIS IS A TEST MESSAGE", player.playerBody.getPosition().x, player.playerBody.getPosition().y);
-		fontBatch.end();
 
-		//toggle to enable or disable collision boxes
-
-		if (debug) {
-			for (Enemy enemy : enemies) {
-				//renders ray cast rays
-				Ray<Vector2>[] rays = enemy.rayConfigurations[0].getRays();
-				enemy.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-				enemy.shapeRenderer.setProjectionMatrix(camera.combined);
-				enemy.shapeRenderer.setColor(1, 0, 0, 1);
-				// shapeRenderer.setColor(Color.RED);
-				//transform.idt();
-				//shapeRenderer.setTransformMatrix(transform);
-				for (int i = 0; i < rays.length; i++) {
-					Ray<Vector2> ray = rays[i];
-					enemy.tmp.set(ray.start);
-					enemy.tmp2.set(ray.end);
-					enemy.shapeRenderer.line(enemy.tmp, enemy.tmp2);
+			//check if there are any fired arrows
+			if (!arrowArrayMap.isEmpty()) {
+				for (OrderedMap.Entry<Body, Arrow> arrowEntry : arrowArrayMap.entries()) {
+					Body key = arrowEntry.key;
+					//render each individual arrow
+					arrowBatch.begin();
+					Arrow.renderArrow(arrowBatch, tx.arrowSprite, arrowEntry.value.direction, key.getPosition().x, key.getPosition().y);
+					arrowBatch.end();
 				}
 
-				/*
-				if (playerSighted) {
-					Ray<Vector2>[] rays2 = enemy.rayConfigurations2[0].getRays();
-					for (int i = 0; i < rays2.length; i++) {
-						Ray<Vector2> ray = rays2[i];
+				//array map order needs to be reversedArrowMap once (Collections.reverseOrder() method is not available with ArrayMaps)
+				if (!reversedArrowMap) {
+					arrowArrayMap.reverse();
+					reversedArrowMap = true;
+				}
+
+				Iterator<Body> bodyIt = arrowBodiesCollided.iterator();
+				//iterate through every collided arrow
+				if (bodyIt.hasNext()) {
+					Body collidedBody = bodyIt.next();
+					//if the array map contains the arrow body that collided, remove that arrow from the game
+					if (arrowArrayMap.containsKey(collidedBody)) {
+						arrowArrayMap.removeKey(collidedBody);
+						//remove the arrow Box2D body
+						world.destroyBody(collidedBody);
+						//remove body from arrowBodiesCollided
+						bodyIt.remove();
+						//remove the sprite by removing the Arrow class object
+						arrows.remove(arrowArrayMap.get(collidedBody));
+					}
+				}
+			}
+			for (Body body : deadEnemyBodies) {
+				world.destroyBody(body);
+			}
+
+			deadEnemyBodies.clear();
+
+			fontBatch.begin();
+			for (Text t : messages) {
+					FontController.drawFont(fontBatch, defaultFont, t.textX, t.textY, t);
+			}
+			fontBatch.end();
+
+			//toggle to enable or disable visible collision boxes
+			if (debug) {
+				for (Enemy enemy : enemies) {
+					//renders ray cast rays
+					Ray<Vector2>[] rays = enemy.rayConfigurations[0].getRays();
+					enemy.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+					enemy.shapeRenderer.setProjectionMatrix(camera.combined);
+					enemy.shapeRenderer.setColor(1, 0, 0, 1);
+					// shapeRenderer.setColor(Color.RED);
+					//transform.idt();
+					//shapeRenderer.setTransformMatrix(transform);
+					for (int i = 0; i < rays.length; i++) {
+						Ray<Vector2> ray = rays[i];
 						enemy.tmp.set(ray.start);
 						enemy.tmp2.set(ray.end);
 						enemy.shapeRenderer.line(enemy.tmp, enemy.tmp2);
 					}
+
+					/*
+					if (playerSighted) {
+						Ray<Vector2>[] rays2 = enemy.rayConfigurations2[0].getRays();
+						for (int i = 0; i < rays2.length; i++) {
+							Ray<Vector2> ray = rays2[i];
+							enemy.tmp.set(ray.start);
+							enemy.tmp2.set(ray.end);
+							enemy.shapeRenderer.line(enemy.tmp, enemy.tmp2);
+						}
+					}
+
+					 */
+					enemy.shapeRenderer.end();
 				}
+				b2dr.render(world, camera.combined);
 
-				 */
-				enemy.shapeRenderer.end();
+				//TODO Add debug button to Scene
+
 			}
-			b2dr.render(world, camera.combined);
 
-			//TODO Add debug button to Scene
-
-		}
-
-		camera.update();
-		hud.update();
-		rayHandler.render();
-		rayHandler.setCombinedMatrix(camera);
-		obstacleBatch.setProjectionMatrix(camera.combined);
-		playerBatch.setProjectionMatrix(camera.combined);
-		arrowBatch.setProjectionMatrix(camera.combined);
-		skullBatch.setProjectionMatrix(camera.combined);
-		boneBatch.setProjectionMatrix(camera.combined);
-		tutoBatch.setProjectionMatrix(camera.combined);
-		enemyBatch.setProjectionMatrix(camera.combined);
-		lockBatch.setProjectionMatrix(camera.combined);
-		doorBatch.setProjectionMatrix(camera.combined);
-		potBatch.setProjectionMatrix(camera.combined);
-		potionBatch.setProjectionMatrix(camera.combined);
-		columnBaseBatch.setProjectionMatrix(camera.combined);
-		columnStemBatch.setProjectionMatrix(camera.combined);
-		columnTopBatch.setProjectionMatrix(camera.combined);
-		fontBatch.setProjectionMatrix(camera.combined);
-		hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
-		hud.stage.draw();
+			camera.update();
+			hud.update();
+			rayHandler.render();
+			rayHandler.setCombinedMatrix(camera);
+			obstacleBatch.setProjectionMatrix(camera.combined);
+			playerBatch.setProjectionMatrix(camera.combined);
+			arrowBatch.setProjectionMatrix(camera.combined);
+			skullBatch.setProjectionMatrix(camera.combined);
+			boneBatch.setProjectionMatrix(camera.combined);
+			tutoBatch.setProjectionMatrix(camera.combined);
+			enemyBatch.setProjectionMatrix(camera.combined);
+			lockBatch.setProjectionMatrix(camera.combined);
+			doorBatch.setProjectionMatrix(camera.combined);
+			potBatch.setProjectionMatrix(camera.combined);
+			potionBatch.setProjectionMatrix(camera.combined);
+			columnBaseBatch.setProjectionMatrix(camera.combined);
+			columnStemBatch.setProjectionMatrix(camera.combined);
+			columnTopBatch.setProjectionMatrix(camera.combined);
+			fontBatch.setProjectionMatrix(camera.combined);
+			hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
+			hud.stage.draw();
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.entity.behaviours.fsm.Enemy;
 import com.mygdx.game.entity.behaviours.fsm.EnemyState;
 import com.mygdx.game.entity.Skull;
+import com.mygdx.game.entity.behaviours.fsm.Shopkeeper;
 import com.mygdx.game.level.objects.Door;
 import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.objects.Pot;
@@ -26,6 +27,9 @@ public class GameContactListener implements ContactListener {
 
         String faAsString = fa.getBody().getUserData().toString();
 
+        System.out.println(fa.getBody().getUserData() + " " + fb.getBody().getUserData());
+        System.out.println(fa.getUserData() + " " + fb.getUserData());
+
         //TODO: finish switch statement
         switch (faAsString) {
             case "Arrow":
@@ -39,6 +43,21 @@ public class GameContactListener implements ContactListener {
                     for (Potion p : potions) {
                         if (p.potionBody == fb.getBody()){
                             collectedPotions.add(p);
+                        }
+                    }
+                } else if (fb.getUserData() == "ShopRadius"){
+                    for (Shopkeeper shop : shopkeepers){
+                        if (fb.getBody() == shop.shopBody){
+                            shop.shopMessage = shop.shopMessages.get(0);
+                            shop.shopMessage.showing = true;
+                        }
+                    }
+                }
+                else if (fb.getUserData() == "ShopSell"){
+                    for (Shopkeeper shop : shopkeepers){
+                        if (fb.getBody() == shop.shopBody){
+                            shop.shopMessage = shop.shopMessages.get(1);
+                            shop.shopMessage.showing = true;
                         }
                     }
                 }
@@ -304,19 +323,19 @@ public class GameContactListener implements ContactListener {
                                 break;
                             case "DownArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY - 80);
+                                e.enemyBody.setLinearVelocity(velX, velY - 85);
                                 break;
                             case "UpArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY + 80);
+                                e.enemyBody.setLinearVelocity(velX, velY + 85);
                                 break;
                             case "LeftArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX - 80, velY);
+                                e.enemyBody.setLinearVelocity(velX - 85, velY);
                                 break;
                             case "RightArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX + 80, velY);
+                                e.enemyBody.setLinearVelocity(velX + 85, velY);
                                 break;
                             default:
                                 break;
@@ -367,19 +386,19 @@ public class GameContactListener implements ContactListener {
                                 break;
                             case "DownArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY - 80);
+                                e.enemyBody.setLinearVelocity(velX, velY - 85);
                                 break;
                             case "UpArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY + 80);
+                                e.enemyBody.setLinearVelocity(velX, velY + 85);
                                 break;
                             case "LeftArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX - 80, velY);
+                                e.enemyBody.setLinearVelocity(velX - 85, velY);
                                 break;
                             case "RightArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX + 80, velY);
+                                e.enemyBody.setLinearVelocity(velX + 85, velY);
                                 break;
                             default:
                                 break;

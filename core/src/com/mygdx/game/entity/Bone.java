@@ -62,7 +62,7 @@ public class Bone {
         }
 
         public static void renderBone(SpriteBatch batch, Sprite boneSprite, float x, float y, float rotation) {
-        //57.3f
+
             batch.draw(boneSprite, x - 8f, y - 7.5f, 8f, 7.5f, 16, 16, 1f, 1f, rotation * 57.3f);
         }
     }

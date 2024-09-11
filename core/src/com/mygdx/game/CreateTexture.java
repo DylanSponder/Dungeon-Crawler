@@ -17,7 +17,7 @@ public class CreateTexture {
     Texture roomBackground = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/Interior/CustomTileset.png"));
     //Texture roomDoorTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHouse.png"));
     //Texture roomHoleTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHole.png"));
-    Texture swordTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/BigSword/SpriteInHand.png"));
+    Texture swordTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Sword/SpriteInHand.png"));
     Texture bowTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/Bow/Sprite.png"));
     Texture arrowTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/Bow/Arrow.png"));
     Texture enemySkullTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Skull/SpriteSheet.png"));
@@ -189,8 +189,6 @@ public class CreateTexture {
         colBase.setRegion(0, 32, 16, 16);
         pedestal1.setRegion(16, 32, 16, 16);
         pedestal2.setRegion(32, 32, 16, 16);
-
-
 
         doorTopLeftTexture.setRegion(128, 0, 16, 16);
         doorTopRightTexture.setRegion(144, 0, 16, 16);

@@ -1,6 +1,5 @@
 package com.mygdx.game.entity.behaviours.fsm;
 
-import box2dLight.PointLight;
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
@@ -9,8 +8,6 @@ import com.badlogic.gdx.ai.steer.behaviors.*;
 import com.badlogic.gdx.ai.steer.limiters.LinearAccelerationLimiter;
 import com.badlogic.gdx.ai.steer.utils.rays.CentralRayWithWhiskersConfiguration;
 import com.badlogic.gdx.ai.steer.utils.rays.RayConfigurationBase;
-import com.badlogic.gdx.ai.steer.utils.rays.SingleRayConfiguration;
-import com.badlogic.gdx.ai.utils.Ray;
 import com.badlogic.gdx.ai.utils.RaycastCollisionDetector;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
@@ -24,7 +21,6 @@ import com.mygdx.game.entity.Skull;
 import com.mygdx.game.entity.utils.EnemyBox2DSteeringEntity;
 import com.mygdx.game.entity.utils.EnemyBox2DRaycastCollisionDetector;
 import com.mygdx.game.HUD;
-import com.mygdx.game.entity.utils.PlayerBox2DRaycastCollisionDetector;
 
 import static com.mygdx.game.DungeonCrawler.*;
 
@@ -61,8 +57,8 @@ public class Enemy {
         ENEMY_HEALTH = 3;
 
         //creates an enemy with a body, hitbox and steering entity
-        enemyBody = bodyFactory.createEnemyBody(world, x, y);
-        enemyDetectionBody = bodyFactory.createEnemyBody(world, x, y);
+        enemyBody = bodyFactory.createSimpleBody(world, x, y);
+        enemyDetectionBody = bodyFactory.createSimpleBody(world, x, y);
 
         enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 7f);
 

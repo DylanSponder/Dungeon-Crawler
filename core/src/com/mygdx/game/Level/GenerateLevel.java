@@ -2,6 +2,7 @@ package com.mygdx.game.level;
 
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.*;
@@ -137,8 +138,8 @@ public class GenerateLevel {
                 newRoom.roomNum = 0;
             }
             else {
-                int random = (int) (Math.random() * /*upper limit->*/ 4 + 1);
-                newRoom.roomNum = random;
+                //int random = (int) (Math.random() * /*upper limit->*/ 5 + 1);
+                newRoom.roomNum = 5;
             }
             // init.roomList.get(i).roomNum = random;
         }
@@ -1248,7 +1249,18 @@ for (int i = 0; i < layerSize; i++) {
         break;
     case "shop":
         currentCell = init.cr.middleFloorTile;
-        Shopkeeper shopkeeper = new Shopkeeper(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+        Text shopMessage = new Text(DungeonCrawler.defaultFont,"WELCOME", Color.WHITE,true,1f,0.0045f,false, false, null);
+        //TODO Add Sprite to Text for Shop Display
+        Text sellMessage = new Text(DungeonCrawler.defaultFont,"BUY POTION", Color.WHITE,true,1f,0.0045f,false, false, null);
+        shopMessage.textX = ((roomX + i) * 16) + 16 * 16;
+        shopMessage.textY = levelY * 16 + Gdx.graphics.getHeight() / 30 - 1 - 32;
+        sellMessage.textX = ((roomX + i) * 16) + 16 * 16;
+        sellMessage.textY = levelY * 16 + Gdx.graphics.getHeight() / 30 - 1;
+        messages.add(shopMessage);
+        messages.add(sellMessage);
+        Shopkeeper shopkeeper = new Shopkeeper(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,shopMessage);
+        shopkeeper.shopMessages.add(shopMessage);
+        shopkeeper.shopMessages.add(sellMessage);
         DungeonCrawler.shopkeepers.add(shopkeeper);
         break;
     case "twColTop1":
