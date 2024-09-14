@@ -94,16 +94,6 @@ public class GenerateLevel {
         path.add(4,4);
          */
 
-        /*
-        path.add(0,0);
-        path.add(1,1);
-        path.add(2,1);
-        path.add(3,2);
-        path.add(4,2);
-        path.add(5,1);
-        path.add(6,1);
-         */
-
         for (int i = 0; i<numRooms*2; i++){
             if (i-1 != -1){
                 previousDoorDirection = path.get(i-1);
@@ -112,11 +102,6 @@ public class GenerateLevel {
                 previousDoorDirection = 0;
             }
             currentDoorDirection =  pd.pickInitialDirection(currentDoorDirection);
-
-//            for (int i2 = 0; i2<2; i2++) {
-//                if (){
-//
-//                }
 
             path.add(i, currentDoorDirection);
             path.add(i+1, currentDoorDirection);
@@ -138,8 +123,8 @@ public class GenerateLevel {
                 newRoom.roomNum = 0;
             }
             else {
-                //int random = (int) (Math.random() * /*upper limit->*/ 5 + 1);
-                newRoom.roomNum = 5;
+                int random = (int) (Math.random() * /*upper limit->*/ 5 + 1);
+                newRoom.roomNum = 4;
             }
             // init.roomList.get(i).roomNum = random;
         }
@@ -1263,10 +1248,103 @@ for (int i = 0; i < layerSize; i++) {
         shopkeeper.shopMessages.add(sellMessage);
         DungeonCrawler.shopkeepers.add(shopkeeper);
         break;
-    case "twColTop1":
+        case "twColTop1":
+        case "toruColTop1":
+            currentCell = init.cr.topWallTile;
+        Body newTopWallCol1 = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+        newTopWallCol1.setUserData("Wall");
+        Column twCol1 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 - 12,1);
+        twCol1.createColumnTop(false);
+        break;
+        case "twColTop2":
+        case "toruColTop2":
         currentCell = init.cr.topWallTile;
-
-}
+        Body newTopWallCol2 = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+        newTopWallCol2.setUserData("Wall");
+        Column twCol2 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 - 12,2);
+        twCol2.createColumnTop(false);
+        break;
+        case "twColTop3":
+        case "toruColTop3":
+        currentCell = init.cr.topWallTile;
+        Body newTopWallCol3 = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+        newTopWallCol3.setUserData("Wall");
+        Column twCol3 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 - 12,3);
+        twCol3.createColumnTop(false);
+        break;
+        case "twColStem1":
+        case "toruColStem1":
+        currentCell = init.cr.topWallTile;
+        Body newTopWallCol4 = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+        newTopWallCol4.setUserData("Wall");
+        Column twCol4 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 - 6,4);
+        twCol4.createColumnStem(false);
+        break;
+        case "twColStem2":
+        case "toruColStem2":
+        currentCell = init.cr.topWallTile;
+        Body newTopWallCol5 = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+        newTopWallCol5.setUserData("Wall");
+        Column twCol5 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 - 6,5);
+        twCol5.createColumnStem(false);
+        break;
+        case "twColStem3":
+        case "toruColStem3":
+        currentCell = init.cr.topWallTile;
+        Body newTopWallCol6 = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+        newTopWallCol6.setUserData("Wall");
+        Column twCol6 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 - 6,6);
+        twCol6.createColumnStem(false);
+        break;
+        case "col1":
+            //TODO finish. string splitting an option to get column downward offset e.g col16 for 6 y-offset
+            //TODO: OR we can grab the previous columns in columns and check to see if it col4,5 or 6, and keep checking
+            //TODO: until we hit a col1, 2 or 3. Then simply x 6 to get the total offset 'naturally' - lower overhead to map making
+            currentCell = init.cr.middleFloorTile;
+            Column col1 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 - 12,1);
+            col1.createColumnTop(false);
+            break;
+        case "col2":
+            currentCell = init.cr.middleFloorTile;
+            Column col2 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 - 12,2);
+            col2.createColumnTop(false);
+            break;
+        case "col3":
+            currentCell = init.cr.middleFloorTile;
+            Column col3 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 - 12,3);
+            col3.createColumnTop(false);
+            break;
+        case "col4":
+            currentCell = init.cr.middleFloorTile;
+            Column col4 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 - 6,4);
+            col4.createColumnStem(false);
+            break;
+        case "col5":
+            currentCell = init.cr.middleFloorTile;
+            Column col5 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 - 6,5);
+            col5.createColumnStem(false);
+            break;
+        case "col6":
+            currentCell = init.cr.middleFloorTile;
+            Column col6 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,6);
+            col6.createColumnStem(false);
+            break;
+        case "col7":
+            currentCell = init.cr.middleFloorTile;
+            Column col7 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,7);
+            col7.createColumnBase(false);
+            break;
+        case "col8":
+            currentCell = init.cr.middleFloorTile;
+            Column col8 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,8);
+            col8.createColumnBase(false);
+            break;
+        case "col9":
+            currentCell = init.cr.middleFloorTile;
+            Column col9 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,9);
+            col9.createColumnBase(false);
+            break;
+    }
 
     layer.setCell((roomX + i) + 16, levelY, currentCell);
     init.roomList.get(roomIndex).roomLayer = layer;

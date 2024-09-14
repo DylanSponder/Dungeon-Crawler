@@ -7,6 +7,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.ai.utils.Ray;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -42,7 +43,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch;
 	public static World world;
-	public static boolean debug = true;
+	public static boolean debug = false;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -68,6 +69,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Potion> potions, collectedPotions;
 	public static ArrayList<Torch> torches;
 	public static ArrayList<Obstacle> obstacles;
+	//public static ArrayList<ColumnTop> columnTops;
+	//public static ArrayList<ColumnStem> columnStems;
+	//public static ArrayList<ColumnBase> columnBases;
+	public static ArrayList<Column> columns;
 	public float PLAYER_HORIZONTAL_SPEED = 0f, PLAYER_VERTICAL_SPEED = 0f, PLAYER_X = 0f, PLAYER_Y = 0f;
 	private TiledMapRenderer renderer;
 	public static OrthographicCamera camera;
@@ -79,15 +84,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private BitmapFont.BitmapFontData bmfData;
 	public static BitmapFont defaultFont;
 	public static ArrayList<Text> messages;
+	public AssetManager assetManager;
 
 	private boolean leanDown = false, leanUp = false, leanLeft = false, leanRight = false, leanUpLeft = false, leanUpRight = false;
-	private float fade;
 
 	@Override
 	public void create() {
-
-
 		world = new World(new Vector2(0, 0f), false);
+		assetManager = new AssetManager();
 		playerBatch = new SpriteBatch();
 		hudBatch = new SpriteBatch();
 		tutoBatch = new SpriteBatch();
@@ -121,9 +125,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 		potArrayMap = new ArrayMap<>();
 		torches = new ArrayList<>();
 		potions = new ArrayList<>();
+		columns = new ArrayList<Column>();
+		//columnTops = new ArrayList<>();
+		//columnStems = new ArrayList<>();
+		//columnBases = new ArrayList<>();
 		collectedPotions = new ArrayList<Potion>();
 		obstacles = new ArrayList<Obstacle>();
-		fade = 1f;
 		messages = new ArrayList<Text>();
 
 		//roomClear = Gdx.audio.newMusic(Gdx.files.internal("NinjaAdventure/Sounds/Menu/Accept.wav"));
@@ -146,8 +153,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//defaultFont = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/GreekAlphabetConcise-export.fnt"),
 		//		Gdx.files.internal("HellasDungeon/Font/GreekAlphabetConcise-export.png"), false);
 
-		defaultFont = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/HellasFontStylized-final.fnt"),
-				Gdx.files.internal("HellasDungeon/Font/HellasFontStylized-final.png"), false);
+
+		defaultFont = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/HellasFontStylized-extended.fnt"),
+				Gdx.files.internal("HellasDungeon/Font/HellasFontStylized-extended.png"), false);
 
 		Color c = new Color();
 		c.set(1,1,1,1);
@@ -156,6 +164,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		Text level1StartText =  new Text(defaultFont, "CLAY CATACOMBS", c, true, 1f, 0.045f, true,false,null);
 		messages.add(level1StartText);
+
+		Text roomCleared =  new Text(defaultFont, "ROOM CLEARED", c, true, 1f, 0.045f, true,false,null);
+		messages.add(roomCleared);
 
 		//defaultFont.getData();
 		//bmfData.setGlyphRegion();
@@ -364,14 +375,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 					} else if (tx.playerSprite.equals(tx.playerLeft)) {
 						playerDirection = "Left";
 						tx.playerSprite = tx.playerAttackLeft;
-						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 14f, player.playerBody.getPosition().y);
+						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 14f, player.playerBody.getPosition().y+1);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
 						arrowHitbox.setUserData("LeftArrow");
 						arrowBody.setLinearVelocity(-500f, 0);
 					} else if (tx.playerSprite.equals(tx.playerRight)) {
 						playerDirection = "Right";
 						tx.playerSprite = tx.playerAttackRight;
-						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x + 14f, player.playerBody.getPosition().y);
+						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x + 14f, player.playerBody.getPosition().y+1);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
 						arrowHitbox.setUserData("RightArrow");
 						arrowBody.setLinearVelocity(500f, 0);
@@ -380,7 +391,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					else {
 						playerDirection = "Down";
 						tx.playerSprite = tx.playerAttackDown;
-						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y - 16f);
+						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y - 14f);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
 						arrowHitbox.setUserData("DownArrow");
 						arrowBody.setLinearVelocity(0, -500f);
@@ -553,14 +564,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 					} else if (tx.playerSprite.equals(tx.playerLeft)) {
 						playerDirection = "Left";
 						tx.playerSprite = tx.playerAttackLeft;
-						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 14f, player.playerBody.getPosition().y);
+						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 14f, player.playerBody.getPosition().y+1);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
 						arrowHitbox.setUserData("LeftArrow");
 						arrowBody.setLinearVelocity(-500f, 0);
 					} else if (tx.playerSprite.equals(tx.playerRight)) {
 						playerDirection = "Right";
 						tx.playerSprite = tx.playerAttackRight;
-						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x + 14f, player.playerBody.getPosition().y);
+						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x + 14f, player.playerBody.getPosition().y+1);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
 						arrowHitbox.setUserData("RightArrow");
 						arrowBody.setLinearVelocity(500f, 0);
@@ -569,7 +580,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					else {
 						playerDirection = "Down";
 						tx.playerSprite = tx.playerAttackDown;
-						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y - 16f);
+						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y - 14f);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
 						arrowHitbox.setUserData("DownArrow");
 						arrowBody.setLinearVelocity(0, -500f);
@@ -875,7 +886,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			//draw playerSprite on player Box2D object
 			playerBatch.draw(tx.playerSprite, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 6f, 16, 16);
 			if (playerMeleeAttacking) {
-				//add the swordSprite to the corresponding attack playerDirection
+				//add the lanceSprite to the corresponding attack playerDirection
 				if (tx.playerSprite.equals(tx.playerAttackUp)) {
 					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 13f, player.playerBody.getPosition().y - 3f, 7, 12, 7, 12, 1, 1, 180);
 				} else if (tx.playerSprite.equals(tx.playerAttackDown)) {
@@ -889,13 +900,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 			if (playerRangedAttacking) {
 				//add the bowSprite and arrowSprite to the corresponding attack playerDirection
 				if (tx.playerSprite.equals(tx.playerAttackUp)) {
-					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 11f, player.playerBody.getPosition().y - 4f, 8, 10, 14, 7, 1, 1, 180);
+					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 2f, 8, 10, 18, 8, 1, 1, 180);
 				} else if (tx.playerSprite.equals(tx.playerAttackDown)) {
-					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 9f, player.playerBody.getPosition().y - 13f, 7, 12, 14, 7, 1, 1, 0);
+					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 10f, player.playerBody.getPosition().y - 14f, 7, 12, 18, 8, 1, 1, 0);
 				} else if (tx.playerSprite.equals(tx.playerAttackLeft)) {
-					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 10f, player.playerBody.getPosition().y - 12f, 7, 12, 14, 7, 1, 1, 270);
+					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 11f, player.playerBody.getPosition().y - 9f, 7, 12, 18, 8, 1, 1, 270);
 				} else if (tx.playerSprite.equals(tx.playerAttackRight)) {
-					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 4f, player.playerBody.getPosition().y - 12f, 7, 12, 14, 7, 1, 1, 90);
+					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 3f, player.playerBody.getPosition().y - 13f, 7, 12, 18, 8, 1, 1, 90);
 				}
 			}
 			playerBatch.end();
@@ -916,8 +927,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 				playerBatch.draw(tx.shopkeeperSprite, s.shopBody.getPosition().x - 8f, s.shopBody.getPosition().y - 7f, 16, 16);
 				playerBatch.end();
 			}
-
-
 
 			//check if there are any fired arrows
 			if (!arrowArrayMap.isEmpty()) {
@@ -956,6 +965,56 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 
 			deadEnemyBodies.clear();
+
+
+
+			for (Column c : columns) {
+				columnBaseBatch.begin();
+				switch (c.type) {
+					case 7:
+						columnBaseBatch.draw(tx.colBase, c.columnX, c.columnY);
+						break;
+					case 8:
+						columnBaseBatch.draw(tx.pedestal1, c.columnX, c.columnY);
+						break;
+					case 9:
+						columnBaseBatch.draw(tx.pedestal2, c.columnX, c.columnY);
+						break;
+				}
+				columnBaseBatch.end();
+			}
+		for (Column c : columns) {
+			columnStemBatch.begin();
+			switch (c.type) {
+				case 4:
+					columnStemBatch.draw(tx.colStem, c.columnX, c.columnY);
+					break;
+				case 5:
+					columnStemBatch.draw(tx.colStemDamaged1, c.columnX, c.columnY);
+					break;
+				case 6:
+					columnStemBatch.draw(tx.colStemDamaged2, c.columnX, c.columnY);
+					break;
+			}
+			columnStemBatch.end();
+		}
+		for (Column c : columns) {
+				columnTopBatch.begin();
+				switch (c.type) {
+					case 1:
+						columnTopBatch.draw(tx.colTop1,c.columnX,c.columnY);
+						break;
+					case 2:
+						columnTopBatch.draw(tx.colTop2,c.columnX,c.columnY);
+						break;
+					case 3:
+						columnTopBatch.draw(tx.colTop3,c.columnX,c.columnY);
+						break;
+				}
+				columnTopBatch.end();
+			}
+
+
 
 			fontBatch.begin();
 			for (Text t : messages) {
@@ -1063,9 +1122,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 		doorBatch.dispose();
 		potBatch.dispose();
 		potionBatch.dispose();
-		columnBaseBatch.dispose();
-		columnStemBatch.dispose();
 		columnTopBatch.dispose();
+		columnStemBatch.dispose();
+		columnBaseBatch.dispose();
 		rayHandler.dispose();
 		world.dispose();
 		b2dr.dispose();
@@ -1098,12 +1157,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				tx.playerSprite = tx.playerUpRightLean;
 			}
 			else {
-				Timer.schedule(new Timer.Task() {
-					@Override
-					public void run() {
-						tx.playerSprite = tx.playerUp;
-					}
-				}, movementDelay);
+				tx.playerSprite = tx.playerUp;
 			}
 		}
 
@@ -1118,12 +1172,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				PLAYER_VERTICAL_SPEED = 1f;
 				tx.playerSprite = tx.playerUpLeftLean;
 			} else {
-				Timer.schedule(new Timer.Task() {
-					@Override
-					public void run() {
-						tx.playerSprite = tx.playerLeft;
-					}
-				}, movementDelay);
+				tx.playerSprite = tx.playerLeft;
 			}
 		}
 
@@ -1138,12 +1187,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				PLAYER_HORIZONTAL_SPEED = 1f;
 				tx.playerSprite = tx.playerDownRightLean;
 			} else {
-				Timer.schedule(new Timer.Task() {
-					@Override
-					public void run() {
-						tx.playerSprite = tx.playerDown;
-					}
-				}, movementDelay);
+				tx.playerSprite = tx.playerDown;
 			}
 		}
 		if (Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.RIGHT)) {
@@ -1154,12 +1198,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			} else if (leanUp) {
 				tx.playerSprite = tx.playerUpRightLean;
 			} else {
-				Timer.schedule(new Timer.Task() {
-					@Override
-					public void run() {
-						tx.playerSprite = tx.playerRight;
-					}
-				}, movementDelay);
+				tx.playerSprite = tx.playerRight;
 			}
 		}
 

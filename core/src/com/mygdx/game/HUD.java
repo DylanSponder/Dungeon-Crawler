@@ -43,8 +43,8 @@ public class HUD {
     healthBar = new HealthBar(4f, healthSymbol, healthSymbolHalf, healthSymbolEmpty, 30);
     
     moneyTable = new Table();
-    moneyAmount = new Label(totalGoldAsString, new LabelStyle(new BitmapFont(), Color.YELLOW));
-    moneyTable.add(moneyAmount);
+    moneyAmount = new Label(totalGoldAsString, new LabelStyle(DungeonCrawler.defaultFont, Color.YELLOW));
+    moneyTable.add(moneyAmount).padTop(12);
     moneySymbol = new Image(new Sprite(tx.coinTexture, 16, 16));
     moneyTable.add(moneySymbol).padLeft(2);
 
@@ -65,7 +65,7 @@ public class HUD {
     Table winTable = new Table();
     winTable.center();
     winTable.setFillParent(true);
-    winWords = new Label("DUNGEON CLEARED", new LabelStyle(DungeonCrawler.defaultFont, Color.YELLOW));
+    winWords = new Label("DUNGEON CLEARED", new LabelStyle(DungeonCrawler.defaultFont, Color.RED));
     winTable.add(winWords);
     stage.addActor(winTable);
   }
@@ -77,8 +77,8 @@ public class HUD {
 
     totalGold = totalGold + gold;
     totalGoldAsString  = String.valueOf(totalGold);
-    moneyAmount = new Label(totalGoldAsString, new LabelStyle(new BitmapFont(), Color.YELLOW));
-    moneyTable.add(moneyAmount);
+    moneyAmount = new Label(totalGoldAsString, new LabelStyle(DungeonCrawler.defaultFont, Color.YELLOW));
+    moneyTable.add(moneyAmount).padTop(12);
     moneySymbol = new Image(new Sprite(tx.coinTexture, 16, 16));
     moneyTable.add(moneySymbol).padLeft(2);
   }

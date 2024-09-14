@@ -1,8 +1,8 @@
 tlw,toru,tw,dtl,doortl,doortr,dtr,twcol1,torucol1,trw
-lw,f,f,f,f,f,f,f,f,rw
-torl,f,f,f,f,f,f,f,f,torr
-dlu,f,f,f,f,f,f,f,f,dru
-doorul,f,f,f,f,f,f,f,f,doorur
+lw,f,f,f,f,f,f,fcol4,fcol5,rw
+torl,f,f,f,f,f,f,fcol4,fcol6,torr
+dlu,f,f,f,f,f,f,fcol4,f,dru
+doorul,f,f,f,f,f,f,fcol7,f,doorur
 doorll,f,f,f,f,f,f,f,f,doorlr
 dll,f,f,ftuto,f,f,f,f,f,drl
 torl,f,f,f,f,f,f,f,f,torr

@@ -35,7 +35,6 @@ public class Shopkeeper {
         this.shopMessages = new ArrayList<>();
 
         this.shopBody.setUserData("Shopkeeper");
-        //this.shopDetectionBody.setUserData("ShopRadius");
         this.shopDetectionRadius.setUserData("ShopRadius");
     }
 }

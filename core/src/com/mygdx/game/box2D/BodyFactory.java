@@ -132,7 +132,7 @@ public class BodyFactory {
         return body;
     }
 
-    public Fixture createSwordHitbox(Body sword,boolean r){
+    public Fixture createSwordHitbox(Body sword, boolean r){
         PolygonShape swordShape = new PolygonShape();
         if (r){
             swordShape.setAsBox(5f, 2.5f);
@@ -216,7 +216,7 @@ public class BodyFactory {
         Fixture enemyDetectionHitbox = body.createFixture(enemyShape, 1.0f);
         enemyShape.dispose();
         enemyDetectionHitbox.setUserData("Proximity");
-        enemyDetectionHitbox.isSensor();
+        enemyDetectionHitbox.setSensor(true);
         return enemyDetectionHitbox;
     }
 

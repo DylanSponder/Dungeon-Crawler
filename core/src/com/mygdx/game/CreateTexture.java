@@ -1,12 +1,15 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class CreateTexture {
+
     //TODO Link all textures to HellasDungeon path
     Texture heartTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Heart.png"));
     Texture potionTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/LifePot.png"));
@@ -18,7 +21,7 @@ public class CreateTexture {
     //Texture roomDoorTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHouse.png"));
     //Texture roomHoleTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHole.png"));
     Texture swordTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Sword/SpriteInHand.png"));
-    Texture bowTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/Bow/Sprite.png"));
+    Texture bowTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Bow/Sprite.png"));
     Texture arrowTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/Bow/Arrow.png"));
     Texture enemySkullTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Skull/SpriteSheet.png"));
     Texture enemyEyeTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Eye/Eye.png"));
@@ -129,7 +132,7 @@ public class CreateTexture {
     Sprite playerAttackRight = new Sprite(playerAttackTexture, 48, 0, 16, 16);
     //outline weapon sprites
     Sprite swordSprite = new Sprite(swordTexture, 0, 0, 7, 12);
-    Sprite bowSprite = new Sprite(bowTexture,0,0,15,7);
+    Sprite bowSprite = new Sprite(bowTexture,0,0,19,8);
     Sprite arrowSprite = new Sprite(arrowTexture,0,0,13,5);
     //outline enemy sprites
     Sprite enemySprite = new Sprite(enemySkullTexture,0,0,16,16);
@@ -162,6 +165,10 @@ public class CreateTexture {
     }
 
     public void textureRegionBuilder() {
+
+        AssetManager assetManager = new AssetManager();
+        assetManager.load("HellasDungeon/Font/HellasFontStylized-extended.fnt", BitmapFont.class);
+
         roomMiddleFloorTexture.setRegion(96, 16, 16, 16);
         roomTopLeftWallTexture.setRegion(0, 0, 16, 16);
         roomTopWallTexture.setRegion(48, 0, 16, 16);

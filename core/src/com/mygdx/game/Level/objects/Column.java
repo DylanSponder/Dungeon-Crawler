@@ -4,6 +4,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
 
 public class Column {
@@ -13,7 +14,7 @@ public class Column {
     //uses lock logic to remove the sprite
 
     public float columnX, columnY;
-    private World world;
+    public World world;
     public Body columnBody;
     public boolean visible;
     public int type; //1-9 types
@@ -26,44 +27,68 @@ public class Column {
         this.type = type;
     }
 
-    public Body createColumn() {
+    public void createColumnTop(boolean solid) {
         //creates and activates the pots hitbox for collisions
         BodyFactory bodyFactory = new BodyFactory();
 
-        //this.columnBody = bodyFactory.createPot(world, potX, potY);
+        //this.columnBody = bodyFactory.createWall(world, columnX, columnY);
 
-        this.columnBody.setUserData("Column");
+        DungeonCrawler.columns.add(this);
+
+        //this.columnBody.setUserData("Column");
 
         //potArrayMap.put(potBody, this);
 
         //this.potCreated = true;
 
-        return this.columnBody;
+        //return this.columnBody;
+    }
+
+    public void createColumnStem(boolean solid) {
+        //creates and activates the pots hitbox for collisions
+        BodyFactory bodyFactory = new BodyFactory();
+
+        DungeonCrawler.columns.add(this);
+
+        //this.columnBody = bodyFactory.createPot(world, potX, potY);
+
+        //ColumnTop col1 = new ColumnTop(world, columnX, columnY, type, solid);
+
+        //DungeonCrawler.columnTops.add(col1);
+
+        //this.columnBody.setUserData("Column");
+
+        //potArrayMap.put(potBody, this);
+
+        //this.potCreated = true;
+
+        //return this.columnBody;
+    }
+
+    public void createColumnBase(boolean solid) {
+        //creates and activates the pots hitbox for collisions
+        BodyFactory bodyFactory = new BodyFactory();
+
+        DungeonCrawler.columns.add(this);
+
+        //this.columnBody = bodyFactory.createPot(world, potX, potY);
+
+        //ColumnTop col1 = new ColumnTop(world, columnX, columnY, type, solid);
+
+        //DungeonCrawler.columnTops.add(col1);
+
+        //this.columnBody.setUserData("Column");
+
+        //potArrayMap.put(potBody, this);
+
+        //this.potCreated = true;
+
+        //return this.columnBody;
     }
 }
 
-class ColumnBase extends Column {
 
-    private Fixture baseHitbox;
-    public ColumnBase(World world, float x, float y, int type) {
-        super(world, x, y, type);
 
-    }
-    public Body createColumnBase(Body body){
-        return body;
-    }
-}
 
-class ColumnStem extends Column {
 
-    public ColumnStem(World world, float x, float y, int type) {
-        super(world, x, y, type);
-    }
-}
 
-class ColumnTop extends Column {
-
-    public ColumnTop(World world, float x, float y, int type) {
-        super(world, x, y, type);
-    }
-}

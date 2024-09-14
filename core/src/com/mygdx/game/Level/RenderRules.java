@@ -253,7 +253,7 @@ public class RenderRules {
                         System.out.println(str);
                         switch (str) {
                             case "col1":
-                                drawableLevelLayer.add(index, "twCol1");
+                                drawableLevelLayer.add(index, "twColTop1");
                                 index++;
                                 break;
                             case "col2":
@@ -280,32 +280,32 @@ public class RenderRules {
                     }
                         else if (levelLayer.get(index).matches("t+o+r+u+.+")) {
                             StringBuffer sb2 = new StringBuffer(i);
-                            sb2.delete(0, 2);
+                            sb2.delete(0, 4);
                             String str = sb2.toString();
                             System.out.println(str);
                             switch (str) {
                                 case "col1":
-                                    drawableLevelLayer.add(index, "colTop1");
+                                    drawableLevelLayer.add(index, "toruColTop1");
                                     index++;
                                     break;
                                 case "col2":
-                                    drawableLevelLayer.add(index, "colTop2");
+                                    drawableLevelLayer.add(index, "toruColTop2");
                                     index++;
                                     break;
                                 case "col3":
-                                    drawableLevelLayer.add(index, "colTop3");
+                                    drawableLevelLayer.add(index, "toruColTop3");
                                     index++;
                                     break;
                                 case "col4":
-                                    drawableLevelLayer.add(index, "colStem");
+                                    drawableLevelLayer.add(index, "toruColStem1");
                                     index++;
                                     break;
                                 case "col5":
-                                    drawableLevelLayer.add(index, "colStem2");
+                                    drawableLevelLayer.add(index, "toruColStem2");
                                     index++;
                                     break;
                                 case "col6":
-                                    drawableLevelLayer.add(index, "colStem3");
+                                    drawableLevelLayer.add(index, "toruColStem3");
                                     index++;
                                     break;
                             }
