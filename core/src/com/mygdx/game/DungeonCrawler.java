@@ -12,9 +12,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -38,6 +36,8 @@ import com.mygdx.game.level.CreateCell;
 import com.mygdx.game.level.objects.*;
 import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.InitLevel;
+
+import static com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL;
 
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch playerBatch, arrowBatch, enemyBatch, potBatch, hudBatch, tutoBatch, fontBatch;
@@ -87,6 +87,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static BitmapFont defaultFont;
 	public static ArrayList<Text> messages;
 	public AssetManager assetManager;
+	public float stateTime;
+	public int index = 0;
 
 	private boolean leanDown = false, leanUp = false, leanLeft = false, leanRight = false, leanUpLeft = false, leanUpRight = false;
 
@@ -1023,9 +1025,15 @@ public class DungeonCrawler extends ApplicationAdapter {
 				columnTopBatch.end();
 			}
 
+
+		stateTime += Gdx.graphics.getDeltaTime();
+
 		for (Fire f : fires) {
 
-
+			TextureRegion currentFrame = tx.fireAnimation.getKeyFrame(stateTime, true);
+			fireBatch.begin();
+			fireBatch.draw(currentFrame, f.fireX, f.fireY);
+			fireBatch.end();
 		}
 
 

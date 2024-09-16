@@ -1,10 +1,10 @@
 tlw,twcol10,tw,dtl,doortl,doortr,dtr,tw,twcol10,trw
 lw,fcol4,f,f,f,f,f,f,fcol4,rw
-torl,fcol7,f,f,f,f,f,f,fcol7,torr
+lw,fcol7,f,f,f,f,f,f,fcol7,rw
 dlu,f,f,f,f,f,f,f,f,dru
 doorul,f,f,f,f,f,f,f,f,doorur
 doorll,f,f,f,f,f,f,f,f,doorlr
-dll,fcol10,f,ftuto,f,f,f,f,fcol10,drl
-torl,fcol4,f,f,f,f,f,f,fcol4,torr
+dll,fcol10fire,f,ftuto,f,f,f,f,fcol10fire,drl
+lw,fcol4,f,f,f,f,f,f,fcol4,rw
 lw,fcol7,f,f,f,f,f,f,fcol7,rw
-blw,bw,bw,dbl,doorbl,doorbr,dbr,bw,tord,brw
+blw,bw,bw,dbl,doorbl,doorbr,dbr,bw,bw,brw

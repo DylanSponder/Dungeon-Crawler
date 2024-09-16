@@ -55,7 +55,18 @@ public class CreateTexture {
     public TextureRegion damagedAmphoraTexture = new TextureRegion(roomBackground, 0,0,16,16);
 
     public TextureRegion fireTexture = new TextureRegion(fireAnimationSheet,0,0,16,16);
-    public Animation<TextureRegion> fireAnimation = new Animation<TextureRegion>(0.5f,fireTexture);
+
+    public Animation<TextureRegion> fireAnimation = new Animation<TextureRegion>(0.25f,fireTexture);
+
+    TextureRegion[][] fire = TextureRegion.split(fireAnimationSheet,
+            fireAnimationSheet.getWidth() / 5,
+            fireAnimationSheet.getHeight() / 2);
+
+    TextureRegion[] fireFrames = new TextureRegion[5 * 2];
+    int index = 0;
+
+
+
 
     public TextureRegion colTop1 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colTop2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
@@ -175,6 +186,16 @@ public class CreateTexture {
 
         AssetManager assetManager = new AssetManager();
         assetManager.load("HellasDungeon/Font/HellasFontStylized-extended.fnt", BitmapFont.class);
+
+        for (int p = 0; p < 2; p++) {
+            for (int j = 0; j < 5; j++) {
+                fireFrames[index++] = fire[p][j];
+            }
+        }
+
+        // Initialize the Animation with the frame interval and array of frames
+        fireAnimation = new Animation<TextureRegion>(0.12f, fireFrames);
+        float stateTime = 0f;
 
         roomMiddleFloorTexture.setRegion(96, 16, 16, 16);
         roomTopLeftWallTexture.setRegion(0, 0, 16, 16);

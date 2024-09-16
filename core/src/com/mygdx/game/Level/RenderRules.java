@@ -150,6 +150,58 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "tord");
                         index++;
                         break;
+                    case "col1":
+                        drawableLevelLayer.add(index, "col1");
+                        index++;
+                        break;
+                    case "col2":
+                        drawableLevelLayer.add(index, "col2");
+                        index++;
+                        break;
+                    case "col3":
+                        drawableLevelLayer.add(index, "col3");
+                        index++;
+                        break;
+                    case "col4":
+                        drawableLevelLayer.add(index, "col4");
+                        index++;
+                        break;
+                    case "col5":
+                        drawableLevelLayer.add(index, "col5");
+                        index++;
+                        break;
+                    case "col6":
+                        drawableLevelLayer.add(index, "col6");
+                        index++;
+                        break;
+                    case "col7":
+                        drawableLevelLayer.add(index, "col7");
+                        index++;
+                        break;
+                    case "col8":
+                        drawableLevelLayer.add(index, "col8");
+                        index++;
+                        break;
+                    case "col9":
+                        drawableLevelLayer.add(index, "col9");
+                        index++;
+                        break;
+                    case "col10":
+                        drawableLevelLayer.add(index, "col10");
+                        index++;
+                        break;
+                    case "col11":
+                        drawableLevelLayer.add(index, "col11");
+                        index++;
+                        break;
+                    case "col12":
+                        drawableLevelLayer.add(index, "col12");
+                        index++;
+                        break;
+                    case "col13":
+                        drawableLevelLayer.add(index, "col13");
+                        index++;
+                        break;
                     default:
                         if (i == "" || i == " " || i == null || i.isEmpty()){
                             drawableLevelLayer.add(index, "");
@@ -160,7 +212,13 @@ public class RenderRules {
                             StringBuffer sb = new StringBuffer(i);
                             sb.delete(0, 1);
                             String str = sb.toString();
-
+                            //floor + columntop4 + fire
+                            switch (str) {
+                                    case "col10fire":
+                                        drawableLevelLayer.add(index, "fcol10fire");
+                                        index++;
+                                        break;
+                            }
                             switch (str) {
                                     //enemy
                                 case "enemy":
@@ -186,46 +244,79 @@ public class RenderRules {
                                     drawableLevelLayer.add(index, "pot2");
                                     index++;
                                     break;
-                                    //potion - unused as is never placed in natural generation
+                                    //potion - unused - never placed in natural generation
                                 case "heal":
                                     drawableLevelLayer.add(index, "middleFloorTile");
                                     index++;
                                     break;
                                     //columns
                                 case "col1":
-                                    drawableLevelLayer.add(index, "col1");
+                                    drawableLevelLayer.add(index, "fcol1");
                                     index++;
                                     break;
                                 case "col2":
-                                    drawableLevelLayer.add(index, "col2");
+                                    drawableLevelLayer.add(index, "fcol2");
                                     index++;
                                     break;
                                 case "col3":
-                                    drawableLevelLayer.add(index, "col3");
+                                    drawableLevelLayer.add(index, "fcol3");
                                     index++;
                                     break;
                                 case "col4":
-                                    drawableLevelLayer.add(index, "col4");
+                                    drawableLevelLayer.add(index, "fcol4");
                                     index++;
                                     break;
                                 case "col5":
-                                    drawableLevelLayer.add(index, "col5");
+                                    drawableLevelLayer.add(index, "fcol5");
                                     index++;
                                     break;
                                 case "col6":
-                                    drawableLevelLayer.add(index, "col6");
+                                    drawableLevelLayer.add(index, "fcol6");
                                     index++;
                                     break;
                                 case "col7":
-                                    drawableLevelLayer.add(index, "col7");
+                                    drawableLevelLayer.add(index, "fcol7");
                                     index++;
                                     break;
                                 case "col8":
-                                    drawableLevelLayer.add(index, "col8");
+                                    drawableLevelLayer.add(index, "fcol8");
                                     index++;
                                     break;
                                 case "col9":
-                                    drawableLevelLayer.add(index, "col9");
+                                    drawableLevelLayer.add(index, "fcol9");
+                                    index++;
+                                    break;
+                                case "col10":
+                                    drawableLevelLayer.add(index, "fcol10");
+                                    index++;
+                                    break;
+                                case "col11":
+                                    drawableLevelLayer.add(index, "fcol11");
+                                    index++;
+                                    break;
+                                case "col12":
+                                    drawableLevelLayer.add(index, "fcol12");
+                                    index++;
+                                    break;
+                                case "col13":
+                                    drawableLevelLayer.add(index, "fcol13");
+                                    index++;
+                                    break;
+                                    //pedestals
+                                case "ped1":
+                                    drawableLevelLayer.add(index, "ped1");
+                                    index++;
+                                    break;
+                                case "ped2":
+                                    drawableLevelLayer.add(index, "ped2");
+                                    index++;
+                                    break;
+                                case "ped3":
+                                    drawableLevelLayer.add(index, "ped3");
+                                    index++;
+                                    break;
+                                case "ped4":
+                                    drawableLevelLayer.add(index, "ped3");
                                     index++;
                                     break;
                                     //obstacles
@@ -246,6 +337,7 @@ public class RenderRules {
                                     break;
                              }
                         }
+
                         else if (levelLayer.get(index).matches("t+w+.+")) {
                         StringBuffer sb2 = new StringBuffer(i);
                         sb2.delete(0, 2);
@@ -257,11 +349,19 @@ public class RenderRules {
                                 index++;
                                 break;
                             case "col2":
-                                drawableLevelLayer.add(index, "twCol2");
+                                drawableLevelLayer.add(index, "twColTop2");
                                 index++;
                                 break;
                             case "col3":
-                                drawableLevelLayer.add(index, "twCol3");
+                                drawableLevelLayer.add(index, "twColTop3");
+                                index++;
+                                break;
+                            case "col10":
+                                drawableLevelLayer.add(index, "twColTop4");
+                                index++;
+                                break;
+                            case "col11":
+                                drawableLevelLayer.add(index, "twColTop5");
                                 index++;
                                 break;
                             case "col4":
@@ -274,6 +374,14 @@ public class RenderRules {
                                 break;
                             case "col6":
                                 drawableLevelLayer.add(index, "twColStem3");
+                                index++;
+                                break;
+                            case "col12":
+                                drawableLevelLayer.add(index, "twColStem4");
+                                index++;
+                                break;
+                            case "col13":
+                                drawableLevelLayer.add(index, "twColStem5");
                                 index++;
                                 break;
                         }
@@ -296,15 +404,31 @@ public class RenderRules {
                                     drawableLevelLayer.add(index, "toruColTop3");
                                     index++;
                                     break;
+                                case "col10":
+                                    drawableLevelLayer.add(index, "toruColTop4");
+                                    index++;
+                                    break;
+                                case "col11":
+                                    drawableLevelLayer.add(index, "toruColTop5");
+                                    index++;
+                                    break;
                                 case "col4":
                                     drawableLevelLayer.add(index, "toruColStem1");
                                     index++;
                                     break;
                                 case "col5":
-                                    drawableLevelLayer.add(index, "toruColStem2");
+                                    drawableLevelLayer.add(index, "toruColStemDamaged1");
                                     index++;
                                     break;
                                 case "col6":
+                                    drawableLevelLayer.add(index, "toruColStemStemDamaged1");
+                                    index++;
+                                    break;
+                                case "col12":
+                                    drawableLevelLayer.add(index, "toruColStem2");
+                                    index++;
+                                    break;
+                                case "col13":
                                     drawableLevelLayer.add(index, "toruColStem3");
                                     index++;
                                     break;
