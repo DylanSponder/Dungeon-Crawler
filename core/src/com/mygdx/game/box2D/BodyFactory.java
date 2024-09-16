@@ -18,6 +18,20 @@ public class BodyFactory {
         return body;
     }
 
+    public Body createColumnBase(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 8, y + 3);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(8, 3);
+        body.createFixture(shape, 1.0f);
+        shape.dispose();
+        return body;
+    }
+
     public Body createDoorBody(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();

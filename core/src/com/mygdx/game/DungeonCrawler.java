@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
@@ -40,7 +41,7 @@ import com.mygdx.game.level.InitLevel;
 
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch playerBatch, arrowBatch, enemyBatch, potBatch, hudBatch, tutoBatch, fontBatch;
-	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch;
+	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch;
 	public static World world;
 	public static boolean debug = false;
@@ -69,6 +70,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Potion> potions, collectedPotions;
 	public static ArrayList<Torch> torches;
 	public static ArrayList<Obstacle> obstacles;
+	public static  ArrayList<Fire> fires;
 	//public static ArrayList<ColumnTop> columnTops;
 	//public static ArrayList<ColumnStem> columnStems;
 	//public static ArrayList<ColumnBase> columnBases;
@@ -107,16 +109,17 @@ public class DungeonCrawler extends ApplicationAdapter {
 		columnTopBatch = new SpriteBatch();
 		columnStemBatch = new SpriteBatch();
 		columnBaseBatch = new SpriteBatch();
+		fireBatch = new SpriteBatch();
 		fontBatch = new SpriteBatch();
 		reversedArrowMap = false;
 		reversedSkullMap = false;
 		reversedPotMap = false;
 		player = new Player();
 		enemies = new ArrayList<>();
-		deadEnemyBodies = new ArrayList<Body>();
-		enemySkulls = new ArrayList<Skull>();
-		brokenSkulls = new ArrayList<Skull>();
-		bones = new ArrayList<Bone>();
+		deadEnemyBodies = new ArrayList<>();
+		enemySkulls = new ArrayList<>();
+		brokenSkulls = new ArrayList<>();
+		bones = new ArrayList<>();
 		shopkeepers = new ArrayList<>();
 		tutorial = new ArrayList<>();
 		locks = new ArrayList<>();
@@ -125,7 +128,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		potArrayMap = new ArrayMap<>();
 		torches = new ArrayList<>();
 		potions = new ArrayList<>();
-		columns = new ArrayList<Column>();
+		columns = new ArrayList<>();
+		fires = new ArrayList<>();
 		//columnTops = new ArrayList<>();
 		//columnStems = new ArrayList<>();
 		//columnBases = new ArrayList<>();
@@ -967,7 +971,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 			deadEnemyBodies.clear();
 
 
-
 			for (Column c : columns) {
 				columnBaseBatch.begin();
 				switch (c.type) {
@@ -1010,10 +1013,20 @@ public class DungeonCrawler extends ApplicationAdapter {
 					case 3:
 						columnTopBatch.draw(tx.colTop3,c.columnX,c.columnY);
 						break;
+					case 10:
+						columnTopBatch.draw(tx.colTop4,c.columnX,c.columnY);
+						break;
+					case 11:
+						columnTopBatch.draw(tx.colTop5,c.columnX,c.columnY);
+						break;
 				}
 				columnTopBatch.end();
 			}
 
+		for (Fire f : fires) {
+
+
+		}
 
 
 			fontBatch.begin();
@@ -1078,6 +1091,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			columnBaseBatch.setProjectionMatrix(camera.combined);
 			columnStemBatch.setProjectionMatrix(camera.combined);
 			columnTopBatch.setProjectionMatrix(camera.combined);
+			fireBatch.setProjectionMatrix(camera.combined);
 			fontBatch.setProjectionMatrix(camera.combined);
 			hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
 			hud.stage.draw();
@@ -1125,6 +1139,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		columnTopBatch.dispose();
 		columnStemBatch.dispose();
 		columnBaseBatch.dispose();
+		fireBatch.dispose();
 		rayHandler.dispose();
 		world.dispose();
 		b2dr.dispose();

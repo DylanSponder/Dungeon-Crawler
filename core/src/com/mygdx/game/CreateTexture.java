@@ -60,12 +60,19 @@ public class CreateTexture {
     public TextureRegion colTop1 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colTop2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colTop3 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion colTop4 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion colTop5 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colStem = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion colStem2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion colStem3 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+
     public TextureRegion colStemDamaged1 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colStemDamaged2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colBase = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion pedestal1 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion pedestal2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion pedestal3 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion pedestal4 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
 
     public TextureRegion skullTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion boneTexture = new TextureRegion(roomBackground, 0,0,16,16);
@@ -190,12 +197,18 @@ public class CreateTexture {
         colTop1.setRegion(0, 0, 16, 16);
         colTop2.setRegion(16, 0, 16, 16);
         colTop3.setRegion(32, 0, 16, 16);
+        colTop4.setRegion(48, 0, 16, 16);
+        colTop5.setRegion(64, 0, 16, 16);
         colStem.setRegion(0, 16, 16, 16);
         colStemDamaged1.setRegion(16, 16, 16, 16);
         colStemDamaged2.setRegion(32, 16, 16, 16);
+        colStem2.setRegion(48, 16, 16, 16);
+        colStem3.setRegion(64, 16, 16, 16);
         colBase.setRegion(0, 32, 16, 16);
-        pedestal1.setRegion(16, 32, 16, 16);
-        pedestal2.setRegion(32, 32, 16, 16);
+        pedestal1.setRegion(32, 32, 16, 16);
+        pedestal2.setRegion(48, 32, 16, 16);
+        pedestal3.setRegion(64, 32, 16, 16);
+        pedestal4.setRegion(80, 32, 16, 16);
 
         doorTopLeftTexture.setRegion(128, 0, 16, 16);
         doorTopRightTexture.setRegion(144, 0, 16, 16);

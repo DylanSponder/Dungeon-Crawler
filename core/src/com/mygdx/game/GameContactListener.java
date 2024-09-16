@@ -272,8 +272,8 @@ public class GameContactListener implements ContactListener {
             }
         }
 
-        if(((fa.getBody().getUserData() == "Pot" && fb.getBody().getUserData() == "Lance")
-                || (fa.getBody().getUserData() == "Lance" && fb.getBody().getUserData() == "Pot"))
+        if(((fa.getBody().getUserData() == "Pot" && fb.getBody().getUserData() == "Sword")
+                || (fa.getBody().getUserData() == "Sword" && fb.getBody().getUserData() == "Pot"))
                 || ((fa.getBody().getUserData() == "Pot" && fb.getBody().getUserData().toString().startsWith("Arrow"))
                 || (fa.getBody().getUserData().toString().startsWith("Arrow") && fb.getBody().getUserData() == "Pot"))){
             if (fb.getBody().getUserData() == "Pot") {
@@ -293,8 +293,8 @@ public class GameContactListener implements ContactListener {
         if ((fa.getBody().getUserData().toString().startsWith("Arrow") && fb.getBody().getUserData() == "Enemy")
                 || (fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData().toString().startsWith("Arrow"))
                 ||
-                ((fa.getBody().getUserData() == "Lance" && fb.getBody().getUserData() == "Enemy")
-                || (fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Lance"))
+                ((fa.getBody().getUserData() == "Sword" && fb.getBody().getUserData() == "Enemy")
+                || (fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Sword"))
         ) {
             if (fa.getUserData() != "Proximity" &&
                     fb.getUserData() != "Proximity") {
@@ -305,19 +305,19 @@ public class GameContactListener implements ContactListener {
                         float velX = e.enemyBody.getLinearVelocity().x;
                         float velY = e.enemyBody.getLinearVelocity().y;
                         switch (fbData) {
-                            case "DownLance":
+                            case "DownSword":
                                 e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
                                 e.enemyBody.setLinearVelocity(velX, velY - 50);
                                 break;
-                            case "UpLance":
+                            case "UpSword":
                                 e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
                                 e.enemyBody.setLinearVelocity(velX, velY + 50);
                                 break;
-                            case "LeftLance":
+                            case "LeftSword":
                                 e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
                                 e.enemyBody.setLinearVelocity(velX - 50, velY);
                                 break;
-                            case "RightLance":
+                            case "RightSword":
                                 e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
                                 e.enemyBody.setLinearVelocity(velX + 50, velY);
                                 break;
@@ -368,19 +368,19 @@ public class GameContactListener implements ContactListener {
                         float velX = e.enemyBody.getLinearVelocity().x;
                         float velY = e.enemyBody.getLinearVelocity().y;
                         switch (faData) {
-                            case "DownLance":
+                            case "DownSword":
                                 e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
                                 e.enemyBody.setLinearVelocity(velX, velY - 50);
                                 break;
-                            case "UpLance":
+                            case "UpSword":
                                 e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
                                 e.enemyBody.setLinearVelocity(velX, velY + 50);
                                 break;
-                            case "LeftLance":
+                            case "LeftSword":
                                 e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
                                 e.enemyBody.setLinearVelocity(velX - 50, velY);
                                 break;
-                            case "RightLance":
+                            case "RightSword":
                                 e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
                                 e.enemyBody.setLinearVelocity(velX + 50, velY);
                                 break;
@@ -425,8 +425,8 @@ public class GameContactListener implements ContactListener {
         }
         if (((fa.getBody().getUserData().toString().startsWith("Arrow") && fb.getBody().getUserData() == "Skull")
             || (fa.getBody().getUserData() == "Skull" && fb.getBody().getUserData().toString().startsWith("Arrow")))
-            || ((fa.getBody().getUserData() == "Lance" && fb.getBody().getUserData() == "Skull")
-            || (fa.getBody().getUserData() == "Skull" && fb.getBody().getUserData() == "Lance"))
+            || ((fa.getBody().getUserData() == "Sword" && fb.getBody().getUserData() == "Skull")
+            || (fa.getBody().getUserData() == "Skull" && fb.getBody().getUserData() == "Sword"))
         ) {
             if (fb.getBody().getUserData() == "Skull") {
                 for (Skull s : enemySkulls) {
