@@ -124,7 +124,7 @@ public class GenerateLevel {
             }
             else {
                 int random = (int) (Math.random() * /*upper limit->*/ 5 + 1);
-                newRoom.roomNum = 4;
+                newRoom.roomNum = random;
             }
             // init.roomList.get(i).roomNum = random;
         }
@@ -1328,6 +1328,15 @@ for (int i = 0; i < layerSize; i++) {
             Column twCol13 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 - 8,13);
             twCol13.createColumnTop(false);
             break;
+        case "twCol10Fire":
+            currentCell = init.cr.topWallTile;
+            Column twFireCol10 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,10);
+            twFireCol10.createColumnTop(false);
+            Fire twfirecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 5);
+            twfirecol10.createFire();
+            fires.add(twfirecol10);
+            break;
+
         //TODO finish. string splitting an option to get column downward offset e.g col16 for 6 y-offset
         //TODO: OR we can grab the previous columns in columns and check to see if it col4,5 or 6, and keep checking
         //TODO: until we hit a col1, 2 or 3. Then simply x 6 to get the total offset 'naturally' - lower overhead to map making
@@ -1383,8 +1392,8 @@ for (int i = 0; i < layerSize; i++) {
             break;
         case "fcol10fire":
             currentCell = init.cr.middleFloorTile;
-            Column col10fire = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,10);
-            col10fire.createColumnTop(false);
+            Column fireCol10 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,10);
+            fireCol10.createColumnTop(false);
             Fire firecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 5);
             firecol10.createFire();
             fires.add(firecol10);

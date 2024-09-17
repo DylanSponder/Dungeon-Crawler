@@ -13,6 +13,8 @@ import com.mygdx.game.level.objects.Potion;
 import com.mygdx.game.level.objects.Room;
 import com.mygdx.game.CreateSound;
 
+import java.sql.SQLSyntaxErrorException;
+
 import static com.mygdx.game.DungeonCrawler.*;
 
 public class GameContactListener implements ContactListener {
@@ -30,9 +32,42 @@ public class GameContactListener implements ContactListener {
         //System.out.println(fa.getBody().getUserData() + " " + fb.getBody().getUserData());
         //System.out.println(fa.getUserData() + " " + fb.getUserData());
 
-        //TODO: finish switch statement
+        //TODO: finish switch statement - ~30% done
         switch (faAsString) {
             case "Arrow":
+                if (((fb.getBody().getUserData() == "Enemy" && fb.getUserData() != "Proximity")
+                        || fb.getBody().getUserData() == "Wall")
+                        || fb.getBody().getUserData() == "Pot") {
+                    if (!arrowBodiesCollided.contains(fa.getBody())) {
+                        arrowBodiesCollided.add(fa.getBody());
+                        break;
+                    }
+                } else if (fb.getUserData() == "EnemyHitbox") {
+                    for (Enemy e : enemies) {
+                        if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()) {
+                            e.getStateMachine().changeState(EnemyState.ATTACK);
+                            break;
+                        }
+                    }
+                }
+                else if (fb.getBody().getUserData() == "Door") {
+                    for (Room r : GenerateLevel.init.roomList) {
+                        for (Door d : r.doors) {
+                            if (d.doorBody == fb.getBody()) {
+                                if (!d.open) {
+                                    if (!arrowBodiesCollided.contains(fa.getBody())) {
+                                        arrowBodiesCollided.add(fa.getBody());
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            case "Door":
+                //fb.getBody().getUserData() == "Player"
+                //fb.getBody().getUserData() == "Enemy"
                 break;
             case "Sword":
                 break;
@@ -62,64 +97,6 @@ public class GameContactListener implements ContactListener {
                     }
                 }
                 break;
-        }
-
-        if ((fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Enemy")
-                || (fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Arrow")
-                || (fa.getBody().getUserData() == "Wall" && fb.getBody().getUserData() == "Arrow")
-                || (fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Wall")
-                || (fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Door")
-                || (fa.getBody().getUserData() == "Door" && fb.getBody().getUserData() == "Arrow")
-                || (fa.getBody().getUserData() == "Pot" && fb.getBody().getUserData() == "Arrow")
-                || (fa.getBody().getUserData() == "Arrow" && fb.getBody().getUserData() == "Pot")
-        ) {
-            if (fa.getBody().getUserData() == "Enemy" && fa.getUserData() != "Proximity"
-                    || fa.getBody().getUserData() == "Wall"
-                    || fa.getBody().getUserData() == "Pot") {
-                if (!arrowBodiesCollided.contains(fb.getBody())) {
-                    arrowBodiesCollided.add(fb.getBody());
-                }
-            } else if (fb.getBody().getUserData() == "Enemy" && fb.getUserData() != "Proximity"
-                    || fb.getBody().getUserData() == "Wall"
-                    || fb.getBody().getUserData() == "Pot") {
-                if (!arrowBodiesCollided.contains(fa.getBody())) {
-                    arrowBodiesCollided.add(fa.getBody());
-                }
-            } else if (fa.getBody().getUserData() == "Door") {
-                for (Room r : GenerateLevel.init.roomList) {
-                    for (Door d : r.doors) {
-                        if (d.doorBody == fa.getBody()) {
-                            if (!d.open) {
-                                if (!arrowBodiesCollided.contains(fb.getBody())) {
-                                    arrowBodiesCollided.add(fb.getBody());
-                                }
-                            }
-                        }
-                    }
-                }
-            } else if (fb.getBody().getUserData() == "Door") {
-                for (Room r : GenerateLevel.init.roomList) {
-                    for (Door d : r.doors) {
-                        if (d.doorBody == fb.getBody()) {
-                            if (!d.open) {
-                                if (!arrowBodiesCollided.contains(fa.getBody())) {
-                                    arrowBodiesCollided.add(fa.getBody());
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (fa.getBody().getUserData() == "Arrow" && fb.getUserData() == "EnemyHitbox"
-                    || fb.getBody().getUserData() == "Arrow" && fa.getUserData() == "EnemyHitbox") {
-                for (Enemy e : enemies) {
-                    if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()) {
-                        e.getStateMachine().changeState(EnemyState.ATTACK);
-                    }
-                }
-            }
-
         }
 
         if ((fa.getBody().getUserData() == "Door" && fb.getBody().getUserData() == "Player")

@@ -80,7 +80,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static OrthographicCamera camera;
 	public static final float DEFAULT_VIEWPORT_WIDTH = 300f;
 	public static HUD hud;
-	public static Music roomClear, swordSlash;
+	public static Music roomClear, swordSlash, level1Music;
 	public static RayHandler rayHandler;
 	private PointLight playerTorch;
 	private BitmapFont.BitmapFontData bmfData;
@@ -138,6 +138,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		collectedPotions = new ArrayList<Potion>();
 		obstacles = new ArrayList<Obstacle>();
 		messages = new ArrayList<Text>();
+
 
 		//roomClear = Gdx.audio.newMusic(Gdx.files.internal("NinjaAdventure/Sounds/Menu/Accept.wav"));
 		//swordSlash = Gdx.audio.newMusic(Gdx.files.internal("Sounds/slash.mp3"));
@@ -940,7 +941,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 					Body key = arrowEntry.key;
 					//render each individual arrow
 					arrowBatch.begin();
-					Arrow.renderArrow(arrowBatch, tx.arrowSprite, arrowEntry.value.direction, key.getPosition().x, key.getPosition().y);
+					TextureRegion currentFrame = tx.arrowAnimation.getKeyFrame(stateTime, true);
+					arrowBatch.draw(currentFrame, key.getPosition().x, key.getPosition().y);
+					//Arrow.renderArrow(arrowBatch, tx.arrowSprite, arrowEntry.value.direction, key.getPosition().x, key.getPosition().y);
 					arrowBatch.end();
 				}
 
@@ -1029,7 +1032,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 		stateTime += Gdx.graphics.getDeltaTime();
 
 		for (Fire f : fires) {
-
 			TextureRegion currentFrame = tx.fireAnimation.getKeyFrame(stateTime, true);
 			fireBatch.begin();
 			fireBatch.draw(currentFrame, f.fireX, f.fireY);

@@ -343,6 +343,12 @@ public class RenderRules {
                         sb2.delete(0, 2);
                         String str = sb2.toString();
                         System.out.println(str);
+                            switch (str) {
+                                case "col10fire":
+                                    drawableLevelLayer.add(index, "twCol10Fire");
+                                    index++;
+                                    break;
+                            }
                         switch (str) {
                             case "col1":
                                 drawableLevelLayer.add(index, "twColTop1");

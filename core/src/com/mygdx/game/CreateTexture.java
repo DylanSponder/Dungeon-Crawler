@@ -2,6 +2,9 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.MusicLoader;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -23,12 +26,14 @@ public class CreateTexture {
     Texture swordTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Sword/SpriteInHand.png"));
     Texture bowTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Bow/Sprite.png"));
     Texture arrowTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/Bow/Arrow.png"));
-    Texture enemySkullTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Skull/SpriteSheet.png"));
+    Texture enemySkullTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/Enemy/SpriteSheet.png"));
     Texture enemyEyeTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Eye/Eye.png"));
     Texture shopkeeperTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/OldMan3/SpriteSheet.png"));
     Texture tutorialTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Tuto.png"));
     Texture fireAnimationSheet = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/Fire.png"));
+    Texture arrowAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Bow/ArrowAnimation.png"));
     Texture columnsTextureSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Columns.png"));
+    Music level1Track = Gdx.audio.newMusic(Gdx.files.internal("HellasDungeon/Music/Level1Track.mp3"));
 
     //Texture font = new Texture(Gdx.files.internal("HellasDungeon/Font/GreekAlphabet.png"));
     //public TextureRegion fontTexture = new TextureRegion(font,0,0,16,16);
@@ -54,18 +59,27 @@ public class CreateTexture {
     public TextureRegion amphora2Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion damagedAmphoraTexture = new TextureRegion(roomBackground, 0,0,16,16);
 
-    public TextureRegion fireTexture = new TextureRegion(fireAnimationSheet,0,0,16,16);
+    public TextureRegion fireAnimationTexture = new TextureRegion(fireAnimationSheet,0,0,16,16);
+    public TextureRegion arrowAnimationTexture = new TextureRegion(fireAnimationSheet,0,0,16,16);
 
-    public Animation<TextureRegion> fireAnimation = new Animation<TextureRegion>(0.25f,fireTexture);
+    public Animation<TextureRegion> fireAnimation = new Animation<TextureRegion>(0.25f, fireAnimationTexture);
 
-    TextureRegion[][] fire = TextureRegion.split(fireAnimationSheet,
+    TextureRegion[][] fireTextureArray = TextureRegion.split(fireAnimationSheet,
             fireAnimationSheet.getWidth() / 5,
             fireAnimationSheet.getHeight() / 2);
 
     TextureRegion[] fireFrames = new TextureRegion[5 * 2];
+
+    public Animation<TextureRegion> arrowAnimation = new Animation<TextureRegion>(0.1f,arrowAnimationTexture);
+
+    TextureRegion[][] arrowTextureArray = TextureRegion.split(arrowAnimationSheet,
+            arrowAnimationSheet.getWidth() / 9,
+            arrowAnimationSheet.getHeight() / 1);
+
+    TextureRegion[] arrowFrames = new TextureRegion[9 * 1];
+
     int index = 0;
-
-
+    int index2 = 0;
 
 
     public TextureRegion colTop1 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
@@ -186,16 +200,36 @@ public class CreateTexture {
 
         AssetManager assetManager = new AssetManager();
         assetManager.load("HellasDungeon/Font/HellasFontStylized-extended.fnt", BitmapFont.class);
+       // assetManager.load("HellasDungeon/Music/level1Track.mp3", Music.class);
+       // assetManager.setLoader(MusicLoader.class,);
+       // Music music2 = assetManager.get("HellasDungeon/Music/Level1Track.mp3");
+
+       // music2.play();
+       // music2.setLooping(true);
 
         for (int p = 0; p < 2; p++) {
             for (int j = 0; j < 5; j++) {
-                fireFrames[index++] = fire[p][j];
+                fireFrames[index++] = fireTextureArray[p][j];
             }
         }
 
         // Initialize the Animation with the frame interval and array of frames
         fireAnimation = new Animation<TextureRegion>(0.12f, fireFrames);
         float stateTime = 0f;
+
+
+        for (int y = 0; y < 1; y++) {
+            for (int r = 0; r < 9; r++) {
+                arrowFrames[index2++] = arrowTextureArray[y][r];
+            }
+        }
+
+        // Initialize the Animation with the frame interval and array of frames
+        arrowAnimation = new Animation<TextureRegion>(0.06f, arrowFrames);
+        float stateTime2 = 0f;
+
+        level1Track.play();
+        level1Track.setLooping(true);
 
         roomMiddleFloorTexture.setRegion(96, 16, 16, 16);
         roomTopLeftWallTexture.setRegion(0, 0, 16, 16);
