@@ -2,6 +2,7 @@ package com.mygdx.game.entity;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class Arrow {
@@ -9,10 +10,12 @@ public class Arrow {
     public String direction;
     static float arrowX;
     static float arrowY;
+    public float stateTime;
 
-    public Arrow(Body arrow, String direction){
+    public Arrow(Body arrow, String direction, float stateTime){
         arrowBody = arrow;
         this.direction = direction;
+        this.stateTime = stateTime;
     }
 
     public static Body createArrowBody(World world, float x, float y) {
@@ -41,7 +44,7 @@ public class Arrow {
         return arrowHitbox;
     }
 
-    public static void renderArrow (SpriteBatch batch, Sprite arrowSprite, String direction, float x, float y){
+    public static void renderArrow (SpriteBatch batch, TextureRegion arrowSprite, String direction, float x, float y){
             if (direction == "Down"){
                 batch.draw(arrowSprite,x-5.5f,y-6.5f,8,5,13,5,1,1,270);
             }

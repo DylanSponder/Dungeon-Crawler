@@ -22,7 +22,7 @@ public class HUD {
   private Image moneySymbol;
   public int totalGold;
   public String totalGoldAsString;
-  private Label winWords;
+  private Label winWords, startWords;
   //private CreateTexture tx;
 
   public HUD(Viewport vp, SpriteBatch sb) {
@@ -58,6 +58,16 @@ public class HUD {
     table.add(moneyTable);
 
     stage.addActor(table);
+  }
+
+  public void startLevel() {
+    stage.clear();
+    Table startTable = new Table();
+    startTable.center();
+    startTable.setFillParent(true);
+    startWords = new Label("CLAY CATACOMBS", new LabelStyle(DungeonCrawler.defaultFont, Color.WHITE));
+    startTable.add(startWords);
+    stage.addActor(startTable);
   }
 
   public void winGame() {

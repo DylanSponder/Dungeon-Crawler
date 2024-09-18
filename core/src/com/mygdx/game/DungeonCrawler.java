@@ -42,7 +42,7 @@ import static com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL;
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch playerBatch, arrowBatch, enemyBatch, potBatch, hudBatch, tutoBatch, fontBatch;
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch;
-	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch;
+	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch;
 	public static World world;
 	public static boolean debug = false;
 	private Box2DDebugRenderer b2dr;
@@ -87,7 +87,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static BitmapFont defaultFont;
 	public static ArrayList<Text> messages;
 	public AssetManager assetManager;
-	public float stateTime;
+	public float stateTime, stateTime2;
 	public int index = 0;
 
 	private boolean leanDown = false, leanUp = false, leanLeft = false, leanRight = false, leanUpLeft = false, leanUpRight = false;
@@ -111,6 +111,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		columnTopBatch = new SpriteBatch();
 		columnStemBatch = new SpriteBatch();
 		columnBaseBatch = new SpriteBatch();
+		pedestalBatch = new SpriteBatch();
 		fireBatch = new SpriteBatch();
 		fontBatch = new SpriteBatch();
 		reversedArrowMap = false;
@@ -161,19 +162,20 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//		Gdx.files.internal("HellasDungeon/Font/GreekAlphabetConcise-export.png"), false);
 
 
-		defaultFont = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/HellasFontStylized-extended.fnt"),
-				Gdx.files.internal("HellasDungeon/Font/HellasFontStylized-extended.png"), false);
+		defaultFont = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.fnt"),
+				Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.png"), false);
 
 		Color c = new Color();
 		c.set(1,1,1,1);
 		//Text t =  new Text(defaultFont, "TEST MESSAGE", c, false);
 		//messages.add(t);
 
-		Text level1StartText =  new Text(defaultFont, "CLAY CATACOMBS", c, true, 1f, 0.045f, true,false,null);
+		Text level1StartText =  new Text(defaultFont, "CLAY CATACOMBS", c, false, 100f, 1f, true);
 		messages.add(level1StartText);
+		//0.045f
 
-		Text roomCleared =  new Text(defaultFont, "ROOM CLEARED", c, true, 1f, 0.045f, true,false,null);
-		messages.add(roomCleared);
+		//Text roomCleared =  new Text(defaultFont, "ROOM CLEARED", c, true, 1f, 0.045f, true);
+		//messages.add(roomCleared);
 
 		//defaultFont.getData();
 		//bmfData.setGlyphRegion();
@@ -405,7 +407,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 					//pause player in place while attacking (attacks must be timed correctly!)
 					arrowBody.setUserData("Arrow");
-					arrows.add(arrow = new Arrow(arrowBody, playerDirection));
+					arrows.add(arrow = new Arrow(arrowBody, playerDirection, 0f));
 					arrowArrayMap.put(arrowBody, arrow);
 
 					playerPaused = true;
@@ -552,6 +554,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				//if player presses enter attack with a bow
 				if (keycode == 66 && (!playerMeleeAttacking && !playerRangedAttacking)) {
 					float playerRangedAttackSpeedInSeconds = 0.50f;
+					stateTime2 = 0f;
 					playerRangedAttacking = true;
 
 					if (tx.playerSprite.equals(tx.playerDown)) {
@@ -593,8 +596,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowBody.setLinearVelocity(0, -500f);
 					}
 					//pause player in place while attacking (attacks must be timed correctly!)
+
 					arrowBody.setUserData("Arrow");
-					arrows.add(arrow = new Arrow(arrowBody, playerDirection));
+					System.out.println(arrowBody.getUserData());
+					arrows.add(arrow = new Arrow(arrowBody, playerDirection, 0f));
 					arrowArrayMap.put(arrowBody, arrow);
 
 					playerPaused = true;
@@ -634,6 +639,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 			if (hud.healthBar.currentHealth == 0) {
 				Gdx.app.exit();
 			}
+
+		//hud.startLevel();
 
 			// win the game if all enemies are dead
 			if (enemies.isEmpty()) {
@@ -938,12 +945,16 @@ public class DungeonCrawler extends ApplicationAdapter {
 			//check if there are any fired arrows
 			if (!arrowArrayMap.isEmpty()) {
 				for (OrderedMap.Entry<Body, Arrow> arrowEntry : arrowArrayMap.entries()) {
+					Arrow value = arrowEntry.value;
+
+					value.stateTime += Gdx.graphics.getDeltaTime();
+
 					Body key = arrowEntry.key;
 					//render each individual arrow
 					arrowBatch.begin();
-					TextureRegion currentFrame = tx.arrowAnimation.getKeyFrame(stateTime, true);
-					arrowBatch.draw(currentFrame, key.getPosition().x, key.getPosition().y);
-					//Arrow.renderArrow(arrowBatch, tx.arrowSprite, arrowEntry.value.direction, key.getPosition().x, key.getPosition().y);
+					TextureRegion currentFrame = tx.arrowAnimation.getKeyFrame(value.stateTime, true);
+					//arrowBatch.draw(currentFrame, key.getPosition().x, key.getPosition().y);
+					Arrow.renderArrow(arrowBatch, currentFrame, arrowEntry.value.direction, key.getPosition().x, key.getPosition().y);
 					arrowBatch.end();
 				}
 
@@ -1027,7 +1038,24 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 				columnTopBatch.end();
 			}
-
+		for (Column c : columns) {
+			pedestalBatch.begin();
+			switch (c.type) {
+				case 14:
+					pedestalBatch.draw(tx.pedestal1,c.columnX,c.columnY);
+					break;
+				case 15:
+					pedestalBatch.draw(tx.pedestal2,c.columnX,c.columnY);
+					break;
+				case 16:
+					pedestalBatch.draw(tx.pedestal3,c.columnX,c.columnY);
+					break;
+				case 17:
+					pedestalBatch.draw(tx.pedestal4,c.columnX,c.columnY);
+					break;
+			}
+			pedestalBatch.end();
+		}
 
 		stateTime += Gdx.graphics.getDeltaTime();
 
@@ -1038,10 +1066,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 			fireBatch.end();
 		}
 
-
 			fontBatch.begin();
 			for (Text t : messages) {
-					FontController.drawFont(fontBatch, defaultFont, t.textX, t.textY, t);
+				defaultFont.draw(fontBatch,t.message,camera.viewportWidth/2,camera.viewportHeight/2);
+				//	FontController.drawFont(fontBatch, defaultFont, t.textX, t.textY, t);
 			}
 			fontBatch.end();
 
@@ -1101,6 +1129,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			columnBaseBatch.setProjectionMatrix(camera.combined);
 			columnStemBatch.setProjectionMatrix(camera.combined);
 			columnTopBatch.setProjectionMatrix(camera.combined);
+			pedestalBatch.setProjectionMatrix(camera.combined);
 			fireBatch.setProjectionMatrix(camera.combined);
 			fontBatch.setProjectionMatrix(camera.combined);
 			hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);

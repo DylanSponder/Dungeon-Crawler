@@ -70,13 +70,13 @@ public class CreateTexture {
 
     TextureRegion[] fireFrames = new TextureRegion[5 * 2];
 
-    public Animation<TextureRegion> arrowAnimation = new Animation<TextureRegion>(0.1f,arrowAnimationTexture);
+    public Animation<TextureRegion> arrowAnimation = new Animation<TextureRegion>(1f,arrowAnimationTexture);
 
     TextureRegion[][] arrowTextureArray = TextureRegion.split(arrowAnimationSheet,
-            arrowAnimationSheet.getWidth() / 9,
+            arrowAnimationSheet.getWidth() / 8,
             arrowAnimationSheet.getHeight() / 1);
 
-    TextureRegion[] arrowFrames = new TextureRegion[9 * 1];
+    TextureRegion[] arrowFrames = new TextureRegion[8 * 1];
 
     int index = 0;
     int index2 = 0;
@@ -219,14 +219,15 @@ public class CreateTexture {
 
 
         for (int y = 0; y < 1; y++) {
-            for (int r = 0; r < 9; r++) {
+            for (int r = 0; r < 8; r++) {
                 arrowFrames[index2++] = arrowTextureArray[y][r];
             }
         }
 
         // Initialize the Animation with the frame interval and array of frames
         arrowAnimation = new Animation<TextureRegion>(0.06f, arrowFrames);
-        float stateTime2 = 0f;
+
+        //0.0651f
 
         level1Track.play();
         level1Track.setLooping(true);

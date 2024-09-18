@@ -8,7 +8,7 @@ import com.mygdx.game.level.objects.Text;
 public class FontController {
 
     public static void drawFont(SpriteBatch fontBatch, BitmapFont font, float x, float y, Text text) {
-        if (text.showing){
+        if (text.showing) {
             font.draw(fontBatch, text.message, x, y);
             if (text.hasSprite){
                 fontBatch.draw(text.sprite,text.textX-16,text.textY);

@@ -28,13 +28,17 @@ public class GameContactListener implements ContactListener {
         Fixture fb = contact.getFixtureB();
 
         String faAsString = fa.getBody().getUserData().toString();
+        String fbAsString = fb.getBody().getUserData().toString();
 
-        //System.out.println(fa.getBody().getUserData() + " " + fb.getBody().getUserData());
-        //System.out.println(fa.getUserData() + " " + fb.getUserData());
+        //System.out.println(fbAsString);
 
         //TODO: finish switch statement - ~30% done
         switch (faAsString) {
             case "Arrow":
+
+                //System.out.println(fa.getBody().getUserData() + " " + fb.getBody().getUserData());
+               // System.out.println(fa.getUserData() + " " + fb.getUserData());
+
                 if (((fb.getBody().getUserData() == "Enemy" && fb.getUserData() != "Proximity")
                         || fb.getBody().getUserData() == "Wall")
                         || fb.getBody().getUserData() == "Pot") {
