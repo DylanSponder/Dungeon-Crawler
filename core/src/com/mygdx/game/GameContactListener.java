@@ -6,11 +6,8 @@ import com.mygdx.game.entity.behaviours.fsm.Enemy;
 import com.mygdx.game.entity.behaviours.fsm.EnemyState;
 import com.mygdx.game.entity.Skull;
 import com.mygdx.game.entity.behaviours.fsm.Shopkeeper;
-import com.mygdx.game.level.objects.Door;
+import com.mygdx.game.level.objects.*;
 import com.mygdx.game.level.GenerateLevel;
-import com.mygdx.game.level.objects.Pot;
-import com.mygdx.game.level.objects.Potion;
-import com.mygdx.game.level.objects.Room;
 import com.mygdx.game.CreateSound;
 
 import java.sql.SQLSyntaxErrorException;
@@ -32,10 +29,30 @@ public class GameContactListener implements ContactListener {
 
         //System.out.println(fbAsString);
 
-        //TODO: finish switch statement - ~30% done
+        //TODO: finish switch statement - ~40% done
         switch (faAsString) {
-            case "Arrow":
+            case "Column":
+            case "Fire":
+                for (Fire f : fires) {
+                    if (f.extinguish) {
+                        if (f.fireBody == fa.getBody()){
 
+                            f.smoking = true;
+                            f.extinguish = false;
+                        }
+                    }
+                }
+            case "Wall":
+                if (fbAsString == "Arrow"){
+                    if (!arrowBodiesCollided.contains(fb.getBody())) {
+                        arrowBodiesCollided.add(fb.getBody());
+                        break;
+                    }
+                }
+                break;
+
+            case "Arrow":
+                System.out.println("HA");
                 //System.out.println(fa.getBody().getUserData() + " " + fb.getBody().getUserData());
                // System.out.println(fa.getUserData() + " " + fb.getUserData());
 

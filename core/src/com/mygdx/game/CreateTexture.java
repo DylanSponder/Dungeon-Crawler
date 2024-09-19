@@ -2,9 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.MusicLoader;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -20,7 +18,7 @@ public class CreateTexture {
     Texture coinTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Coin2Preview.png"));
     Texture playerTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SpriteSheet.png"));
     Texture playerAttackTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/Attack.png"));
-    Texture roomBackground = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/Interior/CustomTileset.png"));
+    Texture roomBackground = new Texture(Gdx.files.internal("HellasDungeon/Level/Level 1/CustomTileset.png"));
     //Texture roomDoorTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHouse.png"));
     //Texture roomHoleTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHole.png"));
     Texture swordTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Sword/SpriteInHand.png"));
@@ -30,7 +28,9 @@ public class CreateTexture {
     Texture enemyEyeTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Eye/Eye.png"));
     Texture shopkeeperTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/OldMan3/SpriteSheet.png"));
     Texture tutorialTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Tuto.png"));
-    Texture fireAnimationSheet = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/Fire.png"));
+    Texture fireAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Fire.png"));
+    Texture smokeAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Smoke.png"));
+    Texture fireOutAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/FireOut.png"));
     Texture arrowAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Bow/ArrowAnimation.png"));
     Texture columnsTextureSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Columns.png"));
     Music level1Track = Gdx.audio.newMusic(Gdx.files.internal("HellasDungeon/Music/Level1Track.mp3"));
@@ -59,10 +59,16 @@ public class CreateTexture {
     public TextureRegion amphora2Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion damagedAmphoraTexture = new TextureRegion(roomBackground, 0,0,16,16);
 
+    //animations
+
     public TextureRegion fireAnimationTexture = new TextureRegion(fireAnimationSheet,0,0,16,16);
+    public TextureRegion smokeAnimationTexture = new TextureRegion(smokeAnimationSheet,0,0,16,16);
     public TextureRegion arrowAnimationTexture = new TextureRegion(fireAnimationSheet,0,0,16,16);
+    public TextureRegion fireOutAnimationTexture = new TextureRegion(fireOutAnimationSheet,0,0,16,16);
 
     public Animation<TextureRegion> fireAnimation = new Animation<TextureRegion>(0.25f, fireAnimationTexture);
+    public Animation<TextureRegion> smokeAnimation = new Animation<TextureRegion>(0.25f, smokeAnimationTexture);
+    public Animation<TextureRegion> fireOutAnimation = new Animation<TextureRegion>(0.10f, fireOutAnimationTexture);
 
     TextureRegion[][] fireTextureArray = TextureRegion.split(fireAnimationSheet,
             fireAnimationSheet.getWidth() / 5,
@@ -78,8 +84,22 @@ public class CreateTexture {
 
     TextureRegion[] arrowFrames = new TextureRegion[8 * 1];
 
+    TextureRegion[][] smokeTextureArray = TextureRegion.split(smokeAnimationSheet,
+            smokeAnimationSheet.getWidth() / 5,
+            smokeAnimationSheet.getHeight() / 2);
+
+    TextureRegion[] smokeFrames = new TextureRegion[5 * 2];
+
+    TextureRegion[][] fireOutTextureArray = TextureRegion.split(fireOutAnimationSheet,
+            fireOutAnimationSheet.getWidth() / 5,
+            fireOutAnimationSheet.getHeight() / 2);
+
+    TextureRegion[] fireOutFrames = new TextureRegion[5 * 2];
+
     int index = 0;
     int index2 = 0;
+    int index3 = 0;
+    int index4 = 0;
 
 
     public TextureRegion colTop1 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
@@ -94,6 +114,7 @@ public class CreateTexture {
     public TextureRegion colStemDamaged1 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colStemDamaged2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colBase = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion colBase2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion pedestal1 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion pedestal2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion pedestal3 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
@@ -207,6 +228,7 @@ public class CreateTexture {
        // music2.play();
        // music2.setLooping(true);
 
+        //fire animation
         for (int p = 0; p < 2; p++) {
             for (int j = 0; j < 5; j++) {
                 fireFrames[index++] = fireTextureArray[p][j];
@@ -215,6 +237,25 @@ public class CreateTexture {
 
         // Initialize the Animation with the frame interval and array of frames
         fireAnimation = new Animation<TextureRegion>(0.12f, fireFrames);
+
+        for (int p = 0; p < 2; p++) {
+            for (int j = 0; j < 5; j++) {
+                smokeFrames[index3++] = smokeTextureArray[p][j];
+            }
+        }
+
+        // Initialize the Animation with the frame interval and array of frames
+        smokeAnimation = new Animation<TextureRegion>(0.3f, smokeFrames);
+
+        for (int g = 0; g < 2; g++) {
+            for (int t = 0; t < 5; t++) {
+                fireOutFrames[index4++] = fireOutTextureArray[g][t];
+            }
+        }
+
+        // Initialize the Animation with the frame interval and array of frames
+        fireOutAnimation = new Animation<TextureRegion>(0.20f, fireOutFrames);
+
         float stateTime = 0f;
 
 
@@ -225,12 +266,12 @@ public class CreateTexture {
         }
 
         // Initialize the Animation with the frame interval and array of frames
-        arrowAnimation = new Animation<TextureRegion>(0.06f, arrowFrames);
+        arrowAnimation = new Animation<TextureRegion>(0.056f, arrowFrames);
 
         //0.0651f
 
-        level1Track.play();
-        level1Track.setLooping(true);
+        //level1Track.play();
+        //level1Track.setLooping(true);
 
         roomMiddleFloorTexture.setRegion(96, 16, 16, 16);
         roomTopLeftWallTexture.setRegion(0, 0, 16, 16);
@@ -261,6 +302,7 @@ public class CreateTexture {
         colStem2.setRegion(48, 16, 16, 16);
         colStem3.setRegion(64, 16, 16, 16);
         colBase.setRegion(0, 32, 16, 16);
+        colBase2.setRegion(16, 32, 16, 16);
         pedestal1.setRegion(32, 32, 16, 16);
         pedestal2.setRegion(48, 32, 16, 16);
         pedestal3.setRegion(64, 32, 16, 16);

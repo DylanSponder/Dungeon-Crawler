@@ -87,8 +87,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static BitmapFont defaultFont;
 	public static ArrayList<Text> messages;
 	public AssetManager assetManager;
-	public float stateTime, stateTime2;
+	public float stateTime, stateTime2, stateTime3;
 	public int index = 0;
+	public TextureRegion currentFrame;
 
 	private boolean leanDown = false, leanUp = false, leanLeft = false, leanRight = false, leanUpLeft = false, leanUpRight = false;
 
@@ -463,7 +464,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				if (keycode == 8) {
 					if (hud.inventory.Size > 0) {
 						hud.inventory.usePotion(1);
-						hud.healthBar.GainHealth(2);
+						hud.healthBar.GainHealth(1.5f);
 					}
 				}
 
@@ -571,6 +572,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
 						arrowHitbox.setUserData("UpArrow");
 						arrowBody.setLinearVelocity(0, 500f);
+
 					} else if (tx.playerSprite.equals(tx.playerLeft)) {
 						playerDirection = "Left";
 						tx.playerSprite = tx.playerAttackLeft;
@@ -578,6 +580,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
 						arrowHitbox.setUserData("LeftArrow");
 						arrowBody.setLinearVelocity(-500f, 0);
+
+						player.playerBody.applyForce(28000,0,0,0,true);
+
 					} else if (tx.playerSprite.equals(tx.playerRight)) {
 						playerDirection = "Right";
 						tx.playerSprite = tx.playerAttackRight;
@@ -598,7 +603,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 					//pause player in place while attacking (attacks must be timed correctly!)
 
 					arrowBody.setUserData("Arrow");
-					System.out.println(arrowBody.getUserData());
 					arrows.add(arrow = new Arrow(arrowBody, playerDirection, 0f));
 					arrowArrayMap.put(arrowBody, arrow);
 
@@ -929,7 +933,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			for (Enemy e : enemies) {
 				if (e.playerSighted){
 					e.getStateMachine().changeState(EnemyState.ATTACK);
-					e.playerSighted = false;
+					//e.playerSighted = false;
 				}
 				enemyBatch.begin();
 				enemyBatch.draw(tx.enemySprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
@@ -941,6 +945,44 @@ public class DungeonCrawler extends ApplicationAdapter {
 				playerBatch.draw(tx.shopkeeperSprite, s.shopBody.getPosition().x - 8f, s.shopBody.getPosition().y - 7f, 16, 16);
 				playerBatch.end();
 			}
+
+		for (Column c : columns) {
+			columnBaseBatch.begin();
+			switch (c.type) {
+				case 7:
+					columnBaseBatch.draw(tx.colBase, c.columnX, c.columnY);
+					break;
+				case 8:
+					columnBaseBatch.draw(tx.pedestal1, c.columnX, c.columnY);
+					break;
+				case 9:
+					columnBaseBatch.draw(tx.pedestal2, c.columnX, c.columnY);
+					break;
+				case 18:
+					columnBaseBatch.draw(tx.colBase2, c.columnX, c.columnY);
+					break;
+			}
+			columnBaseBatch.end();
+		}
+
+		for (Column c : columns) {
+			pedestalBatch.begin();
+			switch (c.type) {
+				case 14:
+					pedestalBatch.draw(tx.pedestal1,c.columnX,c.columnY);
+					break;
+				case 15:
+					pedestalBatch.draw(tx.pedestal2,c.columnX,c.columnY);
+					break;
+				case 16:
+					pedestalBatch.draw(tx.pedestal3,c.columnX,c.columnY);
+					break;
+				case 17:
+					pedestalBatch.draw(tx.pedestal4,c.columnX,c.columnY);
+					break;
+			}
+			pedestalBatch.end();
+		}
 
 			//check if there are any fired arrows
 			if (!arrowArrayMap.isEmpty()) {
@@ -987,21 +1029,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			deadEnemyBodies.clear();
 
 
-			for (Column c : columns) {
-				columnBaseBatch.begin();
-				switch (c.type) {
-					case 7:
-						columnBaseBatch.draw(tx.colBase, c.columnX, c.columnY);
-						break;
-					case 8:
-						columnBaseBatch.draw(tx.pedestal1, c.columnX, c.columnY);
-						break;
-					case 9:
-						columnBaseBatch.draw(tx.pedestal2, c.columnX, c.columnY);
-						break;
-				}
-				columnBaseBatch.end();
-			}
+
 		for (Column c : columns) {
 			columnStemBatch.begin();
 			switch (c.type) {
@@ -1038,33 +1066,51 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 				columnTopBatch.end();
 			}
-		for (Column c : columns) {
-			pedestalBatch.begin();
-			switch (c.type) {
-				case 14:
-					pedestalBatch.draw(tx.pedestal1,c.columnX,c.columnY);
-					break;
-				case 15:
-					pedestalBatch.draw(tx.pedestal2,c.columnX,c.columnY);
-					break;
-				case 16:
-					pedestalBatch.draw(tx.pedestal3,c.columnX,c.columnY);
-					break;
-				case 17:
-					pedestalBatch.draw(tx.pedestal4,c.columnX,c.columnY);
-					break;
-			}
-			pedestalBatch.end();
-		}
+
 
 		stateTime += Gdx.graphics.getDeltaTime();
 
 		for (Fire f : fires) {
-			TextureRegion currentFrame = tx.fireAnimation.getKeyFrame(stateTime, true);
-			fireBatch.begin();
-			fireBatch.draw(currentFrame, f.fireX, f.fireY);
-			fireBatch.end();
-		}
+			if (f.smoking) {
+				TextureRegion currentFrame = tx.smokeAnimation.getKeyFrame(f.stateTime, false);
+				fireBatch.begin();
+				//fireBatch.draw(currentFrame, f.fireX, f.fireY);
+				Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking);
+				fireBatch.end();
+				f.stateTime += Gdx.graphics.getDeltaTime();
+
+				if (tx.smokeAnimation.isAnimationFinished(f.stateTime)) {
+						f.active = false;
+						f.fireLight.setActive(false);
+						f.stateTime = 0;
+						f.smoking = false;
+				}
+			} else {
+				if (!f.active) {
+
+					TextureRegion currentFrame2 = tx.fireOutAnimation.getKeyFrame(f.stateTime, true);
+					fireBatch.begin();
+					Fire.renderFire(fireBatch, currentFrame2, f.fireX, f.fireY, f.smoking);
+					fireBatch.end();
+					f.stateTime += Gdx.graphics.getDeltaTime();
+
+					} else {
+
+					currentFrame = tx.fireAnimation.getKeyFrame(stateTime, f.active);
+					fireBatch.begin();
+					Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking);
+					fireBatch.end();
+
+					}
+
+				}
+
+
+				//stateTime3 += Gdx.graphics.getDeltaTime();
+				//if (tx.smokeAnimation.isAnimationFinished(f.stateTime)) {
+				//}
+			}
+
 
 			fontBatch.begin();
 			for (Text t : messages) {

@@ -304,19 +304,27 @@ public class RenderRules {
                                     break;
                                     //pedestals
                                 case "ped1":
-                                    drawableLevelLayer.add(index, "ped1");
+                                    drawableLevelLayer.add(index, "fped1");
+                                    index++;
+                                    break;
+                                case "col14":
+                                    drawableLevelLayer.add(index, "fcol14");
+                                    index++;
+                                    break;
+                                case "ped1fire":
+                                    drawableLevelLayer.add(index, "fped1fire");
                                     index++;
                                     break;
                                 case "ped2":
-                                    drawableLevelLayer.add(index, "ped2");
+                                    drawableLevelLayer.add(index, "fped2");
                                     index++;
                                     break;
                                 case "ped3":
-                                    drawableLevelLayer.add(index, "ped3");
+                                    drawableLevelLayer.add(index, "fped3");
                                     index++;
                                     break;
                                 case "ped4":
-                                    drawableLevelLayer.add(index, "ped3");
+                                    drawableLevelLayer.add(index, "fped4");
                                     index++;
                                     break;
                                     //obstacles

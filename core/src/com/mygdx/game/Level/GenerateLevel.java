@@ -123,7 +123,7 @@ public class GenerateLevel {
                 newRoom.roomNum = 0;
             }
             else {
-                int random = (int) (Math.random() * /*upper limit->*/ 5 + 1);
+                int random = (int) (Math.random() * /*upper limit->*/ 4 + 1);
                 newRoom.roomNum = random;
             }
             // init.roomList.get(i).roomNum = random;
@@ -1234,9 +1234,10 @@ for (int i = 0; i < layerSize; i++) {
         break;
     case "shop":
         currentCell = init.cr.middleFloorTile;
-        Text shopMessage = new Text(DungeonCrawler.defaultFont,"WELCOME", Color.WHITE,true,1f,0.0045f,false, false, null);
+        /*
+        Text shopMessage = new Text(DungeonCrawler.defaultFont,"WELCOME", Color.WHITE,true,1f,0.0045f,false);
         //TODO Add Sprite to Text for Shop Display
-        Text sellMessage = new Text(DungeonCrawler.defaultFont,"BUY POTION", Color.WHITE,true,1f,0.0045f,false, false, null);
+        Text sellMessage = new Text(DungeonCrawler.defaultFont,"BUY POTION", Color.WHITE,true,1f,0.0045f,false);
         shopMessage.textX = ((roomX + i) * 16) + 16 * 16;
         shopMessage.textY = levelY * 16 + Gdx.graphics.getHeight() / 30 - 1 - 32;
         sellMessage.textX = ((roomX + i) * 16) + 16 * 16;
@@ -1247,6 +1248,8 @@ for (int i = 0; i < layerSize; i++) {
         shopkeeper.shopMessages.add(shopMessage);
         shopkeeper.shopMessages.add(sellMessage);
         DungeonCrawler.shopkeepers.add(shopkeeper);
+
+         */
         break;
         case "twColTop1":
         case "toruColTop1":
@@ -1332,7 +1335,7 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.topWallTile;
             Column twFireCol10 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,10);
             twFireCol10.createColumnTop(false);
-            Fire twfirecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 5);
+            Fire twfirecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 5, false, 0f);
             twfirecol10.createFire();
             fires.add(twfirecol10);
             break;
@@ -1394,7 +1397,7 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.middleFloorTile;
             Column fireCol10 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,10);
             fireCol10.createColumnTop(false);
-            Fire firecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 5);
+            Fire firecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, false, 0f);
             firecol10.createFire();
             fires.add(firecol10);
             break;
@@ -1412,6 +1415,39 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.middleFloorTile;
             Column col13 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,13);
             col13.createColumnStem(false);
+            break;
+        case "fcol14":
+            currentCell = init.cr.middleFloorTile;
+            Column col14 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,18);
+            col14.createColumnBase();
+            break;
+        case "fped1":
+            currentCell = init.cr.middleFloorTile;
+            Column ped1 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
+            ped1.createPedestal();
+            break;
+        case "fped2":
+            currentCell = init.cr.middleFloorTile;
+            Column ped2 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,15);
+            ped2.createPedestal();
+            break;
+        case "fped3":
+            currentCell = init.cr.middleFloorTile;
+            Column ped3 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,16);
+            ped3.createPedestal();
+            break;
+        case "fped4":
+            currentCell = init.cr.middleFloorTile;
+            Column ped4 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,17);
+            ped4.createPedestal();
+            break;
+        case "fped1fire":
+            currentCell = init.cr.middleFloorTile;
+            Column ped1fire = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
+            ped1fire.createPedestal();
+            Fire fireped1 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, true, 0f);
+            fireped1.createFire();
+            fires.add(fireped1);
             break;
     }
 

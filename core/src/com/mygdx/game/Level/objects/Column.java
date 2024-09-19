@@ -102,7 +102,7 @@ public class Column {
 
         DungeonCrawler.columns.add(this);
 
-        this.columnBody = bodyFactory.createColumnBase(world, columnX, columnY);
+        this.columnBody = bodyFactory.createPedestal(world, columnX, columnY);
 
         //ColumnTop col1 = new ColumnTop(world, columnX, columnY, type, solid);
 

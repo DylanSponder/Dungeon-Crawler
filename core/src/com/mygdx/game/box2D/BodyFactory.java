@@ -18,15 +18,44 @@ public class BodyFactory {
         return body;
     }
 
+    public Body createFireBody(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 8, y + 10);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(4, 4);
+        Fixture fix = body.createFixture(shape, 1.0f);
+        shape.dispose();
+        fix.setSensor(true);
+        return body;
+    }
+
     public Body createColumnBase(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(x + 8, y + 3);
+        bodyDef.position.set(x + 8, y + 4);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(8, 3);
+        shape.setAsBox(8, 4);
+        body.createFixture(shape, 1.0f);
+        shape.dispose();
+        return body;
+    }
+
+    public Body createPedestal(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 8, y + 7);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(8, 7);
         body.createFixture(shape, 1.0f);
         shape.dispose();
         return body;
@@ -302,7 +331,7 @@ public class BodyFactory {
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         PolygonShape playerShape = new PolygonShape();
-        playerShape.setAsBox(6f, 5f);
+        playerShape.setAsBox(6f, 6f);
         Fixture playerHitbox = body.createFixture(playerShape, 1.0f);
         body.setUserData("Player");
         playerHitbox.setUserData("PlayerHitbox");

@@ -15,7 +15,7 @@ public class Text {
     public float textX, textY;
     public Sprite sprite;
 
-    public Text(BitmapFont font, String message, Color color, boolean fade, float fadeTiming, float fadeOutSpeed, boolean showing, boolean hasSprite, Sprite sprite) {
+    public Text(BitmapFont font, String message, Color color, boolean fade, float fadeTiming, float fadeOutSpeed, boolean showing) {
         this.font = font;
         this.message = message;
         this.color = color;
@@ -24,8 +24,8 @@ public class Text {
         this.fadeTiming = fadeTiming;
         this.fadeOutSpeed = fadeOutSpeed;
         this.showing = showing;
-        this.sprite = sprite;
-        this.hasSprite = hasSprite;
+        //this.sprite = sprite;
+        //this.hasSprite = hasSprite;
     }
 
     public void createText() {

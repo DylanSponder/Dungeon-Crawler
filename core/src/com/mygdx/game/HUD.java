@@ -40,17 +40,19 @@ public class HUD {
     Sprite healthSymbol = new Sprite(tx.heartTexture, 0, 0, 16, 16);
     Sprite healthSymbolHalf = new Sprite(tx.heartTexture, 32, 0, 16, 16);
     Sprite healthSymbolEmpty = new Sprite(tx.heartTexture, 64, 0, 16, 16);
+    //Health slots
     healthBar = new HealthBar(4f, healthSymbol, healthSymbolHalf, healthSymbolEmpty, 30);
     
     moneyTable = new Table();
     moneyAmount = new Label(totalGoldAsString, new LabelStyle(DungeonCrawler.defaultFont, Color.YELLOW));
-    moneyTable.add(moneyAmount).padTop(12);
-    moneySymbol = new Image(new Sprite(tx.coinTexture, 16, 16));
-    moneyTable.add(moneySymbol).padLeft(2);
+    moneyTable.add(moneyAmount).padTop(15);
+    moneySymbol = new Image(new Sprite(tx.coinTexture, 10, 10));
+    moneyTable.add(moneySymbol).padLeft(0);
 
     Sprite potionSymbol = new Sprite(tx.potionTexture, 9, 11);
     Sprite emptySlotSymbol = new Sprite(tx.emptySlotTexture, 9, 11);
-    inventory = new Inventory(potionSymbol, emptySlotSymbol, 3, 30);
+    //Potion slots
+    inventory = new Inventory(potionSymbol, emptySlotSymbol, 4, 30);
 
     float spacing = 50f;
     table.add(healthBar);
@@ -88,8 +90,8 @@ public class HUD {
     totalGold = totalGold + gold;
     totalGoldAsString  = String.valueOf(totalGold);
     moneyAmount = new Label(totalGoldAsString, new LabelStyle(DungeonCrawler.defaultFont, Color.YELLOW));
-    moneyTable.add(moneyAmount).padTop(12);
-    moneySymbol = new Image(new Sprite(tx.coinTexture, 16, 16));
+    moneyTable.add(moneyAmount).padTop(15);
+    moneySymbol = new Image(new Sprite(tx.coinTexture, 10, 10));
     moneyTable.add(moneySymbol).padLeft(2);
   }
 
