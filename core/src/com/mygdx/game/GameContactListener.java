@@ -33,12 +33,14 @@ public class GameContactListener implements ContactListener {
         switch (faAsString) {
             case "Column":
             case "Fire":
-                for (Fire f : fires) {
-                    if (f.extinguish) {
-                        if (f.fireBody == fa.getBody()){
+                if (fb.getBody().getUserData() != "Proximity" && fb.getBody().getUserData() != "Player") {
+                    for (Fire f : fires) {
+                        if (f.extinguish) {
+                            if (f.fireBody == fa.getBody()) {
 
-                            f.smoking = true;
-                            f.extinguish = false;
+                                f.smoking = true;
+                                f.extinguish = false;
+                            }
                         }
                     }
                 }

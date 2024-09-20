@@ -92,9 +92,9 @@ public class CreateTexture {
 
     TextureRegion[][] fireOutTextureArray = TextureRegion.split(fireOutAnimationSheet,
             fireOutAnimationSheet.getWidth() / 5,
-            fireOutAnimationSheet.getHeight() / 2);
+            fireOutAnimationSheet.getHeight() / 4);
 
-    TextureRegion[] fireOutFrames = new TextureRegion[5 * 2];
+    TextureRegion[] fireOutFrames = new TextureRegion[5 * 4];
 
     int index = 0;
     int index2 = 0;
@@ -184,7 +184,7 @@ public class CreateTexture {
     Sprite playerAttackLeft = new Sprite(playerAttackTexture, 32, 0, 16, 16);
     Sprite playerAttackRight = new Sprite(playerAttackTexture, 48, 0, 16, 16);
     //outline weapon sprites
-    Sprite swordSprite = new Sprite(swordTexture, 0, 0, 7, 12);
+    Sprite swordSprite = new Sprite(swordTexture, 0, 0, 7, 14);
     Sprite bowSprite = new Sprite(bowTexture,0,0,19,8);
     Sprite arrowSprite = new Sprite(arrowTexture,0,0,13,5);
     //outline enemy sprites
@@ -247,14 +247,14 @@ public class CreateTexture {
         // Initialize the Animation with the frame interval and array of frames
         smokeAnimation = new Animation<TextureRegion>(0.3f, smokeFrames);
 
-        for (int g = 0; g < 2; g++) {
+        for (int g = 0; g < 4; g++) {
             for (int t = 0; t < 5; t++) {
                 fireOutFrames[index4++] = fireOutTextureArray[g][t];
             }
         }
 
         // Initialize the Animation with the frame interval and array of frames
-        fireOutAnimation = new Animation<TextureRegion>(0.20f, fireOutFrames);
+        fireOutAnimation = new Animation<TextureRegion>(0.3f, fireOutFrames);
 
         float stateTime = 0f;
 

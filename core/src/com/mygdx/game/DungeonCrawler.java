@@ -489,30 +489,40 @@ public class DungeonCrawler extends ApplicationAdapter {
 						swordHitbox = bf.createSwordHitbox(sword, false);
 						swordHitbox.setUserData("DownSword");
 						swordHitbox.setSensor(true);
+
+						player.playerBody.applyForce(0,-80000,0,0,true);
 					} else if (tx.playerSprite.equals(tx.playerUp)) {
 						tx.playerSprite = tx.playerAttackUp;
 						sword = bf.createSwordBody(world, player.playerBody, -2.5f, 15);
 						swordHitbox = bf.createSwordHitbox(sword, false);
 						swordHitbox.setUserData("UpSword");
 						swordHitbox.setSensor(true);
+
+						player.playerBody.applyForce(0,80000,0,0,true);
 					} else if (tx.playerSprite.equals(tx.playerLeft)) {
 						tx.playerSprite = tx.playerAttackLeft;
 						sword = bf.createSwordBody(world, player.playerBody, -14f, -2.5f);
 						swordHitbox = bf.createSwordHitbox(sword, true);
 						swordHitbox.setUserData("LeftSword");
 						swordHitbox.setSensor(true);
+
+						player.playerBody.applyForce(-80000,0,0,0,true);
 					} else if (tx.playerSprite.equals(tx.playerRight)) {
 						tx.playerSprite = tx.playerAttackRight;
 						sword = bf.createSwordBody(world, player.playerBody, 14, -2.5f);
 						swordHitbox = bf.createSwordHitbox(sword, true);
 						swordHitbox.setUserData("RightSword");
 						swordHitbox.setSensor(true);
+
+						player.playerBody.applyForce(80000,0,0,0,true);
 					} else {
 						tx.playerSprite = tx.playerAttackDown;
 						sword = bf.createSwordBody(world, player.playerBody, -2.5f, -12f);
 						swordHitbox = bf.createSwordHitbox(sword, false);
 						swordHitbox.setUserData("DownSword");
 						swordHitbox.setSensor(true);
+
+						player.playerBody.applyForce(0,-80000,0,0,true);
 					}
 
 					sword.setUserData("Sword");
@@ -565,6 +575,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
 						arrowHitbox.setUserData("DownArrow");
 						arrowBody.setLinearVelocity(0, -500f);
+
+						player.playerBody.applyForce(0,150000,0,0,true);
 					} else if (tx.playerSprite.equals(tx.playerUp)) {
 						playerDirection = "Up";
 						tx.playerSprite = tx.playerAttackUp;
@@ -572,6 +584,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
 						arrowHitbox.setUserData("UpArrow");
 						arrowBody.setLinearVelocity(0, 500f);
+
+						player.playerBody.applyForce(0,-150000,0,0,true);
 
 					} else if (tx.playerSprite.equals(tx.playerLeft)) {
 						playerDirection = "Left";
@@ -581,7 +595,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox.setUserData("LeftArrow");
 						arrowBody.setLinearVelocity(-500f, 0);
 
-						player.playerBody.applyForce(28000,0,0,0,true);
+						player.playerBody.applyForce(150000,0,0,0,true);
 
 					} else if (tx.playerSprite.equals(tx.playerRight)) {
 						playerDirection = "Right";
@@ -590,6 +604,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
 						arrowHitbox.setUserData("RightArrow");
 						arrowBody.setLinearVelocity(500f, 0);
+
+						player.playerBody.applyForce(-150000,0,0,0,true);
 					}
 					//only triggers if the player hasn't moved at all yet - player starts facing down
 					else {
@@ -599,6 +615,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
 						arrowHitbox.setUserData("DownArrow");
 						arrowBody.setLinearVelocity(0, -500f);
+
+						player.playerBody.applyForce(0,150000,0,0,true);
 					}
 					//pause player in place while attacking (attacks must be timed correctly!)
 
@@ -906,13 +924,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 			if (playerMeleeAttacking) {
 				//add the lanceSprite to the corresponding attack playerDirection
 				if (tx.playerSprite.equals(tx.playerAttackUp)) {
-					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 13f, player.playerBody.getPosition().y - 3f, 7, 12, 7, 12, 1, 1, 180);
+					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 13f, player.playerBody.getPosition().y - 4f, 7, 14, 7, 14, 1, 1, 180);
 				} else if (tx.playerSprite.equals(tx.playerAttackDown)) {
-					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 6f, player.playerBody.getPosition().y - 18f, 7, 12, 7, 12, 1, 1, 0);
+					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 6f, player.playerBody.getPosition().y - 18f, 7, 14, 7, 14, 1, 1, 0);
 				} else if (tx.playerSprite.equals(tx.playerAttackLeft)) {
-					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 15f, player.playerBody.getPosition().y - 18f, 7, 12, 7, 12, 1, 1, 270);
+					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 15f, player.playerBody.getPosition().y - 18f, 7, 14, 7, 14, 1, 1, 270);
 				} else if (tx.playerSprite.equals(tx.playerAttackRight)) {
-					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x + 1f, player.playerBody.getPosition().y - 11f, 7, 12, 7, 12, 1, 1, 90);
+					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x + 1f, player.playerBody.getPosition().y - 11f, 7, 14, 7, 14, 1, 1, 90);
 				}
 			}
 			if (playerRangedAttacking) {
@@ -1072,6 +1090,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		for (Fire f : fires) {
 			if (f.smoking) {
+				f.fireLight.setColor(f.fireLight.getColor().r, f.fireLight.getColor().g, f.fireLight.getColor().b, 0.65f);
 				TextureRegion currentFrame = tx.smokeAnimation.getKeyFrame(f.stateTime, false);
 				fireBatch.begin();
 				//fireBatch.draw(currentFrame, f.fireX, f.fireY);
@@ -1307,8 +1326,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		vec.nor();
 
 		//multiply to get desired speed
-		PLAYER_HORIZONTAL_SPEED = vec.x * 70f;
-		PLAYER_VERTICAL_SPEED = vec.y * 70f;
+		PLAYER_HORIZONTAL_SPEED = vec.x * 65f;
+		PLAYER_VERTICAL_SPEED = vec.y * 65f;
 
 		player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
 	}
