@@ -51,11 +51,11 @@ public class BodyFactory {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(x + 8, y + 7);
+        bodyDef.position.set(x + 8, y + 6);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(8, 7);
+        shape.setAsBox(8, 6);
         body.createFixture(shape, 1.0f);
         shape.dispose();
         return body;

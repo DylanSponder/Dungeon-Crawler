@@ -44,8 +44,10 @@ public class GameContactListener implements ContactListener {
                         }
                     }
                 }
+                break;
             case "Wall":
                 if (fbAsString == "Arrow"){
+                    System.out.println(faAsString + " " + fbAsString);
                     if (!arrowBodiesCollided.contains(fb.getBody())) {
                         arrowBodiesCollided.add(fb.getBody());
                         break;
@@ -54,7 +56,6 @@ public class GameContactListener implements ContactListener {
                 break;
 
             case "Arrow":
-                System.out.println("HA");
                 //System.out.println(fa.getBody().getUserData() + " " + fb.getBody().getUserData());
                // System.out.println(fa.getUserData() + " " + fb.getUserData());
 
@@ -208,7 +209,6 @@ public class GameContactListener implements ContactListener {
                     && fb.getBody().getUserData() == "Bone") {
 
                 if (fa.getBody().getUserData() == "Door"){
-                    System.out.println("DOOR FIX A");
                     for (Room r : GenerateLevel.init.roomList) {
                         for (Door d : r.doors) {
                             if (d.doorBody == fa.getBody()) {
@@ -222,7 +222,6 @@ public class GameContactListener implements ContactListener {
                     }
                 }
                 else if (fa.getBody().getUserData() == "Wall"){
-                    System.out.println("WALL FIX A");
                     if (!boneBodiesCollided.contains(fb.getBody())) {
                         boneBodiesCollided.add(fb.getBody());
                     }
@@ -234,7 +233,6 @@ public class GameContactListener implements ContactListener {
                         && fa.getBody().getUserData() == "Bone") {
 
                 if (fb.getBody().getUserData() == "Door"){
-                    System.out.println("DOOR FIX B");
                     for (Room r : GenerateLevel.init.roomList) {
                         for (Door d : r.doors) {
                             if (d.doorBody == fb.getBody()) {
@@ -248,7 +246,6 @@ public class GameContactListener implements ContactListener {
                     }
                 }
                 else if (fa.getBody().getUserData() == "Wall"){
-                    System.out.println("WALL FIX B");
                     if (!boneBodiesCollided.contains(fa.getBody())) {
                         boneBodiesCollided.add(fa.getBody());
                     }

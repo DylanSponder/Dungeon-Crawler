@@ -266,7 +266,7 @@ public class CreateTexture {
         }
 
         // Initialize the Animation with the frame interval and array of frames
-        arrowAnimation = new Animation<TextureRegion>(0.056f, arrowFrames);
+        arrowAnimation = new Animation<TextureRegion>(0.03f, arrowFrames);
 
         //0.0651f
 

@@ -171,8 +171,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//Text t =  new Text(defaultFont, "TEST MESSAGE", c, false);
 		//messages.add(t);
 
-		Text level1StartText =  new Text(defaultFont, "CLAY CATACOMBS", c, false, 100f, 1f, true);
-		messages.add(level1StartText);
+		Text level1StartText =  new Text(defaultFont, "CLAY CATACOMBS", c, true, 10f, 1f, true);
+		//messages.add(level1StartText);
 		//0.045f
 
 		//Text roomCleared =  new Text(defaultFont, "ROOM CLEARED", c, true, 1f, 0.045f, true);
@@ -244,7 +244,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		layers.add(layer);
 
 		//create a point light and attach it to the player
-		playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.55f), 90, PLAYER_X, PLAYER_Y);
+		playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.45f), 90, PLAYER_X, PLAYER_Y);
 		playerTorch.attachToBody(player.playerBody);
 		playerTorch.setSoftnessLength(65);
 		//playerTorch.isSoft();
@@ -1133,7 +1133,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			fontBatch.begin();
 			for (Text t : messages) {
-				defaultFont.draw(fontBatch,t.message,camera.viewportWidth/2,camera.viewportHeight/2);
+				defaultFont.draw(fontBatch,t.message,player.playerBody.getPosition().x, player.playerBody.getPosition().y);
 				//	FontController.drawFont(fontBatch, defaultFont, t.textX, t.textY, t);
 			}
 			fontBatch.end();
