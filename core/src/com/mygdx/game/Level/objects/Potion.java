@@ -42,7 +42,7 @@ public class Potion {
             this.potionCreated = true;
 
             Color potionLightColor = new Color(Color.SCARLET);
-            potionLightColor.a = 0.4f;
+            potionLightColor.a = 0.5f;
 
             this.potionLight = new PointLight(rayHandler, 100, potionLightColor, 40, potionX, potionY);
             this.potionLight.setXray(true);
