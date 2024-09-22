@@ -31,6 +31,23 @@ public class GameContactListener implements ContactListener {
 
         //TODO: finish switch statement - ~40% done
         switch (faAsString) {
+            case "Skull":
+                if (fbAsString == "Skull") {
+                    //TODO Yeah this doesn't work. Bodies don't actually collide with other bodies when they are added to the world
+                    // check for coordinates instead
+                    if (!deadEnemyBodies.contains(fa.getBody())) {
+                        //arrowBodiesCollided.add(fa.getBody());
+                        deadEnemyBodies.add(fa.getBody());
+                    }
+                    if (!deadEnemyBodies.contains(fb.getBody())) {
+                        //arrowBodiesCollided.add(fa.getBody());
+                        deadEnemyBodies.add(fb.getBody());
+                    }
+
+                    //SkullPile.createSkullPile
+
+                }
+                break;
             case "Column":
             case "Fire":
                 if (fb.getBody().getUserData() != "Proximity" && fb.getBody().getUserData() != "Player") {
@@ -60,8 +77,7 @@ public class GameContactListener implements ContactListener {
                // System.out.println(fa.getUserData() + " " + fb.getUserData());
 
                 if (((fb.getBody().getUserData() == "Enemy" && fb.getUserData() != "Proximity")
-                        || fb.getBody().getUserData() == "Wall")
-                        || fb.getBody().getUserData() == "Pot") {
+                        || fb.getBody().getUserData() == "Wall")) {
                     if (!arrowBodiesCollided.contains(fa.getBody())) {
                         arrowBodiesCollided.add(fa.getBody());
                         break;
@@ -167,8 +183,7 @@ public class GameContactListener implements ContactListener {
                 for (Enemy e : enemies) {
                     if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()) {
                        // e.getStateMachine().changeState(EnemyState.ATTACK);
-                        e.getStateMachine().changeState(EnemyState.DETECT);
-                        System.out.println("DETECTING PLAYER");
+                        e.getStateMachine().changeState(EnemyState.ATTACK);
                     }
                 }
             } else {

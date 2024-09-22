@@ -71,9 +71,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Torch> torches;
 	public static ArrayList<Obstacle> obstacles;
 	public static  ArrayList<Fire> fires;
-	//public static ArrayList<ColumnTop> columnTops;
-	//public static ArrayList<ColumnStem> columnStems;
-	//public static ArrayList<ColumnBase> columnBases;
 	public static ArrayList<Column> columns;
 	public float PLAYER_HORIZONTAL_SPEED = 0f, PLAYER_VERTICAL_SPEED = 0f, PLAYER_X = 0f, PLAYER_Y = 0f;
 	private TiledMapRenderer renderer;
@@ -1124,12 +1121,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 				}
 
-
 				//stateTime3 += Gdx.graphics.getDeltaTime();
 				//if (tx.smokeAnimation.isAnimationFinished(f.stateTime)) {
 				//}
 			}
-
 
 			fontBatch.begin();
 			for (Text t : messages) {
