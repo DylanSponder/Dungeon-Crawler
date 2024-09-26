@@ -9,9 +9,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.game.DungeonCrawler;
-import com.mygdx.game.entity.behaviours.fsm.Enemy;
-import com.mygdx.game.entity.behaviours.fsm.EnemyState;
+import com.mygdx.game.entity.behaviours.fsm.EnemySkull;
+import com.mygdx.game.entity.behaviours.fsm.EnemySkullState;
 
 import static com.mygdx.game.DungeonCrawler.enemies;
 
@@ -65,11 +64,11 @@ public class EnemyBox2DRaycastCollisionDetector implements RaycastCollisionDetec
 
                 if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody){
                     collided = true;
-                    for (Enemy e : enemies) {
+                    for (EnemySkull e : enemies) {
                         if (e.enemyBody == fixture.getBody() && !hitWall) {
                             hitWall = true;
                             System.out.println("WANDERING");
-                            e.getStateMachine().changeState(EnemyState.WANDER);
+                            e.getStateMachine().changeState(EnemySkullState.WANDER);
                         }
                     }
                     //System.out.println("I'm colliding with a static object!");

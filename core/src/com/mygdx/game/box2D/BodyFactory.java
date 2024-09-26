@@ -178,10 +178,10 @@ public class BodyFactory {
     public Fixture createSwordHitbox(Body sword, boolean r){
         PolygonShape swordShape = new PolygonShape();
         if (r){
-            swordShape.setAsBox(5f, 2.5f);
+            swordShape.setAsBox(5.5f, 2.5f);
         }
         else {
-            swordShape.setAsBox(2.5f, 5f);
+            swordShape.setAsBox(2.5f, 5.5f);
         }
         Fixture swordHitbox = sword.createFixture(swordShape, 1.0f);
         swordShape.dispose();

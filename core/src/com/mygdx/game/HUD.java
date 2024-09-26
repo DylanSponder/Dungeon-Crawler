@@ -77,7 +77,7 @@ public class HUD {
     Table winTable = new Table();
     winTable.center();
     winTable.setFillParent(true);
-    winWords = new Label("DUNGEON CLEARED", new LabelStyle(DungeonCrawler.defaultFont, Color.RED));
+    winWords = new Label("LEVEL CLEARED!", new LabelStyle(DungeonCrawler.defaultFont, Color.RED));
     winTable.add(winWords);
     stage.addActor(winTable);
   }

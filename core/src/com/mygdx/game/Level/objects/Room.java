@@ -20,6 +20,8 @@ public class Room {
     public ArrayList<Door> doors;
     public ArrayMap<String, Door> doorArrayMap;
 
+    public boolean isShop;
+
     public Room() {
         doorLocations = new HashMap();
         doorFixtures = new ArrayList<Fixture>();

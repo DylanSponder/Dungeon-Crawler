@@ -1,13 +1,12 @@
 package com.mygdx.game.level;
 
-import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.*;
 import com.mygdx.game.box2D.BodyFactory;
-import com.mygdx.game.entity.behaviours.fsm.Enemy;
+import com.mygdx.game.entity.behaviours.fsm.EnemySkull;
 import com.mygdx.game.entity.behaviours.fsm.Shopkeeper;
 import com.mygdx.game.level.objects.*;
 import com.mygdx.game.entity.Tutorial;
@@ -60,8 +59,10 @@ public class GenerateLevel {
         roomsIndex = 0;
         roomHitboxCreated = false;
 
-        int min = 10;
-        int max = 10;
+        //Level.levelSize.min
+
+        int min = 8;
+        int max = 8;
         numRooms = (int) (Math.random() * (max - min + 1)) + min;
         //int numRooms = 7;
 
@@ -73,14 +74,14 @@ public class GenerateLevel {
         }
 
         boolean temp;
-        temp = attemptLevelGen();
+        temp = attemptLevelGen(1);
         while (!temp) {
-            attemptLevelGen();
+            //attemptLevelGen();
         }
         return list;
     }
 
-    public boolean attemptLevelGen() {
+    public boolean attemptLevelGen(int level) {
 
         int currentDoorDirection = 0;
         int previousDoorDirection = 0;
@@ -123,8 +124,12 @@ public class GenerateLevel {
                 newRoom.roomNum = 0;
             }
             else {
-                int random = (int) (Math.random() * /*upper limit->*/ 4 + 1);
+                int random = (int) (Math.random() * /*upper limit->*/ 6 + 1);
                 newRoom.roomNum = random;
+                if (newRoom.roomNum == 5){
+                    newRoom.isShop = true;
+                    newRoom.unlockAllDoors(world, newRoom,false);
+                }
             }
             // init.roomList.get(i).roomNum = random;
         }
@@ -1227,14 +1232,14 @@ for (int i = 0; i < layerSize; i++) {
         //entities
     case "enemy":
         currentCell = init.cr.middleFloorTile;
-        Enemy enemy = new Enemy(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+        EnemySkull enemy = new EnemySkull(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
         init.roomList.get(roomIndex).enemyCounter++;
         enemy.room = roomIndex;
         DungeonCrawler.enemies.add(enemy);
         break;
     case "shop":
         currentCell = init.cr.middleFloorTile;
-        /*
+
         Text shopMessage = new Text(DungeonCrawler.defaultFont,"WELCOME", Color.WHITE,true,1f,0.0045f,false);
         //TODO Add Sprite to Text for Shop Display
         Text sellMessage = new Text(DungeonCrawler.defaultFont,"BUY POTION", Color.WHITE,true,1f,0.0045f,false);
@@ -1249,7 +1254,7 @@ for (int i = 0; i < layerSize; i++) {
         shopkeeper.shopMessages.add(sellMessage);
         DungeonCrawler.shopkeepers.add(shopkeeper);
 
-         */
+
         break;
         case "twColTop1":
         case "toruColTop1":
@@ -1337,8 +1342,8 @@ for (int i = 0; i < layerSize; i++) {
             newTopWallCol10Fire.setUserData("Wall");
             Column twFireCol10 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,10);
             twFireCol10.createColumnTop(false);
-            Fire twfirecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 3, false, 0f);
-            twfirecol10.createFire();
+            Fire twfirecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 3, false, 0f, 1);
+            twfirecol10.createFire(new Color(0.25f,0.20f,0,0.7f),60);
             fires.add(twfirecol10);
             break;
 
@@ -1399,8 +1404,8 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.middleFloorTile;
             Column fireCol10 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,10);
             fireCol10.createColumnTop(false);
-            Fire firecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 3, false, 0f);
-            firecol10.createFire();
+            Fire firecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 3, false, 0f, 1);
+            firecol10.createFire(new Color(0.25f,0.20f,0,0.7f),60);
             fires.add(firecol10);
             break;
         case "fcol11":
@@ -1447,8 +1452,9 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.middleFloorTile;
             Column ped1fire = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
             ped1fire.createPedestal();
-            Fire fireped1 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, true, 0f);
-            fireped1.createFire();
+            Fire fireped1 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, true, 0f, 2);
+            Color color = new Color(0,0,1f,0.7f);
+            fireped1.createFire(color, 10);
             fires.add(fireped1);
             break;
     }

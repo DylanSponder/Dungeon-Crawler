@@ -29,6 +29,7 @@ public class CreateTexture {
     Texture shopkeeperTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/OldMan3/SpriteSheet.png"));
     Texture tutorialTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Tuto.png"));
     Texture fireAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Fire.png"));
+    Texture blueFireAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/FireBlu.png"));
     Texture smokeAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Smoke.png"));
     Texture fireOutAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/FireOut.png"));
     Texture arrowAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Bow/ArrowAnimation.png"));
@@ -62,11 +63,14 @@ public class CreateTexture {
     //animations
 
     public TextureRegion fireAnimationTexture = new TextureRegion(fireAnimationSheet,0,0,16,16);
+    public TextureRegion blueFireAnimationTexture = new TextureRegion(blueFireAnimationSheet,0,0,16,16);
     public TextureRegion smokeAnimationTexture = new TextureRegion(smokeAnimationSheet,0,0,16,16);
     public TextureRegion arrowAnimationTexture = new TextureRegion(fireAnimationSheet,0,0,16,16);
     public TextureRegion fireOutAnimationTexture = new TextureRegion(fireOutAnimationSheet,0,0,16,16);
 
     public Animation<TextureRegion> fireAnimation = new Animation<TextureRegion>(0.25f, fireAnimationTexture);
+    public Animation<TextureRegion> blueFireAnimation = new Animation<TextureRegion>(0.25f, fireAnimationTexture);
+
     public Animation<TextureRegion> smokeAnimation = new Animation<TextureRegion>(0.25f, smokeAnimationTexture);
     public Animation<TextureRegion> fireOutAnimation = new Animation<TextureRegion>(0.10f, fireOutAnimationTexture);
 
@@ -75,6 +79,12 @@ public class CreateTexture {
             fireAnimationSheet.getHeight() / 2);
 
     TextureRegion[] fireFrames = new TextureRegion[5 * 2];
+
+    TextureRegion[][] blueFireTextureArray = TextureRegion.split(blueFireAnimationSheet,
+            blueFireAnimationSheet.getWidth() / 5,
+            blueFireAnimationSheet.getHeight() / 2);
+
+    TextureRegion[] blueFireFrames = new TextureRegion[5 * 2];
 
     public Animation<TextureRegion> arrowAnimation = new Animation<TextureRegion>(1f,arrowAnimationTexture);
 
@@ -100,6 +110,7 @@ public class CreateTexture {
     int index2 = 0;
     int index3 = 0;
     int index4 = 0;
+    int index5 = 0;
 
 
     public TextureRegion colTop1 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
@@ -236,7 +247,16 @@ public class CreateTexture {
         }
 
         // Initialize the Animation with the frame interval and array of frames
-        fireAnimation = new Animation<TextureRegion>(0.12f, fireFrames);
+        fireAnimation = new Animation<TextureRegion>(0.14f, fireFrames);
+
+        //blue fire animation
+        for (int p = 0; p < 2; p++) {
+            for (int j = 0; j < 5; j++) {
+                blueFireFrames[index5++] = blueFireTextureArray[p][j];
+            }
+        }
+
+        blueFireAnimation = new Animation<TextureRegion>(0.07f, blueFireFrames);
 
         for (int p = 0; p < 2; p++) {
             for (int j = 0; j < 5; j++) {

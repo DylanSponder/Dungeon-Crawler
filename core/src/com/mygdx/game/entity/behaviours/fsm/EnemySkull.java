@@ -24,8 +24,8 @@ import com.mygdx.game.HUD;
 
 import static com.mygdx.game.DungeonCrawler.*;
 
-public class Enemy {
-    private StateMachine<Enemy, EnemyState> stateMachine;
+public class EnemySkull {
+    private StateMachine<EnemySkull, EnemySkullState> stateMachine;
     public Body enemyBody, enemyDetectionBody, enemyPlayerDetectionBody;
     public Fixture enemyHitbox;
     public Fixture enemyDetectionRadius;
@@ -48,7 +48,7 @@ public class Enemy {
     public int room;
     public boolean playerSighted;
 
-    public Enemy(World world, float x, float y) {
+    public EnemySkull(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
         shapeRenderer = new ShapeRenderer();
 
@@ -62,15 +62,15 @@ public class Enemy {
 
         enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 7f);
 
-        enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 45);
+        enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 50f);
 
         enemyDetectionRadius.setSensor(true);
 
         enemyAI = new EnemyBox2DSteeringEntity(enemyBody, 10);
         playerDetectionRay = new EnemyBox2DSteeringEntity(enemyBody,10);
 
-        stateMachine = new DefaultStateMachine<Enemy, EnemyState>(this, EnemyState.WANDER);
-        stateMachine.changeState(EnemyState.WANDER);
+        stateMachine = new DefaultStateMachine<EnemySkull, EnemySkullState>(this, EnemySkullState.WANDER);
+        stateMachine.changeState(EnemySkullState.WANDER);
         this.enemyBody.setUserData("Enemy");
 
         debug = false;
@@ -137,7 +137,7 @@ public class Enemy {
         return wanderSB;
     }
 
-    public Seek<Vector2> attack() {
+    public Seek<Vector2> seekPlayer() {
          seekSB = new Seek<Vector2>(enemyAI, DungeonCrawler.player.playerB2D);
          return seekSB;
     }
@@ -145,8 +145,8 @@ public class Enemy {
     public RaycastObstacleAvoidance avoidObstacle(){
 
         RayConfigurationBase<Vector2>[] localRayConfigurations = new RayConfigurationBase[] {
-                new CentralRayWithWhiskersConfiguration<Vector2>(enemyAI, 20f,
-                        15f, 15 * MathUtils.degreesToRadians)};
+                new CentralRayWithWhiskersConfiguration<Vector2>(enemyAI, 15f,
+                        10f, 15 * MathUtils.degreesToRadians)};
         rayConfigurations = localRayConfigurations;
 
         RaycastCollisionDetector<Vector2> raycastCollisionDetector = new EnemyBox2DRaycastCollisionDetector(DungeonCrawler.world);
@@ -232,7 +232,7 @@ public class Enemy {
 
         stateMachine.update();
     }
-    public StateMachine<Enemy, EnemyState> getStateMachine () {
+    public StateMachine<EnemySkull, EnemySkullState> getStateMachine () {
         return stateMachine;
     }
 }

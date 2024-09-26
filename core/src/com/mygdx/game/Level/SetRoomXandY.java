@@ -4,7 +4,7 @@ public class SetRoomXandY {
 
     //this class holds two functions which are almost the same - the difference being:
     // - checkRoomForIntersection is used to set dummy values which simulate a room generating, for use in collision detection equations.
-    // - setNextRoomDimensions is for rooms which are confirmed to have no intersections with any previous rooms.
+    // - setNextRoomDimensions is for rooms which are confirmed to have no intersections with any previous rooms. (unused currently)
 
     public int checkRoomForIntersection(boolean startingRoom, int doorDirection, int roomX, int levelY, int previousRoomSize, int currentRoomSize, int previousLongestRow, int longestRow) {
         if (!startingRoom) {

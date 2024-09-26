@@ -11,11 +11,11 @@ import java.util.Iterator;
 
 import static com.mygdx.game.DungeonCrawler.*;
 
-public enum EnemyState implements State<Enemy> {
+public enum EnemySkullState implements State<EnemySkull> {
 
     WANDER() {
         @Override
-        public void enter(Enemy enemy) {
+        public void enter(EnemySkull enemy) {
             //set a random orientation for the enemy
             float orientation = MathUtils.random(-MathUtils.PI, MathUtils.PI);
             enemy.enemyAI.setBehaviour(null);
@@ -29,24 +29,24 @@ public enum EnemyState implements State<Enemy> {
         }
 
         @Override
-        public void update(Enemy enemy) {
+        public void update(EnemySkull enemy) {
 
         }
 
         @Override
-        public void exit(Enemy enemy) {
+        public void exit(EnemySkull enemy) {
 
         }
 
         @Override
-        public boolean onMessage(Enemy enemy, Telegram telegram) {
+        public boolean onMessage(EnemySkull enemy, Telegram telegram) {
             return false;
         }
     },
 
     DETECT() {
         @Override
-        public void enter(Enemy enemy) {
+        public void enter(EnemySkull enemy) {
             //set a random orientation for the enemy
             float orientation = MathUtils.random(-MathUtils.PI, MathUtils.PI);
             enemy.playerDetectionRay.setBehaviour(null);
@@ -61,32 +61,32 @@ public enum EnemyState implements State<Enemy> {
         }
 
         @Override
-        public void update(Enemy enemy) {
+        public void update(EnemySkull enemy) {
 
         }
 
         @Override
-        public void exit(Enemy enemy) {
+        public void exit(EnemySkull enemy) {
 
         }
 
         @Override
-        public boolean onMessage(Enemy enemy, Telegram telegram) {
+        public boolean onMessage(EnemySkull enemy, Telegram telegram) {
             return false;
         }
     },
 
-    ATTACK() {
+    GO_TO_PLAYER() {
         @Override
-        public void enter(Enemy enemy) {
+        public void enter(EnemySkull enemy) {
             enemy.enemyAI.setBehaviour(null);
-            Seek attack = enemy.attack();
+            Seek seekPlayer = enemy.seekPlayer();
           //  BlendedSteering blendedAttackSteering = enemy.blendSteering(attack, 3, 6);
-            enemy.enemyAI.setBehaviour(attack);
+            enemy.enemyAI.setBehaviour(seekPlayer);
         }
 
         @Override
-        public void update(final Enemy enemy) {
+        public void update(final EnemySkull enemy) {
             //System.out.println(enemy.enemyAI.getLinearVelocity());
             if (enemy.enemyAI.getLinearVelocity().x < 0.5 && enemy.enemyAI.getLinearVelocity().y < 0.5){
                 //System.out.println("Ack! I'm stuck!");
@@ -117,12 +117,12 @@ public enum EnemyState implements State<Enemy> {
         }
 
         @Override
-        public void exit(Enemy enemy) {
+        public void exit(EnemySkull enemy) {
             //System.out.println("No longer attacking the player");
         }
 
         @Override
-        public boolean onMessage(Enemy entity, Telegram telegram) {
+        public boolean onMessage(EnemySkull entity, Telegram telegram) {
             return false;
         }
     },
@@ -130,9 +130,9 @@ public enum EnemyState implements State<Enemy> {
     DIE() {
         final CreateTexture tx = CreateTexture.getInstance();
         @Override
-        public void enter (Enemy enemy){
+        public void enter (EnemySkull enemy){
             Skull skull = new Skull(world, enemy.enemyBody.getPosition().x, enemy.enemyBody.getPosition().y);
-            Iterator<Enemy> enemyIt = enemies.iterator();
+            Iterator<EnemySkull> enemyIt = enemies.iterator();
 
             if (enemyIt.hasNext()) {
                 //enemy.die(enemy.enemyBody.getPosition().x, enemy.enemyBody.getPosition().y);
@@ -141,17 +141,17 @@ public enum EnemyState implements State<Enemy> {
             }
         }
         @Override
-        public void update(Enemy enemy) {
+        public void update(EnemySkull enemy) {
 
         }
 
         @Override
-        public void exit(Enemy enemy) {
+        public void exit(EnemySkull enemy) {
 
         }
 
         @Override
-        public boolean onMessage(Enemy enemy, Telegram telegram) {
+        public boolean onMessage(EnemySkull enemy, Telegram telegram) {
             return false;
         }
     };

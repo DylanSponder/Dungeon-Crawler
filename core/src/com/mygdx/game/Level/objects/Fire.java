@@ -22,18 +22,20 @@ public class Fire {
     public boolean extinguish, smoking, active;
     public PointLight fireLight;
     public float stateTime;
+    public int type;
 
-    public Fire(World world, RayHandler rayHandler, float x, float y, boolean extinguish, float stateTime) {
+    public Fire(World world, RayHandler rayHandler, float x, float y, boolean extinguish, float stateTime, int type) {
         this.world = world;
         this.rayHandler = rayHandler;
         this.fireX = x;
         this.fireY = y;
         this.extinguish = extinguish;
         this.stateTime = stateTime;
+        this.type = type;
     }
 
-    public void createFire() {
-        this.fireLight = new PointLight(rayHandler,400, new Color(0.25f,0.20f,0,0.7f),60, fireX + 8, fireY + 8);
+    public void createFire(Color color, int distance) {
+        this.fireLight = new PointLight(rayHandler,400, color,60, fireX + 8, fireY + 8);
         this.fireLight.setXray(true);
 
         this.smoking = false;
