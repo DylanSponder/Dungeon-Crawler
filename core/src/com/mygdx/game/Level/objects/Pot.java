@@ -6,7 +6,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ArrayMap;
-import com.mygdx.game.CreateTexture;
 import com.mygdx.game.box2D.BodyFactory;
 
 public class Pot {

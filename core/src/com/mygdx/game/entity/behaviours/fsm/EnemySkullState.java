@@ -4,7 +4,7 @@ import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
 import com.badlogic.gdx.ai.steer.behaviors.*;
 import com.badlogic.gdx.math.MathUtils;
-import com.mygdx.game.CreateTexture;
+import com.mygdx.game.CreateAssets;
 import com.mygdx.game.entity.Skull;
 
 import java.util.Iterator;
@@ -49,7 +49,7 @@ public enum EnemySkullState implements State<EnemySkull> {
         public void enter(EnemySkull enemy) {
             //set a random orientation for the enemy
             float orientation = MathUtils.random(-MathUtils.PI, MathUtils.PI);
-            enemy.playerDetectionRay.setBehaviour(null);
+            //enemy.playerDetectionRay.setBehaviour(null);
             Wander wander = enemy.wander(enemy.enemyAI, orientation);
             //BlendedSteering blendedWanderSteering = enemy.blendSteering(wander, enemy.avoidObstacle(), 2.5f, 2);
             //enemy.enemyAI.setBehaviour(blendedWanderSteering);
@@ -57,7 +57,6 @@ public enum EnemySkullState implements State<EnemySkull> {
             //enemy.enemyAI.setBehaviour(blendedWanderSteering);
             //BlendedSteering blendedSightSteering = enemy.blendSteering(wander, enemy.detectPlayer(), 2.5f, 2);
             //enemy.playerDetectionRay.setBehaviour(blendedSightSteering);
-            enemy.playerDetectionRay.setBehaviour(enemy.detectPlayer());
         }
 
         @Override
@@ -128,7 +127,7 @@ public enum EnemySkullState implements State<EnemySkull> {
     },
 
     DIE() {
-        final CreateTexture tx = CreateTexture.getInstance();
+        final CreateAssets tx = CreateAssets.getInstance();
         @Override
         public void enter (EnemySkull enemy){
             Skull skull = new Skull(world, enemy.enemyBody.getPosition().x, enemy.enemyBody.getPosition().y);

@@ -9,7 +9,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class CreateTexture {
+public class CreateAssets {
+
+    public AssetManager assetManager;
 
     //TODO Link all textures to HellasDungeon path
     Texture heartTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Heart.png"));
@@ -220,18 +222,20 @@ public class CreateTexture {
 
     Sprite tutorialSprite = new Sprite(tutorialTexture, 0,0, 96, 64);
 
-    private static CreateTexture instance = null;
-    public static CreateTexture getInstance(){
+    private static CreateAssets instance = null;
+    public static CreateAssets getInstance(){
         if (instance == null) {
-            instance = new CreateTexture();
+            instance = new CreateAssets();
         }
         return instance;
     }
 
     public void textureRegionBuilder() {
 
-        AssetManager assetManager = new AssetManager();
+        assetManager = new AssetManager();
         assetManager.load("HellasDungeon/Font/HellasFontStylized-extended.fnt", BitmapFont.class);
+
+
        // assetManager.load("HellasDungeon/Music/level1Track.mp3", Music.class);
        // assetManager.setLoader(MusicLoader.class,);
        // Music music2 = assetManager.get("HellasDungeon/Music/Level1Track.mp3");

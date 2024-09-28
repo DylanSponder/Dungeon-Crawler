@@ -3,7 +3,7 @@ package com.mygdx.game.level;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
-import com.mygdx.game.CreateTexture;
+import com.mygdx.game.CreateAssets;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.level.objects.Room;
 
@@ -15,7 +15,7 @@ public class InitLevel {
     public RenderRules rr;
     public CreateCell cr;
     public BodyFactory bf;
-    public CreateTexture tx;
+    public CreateAssets tx;
     public PickDirection pd;
     public SetRoomXandY xy;
     public TiledMapTileLayer layer;
@@ -34,7 +34,7 @@ public class InitLevel {
         cr = new CreateCell();
         cr.InitializeCells();
         bf = new BodyFactory();
-        tx = new CreateTexture();
+        tx = new CreateAssets();
         tx.textureRegionBuilder();
         pd = new PickDirection();
         xy = new SetRoomXandY();

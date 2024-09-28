@@ -85,6 +85,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public float stateTime, stateTime2, stateTime3;
 	public int index = 0;
 	public TextureRegion currentFrame;
+	public Ray playerSightRay;
 
 	private boolean leanDown = false, leanUp = false, leanLeft = false, leanRight = false, leanUpLeft = false, leanUpRight = false;
 
@@ -136,16 +137,24 @@ public class DungeonCrawler extends ApplicationAdapter {
 		obstacles = new ArrayList<Obstacle>();
 		messages = new ArrayList<Text>();
 
+		Vector2 vec = new Vector2();
+		vec.x = PLAYER_X;
+		vec.y = PLAYER_Y;
+
+		//playerSightRay = new Ray<>(vec,);
 
 		//roomClear = Gdx.audio.newMusic(Gdx.files.internal("NinjaAdventure/Sounds/Menu/Accept.wav"));
 		//swordSlash = Gdx.audio.newMusic(Gdx.files.internal("Sounds/slash.mp3"));
 
 		final BodyFactory bf = new BodyFactory();
-		final CreateTexture tx = CreateTexture.getInstance();
+		final CreateAssets tx = CreateAssets.getInstance();
 		GameContactListener lc = new GameContactListener();
 		tx.textureRegionBuilder();
-		final CreateSound cs = new CreateSound();
-		cs.createSound();
+
+
+
+//		final CreateSound cs = new CreateSound();
+//		cs.createSound();
 
 		//FileHandle file = new FileHandle("");
 		//bmfData = new BitmapFont.BitmapFontData();
@@ -197,6 +206,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		renderer = new OrthogonalTiledMapRenderer(map);
 		b2dr = new Box2DDebugRenderer();
+
+
+		//TODO: Add basic menu/loading screen here
 
 		//create the Box2D ray handler
 		rayHandler = new RayHandler(world);
@@ -571,7 +583,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox.setUserData("DownArrow");
 						arrowBody.setLinearVelocity(0, -500f);
 
-						player.playerBody.applyForce(0,150000,0,0,true);
+						player.playerBody.applyForce(0,130000,0,0,true);
 					} else if (tx.playerSprite.equals(tx.playerUp)) {
 						playerDirection = "Up";
 						tx.playerSprite = tx.playerAttackUp;
@@ -580,7 +592,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox.setUserData("UpArrow");
 						arrowBody.setLinearVelocity(0, 500f);
 
-						player.playerBody.applyForce(0,-150000,0,0,true);
+						player.playerBody.applyForce(0,-130000,0,0,true);
 
 					} else if (tx.playerSprite.equals(tx.playerLeft)) {
 						playerDirection = "Left";
@@ -590,7 +602,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox.setUserData("LeftArrow");
 						arrowBody.setLinearVelocity(-500f, 0);
 
-						player.playerBody.applyForce(150000,0,0,0,true);
+						player.playerBody.applyForce(130000,0,0,0,true);
 
 					} else if (tx.playerSprite.equals(tx.playerRight)) {
 						playerDirection = "Right";
@@ -600,7 +612,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox.setUserData("RightArrow");
 						arrowBody.setLinearVelocity(500f, 0);
 
-						player.playerBody.applyForce(-150000,0,0,0,true);
+						player.playerBody.applyForce(-130000,0,0,0,true);
 					}
 					//only triggers if the player hasn't moved at all yet - player starts facing down
 					else {
@@ -611,7 +623,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox.setUserData("DownArrow");
 						arrowBody.setLinearVelocity(0, -500f);
 
-						player.playerBody.applyForce(0,150000,0,0,true);
+						player.playerBody.applyForce(0,130000,0,0,true);
 					}
 					//pause player in place while attacking (attacks must be timed correctly!)
 
@@ -664,7 +676,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				hud.winGame();
 			}
 
-			final CreateTexture tx = CreateTexture.getInstance();
+			final CreateAssets tx = CreateAssets.getInstance();
 			//clear all assets and replace with background color
 			ScreenUtils.clear(1, 1, 1, 1);
 
@@ -944,7 +956,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			//render enemy sprite
 			for (EnemySkull e : enemies) {
-				if (e.playerSighted){
+				e.detectPlayer();
+				if (e.playerSighted && e.playerInRange){
 					e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
 					//e.playerSighted = false;
 				}
@@ -1142,6 +1155,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 				for (EnemySkull enemy : enemies) {
 					//renders ray cast rays
 					Ray<Vector2>[] rays = enemy.rayConfigurations[0].getRays();
+
+
 					enemy.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 					enemy.shapeRenderer.setProjectionMatrix(camera.combined);
 					enemy.shapeRenderer.setColor(1, 0, 0, 1);
@@ -1154,6 +1169,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 						enemy.tmp2.set(ray.end);
 						enemy.shapeRenderer.line(enemy.tmp, enemy.tmp2);
 					}
+
+					enemy.tmp3.set((Vector2) enemy.playerDetectionRay.start);
+					enemy.tmp4.set((Vector2) enemy.playerDetectionRay.end);
+					enemy.shapeRenderer.line(enemy.tmp3, enemy.tmp4);
+
+
+
 
 					/*
 					if (playerSighted) {
@@ -1218,9 +1240,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 		rayHandler.update();
 		rayHandler.setCombinedMatrix(camera);
 
+		//player.castRay();
+
 		for (EnemySkull e : enemies) {
 			e.enemyAI.update(GdxAI.getTimepiece().getTime());
 			e.update(GdxAI.getTimepiece().getTime());
+			if (e.playerInRange){
+				e.detectPlayer();
+			}
 		}
 
 		if (!playerPaused) {
@@ -1249,7 +1276,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	}
 
 	public void inputUpdate() {
-		final CreateTexture tx = CreateTexture.getInstance();
+		final CreateAssets tx = CreateAssets.getInstance();
 		leanUp = false;
 		leanDown = false;
 		leanLeft = false;

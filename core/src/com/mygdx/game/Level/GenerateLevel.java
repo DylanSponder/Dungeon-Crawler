@@ -19,7 +19,7 @@ import static com.mygdx.game.DungeonCrawler.*;
 public class GenerateLevel {
     public static InitLevel init;
     private BodyFactory bf;
-    private CreateTexture tx;
+    private CreateAssets tx;
     private PickDirection pd;
     private SetRoomXandY xy;
     private CreateCorridor cc;
@@ -46,6 +46,11 @@ public class GenerateLevel {
     private HashMap<String, String> doorMapPrevious;
 
     public ArrayList generateLevel(float PLAYER_X, float PLAYER_Y) {
+        //int numRooms
+        //int[] indexes
+        //String filePath
+        //int shop
+
         init = new InitLevel();
         init.InitializeLevel();
         pd = new PickDirection();
@@ -59,10 +64,8 @@ public class GenerateLevel {
         roomsIndex = 0;
         roomHitboxCreated = false;
 
-        //Level.levelSize.min
-
-        int min = 8;
-        int max = 8;
+        int min = 10;
+        int max = 10;
         numRooms = (int) (Math.random() * (max - min + 1)) + min;
         //int numRooms = 7;
 
@@ -125,7 +128,11 @@ public class GenerateLevel {
             }
             else {
                 int random = (int) (Math.random() * /*upper limit->*/ 6 + 1);
+
+                //determines which pre-gen room is placed next in sequence
+                //rooms are numbered, room1 etc
                 newRoom.roomNum = random;
+
                 if (newRoom.roomNum == 5){
                     newRoom.isShop = true;
                     newRoom.unlockAllDoors(world, newRoom,false);

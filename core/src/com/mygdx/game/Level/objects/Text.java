@@ -3,8 +3,7 @@ package com.mygdx.game.level.objects;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.mygdx.game.CreateTexture;
-import com.mygdx.game.DungeonCrawler;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Text {
     public BitmapFont font;
@@ -28,8 +27,8 @@ public class Text {
         //this.hasSprite = hasSprite;
     }
 
-    public void createText() {
-
+    public void createText(SpriteBatch fontBatch) {
+        //fontBatch.draw();
 
 
     }

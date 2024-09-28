@@ -14,6 +14,10 @@ public class Level {
     private int startRoomNo;
     //private Music levelMusic;
     private ArrayList<Room> rooms;
+    //we need a GenerateLevel class object that can take parameters
+    //available room indexes and room file path
+    //number of rooms to generate
+    //secret rooms?
 
     public Level() {
 

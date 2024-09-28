@@ -3,9 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.ArrayMap;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.OrderedMap;
-import com.mygdx.game.entity.Bone;
 import com.mygdx.game.entity.Skull;
 
 import java.util.ArrayList;
@@ -24,7 +22,7 @@ public class GameObjectDestroyer {
                               SpriteBatch batch,
                               boolean reversed) {
 
-        final CreateTexture tx = CreateTexture.getInstance();
+        final CreateAssets tx = CreateAssets.getInstance();
 
         if (!map.isEmpty()) {
             for (OrderedMap.Entry<Object, Object> entry : map.entries()) {

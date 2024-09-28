@@ -8,6 +8,7 @@ import com.badlogic.gdx.ai.steer.behaviors.*;
 import com.badlogic.gdx.ai.steer.limiters.LinearAccelerationLimiter;
 import com.badlogic.gdx.ai.steer.utils.rays.CentralRayWithWhiskersConfiguration;
 import com.badlogic.gdx.ai.steer.utils.rays.RayConfigurationBase;
+import com.badlogic.gdx.ai.utils.Ray;
 import com.badlogic.gdx.ai.utils.RaycastCollisionDetector;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
@@ -21,6 +22,7 @@ import com.mygdx.game.entity.Skull;
 import com.mygdx.game.entity.utils.EnemyBox2DSteeringEntity;
 import com.mygdx.game.entity.utils.EnemyBox2DRaycastCollisionDetector;
 import com.mygdx.game.HUD;
+import jdk.internal.jshell.tool.StopDetectingInputStream;
 
 import static com.mygdx.game.DungeonCrawler.*;
 
@@ -29,11 +31,13 @@ public class EnemySkull {
     public Body enemyBody, enemyDetectionBody, enemyPlayerDetectionBody;
     public Fixture enemyHitbox;
     public Fixture enemyDetectionRadius;
-    public EnemyBox2DSteeringEntity enemyAI, playerDetectionRay;
+    public EnemyBox2DSteeringEntity enemyAI;
     //public PlayerBox2DRaycastCollisionDetector playerDetectionRay;
     public ShapeRenderer shapeRenderer;
     public Vector2 tmp = new Vector2();
     public Vector2 tmp2 = new Vector2();
+    public Vector2 tmp3 = new Vector2();
+    public Vector2 tmp4 = new Vector2();
     public RayConfigurationBase<Vector2>[] rayConfigurations, rayConfigurations2;
     public RaycastObstacleAvoidance<Vector2> raycastObstacleAvoidanceSB, raycastPlayerDetectionSB;
     public Seek seekSB;
@@ -47,14 +51,21 @@ public class EnemySkull {
     public Skull skull;
     public int room;
     public boolean playerSighted;
+    public Ray playerDetectionRay;
+    public boolean playerInRange;
+    public int sightCounter;
 
     public EnemySkull(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
         shapeRenderer = new ShapeRenderer();
 
+        sightCounter = 0;
+
         Viewport vp = new ExtendViewport(camera.viewportWidth, camera.viewportHeight);
 
         ENEMY_HEALTH = 3;
+
+        playerInRange = false;
 
         //creates an enemy with a body, hitbox and steering entity
         enemyBody = bodyFactory.createSimpleBody(world, x, y);
@@ -62,12 +73,12 @@ public class EnemySkull {
 
         enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 7f);
 
-        enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 50f);
+        enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 60f);
 
         enemyDetectionRadius.setSensor(true);
 
         enemyAI = new EnemyBox2DSteeringEntity(enemyBody, 10);
-        playerDetectionRay = new EnemyBox2DSteeringEntity(enemyBody,10);
+        //playerDetectionRay = new EnemyBox2DSteeringEntity(enemyBody,10);
 
         stateMachine = new DefaultStateMachine<EnemySkull, EnemySkullState>(this, EnemySkullState.WANDER);
         stateMachine.changeState(EnemySkullState.WANDER);
@@ -158,51 +169,55 @@ public class EnemySkull {
 
     public RaycastObstacleAvoidance detectPlayer(){
 
+        Vector2 translatedCoords = new Vector2();
+        translatedCoords.x = this.enemyAI.getPosition().x;
+        translatedCoords.y = this.enemyAI.getPosition().y;
+
+        //System.out.println(enemyBody.getPosition().x);
+
+        //System.out.println(player.playerBody.getPosition().x);
+
+        playerDetectionRay = new Ray<>(translatedCoords,player.playerBody.getPosition());
+
         //Ray<Vector2> ray = new Ray<>(enemyBody.getPosition(),player.playerBody.getPosition());
 
-        Vector2 translatedCoords = new Vector2();
-        translatedCoords.x = enemyBody.getPosition().x + 8f;
-        translatedCoords.x = enemyBody.getPosition().y - 8f;
+
         world.rayCast((fixture, point, normal, fraction) -> {
-            System.out.println(fixture.getBody().getUserData());
-            if (!fixture.isSensor()) {
+            //
+            boolean sighted = false;
+
                 if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody) {
+                    //sighted = true;
+                    sightCounter = 0;
+                    playerSighted = false;
+                    System.out.println(fixture.getBody().getUserData());
                     //System.out.println("STATIC BODY");
                     //System.out.println(fixture.getBody().getUserData());
-                    return 1;
-                }
-
-                }
-            else {
-                //TODO THIS NEEDS TO HIT ENEMIES INSTEAD - OPPOSITE OF ORIGINAL APPROACH
-                //System.out.println(fixture.);
+                    return 0;
+                } else if (fixture.getBody().getType() == BodyDef.BodyType.DynamicBody) {
                 playerSighted = false;
+                this.getStateMachine().changeState(EnemySkullState.WANDER);
+                //this.enemyAI.setBehaviour();
                 if (fixture.getBody().getUserData() != "Player") {
                     //System.out.println("NOT A PLAYER BUT DYNAMIC");
-                    return 0;
+                    return fraction;
                 } else if (fixture.getBody().getUserData() == "Player") {
-                    //System.out.println("PLAYER SIGHTED! NO OBSTRUCTION");
-                    playerSighted = true;
-                    return 0;
+                        sightCounter++;
+                        if (sightCounter > 5) {
+                            System.out.println("PLAYER SIGHTED! NO OBSTRUCTION");
+                            playerSighted = true;
+                            return 1;
+                        }
+                        return 1;
                 }
-                return 0;
+                return 1;
             }
-            return 1;
+                else {
+                    return 1;
+                }
         },
                 translatedCoords, player.playerBody.getPosition());
 
-        /*
-        RayConfigurationBase<Vector2>[] localRayConfigurations = new RayConfigurationBase[] {
-                new SingleRayConfiguration(playerDetectionRay, 50f)};
-
-
-        rayConfigurations2 = localRayConfigurations;
-         */
-        /*
-                RaycastCollisionDetector<Vector2> raycastCollisionDetector = new PlayerBox2DRaycastCollisionDetector(DungeonCrawler.world);
-        raycastPlayerDetectionSB = new RaycastObstacleAvoidance<Vector2>(playerDetectionRay, rayConfigurations2[0],
-                raycastCollisionDetector, 200);
-         */
         return raycastPlayerDetectionSB;
     }
 

@@ -28,6 +28,7 @@ public class GameContactListener implements ContactListener {
         //TODO: finish switch statement - ~40% done
         switch (faAsString) {
             case "Skull":
+                /*
                 if (fbAsString == "Skull") {
                     //TODO Yeah this doesn't work. Bodies don't actually collide with other bodies when they are added to the world
                     // check for coordinates instead
@@ -43,9 +44,12 @@ public class GameContactListener implements ContactListener {
                     //SkullPile.createSkullPile
 
                 }
+                */
                 break;
             case "Column":
+                break;
             case "Fire":
+                System.out.println(faAsString + " " + fbAsString);
                 if ((fb.getUserData() != "Proximity" && fb.getBody().getUserData() != "Enemy")
                         && fb.getBody().getUserData() != "Player") {
                     for (Fire f : fires) {
@@ -125,6 +129,7 @@ public class GameContactListener implements ContactListener {
                 break;
 
                  */
+                break;
             case "Player":
                 if (fb.getBody().getUserData() == "Potion"){
                     for (Potion p : potions) {
@@ -194,8 +199,9 @@ public class GameContactListener implements ContactListener {
                     fb.getUserData() == "Proximity") {
                 for (EnemySkull e : enemies) {
                     if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()) {
+                        e.playerInRange = true;
                        // e.getStateMachine().changeState(EnemyState.GO_TO_PLAYER);
-                        e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
+                        //e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
                     }
                 }
             } else {
@@ -490,6 +496,7 @@ public class GameContactListener implements ContactListener {
                     fb.getUserData() == "Proximity"){
                 for (EnemySkull e : enemies){
                     if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()){
+                        e.playerInRange = false;
                         e.getStateMachine().changeState(EnemySkullState.WANDER);
                     }
                 }

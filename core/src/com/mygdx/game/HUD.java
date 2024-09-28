@@ -1,7 +1,6 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -36,7 +35,7 @@ public class HUD {
     table.top();
     table.setFillParent(true);
 
-    CreateTexture tx = CreateTexture.getInstance();
+    CreateAssets tx = CreateAssets.getInstance();
     Sprite healthSymbol = new Sprite(tx.heartTexture, 0, 0, 16, 16);
     Sprite healthSymbolHalf = new Sprite(tx.heartTexture, 32, 0, 16, 16);
     Sprite healthSymbolEmpty = new Sprite(tx.heartTexture, 64, 0, 16, 16);
@@ -83,7 +82,7 @@ public class HUD {
   }
 
   public void updateGold(int gold) {
-    CreateTexture tx = CreateTexture.getInstance();
+    CreateAssets tx = CreateAssets.getInstance();
 
     moneyTable.clear();
 

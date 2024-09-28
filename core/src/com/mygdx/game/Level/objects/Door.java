@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.game.CreateTexture;
+import com.mygdx.game.CreateAssets;
 import com.mygdx.game.box2D.BodyFactory;
 
 public class Door {
@@ -39,7 +39,7 @@ public class Door {
     //renders the open door texture for the respective door on top of the door cell but below the player
     public void renderOpen(SpriteBatch batch, int direction, float x, float y) {
 
-        final CreateTexture tx = CreateTexture.getInstance();
+        final CreateAssets tx = CreateAssets.getInstance();
 
             if (doorName == "BottomLeft") {
                 batch.draw(tx.doorBottomLeftOpenTexture,x,y,0,0,16,16,1,1,0);

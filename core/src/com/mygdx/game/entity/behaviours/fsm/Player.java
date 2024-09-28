@@ -20,7 +20,7 @@ public class Player {
     public static PlayerBox2DSteeringEntity playerB2D;
     public float PLAYER_X = 0f, PLAYER_Y = 0f;
 
-    public Body playerBody;
+    public static Body playerBody;
     public int currentRoom;
     public boolean touchingRoom;
     public boolean midAnimationFrame;
