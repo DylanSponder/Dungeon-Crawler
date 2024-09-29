@@ -7,6 +7,7 @@ import com.badlogic.gdx.ai.utils.RaycastCollisionDetector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
@@ -25,6 +26,8 @@ public class Player {
     public boolean touchingRoom;
     public boolean midAnimationFrame;
 
+    public Fixture playerDetectionFixture;
+
     public Player() {
         PLAYER_HEALTH = 12;
         midAnimationFrame = false;
@@ -34,6 +37,8 @@ public class Player {
         BodyFactory bf = new BodyFactory();
 
         this.playerBody = bf.createPlayerBody(world, PLAYER_X, PLAYER_Y);
+
+        //this.playerDetectionFixture = bf.createEnemyDetectionRadius(playerBody,150f);
 
         this.playerB2D = new PlayerBox2DSteeringEntity(playerBody,10);
 

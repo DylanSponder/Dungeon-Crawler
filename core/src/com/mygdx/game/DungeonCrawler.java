@@ -42,7 +42,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch;
 	public static World world;
-	public static boolean debug = false;
+	public static boolean debug = true;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -957,7 +957,17 @@ public class DungeonCrawler extends ApplicationAdapter {
 			//render enemy sprite
 			for (EnemySkull e : enemies) {
 				e.detectPlayer();
-				if (e.playerSighted && e.playerInRange){
+				if ((e.playerSighted && e.playerInRange)){
+					if (!e.alerted) {
+						//FontController.drawFont(fontBatch,);
+						e.alertMessage.showing = true;
+						e.alertMessage.fade = true;
+						e.alerted = true;
+						System.out.println("LOG");
+						e.alertMessage.textX = e.enemyAI.getBody().getPosition().x - 2f;
+						e.alertMessage.textY = e.enemyAI.getBody().getPosition().y + 8f;
+						messages.add(e.alertMessage);
+					}
 					e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
 					//e.playerSighted = false;
 				}
@@ -1170,6 +1180,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						enemy.shapeRenderer.line(enemy.tmp, enemy.tmp2);
 					}
 
+					//render player rayCasts to Enemies
 					enemy.tmp3.set((Vector2) enemy.playerDetectionRay.start);
 					enemy.tmp4.set((Vector2) enemy.playerDetectionRay.end);
 					enemy.shapeRenderer.line(enemy.tmp3, enemy.tmp4);

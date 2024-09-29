@@ -18,6 +18,7 @@ public enum EnemySkullState implements State<EnemySkull> {
         public void enter(EnemySkull enemy) {
             //set a random orientation for the enemy
             float orientation = MathUtils.random(-MathUtils.PI, MathUtils.PI);
+            //enemy.alerted = false;
             enemy.enemyAI.setBehaviour(null);
             Wander wander = enemy.wander(enemy.enemyAI, orientation);
             BlendedSteering blendedWanderSteering = enemy.blendSteering(wander, enemy.avoidObstacle(), 2.5f, 2);
@@ -30,7 +31,7 @@ public enum EnemySkullState implements State<EnemySkull> {
 
         @Override
         public void update(EnemySkull enemy) {
-
+            enemy.alerted = false;
         }
 
         @Override
@@ -79,6 +80,7 @@ public enum EnemySkullState implements State<EnemySkull> {
         @Override
         public void enter(EnemySkull enemy) {
             enemy.enemyAI.setBehaviour(null);
+            enemy.alerted = true;
             Seek seekPlayer = enemy.seekPlayer();
           //  BlendedSteering blendedAttackSteering = enemy.blendSteering(attack, 3, 6);
             enemy.enemyAI.setBehaviour(seekPlayer);

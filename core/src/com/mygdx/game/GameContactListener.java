@@ -49,7 +49,7 @@ public class GameContactListener implements ContactListener {
             case "Column":
                 break;
             case "Fire":
-                System.out.println(faAsString + " " + fbAsString);
+                //System.out.println(faAsString + " " + fbAsString);
                 if ((fb.getUserData() != "Proximity" && fb.getBody().getUserData() != "Enemy")
                         && fb.getBody().getUserData() != "Player") {
                     for (Fire f : fires) {

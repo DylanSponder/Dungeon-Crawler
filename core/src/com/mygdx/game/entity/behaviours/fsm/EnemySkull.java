@@ -10,6 +10,7 @@ import com.badlogic.gdx.ai.steer.utils.rays.CentralRayWithWhiskersConfiguration;
 import com.badlogic.gdx.ai.steer.utils.rays.RayConfigurationBase;
 import com.badlogic.gdx.ai.utils.Ray;
 import com.badlogic.gdx.ai.utils.RaycastCollisionDetector;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -22,6 +23,7 @@ import com.mygdx.game.entity.Skull;
 import com.mygdx.game.entity.utils.EnemyBox2DSteeringEntity;
 import com.mygdx.game.entity.utils.EnemyBox2DRaycastCollisionDetector;
 import com.mygdx.game.HUD;
+import com.mygdx.game.level.objects.Text;
 import jdk.internal.jshell.tool.StopDetectingInputStream;
 
 import static com.mygdx.game.DungeonCrawler.*;
@@ -50,16 +52,22 @@ public class EnemySkull {
     public HUD hud;
     public Skull skull;
     public int room;
-    public boolean playerSighted;
+    public boolean playerSighted, alerted;
     public Ray playerDetectionRay;
     public boolean playerInRange;
     public int sightCounter;
+    public Text alertMessage;
 
     public EnemySkull(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
         shapeRenderer = new ShapeRenderer();
 
+        alertMessage = new Text(DungeonCrawler.defaultFont,"!", Color.WHITE,true,1f,0.0045f,false);
+
+
         sightCounter = 0;
+
+        alerted = false;
 
         Viewport vp = new ExtendViewport(camera.viewportWidth, camera.viewportHeight);
 
@@ -73,7 +81,7 @@ public class EnemySkull {
 
         enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 7f);
 
-        enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 60f);
+        enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 80f);
 
         enemyDetectionRadius.setSensor(true);
 
@@ -125,6 +133,11 @@ public class EnemySkull {
             }
         };
  */
+    }
+
+    public void showAlertMessage() {
+        alertMessage.textX = this.enemyAI.getBody().getPosition().x;
+        alertMessage.textY = this.enemyAI.getBody().getPosition().y;
     }
 
     public Wander<Vector2> wander(EnemyBox2DSteeringEntity owner, float wanderOrientation) {
@@ -186,13 +199,10 @@ public class EnemySkull {
             //
             boolean sighted = false;
 
-                if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody) {
+                if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody && fixture.getBody().getUserData() != "Skull") {
                     //sighted = true;
                     sightCounter = 0;
                     playerSighted = false;
-                    System.out.println(fixture.getBody().getUserData());
-                    //System.out.println("STATIC BODY");
-                    //System.out.println(fixture.getBody().getUserData());
                     return 0;
                 } else if (fixture.getBody().getType() == BodyDef.BodyType.DynamicBody) {
                 playerSighted = false;
@@ -203,8 +213,9 @@ public class EnemySkull {
                     return fraction;
                 } else if (fixture.getBody().getUserData() == "Player") {
                         sightCounter++;
-                        if (sightCounter > 5) {
-                            System.out.println("PLAYER SIGHTED! NO OBSTRUCTION");
+                        //number of successful ray hits on the player - more for slower detection
+                        if (sightCounter > 10) {
+                            //enemy has seen the player and will reach appropriate distance
                             playerSighted = true;
                             return 1;
                         }
