@@ -315,6 +315,10 @@ public class RenderRules {
                                     drawableLevelLayer.add(index, "fped1fire");
                                     index++;
                                     break;
+                                case "ped1fireb":
+                                    drawableLevelLayer.add(index, "fped1fireB");
+                                    index++;
+                                    break;
                                 case "ped2":
                                     drawableLevelLayer.add(index, "fped2");
                                     index++;

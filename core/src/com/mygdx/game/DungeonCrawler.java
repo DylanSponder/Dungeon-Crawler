@@ -18,6 +18,7 @@ import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.*;
@@ -53,7 +54,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Body> arrowBodiesCollided, boneBodiesCollided, skullBodiesDestroyed, deadEnemyBodies;
 	public ArrayMap<Body, Arrow> arrowArrayMap;
 	public ArrayMap<Body, Skull> skullArrayMap;
-	public ArrayMap<Body, Bone> boneArrayMap;
+	public static ArrayMap<Body, Bone> boneArrayMap;
 	public ArrayMap<Body, Potion> potionArrayMap;
 	public ArrayMap<Body, Pot> potArrayMap;
 	public boolean reversedArrowMap, reversedSkullMap, reversedPotMap, reversedPotionMap;
@@ -779,12 +780,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 				if (skullIt.hasNext()) {
 					Skull skull = skullIt.next();
 					if (brokenSkulls.contains(skull)) {
-						Bone bone = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, false, 0);
+						Bone bone = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, false, 0, false, 0);
 						bone.createBone();
 						bones.add(bone);
 						boneArrayMap.put(bone.boneBody, bone);
 
-						Bone bone2 = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, true, bone.orientation);
+						Bone bone2 = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, true, bone.orientation, false, 0);
 						bone2.createBone();
 						bones.add(bone2);
 						boneArrayMap.put(bone2.boneBody, bone2);
@@ -845,7 +846,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 							potions.add(potion);
 							potionArrayMap.put(potion.potionBody, potion);
 						} else if (potionChance == 1) {
-							Bone bone = new Bone(world, pot.potBody, pot.potBody.getPosition().x, pot.potBody.getPosition().y, false, 0);
+							Bone bone = new Bone(world, pot.potBody, pot.potBody.getPosition().x, pot.potBody.getPosition().y, false, 0, false, 0);
 							bone.createBone();
 							bones.add(bone);
 							boneArrayMap.put(bone.boneBody, bone);
@@ -967,14 +968,35 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			//render enemy sprite
 			for (EnemySkull e : enemies) {
-				e.detectPlayer();
+				if (e.rayCastable) {
+					e.detectPlayer();
+				}
 				if ((e.playerSighted && e.playerInRange)){
+					System.out.println(Gdx.graphics.getDeltaTime());
+					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 2)){
+						System.out.println("HELLO");
+						e.timeSinceAlerted = 0f;
+					}
+					e.timeSinceAlerted = e.timeSinceAlerted + Gdx.graphics.getDeltaTime();
+					System.out.println("TIME SINCE ALERTED" + e.timeSinceAlerted);
+					//e.throwBoneAtPlayer();
+					Vector2 vec1 = new Vector2(player.playerBody.getPosition());
+					Vector2 vec2 = new Vector2(e.enemyAI.getPosition());
+
+					float x = MathUtils.atan2(vec2.y - vec1.y, vec2.x - vec1.x);
+
+					Bone bone = new Bone(world, e.enemyBody, e.enemyBody.getPosition().x, e.enemyBody.getPosition().y, false, 0, true, x);
+					bone.createBone();
+					bones.add(bone);
+					DungeonCrawler.boneArrayMap.put(bone.boneBody, bone);
 					if (!e.alerted) {
+
 						//FontController.drawFont(fontBatch,);
 						e.alertMessage.showing = true;
 						e.alertMessage.fade = true;
 						e.alerted = true;
-						System.out.println("LOG");
+
+						//System.out.println("LOG");
 						e.alertMessage.textX = e.enemyAI.getBody().getPosition().x - 2f;
 						e.alertMessage.textY = e.enemyAI.getBody().getPosition().y + 8f;
 						messages.add(e.alertMessage);

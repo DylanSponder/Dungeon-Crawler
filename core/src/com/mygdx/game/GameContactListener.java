@@ -47,6 +47,12 @@ public class GameContactListener implements ContactListener {
                 */
                 break;
             case "Column":
+                if (fbAsString == "Arrow"){
+                    if (!arrowBodiesCollided.contains(fb.getBody())) {
+                        arrowBodiesCollided.add(fb.getBody());
+                        break;
+                    }
+                }
                 break;
             case "Fire":
                 //System.out.println(faAsString + " " + fbAsString);
@@ -82,7 +88,7 @@ public class GameContactListener implements ContactListener {
                         arrowBodiesCollided.add(fa.getBody());
                     }
                     for (EnemySkull e : enemies) {
-                        if (e.enemyBody == fb.getBody()) {
+                        if (e.enemyAI.getBody() == fb.getBody()) {
                             e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
                             break;
                         }
@@ -288,9 +294,10 @@ public class GameContactListener implements ContactListener {
 
         if (fa.getBody().getUserData().toString().startsWith("Room")) {
             // && (fb.getUserData() != "Wall" || fb.getUserData() !="Enemy" || fb.getUserData() != "Player"))
-            String[] roomIndexAsString = fa.getBody().getUserData().toString().split("-");
-            player.currentRoom = Integer.parseInt(roomIndexAsString[1]);
+
             if (fb.getBody().getUserData() == "Player") {
+                String[] roomIndexAsString = fa.getBody().getUserData().toString().split("-");
+                player.currentRoom = Integer.parseInt(roomIndexAsString[1]);
                 for (EnemySkull e : init.roomList.get(player.currentRoom).enemies) {
                     e.rayCastable = true;
                 }

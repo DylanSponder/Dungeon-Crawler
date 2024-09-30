@@ -41,7 +41,7 @@ public class BodyFactory {
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(8, 4);
+        shape.setAsBox(8, 3);
         body.createFixture(shape, 1.0f);
         shape.dispose();
         return body;

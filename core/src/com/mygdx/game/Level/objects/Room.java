@@ -4,6 +4,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.mygdx.game.entity.behaviours.fsm.EnemySkull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ public class Room {
     public ArrayList<Lock> locks;
     public ArrayList<Door> doors;
     public ArrayMap<String, Door> doorArrayMap;
+    public ArrayList<EnemySkull> enemies;
 
     public boolean isShop;
 
@@ -28,6 +30,7 @@ public class Room {
         doorArrayMap = new ArrayMap<String, Door>();
         locks = new ArrayList<Lock>();
         doors = new ArrayList<Door>();
+        enemies = new ArrayList<EnemySkull>();
     }
 
     public void createLocks(World world) {

@@ -23,18 +23,26 @@ public class Bone {
     public float orientation;
     public Vector2 outVector;
     public float vecMulti;
+    public boolean aimed;
 
-    public Bone(World world, Body skullBody, float x, float y, boolean multiplied, float initialAngle) {
+    public Bone(World world, Body skullBody, float x, float y, boolean multiplied, float initialAngle, boolean aimed, float orientation) {
         this.boneX = x;
         this.boneY = y;
         this.skullBody = skullBody;
-        if (!multiplied) {
-            this.orientation = MathUtils.random(-MathUtils.PI, MathUtils.PI);
+        this.aimed = aimed;
+        if (this.aimed) {
+            this.orientation = orientation;
+        } else {
+            if (!multiplied) {
+                this.orientation = MathUtils.random(-MathUtils.PI, MathUtils.PI);
+                System.out.println(MathUtils.random(-MathUtils.PI, MathUtils.PI));
+            }
+            else {
+                float testAngle = MathUtils.random(-MathUtils.PI, MathUtils.PI);
+                this.orientation = initialAngle + testAngle;
+            }
         }
-        else {
-            float testAngle = MathUtils.random(-MathUtils.PI, MathUtils.PI);
-            this.orientation = initialAngle + testAngle;
-        }
+
 
         this.outVector = new Vector2();
     }
@@ -47,6 +55,10 @@ public class Bone {
         //this.boneBody.applyLinearImpulse(0,0,0,0,true);
 
         this.boneBody.setAngularVelocity(8f);
+
+        if (!aimed) {
+
+        }
 
         this.outVector = Box2DSteeringUtils.angleToVector(this.outVector, this.orientation);
 

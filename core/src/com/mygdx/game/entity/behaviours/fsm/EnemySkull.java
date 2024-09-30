@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
+import com.mygdx.game.entity.Bone;
 import com.mygdx.game.entity.Skull;
 import com.mygdx.game.entity.utils.EnemyBox2DSteeringEntity;
 import com.mygdx.game.entity.utils.EnemyBox2DRaycastCollisionDetector;
@@ -56,6 +57,7 @@ public class EnemySkull {
     public Ray playerDetectionRay;
     public int sightCounter;
     public Text alertMessage;
+    public float timeSinceAlerted;
 
     public EnemySkull(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
@@ -142,6 +144,17 @@ public class EnemySkull {
     }
     */
 
+    public void throwBoneAtPlayer() {
+
+
+
+       // angle =
+
+       // Bone bone = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, false, 0, true, angle);
+
+
+    }
+
     public Wander<Vector2> wander(EnemyBox2DSteeringEntity owner, float wanderOrientation) {
         wanderSB = new Wander<Vector2>(owner)
                 .setFaceEnabled(false)
@@ -183,6 +196,8 @@ public class EnemySkull {
     }
 
     public RaycastObstacleAvoidance detectPlayer(){
+        if (this.rayCastable) {
+
 
         Vector2 translatedCoords = new Vector2();
         translatedCoords.x = this.enemyAI.getPosition().x;
@@ -192,7 +207,7 @@ public class EnemySkull {
 
         //Ray<Vector2> ray = new Ray<>(enemyBody.getPosition(),player.playerBody.getPosition());
 
-        if (this.rayCastable) {
+
             playerDetectionRay = new Ray<>(translatedCoords,player.playerBody.getPosition());
 
             world.rayCast((fixture, point, normal, fraction) -> {
@@ -215,6 +230,8 @@ public class EnemySkull {
                                 sightCounter++;
                                 //number of successful ray hits on the player - more for slower detection
                                 if (sightCounter > 10) {
+                                    //System.out.println(fraction);
+
                                     //enemy has seen the player and will reach appropriate distance
                                     playerSighted = true;
                                     return 1;
