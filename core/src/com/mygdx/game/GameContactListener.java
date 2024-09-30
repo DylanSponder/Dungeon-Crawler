@@ -291,16 +291,21 @@ public class GameContactListener implements ContactListener {
             String[] roomIndexAsString = fa.getBody().getUserData().toString().split("-");
             player.currentRoom = Integer.parseInt(roomIndexAsString[1]);
             if (fb.getBody().getUserData() == "Player") {
+                for (EnemySkull e : init.roomList.get(player.currentRoom).enemies) {
+                    e.rayCastable = true;
+                }
                 player.touchingRoom = true;
             }
             if (init.roomList.get(player.currentRoom).isShop) {
                 init.roomList.get(player.currentRoom).enemyCounter = 0;
                 init.roomList.get(player.currentRoom).unlockAllDoors(world, init.roomList.get(player.currentRoom), false);
             }
+            /*
         } else if (fb.getBody().getUserData().toString().startsWith("Room")) {
             // && (fb.getUserData() != "Wall" || fb.getUserData() !="Enemy" || fb.getUserData() != "Player"))
             String[] roomIndexAsString = fb.getBody().getUserData().toString().split("-");
             player.currentRoom = Integer.parseInt(roomIndexAsString[1]);
+
             if (fa.getBody().getUserData() == "Player") {
                 player.touchingRoom = true;
             }
@@ -308,6 +313,8 @@ public class GameContactListener implements ContactListener {
                 init.roomList.get(player.currentRoom).enemyCounter = 0;
                 init.roomList.get(player.currentRoom).unlockAllDoors(world, init.roomList.get(player.currentRoom), false);
             }
+
+             */
         }
 
         if(((fa.getBody().getUserData() == "Pot" && fb.getBody().getUserData() == "Sword")

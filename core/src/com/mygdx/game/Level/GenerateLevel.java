@@ -1241,6 +1241,7 @@ for (int i = 0; i < layerSize; i++) {
         currentCell = init.cr.middleFloorTile;
         EnemySkull enemy = new EnemySkull(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
         init.roomList.get(roomIndex).enemyCounter++;
+        init.roomList.get(roomIndex).enemies.add(enemy);
         enemy.room = roomIndex;
         DungeonCrawler.enemies.add(enemy);
         break;
@@ -1459,10 +1460,18 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.middleFloorTile;
             Column ped1fire = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
             ped1fire.createPedestal();
-            Fire fireped1 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, true, 0f, 2);
-            Color color = new Color(0,0,1f,0.7f);
-            fireped1.createFire(color, 10);
+            Fire fireped1 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, true, 0f, 1);
+            fireped1.createFire(new Color(0.25f,0.20f,0,0.7f), 10);
             fires.add(fireped1);
+            break;
+        case "fped1fireB":
+            currentCell = init.cr.middleFloorTile;
+            Column ped1fireb = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
+            ped1fireb.createPedestal();
+            Fire fireped1b = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, true, 0f, 2);
+            Color colorb = new Color(0,0,1f,0.7f);
+            fireped1b.createFire(colorb, 10);
+            fires.add(fireped1b);
             break;
     }
 

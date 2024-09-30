@@ -56,4 +56,11 @@ public class Fire {
 
             batch.draw(currentFrame, x, y);
     }
+
+    public void spawnEnemy(float time, int enemyType) {
+        //spawn an enemy at the fires highest Y value
+
+
+
+    }
 }

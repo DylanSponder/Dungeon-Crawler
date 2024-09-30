@@ -52,9 +52,8 @@ public class EnemySkull {
     public HUD hud;
     public Skull skull;
     public int room;
-    public boolean playerSighted, alerted;
+    public boolean playerSighted, alerted, playerInRange, rayCastable;
     public Ray playerDetectionRay;
-    public boolean playerInRange;
     public int sightCounter;
     public Text alertMessage;
 
@@ -64,6 +63,7 @@ public class EnemySkull {
 
         alertMessage = new Text(DungeonCrawler.defaultFont,"!", Color.WHITE,true,1f,0.0045f,false);
 
+        rayCastable = false;
 
         sightCounter = 0;
 
@@ -81,7 +81,7 @@ public class EnemySkull {
 
         enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 7f);
 
-        enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 80f);
+        enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 120f);
 
         enemyDetectionRadius.setSensor(true);
 
@@ -135,10 +135,12 @@ public class EnemySkull {
  */
     }
 
+    /*
     public void showAlertMessage() {
         alertMessage.textX = this.enemyAI.getBody().getPosition().x;
         alertMessage.textY = this.enemyAI.getBody().getPosition().y;
     }
+    */
 
     public Wander<Vector2> wander(EnemyBox2DSteeringEntity owner, float wanderOrientation) {
         wanderSB = new Wander<Vector2>(owner)
@@ -186,48 +188,48 @@ public class EnemySkull {
         translatedCoords.x = this.enemyAI.getPosition().x;
         translatedCoords.y = this.enemyAI.getPosition().y;
 
-        //System.out.println(enemyBody.getPosition().x);
 
-        //System.out.println(player.playerBody.getPosition().x);
-
-        playerDetectionRay = new Ray<>(translatedCoords,player.playerBody.getPosition());
 
         //Ray<Vector2> ray = new Ray<>(enemyBody.getPosition(),player.playerBody.getPosition());
 
+        if (this.rayCastable) {
+            playerDetectionRay = new Ray<>(translatedCoords,player.playerBody.getPosition());
 
-        world.rayCast((fixture, point, normal, fraction) -> {
-            //
-            boolean sighted = false;
+            world.rayCast((fixture, point, normal, fraction) -> {
+                        //
+                        boolean sighted = false;
 
-                if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody && fixture.getBody().getUserData() != "Skull") {
-                    //sighted = true;
-                    sightCounter = 0;
-                    playerSighted = false;
-                    return 0;
-                } else if (fixture.getBody().getType() == BodyDef.BodyType.DynamicBody) {
-                playerSighted = false;
-                this.getStateMachine().changeState(EnemySkullState.WANDER);
-                //this.enemyAI.setBehaviour();
-                if (fixture.getBody().getUserData() != "Player") {
-                    //System.out.println("NOT A PLAYER BUT DYNAMIC");
-                    return fraction;
-                } else if (fixture.getBody().getUserData() == "Player") {
-                        sightCounter++;
-                        //number of successful ray hits on the player - more for slower detection
-                        if (sightCounter > 10) {
-                            //enemy has seen the player and will reach appropriate distance
-                            playerSighted = true;
+                        if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody && fixture.getBody().getUserData() != "Skull") {
+                            //sighted = true;
+                            sightCounter = 0;
+                            playerSighted = false;
+                            return 0;
+                        } else if (fixture.getBody().getType() == BodyDef.BodyType.DynamicBody) {
+                            playerSighted = false;
+                            this.getStateMachine().changeState(EnemySkullState.WANDER);
+                            //this.enemyAI.setBehaviour();
+                            if (fixture.getBody().getUserData() != "Player") {
+                                //System.out.println("NOT A PLAYER BUT DYNAMIC");
+                                return fraction;
+                            } else if (fixture.getBody().getUserData() == "Player") {
+                                sightCounter++;
+                                //number of successful ray hits on the player - more for slower detection
+                                if (sightCounter > 10) {
+                                    //enemy has seen the player and will reach appropriate distance
+                                    playerSighted = true;
+                                    return 1;
+                                }
+                                return 1;
+                            }
                             return 1;
                         }
-                        return 1;
-                }
-                return 1;
-            }
-                else {
-                    return 1;
-                }
-        },
-                translatedCoords, player.playerBody.getPosition());
+                        else {
+                            return 1;
+                        }
+                    },
+                    translatedCoords, player.playerBody.getPosition());
+        }
+
 
         return raycastPlayerDetectionSB;
     }

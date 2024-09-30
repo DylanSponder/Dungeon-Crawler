@@ -715,6 +715,17 @@ public class DungeonCrawler extends ApplicationAdapter {
 			//	}
 
 			for (Room r : GenerateLevel.init.roomList) {
+				for (EnemySkull e : r.enemies){
+					//if the enemy is alive and in the room, it can receive Rays
+					/*
+					if (e.room == player.currentRoom){
+						e.rayCastable = true;
+					} else{
+						e.rayCastable = false;
+					}
+
+					 */
+				}
 				for (Door d : r.doors) {
 					//render open doors here
 					if (d.open) {
@@ -1181,12 +1192,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 
 					//render player rayCasts to Enemies
-					enemy.tmp3.set((Vector2) enemy.playerDetectionRay.start);
-					enemy.tmp4.set((Vector2) enemy.playerDetectionRay.end);
-					enemy.shapeRenderer.line(enemy.tmp3, enemy.tmp4);
-
-
-
+					if (enemy.rayCastable) {
+						enemy.tmp3.set((Vector2) enemy.playerDetectionRay.start);
+						enemy.tmp4.set((Vector2) enemy.playerDetectionRay.end);
+						enemy.shapeRenderer.line(enemy.tmp3, enemy.tmp4);
+					}
 
 					/*
 					if (playerSighted) {

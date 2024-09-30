@@ -81,6 +81,7 @@ public enum EnemySkullState implements State<EnemySkull> {
         public void enter(EnemySkull enemy) {
             enemy.enemyAI.setBehaviour(null);
             enemy.alerted = true;
+
             Seek seekPlayer = enemy.seekPlayer();
           //  BlendedSteering blendedAttackSteering = enemy.blendSteering(attack, 3, 6);
             enemy.enemyAI.setBehaviour(seekPlayer);
