@@ -57,14 +57,20 @@ public class Bone {
         this.boneBody.setAngularVelocity(8f);
 
         if (!aimed) {
+            this.vecMulti = MathUtils.random(35, 45);
 
+            this.outVector = Box2DSteeringUtils.angleToVector(this.outVector, this.orientation);
+
+            this.boneBody.setLinearVelocity(this.outVector.x*vecMulti,this.outVector.y*vecMulti);
+        } else {
+            this.vecMulti = MathUtils.random(35, 45);
+
+            this.outVector = Box2DSteeringUtils.angleToVector(this.outVector, this.orientation);
+
+            this.boneBody.setLinearVelocity(this.outVector.x*vecMulti,this.outVector.y*vecMulti);
         }
 
-        this.outVector = Box2DSteeringUtils.angleToVector(this.outVector, this.orientation);
 
-        this.vecMulti = MathUtils.random(35, 45);
-
-        this.boneBody.setLinearVelocity(this.outVector.x*vecMulti,this.outVector.y*vecMulti);
 
         //this.boneHitbox = bodyFactory.createBone(world, boneBody, skullBody.getPosition().x, skullBody.getPosition().y);
 

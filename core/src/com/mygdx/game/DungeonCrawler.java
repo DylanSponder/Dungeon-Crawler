@@ -973,22 +973,29 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 				if ((e.playerSighted && e.playerInRange)){
 					System.out.println(Gdx.graphics.getDeltaTime());
-					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 2)){
-						System.out.println("HELLO");
+					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 90)){
+						System.out.println("THROWING BONE...");
 						e.timeSinceAlerted = 0f;
+						Vector2 vec1 = new Vector2(player.playerBody.getPosition());
+						Vector2 vec2 = new Vector2(e.enemyAI.getPosition());
+
+						float x = MathUtils.atan2(vec2.y - vec1.y, vec2.x - vec1.x);
+						//float value = 180 / MathUtils.PI;
+						//float result = x * value;
+						System.out.println(x );
+						float result = (e.enemyAI.getOrientation() / x * MathUtils.PI);
+						//result = result - MathUtils.PI / 2;
+						System.out.println("ORIENTATION" + e.enemyAI.getOrientation());
+
+						Bone bone = new Bone(world, e.enemyBody, e.enemyBody.getPosition().x, e.enemyBody.getPosition().y, false, 0, true, result);
+						bone.createBone();
+						bones.add(bone);
+						DungeonCrawler.boneArrayMap.put(bone.boneBody, bone);
 					}
 					e.timeSinceAlerted = e.timeSinceAlerted + Gdx.graphics.getDeltaTime();
-					System.out.println("TIME SINCE ALERTED" + e.timeSinceAlerted);
+					//System.out.println("TIME SINCE ALERTED" + e.timeSinceAlerted);
 					//e.throwBoneAtPlayer();
-					Vector2 vec1 = new Vector2(player.playerBody.getPosition());
-					Vector2 vec2 = new Vector2(e.enemyAI.getPosition());
 
-					float x = MathUtils.atan2(vec2.y - vec1.y, vec2.x - vec1.x);
-
-					Bone bone = new Bone(world, e.enemyBody, e.enemyBody.getPosition().x, e.enemyBody.getPosition().y, false, 0, true, x);
-					bone.createBone();
-					bones.add(bone);
-					DungeonCrawler.boneArrayMap.put(bone.boneBody, bone);
 					if (!e.alerted) {
 
 						//FontController.drawFont(fontBatch,);

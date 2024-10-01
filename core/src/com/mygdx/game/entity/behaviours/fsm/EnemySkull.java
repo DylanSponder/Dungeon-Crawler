@@ -44,6 +44,7 @@ public class EnemySkull {
     public RayConfigurationBase<Vector2>[] rayConfigurations, rayConfigurations2;
     public RaycastObstacleAvoidance<Vector2> raycastObstacleAvoidanceSB, raycastPlayerDetectionSB;
     public Seek seekSB;
+    public Arrive arriveSB;
     public BlendedSteering blendedSteeringSB;
     public Vector2 wanderCenter;
     public int ENEMY_HEALTH;
@@ -181,6 +182,14 @@ public class EnemySkull {
          return seekSB;
     }
 
+    public Arrive<Vector2> arriveAtPlayer() {
+        arriveSB = new Arrive<Vector2>(enemyAI, DungeonCrawler.player.playerB2D)
+                .setTimeToTarget(0.01f)
+                .setArrivalTolerance(50f)
+                .setDecelerationRadius(50f);
+        return arriveSB;
+    }
+
     public RaycastObstacleAvoidance avoidObstacle(){
 
         RayConfigurationBase<Vector2>[] localRayConfigurations = new RayConfigurationBase[] {
@@ -211,6 +220,8 @@ public class EnemySkull {
             playerDetectionRay = new Ray<>(translatedCoords,player.playerBody.getPosition());
 
             world.rayCast((fixture, point, normal, fraction) -> {
+
+
                         //
                         boolean sighted = false;
 
@@ -223,7 +234,13 @@ public class EnemySkull {
                             playerSighted = false;
                             this.getStateMachine().changeState(EnemySkullState.WANDER);
                             //this.enemyAI.setBehaviour();
-                            if (fixture.getBody().getUserData() != "Player") {
+                            if (fixture.getBody().getUserData() != "Player"
+                                    && fixture.getUserData() != "Proximity"
+                                    && fixture.getUserData() != "EnemyHitbox"
+                                    && fixture.getUserData() != "Bone"
+                            ) {
+                                System.out.println("FIXTURE USER DATA " + fixture.getUserData());
+                                System.out.println("BODY USER DATA " + fixture.getUserData());
                                 //System.out.println("NOT A PLAYER BUT DYNAMIC");
                                 return fraction;
                             } else if (fixture.getBody().getUserData() == "Player") {
