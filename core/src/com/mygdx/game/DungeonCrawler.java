@@ -43,7 +43,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch;
 	public static World world;
-	public static boolean debug = true;
+	public static boolean debug = false;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -973,21 +973,25 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 				if ((e.playerSighted && e.playerInRange)){
 					System.out.println(Gdx.graphics.getDeltaTime());
-					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 90)){
+					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 40)){
 						System.out.println("THROWING BONE...");
 						e.timeSinceAlerted = 0f;
-						Vector2 vec1 = new Vector2(player.playerBody.getPosition());
-						Vector2 vec2 = new Vector2(e.enemyAI.getPosition());
+						Vector2 vec1 = new Vector2(e.enemyBody.getPosition());
+						Vector2 vec2 = new Vector2(player.playerBody.getPosition());
+
+						//vec2.sub(vec1);
+
+						//atan2(vector2.y, vector2.x) - atan2(vector1.y, vector1.x);
 
 						float x = MathUtils.atan2(vec2.y - vec1.y, vec2.x - vec1.x);
 						//float value = 180 / MathUtils.PI;
 						//float result = x * value;
-						System.out.println(x );
-						float result = (e.enemyAI.getOrientation() / x * MathUtils.PI);
+						x = x * MathUtils.radiansToDegrees;
+						//float result = (e.enemyAI.getOrientation() / (x * MathUtils.PI));
 						//result = result - MathUtils.PI / 2;
-						System.out.println("ORIENTATION" + e.enemyAI.getOrientation());
+						System.out.println(x);
 
-						Bone bone = new Bone(world, e.enemyBody, e.enemyBody.getPosition().x, e.enemyBody.getPosition().y, false, 0, true, result);
+						Bone bone = new Bone(world, e.enemyBody, e.enemyBody.getPosition().x, e.enemyBody.getPosition().y, false, 0, true, x);
 						bone.createBone();
 						bones.add(bone);
 						DungeonCrawler.boneArrayMap.put(bone.boneBody, bone);
@@ -1175,6 +1179,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 					if (f.type == 1) {
 						currentFrame = tx.fireAnimation.getKeyFrame(stateTime, f.active);
 					} else if (f.type == 2) {
+
+						//we want blue fire to respawn dead Enemies nearby every X number of frames
+						//e.timeSinceAlerted = e.timeSinceAlerted + Gdx.graphics.getDeltaTime();
+
+
 						currentFrame = tx.blueFireAnimation.getKeyFrame(stateTime, f.active);
 					}
 
