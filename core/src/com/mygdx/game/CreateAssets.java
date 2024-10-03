@@ -235,13 +235,17 @@ public class CreateAssets {
         assetManager = new AssetManager();
         assetManager.load("HellasDungeon/Font/HellasFontStylized-extended.fnt", BitmapFont.class);
 
+        assetManager.load("HellasDungeon/Music/Level1Track.mp3", Music.class);
+        //assetManager.finishLoading();
 
-        //assetManager.load("HellasDungeon/Music/level1Track.mp3", Music.class);
+
+        //do not use yet - need to understand how assetloading music works properly
         //assetManager.setLoader(MusicLoader.class,);
-        Music music2 = assetManager.get("HellasDungeon/Music/Level1Track.mp3");
+        //Music music2 = assetManager.get("HellasDungeon/Music/Level1Track.mp3");
 
-        music2.play();
-        music2.setVolume(0.5f);
+        //Music music2 = assetManager.get("HellasDungeon/Music/Level1Track.mp3");
+        //music2.play();
+        //music2.setVolume(0.5f);
        // music2.setLooping(true);
 
         //fire animation
@@ -295,8 +299,8 @@ public class CreateAssets {
 
         //0.0651f
 
-        //level1Track.play();
-        //level1Track.setLooping(true);
+        level1Track.play();
+        level1Track.setLooping(true);
 
         roomMiddleFloorTexture.setRegion(96, 16, 16, 16);
         roomTopLeftWallTexture.setRegion(0, 0, 16, 16);
