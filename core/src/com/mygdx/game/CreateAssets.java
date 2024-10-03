@@ -241,6 +241,7 @@ public class CreateAssets {
         Music music2 = assetManager.get("HellasDungeon/Music/Level1Track.mp3");
 
         music2.play();
+        music2.setVolume(0.5f);
        // music2.setLooping(true);
 
         //fire animation
