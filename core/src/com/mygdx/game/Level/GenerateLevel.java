@@ -1472,6 +1472,7 @@ for (int i = 0; i < layerSize; i++) {
             Color colorb = new Color(0,0,1f,0.7f);
             fireped1b.createFire(colorb, 10);
             fires.add(fireped1b);
+            init.roomList.get(roomIndex).spawners.add(fireped1b);
             break;
     }
 

@@ -236,11 +236,11 @@ public class CreateAssets {
         assetManager.load("HellasDungeon/Font/HellasFontStylized-extended.fnt", BitmapFont.class);
 
 
-       // assetManager.load("HellasDungeon/Music/level1Track.mp3", Music.class);
-       // assetManager.setLoader(MusicLoader.class,);
-       // Music music2 = assetManager.get("HellasDungeon/Music/Level1Track.mp3");
+        //assetManager.load("HellasDungeon/Music/level1Track.mp3", Music.class);
+        //assetManager.setLoader(MusicLoader.class,);
+        Music music2 = assetManager.get("HellasDungeon/Music/Level1Track.mp3");
 
-       // music2.play();
+        music2.play();
        // music2.setLooping(true);
 
         //fire animation

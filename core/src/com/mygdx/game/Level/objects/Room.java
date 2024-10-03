@@ -21,6 +21,7 @@ public class Room {
     public ArrayList<Door> doors;
     public ArrayMap<String, Door> doorArrayMap;
     public ArrayList<EnemySkull> enemies;
+    public ArrayList<Fire> spawners;
 
     public boolean isShop;
 
@@ -31,6 +32,7 @@ public class Room {
         locks = new ArrayList<Lock>();
         doors = new ArrayList<Door>();
         enemies = new ArrayList<EnemySkull>();
+        spawners = new ArrayList<Fire>();
     }
 
     public void createLocks(World world) {

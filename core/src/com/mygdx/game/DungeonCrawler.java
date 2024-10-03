@@ -43,7 +43,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch;
 	public static World world;
-	public static boolean debug = false;
+	public static boolean debug = true;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -716,17 +716,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 			//	}
 
 			for (Room r : GenerateLevel.init.roomList) {
-				for (EnemySkull e : r.enemies){
-					//if the enemy is alive and in the room, it can receive Rays
-					/*
-					if (e.room == player.currentRoom){
-						e.rayCastable = true;
-					} else{
-						e.rayCastable = false;
-					}
 
-					 */
-				}
+
 				for (Door d : r.doors) {
 					//render open doors here
 					if (d.open) {
@@ -748,8 +739,20 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			//adds all skulls that have been created to the array map for manipulation
 			for (Skull s : enemySkulls) {
+
 				if (!s.skullCreated) {
 					skullArrayMap.put(s.createSkull(skullArrayMap), s);
+				}
+				for (Room r : GenerateLevel.init.roomList) {
+					for (Fire f : r.spawners) {
+						for (Skull s2 : enemySkulls) {
+							boolean rayResult = s2.rayCastSkull(r, f);
+							System.out.println("ROOM INDEX OF FIRE" + r.roomNum);
+							if (rayResult) {
+								System.out.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+							}
+						}
+					}
 				}
 			}
 
@@ -972,8 +975,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 					e.detectPlayer();
 				}
 				if ((e.playerSighted && e.playerInRange)){
-					System.out.println(Gdx.graphics.getDeltaTime());
-					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 40)){
+					//System.out.println(Gdx.graphics.getDeltaTime());
+					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 50)){
 						System.out.println("THROWING BONE...");
 						e.timeSinceAlerted = 0f;
 						Vector2 vec1 = new Vector2(e.enemyBody.getPosition());
@@ -1235,21 +1238,23 @@ public class DungeonCrawler extends ApplicationAdapter {
 						enemy.tmp4.set((Vector2) enemy.playerDetectionRay.end);
 						enemy.shapeRenderer.line(enemy.tmp3, enemy.tmp4);
 					}
-
-					/*
-					if (playerSighted) {
-						Ray<Vector2>[] rays2 = enemy.rayConfigurations2[0].getRays();
-						for (int i = 0; i < rays2.length; i++) {
-							Ray<Vector2> ray = rays2[i];
-							enemy.tmp.set(ray.start);
-							enemy.tmp2.set(ray.end);
-							enemy.shapeRenderer.line(enemy.tmp, enemy.tmp2);
-						}
-					}
-
-					 */
 					enemy.shapeRenderer.end();
 				}
+				for (Skull s : enemySkulls) {
+					if (s.skullCreated) {
+						s.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+						s.shapeRenderer.setProjectionMatrix(camera.combined);
+						s.shapeRenderer.setColor(1, 0, 0, 1);
+
+						s.tmp.set((Vector2) s.respawnDetectionRay.start);
+						s.tmp2.set((Vector2) s.respawnDetectionRay.end);
+						s.shapeRenderer.line(s.tmp, s.tmp2);
+
+						s.shapeRenderer.end();
+					}
+				}
+
+
 				b2dr.render(world, camera.combined);
 
 				//TODO Add debug button to Scene

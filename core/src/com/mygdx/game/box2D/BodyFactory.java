@@ -37,7 +37,7 @@ public class BodyFactory {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(x + 8, y + 4);
+        bodyDef.position.set(x + 8, y + 3);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
@@ -268,7 +268,7 @@ public class BodyFactory {
         enemyShape.setRadius(r);
         Fixture enemyDetectionHitbox = body.createFixture(enemyShape, 1.0f);
         enemyShape.dispose();
-        enemyDetectionHitbox.setUserData("Proximity");
+        enemyDetectionHitbox.setUserData("Spawner");
         enemyDetectionHitbox.setSensor(true);
         return enemyDetectionHitbox;
     }

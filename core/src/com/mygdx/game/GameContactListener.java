@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.ai.StandaloneFileSystem;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.entity.behaviours.fsm.EnemySkull;
 import com.mygdx.game.entity.behaviours.fsm.EnemySkullState;
@@ -28,6 +29,9 @@ public class GameContactListener implements ContactListener {
         //TODO: finish switch statement - ~40% done
         switch (faAsString) {
             case "Skull":
+                if (fbAsString == "Skull") {
+                    System.out.println("WAWAWAWAWAWAWAWAWAWAWAWA");
+                }
                 /*
                 if (fbAsString == "Skull") {
                     //TODO Yeah this doesn't work. Bodies don't actually collide with other bodies when they are added to the world

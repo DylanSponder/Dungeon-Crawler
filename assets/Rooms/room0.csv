@@ -3,7 +3,7 @@ lw,fcol4,fpot,fped1fire,fpot2,fcol4,fped1fire,f,f,fped1fire,fcol4,fpot2,fped1fir
 torl,fcol7,f,f,f,fcol7,f,f,f,f,fcol7,f,f,f,fcol7,torr
 dlu,f,f,f,f,f,f,f,f,f,f,f,f,f,f,dru
 doorul,f,f,f,f,f,f,f,f,f,f,f,f,f,f,doorur
-doorll,f,f,f,f,f,f,f,f,f,f,f,f,f,f,doorlr
+doorll,f,f,f,f,f,f,f,f,f,f,fped1fireb,f,f,f,doorlr
 dll,f,f,ftuto,f,f,f,f,f,f,f,f,f,f,f,drl
 torl,fcol11,f,f,f,fcol10fire,f,f,f,f,fcol10fire,f,f,f,fcol11,torr
 lw,fcol4,f,fenemy,f,fcol4,f,f,f,f,fcol4,f,f,f,fcol4,rw

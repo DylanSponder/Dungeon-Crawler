@@ -207,26 +207,21 @@ public class EnemySkull {
     public RaycastObstacleAvoidance detectPlayer(){
         if (this.rayCastable) {
 
-
         Vector2 translatedCoords = new Vector2();
         translatedCoords.x = this.enemyAI.getPosition().x;
         translatedCoords.y = this.enemyAI.getPosition().y;
 
-
-
         //Ray<Vector2> ray = new Ray<>(enemyBody.getPosition(),player.playerBody.getPosition());
-
 
             playerDetectionRay = new Ray<>(translatedCoords,player.playerBody.getPosition());
 
             world.rayCast((fixture, point, normal, fraction) -> {
 
-
-                        //
                         boolean sighted = false;
 
                         if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody && fixture.getBody().getUserData() != "Skull") {
                             //sighted = true;
+                            //System.out.println(fixture.getBody().getUserData());
                             sightCounter = 0;
                             playerSighted = false;
                             return 0;
@@ -242,8 +237,26 @@ public class EnemySkull {
                                 System.out.println("FIXTURE USER DATA " + fixture.getUserData());
                                 System.out.println("BODY USER DATA " + fixture.getUserData());
                                 //System.out.println("NOT A PLAYER BUT DYNAMIC");
-                                return fraction;
-                            } else if (fixture.getBody().getUserData() == "Player") {
+                                return 0;
+
+                            }
+                            else if (fixture.getBody().getUserData() == "Bone"
+                            ||        fixture.getUserData() == "Proximity"
+                            ||        fixture.getUserData() == "UpArrow"
+                            ||        fixture.getUserData() == "DownArrow"
+                            ||        fixture.getUserData() == "LeftArrow"
+                            ||        fixture.getUserData() == "RightArrow"
+                            ||        fixture.getUserData() == "UpSword"
+                            ||        fixture.getUserData() == "DownSword"
+                            ||        fixture.getUserData() == "LeftSword"
+                            ||        fixture.getUserData() == "RightSword"
+                            ) {
+                                return 1;
+                            }
+
+                            else if (fixture.getBody().getUserData() == "Player"
+
+                            ) {
                                 sightCounter++;
                                 //number of successful ray hits on the player - more for slower detection
                                 if (sightCounter > 10) {
@@ -263,8 +276,6 @@ public class EnemySkull {
                     },
                     translatedCoords, player.playerBody.getPosition());
         }
-
-
         return raycastPlayerDetectionSB;
     }
 
