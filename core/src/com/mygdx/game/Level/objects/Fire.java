@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.box2D.BodyFactory;
 
@@ -18,6 +19,7 @@ public class Fire {
     public World world;
     public ArrayList<Fire> fires;
     public Body fireBody;
+    public Fixture fireSpawnerBody;
     public RayHandler rayHandler;
     public boolean extinguish, smoking, active;
     public PointLight fireLight;
@@ -49,6 +51,14 @@ public class Fire {
 
             fireBody.setUserData("Fire");
         }
+
+        if (type == 2){
+
+            BodyFactory bf = new BodyFactory();
+
+            fireSpawnerBody = bf.createSpawnerDetectionRadius(fireBody, 60f);
+
+        }
         //ConeLight fireLight2 = new ConeLight(rayHandler, 400, new Color(0.25f,0.20f,0,0.85f),70,fireX+8,fireY+16,270,70);
     }
 
@@ -57,8 +67,8 @@ public class Fire {
             batch.draw(currentFrame, x, y);
     }
 
-    public void spawnEnemy(float time, int enemyType) {
-        //spawn an enemy at the fires highest Y value
+    public void respawnEnemy(float time, int enemyType) {
+        //respawn an enemy at the nearest Skull, then remove the Skull
 
 
 
