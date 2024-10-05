@@ -49,6 +49,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private String playerDirection;
 	private boolean playerPaused, playerMeleeAttacking, playerRangedAttacking;
 	private Body sword, arrowBody;
+  public boolean canPurchase;
 	private Arrow arrow;
 	public ArrayList<Arrow> arrows;
 	public static ArrayList<Body> arrowBodiesCollided, boneBodiesCollided, skullBodiesDestroyed, deadEnemyBodies;
@@ -455,16 +456,16 @@ public class DungeonCrawler extends ApplicationAdapter {
 				if (debug) {
 
 					// (For Debugging) Add potion
-					if (keycode == 16) {
+					if (keycode == Keys.NUM_9) {
 						hud.inventory.addPotion();
 					}
 
 					// (For Debugging) Damage player
-					if (keycode == 7) {
+					if (keycode == Keys.NUM_0) {
 						hud.healthBar.LoseHealth(0.5f);
 					}
 
-					if (keycode == 9) {
+					if (keycode == Keys.NUM_2) {
 						camera.zoom = 1f;
 					}
 
