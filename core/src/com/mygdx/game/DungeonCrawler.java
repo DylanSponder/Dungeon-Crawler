@@ -43,7 +43,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch;
 	public static World world;
-	public static boolean debug = true;
+	public static boolean debug = false;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -56,11 +56,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public ArrayMap<Body, Skull> skullArrayMap;
 	public static ArrayMap<Body, Bone> boneArrayMap;
 	public ArrayMap<Body, Potion> potionArrayMap;
+	public ArrayMap<Body, Fire> respawnFireMap;
 	public ArrayMap<Body, Pot> potArrayMap;
-	public boolean reversedArrowMap, reversedSkullMap, reversedPotMap, reversedPotionMap;
+	public boolean reversedArrowMap, reversedSkullMap, reversedPotMap, reversedPotionMap, reversedRespawnFireMap;
 	private Fixture swordHitbox, arrowHitbox;
 	public static ArrayList<EnemySkull> enemies;
 	public static ArrayList<Skull> enemySkulls, brokenSkulls;
+	public static ArrayList<Fire> extinguishedRespawnFires;
 	public static ArrayList<Bone> bones;
 	public static ArrayList<Shopkeeper> shopkeepers;
 	public static ArrayList<Lock> locks;
@@ -131,6 +133,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		potions = new ArrayList<>();
 		columns = new ArrayList<>();
 		fires = new ArrayList<>();
+		extinguishedRespawnFires = new ArrayList<>();
 		//columnTops = new ArrayList<>();
 		//columnStems = new ArrayList<>();
 		//columnBases = new ArrayList<>();
@@ -266,9 +269,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 		boneArrayMap = new ArrayMap<Body, Bone>();
 		arrows = new ArrayList<Arrow>();
 		potionArrayMap = new ArrayMap<Body, Potion>();
+		respawnFireMap = new ArrayMap<Body, Fire>();
 
 		//create an input processor to handle single input events - see inputUpdate() for held down inputs
-		camera.zoom = 0.75f;
+		camera.zoom = 0.60f;
 		Gdx.input.setInputProcessor(new GameInputProcessor() {
 			@Override
 			public boolean scrolled(float amountX, float amountY) {
@@ -742,19 +746,78 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 				if (!s.skullCreated) {
 					skullArrayMap.put(s.createSkull(skullArrayMap), s);
+					s.room = player.currentRoom;
 				}
-				for (Room r : GenerateLevel.init.roomList) {
-					for (Fire f : r.spawners) {
-						for (Skull s2 : enemySkulls) {
-							boolean rayResult = s2.rayCastSkull(r, f);
-							System.out.println("ROOM INDEX OF FIRE" + r.roomNum);
-							if (rayResult) {
-								System.out.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+
+			}
+
+		//for (Room r : GenerateLevel.init.roomList) {
+			for (Skull s : enemySkulls) {
+				if (!GenerateLevel.init.roomList.get(s.room).spawners.isEmpty()) {
+					for (Fire f : GenerateLevel.init.roomList.get(player.currentRoom).spawners) {
+						System.out.println(GenerateLevel.init.roomList.get(player.currentRoom).index);
+						if (s.skullCreated) {
+							boolean rayResult = s.rayCastSkull(GenerateLevel.init.roomList.get(player.currentRoom), f);
+							//System.out.println("ROOM INDEX OF FIRE" + GenerateLevel.init.roomList.get(player.currentRoom).index);
+							if (rayResult && !s.resurrecting && f.active) {
+								System.out.println("Resurrecting dead enemy");
+								Fire respawnFire = new Fire(world, rayHandler, s.skullX - 4, s.skullY - 8, false, 0f, 2);
+								respawnFire.createFire(new Color(0,0,1f,0.6f), 15);
+								fires.add(respawnFire);
+								s.resurrecting = true;
+								Timer.schedule(new Timer.Task() {
+									@Override
+									public void run() {
+										System.out.println("RESPAWNING SKULL AFTER DELAY");
+										if (f.active) {
+											brokenSkulls.add(s);
+											EnemySkull respawnedEnemy = new EnemySkull(world, s.skullX, s.skullY);
+											DungeonCrawler.enemies.add(respawnedEnemy);
+											respawnedEnemy.rayCastable = true;
+										}
+									}
+								}, 5f);
+								extinguishedRespawnFires.add(respawnFire);
+								//respawnFire.fireLight = null;
+								//respawnFire.fireBody.setActive(false);
+
 							}
 						}
 					}
 				}
 			}
+			//}
+
+		if (!potionArrayMap.isEmpty()) {
+			for (OrderedMap.Entry<Body, Potion> potionEntry : potionArrayMap.entries()) {
+				Potion value = potionEntry.value;
+				//render each potion
+				potionBatch.begin();
+				if (value.type == 1) {
+					Potion.renderPotion(potionBatch, tx.potionSprite, potionEntry.key.getPosition().x, potionEntry.key.getPosition().y);
+				}
+				potionBatch.end();
+			}
+
+			if (!reversedPotionMap) {
+				potionArrayMap.reverse();
+				reversedPotionMap = true;
+			}
+
+			Iterator<Potion> potionIt = collectedPotions.iterator();
+			if (potionIt.hasNext()) {
+				Potion potion = potionIt.next();
+				if (collectedPotions.contains(potion)) {
+
+					hud.inventory.addPotion();
+					potion.potionLight.remove();
+					potions.remove(potion);
+					potionArrayMap.removeKey(potion.potionBody);
+					world.destroyBody(potion.potionBody);
+					potionIt.remove();
+				}
+			}
+		}
 
 			//destructible objects safe removers - Skulls - Arrows - Pots - Potions
 
@@ -1241,7 +1304,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					enemy.shapeRenderer.end();
 				}
 				for (Skull s : enemySkulls) {
-					if (s.skullCreated) {
+					if (s.skullCreated && !GenerateLevel.init.roomList.get(s.room).spawners.isEmpty()) {
 						s.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 						s.shapeRenderer.setProjectionMatrix(camera.combined);
 						s.shapeRenderer.setColor(1, 0, 0, 1);

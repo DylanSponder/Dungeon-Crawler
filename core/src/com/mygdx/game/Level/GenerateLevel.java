@@ -131,9 +131,11 @@ public class GenerateLevel {
 
                 //determines which pre-gen room is placed next in sequence
                 //rooms are numbered, room1 etc
-                newRoom.roomNum = random;
+                newRoom.roomNum = 2;
 
-                if (newRoom.roomNum == 5){
+
+                //I'm thinking shops are halfway through each level
+                if (newRoom.roomNum == 5) {
                     newRoom.isShop = true;
                     newRoom.unlockAllDoors(world, newRoom,false);
                 }
@@ -1250,7 +1252,9 @@ for (int i = 0; i < layerSize; i++) {
 
         Text shopMessage = new Text(DungeonCrawler.defaultFont,"WELCOME", Color.WHITE,true,1f,0.0045f,false);
         //TODO Add Sprite to Text for Shop Display
-        Text sellMessage = new Text(DungeonCrawler.defaultFont,"BUY POTION", Color.WHITE,true,1f,0.0045f,false);
+
+        Text sellMessage = new Text(DungeonCrawler.defaultFont,"BUY POTION", Color.WHITE,false,1f,0.0045f,false);
+
         shopMessage.textX = ((roomX + i) * 16) + 16 * 16;
         shopMessage.textY = levelY * 16 + Gdx.graphics.getHeight() / 30 - 1 - 32;
         sellMessage.textX = ((roomX + i) * 16) + 16 * 16;

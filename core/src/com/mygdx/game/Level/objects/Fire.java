@@ -50,15 +50,16 @@ public class Fire {
             fireBody = bodyFactory.createFireBody(world, fireX, fireY);
 
             fireBody.setUserData("Fire");
+            if (type == 2){
+
+                BodyFactory bf = new BodyFactory();
+
+                fireSpawnerBody = bf.createSpawnerDetectionRadius(fireBody, 60f);
+
+            }
         }
 
-        if (type == 2){
 
-            BodyFactory bf = new BodyFactory();
-
-            fireSpawnerBody = bf.createSpawnerDetectionRadius(fireBody, 60f);
-
-        }
         //ConeLight fireLight2 = new ConeLight(rayHandler, 400, new Color(0.25f,0.20f,0,0.85f),70,fireX+8,fireY+16,270,70);
     }
 

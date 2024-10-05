@@ -61,7 +61,10 @@ public class GameContactListener implements ContactListener {
             case "Fire":
                 //System.out.println(faAsString + " " + fbAsString);
                 if ((fb.getUserData() != "Proximity" && fb.getBody().getUserData() != "Enemy")
-                        && fb.getBody().getUserData() != "Player") {
+                        && fb.getBody().getUserData() != "Player"
+                        && fb.getBody().getUserData() != "Bone"
+                ) {
+                    System.out.println("THIS IS A TEST FOR RESPAWNING ENEMIES" + fbAsString);
                     for (Fire f : fires) {
                         if (f.extinguish) {
                             if (f.fireBody == fa.getBody()) {

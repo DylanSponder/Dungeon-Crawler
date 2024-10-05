@@ -300,8 +300,8 @@ public class CreateAssets {
         //0.0651f
 
         level1Track.play();
-        level1Track.setLooping(true);
-        level1Track.setVolume(0.5f);
+        //level1Track.setLooping(true);
+        level1Track.setVolume(0.3f);
 
         roomMiddleFloorTexture.setRegion(96, 16, 16, 16);
         roomTopLeftWallTexture.setRegion(0, 0, 16, 16);

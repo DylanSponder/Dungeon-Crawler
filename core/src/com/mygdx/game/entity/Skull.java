@@ -33,6 +33,8 @@ public class Skull {
     public Vector2 tmp2 = new Vector2();
     public boolean rayCastable, rayResult;
     public Ray respawnDetectionRay;
+    public int room;
+    public boolean resurrecting;
 
     public Skull(World world, float x, float y) {
         this.world = world;
@@ -44,6 +46,8 @@ public class Skull {
     }
 
     public Body createSkull(ArrayMap<Body, Skull> skullArrayMap) {
+
+        this.resurrecting = false;
 
         shapeRenderer = new ShapeRenderer();
         Timer.schedule(new Timer.Task() {
@@ -99,10 +103,15 @@ public class Skull {
                 System.out.println(fixture.getUserData());
                 if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody){
                     System.out.println("STATIC");
-                    System.out.println(fixture.getBody().getUserData());
-                    System.out.println(fixture.getUserData());
-                    if (fixture.getUserData() == "Spawner") {
+
+                    if (fixture.getUserData() == "Spawner" || fixture.getBody().getUserData() == "Spawner") {
+
+                        return 0;
+                    }
+                    else if (fixture.getUserData() == "Fire" || fixture.getBody().getUserData() == "Fire") {
                         rayResult = true;
+
+                        return 1;
                     }
 
                 } else
@@ -112,7 +121,7 @@ public class Skull {
 
                 }
                 return 0;
-            },translatedCoords, player.playerBody.getPosition());
+            },translatedCoords, fire.fireBody.getPosition());
 
         return rayResult;
     }

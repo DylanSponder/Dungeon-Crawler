@@ -266,11 +266,11 @@ public class BodyFactory {
     public Fixture createSpawnerDetectionRadius(Body body, float r){
         CircleShape enemyShape = new CircleShape();
         enemyShape.setRadius(r);
-        Fixture enemyDetectionHitbox = body.createFixture(enemyShape, 1.0f);
+        Fixture spawner = body.createFixture(enemyShape, 0.0f);
         enemyShape.dispose();
-        enemyDetectionHitbox.setUserData("Spawner");
-        enemyDetectionHitbox.setSensor(true);
-        return enemyDetectionHitbox;
+        spawner.setUserData("Spawner");
+        spawner.setSensor(true);
+        return spawner;
     }
 
     public Body createShopBody(World world, float x, float y) {
