@@ -6,13 +6,9 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
-import com.mygdx.game.level.objects.Item;
 import com.mygdx.game.level.objects.Text;
 
 import java.util.ArrayList;
-
-import static com.mygdx.game.DungeonCrawler.messages;
-import static com.mygdx.game.DungeonCrawler.shopkeepers;
 
 public class Shopkeeper {
     public Body shopBody, shopDetectionBody, shopSellBody;
@@ -65,6 +61,28 @@ public class Shopkeeper {
                 this.inventory.add(t);
 
             }
+            case "SHIELD": {
+                System.out.println("SHIELD ADDED TO THE SHOPKEEPER INVENTORY");
+                String msg = "BUY SHIELD HERE";
+                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false);
+                t.textX = this.posX;
+                t.textY = this.posY;
+                // DungeonCrawler.messages.add(t);
+                //this.inventory.add()
+                this.inventory.add(t);
+
+            }
+            case "GREEKFIRE": {
+                System.out.println("GREEKFIRE ADDED TO THE SHOPKEEPER INVENTORY");
+                String msg = "BUY GREEKFIRE HERE";
+                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false);
+                t.textX = this.posX;
+                t.textY = this.posY;
+                // DungeonCrawler.messages.add(t);
+                //this.inventory.add()
+                this.inventory.add(t);
+
+            }
         }
         return inventory.get(0);
      // this.inventory.add(item);
@@ -72,7 +90,7 @@ public class Shopkeeper {
 
     public void ListStock() {
       for (int i = 0; i < inventory.size(); i++) {
-          System.out.println("SHWOING STOCK");
+        this.inventory.get(i).textY = (inventory.get(i).textY) + i * 16;
         this.inventory.get(i).showing = true;
       }
     }
