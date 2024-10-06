@@ -39,11 +39,11 @@ import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.InitLevel;
 
 public class DungeonCrawler extends ApplicationAdapter {
-	private SpriteBatch playerBatch, arrowBatch, enemyBatch, potBatch, hudBatch, tutoBatch, fontBatch;
+	private SpriteBatch playerBatch, arrowBatch, enemyBatch, potBatch, hudBatch, tutoBatch, fontBatch, inventoryBatch;
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch;
 	public static World world;
-	public static boolean debug = false;
+	public static boolean debug = true;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -83,7 +83,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static RayHandler rayHandler;
 	private PointLight playerTorch;
 	private BitmapFont.BitmapFontData bmfData;
-	public static BitmapFont defaultFont;
+	public static BitmapFont defaultFont, defaultFont2;
 	public static ArrayList<Text> messages;
 	public AssetManager assetManager;
 	public float stateTime, stateTime2, stateTime3;
@@ -115,6 +115,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		pedestalBatch = new SpriteBatch();
 		fireBatch = new SpriteBatch();
 		fontBatch = new SpriteBatch();
+		inventoryBatch = new SpriteBatch();
 		reversedArrowMap = false;
 		reversedSkullMap = false;
 		reversedPotMap = false;
@@ -173,6 +174,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 
 		defaultFont = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.fnt"),
+				Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.png"), false);
+
+		defaultFont2 = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.fnt"),
 				Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.png"), false);
 
 		Color c = new Color();
@@ -1269,12 +1273,26 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			fontBatch.begin();
 			for (Text t : messages) {
-
-				//defaultFont.draw(fontBatch,t.message,player.playerBody.getPosition().x, player.playerBody.getPosition().y);
-				//defaultFont.draw(fontBatch,t.message,t.textX, t.textY);
-					FontController.drawFont(fontBatch, defaultFont, t.textX, t.textY, t);
+				if (t.showing) {
+					//defaultFont.draw(fontBatch,t.message,player.playerBody.getPosition().x, player.playerBody.getPosition().y);
+					//defaultFont.draw(fontBatch,t.message,t.textX, t.textY);
+					FontController.drawFadingFont(fontBatch, defaultFont, t.textX, t.textY, t);
+				}
 			}
 			fontBatch.end();
+
+			inventoryBatch.begin();
+			for (Shopkeeper s : shopkeepers) {
+				for (Text t2 : s.inventory) {
+					if (t2.showing) {
+
+						//defaultFont.draw(fontBatch,t.message,player.playerBody.getPosition().x, player.playerBody.getPosition().y);
+						//defaultFont.draw(fontBatch,t.message,t.textX, t.textY);
+						FontController.drawFont(inventoryBatch, defaultFont2, t2.textX, t2.textY, t2);
+					}
+				}
+			}
+			inventoryBatch.end();
 
 			//toggle to enable or disable visible collision boxes
 			if (debug) {
@@ -1346,6 +1364,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			pedestalBatch.setProjectionMatrix(camera.combined);
 			fireBatch.setProjectionMatrix(camera.combined);
 			fontBatch.setProjectionMatrix(camera.combined);
+			inventoryBatch.setProjectionMatrix(camera.combined);
 			hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
 			hud.stage.draw();
 	}

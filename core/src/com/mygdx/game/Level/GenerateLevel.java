@@ -1250,19 +1250,27 @@ for (int i = 0; i < layerSize; i++) {
     case "shop":
         currentCell = init.cr.middleFloorTile;
 
-        Text shopMessage = new Text(DungeonCrawler.defaultFont,"WELCOME", Color.WHITE,true,1f,0.0045f,false);
+        Text shopMessage = new Text(DungeonCrawler.defaultFont,"WELCOME", Color.WHITE,true,1f,0.0090f,false);
         //TODO Add Sprite to Text for Shop Display
-        Text sellMessage = new Text(DungeonCrawler.defaultFont,"BUY POTION", Color.WHITE,true,1f,0.0045f,false);
+        //Text sellMessage = new Text(DungeonCrawler.defaultFont,"BUY POTION", Color.WHITE,true,1f,0.0045f,false);
         shopMessage.textX = ((roomX + i) * 16) + 16 * 16;
         shopMessage.textY = levelY * 16 + Gdx.graphics.getHeight() / 30 - 1 - 32;
-        sellMessage.textX = ((roomX + i) * 16) + 16 * 16;
-        sellMessage.textY = levelY * 16 + Gdx.graphics.getHeight() / 30 - 1;
+        //sellMessage.textX = ((roomX + i) * 16) + 16 * 16;
+        //sellMessage.textY = levelY * 16 + Gdx.graphics.getHeight() / 30 - 1;
         messages.add(shopMessage);
-        messages.add(sellMessage);
+        //messages.add(sellMessage);
         Shopkeeper shopkeeper = new Shopkeeper(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,shopMessage);
-        shopkeeper.Stock("POTION");
+        Text t3 = shopkeeper.Stock("POTION");
         shopkeeper.messages.add(shopMessage);
-        shopkeeper.messages.add(sellMessage);
+        //shopkeeper.messages.add(shopkeeper.inventory.get(0));
+        t3.textX = shopkeeper.posX;
+        t3.textY = shopkeeper.posY;
+        //t3.fade = false;
+        System.out.println(shopkeeper.inventory.get(0).message);
+        //messages.add(shopkeeper.inventory.get(0));
+        //shopkeeper.messages.add(shopkeeper.inventory.get(0).listing);
+        //messages.add(shopkeeper.inventory.get(0).listing);
+        //shopkeeper.messages.add(sellMessage);
         DungeonCrawler.shopkeepers.add(shopkeeper);
 
 

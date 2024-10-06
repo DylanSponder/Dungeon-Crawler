@@ -161,9 +161,24 @@ public class GameContactListener implements ContactListener {
                 else if (collidee.getUserData() == "ShopSell"){
                     for (Shopkeeper shop : shopkeepers){
                         if (collidee.getBody() == shop.shopBody){
-                            shop.message = shop.messages.get(1);
-                            shop.message.showing = true;
+                            //shop.message = shop.messages.get(1);
+                            //shop.message.showing = true;
+
                             shop.ListStock();
+
+                            System.out.println("HEY THE SHOP SELL RADIUS WORKS");
+
+                            /*
+                            for (int i = 0; i < shop.inventory.size(); i++) {
+                                shop.inventory.get(i).showing = true;
+                                shop.inventory.get(i).fade = false;
+                            }
+
+
+                             */
+
+
+
                         }
                     }
                 }
@@ -510,6 +525,17 @@ public class GameContactListener implements ContactListener {
 
         String faAsString = fa.getBody().getUserData().toString();
         String fbAsString = fb.getBody().getUserData().toString();
+
+        switch (faAsString) {
+            case "Player":
+                if (fb.getUserData() == "ShopSell") {
+                    for (Shopkeeper s : shopkeepers) {
+                        System.out.println("HEY THIS WORKS");
+                        s.HideStock();
+                    }
+                }
+                break;
+        }
 
         if (    (fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Enemy")
                 ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Player")

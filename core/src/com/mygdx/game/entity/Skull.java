@@ -99,8 +99,8 @@ public class Skull {
             //send a ray to each spawner, if it collides with the spawner radius, ignore.
 
             world.rayCast((fixture, point, normal, fraction) -> {
-                System.out.println(fixture.getBody().getUserData());
-                System.out.println(fixture.getUserData());
+                //System.out.println(fixture.getBody().getUserData());
+                //System.out.println(fixture.getUserData());
                 if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody){
                     System.out.println("STATIC");
 

@@ -299,7 +299,7 @@ public class CreateAssets {
 
         //0.0651f
 
-        level1Track.play();
+        //level1Track.play();
         //level1Track.setLooping(true);
         level1Track.setVolume(0.3f);
 
