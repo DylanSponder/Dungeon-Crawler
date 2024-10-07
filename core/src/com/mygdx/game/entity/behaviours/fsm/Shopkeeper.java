@@ -45,21 +45,21 @@ public class Shopkeeper {
         this.shopDetectionRadius.setUserData("ShopRadius");
     }
 
-    public Text Stock(String kind) {
-      Integer amount = this.inventory.size();
+    public Text Stock(String kind, int index, int amount) {
+      //Integer amount = this.inventory.size();
       // TODO Check precedence if buggy
       //Item item = new Item(amount, kind, this.shopBody.getPosition().x, this.shopBody.getPosition().y);
         switch (kind) {
             case "POTION": {
                 System.out.println("POTION ADDED TO THE SHOPKEEPER INVENTORY");
-                String msg = "BUY POTION HERE";
+                String msg = index + " BUY POTION HERE " + amount;
                 Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false);
                 t.textX = this.posX;
                 t.textY = this.posY;
                // DungeonCrawler.messages.add(t);
                 //this.inventory.add()
                 this.inventory.add(t);
-
+                break;
             }
             case "SHIELD": {
                 System.out.println("SHIELD ADDED TO THE SHOPKEEPER INVENTORY");
@@ -70,7 +70,7 @@ public class Shopkeeper {
                 // DungeonCrawler.messages.add(t);
                 //this.inventory.add()
                 this.inventory.add(t);
-
+                break;
             }
             case "GREEKFIRE": {
                 System.out.println("GREEKFIRE ADDED TO THE SHOPKEEPER INVENTORY");
@@ -81,7 +81,7 @@ public class Shopkeeper {
                 // DungeonCrawler.messages.add(t);
                 //this.inventory.add()
                 this.inventory.add(t);
-
+                break;
             }
         }
         return inventory.get(0);
@@ -101,7 +101,9 @@ public class Shopkeeper {
         }
     }
 
-    public void OrganiseStock() {}
+    public void OrganiseStock() {
+
+    }
 
     public void BuyItem(Integer itemNum) {
       // Remove(inventory, itemNum)
