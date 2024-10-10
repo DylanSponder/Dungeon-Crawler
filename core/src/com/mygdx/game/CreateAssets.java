@@ -204,8 +204,9 @@ public class CreateAssets {
     Sprite enemySprite = new Sprite(enemySkullTexture,0,0,16,16);
     Sprite enemyEyeSprite = new Sprite(enemyEyeTexture,0,0,16,16);
     //outline HUD sprites
+    public Sprite coinSprite = new Sprite(coinTexture, 10, 10);
     Sprite heartSprite = new Sprite(heartTexture, 16, 16);
-    Sprite potionSprite = new Sprite(potionTexture, 16, 16);
+    public Sprite potionSprite = new Sprite(potionTexture, 16, 16);
     Sprite shopkeeperSprite = new Sprite(shopkeeperTexture, 0,0, 16, 16);
     Sprite skullSprite = new Sprite(skullTexture, 176,64, 16, 16);
     Sprite damagedSkullSprite = new Sprite(skullTexture, 192,48, 16, 16);

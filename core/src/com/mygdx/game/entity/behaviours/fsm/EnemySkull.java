@@ -63,7 +63,7 @@ public class EnemySkull {
         BodyFactory bodyFactory = new BodyFactory();
         shapeRenderer = new ShapeRenderer();
 
-        alertMessage = new Text(DungeonCrawler.defaultFont,"!", Color.WHITE,true,1f,0.0045f,false);
+        alertMessage = new Text(DungeonCrawler.defaultFont,"!", Color.WHITE,true,1f,0.0045f,false, false, null, 0);
 
         rayCastable = false;
 
@@ -232,9 +232,11 @@ public class EnemySkull {
                                     && fixture.getUserData() != "Proximity"
                                     && fixture.getUserData() != "EnemyHitbox"
                                     && fixture.getUserData() != "Bone"
+                                    && fixture.getUserData() == "Spawner"
+                                    && fixture.getUserData() == "Fire"
                             ) {
-                                System.out.println("FIXTURE USER DATA " + fixture.getUserData());
-                                System.out.println("BODY USER DATA " + fixture.getUserData());
+                                //System.out.println("FIXTURE USER DATA " + fixture.getUserData());
+                                //System.out.println("BODY USER DATA " + fixture.getUserData());
                                 //System.out.println("NOT A PLAYER BUT DYNAMIC");
                                 return 0;
 
@@ -249,6 +251,8 @@ public class EnemySkull {
                             ||        fixture.getUserData() == "DownSword"
                             ||        fixture.getUserData() == "LeftSword"
                             ||        fixture.getUserData() == "RightSword"
+                            ||        fixture.getUserData() == "Spawner"
+                            ||        fixture.getUserData() == "Fire"
                             ) {
                                 return 1;
                             }

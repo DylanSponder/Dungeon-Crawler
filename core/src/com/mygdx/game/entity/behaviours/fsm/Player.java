@@ -27,6 +27,7 @@ public class Player {
     public boolean midAnimationFrame;
 
     public Fixture playerDetectionFixture;
+    public boolean buyingStock;
 
     public Player() {
         PLAYER_HEALTH = 12;

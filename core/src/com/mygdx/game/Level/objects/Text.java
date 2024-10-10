@@ -10,11 +10,11 @@ public class Text {
     public String message;
     public Color color;
     public boolean fade, showing, hasSprite;
-    public float fadeTime, fadeTiming, fadeOutSpeed;
+    public float fadeTime, fadeTiming, fadeOutSpeed, offset;
     public float textX, textY;
     public Sprite sprite;
 
-    public Text(BitmapFont font, String message, Color color, boolean fade, float fadeTiming, float fadeOutSpeed, boolean showing) {
+    public Text(BitmapFont font, String message, Color color, boolean fade, float fadeTiming, float fadeOutSpeed, boolean showing, boolean hasSprite, Sprite sprite, float spriteOffset) {
         this.font = font;
         this.message = message;
         this.color = color;
@@ -23,8 +23,11 @@ public class Text {
         this.fadeTiming = fadeTiming;
         this.fadeOutSpeed = fadeOutSpeed;
         this.showing = showing;
-        //this.sprite = sprite;
-        //this.hasSprite = hasSprite;
+        if (hasSprite) {
+            this.hasSprite = hasSprite;
+            this.sprite = sprite;
+            this.offset = spriteOffset;
+        }
     }
 
     public void createText(SpriteBatch fontBatch) {

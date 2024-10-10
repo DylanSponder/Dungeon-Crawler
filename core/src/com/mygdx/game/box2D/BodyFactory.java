@@ -276,7 +276,7 @@ public class BodyFactory {
     public Body createShopBody(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(x,y);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);

@@ -168,6 +168,8 @@ public class GameContactListener implements ContactListener {
 
                             System.out.println("HEY THE SHOP SELL RADIUS WORKS");
 
+                            player.buyingStock = true;
+
                             /*
                             for (int i = 0; i < shop.inventory.size(); i++) {
                                 shop.inventory.get(i).showing = true;

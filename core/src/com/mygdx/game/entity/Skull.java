@@ -102,7 +102,7 @@ public class Skull {
                 //System.out.println(fixture.getBody().getUserData());
                 //System.out.println(fixture.getUserData());
                 if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody){
-                    System.out.println("STATIC");
+                    //System.out.println("STATIC");
 
                     if (fixture.getUserData() == "Spawner" || fixture.getBody().getUserData() == "Spawner") {
 

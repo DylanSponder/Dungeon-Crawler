@@ -43,7 +43,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch;
 	public static World world;
-	public static boolean debug = true;
+	public static boolean debug = false;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -184,7 +184,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//Text t =  new Text(defaultFont, "TEST MESSAGE", c, false);
 		//messages.add(t);
 
-		Text level1StartText =  new Text(defaultFont, "CLAY CATACOMBS", c, true, 10f, 1f, true);
+		Text level1StartText =  new Text(defaultFont, "CLAY CATACOMBS", c, true, 10f, 1f, true, false, null, 0);
 		//messages.add(level1StartText);
 		//0.045f
 
@@ -277,7 +277,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		respawnFireMap = new ArrayMap<Body, Fire>();
 
 		//create an input processor to handle single input events - see inputUpdate() for held down inputs
-		camera.zoom = 0.60f;
+
+
 		Gdx.input.setInputProcessor(new GameInputProcessor() {
 			@Override
 			public boolean scrolled(float amountX, float amountY) {
@@ -476,6 +477,19 @@ public class DungeonCrawler extends ApplicationAdapter {
 					if (keycode == 10) {
 						camera.zoom = 10f;
 					}
+				}
+				else {
+
+					if (keycode == Keys.NUM_1) {
+
+					}
+
+					if (keycode == Keys.NUM_2) {
+
+					}
+
+
+
 				}
 				// Use potion
 				if (keycode == 8) {
@@ -760,12 +774,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 			for (Skull s : enemySkulls) {
 				if (!GenerateLevel.init.roomList.get(s.room).spawners.isEmpty()) {
 					for (Fire f : GenerateLevel.init.roomList.get(player.currentRoom).spawners) {
-						System.out.println(GenerateLevel.init.roomList.get(player.currentRoom).index);
+						//System.out.println(GenerateLevel.init.roomList.get(player.currentRoom).index);
 						if (s.skullCreated) {
 							boolean rayResult = s.rayCastSkull(GenerateLevel.init.roomList.get(player.currentRoom), f);
 							//System.out.println("ROOM INDEX OF FIRE" + GenerateLevel.init.roomList.get(player.currentRoom).index);
 							if (rayResult && !s.resurrecting && f.active) {
-								System.out.println("Resurrecting dead enemy");
+								//System.out.println("Resurrecting dead enemy");
 								Fire respawnFire = new Fire(world, rayHandler, s.skullX - 4, s.skullY - 8, false, 0f, 2);
 								respawnFire.createFire(new Color(0,0,1f,0.6f), 15);
 								fires.add(respawnFire);
@@ -773,7 +787,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 								Timer.schedule(new Timer.Task() {
 									@Override
 									public void run() {
-										System.out.println("RESPAWNING SKULL AFTER DELAY");
+										//System.out.println("RESPAWNING SKULL AFTER DELAY");
 										if (f.active) {
 											brokenSkulls.add(s);
 											EnemySkull respawnedEnemy = new EnemySkull(world, s.skullX, s.skullY);
@@ -1045,7 +1059,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				if ((e.playerSighted && e.playerInRange)){
 					//System.out.println(Gdx.graphics.getDeltaTime());
 					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 50)){
-						System.out.println("THROWING BONE...");
+						//System.out.println("THROWING BONE...");
 						e.timeSinceAlerted = 0f;
 						Vector2 vec1 = new Vector2(e.enemyBody.getPosition());
 						Vector2 vec2 = new Vector2(player.playerBody.getPosition());
@@ -1060,7 +1074,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						x = x * MathUtils.radiansToDegrees;
 						//float result = (e.enemyAI.getOrientation() / (x * MathUtils.PI));
 						//result = result - MathUtils.PI / 2;
-						System.out.println(x);
+						//System.out.println(x);
 
 						Bone bone = new Bone(world, e.enemyBody, e.enemyBody.getPosition().x, e.enemyBody.getPosition().y, false, 0, true, x);
 						bone.createBone();
@@ -1288,6 +1302,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 						//defaultFont.draw(fontBatch,t.message,player.playerBody.getPosition().x, player.playerBody.getPosition().y);
 						//defaultFont.draw(fontBatch,t.message,t.textX, t.textY);
+
 						FontController.drawFont(inventoryBatch, defaultFont2, t2.textX, t2.textY, t2);
 					}
 				}
@@ -1386,6 +1401,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//rayHandler.setCombinedMatrix(camera.combined);
 		rayHandler.update();
 		rayHandler.setCombinedMatrix(camera);
+
+		if (!GenerateLevel.init.roomList.get(player.currentRoom).isShop && !debug) {
+			camera.zoom = 0.60f;
+		}
+		else if (!debug){
+			camera.zoom = 1f;
+		}
 
 		//player.castRay();
 
@@ -1503,8 +1525,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		vec.nor();
 
 		//multiply to get desired speed
-		PLAYER_HORIZONTAL_SPEED = vec.x * 65f;
-		PLAYER_VERTICAL_SPEED = vec.y * 65f;
+		PLAYER_HORIZONTAL_SPEED = vec.x * 60f;
+		PLAYER_VERTICAL_SPEED = vec.y * 60f;
 
 		player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
 	}
