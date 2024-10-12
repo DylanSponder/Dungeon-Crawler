@@ -8,7 +8,7 @@ public class SetRoomXandY {
 
     public int checkRoomForIntersection(boolean startingRoom, int doorDirection, int roomX, int levelY, int previousRoomSize, int currentRoomSize, int previousLongestRow, int longestRow) {
         if (!startingRoom) {
-            //1 is up, 2 is right, 3 is down, 4 is left
+            // 1 is up, 2 is right, 3 is down, 4 is left
             if (doorDirection == 1){
                 GenerateLevel.testLevelY = GenerateLevel.testLevelY + currentRoomSize + 4;
             }
@@ -29,7 +29,7 @@ public class SetRoomXandY {
 
     public int setNextRoomDimensions(int doorDirection, int roomX, int levelY, int previousRoomSize, int currentRoomSize, int previousLongestRow, int longestRow){
         //room placement directions
-        // - 1 is up, 2 is right, 3 is down, 4 is left
+        // 1 is up, 2 is right, 3 is down, 4 is left
         if (doorDirection == 1){
             GenerateLevel.levelY = levelY + (previousRoomSize + currentRoomSize);
         }

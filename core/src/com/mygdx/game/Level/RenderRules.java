@@ -22,6 +22,14 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "middleFloorTile");
                         index++;
                         break;
+                    case "f2":
+                        drawableLevelLayer.add(index, "middleFloor2Tile");
+                        index++;
+                        break;
+                    case "f3":
+                        drawableLevelLayer.add(index, "middleFloor3Tile");
+                        index++;
+                        break;
                     case "tlw":
                         drawableLevelLayer.add(index, "topLeftWallTile");
                         index++;
@@ -208,7 +216,8 @@ public class RenderRules {
                             index++;
                             break;
                         }
-                        else if (levelLayer.get(index).matches("[f].+")) {
+                        else if (levelLayer.get(index).matches("[f].+")
+) {
                             StringBuffer sb = new StringBuffer(i);
                             sb.delete(0, 1);
                             String str = sb.toString();
@@ -220,6 +229,7 @@ public class RenderRules {
                                         break;
                             }
                             switch (str) {
+
                                     //enemy
                                 case "enemy":
                                     drawableLevelLayer.add(index, "enemy");
@@ -481,6 +491,12 @@ public class RenderRules {
             // (int i = 0; i < layerSize; i++)
             switch (levelLayer.get(index)) {
                 case "f":
+                    index++;
+                    break;
+                case "f2":
+                    index++;
+                    break;
+                case "f3":
                     index++;
                     break;
                 case "tlw":

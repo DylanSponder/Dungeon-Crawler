@@ -41,6 +41,8 @@ public class InitLevel {
 
         //sets tiles to their appropriate texture
         cr.middleFloorTile.setTile(new StaticTiledMapTile(tx.roomMiddleFloorTexture));
+        cr.middleFloor2Tile.setTile(new StaticTiledMapTile(tx.roomMiddleFloor2Texture));
+        cr.middleFloor3Tile.setTile(new StaticTiledMapTile(tx.roomMiddleFloor3Texture));
         cr.topLeftWallTile.setTile(new StaticTiledMapTile(tx.roomTopLeftWallTexture));
         cr.topWallTile.setTile(new StaticTiledMapTile(tx.roomTopWallTexture));
         cr.topRightWallTile.setTile(new StaticTiledMapTile(tx.roomTopRightWallTexture));

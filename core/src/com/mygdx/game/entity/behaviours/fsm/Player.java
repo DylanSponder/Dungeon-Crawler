@@ -22,6 +22,7 @@ public class Player {
     public float PLAYER_X = 0f, PLAYER_Y = 0f;
 
     public static Body playerBody;
+    public Shopkeeper shopkeeper;
     public int currentRoom;
     public boolean touchingRoom;
     public boolean midAnimationFrame;

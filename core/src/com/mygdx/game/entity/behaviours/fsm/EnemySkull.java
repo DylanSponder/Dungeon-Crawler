@@ -214,11 +214,12 @@ public class EnemySkull {
 
             playerDetectionRay = new Ray<>(translatedCoords,player.playerBody.getPosition());
 
+
             world.rayCast((fixture, point, normal, fraction) -> {
 
                         boolean sighted = false;
 
-                        if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody && fixture.getBody().getUserData() != "Skull") {
+                        if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody && fixture.getBody().getUserData() != "Skull" && fixture.getBody().getUserData() != "Fire") {
                             //sighted = true;
                             //System.out.println(fixture.getBody().getUserData());
                             sightCounter = 0;
@@ -232,34 +233,17 @@ public class EnemySkull {
                                     && fixture.getUserData() != "Proximity"
                                     && fixture.getUserData() != "EnemyHitbox"
                                     && fixture.getUserData() != "Bone"
-                                    && fixture.getUserData() == "Spawner"
-                                    && fixture.getUserData() == "Fire"
+
                             ) {
-                                //System.out.println("FIXTURE USER DATA " + fixture.getUserData());
-                                //System.out.println("BODY USER DATA " + fixture.getUserData());
+                                System.out.println("FIXTURE USER DATA " + fixture.getUserData());
+                                System.out.println("BODY USER DATA " + fixture.getUserData());
                                 //System.out.println("NOT A PLAYER BUT DYNAMIC");
                                 return 0;
 
                             }
-                            else if (fixture.getBody().getUserData() == "Bone"
-                            ||        fixture.getUserData() == "Proximity"
-                            ||        fixture.getUserData() == "UpArrow"
-                            ||        fixture.getUserData() == "DownArrow"
-                            ||        fixture.getUserData() == "LeftArrow"
-                            ||        fixture.getUserData() == "RightArrow"
-                            ||        fixture.getUserData() == "UpSword"
-                            ||        fixture.getUserData() == "DownSword"
-                            ||        fixture.getUserData() == "LeftSword"
-                            ||        fixture.getUserData() == "RightSword"
-                            ||        fixture.getUserData() == "Spawner"
-                            ||        fixture.getUserData() == "Fire"
-                            ) {
-                                return 1;
-                            }
 
-                            else if (fixture.getBody().getUserData() == "Player"
+                            else if (fixture.getBody().getUserData() == "Player") {
 
-                            ) {
                                 sightCounter++;
                                 //number of successful ray hits on the player - more for slower detection
                                 if (sightCounter > 10) {

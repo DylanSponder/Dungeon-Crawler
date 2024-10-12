@@ -5,6 +5,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class CreateCell {
     public TiledMapTileLayer.Cell middleFloorTile;
+    public TiledMapTileLayer.Cell middleFloor2Tile;
+    public TiledMapTileLayer.Cell middleFloor3Tile;
     public TiledMapTileLayer.Cell topLeftWallTile;
     public TiledMapTileLayer.Cell topWallTile;
     public TiledMapTileLayer.Cell topRightWallTile;
@@ -56,6 +58,8 @@ public class CreateCell {
 
     public void InitializeCells() {
         middleFloorTile = new TiledMapTileLayer.Cell();
+        middleFloor2Tile = new TiledMapTileLayer.Cell();
+        middleFloor3Tile = new TiledMapTileLayer.Cell();
         topLeftWallTile = new TiledMapTileLayer.Cell();
         topWallTile = new TiledMapTileLayer.Cell();
         topRightWallTile = new TiledMapTileLayer.Cell();

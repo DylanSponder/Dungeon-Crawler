@@ -39,7 +39,7 @@ public class Shopkeeper {
         this.shopDetectionRadius = bodyFactory.createShopDetectionRadius(shopBody, 70);
         this.shopDetectionRadius.setSensor(true);
 
-        this.shopSellRadius = bodyFactory.createShopDetectionRadius(shopBody, 40);
+        this.shopSellRadius = bodyFactory.createShopDetectionRadius(shopBody, 35);
         this.shopSellRadius.setSensor(true);
 
         this.message = shopMessage;

@@ -43,7 +43,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch;
 	public static World world;
-	public static boolean debug = false;
+	public static boolean debug = true;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -478,14 +478,17 @@ public class DungeonCrawler extends ApplicationAdapter {
 						camera.zoom = 10f;
 					}
 				}
-				else {
+				else if (player.buyingStock){
 
 					if (keycode == Keys.NUM_1) {
-
+						//player.shopkeeper.inventory.get(0).amount--
+						// if (!(player.shopkeeper.inventory.get(0).amount < 1)) {
+						//
+						// }
 					}
 
 					if (keycode == Keys.NUM_2) {
-
+						//player.shopkeeper.inventory;
 					}
 
 
@@ -989,13 +992,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 				obstacleBatch.begin();
 				switch (o.type){
 					case 1:
-						obstacleBatch.draw(tx.obstacle1Sprite, o.obBody.getPosition().x - 8f, o.obBody.getPosition().y - 7f, 16, 16);
+						obstacleBatch.draw(tx.obstacle1Sprite, o.obBody.getPosition().x - 8f, o.obBody.getPosition().y - 8f, 16, 16);
 						break;
 					case 2:
-						obstacleBatch.draw(tx.obstacle2Sprite, o.obBody.getPosition().x - 8f, o.obBody.getPosition().y - 7f, 16, 16);
+						obstacleBatch.draw(tx.obstacle2Sprite, o.obBody.getPosition().x - 8f, o.obBody.getPosition().y - 8f, 16, 16);
 						break;
 					case 3:
-						obstacleBatch.draw(tx.obstacle3Sprite, o.obBody.getPosition().x - 8f, o.obBody.getPosition().y - 7f, 16, 16);
+						obstacleBatch.draw(tx.obstacle3Sprite, o.obBody.getPosition().x - 8f, o.obBody.getPosition().y - 8f, 16, 16);
 						break;
 				}
 				obstacleBatch.end();
@@ -1403,7 +1406,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		rayHandler.setCombinedMatrix(camera);
 
 		if (!GenerateLevel.init.roomList.get(player.currentRoom).isShop && !debug) {
-			camera.zoom = 0.60f;
+			camera.zoom = 0.65f;
 		}
 		else if (!debug){
 			camera.zoom = 1f;

@@ -22,11 +22,11 @@ public class BodyFactory {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(x + 8, y + 10);
+        bodyDef.position.set(x + 8, y + 10f);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(4, 4);
+        shape.setAsBox(4.5f, 5f);
         Fixture fix = body.createFixture(shape, 1.0f);
         shape.dispose();
         fix.setSensor(true);
@@ -37,11 +37,11 @@ public class BodyFactory {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(x + 8, y + 3);
+        bodyDef.position.set(x + 8, y + 2);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(8, 3);
+        shape.setAsBox(8, 2f);
         body.createFixture(shape, 1.0f);
         shape.dispose();
         return body;
@@ -110,7 +110,7 @@ public class BodyFactory {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(x + 8f, y + 8f);
+        bodyDef.position.set(x + 8f, y + 9f);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         CircleShape shape = new CircleShape();
@@ -256,7 +256,7 @@ public class BodyFactory {
     public Fixture createEnemyDetectionRadius(Body body, float r){
         CircleShape enemyShape = new CircleShape();
         enemyShape.setRadius(r);
-        Fixture enemyDetectionHitbox = body.createFixture(enemyShape, 1.0f);
+        Fixture enemyDetectionHitbox = body.createFixture(enemyShape, 0.8f);
         enemyShape.dispose();
         enemyDetectionHitbox.setUserData("Proximity");
         enemyDetectionHitbox.setSensor(true);

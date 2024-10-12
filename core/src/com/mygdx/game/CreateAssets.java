@@ -42,6 +42,9 @@ public class CreateAssets {
     //public TextureRegion fontTexture = new TextureRegion(font,0,0,16,16);
 
     public TextureRegion roomMiddleFloorTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomMiddleFloor2Texture = new TextureRegion(roomBackground, 256, 32, 16, 16);
+    public TextureRegion roomMiddleFloor3Texture = new TextureRegion(roomBackground, 272, 32, 16, 16);
+
     public TextureRegion roomLeftWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomRightWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomTopWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
@@ -305,6 +308,9 @@ public class CreateAssets {
         level1Track.setVolume(0.3f);
 
         roomMiddleFloorTexture.setRegion(96, 16, 16, 16);
+        roomMiddleFloor2Texture.setRegion(256, 32, 16, 16);
+        roomMiddleFloor3Texture.setRegion(272, 32, 16, 16);
+
         roomTopLeftWallTexture.setRegion(0, 0, 16, 16);
         roomTopWallTexture.setRegion(48, 0, 16, 16);
         roomTopRightWallTexture.setRegion(64, 0, 16, 16);

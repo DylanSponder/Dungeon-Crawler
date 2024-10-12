@@ -130,13 +130,13 @@ public class GenerateLevel {
             if (i == 0){
                 newRoom.roomNum = 0;
             }
+
             else {
-                int random = (int) (Math.random() * /*upper limit->*/ 6 + 1);
+                int random = RandomInteger.randomInt(6, 1);
 
                 //determines which pre-gen room is placed next in sequence
                 //rooms are numbered, room1 etc
-                newRoom.roomNum = 5;
-
+                newRoom.roomNum = random;
 
                 //I'm thinking shops are halfway through each level
                 if (newRoom.roomNum == 5) {
@@ -829,6 +829,12 @@ for (int i = 0; i < layerSize; i++) {
         case "middleFloorTile":
             currentCell = init.cr.middleFloorTile;
             break;
+        case "middleFloor2Tile":
+            currentCell = init.cr.middleFloor2Tile;
+            break;
+        case "middleFloor3Tile":
+            currentCell = init.cr.middleFloor3Tile;
+            break;
         case "topLeftWallTile":
             currentCell = init.cr.topLeftWallTile;
             Body newTopLeftWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
@@ -1241,19 +1247,17 @@ for (int i = 0; i < layerSize; i++) {
             DungeonCrawler.enemies.add(enemy);
             break;
         case "shop":
-            currentCell = init.cr.middleFloorTile;
+            currentCell = init.cr.middleFloor3Tile;
 
             Text shopMessage = new Text(DungeonCrawler.defaultFont, "WELCOME!", Color.WHITE, true, 1f, 0.0200f, false, false, null, 0);
             //TODO Add Sprite to Text for Shop Display
             //Text sellMessage = new Text(DungeonCrawler.defaultFont,"BUY POTION", Color.WHITE,true,1f,0.0045f,false);
             speechMinX = -10;
             speechMaxX = 10;
-
             randomSpeechXOffset = (int) (Math.random() * (speechMaxX - speechMinX + 1)) + speechMinX;
 
             speechMinY = -10;
             speechMaxY = 10;
-
             randomSpeechYOffset = (int) (Math.random() * (speechMaxY - speechMinY + 1)) + speechMinY;
             shopMessage.textX = ((roomX + i) * 16) + 16 * 16 - 16 + randomSpeechXOffset;
             shopMessage.textY = levelY * 16 + Gdx.graphics.getHeight() / 30 - 1 + randomSpeechYOffset;
@@ -1262,25 +1266,19 @@ for (int i = 0; i < layerSize; i++) {
             messages.add(shopMessage);
             //messages.add(sellMessage);
             Shopkeeper shopkeeper = new Shopkeeper(DungeonCrawler.world, ((roomX + i) * 16) + 16.5f * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 8, shopMessage);
-
             invMin = 2;
             invMax = 4;
 
             invRandom = (int) (Math.random() * (invMax - invMin + 1)) + invMin;
 
-            System.out.println("INV RANDOM " + invRandom);
-
-
             for (int i2 = 0; i2 < invMax; i2++) {
 
             indexMin = 1;
             indexMax = 3;
-
             randomIndex = (int) (Math.random() * (indexMax - indexMin + 1)) + indexMin;
 
             amountMin = 1;
             amountMax = 3;
-
             amountIndex = (int) (Math.random() * (amountMax - amountMin + 1)) + amountMin;
 
             switch (randomIndex) {
