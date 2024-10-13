@@ -17,7 +17,7 @@ public class Inventory extends Table {
   int Capacity;
   public int Size;
 
-  Inventory(Sprite potionSymbol, Sprite emptySlotSymbol, int capacity, int cooldown) {
+  public Inventory(Sprite potionSymbol, Sprite emptySlotSymbol, int capacity, int cooldown) {
     Cooldown = cooldown;
     potion = new TextureRegionDrawable(potionSymbol);
     emptySlot = new TextureRegionDrawable(emptySlotSymbol);

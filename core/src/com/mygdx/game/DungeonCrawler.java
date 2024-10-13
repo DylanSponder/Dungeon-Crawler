@@ -43,7 +43,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch;
 	public static World world;
-	public static boolean debug = true;
+	public static boolean debug = false;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -492,7 +492,33 @@ public class DungeonCrawler extends ApplicationAdapter {
 						int money = Integer.parseInt(hud.totalGoldAsString);
 
 						if (money >= item.cost && !item.purchased) {
+
+							System.out.println(item.kind + "<- THE TYPE OF ITEM");
+
 							item.purchased = true;
+							switch (item.kind) {
+
+								case "POTION": {
+									//System.out.println("THIS IS A TEST TO SEE IF POTIONS CAN BE ADDED VIA THE HUD");
+									//hud.inventory.addPotion();
+									Potion potion = new Potion(world, player.shopkeeper.posX, player.shopkeeper.posY+ 16,1);
+									potion.createPotion(potionArrayMap,rayHandler);
+									potions.add(potion);
+									potionArrayMap.put(potion.potionBody, potion);
+									break;
+
+								}
+								case "SHIELD": {
+									//TODO: add shield item
+
+									break;
+
+								}
+								case "GREEK FIRE": {
+									//TODO: add fire arrows
+									break;
+								}
+							}
 
 							//int moneyAfterPurchase = money - item.cost;
 
@@ -522,6 +548,29 @@ public class DungeonCrawler extends ApplicationAdapter {
 						if (money >= item.cost && !item.purchased) {
 							item.purchased = true;
 
+							switch (item.kind) {
+
+								case "POTION": {
+									//System.out.println("THIS IS A TEST TO SEE IF POTIONS CAN BE ADDED VIA THE HUD");
+									//hud.inventory.addPotion();
+									Potion potion = new Potion(world, player.shopkeeper.posX, player.shopkeeper.posY+ 16,1);
+									potion.createPotion(potionArrayMap,rayHandler);
+									potions.add(potion);
+									potionArrayMap.put(potion.potionBody, potion);
+									break;
+
+								}
+								case "SHIELD": {
+									//TODO: add shield item
+
+									break;
+
+								}
+								case "GREEK FIRE": {
+									//TODO: add fire arrows
+									break;
+								}
+							}
 							//int moneyAfterPurchase = money - item.cost;
 
 							hud.updateGold(item.cost, false);
