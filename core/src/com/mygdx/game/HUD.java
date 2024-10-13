@@ -28,7 +28,7 @@ public class HUD {
     stage = new Stage(vp, sb);
     subStage = new Stage(vp, sb);
 
-    totalGold = 0;
+    totalGold = 100;
     totalGoldAsString = String.valueOf(totalGold);
 
     Table table = new Table();
@@ -81,12 +81,16 @@ public class HUD {
     stage.addActor(winTable);
   }
 
-  public void updateGold(int gold) {
+  public void updateGold(int gold, boolean add) {
     CreateAssets tx = CreateAssets.getInstance();
 
     moneyTable.clear();
+     if (add) {
+       totalGold = totalGold + gold;
+     } else {
+       totalGold = totalGold - gold;
+     }
 
-    totalGold = totalGold + gold;
     totalGoldAsString  = String.valueOf(totalGold);
     moneyAmount = new Label(totalGoldAsString, new LabelStyle(DungeonCrawler.defaultFont, Color.YELLOW));
     moneyTable.add(moneyAmount).padTop(15);

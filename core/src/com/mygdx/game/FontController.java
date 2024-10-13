@@ -37,5 +37,27 @@ public class FontController {
 
     }
 
+    public static void drawDriftingFont(SpriteBatch fontBatch, BitmapFont font2, float x, float y, Text text, int speed) {
+        //TODO: Finish implementation - this is meant for 'floating money leaving the players total money and disappearing'
+        int x2;
+        int y2;
 
+        font2.draw(fontBatch, text.message, x, y);
+
+        x = x + speed;
+        y = y + speed;
+
+        if (text.hasSprite){
+            //      fontBatch.draw(text.sprite,text.textX-16,text.textY);
+        }
+        if (text.fade) {
+            if (text.fadeTiming >= 0 ){
+                font2.setColor(1,1,1, text.fadeTiming);
+                text.fadeTiming = text.fadeTiming - 0.0045f;
+            } else {
+                text.fadeTiming = text.fadeTime;
+                text.showing = false;
+            }
+        }
+    }
 }

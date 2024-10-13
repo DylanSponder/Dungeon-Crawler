@@ -136,7 +136,7 @@ public class GenerateLevel {
 
                 //determines which pre-gen room is placed next in sequence
                 //rooms are numbered, room1 etc
-                newRoom.roomNum = random;
+                newRoom.roomNum = 5;
 
                 //I'm thinking shops are halfway through each level
                 if (newRoom.roomNum == 5) {
@@ -1278,7 +1278,7 @@ for (int i = 0; i < layerSize; i++) {
             randomIndex = (int) (Math.random() * (indexMax - indexMin + 1)) + indexMin;
 
             amountMin = 1;
-            amountMax = 3;
+            amountMax = 1;
             amountIndex = (int) (Math.random() * (amountMax - amountMin + 1)) + amountMin;
 
             switch (randomIndex) {
@@ -1287,7 +1287,7 @@ for (int i = 0; i < layerSize; i++) {
                     cost = 5;
                     break;
                 case 2:
-                    itemKind = "GREEKFIRE";
+                    itemKind = "GREEK FIRE";
                     cost = 10;
                     break;
                 case 3:
@@ -1295,8 +1295,11 @@ for (int i = 0; i < layerSize; i++) {
                     cost = 15;
                     break;
             }
-                Text t2 = shopkeeper.Stock(itemKind, i2, amountIndex, cost);
-                Text t3 = shopkeeper.DescribeStock(itemKind, i2, amountIndex, cost);
+                Text t2 = shopkeeper.Stock(itemKind, i2);
+                Text t3 = shopkeeper.DescribeStock(itemKind, i2, cost);
+                ShopItem s1 = new ShopItem();
+                s1.createItem(i2, itemKind, amountIndex, cost, t3);
+                shopkeeper.inventory.put(i2, s1);
                 //overall placement of the text
                 t2.textX = shopkeeper.posX - 65;
                 t2.textY = shopkeeper.posY + 34;

@@ -225,7 +225,7 @@ public class EnemySkull {
                             sightCounter = 0;
                             playerSighted = false;
                             return 0;
-                        } else if (fixture.getBody().getType() == BodyDef.BodyType.DynamicBody) {
+                        } else if (fixture.getBody().getType() == BodyDef.BodyType.DynamicBody && !fixture.isSensor() && fixture.getBody().getUserData() != "Enemy") {
                             playerSighted = false;
                             this.getStateMachine().changeState(EnemySkullState.WANDER);
                             //this.enemyAI.setBehaviour();
@@ -233,7 +233,7 @@ public class EnemySkull {
                                     && fixture.getUserData() != "Proximity"
                                     && fixture.getUserData() != "EnemyHitbox"
                                     && fixture.getUserData() != "Bone"
-
+                                    //&& !fixture.isSensor()
                             ) {
                                 System.out.println("FIXTURE USER DATA " + fixture.getUserData());
                                 System.out.println("BODY USER DATA " + fixture.getUserData());

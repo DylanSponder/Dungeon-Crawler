@@ -457,7 +457,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 
 			public boolean keyDown(int keycode) {
-
+/*
 				if (debug) {
 
 					// (For Debugging) Add potion
@@ -478,21 +478,73 @@ public class DungeonCrawler extends ApplicationAdapter {
 						camera.zoom = 10f;
 					}
 				}
-				else if (player.buyingStock){
+				else
+				*/
+				if (player.buyingStock){
 
 					if (keycode == Keys.NUM_1) {
-						//player.shopkeeper.inventory.get(0).amount--
-						// if (!(player.shopkeeper.inventory.get(0).amount < 1)) {
-						//
-						// }
+						//String amount = player.shopkeeper.inventory.get(1).toString();
+						//int x = Integer.parseInt(amount);
+						//System.out.println(x);
+
+						ShopItem item = (ShopItem) player.shopkeeper.inventory.get(0);
+
+						int money = Integer.parseInt(hud.totalGoldAsString);
+
+						if (money >= item.cost && !item.purchased) {
+							item.purchased = true;
+
+							//int moneyAfterPurchase = money - item.cost;
+
+							hud.updateGold(item.cost, false);
+
+							System.out.println(item.kind);
+							System.out.println(item.index);
+							//item.amount--;
+
+							player.shopkeeper.inventoryText.remove(0);
+							player.shopkeeper.inventoryText.remove(0);
+
+							Text t1 = player.shopkeeper.Stock(item.kind, item.index);
+							Text t2 = player.shopkeeper.DescribeStock(item.kind,item.index,item.cost);
+						}
 					}
 
 					if (keycode == Keys.NUM_2) {
-						//player.shopkeeper.inventory;
+						//String amount = player.shopkeeper.inventory.get(1).toString();
+						//int x = Integer.parseInt(amount);
+						//System.out.println(x);
+						ShopItem firstItem = (ShopItem) player.shopkeeper.inventory.get(0);
+						ShopItem item = (ShopItem) player.shopkeeper.inventory.get(1);
+
+						int money = Integer.parseInt(hud.totalGoldAsString);
+
+						if (money >= item.cost && !item.purchased) {
+							item.purchased = true;
+
+							//int moneyAfterPurchase = money - item.cost;
+
+							hud.updateGold(item.cost, false);
+
+						System.out.println(item.kind);
+						System.out.println(item.index);
+						//item.amount--;
+
+					//	x--;
+							if (firstItem.purchased) {
+								player.shopkeeper.inventoryText.remove(0);
+								player.shopkeeper.inventoryText.remove(0);
+							}
+							else {
+								player.shopkeeper.inventoryText.remove(2);
+								player.shopkeeper.inventoryText.remove(2);
+							}
+
+
+						Text t1 = player.shopkeeper.Stock(item.kind, item.index);
+						Text t2 = player.shopkeeper.DescribeStock(item.kind,item.index,item.cost);
+						}
 					}
-
-
-
 				}
 				// Use potion
 				if (keycode == 8) {
@@ -1300,7 +1352,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			inventoryBatch.begin();
 			for (Shopkeeper s : shopkeepers) {
-				for (Text t2 : s.inventory) {
+				for (Text t2 : s.inventoryText) {
 					if (t2.showing) {
 
 						//defaultFont.draw(fontBatch,t.message,player.playerBody.getPosition().x, player.playerBody.getPosition().y);

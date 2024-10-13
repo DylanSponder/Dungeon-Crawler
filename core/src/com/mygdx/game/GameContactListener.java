@@ -172,9 +172,9 @@ public class GameContactListener implements ContactListener {
                             player.shopkeeper = shop;
 
                             /*
-                            for (int i = 0; i < shop.inventory.size(); i++) {
-                                shop.inventory.get(i).showing = true;
-                                shop.inventory.get(i).fade = false;
+                            for (int i = 0; i < shop.inventoryText.size(); i++) {
+                                shop.inventoryText.get(i).showing = true;
+                                shop.inventoryText.get(i).fade = false;
                             }
 
 
@@ -430,7 +430,7 @@ public class GameContactListener implements ContactListener {
                             enemySkulls.add(new Skull(world, collider.getBody().getPosition().x, collider.getBody().getPosition().y));
                             //skullArrayMap.put();
                             e.getStateMachine().changeState(EnemySkullState.DIE);
-                            hud.updateGold(1);
+                            hud.updateGold(1, true);
 
                             init.roomList.get(e.room).enemyCounter--;
                             if (init.roomList.get(e.room).enemyCounter < 1) {
@@ -488,7 +488,7 @@ public class GameContactListener implements ContactListener {
                             }
                             enemySkulls.add(new Skull(world, collidee.getBody().getPosition().x, collidee.getBody().getPosition().y));
                             e.getStateMachine().changeState(EnemySkullState.DIE);
-                            hud.updateGold(1);
+                            hud.updateGold(1, true);
                             init.roomList.get(e.room).enemyCounter--;
                             if (init.roomList.get(e.room).enemyCounter < 1) {
                                 init.roomList.get(player.currentRoom).unlockAllDoors(world, init.roomList.get(player.currentRoom), false);
