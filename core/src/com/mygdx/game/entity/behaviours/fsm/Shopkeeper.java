@@ -87,6 +87,15 @@ public class Shopkeeper {
                 this.inventoryText.add(t);
                 break;
             }
+            case "TORCH": {
+                System.out.println("TORCH ADDED TO THE SHOPKEEPER INVENTORY");
+                String msg = (index + 1) + ". TORCH";
+                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, false,  tx.coinSprite, 15f);
+                // DungeonCrawler.messages.add(t);
+                //this.inventoryText.add()
+                this.inventoryText.add(t);
+                break;
+            }
         }
         return inventoryText.get(index);
      // this.inventoryText.add(item);
@@ -107,7 +116,7 @@ public class Shopkeeper {
             }
             case "SHIELD": {
                 System.out.println("SHIELD DESCRIPTION ADDED TO A SHIELD");
-                String desc = "  " + cost + " abcdefghij";
+                String desc = "  " + cost + " STOPS PROJECTILES";
                 Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinSprite, 0.5f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()
@@ -123,6 +132,15 @@ public class Shopkeeper {
                 this.inventoryText.add(t);
                 break;
             }
+            case "TORCH": {
+                System.out.println("TORCH DESCRIPTION ADDED TO A TORCH");
+                String desc = "  " + cost + " IMPROVES VISIBLITY";
+                Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinSprite, 0.5f);
+                // DungeonCrawler.messages.add(t);
+                //this.inventoryText.add()
+                this.inventoryText.add(t);
+                break;
+            }
         }
         return inventoryText.get(index);
     }
@@ -132,7 +150,11 @@ public class Shopkeeper {
           if (!this.scaledText) {
               int ihalf = i / 2;
 
-              if (ihalf % 2 != 0) {
+              if (i >= 4) {
+                  this.inventoryText.get(i).textY = inventoryText.get(i).textY - (i * 12) - 36;
+                  this.inventoryText.get(i).showing = true;
+              }
+              else if (i >= 2) {
                   //this.inventoryText.get(i).textY = inventoryText.get(i).textY - i * 12;
                   this.inventoryText.get(i).textY = inventoryText.get(i).textY - (i * 12) - 24;
                   this.inventoryText.get(i).showing = true;

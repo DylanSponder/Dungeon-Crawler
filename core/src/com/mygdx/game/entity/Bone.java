@@ -20,26 +20,28 @@ public class Bone {
     public float boneX, boneY;
     public boolean boneCreated;
     public Body skullBody;
-    public float orientation;
+    public Vector2 orientationVector;
     public Vector2 outVector;
-    public float vecMulti;
+    public float vecMulti, orientation;
     public boolean aimed;
 
-    public Bone(World world, Body skullBody, float x, float y, boolean multiplied, float initialAngle, boolean aimed, float orientation) {
+    public Bone(World world, Body skullBody, float x, float y, boolean multiplied, boolean aimed, Vector2 orientation) {
         this.boneX = x;
         this.boneY = y;
         this.skullBody = skullBody;
         this.aimed = aimed;
         if (this.aimed) {
-            this.orientation = orientation;
+            this.orientationVector = orientation;
         } else {
             if (!multiplied) {
-                this.orientation = MathUtils.random(-MathUtils.PI, MathUtils.PI);
+                this.orientationVector = orientation;
+                        //MathUtils.random(-MathUtils.PI, MathUtils.PI);
                 System.out.println(MathUtils.random(-MathUtils.PI, MathUtils.PI));
             }
             else {
                 float testAngle = MathUtils.random(-MathUtils.PI, MathUtils.PI);
-                this.orientation = initialAngle + testAngle;
+                this.orientationVector = orientation;
+                this.orientation = testAngle;
             }
         }
 
@@ -57,15 +59,15 @@ public class Bone {
         this.boneBody.setAngularVelocity(8f);
 
         if (!aimed) {
-            this.vecMulti = MathUtils.random(35, 45);
+            this.vecMulti = MathUtils.random(20, 40);
 
             this.outVector = Box2DSteeringUtils.angleToVector(this.outVector, this.orientation);
 
             this.boneBody.setLinearVelocity(this.outVector.x*vecMulti,this.outVector.y*vecMulti);
         } else {
-            this.vecMulti = MathUtils.random(35, 45);
+            this.vecMulti = MathUtils.random(25, 35);
 
-            this.outVector = Box2DSteeringUtils.angleToVector(this.outVector, this.orientation);
+            this.outVector =  this.orientationVector;
 
             this.boneBody.setLinearVelocity(this.outVector.x*vecMulti,this.outVector.y*vecMulti);
         }

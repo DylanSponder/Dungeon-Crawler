@@ -49,7 +49,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private String playerDirection;
 	private boolean playerPaused, playerMeleeAttacking, playerRangedAttacking;
 	private Body sword, arrowBody;
-  public boolean canPurchase;
 	private Arrow arrow;
 	public ArrayList<Arrow> arrows;
 	public static ArrayList<Body> arrowBodiesCollided, boneBodiesCollided, skullBodiesDestroyed, deadEnemyBodies;
@@ -318,30 +317,35 @@ public class DungeonCrawler extends ApplicationAdapter {
 						swordHitbox = bf.createSwordHitbox(sword, false);
 						swordHitbox.setUserData("DownSword");
 						swordHitbox.setSensor(true);
-					} else if (tx.playerSprite.equals(tx.playerUp)) {
+						player.playerBody.applyForce(0,-80000,0,0,true);
+					} else if (tx.playerSprite.equals(tx.playerUp) || leanUp) {
 						tx.playerSprite = tx.playerAttackUp;
 						sword = bf.createSwordBody(world, player.playerBody, -2.5f, 17.5f);
 						swordHitbox = bf.createSwordHitbox(sword, false);
 						swordHitbox.setUserData("UpSword");
 						swordHitbox.setSensor(true);
+						player.playerBody.applyForce(0,80000,0,0,true);
 					} else if (tx.playerSprite.equals(tx.playerLeft)) {
 						tx.playerSprite = tx.playerAttackLeft;
 						sword = bf.createSwordBody(world, player.playerBody, -15.5f, -0.5f);
 						swordHitbox = bf.createSwordHitbox(sword, true);
 						swordHitbox.setUserData("LeftSword");
 						swordHitbox.setSensor(true);
+						player.playerBody.applyForce(-80000,0,0,0,true);
 					} else if (tx.playerSprite.equals(tx.playerRight)) {
 						tx.playerSprite = tx.playerAttackRight;
 						sword = bf.createSwordBody(world, player.playerBody, 15.5f, -0.5f);
 						swordHitbox = bf.createSwordHitbox(sword, true);
 						swordHitbox.setUserData("RightSword");
 						swordHitbox.setSensor(true);
+						player.playerBody.applyForce(80000,0,0,0,true);
 					} else {
 						tx.playerSprite = tx.playerAttackDown;
 						sword = bf.createSwordBody(world, player.playerBody, -2.5f, -11.5f);
 						swordHitbox = bf.createSwordHitbox(sword, false);
 						swordHitbox.setUserData("DownSword");
 						swordHitbox.setSensor(true);
+						player.playerBody.applyForce(0,-80000,0,0,true);
 					}
 
 					sword.setUserData("Sword");
@@ -393,13 +397,15 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
 						arrowHitbox.setUserData("DownArrow");
 						arrowBody.setLinearVelocity(0, -500f);
-					} else if (tx.playerSprite.equals(tx.playerUp)) {
+						player.playerBody.applyForce(0,130000,0,0,true);
+					} else if (tx.playerSprite.equals(tx.playerUp) || leanUp) {
 						playerDirection = "Up";
 						tx.playerSprite = tx.playerAttackUp;
 						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y + 14f);
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
 						arrowHitbox.setUserData("UpArrow");
 						arrowBody.setLinearVelocity(0, 500f);
+						player.playerBody.applyForce(0,-130000,0,0,true);
 					} else if (tx.playerSprite.equals(tx.playerLeft)) {
 						playerDirection = "Left";
 						tx.playerSprite = tx.playerAttackLeft;
@@ -407,6 +413,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
 						arrowHitbox.setUserData("LeftArrow");
 						arrowBody.setLinearVelocity(-500f, 0);
+						player.playerBody.applyForce(130000,0,0,0,true);
 					} else if (tx.playerSprite.equals(tx.playerRight)) {
 						playerDirection = "Right";
 						tx.playerSprite = tx.playerAttackRight;
@@ -414,6 +421,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
 						arrowHitbox.setUserData("RightArrow");
 						arrowBody.setLinearVelocity(500f, 0);
+						player.playerBody.applyForce(-130000,0,0,0,true);
 					}
 					//only triggers if the player hasn't moved at all yet - player starts facing down
 					else {
@@ -423,6 +431,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
 						arrowHitbox.setUserData("DownArrow");
 						arrowBody.setLinearVelocity(0, -500f);
+						player.playerBody.applyForce(0,130000,0,0,true);
 					}
 					//pause player in place while attacking (attacks must be timed correctly!)
 					arrowBody.setUserData("Arrow");
@@ -518,6 +527,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 									//TODO: add fire arrows
 									break;
 								}
+								case "TORCH": {
+									playerTorch.remove();
+									playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.80f), 110, PLAYER_X, PLAYER_Y);
+									playerTorch.attachToBody(player.playerBody);
+									//playerTorch.setXray(true);
+									break;
+								}
 							}
 
 							//int moneyAfterPurchase = money - item.cost;
@@ -570,6 +586,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 									//TODO: add fire arrows
 									break;
 								}
+								case "TORCH": {
+									playerTorch.remove();
+									playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.80f), 110, PLAYER_X, PLAYER_Y);
+									playerTorch.attachToBody(player.playerBody);
+									//playerTorch.setXray(true);
+									break;
+								}
 							}
 							//int moneyAfterPurchase = money - item.cost;
 
@@ -592,6 +615,77 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 						Text t1 = player.shopkeeper.Stock(item.kind, item.index);
 						Text t2 = player.shopkeeper.DescribeStock(item.kind,item.index,item.cost);
+						}
+					}
+
+					if (keycode == Keys.NUM_3) {
+						//String amount = player.shopkeeper.inventory.get(1).toString();
+						//int x = Integer.parseInt(amount);
+						//System.out.println(x);
+						ShopItem firstItem = (ShopItem) player.shopkeeper.inventory.get(0);
+						ShopItem secondItem = (ShopItem) player.shopkeeper.inventory.get(1);
+						ShopItem item = (ShopItem) player.shopkeeper.inventory.get(2);
+
+						int money = Integer.parseInt(hud.totalGoldAsString);
+
+						if (money >= item.cost && !item.purchased) {
+							item.purchased = true;
+
+							switch (item.kind) {
+
+								case "POTION": {
+									//System.out.println("THIS IS A TEST TO SEE IF POTIONS CAN BE ADDED VIA THE HUD");
+									//hud.inventory.addPotion();
+									Potion potion = new Potion(world, player.shopkeeper.posX, player.shopkeeper.posY+ 16,1);
+									potion.createPotion(potionArrayMap,rayHandler);
+									potions.add(potion);
+									potionArrayMap.put(potion.potionBody, potion);
+									break;
+
+								}
+								case "SHIELD": {
+									//TODO: add shield item
+
+									break;
+
+								}
+								case "GREEK FIRE": {
+									//TODO: add fire arrows
+									break;
+								}
+								case "TORCH": {
+									playerTorch.remove();
+									playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.80f), 110, PLAYER_X, PLAYER_Y);
+									playerTorch.attachToBody(player.playerBody);
+									//playerTorch.setXray(true);
+									break;
+								}
+							}
+							//int moneyAfterPurchase = money - item.cost;
+
+							hud.updateGold(item.cost, false);
+
+							System.out.println(item.kind);
+							System.out.println(item.index);
+							//item.amount--;
+
+							//	x--;
+							if (firstItem.purchased && !secondItem.purchased) {
+								player.shopkeeper.inventoryText.remove(2);
+								player.shopkeeper.inventoryText.remove(2);
+							}
+							else if (secondItem.purchased && secondItem.purchased) {
+								player.shopkeeper.inventoryText.remove(0);
+								player.shopkeeper.inventoryText.remove(0);
+							}
+							else {
+								player.shopkeeper.inventoryText.remove(4);
+								player.shopkeeper.inventoryText.remove(4);
+							}
+
+
+							Text t1 = player.shopkeeper.Stock(item.kind, item.index);
+							Text t2 = player.shopkeeper.DescribeStock(item.kind,item.index,item.cost);
 						}
 					}
 				}
@@ -712,7 +806,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowBody.setLinearVelocity(0, -500f);
 
 						player.playerBody.applyForce(0,130000,0,0,true);
-					} else if (tx.playerSprite.equals(tx.playerUp)) {
+					} else if (tx.playerSprite.equals(tx.playerUp) || leanUp) {
 						playerDirection = "Up";
 						tx.playerSprite = tx.playerAttackUp;
 						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y + 14f);
@@ -969,12 +1063,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 				if (skullIt.hasNext()) {
 					Skull skull = skullIt.next();
 					if (brokenSkulls.contains(skull)) {
-						Bone bone = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, false, 0, false, 0);
+						Bone bone = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, false, false, new Vector2());
 						bone.createBone();
 						bones.add(bone);
 						boneArrayMap.put(bone.boneBody, bone);
 
-						Bone bone2 = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, true, bone.orientation, false, 0);
+						Bone bone2 = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, true, false, new Vector2());
 						bone2.createBone();
 						bones.add(bone2);
 						boneArrayMap.put(bone2.boneBody, bone2);
@@ -1035,10 +1129,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 							potions.add(potion);
 							potionArrayMap.put(potion.potionBody, potion);
 						} else if (potionChance == 1) {
-							Bone bone = new Bone(world, pot.potBody, pot.potBody.getPosition().x, pot.potBody.getPosition().y, false, 0, false, 0);
-							bone.createBone();
-							bones.add(bone);
-							boneArrayMap.put(bone.boneBody, bone);
+							//Bone bone = new Bone(world, pot.potBody, pot.potBody.getPosition().x, pot.potBody.getPosition().y, false, false, new Vector2());
+							//bone.createBone();
+							//bones.add(bone);
+							//boneArrayMap.put(bone.boneBody, bone);
 
 							//create heart object
 							//Heart heart = new Heart(world, heart.heartBody.getPosition().x, heart.heartBody.getPosition().y, 1);
@@ -1162,25 +1256,32 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 				if ((e.playerSighted && e.playerInRange)){
 					//System.out.println(Gdx.graphics.getDeltaTime());
-					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 50)){
+					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 110)){
 						//System.out.println("THROWING BONE...");
 						e.timeSinceAlerted = 0f;
 						Vector2 vec1 = new Vector2(e.enemyBody.getPosition());
 						Vector2 vec2 = new Vector2(player.playerBody.getPosition());
 
-						//vec2.sub(vec1);
-
-						//atan2(vector2.y, vector2.x) - atan2(vector1.y, vector1.x);
-
 						float x = MathUtils.atan2(vec2.y - vec1.y, vec2.x - vec1.x);
-						//float value = 180 / MathUtils.PI;
-						//float result = x * value;
-						x = x * MathUtils.radiansToDegrees;
+						float randomOffset = Random.randomFloat(1.5f,0.5f);
+						randomOffset = randomOffset / 10;
+						boolean random = Random.randomBoolean();
+						Vector2 finalX = new Vector2((float)Math.cos(x),(float)Math.sin(x));
+
+						if (random) {
+							finalX.x = finalX.x + randomOffset;
+							finalX.y = finalX.y + randomOffset;
+						} else {
+							finalX.x = finalX.x - randomOffset;
+							finalX.y = finalX.y - randomOffset;
+						}
+
+						System.out.println(finalX + " = ANGLE");
 						//float result = (e.enemyAI.getOrientation() / (x * MathUtils.PI));
 						//result = result - MathUtils.PI / 2;
 						//System.out.println(x);
 
-						Bone bone = new Bone(world, e.enemyBody, e.enemyBody.getPosition().x, e.enemyBody.getPosition().y, false, 0, true, x);
+						Bone bone = new Bone(world, e.enemyBody, e.enemyBody.getPosition().x, e.enemyBody.getPosition().y, false,  true, finalX);
 						bone.createBone();
 						bones.add(bone);
 						DungeonCrawler.boneArrayMap.put(bone.boneBody, bone);
@@ -1507,7 +1608,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		rayHandler.setCombinedMatrix(camera);
 
 		if (!GenerateLevel.init.roomList.get(player.currentRoom).isShop && !debug) {
-			camera.zoom = 0.65f;
+			camera.zoom = 0.75f;
 		}
 		else if (!debug){
 			camera.zoom = 1f;

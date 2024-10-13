@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.*;
+import com.mygdx.game.Random;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.behaviours.fsm.EnemySkull;
 import com.mygdx.game.entity.behaviours.fsm.Shopkeeper;
@@ -132,13 +133,19 @@ public class GenerateLevel {
             }
 
             else {
-                int random = RandomInteger.randomInt(6, 1);
+                if (i == 4) {
+                    newRoom.roomNum = 5;
+                } else {
+                    int random = Random.randomInt(6, 1);
+                    while (random == 5) {
+                        random = Random.randomInt(6, 1);
+                    }
+                    newRoom.roomNum = random;
+                }
 
                 //determines which pre-gen room is placed next in sequence
                 //rooms are numbered, room1 etc
-                newRoom.roomNum = 5;
 
-                //I'm thinking shops are halfway through each level
                 if (newRoom.roomNum == 5) {
                     newRoom.isShop = true;
                     newRoom.unlockAllDoors(world, newRoom,false);
@@ -617,6 +624,9 @@ public class GenerateLevel {
                     if ((path.get(roomIndex+1) == 2)) {
                         locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
 
+                    }
+                    else if ((path.get(roomIndex+1) == 4)) {
+                        locateDoors(roomIndex, init.roomList.get(roomIndex).x1 + xOffset, init.roomList.get(roomIndex).y1);
                     }
                     else {
                         locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
@@ -1271,10 +1281,10 @@ for (int i = 0; i < layerSize; i++) {
 
             invRandom = (int) (Math.random() * (invMax - invMin + 1)) + invMin;
 
-            for (int i2 = 0; i2 < invMax; i2++) {
+            for (int i2 = 0; i2 < 6; i2++) {
 
             indexMin = 1;
-            indexMax = 3;
+            indexMax = 4;
             randomIndex = (int) (Math.random() * (indexMax - indexMin + 1)) + indexMin;
 
             amountMin = 1;
@@ -1294,6 +1304,10 @@ for (int i = 0; i < layerSize; i++) {
                     itemKind = "SHIELD";
                     cost = 15;
                     break;
+                case 4:
+                    itemKind = "TORCH";
+                    cost = 10;
+                    break;
             }
                 Text t2 = shopkeeper.Stock(itemKind, i2);
                 Text t3 = shopkeeper.DescribeStock(itemKind, i2, cost);
@@ -1301,9 +1315,9 @@ for (int i = 0; i < layerSize; i++) {
                 s1.createItem(i2, itemKind, amountIndex, cost, t3);
                 shopkeeper.inventory.put(i2, s1);
                 //overall placement of the text
-                t2.textX = shopkeeper.posX - 65;
+                t2.textX = shopkeeper.posX - 70;
                 t2.textY = shopkeeper.posY + 34;
-                t3.textX = shopkeeper.posX - 60;
+                t3.textX = shopkeeper.posX - 65;
                 t3.textY = shopkeeper.posY + 34;
 
     }

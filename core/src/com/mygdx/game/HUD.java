@@ -28,7 +28,7 @@ public class HUD {
     stage = new Stage(vp, sb);
     subStage = new Stage(vp, sb);
 
-    totalGold = 100;
+    totalGold = 0;
     totalGoldAsString = String.valueOf(totalGold);
 
     Table table = new Table();
@@ -40,13 +40,13 @@ public class HUD {
     Sprite healthSymbolHalf = new Sprite(tx.heartTexture, 32, 0, 16, 16);
     Sprite healthSymbolEmpty = new Sprite(tx.heartTexture, 64, 0, 16, 16);
     //Health slots
-    healthBar = new HealthBar(3f, healthSymbol, healthSymbolHalf, healthSymbolEmpty, 60);
+    healthBar = new HealthBar(3f, healthSymbol, healthSymbolHalf, healthSymbolEmpty, 65);
     
     moneyTable = new Table();
     moneyAmount = new Label(totalGoldAsString, new LabelStyle(DungeonCrawler.defaultFont, Color.YELLOW));
-    moneyTable.add(moneyAmount).padTop(15);
+    moneyTable.add(moneyAmount).padTop(25);
     moneySymbol = new Image(new Sprite(tx.coinTexture, 10, 10));
-    moneyTable.add(moneySymbol).padLeft(0);
+    moneyTable.add(moneySymbol).padBottom(0);
 
     Sprite potionSymbol = new Sprite(tx.potionTexture, 9, 11);
     Sprite emptySlotSymbol = new Sprite(tx.emptySlotTexture, 9, 11);
@@ -93,9 +93,9 @@ public class HUD {
 
     totalGoldAsString  = String.valueOf(totalGold);
     moneyAmount = new Label(totalGoldAsString, new LabelStyle(DungeonCrawler.defaultFont, Color.YELLOW));
-    moneyTable.add(moneyAmount).padTop(15);
+    moneyTable.add(moneyAmount).padTop(25);
     moneySymbol = new Image(new Sprite(tx.coinTexture, 10, 10));
-    moneyTable.add(moneySymbol).padLeft(2);
+    moneyTable.add(moneySymbol).padBottom(0);
   }
 
   public void update() {
