@@ -16,7 +16,7 @@ public class GameObjectDestroyer {
     public void destroyObject(ArrayMap<Object, Object> map,
                               ArrayList brokenList,
                               ArrayList objectList,
-                              ArrayList objectList2,
+                              String objectList2,
                               Object obj,
                               Body objBody,
                               SpriteBatch batch,

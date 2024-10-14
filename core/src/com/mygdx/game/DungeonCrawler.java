@@ -40,10 +40,10 @@ import com.mygdx.game.level.InitLevel;
 
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch playerBatch, arrowBatch, enemyBatch, potBatch, hudBatch, tutoBatch, fontBatch, inventoryBatch;
-	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch;
+	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch, cobBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch;
 	public static World world;
-	public static boolean debug = true;
+	public static boolean debug = false;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -56,6 +56,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public ArrayMap<Body, Skull> skullArrayMap;
 	public static ArrayMap<Body, Bone> boneArrayMap;
 	public ArrayMap<Body, Potion> potionArrayMap;
+	public ArrayMap<Body, Cobweb> cobArrayMap;
 	public ArrayMap<Body, Fire> respawnFireMap;
 	public ArrayMap<Body, Pot> potArrayMap;
 	public boolean reversedArrowMap, reversedSkullMap, reversedPotMap, reversedPotionMap, reversedRespawnFireMap;
@@ -68,6 +69,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Lock> locks;
 	public static ArrayList<Tutorial> tutorial;
 	public static ArrayList<Pot> pots, brokenPots;
+	public static ArrayList<Cobweb> cobwebs, burnedCobwebs;
 	public static ArrayList<Potion> potions, collectedPotions;
 	public static ArrayList<Torch> torches;
 	public static ArrayList<Obstacle> obstacles;
@@ -115,6 +117,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		fireBatch = new SpriteBatch();
 		fontBatch = new SpriteBatch();
 		inventoryBatch = new SpriteBatch();
+		cobBatch = new SpriteBatch();
 		reversedArrowMap = false;
 		reversedSkullMap = false;
 		reversedPotMap = false;
@@ -124,6 +127,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		enemySkulls = new ArrayList<>();
 		brokenSkulls = new ArrayList<>();
 		bones = new ArrayList<>();
+		cobwebs = new ArrayList<>();
+		burnedCobwebs = new ArrayList<>();
 		shopkeepers = new ArrayList<>();
 		tutorial = new ArrayList<>();
 		locks = new ArrayList<>();
@@ -274,6 +279,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		arrows = new ArrayList<Arrow>();
 		potionArrayMap = new ArrayMap<Body, Potion>();
 		respawnFireMap = new ArrayMap<Body, Fire>();
+		cobArrayMap = new ArrayMap<Body, Cobweb>();
 
 		//create an input processor to handle single input events - see inputUpdate() for held down inputs
 
@@ -1039,11 +1045,38 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 		}
+		for (Cobweb c : cobwebs) {
+			if (!c.cobCreated) {
+				cobArrayMap.put(c.createCobweb(cobArrayMap), c);
+			}
+		}
+
+		if (!cobArrayMap.isEmpty()) {
+			for (OrderedMap.Entry<Body, Cobweb> cobEntry : cobArrayMap.entries()) {
+				Cobweb value = cobEntry.value;
+				//render each cobweb
+				cobBatch.begin();
+				Cobweb.renderCobweb(cobBatch,tx.cobwebSprite,cobEntry.key.getPosition().x, cobEntry.key.getPosition().y);
+				cobBatch.end();
+			}
+
+			Iterator<Cobweb> cobIt = burnedCobwebs.iterator();
+			if (cobIt.hasNext()) {
+				Cobweb cob = cobIt.next();
+				if (burnedCobwebs.contains(cob)) {
+
+					cobwebs.remove(cob);
+					cobArrayMap.removeKey(cob.cobBody);
+					world.destroyBody(cob.cobBody);
+					cobIt.remove();
+				}
+			}
+		}
 
 			//destructible objects safe removers - Skulls - Arrows - Pots - Potions
 
 			GameObjectDestroyer skullBasher9000 = new GameObjectDestroyer();
-			//skullBasher9000.destroyObject(skullArrayMap,brokenSkulls,enemySkulls,Skull.class,);
+			//skullBasher9000.destroyObject(skullArrayMap,brokenSkulls,enemySkulls,"Skull",);
 
 			if (!skullArrayMap.isEmpty()) {
 				for (OrderedMap.Entry<Body, Skull> skullEntry : skullArrayMap.entries()) {
@@ -1580,6 +1613,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			lockBatch.setProjectionMatrix(camera.combined);
 			doorBatch.setProjectionMatrix(camera.combined);
 			potBatch.setProjectionMatrix(camera.combined);
+			cobBatch.setProjectionMatrix(camera.combined);
 			potionBatch.setProjectionMatrix(camera.combined);
 			columnBaseBatch.setProjectionMatrix(camera.combined);
 			columnStemBatch.setProjectionMatrix(camera.combined);

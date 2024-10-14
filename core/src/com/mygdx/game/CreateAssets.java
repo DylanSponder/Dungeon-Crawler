@@ -65,6 +65,8 @@ public class CreateAssets {
     public TextureRegion amphora2Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion damagedAmphoraTexture = new TextureRegion(roomBackground, 0,0,16,16);
 
+    public TextureRegion cobwebTexture = new TextureRegion(roomBackground,0,0,16,16);
+
     //animations
 
     public TextureRegion fireAnimationTexture = new TextureRegion(fireAnimationSheet,0,0,16,16);
@@ -214,6 +216,8 @@ public class CreateAssets {
     Sprite skullSprite = new Sprite(skullTexture, 176,64, 16, 16);
     Sprite damagedSkullSprite = new Sprite(skullTexture, 192,48, 16, 16);
     Sprite boneSprite = new Sprite(boneTexture, 192,64, 16, 16);
+
+    public Sprite cobwebSprite = new Sprite(cobwebTexture,351,0,16,16);
 
     Sprite obstacle1Sprite = new Sprite(obstacle1Texture,80,48,16,16);
     Sprite obstacle2Sprite = new Sprite(obstacle2Texture,96,48,16,16);
