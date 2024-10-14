@@ -96,6 +96,15 @@ public class Shopkeeper {
                 this.inventoryText.add(t);
                 break;
             }
+            case "BELT": {
+                System.out.println("BELT ADDED TO THE SHOPKEEPER INVENTORY");
+                String msg = (index + 1) + ". POTION BELT";
+                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, false,  tx.coinSprite, 15f);
+                // DungeonCrawler.messages.add(t);
+                //this.inventoryText.add()
+                this.inventoryText.add(t);
+                break;
+            }
         }
         return inventoryText.get(index);
      // this.inventoryText.add(item);
@@ -135,6 +144,15 @@ public class Shopkeeper {
             case "TORCH": {
                 System.out.println("TORCH DESCRIPTION ADDED TO A TORCH");
                 String desc = "  " + cost + " IMPROVES VISIBLITY";
+                Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinSprite, 0.5f);
+                // DungeonCrawler.messages.add(t);
+                //this.inventoryText.add()
+                this.inventoryText.add(t);
+                break;
+            }
+            case "BELT": {
+                System.out.println("BELT DESCRIPTION ADDED TO A BELT");
+                String desc = "  " + cost + " POTION CAPACITY + 2";
                 Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinSprite, 0.5f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()

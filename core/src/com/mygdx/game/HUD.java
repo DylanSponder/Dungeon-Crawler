@@ -28,7 +28,7 @@ public class HUD {
     stage = new Stage(vp, sb);
     subStage = new Stage(vp, sb);
 
-    totalGold = 0;
+    totalGold = 100;
     totalGoldAsString = String.valueOf(totalGold);
 
     Table table = new Table();
@@ -40,7 +40,7 @@ public class HUD {
     Sprite healthSymbolHalf = new Sprite(tx.heartTexture, 32, 0, 16, 16);
     Sprite healthSymbolEmpty = new Sprite(tx.heartTexture, 64, 0, 16, 16);
     //Health slots
-    healthBar = new HealthBar(3f, healthSymbol, healthSymbolHalf, healthSymbolEmpty, 65);
+    healthBar = new HealthBar(3f, healthSymbol, healthSymbolHalf, healthSymbolEmpty, 80);
     
     moneyTable = new Table();
     moneyAmount = new Label(totalGoldAsString, new LabelStyle(DungeonCrawler.defaultFont, Color.YELLOW));

@@ -85,7 +85,7 @@ public class EnemySkull {
 
         enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 120f);
 
-        enemyDetectionRadius.setSensor(true);
+        //enemyDetectionRadius.setSensor(true);
 
         enemyAI = new EnemyBox2DSteeringEntity(enemyBody, 10);
         //playerDetectionRay = new EnemyBox2DSteeringEntity(enemyBody,10);

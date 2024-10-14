@@ -133,7 +133,7 @@ public class GenerateLevel {
             }
 
             else {
-                if (i == 4) {
+                if (i == 1) {
                     newRoom.roomNum = 5;
                 } else {
                     int random = Random.randomInt(6, 1);
@@ -1260,8 +1260,6 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.middleFloor3Tile;
 
             Text shopMessage = new Text(DungeonCrawler.defaultFont, "WELCOME!", Color.WHITE, true, 1f, 0.0200f, false, false, null, 0);
-            //TODO Add Sprite to Text for Shop Display
-            //Text sellMessage = new Text(DungeonCrawler.defaultFont,"BUY POTION", Color.WHITE,true,1f,0.0045f,false);
             speechMinX = -10;
             speechMaxX = 10;
             randomSpeechXOffset = (int) (Math.random() * (speechMaxX - speechMinX + 1)) + speechMinX;
@@ -1271,20 +1269,17 @@ for (int i = 0; i < layerSize; i++) {
             randomSpeechYOffset = (int) (Math.random() * (speechMaxY - speechMinY + 1)) + speechMinY;
             shopMessage.textX = ((roomX + i) * 16) + 16 * 16 - 16 + randomSpeechXOffset;
             shopMessage.textY = levelY * 16 + Gdx.graphics.getHeight() / 30 - 1 + randomSpeechYOffset;
-            //sellMessage.textX = ((roomX + i) * 16) + 16 * 16;
-            //sellMessage.textY = levelY * 16 + Gdx.graphics.getHeight() / 30 - 1;
             messages.add(shopMessage);
-            //messages.add(sellMessage);
             Shopkeeper shopkeeper = new Shopkeeper(DungeonCrawler.world, ((roomX + i) * 16) + 16.5f * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 8, shopMessage);
+
             invMin = 2;
             invMax = 4;
-
             invRandom = (int) (Math.random() * (invMax - invMin + 1)) + invMin;
 
             for (int i2 = 0; i2 < 6; i2++) {
-
+            //TODO: Make this only pick between items that haven't been chosen yet
             indexMin = 1;
-            indexMax = 4;
+            indexMax = 5;
             randomIndex = (int) (Math.random() * (indexMax - indexMin + 1)) + indexMin;
 
             amountMin = 1;
@@ -1308,6 +1303,10 @@ for (int i = 0; i < layerSize; i++) {
                     itemKind = "TORCH";
                     cost = 10;
                     break;
+                case 5:
+                    itemKind = "BELT";
+                    cost = 5;
+                    break;
             }
                 Text t2 = shopkeeper.Stock(itemKind, i2);
                 Text t3 = shopkeeper.DescribeStock(itemKind, i2, cost);
@@ -1319,12 +1318,9 @@ for (int i = 0; i < layerSize; i++) {
                 t2.textY = shopkeeper.posY + 34;
                 t3.textX = shopkeeper.posX - 65;
                 t3.textY = shopkeeper.posY + 34;
-
     }
-
         shopkeeper.messages.add(shopMessage);
         DungeonCrawler.shopkeepers.add(shopkeeper);
-
         break;
         case "twColTop1":
         case "toruColTop1":

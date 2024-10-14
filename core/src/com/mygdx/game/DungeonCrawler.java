@@ -43,7 +43,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch;
 	public static World world;
-	public static boolean debug = false;
+	public static boolean debug = true;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -259,7 +259,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		layers.add(layer);
 
 		//create a point light and attach it to the player
-		playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.45f), 90, PLAYER_X, PLAYER_Y);
+		playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.45f), 100, PLAYER_X, PLAYER_Y);
 		playerTorch.attachToBody(player.playerBody);
 		playerTorch.setSoftnessLength(65);
 		//playerTorch.isSoft();
@@ -397,7 +397,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
 						arrowHitbox.setUserData("DownArrow");
 						arrowBody.setLinearVelocity(0, -500f);
-						player.playerBody.applyForce(0,130000,0,0,true);
+						player.playerBody.applyForce(0,150000,0,0,true);
 					} else if (tx.playerSprite.equals(tx.playerUp) || leanUp) {
 						playerDirection = "Up";
 						tx.playerSprite = tx.playerAttackUp;
@@ -405,7 +405,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
 						arrowHitbox.setUserData("UpArrow");
 						arrowBody.setLinearVelocity(0, 500f);
-						player.playerBody.applyForce(0,-130000,0,0,true);
+						player.playerBody.applyForce(0,-150000,0,0,true);
 					} else if (tx.playerSprite.equals(tx.playerLeft)) {
 						playerDirection = "Left";
 						tx.playerSprite = tx.playerAttackLeft;
@@ -413,7 +413,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
 						arrowHitbox.setUserData("LeftArrow");
 						arrowBody.setLinearVelocity(-500f, 0);
-						player.playerBody.applyForce(130000,0,0,0,true);
+						player.playerBody.applyForce(150000,0,0,0,true);
 					} else if (tx.playerSprite.equals(tx.playerRight)) {
 						playerDirection = "Right";
 						tx.playerSprite = tx.playerAttackRight;
@@ -421,7 +421,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
 						arrowHitbox.setUserData("RightArrow");
 						arrowBody.setLinearVelocity(500f, 0);
-						player.playerBody.applyForce(-130000,0,0,0,true);
+						player.playerBody.applyForce(-150000,0,0,0,true);
 					}
 					//only triggers if the player hasn't moved at all yet - player starts facing down
 					else {
@@ -431,7 +431,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
 						arrowHitbox.setUserData("DownArrow");
 						arrowBody.setLinearVelocity(0, -500f);
-						player.playerBody.applyForce(0,130000,0,0,true);
+						player.playerBody.applyForce(0,150000,0,0,true);
 					}
 					//pause player in place while attacking (attacks must be timed correctly!)
 					arrowBody.setUserData("Arrow");
@@ -529,9 +529,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 								}
 								case "TORCH": {
 									playerTorch.remove();
-									playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.80f), 110, PLAYER_X, PLAYER_Y);
+									playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.75f), 100, PLAYER_X, PLAYER_Y);
 									playerTorch.attachToBody(player.playerBody);
-									//playerTorch.setXray(true);
+									playerTorch.setIgnoreAttachedBody(true);
+									playerTorch.setSoftnessLength(100f);
 									break;
 								}
 							}
@@ -588,9 +589,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 								}
 								case "TORCH": {
 									playerTorch.remove();
-									playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.80f), 110, PLAYER_X, PLAYER_Y);
+									playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.75f), 100, PLAYER_X, PLAYER_Y);
 									playerTorch.attachToBody(player.playerBody);
-									//playerTorch.setXray(true);
+									playerTorch.setIgnoreAttachedBody(true);
+									playerTorch.setSoftnessLength(100f);
 									break;
 								}
 							}
@@ -655,8 +657,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 								}
 								case "TORCH": {
 									playerTorch.remove();
-									playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.80f), 110, PLAYER_X, PLAYER_Y);
+									playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.85f), 85, PLAYER_X, PLAYER_Y);
 									playerTorch.attachToBody(player.playerBody);
+									playerTorch.setIgnoreAttachedBody(true);
+									playerTorch.setSoftnessLength(100f);
 									//playerTorch.setXray(true);
 									break;
 								}
@@ -805,7 +809,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox.setUserData("DownArrow");
 						arrowBody.setLinearVelocity(0, -500f);
 
-						player.playerBody.applyForce(0,130000,0,0,true);
+						player.playerBody.applyForce(0,150000,0,0,true);
 					} else if (tx.playerSprite.equals(tx.playerUp) || leanUp) {
 						playerDirection = "Up";
 						tx.playerSprite = tx.playerAttackUp;
@@ -814,7 +818,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox.setUserData("UpArrow");
 						arrowBody.setLinearVelocity(0, 500f);
 
-						player.playerBody.applyForce(0,-130000,0,0,true);
+						player.playerBody.applyForce(0,-150000,0,0,true);
 
 					} else if (tx.playerSprite.equals(tx.playerLeft)) {
 						playerDirection = "Left";
@@ -824,7 +828,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox.setUserData("LeftArrow");
 						arrowBody.setLinearVelocity(-500f, 0);
 
-						player.playerBody.applyForce(130000,0,0,0,true);
+						player.playerBody.applyForce(150000,0,0,0,true);
 
 					} else if (tx.playerSprite.equals(tx.playerRight)) {
 						playerDirection = "Right";
@@ -834,7 +838,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox.setUserData("RightArrow");
 						arrowBody.setLinearVelocity(500f, 0);
 
-						player.playerBody.applyForce(-130000,0,0,0,true);
+						player.playerBody.applyForce(-150000,0,0,0,true);
 					}
 					//only triggers if the player hasn't moved at all yet - player starts facing down
 					else {
@@ -845,7 +849,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowHitbox.setUserData("DownArrow");
 						arrowBody.setLinearVelocity(0, -500f);
 
-						player.playerBody.applyForce(0,130000,0,0,true);
+						player.playerBody.applyForce(0,150000,0,0,true);
 					}
 					//pause player in place while attacking (attacks must be timed correctly!)
 
@@ -1118,11 +1122,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 				if (potIt.hasNext()) {
 					Pot pot = potIt.next();
 					if (brokenPots.contains(pot)) {
-						//one in 7 chance to get a potion from a pot - subject to change
+						//one in 20 chance to get a potion from a pot - subject to change (was 7)
 						int min = 1;
-						int max = 10;
+						int max = 20;
 						int potionChance = (int) (Math.random() * (max - min + 1)) + min;
-						if (potionChance == 10) {
+						if (potionChance == 20) {
 							//create potion object
 							Potion potion = new Potion(world, pot.potBody.getPosition().x, pot.potBody.getPosition().y, 1);
 							potion.createPotion(potionArrayMap, rayHandler);
@@ -1140,7 +1144,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 							//hearts.add(heart);
 							//heartArrayMap.put(heart.heartBody, heart);
 						}
-
 
 						pots.remove(pot);
 						potArrayMap.removeKey(pot.potBody);
@@ -1263,7 +1266,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						Vector2 vec2 = new Vector2(player.playerBody.getPosition());
 
 						float x = MathUtils.atan2(vec2.y - vec1.y, vec2.x - vec1.x);
-						float randomOffset = Random.randomFloat(1.5f,0.5f);
+						float randomOffset = Random.randomFloat(1.3f,0.3f);
 						randomOffset = randomOffset / 10;
 						boolean random = Random.randomBoolean();
 						Vector2 finalX = new Vector2((float)Math.cos(x),(float)Math.sin(x));
