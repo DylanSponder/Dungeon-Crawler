@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ai.StandaloneFileSystem;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.game.entity.Arrow;
 import com.mygdx.game.entity.behaviours.fsm.EnemySkull;
 import com.mygdx.game.entity.behaviours.fsm.EnemySkullState;
 import com.mygdx.game.entity.Skull;
@@ -182,6 +183,23 @@ public class GameContactListener implements ContactListener {
 
 
 
+                        }
+                    }
+                }
+                break;
+        }
+
+        switch (collideeStr) {
+            case "Cobweb":
+                if (collider.getBody().getUserData() == "Arrow") {
+                    for (Arrow arrow : arrows) {
+                        if (arrow.onFire) {
+                            System.out.println("COBWEB ON FIRE");
+                            for (Cobweb cob : cobwebs) {
+                                if (cob.cobBody == collidee.getBody()) {
+                                    burnedCobwebs.add(cob);
+                                }
+                            }
                         }
                     }
                 }

@@ -40,17 +40,17 @@ import com.mygdx.game.level.InitLevel;
 
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch playerBatch, arrowBatch, enemyBatch, potBatch, hudBatch, tutoBatch, fontBatch, inventoryBatch;
-	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch, cobBatch;
+	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch, flameBatch, cobBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch;
 	public static World world;
-	public static boolean debug = true;
+	public static boolean debug = false;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
 	private boolean playerPaused, playerMeleeAttacking, playerRangedAttacking;
 	private Body sword, arrowBody;
 	private Arrow arrow;
-	public ArrayList<Arrow> arrows;
+	public static ArrayList<Arrow> arrows;
 	public static ArrayList<Body> arrowBodiesCollided, boneBodiesCollided, skullBodiesDestroyed, deadEnemyBodies;
 	public ArrayMap<Body, Arrow> arrowArrayMap;
 	public ArrayMap<Body, Skull> skullArrayMap;
@@ -115,6 +115,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		columnBaseBatch = new SpriteBatch();
 		pedestalBatch = new SpriteBatch();
 		fireBatch = new SpriteBatch();
+		flameBatch = new SpriteBatch();
 		fontBatch = new SpriteBatch();
 		inventoryBatch = new SpriteBatch();
 		cobBatch = new SpriteBatch();
@@ -441,7 +442,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 					//pause player in place while attacking (attacks must be timed correctly!)
 					arrowBody.setUserData("Arrow");
-					arrows.add(arrow = new Arrow(arrowBody, playerDirection, 0f));
+					if (player.hasGreekFire && !(player.greekFireUses < 1)){
+						arrows.add(arrow = new Arrow(arrowBody, playerDirection, 0f, true));
+						player.greekFireUses--;
+					} else {
+						arrows.add(arrow = new Arrow(arrowBody, playerDirection, 0f, false));
+					}
 					arrowArrayMap.put(arrowBody, arrow);
 
 					playerPaused = true;
@@ -532,6 +538,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 								}
 								case "GREEK FIRE": {
+									player.hasGreekFire = true;
+									player.greekFireUses = 10;
 									//TODO: add fire arrows
 									break;
 								}
@@ -597,7 +605,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 								}
 								case "GREEK FIRE": {
-									//TODO: add fire arrows
+									player.hasGreekFire = true;
+									player.greekFireUses = 10;
 									break;
 								}
 								case "TORCH": {
@@ -670,7 +679,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 								}
 								case "GREEK FIRE": {
-									//TODO: add fire arrows
+									player.hasGreekFire = true;
+									player.greekFireUses = 10;
 									break;
 								}
 								case "TORCH": {
@@ -701,7 +711,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 								player.shopkeeper.inventoryText.remove(2);
 								player.shopkeeper.inventoryText.remove(2);
 							}
-							else if (secondItem.purchased && secondItem.purchased) {
+							else if (secondItem.purchased && !firstItem.purchased) {
 								player.shopkeeper.inventoryText.remove(0);
 								player.shopkeeper.inventoryText.remove(0);
 							}
@@ -877,7 +887,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					//pause player in place while attacking (attacks must be timed correctly!)
 
 					arrowBody.setUserData("Arrow");
-					arrows.add(arrow = new Arrow(arrowBody, playerDirection, 0f));
+					arrows.add(arrow = new Arrow(arrowBody, playerDirection, 0f, false));
 					arrowArrayMap.put(arrowBody, arrow);
 
 					playerPaused = true;
@@ -1413,13 +1423,25 @@ public class DungeonCrawler extends ApplicationAdapter {
 					Arrow value = arrowEntry.value;
 
 					value.stateTime += Gdx.graphics.getDeltaTime();
+					value.stateTime2 += Gdx.graphics.getDeltaTime();
+
 
 					Body key = arrowEntry.key;
 					//render each individual arrow
 					arrowBatch.begin();
-					TextureRegion currentFrame = tx.arrowAnimation.getKeyFrame(value.stateTime, true);
+					flameBatch.begin();
+					if (value.onFire) {
+						TextureRegion flameFrame = tx.flameAnimation.getKeyFrame(value.stateTime2,true);
+						TextureRegion currentFrame = tx.arrowAnimation.getKeyFrame(value.stateTime, true);
+						Arrow.renderFireArrow(arrowBatch, currentFrame, flameFrame, arrowEntry.value.direction, key.getPosition().x, key.getPosition().y);
+					}else {
+						//System.out.println("YESSSSSS");
+						TextureRegion currentFrame = tx.arrowAnimation.getKeyFrame(value.stateTime, true);
+						Arrow.renderArrow(arrowBatch, currentFrame, arrowEntry.value.direction, key.getPosition().x, key.getPosition().y);
+					}
+
 					//arrowBatch.draw(currentFrame, key.getPosition().x, key.getPosition().y);
-					Arrow.renderArrow(arrowBatch, currentFrame, arrowEntry.value.direction, key.getPosition().x, key.getPosition().y);
+					flameBatch.end();
 					arrowBatch.end();
 				}
 
@@ -1640,6 +1662,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			columnTopBatch.setProjectionMatrix(camera.combined);
 			pedestalBatch.setProjectionMatrix(camera.combined);
 			fireBatch.setProjectionMatrix(camera.combined);
+			flameBatch.setProjectionMatrix(camera.combined);
 			fontBatch.setProjectionMatrix(camera.combined);
 			inventoryBatch.setProjectionMatrix(camera.combined);
 			hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);

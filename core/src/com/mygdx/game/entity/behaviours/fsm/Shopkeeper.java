@@ -116,7 +116,7 @@ public class Shopkeeper {
         switch (kind) {
             case "POTION": {
                 System.out.println("POTION DESCRIPTION ADDED TO A POTION");
-                String desc = "  " + cost + " HEALS 1.5 HEARTS";
+                String desc = "  " + cost + " HEAL (1.5 HEARTS)";
                 Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinSprite, 0.5f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()
@@ -134,7 +134,7 @@ public class Shopkeeper {
             }
             case "GREEK FIRE": {
                 System.out.println("GREEK FIRE DESCRIPTION ADDED TO A GREEK FIRE");
-                String desc = "  " + cost + " FIRE ARROWS (10 USES)";
+                String desc = "  " + cost + " FLAME ARROWS (X10)";
                 Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinSprite, 0.5f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()
@@ -143,7 +143,7 @@ public class Shopkeeper {
             }
             case "TORCH": {
                 System.out.println("TORCH DESCRIPTION ADDED TO A TORCH");
-                String desc = "  " + cost + " LIGHT (1 USE)";
+                String desc = "  " + cost + " LIGHT (THIS FLOOR)";
                 Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinSprite, 0.5f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()
@@ -152,7 +152,7 @@ public class Shopkeeper {
             }
             case "BELT": {
                 System.out.println("BELT DESCRIPTION ADDED TO A BELT");
-                String desc = "  " + cost + " CAPACITY + 1";
+                String desc = "  " + cost + " CAPACITY UP (+1)";
                 Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinSprite, 0.5f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()

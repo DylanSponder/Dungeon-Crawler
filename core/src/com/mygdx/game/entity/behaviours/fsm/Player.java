@@ -26,6 +26,8 @@ public class Player {
     public int currentRoom;
     public boolean touchingRoom;
     public boolean midAnimationFrame;
+    public boolean hasGreekFire;
+    public int greekFireUses;
 
     public Fixture playerDetectionFixture;
     public boolean buyingStock;
@@ -33,6 +35,7 @@ public class Player {
     public Player() {
         PLAYER_HEALTH = 12;
         midAnimationFrame = false;
+        hasGreekFire = false;
     }
 
     public Body createPlayer(World world, float PLAYER_X, float PLAYER_Y){

@@ -31,7 +31,7 @@ public class CreateAssets {
     Texture shopkeeperTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/OldMan3/SpriteSheet.png"));
     Texture tutorialTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Tuto.png"));
     Texture fireAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Fire.png"));
-    Texture flameAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/SmallFire.png"));
+    Texture flameAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Flame.png"));
     Texture blueFireAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/FireBlu.png"));
     Texture smokeAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Smoke.png"));
     Texture fireOutAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/FireOut.png"));
@@ -85,10 +85,10 @@ public class CreateAssets {
     public Animation<TextureRegion> fireOutAnimation = new Animation<TextureRegion>(0.10f, fireOutAnimationTexture);
 
     TextureRegion[][] flameTextureArray = TextureRegion.split(flameAnimationSheet,
-            flameAnimationSheet.getWidth() / 6,
-            flameAnimationSheet.getHeight() / 1);
+            flameAnimationSheet.getWidth() / 3,
+            flameAnimationSheet.getHeight() / 2);
 
-    TextureRegion[] flameFrames = new TextureRegion[6 * 1];
+    TextureRegion[] flameFrames = new TextureRegion[3 * 2];
 
     TextureRegion[][] fireTextureArray = TextureRegion.split(fireAnimationSheet,
             fireAnimationSheet.getWidth() / 5,
@@ -127,6 +127,7 @@ public class CreateAssets {
     int index3 = 0;
     int index4 = 0;
     int index5 = 0;
+    int index6 = 0;
 
 
     public TextureRegion colTop1 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
@@ -274,6 +275,17 @@ public class CreateAssets {
 
         // Initialize the Animation with the frame interval and array of frames
         fireAnimation = new Animation<TextureRegion>(0.14f, fireFrames);
+
+        //small flame animation
+        for (int g = 0; g < 2; g++) {
+            for (int w = 0; w < 3; w++) {
+                flameFrames[index6++] = flameTextureArray[g][w];
+            }
+        }
+
+        // Initialize the Animation with the frame interval and array of frames
+        flameAnimation = new Animation<TextureRegion>(0.14f, flameFrames);
+
 
         //blue fire animation
         for (int p = 0; p < 2; p++) {
