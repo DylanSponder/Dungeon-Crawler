@@ -1247,6 +1247,13 @@ for (int i = 0; i < layerSize; i++) {
             Pot p2 = new Pot(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 2);
             pots.add(p2);
             break;
+
+        case "cobweb":
+            currentCell = init.cr.middleFloorTile;
+            Cobweb c1 = new Cobweb(world,((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            cobwebs.add(c1);
+            break;
+
         //entities
         case "enemy":
             currentCell = init.cr.middleFloorTile;

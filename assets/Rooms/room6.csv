@@ -1,9 +1,9 @@
 ﻿,,,,,,,,,,,,,,,,,tlw,tw,dtl,doortl,doortr,dtr,tw,trw
-,,,,,,,,,,,,,,,,,lw,f,f,f,f,f,f,rw
+,,,,,,,,,,,,,,,,,lw,f,fob1,fob3,f,f,f,rw
 ,,,,,,,,,,,,,,,tlw,tw,brt,f,fcol10fire,fcol10fire,f,fenemy,f,rw
 ,,,,,,,,,,,,,,,lw,f,f,fob2,fcol4,fcol4,fob3,f,f,dru
 ,,,,,,,,,,,,,,,lw,f,f,f,fcol7,fcol7,f,f,f,doorur
-,,,,,,,,,,,,,,,lw,f,f,f,fob1,fob2,f,f,f,doorlr
+,,,,,,,,,,,,,,,lw,f,f,fob1,fob1,fob2,fob1,f,f,doorlr
 ,,,,,,,,,,,,,,,lw,f,f,f,fcol10fire,fcol10fire,f,f,f,drl
 ,,,,,,,,,,,,,,,lw,f,f,fob2,fcol4,fcol4,fob3,f,f,rw
 ,,,,,,,,,,,,,,tlw,brt,f,f,f,fcol7,fcol7,f,f,f,rw

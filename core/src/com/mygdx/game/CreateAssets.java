@@ -31,6 +31,7 @@ public class CreateAssets {
     Texture shopkeeperTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/OldMan3/SpriteSheet.png"));
     Texture tutorialTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Tuto.png"));
     Texture fireAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Fire.png"));
+    Texture flameAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/SmallFire.png"));
     Texture blueFireAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/FireBlu.png"));
     Texture smokeAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Smoke.png"));
     Texture fireOutAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/FireOut.png"));
@@ -70,16 +71,24 @@ public class CreateAssets {
     //animations
 
     public TextureRegion fireAnimationTexture = new TextureRegion(fireAnimationSheet,0,0,16,16);
+    public TextureRegion flameAnimationTexture = new TextureRegion(flameAnimationSheet,0,0,16,16);
     public TextureRegion blueFireAnimationTexture = new TextureRegion(blueFireAnimationSheet,0,0,16,16);
     public TextureRegion smokeAnimationTexture = new TextureRegion(smokeAnimationSheet,0,0,16,16);
     public TextureRegion arrowAnimationTexture = new TextureRegion(fireAnimationSheet,0,0,16,16);
     public TextureRegion fireOutAnimationTexture = new TextureRegion(fireOutAnimationSheet,0,0,16,16);
 
     public Animation<TextureRegion> fireAnimation = new Animation<TextureRegion>(0.25f, fireAnimationTexture);
+    public Animation<TextureRegion> flameAnimation = new Animation<TextureRegion>(0.20f, flameAnimationTexture);
     public Animation<TextureRegion> blueFireAnimation = new Animation<TextureRegion>(0.25f, fireAnimationTexture);
 
     public Animation<TextureRegion> smokeAnimation = new Animation<TextureRegion>(0.25f, smokeAnimationTexture);
     public Animation<TextureRegion> fireOutAnimation = new Animation<TextureRegion>(0.10f, fireOutAnimationTexture);
+
+    TextureRegion[][] flameTextureArray = TextureRegion.split(flameAnimationSheet,
+            flameAnimationSheet.getWidth() / 6,
+            flameAnimationSheet.getHeight() / 1);
+
+    TextureRegion[] flameFrames = new TextureRegion[6 * 1];
 
     TextureRegion[][] fireTextureArray = TextureRegion.split(fireAnimationSheet,
             fireAnimationSheet.getWidth() / 5,

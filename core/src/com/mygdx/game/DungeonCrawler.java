@@ -43,7 +43,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch, cobBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch;
 	public static World world;
-	public static boolean debug = false;
+	public static boolean debug = true;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -472,13 +472,15 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 
 			public boolean keyDown(int keycode) {
-/*
+
 				if (debug) {
 
 					// (For Debugging) Add potion
 					if (keycode == Keys.NUM_9) {
 						hud.inventory.addPotion();
 					}
+				}
+				/*
 
 					// (For Debugging) Damage player
 					if (keycode == Keys.NUM_0) {
@@ -535,10 +537,15 @@ public class DungeonCrawler extends ApplicationAdapter {
 								}
 								case "TORCH": {
 									playerTorch.remove();
-									playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.75f), 100, PLAYER_X, PLAYER_Y);
+									playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.85f), 95, PLAYER_X, PLAYER_Y);
 									playerTorch.attachToBody(player.playerBody);
 									playerTorch.setIgnoreAttachedBody(true);
 									playerTorch.setSoftnessLength(100f);
+									break;
+								}
+								case "BELT": {
+									//hud.inventory.Capacity = hud.inventory.Capacity + 2;
+									hud.inventory.changeCapacity(1, true);
 									break;
 								}
 							}
@@ -595,10 +602,15 @@ public class DungeonCrawler extends ApplicationAdapter {
 								}
 								case "TORCH": {
 									playerTorch.remove();
-									playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.75f), 100, PLAYER_X, PLAYER_Y);
+									playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.85f), 95, PLAYER_X, PLAYER_Y);
 									playerTorch.attachToBody(player.playerBody);
 									playerTorch.setIgnoreAttachedBody(true);
 									playerTorch.setSoftnessLength(100f);
+									break;
+								}
+								case "BELT": {
+									//hud.inventory.Capacity = hud.inventory.Capacity + 2;
+									hud.inventory.changeCapacity(1, true);
 									break;
 								}
 							}
@@ -663,11 +675,16 @@ public class DungeonCrawler extends ApplicationAdapter {
 								}
 								case "TORCH": {
 									playerTorch.remove();
-									playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.85f), 85, PLAYER_X, PLAYER_Y);
+									playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.85f), 95, PLAYER_X, PLAYER_Y);
 									playerTorch.attachToBody(player.playerBody);
 									playerTorch.setIgnoreAttachedBody(true);
 									playerTorch.setSoftnessLength(100f);
 									//playerTorch.setXray(true);
+									break;
+								}
+								case "BELT": {
+									//hud.inventory.Capacity = hud.inventory.Capacity + 2;
+									hud.inventory.changeCapacity(1, true);
 									break;
 								}
 							}
@@ -1511,6 +1528,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 
 						currentFrame = tx.blueFireAnimation.getKeyFrame(stateTime, f.active);
+					} else if (f.type == 3) {
+						//TODO: Finish small flame
+						currentFrame = tx.flameAnimation.getKeyFrame(stateTime, f.active);
 					}
 
 					fireBatch.begin();

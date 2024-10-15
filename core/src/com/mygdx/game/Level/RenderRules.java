@@ -2,6 +2,7 @@ package com.mygdx.game.level;
 
 import com.mygdx.game.DungeonCrawler;
 
+import java.awt.dnd.InvalidDnDOperationException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -229,7 +230,10 @@ public class RenderRules {
                                         break;
                             }
                             switch (str) {
-
+                                case "cob":
+                                    drawableLevelLayer.add(index,"cobweb");
+                                    index++;
+                                    break;
                                     //enemy
                                 case "enemy":
                                     drawableLevelLayer.add(index, "enemy");

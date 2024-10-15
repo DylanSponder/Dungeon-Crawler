@@ -14,7 +14,7 @@ public class Inventory extends Table {
   int Cooldown;
   int CooldownRemaining;
   boolean WaitingForCooldown = false;
-  int Capacity;
+  public int Capacity;
   public int Size;
 
   public Inventory(Sprite potionSymbol, Sprite emptySlotSymbol, int capacity, int cooldown) {
@@ -23,6 +23,15 @@ public class Inventory extends Table {
     emptySlot = new TextureRegionDrawable(emptySlotSymbol);
     actors = new ArrayList<Image>();
     Capacity = capacity;
+    for (int i = 0; i < Capacity; i++) {
+      actors.add(new Image(emptySlot));
+      this.add(actors.get(i));
+    }
+  }
+
+  public void changeCapacity(int amount, boolean add) {
+    //actors.clear();
+    this.Capacity = this.Capacity + amount;
     for (int i = 0; i < Capacity; i++) {
       actors.add(new Image(emptySlot));
       this.add(actors.get(i));

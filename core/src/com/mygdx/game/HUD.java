@@ -51,7 +51,7 @@ public class HUD {
     Sprite potionSymbol = new Sprite(tx.potionTexture, 9, 11);
     Sprite emptySlotSymbol = new Sprite(tx.emptySlotTexture, 9, 11);
     //Potion slots
-    inventory = new Inventory(potionSymbol, emptySlotSymbol, 3, 30);
+    inventory = new Inventory(potionSymbol, emptySlotSymbol, 1, 150);
 
     float spacing = 50f;
     table.add(healthBar);
