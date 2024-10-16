@@ -110,11 +110,11 @@ public class BodyFactory {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(x + 8f, y + 9f);
+        bodyDef.position.set(x + 8f, y + 8.5f);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         CircleShape shape = new CircleShape();
-        shape.setRadius(8.5f);
+        shape.setRadius(8.4f);
         body.createFixture(shape, 1.0f);
         shape.dispose();
         return body;

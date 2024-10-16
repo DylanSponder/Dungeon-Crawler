@@ -43,7 +43,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch, flameBatch, cobBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch;
 	public static World world;
-	public static boolean debug = false;
+	public static boolean debug = true;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -52,7 +52,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private Arrow arrow;
 	public static ArrayList<Arrow> arrows;
 	public static ArrayList<Body> arrowBodiesCollided, boneBodiesCollided, skullBodiesDestroyed, deadEnemyBodies;
-	public ArrayMap<Body, Arrow> arrowArrayMap;
+	public static ArrayMap<Body, Arrow> arrowArrayMap;
 	public ArrayMap<Body, Skull> skullArrayMap;
 	public static ArrayMap<Body, Bone> boneArrayMap;
 	public ArrayMap<Body, Potion> potionArrayMap;
@@ -226,7 +226,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//create the Box2D ray handler
 		rayHandler = new RayHandler(world);
-		rayHandler.setAmbientLight(0f, 0f, 0f, 0.020f);
+		rayHandler.setAmbientLight(0f, 0f, 0f, 0.015f);
 		if (debug) {
 			rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
 		}
@@ -887,7 +887,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 					//pause player in place while attacking (attacks must be timed correctly!)
 
 					arrowBody.setUserData("Arrow");
-					arrows.add(arrow = new Arrow(arrowBody, playerDirection, 0f, false));
+					if (player.hasGreekFire && !(player.greekFireUses < 1)){
+						arrows.add(arrow = new Arrow(arrowBody, playerDirection, 0f, true));
+						player.greekFireUses--;
+					} else {
+						arrows.add(arrow = new Arrow(arrowBody, playerDirection, 0f, false));
+					}
 					arrowArrayMap.put(arrowBody, arrow);
 
 					playerPaused = true;
@@ -1457,7 +1462,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 					Body collidedBody = bodyIt.next();
 					//if the array map contains the arrow body that collided, remove that arrow from the game
 					if (arrowArrayMap.containsKey(collidedBody)) {
+						arrowArrayMap.get(collidedBody).onFire = false;
 						arrowArrayMap.removeKey(collidedBody);
+
 						//remove the arrow Box2D body
 						world.destroyBody(collidedBody);
 						//remove body from arrowBodiesCollided

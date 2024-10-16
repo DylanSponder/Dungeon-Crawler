@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class Arrow {
-    public static Body arrowBody;
+    public Body arrowBody;
     public String direction;
     static float arrowX;
     static float arrowY;
@@ -14,7 +14,7 @@ public class Arrow {
     public boolean onFire;
 
     public Arrow(Body arrow, String direction, float stateTime, boolean onFire){
-        arrowBody = arrow;
+        this.arrowBody = arrow;
         this.direction = direction;
         this.stateTime = stateTime;
         this.stateTime2 = stateTime;

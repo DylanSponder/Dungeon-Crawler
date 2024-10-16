@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ai.StandaloneFileSystem;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.OrderedMap;
 import com.mygdx.game.entity.Arrow;
 import com.mygdx.game.entity.behaviours.fsm.EnemySkull;
 import com.mygdx.game.entity.behaviours.fsm.EnemySkullState;
@@ -31,11 +32,12 @@ public class GameContactListener implements ContactListener {
         switch (colliderStr) {
             case "Skull":
                 if (collideeStr == "Skull") {
-                    System.out.println("WAWAWAWAWAWAWAWAWAWAWAWA");
+
                 }
                 /*
                 if (fbAsString == "Skull") {
                     //TODO Yeah this doesn't work. Bodies don't actually collide with other bodies when they are added to the world
+                    //TODO Use b2::Contact instead
                     // check for coordinates instead
                     if (!deadEnemyBodies.contains(fa.getBody())) {
                         //arrowBodiesCollided.add(fa.getBody());
@@ -60,8 +62,23 @@ public class GameContactListener implements ContactListener {
                 }
                 break;
             case "Fire":
-                //System.out.println(faAsString + " " + fbAsString);
-                if ((collidee.getUserData() != "Proximity" && collidee.getBody().getUserData() != "Enemy")
+                if (collidee.getBody().getUserData() == "Arrow") {
+                    for (Fire f : fires) {
+                        if (f.fireBody == collider.getBody()) {
+                            if (f.extinguish) {
+                                f.smoking = true;
+                                f.extinguish = false;
+                        for (Arrow a : arrows) {
+                            if (a.arrowBody == collidee.getBody()) {
+                                a.onFire = true;
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                 else if ((collidee.getUserData() != "Proximity" && collidee.getBody().getUserData() != "Enemy")
                         && collidee.getBody().getUserData() != "Player"
                         && collidee.getBody().getUserData() != "Bone"
                 ) {
@@ -73,6 +90,7 @@ public class GameContactListener implements ContactListener {
                                 f.smoking = true;
                                 f.extinguish = false;
                             }
+
                         }
                     }
                 }
@@ -90,7 +108,7 @@ public class GameContactListener implements ContactListener {
                 //System.out.println(fa.getBody().getUserData() + " " + fb.getBody().getUserData());
                 //System.out.println(fa.getUserData() + " " + fb.getUserData());
 
-                if (((collidee.getBody().getUserData() == "Enemy" && collidee.getUserData() != "Proximity")
+                if (((collidee.getBody().getUserData() == "Enemy" && collidee.getUserData() != "Proximity" && collidee.getBody().getUserData() != "Cobweb")
                         || collidee.getBody().getUserData() == "Wall")) {
                     if (!arrowBodiesCollided.contains(collider.getBody())) {
                         arrowBodiesCollided.add(collider.getBody());
@@ -192,14 +210,22 @@ public class GameContactListener implements ContactListener {
         switch (collideeStr) {
             case "Cobweb":
                 if (collider.getBody().getUserData() == "Arrow") {
-                    for (Arrow arrow : arrows) {
-                        if (arrow.onFire) {
-                            System.out.println("COBWEB ON FIRE");
-                            for (Cobweb cob : cobwebs) {
-                                if (cob.cobBody == collidee.getBody()) {
-                                    burnedCobwebs.add(cob);
+                    for (OrderedMap.Entry<Body, Arrow> arrowEntry : arrowArrayMap.entries()) {
+                        Arrow value = arrowEntry.value;
+                        if (value.arrowBody == collider.getBody()) {
+                            if (value.onFire) {
+                                System.out.println("COBWEB ON FIRE");
+                                value.onFire = false;
+                                for (Cobweb cob : cobwebs) {
+                                    if (cob.cobBody == collidee.getBody()) {
+                                        burnedCobwebs.add(cob);
+                                    }
+                                }
+                                if (!arrowBodiesCollided.contains(collider.getBody())) {
+                                    arrowBodiesCollided.add(collider.getBody());
                                 }
                             }
+
                         }
                     }
                 }
@@ -541,30 +567,29 @@ public class GameContactListener implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
-        Fixture fa = contact.getFixtureA();
-        Fixture fb = contact.getFixtureB();
+        Fixture collider = contact.getFixtureA();
+        Fixture collidee = contact.getFixtureB();
 
-        String faAsString = fa.getBody().getUserData().toString();
-        String fbAsString = fb.getBody().getUserData().toString();
+        String colliderAsString = collider.getBody().getUserData().toString();
+        String collideeAsString = collidee.getBody().getUserData().toString();
 
-        switch (faAsString) {
+        switch (colliderAsString) {
             case "Player":
-                if (fb.getUserData() == "ShopSell") {
+                if (collidee.getUserData() == "ShopSell") {
                     for (Shopkeeper s : shopkeepers) {
-                        System.out.println("HEY THIS WORKS");
                         s.HideStock();
                     }
                 }
                 break;
         }
 
-        if (    (fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Enemy")
-                ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Player")
+        if (    (collider.getBody().getUserData() == "Player" && collidee.getBody().getUserData() == "Enemy")
+                ||(collider.getBody().getUserData() == "Enemy" && collidee.getBody().getUserData() == "Player")
         ){
-            if  (fa.getUserData() == "Proximity"||
-                    fb.getUserData() == "Proximity"){
+            if  (collider.getUserData() == "Proximity"||
+                    collidee.getUserData() == "Proximity"){
                 for (EnemySkull e : enemies){
-                    if (e.enemyBody == fa.getBody() || e.enemyBody == fb.getBody()){
+                    if (e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody()){
                         e.playerInRange = false;
                         e.getStateMachine().changeState(EnemySkullState.WANDER);
                     }
@@ -572,8 +597,8 @@ public class GameContactListener implements ContactListener {
             }
         }
 
-        if (fa.getBody().getUserData().toString().startsWith("Room")) {
-            if (fb.getBody().getUserData() == "Player") {
+        if (collider.getBody().getUserData().toString().startsWith("Room")) {
+            if (collidee.getBody().getUserData() == "Player") {
                 player.touchingRoom = false;
                 if (player.currentRoom <= 9){
                         init.roomList.get(player.currentRoom).unlockDoor(world, init.roomList.get(player.currentRoom+1),false);
@@ -581,28 +606,26 @@ public class GameContactListener implements ContactListener {
             }
         }
 
-
-
-        if ((fa.getBody().getUserData() == "Door" && fb.getBody().getUserData() == "Player")
-            ||(fa.getBody().getUserData() == "Player" && fb.getBody().getUserData() == "Door")
-                || ((fa.getBody().getUserData() == "Door" && fb.getBody().getUserData() == "Enemy")
-                ||(fa.getBody().getUserData() == "Enemy" && fb.getBody().getUserData() == "Door"))
+        if ((collider.getBody().getUserData() == "Door" && collidee.getBody().getUserData() == "Player")
+            ||(collider.getBody().getUserData() == "Player" && collidee.getBody().getUserData() == "Door")
+                || ((collider.getBody().getUserData() == "Door" && collidee.getBody().getUserData() == "Enemy")
+                ||(collider.getBody().getUserData() == "Enemy" && collidee.getBody().getUserData() == "Door"))
         )
         {
-            if (fa.getBody().getUserData() == "Door"){
+            if (collider.getBody().getUserData() == "Door"){
                 for (Room r : init.roomList) {
                     for (Door d : r.doors) {
-                        if (d.doorBody == fa.getBody()) {
+                        if (d.doorBody == collider.getBody()) {
                             d.open = false;
                         }
                     }
                 }
 
             }
-            if (fb.getBody().getUserData() == "Door"){
+            if (collidee.getBody().getUserData() == "Door"){
                 for (Room r : init.roomList) {
                     for (Door d : r.doors) {
-                        if (d.doorBody == fa.getBody()) {
+                        if (d.doorBody == collider.getBody()) {
                             d.open = false;
                         }
                     }
@@ -610,10 +633,10 @@ public class GameContactListener implements ContactListener {
             }
         }
 
-        if (fa.getBody().getUserData() == "Door" && fb.getBody().getUserData() == "Player"
-                || (fa.getBody().getUserData() == "Door" && fb.getBody().getUserData() == "Door")) {
+        if (collider.getBody().getUserData() == "Door" && collidee.getBody().getUserData() == "Player"
+                || (collider.getBody().getUserData() == "Door" && collidee.getBody().getUserData() == "Door")) {
             //player must be touching a room but not a door
-            if (fb.getBody().getUserData() == "Player" && player.touchingRoom) {
+            if (collidee.getBody().getUserData() == "Player" && player.touchingRoom) {
                 if (player.currentRoom != 0) {
                     if (init.roomList.get(player.currentRoom).enemyCounter != 0) {
                         init.roomList.get(player.currentRoom).lockAllDoors(world, init.roomList.get(player.currentRoom), true);

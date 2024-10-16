@@ -1,11 +1,11 @@
 ﻿,,,,,,,,,,,,,,,,,tlw,tw,dtl,doortl,doortr,dtr,tw,trw
-,,,,,,,,,,,,,,,,,lw,f,fob1,fob3,f,f,f,rw
+,,,,,,,,,,,,,,,,,lw,f,fob1,f,f,fob3,f,rw
 ,,,,,,,,,,,,,,,tlw,tw,brt,f,fcol10fire,fcol10fire,f,fenemy,f,rw
-,,,,,,,,,,,,,,,lw,f,f,fob2,fcol4,fcol4,fob3,f,f,dru
-,,,,,,,,,,,,,,,lw,f,f,f,fcol7,fcol7,f,f,f,doorur
+,,,,,,,,,,,,,,,lw,f,f,fob2,fcol4,fcol4,fob3,f,fob3,dru
+,,,,,,,,,,,,,,,lw,fob1,f,f,fcol7,fcol7,f,f,f,doorur
 ,,,,,,,,,,,,,,,lw,f,f,fob1,fob1,fob2,fob1,f,f,doorlr
 ,,,,,,,,,,,,,,,lw,f,f,f,fcol10fire,fcol10fire,f,f,f,drl
-,,,,,,,,,,,,,,,lw,f,f,fob2,fcol4,fcol4,fob3,f,f,rw
+,,,,,,,,,,,,,,,lw,fob1,f,fob2,fcol4,fcol4,fob3,f,fob2,rw
 ,,,,,,,,,,,,,,tlw,brt,f,f,f,fcol7,fcol7,f,f,f,rw
 ,,,,,,,,,,,,,tlw,brt,fob2,f,fob3,f,fob1,fob2,f,tlt,bw,brw
 ,,,,,,,,,tlw,tw,tw,tw,brt,f,f,f,f,f,f,f,f,rw,,
@@ -25,6 +25,6 @@ doorul,f,f,f,fob3,f,f,fcol10fire,f,rw,,,,,,,,,,,,,,,
 doorll,f,f,fob2,f,f,f,fcol4,f,rw,,,,,,,,,,,,,,,
 dll,f,f,f,f,f,f,fcol7,f,rw,,,,,,,,,,,,,,,
 lw,f,f,f,f,f,f,f,f,rw,,,,,,,,,,,,,,,
-blw,bw,trt,f,f,f,f,tlt,bw,brw,,,,,,,,,,,,,,,
+blw,bw,trt,f,f,fenemy,f,tlt,bw,brw,,,,,,,,,,,,,,,
 ,,lw,f,f,f,f,rw,,,,,,,,,,,,,,,,,
 ,,blw,dbl,doorbl,doorbr,dbr,brw,,,,,,,,,,,,,,,,,
