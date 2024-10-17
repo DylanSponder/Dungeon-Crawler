@@ -727,7 +727,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 				}
 				// Use potion
-				if (keycode == 8) {
+				if (keycode == Keys.E) {
 					if (hud.inventory.Size > 0) {
 						hud.inventory.usePotion(1);
 						hud.healthBar.GainHealth(1.5f);
@@ -1020,7 +1020,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 							//System.out.println("ROOM INDEX OF FIRE" + GenerateLevel.init.roomList.get(player.currentRoom).index);
 							if (rayResult && !s.resurrecting && f.active) {
 								//System.out.println("Resurrecting dead enemy");
-								Fire respawnFire = new Fire(world, rayHandler, s.skullX - 4, s.skullY - 8, false, 0f, 2);
+								Fire respawnFire = new Fire(world, rayHandler, s.skullX - 4, s.skullY - 8, false, 0f, 2, false);
 								respawnFire.createFire(new Color(0,0,1f,0.6f), 15);
 								fires.add(respawnFire);
 								s.resurrecting = true;
@@ -1068,6 +1068,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				Potion potion = potionIt.next();
 				if (collectedPotions.contains(potion)) {
 
+					//if (hud.inventory.Size )
 					hud.inventory.addPotion();
 					potion.potionLight.remove();
 					potions.remove(potion);
@@ -1189,9 +1190,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 					if (brokenPots.contains(pot)) {
 						//one in 20 chance to get a potion from a pot - subject to change (was 7)
 						int min = 1;
-						int max = 20;
+						int max = 15;
 						int potionChance = (int) (Math.random() * (max - min + 1)) + min;
-						if (potionChance == 20) {
+						if (potionChance == 15) {
 							//create potion object
 							Potion potion = new Potion(world, pot.potBody.getPosition().x, pot.potBody.getPosition().y, 1);
 							potion.createPotion(potionArrayMap, rayHandler);
@@ -1528,7 +1529,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				TextureRegion currentFrame = tx.smokeAnimation.getKeyFrame(f.stateTime, false);
 				fireBatch.begin();
 				//fireBatch.draw(currentFrame, f.fireX, f.fireY);
-				Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking);
+				Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, false);
 				fireBatch.end();
 				f.stateTime += Gdx.graphics.getDeltaTime();
 
@@ -1543,7 +1544,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 					TextureRegion currentFrame2 = tx.fireOutAnimation.getKeyFrame(f.stateTime, true);
 					fireBatch.begin();
-					Fire.renderFire(fireBatch, currentFrame2, f.fireX, f.fireY, f.smoking);
+					Fire.renderFire(fireBatch, currentFrame2, f.fireX, f.fireY, f.smoking, false);
 					fireBatch.end();
 					f.stateTime += Gdx.graphics.getDeltaTime();
 
@@ -1563,7 +1564,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 
 					fireBatch.begin();
-					Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking);
+					if (f.upDown) {
+						Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, true);
+					} else {
+						Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, false);
+					}
+
 					fireBatch.end();
 
 					}

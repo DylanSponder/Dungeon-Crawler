@@ -133,7 +133,7 @@ public class GenerateLevel {
             }
 
             else {
-                if (i == 1) {
+                if (i == 5 || i == 1) {
                     newRoom.roomNum = 5;
                 } else {
                     int random = Random.randomInt(6, 1);
@@ -1210,7 +1210,10 @@ for (int i = 0; i < layerSize; i++) {
             Body newTorchWallLeft = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
             newTorchWallLeft.setUserData("Wall");
             Torch torL = new Torch(rayHandler, world, (((roomX + i) * 16) + 16 * 16) + 6, (levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8);
+            Fire fL = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 4,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 4, false,0f, 3, false);
+            fires.add(fL);
             torches.add(torL);
+            fL.createFire(new Color(0.25f,0.20f,0,0.7f),60);
             torL.createTorch(4);
             break;
         case "torr":
@@ -1218,7 +1221,10 @@ for (int i = 0; i < layerSize; i++) {
             Body newTorchWallRight = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
             newTorchWallRight.setUserData("Wall");
             Torch torR = new Torch(rayHandler, world, (((roomX + i) * 16) + 16 * 16) + 10, (levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8);
+            Fire fR = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 7,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 4, false,0f, 3, false);
+            fires.add(fR);
             torches.add(torR);
+            fR.createFire(new Color(0.25f,0.20f,0,0.7f),60);
             torR.createTorch(2);
             break;
         case "toru":
@@ -1226,7 +1232,10 @@ for (int i = 0; i < layerSize; i++) {
             Body newTorchWallUp = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
             newTorchWallUp.setUserData("Wall");
             Torch torU = new Torch(rayHandler, world, (((roomX + i) * 16) + 16 * 16) + 8, (levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 15);
+            Fire fU = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 5,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 5, false,0f, 3, false);
+            fires.add(fU);
             torches.add(torU);
+            fU.createFire(new Color(0.25f,0.20f,0,0.7f),60);
             torU.createTorch(1);
             break;
         case "tord":
@@ -1234,7 +1243,10 @@ for (int i = 0; i < layerSize; i++) {
             Body newTorchWallDown = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
             newTorchWallDown.setUserData("Wall");
             Torch torD = new Torch(rayHandler, world, (((roomX + i) * 16) + 16 * 16) + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 10);
+            Fire fD = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 + 10,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 + 7, false,0f, 3, true);
+            fires.add(fD);
             torches.add(torD);
+            fD.createFire(new Color(0.25f,0.20f,0,0.7f),60);
             torD.createTorch(3);
             break;
         case "pot":
@@ -1415,8 +1427,8 @@ for (int i = 0; i < layerSize; i++) {
             newTopWallCol10Fire.setUserData("Wall");
             Column twFireCol10 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,10);
             twFireCol10.createColumnTop(false);
-            Fire twfirecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 3, false, 0f, 1);
-            twfirecol10.createFire(new Color(0.25f,0.20f,0,0.7f),60);
+            Fire twfirecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 3, false, 0f, 1, false);
+            twfirecol10.createFire(new Color(0.25f,0.20f,0,0.75f),60);
             fires.add(twfirecol10);
             break;
 
@@ -1477,8 +1489,8 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.middleFloorTile;
             Column fireCol10 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,10);
             fireCol10.createColumnTop(false);
-            Fire firecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 3, false, 0f, 1);
-            firecol10.createFire(new Color(0.25f,0.20f,0,0.7f),60);
+            Fire firecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 3, false, 0f, 1, false);
+            firecol10.createFire(new Color(0.25f,0.20f,0,0.75f),60);
             fires.add(firecol10);
             break;
         case "fcol11":
@@ -1525,15 +1537,15 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.middleFloorTile;
             Column ped1fire = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
             ped1fire.createPedestal();
-            Fire fireped1 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, true, 0f, 1);
-            fireped1.createFire(new Color(0.25f,0.20f,0,0.7f), 10);
+            Fire fireped1 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, true, 0f, 1, false);
+            fireped1.createFire(new Color(0.25f,0.20f,0,0.75f), 60);
             fires.add(fireped1);
             break;
         case "fped1fireB":
             currentCell = init.cr.middleFloorTile;
             Column ped1fireb = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
             ped1fireb.createPedestal();
-            Fire fireped1b = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, true, 0f, 2);
+            Fire fireped1b = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, true, 0f, 2, false);
             Color colorb = new Color(0,0,1f,0.7f);
             fireped1b.createFire(colorb, 10);
             fires.add(fireped1b);

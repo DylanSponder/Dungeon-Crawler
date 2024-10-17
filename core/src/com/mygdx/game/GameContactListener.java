@@ -28,6 +28,9 @@ public class GameContactListener implements ContactListener {
 
         //System.out.println(fbAsString);
 
+
+
+
         //TODO: finish switch statement - ~40% done
         switch (colliderStr) {
             case "Skull":
@@ -65,15 +68,27 @@ public class GameContactListener implements ContactListener {
                 if (collidee.getBody().getUserData() == "Arrow") {
                     for (Fire f : fires) {
                         if (f.fireBody == collider.getBody()) {
-                            if (f.extinguish) {
+                            if (f.extinguish && f.type == 1) {
                                 f.smoking = true;
                                 f.extinguish = false;
                         for (Arrow a : arrows) {
                             if (a.arrowBody == collidee.getBody()) {
-                                a.onFire = true;
+                                if (a.onFire) {
+
+                                    if (!f.active) {
+                                        System.out.println("THIS IS ON FIRE BABY");
+                                        f.active = true;
+                                    }
+                                } else {
+                                    a.onFire = true;
+                                }
+
 
                                         }
                                     }
+                                } else if (f.extinguish && f.type == 2) {
+
+
                                 }
                             }
                         }
