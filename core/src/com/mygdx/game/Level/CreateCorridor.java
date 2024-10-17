@@ -1,14 +1,15 @@
 package com.mygdx.game.level;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.box2D.BodyFactory;
+import com.mygdx.game.level.objects.Fire;
 import com.mygdx.game.level.objects.Torch;
 
-import static com.mygdx.game.DungeonCrawler.rayHandler;
-import static com.mygdx.game.DungeonCrawler.torches;
+import static com.mygdx.game.DungeonCrawler.*;
 
 public class CreateCorridor {
     private BodyFactory bf;
@@ -74,9 +75,12 @@ public class CreateCorridor {
                         if (iTop == 1) {
                             TiledMapTileLayer.Cell newTopCorridorWallCell;
                             newTopCorridorWallCell = GenerateLevel.init.cr.torchWallUpTile;
-                            Torch torU = new Torch(rayHandler, world,  ((doorX + iTop) * 16) + 15*16 + 8,  ((doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - (i-1)*16));
+                            Torch torU = new Torch(rayHandler, world,  ((doorX + iTop) * 16) + 15*16 + 8,  ((doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - (i-1)*16) + 8);
                             torches.add(torU);
                             torU.createTorch(1);
+                            Fire fU = new Fire(world,rayHandler,(((doorX + iTop) * 16) + 16 * 16) + 6 - 4 - 17,(doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 5, false,0f, 3, false);
+                            fires.add(fU);
+                            fU.createFire(new Color(0.25f,0.20f,0,0.7f),60);
                             Body newTopCorridorWall = GenerateLevel.init.bf.createWall(world, ((doorX + iTop) * 16) + 15*16, ((doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - (i-1)*16));
                             layer.setCell(doorXasInt+15+iTop, doorYAsInt-i+1, newTopCorridorWallCell);
                             newTopCorridorWall.setUserData("Wall");

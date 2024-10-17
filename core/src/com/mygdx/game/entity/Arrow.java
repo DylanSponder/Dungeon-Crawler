@@ -1,17 +1,25 @@
 package com.mygdx.game.entity;
 
+import box2dLight.PointLight;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 
+import java.awt.*;
+
+import static com.mygdx.game.DungeonCrawler.rayHandler;
+
 public class Arrow {
-    public Body arrowBody;
+    public static Body arrowBody;
     public String direction;
     static float arrowX;
     static float arrowY;
     public float stateTime, stateTime2;
     public boolean onFire;
+    public boolean flameCreated;
+    public PointLight flameLight;
 
     public Arrow(Body arrow, String direction, float stateTime, boolean onFire){
         this.arrowBody = arrow;
@@ -19,6 +27,18 @@ public class Arrow {
         this.stateTime = stateTime;
         this.stateTime2 = stateTime;
         this.onFire = onFire;
+    }
+
+    public void createArrowFlameLight(Arrow key) {
+        if (!flameCreated) {
+            this.flameLight = new PointLight(rayHandler,400, new Color(0.25f,0.20f,0,0.7f),60, arrowX + 8, arrowY + 8);
+            this.flameLight.attachToBody(key.arrowBody);
+            flameCreated = true;
+        }
+    }
+
+    public void destroyArrowFlameLight(PointLight flameLight) {
+        flameLight.remove();
     }
 
     public static Body createArrowBody(World world, float x, float y) {

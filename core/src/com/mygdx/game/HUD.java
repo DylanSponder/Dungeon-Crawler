@@ -28,7 +28,7 @@ public class HUD {
     stage = new Stage(vp, sb);
     subStage = new Stage(vp, sb);
 
-    totalGold = 100;
+    totalGold = 0;
     totalGoldAsString = String.valueOf(totalGold);
 
     Table table = new Table();

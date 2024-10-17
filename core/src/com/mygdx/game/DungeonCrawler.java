@@ -1427,12 +1427,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 			if (!arrowArrayMap.isEmpty()) {
 				for (OrderedMap.Entry<Body, Arrow> arrowEntry : arrowArrayMap.entries()) {
 					Arrow value = arrowEntry.value;
+					Body key = arrowEntry.key;
 
 					value.stateTime += Gdx.graphics.getDeltaTime();
 					value.stateTime2 += Gdx.graphics.getDeltaTime();
 
 
-					Body key = arrowEntry.key;
+
 					//render each individual arrow
 					arrowBatch.begin();
 					flameBatch.begin();
@@ -1440,6 +1441,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						TextureRegion flameFrame = tx.flameAnimation.getKeyFrame(value.stateTime2,true);
 						TextureRegion currentFrame = tx.arrowAnimation.getKeyFrame(value.stateTime, true);
 						Arrow.renderFireArrow(arrowBatch, currentFrame, flameFrame, arrowEntry.value.direction, key.getPosition().x, key.getPosition().y);
+						value.createArrowFlameLight(value);
 					}else {
 						//System.out.println("YESSSSSS");
 						TextureRegion currentFrame = tx.arrowAnimation.getKeyFrame(value.stateTime, true);
@@ -1463,11 +1465,15 @@ public class DungeonCrawler extends ApplicationAdapter {
 					Body collidedBody = bodyIt.next();
 					//if the array map contains the arrow body that collided, remove that arrow from the game
 					if (arrowArrayMap.containsKey(collidedBody)) {
-						arrowArrayMap.get(collidedBody).onFire = false;
+						if (arrowArrayMap.get(collidedBody).onFire) {
+							arrowArrayMap.get(collidedBody).destroyArrowFlameLight(arrowArrayMap.get(collidedBody).flameLight);
+							arrowArrayMap.get(collidedBody).onFire = false;
+						}
 						arrowArrayMap.removeKey(collidedBody);
 
 						//remove the arrow Box2D body
 						world.destroyBody(collidedBody);
+
 						//remove body from arrowBodiesCollided
 						bodyIt.remove();
 						//remove the sprite by removing the Arrow class object

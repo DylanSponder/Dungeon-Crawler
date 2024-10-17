@@ -230,7 +230,7 @@ public class GameContactListener implements ContactListener {
                         if (value.arrowBody == collider.getBody()) {
                             if (value.onFire) {
                                 System.out.println("COBWEB ON FIRE");
-                                value.onFire = false;
+
                                 for (Cobweb cob : cobwebs) {
                                     if (cob.cobBody == collidee.getBody()) {
                                         burnedCobwebs.add(cob);

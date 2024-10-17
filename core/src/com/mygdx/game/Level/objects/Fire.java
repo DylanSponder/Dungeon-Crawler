@@ -25,8 +25,9 @@ public class Fire {
     public PointLight fireLight;
     public float stateTime;
     public int type;
+    public boolean upDown;
 
-    public Fire(World world, RayHandler rayHandler, float x, float y, boolean extinguish, float stateTime, int type) {
+    public Fire(World world, RayHandler rayHandler, float x, float y, boolean extinguish, float stateTime, int type, boolean upDown) {
         this.world = world;
         this.rayHandler = rayHandler;
         this.fireX = x;
@@ -34,6 +35,7 @@ public class Fire {
         this.extinguish = extinguish;
         this.stateTime = stateTime;
         this.type = type;
+        this.upDown = upDown;
     }
 
     public void createFire(Color color, int distance) {
@@ -57,15 +59,24 @@ public class Fire {
                 fireSpawnerBody = bf.createSpawnerDetectionRadius(fireBody, 60f);
 
             }
+        }   else if (type == 3) {
+
+            //DO TORCH SMALL FLAME
+
         }
 
 
         //ConeLight fireLight2 = new ConeLight(rayHandler, 400, new Color(0.25f,0.20f,0,0.85f),70,fireX+8,fireY+16,270,70);
     }
 
-    public static void renderFire(SpriteBatch batch, TextureRegion currentFrame, float x, float y, boolean smoking) {
+    public static void renderFire(SpriteBatch batch, TextureRegion currentFrame, float x, float y, boolean smoking, boolean upDown) {
 
+        if (upDown) {
+            batch.draw(currentFrame, x, y,0,0,16,16,1,1,180);
+
+        } else {
             batch.draw(currentFrame, x, y);
+        }
     }
 
     public void respawnEnemy(float time, int enemyType) {
