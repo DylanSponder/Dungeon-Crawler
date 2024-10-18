@@ -5,10 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.box2D.BodyFactory;
@@ -105,13 +102,14 @@ public class Skull {
                     //System.out.println("STATIC");
 
                     if (fixture.getUserData() == "Spawner" || fixture.getBody().getUserData() == "Spawner") {
-
+                        System.out.println("TESTING 1");
                         return 0;
                     }
                     else if (fixture.getUserData() == "Fire" || fixture.getBody().getUserData() == "Fire") {
                         rayResult = true;
-
-                        return 1;
+                        System.out.println("TESTING 2");
+                        
+                        return 0;
                     }
 
                 } else

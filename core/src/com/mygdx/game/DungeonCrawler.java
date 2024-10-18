@@ -43,7 +43,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch, flameBatch, cobBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch;
 	public static World world;
-	public static boolean debug = false;
+	public static boolean debug = true;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -930,6 +930,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			// kill game when player health is 0
 			if (hud.healthBar.currentHealth == 0) {
+				System.out.println("YOU DIED IN" + player.currentRoom);
 				Gdx.app.exit();
 			}
 
@@ -937,7 +938,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			// win the game if all enemies are dead
 			if (enemies.isEmpty()) {
-				hud.winGame();
+				hud.winLevel();
 			}
 
 			final CreateAssets tx = CreateAssets.getInstance();
@@ -1706,6 +1707,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 		rayHandler.update();
 		rayHandler.setCombinedMatrix(camera);
 
+		if (player.floorCleared){
+			hud.fadeHUD(hud.winWords);
+		} else if (player.roomCleared) {
+			hud.winRoom();
+			hud.fadeHUD(hud.roomWords);
+		}
 		if (!GenerateLevel.init.roomList.get(player.currentRoom).isShop && !debug) {
 			camera.zoom = 0.75f;
 		}

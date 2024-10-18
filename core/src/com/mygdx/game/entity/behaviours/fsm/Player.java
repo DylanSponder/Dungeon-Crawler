@@ -28,6 +28,7 @@ public class Player {
     public boolean midAnimationFrame;
     public boolean hasGreekFire;
     public int greekFireUses;
+    public boolean floorCleared, roomCleared;
 
     public Fixture playerDetectionFixture;
     public boolean buyingStock;
@@ -40,6 +41,8 @@ public class Player {
 
     public Body createPlayer(World world, float PLAYER_X, float PLAYER_Y){
         BodyFactory bf = new BodyFactory();
+
+        floorCleared = false;
 
         this.playerBody = bf.createPlayerBody(world, PLAYER_X, PLAYER_Y);
 

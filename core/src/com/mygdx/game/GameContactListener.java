@@ -494,8 +494,10 @@ public class GameContactListener implements ContactListener {
                             init.roomList.get(e.room).enemyCounter--;
                             if (init.roomList.get(e.room).enemyCounter < 1) {
                                 init.roomList.get(player.currentRoom).unlockAllDoors(world, init.roomList.get(player.currentRoom), false);
-                                DungeonCrawler.roomClear.play();
-                                DungeonCrawler.roomClear.dispose();
+                               // hud.winRoom();
+                                player.roomCleared = true;
+                                //DungeonCrawler.roomClear.play();
+                                //DungeonCrawler.roomClear.dispose();
                             }
 
                             break;
@@ -551,6 +553,7 @@ public class GameContactListener implements ContactListener {
                             init.roomList.get(e.room).enemyCounter--;
                             if (init.roomList.get(e.room).enemyCounter < 1) {
                                 init.roomList.get(player.currentRoom).unlockAllDoors(world, init.roomList.get(player.currentRoom), false);
+                                player.roomCleared = true;
                                 //DungeonCrawler.roomClear.play();
                                 //DungeonCrawler.roomClear.dispose();
                             }

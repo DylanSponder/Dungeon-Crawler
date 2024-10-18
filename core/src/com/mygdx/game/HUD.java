@@ -21,7 +21,8 @@ public class HUD {
   private Image moneySymbol;
   public int totalGold;
   public String totalGoldAsString;
-  private Label winWords, startWords;
+  public Label winWords, startWords, roomWords;
+  private float hudFade;
   //private CreateTexture tx;
 
   public HUD(Viewport vp, SpriteBatch sb) {
@@ -30,6 +31,8 @@ public class HUD {
 
     totalGold = 0;
     totalGoldAsString = String.valueOf(totalGold);
+
+    hudFade = 1f;
 
     Table table = new Table();
     table.top();
@@ -71,15 +74,43 @@ public class HUD {
     stage.addActor(startTable);
   }
 
-  public void winGame() {
+  public void winRoom() {
     stage.clear();
     Table winTable = new Table();
     winTable.center();
     winTable.setFillParent(true);
-    winWords = new Label("LEVEL CLEARED!", new LabelStyle(DungeonCrawler.defaultFont, Color.RED));
-    winTable.add(winWords);
+    Color color = new Color(1,1,1,1);
+    roomWords = new Label("ROOM CLEARED!", new LabelStyle(DungeonCrawler.defaultFont, color));
+    winTable.add(roomWords);
     stage.addActor(winTable);
   }
+
+  public void winLevel() {
+    stage.clear();
+    Table winTable = new Table();
+    winTable.center();
+    winTable.setFillParent(true);
+    Color color = new Color(1,1,1,1);
+    winWords = new Label("LEVEL CLEARED!", new LabelStyle(DungeonCrawler.defaultFont, color));
+    winTable.add(winWords);
+    stage.addActor(winTable);
+
+  }
+  public void fadeHUD(Label words) {
+          if (hudFade <= 0) {
+            words.clear();
+            hudFade = 1;
+            if (DungeonCrawler.player.floorCleared) {
+              DungeonCrawler.player.floorCleared = false;
+            } else if (DungeonCrawler.player.roomCleared) {
+              DungeonCrawler.player.roomCleared = false;
+            }
+            stage.clear();
+          } else {
+            hudFade = hudFade - 0.0045f;
+            words.setColor(1f,1f,1f,hudFade);
+          }
+      }
 
   public void updateGold(int gold, boolean add) {
     CreateAssets tx = CreateAssets.getInstance();
