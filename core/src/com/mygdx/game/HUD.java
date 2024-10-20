@@ -39,9 +39,9 @@ public class HUD {
     table.setFillParent(true);
 
     CreateAssets tx = CreateAssets.getInstance();
-    Sprite healthSymbol = new Sprite(tx.heartTexture, 0, 0, 16, 16);
-    Sprite healthSymbolHalf = new Sprite(tx.heartTexture, 32, 0, 16, 16);
-    Sprite healthSymbolEmpty = new Sprite(tx.heartTexture, 64, 0, 16, 16);
+    Sprite healthSymbol = new Sprite(tx.heartHUDTexture, 0, 0, 16, 16);
+    Sprite healthSymbolHalf = new Sprite(tx.heartHUDTexture, 32, 0, 16, 16);
+    Sprite healthSymbolEmpty = new Sprite(tx.heartHUDTexture, 64, 0, 16, 16);
     //Health slots
     healthBar = new HealthBar(3f, healthSymbol, healthSymbolHalf, healthSymbolEmpty, 80);
     
@@ -51,7 +51,7 @@ public class HUD {
     moneySymbol = new Image(new Sprite(tx.coinTexture, 10, 10));
     moneyTable.add(moneySymbol).padBottom(0);
 
-    Sprite potionSymbol = new Sprite(tx.potionTexture, 9, 11);
+    Sprite potionSymbol = new Sprite(tx.potionItemTexture, 9, 11);
     Sprite emptySlotSymbol = new Sprite(tx.emptySlotTexture, 9, 11);
     //Potion slots
     inventory = new Inventory(potionSymbol, emptySlotSymbol, 1, 150);
@@ -65,35 +65,35 @@ public class HUD {
   }
 
   public void startLevel() {
-    stage.clear();
+    subStage.clear();
     Table startTable = new Table();
     startTable.center();
     startTable.setFillParent(true);
-    startWords = new Label("CLAY CATACOMBS", new LabelStyle(DungeonCrawler.defaultFont, Color.WHITE));
+    startWords = new Label("j CLAY CATACOMBS j", new LabelStyle(DungeonCrawler.defaultFont, Color.WHITE));
     startTable.add(startWords);
-    stage.addActor(startTable);
+    subStage.addActor(startTable);
   }
 
   public void winRoom() {
-    stage.clear();
+    subStage.clear();
     Table winTable = new Table();
     winTable.center();
     winTable.setFillParent(true);
     Color color = new Color(1,1,1,1);
     roomWords = new Label("ROOM CLEARED!", new LabelStyle(DungeonCrawler.defaultFont, color));
     winTable.add(roomWords);
-    stage.addActor(winTable);
+    subStage.addActor(winTable);
   }
 
   public void winLevel() {
-    stage.clear();
+    subStage.clear();
     Table winTable = new Table();
     winTable.center();
     winTable.setFillParent(true);
     Color color = new Color(1,1,1,1);
     winWords = new Label("LEVEL CLEARED!", new LabelStyle(DungeonCrawler.defaultFont, color));
     winTable.add(winWords);
-    stage.addActor(winTable);
+    subStage.addActor(winTable);
 
   }
   public void fadeHUD(Label words) {
@@ -105,7 +105,7 @@ public class HUD {
             } else if (DungeonCrawler.player.roomCleared) {
               DungeonCrawler.player.roomCleared = false;
             }
-            stage.clear();
+            subStage.clear();
           } else {
             hudFade = hudFade - 0.0045f;
             words.setColor(1f,1f,1f,hudFade);

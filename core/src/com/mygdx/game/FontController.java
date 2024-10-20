@@ -6,17 +6,24 @@ import com.mygdx.game.level.objects.Text;
 
 public class FontController {
 
-    public static void drawFont(SpriteBatch inventoryBatch, BitmapFont font, float x, float y, Text text2) {
+    public static void drawInventoryFont(SpriteBatch inventoryBatch, BitmapFont font, float x, float y, Text text2) {
         font.getData().setScale(0.8f);
         font.setUseIntegerPositions(false);
         font.draw(inventoryBatch, text2.message, x, y);
 
-        if (text2.hasSprite && text2.sprite == CreateAssets.getInstance().potionSprite){
-            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-3f,9,11,9,11,0.8f,0.8f,0);
+        if (text2.hasSprite && text2.sprite == CreateAssets.getInstance().potionItemSprite){
+            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-7f,9,11,9,11,0.8f,0.8f,0);
         }
-        else if (text2.hasSprite && text2.sprite == CreateAssets.getInstance().coinSprite) {
-            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-1f,10,10,9,9,1f,1f,0);
+        else if((text2.hasSprite && text2.sprite == CreateAssets.getInstance().torchItemSprite)) {
+            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-9.5f,10,15,10,15,0.8f,0.8f,0);
         }
+        else if((text2.hasSprite && text2.sprite == CreateAssets.getInstance().shieldItemSprite)) {
+            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-7.5f,11,11,11,11,0.8f,0.8f,0);
+        }
+        else if (text2.hasSprite && text2.sprite == CreateAssets.getInstance().coinItemSprite) {
+            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-6f,10,10,9,9,0.8f,0.8f,0);
+        }
+
     }
 
     public static void drawFadingFont(SpriteBatch fontBatch, BitmapFont font2, float x, float y, Text text) {

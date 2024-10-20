@@ -12,6 +12,7 @@ import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.box2D.Box2DSteeringUtils;
 
+import static com.mygdx.game.DungeonCrawler.boneBodiesCollided;
 import static com.mygdx.game.DungeonCrawler.world;
 
 public class Bone {
@@ -77,6 +78,13 @@ public class Bone {
         this.boneBody.setUserData("Bone");
 
         this.boneCreated = true;
+
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                boneBodiesCollided.add(boneBody);
+                }
+            },10);
         }
 
         public static void renderBone(SpriteBatch batch, Sprite boneSprite, float x, float y, float rotation) {

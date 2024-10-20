@@ -192,27 +192,27 @@ public class BodyFactory {
 
     //unused - in case we want the bow to have collision in future
     //TODO - IMPLEMENT AS SHIELD ITEM
-    public Body createBowBody(World world, Body player, float x, float y) {
+    public Body createShieldBody(World world, Body player, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(player.getPosition().x+x, player.getPosition().y+y);
-        bodyDef.fixedRotation = false;
+       // bodyDef.fixedRotation = false;
         body = world.createBody(bodyDef);
         return body;
     }
 
-    public Fixture createBowHitbox(Body bow,boolean r){
-        PolygonShape bowShape = new PolygonShape();
+    public Fixture createShieldHitbox(Body shield,boolean r){
+        PolygonShape shieldShape = new PolygonShape();
         if (r){
-            bowShape.setAsBox(7f, 3.5f);
+            shieldShape.setAsBox(2.5f, 9f);
         }
         else {
-            bowShape.setAsBox(3.5f, 7f);
+            shieldShape.setAsBox(9f, 2.5f);
         }
-        Fixture bowHitbox = bow.createFixture(bowShape, 1.0f);
-        bowShape.dispose();
-        return bowHitbox;
+        Fixture shieldHitbox = shield.createFixture(shieldShape, 1.0f);
+        shieldShape.dispose();
+        return shieldHitbox;
     }
 
     public Body createSimpleBody(World world, float x, float y) {

@@ -235,8 +235,6 @@ public class EnemySkull {
                                     && fixture.getUserData() != "Bone"
                                     //&& !fixture.isSensor()
                             ) {
-                                System.out.println("FIXTURE USER DATA " + fixture.getUserData());
-                                System.out.println("BODY USER DATA " + fixture.getUserData());
                                 //System.out.println("NOT A PLAYER BUT DYNAMIC");
                                 return 0;
 

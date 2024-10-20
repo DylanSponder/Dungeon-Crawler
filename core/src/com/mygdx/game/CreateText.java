@@ -7,6 +7,6 @@ public class CreateText {
 
     /*
     Text shopMessage = new Text(DungeonCrawler.defaultFont,"WELCOME", Color.WHITE,true,1f,0.0045f,false, false, null);
-    Text sellMessage = new Text(DungeonCrawler.defaultFont,"BUY POTION", Color.WHITE,true,1f,0.0045f,false, true, tx.potionSprite);
+    Text sellMessage = new Text(DungeonCrawler.defaultFont,"BUY POTION", Color.WHITE,true,1f,0.0045f,false, true, tx.potionItemSprite);
      */
 }

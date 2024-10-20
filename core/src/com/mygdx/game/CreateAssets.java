@@ -14,8 +14,10 @@ public class CreateAssets {
     public AssetManager assetManager;
 
     //TODO Link all textures to HellasDungeon path
-    Texture heartTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Heart.png"));
-    Texture potionTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/LifePot.png"));
+    Texture heartHUDTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Heart.png"));
+    Texture potionItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/LifePot.png"));
+    Texture torchItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Torch.png"));
+    Texture shieldItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Shield.png"));
     Texture emptySlotTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Potion/Empty.png"));
     Texture coinTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Coin2Preview.png"));
     Texture playerTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SpriteSheet.png"));
@@ -26,6 +28,7 @@ public class CreateAssets {
     Texture swordTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Sword/SpriteInHand.png"));
     Texture bowTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Bow/Sprite.png"));
     Texture arrowTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/Bow/Arrow.png"));
+    Texture shieldTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Shield/Sprite.png"));
     Texture enemySkullTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/Enemy/SpriteSheet.png"));
     Texture enemyEyeTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Eye/Eye.png"));
     Texture shopkeeperTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/OldMan3/SpriteSheet.png"));
@@ -214,14 +217,20 @@ public class CreateAssets {
     //outline weapon sprites
     Sprite swordSprite = new Sprite(swordTexture, 0, 0, 7, 14);
     Sprite bowSprite = new Sprite(bowTexture,0,0,19,8);
+    Sprite shieldSprite = new Sprite(shieldTexture,0,0, 16, 8);
     Sprite arrowSprite = new Sprite(arrowTexture,0,0,13,5);
     //outline enemy sprites
     Sprite enemySprite = new Sprite(enemySkullTexture,0,0,16,16);
+    Sprite enemyAlertedSprite = new Sprite(enemySkullTexture,16,0,16,16);
     Sprite enemyEyeSprite = new Sprite(enemyEyeTexture,0,0,16,16);
+
     //outline HUD sprites
-    public Sprite coinSprite = new Sprite(coinTexture, 10, 10);
-    Sprite heartSprite = new Sprite(heartTexture, 16, 16);
-    public Sprite potionSprite = new Sprite(potionTexture, 16, 16);
+    public Sprite coinItemSprite = new Sprite(coinTexture, 10, 10);
+    public Sprite heartSprite = new Sprite(heartHUDTexture, 16, 16);
+    public Sprite potionItemSprite = new Sprite(potionItemTexture, 16, 16);
+    public Sprite torchItemSprite = new Sprite(torchItemTexture, 10, 15);
+    public Sprite shieldItemSprite = new Sprite(shieldItemTexture, 11, 11);
+
     Sprite shopkeeperSprite = new Sprite(shopkeeperTexture, 0,0, 16, 16);
     Sprite skullSprite = new Sprite(skullTexture, 176,64, 16, 16);
     Sprite damagedSkullSprite = new Sprite(skullTexture, 192,48, 16, 16);
@@ -401,7 +410,9 @@ public class CreateAssets {
 
         tutoTexture.setRegion(0, 0, 87, 57);
 
-        potionSprite.setRegion(0, 0, 9, 11);
+        potionItemSprite.setRegion(0, 0, 9, 11);
+        torchItemSprite.setRegion(0, 0, 10, 15);
+        shieldItemSprite.setRegion(0, 0, 11, 11);
 
         torchLeftTexture.setRegion(16, 32, 16, 16);
         torchRightTexture.setRegion(16, 48, 16, 16);

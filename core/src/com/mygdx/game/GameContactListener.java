@@ -18,6 +18,8 @@ public class GameContactListener implements ContactListener {
     // (static bodies like walls will never be the object that is colliding with a dynamic body for instance)
     // many redundancies should be re-written and if-statements made into switches
 
+
+
     @Override
     public void beginContact(Contact contact) {
         Fixture collider = contact.getFixtureA();
@@ -26,393 +28,14 @@ public class GameContactListener implements ContactListener {
         String colliderStr = collider.getBody().getUserData().toString();
         String collideeStr = collidee.getBody().getUserData().toString();
 
-        //System.out.println(fbAsString);
-
-
-
-
-        //TODO: finish switch statement - ~40% done
-        switch (colliderStr) {
-            case "Skull":
-                if (collideeStr == "Skull") {
-
-                }
-                /*
-                if (fbAsString == "Skull") {
-                    //TODO Yeah this doesn't work. Bodies don't actually collide with other bodies when they are added to the world
-                    //TODO Use b2::Contact instead
-                    // check for coordinates instead
-                    if (!deadEnemyBodies.contains(fa.getBody())) {
-                        //arrowBodiesCollided.add(fa.getBody());
-                        deadEnemyBodies.add(fa.getBody());
-                    }
-                    if (!deadEnemyBodies.contains(fb.getBody())) {
-                        //arrowBodiesCollided.add(fa.getBody());
-                        deadEnemyBodies.add(fb.getBody());
-                    }
-
-                    //SkullPile.createSkullPile
-
-                }
-                */
-                break;
-            case "Column":
-                if (collideeStr == "Arrow"){
-                    if (!arrowBodiesCollided.contains(collidee.getBody())) {
-                        arrowBodiesCollided.add(collidee.getBody());
-                        break;
-                    }
-                }
-                break;
-            case "Fire":
-                if (collidee.getBody().getUserData() == "Arrow") {
-                    for (Fire f : fires) {
-                        if (f.fireBody == collider.getBody()) {
-                            if (f.extinguish && f.type == 1) {
-                                f.smoking = true;
-                                f.extinguish = false;
-                        for (Arrow a : arrows) {
-                            if (a.arrowBody == collidee.getBody()) {
-                                if (a.onFire) {
-
-                                    if (!f.active) {
-                                        System.out.println("THIS IS ON FIRE BABY");
-                                        f.active = true;
-                                    }
-                                } else {
-                                    a.onFire = true;
-                                }
-
-
-                                        }
-                                    }
-                                } else if (f.extinguish && f.type == 2) {
-
-
-                                }
-                            }
-                        }
-                    }
-                 else if ((collidee.getUserData() != "Proximity" && collidee.getBody().getUserData() != "Enemy")
-                        && collidee.getBody().getUserData() != "Player"
-                        && collidee.getBody().getUserData() != "Bone"
-                ) {
-                    System.out.println("THIS IS A TEST FOR RESPAWNING ENEMIES" + collideeStr);
-                    for (Fire f : fires) {
-                        if (f.extinguish) {
-                            if (f.fireBody == collider.getBody()) {
-
-                                f.smoking = true;
-                                f.extinguish = false;
-                            }
-
-                        }
-                    }
-                }
-                break;
-            case "Wall":
-                if (collideeStr == "Arrow"){
-                    if (!arrowBodiesCollided.contains(collidee.getBody())) {
-                        arrowBodiesCollided.add(collidee.getBody());
-                        break;
-                    }
-                }
-                break;
-
-            case "Arrow":
-                //System.out.println(fa.getBody().getUserData() + " " + fb.getBody().getUserData());
-                //System.out.println(fa.getUserData() + " " + fb.getUserData());
-
-                if (((collidee.getBody().getUserData() == "Enemy" && collidee.getUserData() != "Proximity" && collidee.getBody().getUserData() != "Cobweb")
-                        || collidee.getBody().getUserData() == "Wall")) {
-                    if (!arrowBodiesCollided.contains(collider.getBody())) {
-                        arrowBodiesCollided.add(collider.getBody());
-                    }
-                    for (EnemySkull e : enemies) {
-                        if (e.enemyAI.getBody() == collidee.getBody()) {
-                            e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
-                            break;
-                        }
-                    }
-                }
-                break;
-            case "Door":
-                if (collideeStr == "Arrow") {
-                    for (Room r : init.roomList) {
-                        for (Door d : r.doors) {
-                            if (d.doorBody == collider.getBody()) {
-                                if (!d.open) {
-                                    if (!arrowBodiesCollided.contains(collidee.getBody())) {
-                                        arrowBodiesCollided.add(collidee.getBody());
-                                        break;
-                                    }
-
-                                }
-                            }
-                        }
-                    }
-                }
-                //fb.getBody().getUserData() == "Player"
-                //fb.getBody().getUserData() == "Enemy"
-                break;
-            case "Sword":
-                break;
-            case "Enemy":
-                /*
-                if (fb.getBody().getUserData() == "Arrow") {
-                    for (EnemySkull e : enemies) {
-                        if (e.enemyBody == fa.getBody()) {
-                            e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
-                            break;
-                        }
-                        if (!arrowBodiesCollided.contains(fb.getBody())) {
-                            arrowBodiesCollided.add(fb.getBody());
-                            break;
-                        }
-
-                    }
-
-                }
-                break;
-
-                 */
-                break;
-            case "Player":
-                if (collidee.getBody().getUserData() == "Potion"){
-                    for (Potion p : potions) {
-                        if (p.potionBody == collidee.getBody()){
-                            collectedPotions.add(p);
-                        }
-                    }
-                } else if (collidee.getUserData() == "ShopRadius"){
-                    for (Shopkeeper shop : shopkeepers){
-                        if (collidee.getBody() == shop.shopBody){
-                            shop.message = shop.messages.get(0);
-                            shop.message.showing = true;
-                        }
-                    }
-                }
-                else if (collidee.getUserData() == "ShopSell"){
-                    for (Shopkeeper shop : shopkeepers){
-                        if (collidee.getBody() == shop.shopBody){
-                            //shop.message = shop.messages.get(1);
-                            //shop.message.showing = true;
-
-                            shop.ListStock();
-
-                            System.out.println("HEY THE SHOP SELL RADIUS WORKS");
-
-                            player.buyingStock = true;
-                            player.shopkeeper = shop;
-
-                            /*
-                            for (int i = 0; i < shop.inventoryText.size(); i++) {
-                                shop.inventoryText.get(i).showing = true;
-                                shop.inventoryText.get(i).fade = false;
-                            }
-
-
-                             */
-
-
-
-                        }
-                    }
-                }
-                break;
+        if (collideeStr == "Bone" || colliderStr == "Bone") {
+         //   System.out.println(colliderStr + " + " + collideeStr);
         }
 
-        switch (collideeStr) {
-            case "Cobweb":
-                if (collider.getBody().getUserData() == "Arrow") {
-                    for (OrderedMap.Entry<Body, Arrow> arrowEntry : arrowArrayMap.entries()) {
-                        Arrow value = arrowEntry.value;
-                        if (value.arrowBody == collider.getBody()) {
-                            if (value.onFire) {
-                                System.out.println("COBWEB ON FIRE");
-
-                                for (Cobweb cob : cobwebs) {
-                                    if (cob.cobBody == collidee.getBody()) {
-                                        burnedCobwebs.add(cob);
-                                    }
-                                }
-                                if (!arrowBodiesCollided.contains(collider.getBody())) {
-                                    arrowBodiesCollided.add(collider.getBody());
-                                }
-                            }
-
-                        }
-                    }
-                }
-                break;
-        }
-
-        if ((collider.getBody().getUserData() == "Door" && collidee.getBody().getUserData() == "Player")
-                || (collider.getBody().getUserData() == "Player" && collidee.getBody().getUserData() == "Door")
-                || ((collider.getBody().getUserData() == "Door" && collidee.getBody().getUserData() == "Enemy")
-                || (collider.getBody().getUserData() == "Enemy" && collidee.getBody().getUserData() == "Door"))
-        ) {
-            if (collider.getBody().getUserData() == "Door"
-                    && (collidee.getUserData() != "Proximity")) {
-                for (Room r : init.roomList) {
-                    for (Door d : r.doors) {
-                        if (d.doorBody == collider.getBody()) {
-                            if (!d.locked) {
-                                d.open = true;
-                            }
-                        }
-                    }
-                }
-            }
-            if (collidee.getBody().getUserData() == "Door"
-                    && (collider.getUserData() != "Proximity")) {
-                for (Room r : init.roomList) {
-                    for (Door d : r.doors) {
-                        if (d.doorBody == collider.getBody()) {
-                            if (!d.locked) {
-                                d.open = true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        //bone branch needs to be revisited - faulty logic is causing bones not to get destroyed somewhere here
-        //split into two if-statements
-        if (((collider.getBody().getUserData() == "Player" && collidee.getBody().getUserData() == "Enemy")
-                || (collider.getBody().getUserData() == "Enemy" && collidee.getBody().getUserData() == "Player"))
-                || ((collider.getBody().getUserData() == "Player" && collidee.getBody().getUserData() == "Bone")
-                || (collider.getBody().getUserData() == "Bone" && collidee.getBody().getUserData() == "Player"))
-        ) {
-            //if player enters enemy detection range, attack player
-            if (collider.getUserData() == "Proximity" ||
-                    collidee.getUserData() == "Proximity") {
-                for (EnemySkull e : enemies) {
-                    if (e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody()) {
-                        e.playerInRange = true;
-                       // e.getStateMachine().changeState(EnemyState.GO_TO_PLAYER);
-                        //e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
-                    }
-                }
-            } else {
-                hud.healthBar.LoseHealth(0.5f);
-                if (collider.getBody().getUserData() == "Bone") {
-                    player.playerBody.applyLinearImpulse(collider.getBody().getLinearVelocity().x * 100, collider.getBody().getLinearVelocity().y * 100, 0, 0, true);
-                    if (!boneBodiesCollided.contains(collider.getBody())) {
-                        boneBodiesCollided.add(collider.getBody());
-                    }
-                } else if (collidee.getBody().getUserData() == "Bone") {
-                    player.playerBody.applyLinearImpulse(collidee.getBody().getLinearVelocity().x * 100, collidee.getBody().getLinearVelocity().y * 100, 0, 0, true);
-                    if (!boneBodiesCollided.contains(collidee.getBody())) {
-                        boneBodiesCollided.add(collidee.getBody());
-                    }
-                    //TODO: fix
-                } else if (collider.getBody().getUserData() == "Enemy") {
-                    player.playerBody.applyLinearImpulse(collider.getBody().getLinearVelocity().x * 50, collider.getBody().getLinearVelocity().y * 50, 0, 0, true);
-                    collider.getBody().applyLinearImpulse(-collidee.getBody().getLinearVelocity().x * 2, -collidee.getBody().getLinearVelocity().y * 2, 0, 0, true);
-
-                } else if (collidee.getBody().getUserData() == "Enemy") {
-                    player.playerBody.applyLinearImpulse(collidee.getBody().getLinearVelocity().x * 50, collidee.getBody().getLinearVelocity().y * 50, 0, 0, true);
-
-                    if (collider.getBody().getLinearVelocity().x < 10 && collider.getBody().getLinearVelocity().y < 10) {
-                        collider.getBody().applyLinearImpulse(-collidee.getBody().getLinearVelocity().x, -collidee.getBody().getLinearVelocity().y + 150, 0, 0, true);
-                    } else {
-                        collider.getBody().applyLinearImpulse(-collidee.getBody().getLinearVelocity().x + 150, -collidee.getBody().getLinearVelocity().y + 150, 0, 0, true);
-                    }
-                }
-            }
-        }
-
-        if ((collider.getBody().getUserData() == "Bone" && collidee.getUserData() != "Proximity" && collidee.getBody().getUserData() != "Bone" && collidee.getBody().getUserData() != "Sword" && !collidee.getBody().getUserData().toString().startsWith("Arrow"))
-                || (collidee.getBody().getUserData() == "Bone" && collider.getUserData() != "Proximity" && collider.getBody().getUserData() != "Bone" && collider.getBody().getUserData() != "Sword" && !collider.getBody().getUserData().toString().startsWith("Arrow"))
-        ) {
-            if ((((collider.getBody().getUserData() == "Enemy" && collider.getUserData() != "Proximity")
-                    || collider.getBody().getUserData() == "Wall")
-                    || collider.getBody().getUserData() == "Door")
-                    && collidee.getBody().getUserData() == "Bone") {
-
-                if (collider.getBody().getUserData() == "Door"){
-                    for (Room r : init.roomList) {
-                        for (Door d : r.doors) {
-                            if (d.doorBody == collider.getBody()) {
-                                if (!d.open) {
-                                    if (!boneBodiesCollided.contains(collidee.getBody())) {
-                                        boneBodiesCollided.add(collidee.getBody());
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                else if (collider.getBody().getUserData() == "Wall"){
-                    if (!boneBodiesCollided.contains(collidee.getBody())) {
-                        boneBodiesCollided.add(collidee.getBody());
-                    }
-                }
-
-            } else if ((((collidee.getBody().getUserData() == "Enemy" && collidee.getUserData() != "Proximity")
-                        || collidee.getBody().getUserData() == "Wall")
-                        || collidee.getBody().getUserData() == "Door")
-                        && collider.getBody().getUserData() == "Bone") {
-
-                if (collidee.getBody().getUserData() == "Door"){
-                    for (Room r : init.roomList) {
-                        for (Door d : r.doors) {
-                            if (d.doorBody == collidee.getBody()) {
-                                if (!d.open) {
-                                    if (!boneBodiesCollided.contains(collider.getBody())) {
-                                        boneBodiesCollided.add(collider.getBody());
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                else if (collider.getBody().getUserData() == "Wall"){
-                    if (!boneBodiesCollided.contains(collider.getBody())) {
-                        boneBodiesCollided.add(collider.getBody());
-                    }
-                }
-            }
-        }
-
-        if (collider.getBody().getUserData().toString().startsWith("Room")) {
-            // && (fb.getUserData() != "Wall" || fb.getUserData() !="Enemy" || fb.getUserData() != "Player"))
-
-            if (collidee.getBody().getUserData() == "Player") {
-                String[] roomIndexAsString = collider.getBody().getUserData().toString().split("-");
-                player.currentRoom = Integer.parseInt(roomIndexAsString[1]);
-                for (EnemySkull e : init.roomList.get(player.currentRoom).enemies) {
-                    e.rayCastable = true;
-                }
-                player.touchingRoom = true;
-            }
-            if (init.roomList.get(player.currentRoom).isShop) {
-                init.roomList.get(player.currentRoom).enemyCounter = 0;
-                init.roomList.get(player.currentRoom).unlockAllDoors(world, init.roomList.get(player.currentRoom), false);
-            }
-            /*
-        } else if (fb.getBody().getUserData().toString().startsWith("Room")) {
-            // && (fb.getUserData() != "Wall" || fb.getUserData() !="Enemy" || fb.getUserData() != "Player"))
-            String[] roomIndexAsString = fb.getBody().getUserData().toString().split("-");
-            player.currentRoom = Integer.parseInt(roomIndexAsString[1]);
-
-            if (fa.getBody().getUserData() == "Player") {
-                player.touchingRoom = true;
-            }
-            if (init.roomList.get(player.currentRoom).isShop) {
-                init.roomList.get(player.currentRoom).enemyCounter = 0;
-                init.roomList.get(player.currentRoom).unlockAllDoors(world, init.roomList.get(player.currentRoom), false);
-            }
-
-             */
-        }
-
-        if(((collider.getBody().getUserData() == "Pot" && collidee.getBody().getUserData() == "Sword")
-                || (collider.getBody().getUserData() == "Sword" && collidee.getBody().getUserData() == "Pot"))
-                || ((collider.getBody().getUserData() == "Pot" && collidee.getBody().getUserData().toString().startsWith("Arrow"))
-                || (collider.getBody().getUserData().toString().startsWith("Arrow") && collidee.getBody().getUserData() == "Pot"))){
+        if(((colliderStr == "Pot" && collideeStr == "Sword")
+                || (colliderStr == "Sword" && collideeStr == "Pot"))
+                || ((colliderStr == "Pot" && collideeStr.startsWith("Arrow"))
+                || (colliderStr.startsWith("Arrow") && collideeStr == "Pot"))){
             if (collidee.getBody().getUserData() == "Pot") {
                 for (Pot p : pots) {
                     if (collidee.getBody() == p.potBody) {
@@ -427,11 +50,11 @@ public class GameContactListener implements ContactListener {
             }
         }
 
-        if ((collider.getBody().getUserData().toString().startsWith("Arrow") && collidee.getBody().getUserData() == "Enemy")
-                || (collider.getBody().getUserData() == "Enemy" && collidee.getBody().getUserData().toString().startsWith("Arrow"))
+        if ((colliderStr.startsWith("Arrow") && collideeStr.equals("Enemy"))
+                || (colliderStr.equals("Enemy") && collideeStr.startsWith("Arrow"))
                 ||
-                ((collider.getBody().getUserData() == "Sword" && collidee.getBody().getUserData() == "Enemy")
-                || (collider.getBody().getUserData() == "Enemy" && collidee.getBody().getUserData() == "Sword"))
+                ((colliderStr.equals("Sword") && collideeStr.equals("Enemy"))
+                        || (colliderStr.equals("Enemy") && collideeStr.equals("Sword")))
         ) {
             if (collider.getUserData() != "Proximity" &&
                     collidee.getUserData() != "Proximity") {
@@ -494,8 +117,13 @@ public class GameContactListener implements ContactListener {
                             init.roomList.get(e.room).enemyCounter--;
                             if (init.roomList.get(e.room).enemyCounter < 1) {
                                 init.roomList.get(player.currentRoom).unlockAllDoors(world, init.roomList.get(player.currentRoom), false);
-                               // hud.winRoom();
-                                player.roomCleared = true;
+                                // hud.winRoom();
+                                if (player.currentRoom != 10) {
+                                    player.roomCleared = true;
+                                } else {
+                                    player.floorCleared = true;
+                                }
+
                                 //DungeonCrawler.roomClear.play();
                                 //DungeonCrawler.roomClear.dispose();
                             }
@@ -563,11 +191,13 @@ public class GameContactListener implements ContactListener {
                 }
             }
         }
-        if (((collider.getBody().getUserData().toString().startsWith("Arrow") && collidee.getBody().getUserData() == "Skull")
-            || (collider.getBody().getUserData() == "Skull" && collidee.getBody().getUserData().toString().startsWith("Arrow")))
-            || ((collider.getBody().getUserData() == "Sword" && collidee.getBody().getUserData() == "Skull")
-            || (collider.getBody().getUserData() == "Skull" && collidee.getBody().getUserData() == "Sword"))
+
+        if (((colliderStr.startsWith("Arrow") && collideeStr == "Skull")
+                || (colliderStr == "Skull" && collideeStr.startsWith("Arrow")))
+                || ((colliderStr == "Sword" && collideeStr == "Skull")
+                || (colliderStr == "Skull" && collideeStr == "Sword"))
         ) {
+
             if (collidee.getBody().getUserData() == "Skull") {
                 for (Skull s : enemySkulls) {
                     if (collidee.getBody() == s.skullBody && !s.skullIFrame) {
@@ -581,7 +211,480 @@ public class GameContactListener implements ContactListener {
                 }
             }
         }
-    }
+
+
+        if ((colliderStr == "Bone" && collidee.getUserData() != "Enemy" && collideeStr != "Bone" && collideeStr != "Sword" && !collideeStr.startsWith("Arrow") && !collideeStr.startsWith("Room"))
+                || (collideeStr == "Bone" && collider.getUserData() != "Enemy" && colliderStr != "Bone" && colliderStr != "Sword" && !colliderStr.startsWith("Arrow") && !colliderStr.startsWith("Room"))
+        ) {
+
+            if ((((collideeStr == "Wall")
+                    || collideeStr == "Shield")
+                    || collideeStr =="Door")
+                    && colliderStr =="Bone") {
+                if (collideeStr == "Wall" || collideeStr == "Shield") {
+                    System.out.println("SUCCESS1");
+                    System.out.println(colliderStr + " + " + collideeStr);
+                    System.out.println(boneBodiesCollided);
+                    if (!boneBodiesCollided.contains(collider.getBody())) {
+                        boneBodiesCollided.add(collider.getBody());
+                    } else if (collidee.getBody().getUserData() == "Door") {
+                        for (Room r : init.roomList) {
+                            for (Door d : r.doors) {
+                                if (d.doorBody == collidee.getBody()) {
+                                    if (!d.open) {
+                                        if (!boneBodiesCollided.contains(collider.getBody())) {
+                                            boneBodiesCollided.add(collider.getBody());
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if ((((colliderStr == "Wall")
+                    || colliderStr == "Door")
+                    || colliderStr == "Shield")
+                    && collideeStr == "Bone") {
+
+                System.out.println("YOU ARE GONNA TEST THIS");
+
+                System.out.println(boneBodiesCollided);
+
+                if (colliderStr.equals("Wall") || colliderStr.equals("Shield")) {
+
+                    System.out.println("SUCCESS2");
+                    System.out.println(colliderStr + " + " + collideeStr);
+                    if (!boneBodiesCollided.contains(collidee.getBody())) {
+                        boneBodiesCollided.add(collidee.getBody());
+                    }
+                } else if (collider.getBody().getUserData() == "Door") {
+                    for (Room r : init.roomList) {
+                        for (Door d : r.doors) {
+                            if (d.doorBody == collider.getBody()) {
+                                if (!d.open) {
+                                    if (!boneBodiesCollided.contains(collidee.getBody())) {
+                                        boneBodiesCollided.add(collidee.getBody());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            } else if (collideeStr.equals("Bone") && colliderStr.equals("Player")) {
+                System.out.println("SUCCESS3");
+                System.out.println(colliderStr + " + " + collideeStr);
+                hud.healthBar.LoseHealth(0.5f);
+                if (collidee.getBody().getUserData() == "Bone") {
+                    player.playerBody.applyLinearImpulse(collidee.getBody().getLinearVelocity().x * 100, collidee.getBody().getLinearVelocity().y * 100, 0, 0, true);
+                    if (!boneBodiesCollided.contains(collidee.getBody())) {
+                        boneBodiesCollided.add(collidee.getBody());
+                    }
+                }
+
+            } else if (colliderStr.equals("Bone") && collideeStr.equals("Player")) {
+                System.out.println("SUCCESS4");
+                System.out.println(colliderStr + " + " + collideeStr);
+                player.playerBody.applyLinearImpulse(collider.getBody().getLinearVelocity().x * 100, collider.getBody().getLinearVelocity().y * 100, 0, 0, true);
+                if (!boneBodiesCollided.contains(collider.getBody())) {
+                    boneBodiesCollided.add(collider.getBody());
+                }
+            }
+                           /*else if (collider.getBody().getUserData() == "Enemy") {
+                    player.playerBody.applyLinearImpulse(collider.getBody().getLinearVelocity().x * 50, collider.getBody().getLinearVelocity().y * 50, 0, 0, true);
+                    collider.getBody().applyLinearImpulse(-collidee.getBody().getLinearVelocity().x * 2, -collidee.getBody().getLinearVelocity().y * 2, 0, 0, true);
+
+                } else if (collidee.getBody().getUserData() == "Enemy") {
+                    player.playerBody.applyLinearImpulse(collidee.getBody().getLinearVelocity().x * 50, collidee.getBody().getLinearVelocity().y * 50, 0, 0, true);
+
+                    if (collider.getBody().getLinearVelocity().x < 10 && collider.getBody().getLinearVelocity().y < 10) {
+                        collider.getBody().applyLinearImpulse(-collidee.getBody().getLinearVelocity().x, -collidee.getBody().getLinearVelocity().y + 150, 0, 0, true);
+                    } else {
+                        collider.getBody().applyLinearImpulse(-collidee.getBody().getLinearVelocity().x + 150, -collidee.getBody().getLinearVelocity().y + 150, 0, 0, true);
+                        }
+                    }
+
+                 */
+        }
+
+            //bone branch needs to be revisited - faulty logic is causing bones not to get destroyed somewhere here
+            //split into two if-statements
+            if (((colliderStr == "Player" && collideeStr == "Enemy")
+                    || (colliderStr == "Enemy" && collideeStr == "Player"))
+            ) {
+                //if player enters enemy detection range, attack player
+                if ((collider.getUserData() == "Proximity" ||
+                        collidee.getUserData() == "Proximity")
+                ) {
+                    System.out.println(colliderStr + " + " + collideeStr);
+                    for (EnemySkull e : enemies) {
+                        if (e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody()) {
+                            e.playerInRange = true;
+                            // e.getStateMachine().changeState(EnemyState.GO_TO_PLAYER);
+                            //e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
+                        }
+                    }
+                }
+            }
+
+
+            //TODO: finish switch statement - ~40% done
+            switch (colliderStr) {
+                case "Skull":
+                    if (collideeStr == "Skull") {
+
+                    }
+                /*
+                if (fbAsString == "Skull") {
+                    //TODO Yeah this doesn't work. Bodies don't actually collide with other bodies when they are added to the world
+                    //TODO Use b2::Contact instead
+                    // check for coordinates instead
+                    if (!deadEnemyBodies.contains(fa.getBody())) {
+                        //arrowBodiesCollided.add(fa.getBody());
+                        deadEnemyBodies.add(fa.getBody());
+                    }
+                    if (!deadEnemyBodies.contains(fb.getBody())) {
+                        //arrowBodiesCollided.add(fa.getBody());
+                        deadEnemyBodies.add(fb.getBody());
+                    }
+
+                    //SkullPile.createSkullPile
+
+                }
+                */
+                    break;
+                case "Column":
+                    if (collideeStr.startsWith("Arrow")) {
+                        if (!arrowBodiesCollided.contains(collidee.getBody())) {
+                            arrowBodiesCollided.add(collidee.getBody());
+                            break;
+                        }
+                    }
+                    break;
+                case "Fire":
+                    if (collideeStr.startsWith("Arrow")) {
+                        for (Fire f : fires) {
+                            if (f.fireBody == collider.getBody()) {
+                                if (f.extinguish && f.type == 1) {
+                                    f.smoking = true;
+                                    f.extinguish = false;
+                                    for (Arrow a : arrows) {
+                                        if (a.arrowBody == collidee.getBody()) {
+                                            if (a.onFire) {
+
+                                                if (!f.active) {
+                                                    System.out.println("THIS IS ON FIRE BABY");
+                                                    f.active = true;
+                                                }
+                                            } else {
+                                                a.onFire = true;
+                                            }
+
+
+                                        }
+                                    }
+                                } else if (f.extinguish && f.type == 2) {
+                                    f.smoking = true;
+                                    f.extinguish = false;
+
+                                }
+                            }
+                        }
+                    } else if ((collidee.getUserData() != "Proximity" && collideeStr != "Enemy")
+                            && collideeStr != "Player"
+                            && collideeStr != "Bone"
+                    ) {
+                        System.out.println("THIS IS A TEST FOR RESPAWNING ENEMIES " + collideeStr);
+                        for (Fire f : fires) {
+                            if (f.fireBody == collider.getBody()) {
+                                if (f.extinguish && f.type == 1) {
+                                    f.smoking = true;
+                                    f.extinguish = false;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case "Wall":
+                    if (collideeStr == "Arrow") {
+                        if (!arrowBodiesCollided.contains(collidee.getBody())) {
+                            arrowBodiesCollided.add(collidee.getBody());
+                            break;
+                        }
+                    }
+                    break;
+                case "Obstacle":
+                    if (collideeStr.startsWith("Arrow")) {
+                        if (!arrowBodiesCollided.contains(collidee.getBody())) {
+                            arrowBodiesCollided.add(collidee.getBody());
+                            break;
+                        }
+                    }
+                    break;
+
+                case "Arrow":
+                    //System.out.println(fa.getBody().getUserData() + " " + fb.getBody().getUserData());
+                    //System.out.println(fa.getUserData() + " " + fb.getUserData());
+
+                    if (((collidee.getBody().getUserData() == "Enemy" && collidee.getUserData() != "Proximity" && collidee.getBody().getUserData() != "Cobweb")
+                            || collidee.getBody().getUserData() == "Wall")) {
+                        if (!arrowBodiesCollided.contains(collider.getBody())) {
+                            arrowBodiesCollided.add(collider.getBody());
+                        }
+                        for (EnemySkull e : enemies) {
+                            if (e.enemyAI.getBody() == collidee.getBody()) {
+                                e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
+                                break;
+                            }
+                        }
+                    } else if (collidee.getBody().getUserData() == "Fire") {
+                        for (Fire f : fires) {
+                            if (f.fireBody == collider.getBody()) {
+                                if (f.extinguish && f.type == 1) {
+                                    f.smoking = true;
+                                    f.extinguish = false;
+                                    for (Arrow a : arrows) {
+                                        if (a.arrowBody == collidee.getBody()) {
+                                            if (a.onFire) {
+
+                                                if (!f.active) {
+                                                    System.out.println("THIS IS ON FIRE BABY YEAHHHHHHHHHHHHHHHHHHH");
+                                                    f.active = true;
+                                                }
+                                            } else {
+                                                a.onFire = true;
+                                            }
+
+
+                                        }
+                                    }
+                                } else if (f.extinguish && f.type == 2) {
+                                    f.smoking = true;
+                                    f.extinguish = false;
+
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case "Door":
+                    if (collideeStr == "Arrow") {
+                        for (Room r : init.roomList) {
+                            for (Door d : r.doors) {
+                                if (d.doorBody == collider.getBody()) {
+                                    if (!d.open) {
+                                        if (!arrowBodiesCollided.contains(collidee.getBody())) {
+                                            arrowBodiesCollided.add(collidee.getBody());
+                                            break;
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //fb.getBody().getUserData() == "Player"
+                    //fb.getBody().getUserData() == "Enemy"
+                    break;
+                case "Sword":
+                    break;
+                case "Enemy":
+                    if (collidee.getUserData() == "Player" && collider.getUserData() != "Proximity") {
+                        for (EnemySkull e : enemies) {
+                            hud.healthBar.LoseHealth(0.5f);
+                            if (e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody()) {
+                                e.playerInRange = true;
+                                // e.getStateMachine().changeState(EnemyState.GO_TO_PLAYER);
+                                //e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
+                            }
+                        }
+                    }
+                /*
+                if (fb.getBody().getUserData() == "Arrow") {
+                    for (EnemySkull e : enemies) {
+                        if (e.enemyBody == fa.getBody()) {
+                            e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
+                            break;
+                        }
+                        if (!arrowBodiesCollided.contains(fb.getBody())) {
+                            arrowBodiesCollided.add(fb.getBody());
+                            break;
+                        }
+
+                    }
+
+                }
+                break;
+
+                 */
+                    break;
+                case "Player":
+                /*
+                if (collidee.getBody().getUserData() == "Bone") {
+                    System.out.println("RAHHHHHHHHHHHHHHHHHHHHHHHHH");
+                    System.out.println(colliderStr + " + " + collideeStr);
+                    if (!boneBodiesCollided.contains(collidee.getBody())) {
+                        System.out.println("RAHRAHRAHRAHRAH");
+                        boneBodiesCollided.add(collidee.getBody());
+                    }
+
+                }
+                 */
+
+
+                    if (collidee.getBody().getUserData() == "Potion") {
+                        for (Potion p : potions) {
+                            if (p.potionBody == collidee.getBody()) {
+                                collectedPotions.add(p);
+                            }
+                        }
+                    } else if (collidee.getUserData() == "ShopRadius") {
+                        for (Shopkeeper shop : shopkeepers) {
+                            if (collidee.getBody() == shop.shopBody) {
+                                shop.message = shop.messages.get(0);
+                                shop.message.showing = true;
+                            }
+                        }
+                    } else if (collidee.getUserData() == "ShopSell") {
+                        for (Shopkeeper shop : shopkeepers) {
+                            if (collidee.getBody() == shop.shopBody) {
+                                //shop.message = shop.messages.get(1);
+                                //shop.message.showing = true;
+
+                                shop.ListStock();
+
+                                System.out.println("HEY THE SHOP SELL RADIUS WORKS");
+
+                                player.buyingStock = true;
+                                player.shopkeeper = shop;
+
+                            /*
+                            for (int i = 0; i < shop.inventoryText.size(); i++) {
+                                shop.inventoryText.get(i).showing = true;
+                                shop.inventoryText.get(i).fade = false;
+                            }
+
+
+                             */
+
+
+                            }
+                        }
+                    }
+                    break;
+            }
+
+            switch (collideeStr) {
+                case "Cobweb":
+                    if ((colliderStr.startsWith("Arrow"))) {
+                        for (OrderedMap.Entry<Body, Arrow> arrowEntry : arrowArrayMap.entries()) {
+                            Arrow value = arrowEntry.value;
+                            if (value.arrowBody == collider.getBody()) {
+                                if (value.onFire) {
+                                    System.out.println("COBWEB ON FIRE");
+
+                                    for (Cobweb cob : cobwebs) {
+                                        if (cob.cobBody == collidee.getBody()) {
+                                            burnedCobwebs.add(cob);
+                                        }
+                                    }
+                                    if (!arrowBodiesCollided.contains(collider.getBody())) {
+                                        arrowBodiesCollided.add(collider.getBody());
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                    break;
+                case "Player":
+                    if (colliderStr.equals("Enemy") && collider.getUserData() != "Proximity") {
+                        for (EnemySkull e : enemies) {
+                            hud.healthBar.LoseHealth(0.5f);
+                            if (e.enemyBody == collider.getBody() || e.enemyBody == collider.getBody()) {
+                                e.playerInRange = true;
+                                // e.getStateMachine().changeState(EnemyState.GO_TO_PLAYER);
+                                //e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
+                            }
+                        }
+                    }
+                case "Arrow":
+                    if (colliderStr.equals("Obstacle")) {
+                        if (!arrowBodiesCollided.contains(collidee.getBody())) {
+                            arrowBodiesCollided.add(collidee.getBody());
+                            break;
+                        }
+                    }
+                    break;
+            }
+
+            if ((collider.getBody().getUserData() == "Door" && collidee.getBody().getUserData() == "Player")
+                    || (collider.getBody().getUserData() == "Player" && collidee.getBody().getUserData() == "Door")
+                    || ((collider.getBody().getUserData() == "Door" && collidee.getBody().getUserData() == "Enemy")
+                    || (collider.getBody().getUserData() == "Enemy" && collidee.getBody().getUserData() == "Door"))
+            ) {
+                if (collider.getBody().getUserData() == "Door"
+                        && (collidee.getUserData() != "Proximity")) {
+                    for (Room r : init.roomList) {
+                        for (Door d : r.doors) {
+                            if (d.doorBody == collider.getBody()) {
+                                if (!d.locked) {
+                                    d.open = true;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (collidee.getBody().getUserData() == "Door"
+                        && (collider.getUserData() != "Proximity")) {
+                    for (Room r : init.roomList) {
+                        for (Door d : r.doors) {
+                            if (d.doorBody == collider.getBody()) {
+                                if (!d.locked) {
+                                    d.open = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            if (collider.getBody().getUserData().toString().startsWith("Room")) {
+                // && (fb.getUserData() != "Wall" || fb.getUserData() !="Enemy" || fb.getUserData() != "Player"))
+
+                if (collidee.getBody().getUserData() == "Player") {
+                    String[] roomIndexAsString = collider.getBody().getUserData().toString().split("-");
+                    player.currentRoom = Integer.parseInt(roomIndexAsString[1]);
+                    for (EnemySkull e : init.roomList.get(player.currentRoom).enemies) {
+                        e.rayCastable = true;
+                    }
+                    player.touchingRoom = true;
+                }
+                if (init.roomList.get(player.currentRoom).isShop) {
+                    init.roomList.get(player.currentRoom).enemyCounter = 0;
+                    init.roomList.get(player.currentRoom).unlockAllDoors(world, init.roomList.get(player.currentRoom), false);
+                }
+            /*
+        } else if (fb.getBody().getUserData().toString().startsWith("Room")) {
+            // && (fb.getUserData() != "Wall" || fb.getUserData() !="Enemy" || fb.getUserData() != "Player"))
+            String[] roomIndexAsString = fb.getBody().getUserData().toString().split("-");
+            player.currentRoom = Integer.parseInt(roomIndexAsString[1]);
+
+            if (fa.getBody().getUserData() == "Player") {
+                player.touchingRoom = true;
+            }
+            if (init.roomList.get(player.currentRoom).isShop) {
+                init.roomList.get(player.currentRoom).enemyCounter = 0;
+                init.roomList.get(player.currentRoom).unlockAllDoors(world, init.roomList.get(player.currentRoom), false);
+            }
+
+             */
+            }
+
+        }
+
 
     @Override
     public void endContact(Contact contact) {
@@ -601,8 +704,8 @@ public class GameContactListener implements ContactListener {
                 break;
         }
 
-        if (    (collider.getBody().getUserData() == "Player" && collidee.getBody().getUserData() == "Enemy")
-                ||(collider.getBody().getUserData() == "Enemy" && collidee.getBody().getUserData() == "Player")
+        if (    (colliderAsString == "Player" && collideeAsString == "Enemy")
+                ||(colliderAsString == "Enemy" && collideeAsString == "Player")
         ){
             if  (collider.getUserData() == "Proximity"||
                     collidee.getUserData() == "Proximity"){

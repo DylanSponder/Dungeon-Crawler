@@ -101,14 +101,16 @@ public class Skull {
                 if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody){
                     //System.out.println("STATIC");
 
+                    //TODO: We need this to ignore the Player
+
                     if (fixture.getUserData() == "Spawner" || fixture.getBody().getUserData() == "Spawner") {
-                        System.out.println("TESTING 1");
+                        //System.out.println("TESTING 1");
                         return 0;
                     }
                     else if (fixture.getUserData() == "Fire" || fixture.getBody().getUserData() == "Fire") {
                         rayResult = true;
-                        System.out.println("TESTING 2");
-                        
+                        //System.out.println("TESTING 2");
+
                         return 0;
                     }
 
