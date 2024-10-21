@@ -1298,8 +1298,9 @@ for (int i = 0; i < layerSize; i++) {
             for (int i2 = 0; i2 < 6; i2++) {
             //TODO: Make this only pick between items that haven't been chosen yet
             indexMin = 1;
-            indexMax = 5;
+            indexMax = 6;
             randomIndex = (int) (Math.random() * (indexMax - indexMin + 1)) + indexMin;
+
 
             amountMin = 1;
             amountMax = 1;
@@ -1307,7 +1308,7 @@ for (int i = 0; i < layerSize; i++) {
 
             switch (randomIndex) {
                 case 1:
-                    itemKind = "POTION";
+                    itemKind = "KYKEON";
                     cost = 5;
                     break;
                 case 2:
@@ -1316,7 +1317,7 @@ for (int i = 0; i < layerSize; i++) {
                     break;
                 case 3:
                     itemKind = "SHIELD";
-                    cost = 15;
+                    cost = 12;
                     break;
                 case 4:
                     itemKind = "TORCH";
@@ -1324,7 +1325,15 @@ for (int i = 0; i < layerSize; i++) {
                     break;
                 case 5:
                     itemKind = "BELT";
-                    cost = 5;
+                    cost = 8;
+                    break;
+                case 6:
+                    itemKind = "CHISEL";
+                    cost = 8;
+                    break;
+                case 7:
+                    itemKind = "LANCE";
+                    cost = 10;
                     break;
             }
                 Text t2 = shopkeeper.Stock(itemKind, i2);
@@ -1333,10 +1342,10 @@ for (int i = 0; i < layerSize; i++) {
                 s1.createItem(i2, itemKind, amountIndex, cost, t3);
                 shopkeeper.inventory.put(i2, s1);
                 //overall placement of the text
-                t2.textX = shopkeeper.posX - 70;
-                t2.textY = shopkeeper.posY + 34;
-                t3.textX = shopkeeper.posX - 65;
-                t3.textY = shopkeeper.posY + 34;
+                t2.textX = shopkeeper.posX - 85;
+                t2.textY = shopkeeper.posY + 40;
+                t3.textX = shopkeeper.posX - 80;
+                t3.textY = shopkeeper.posY + 40;
     }
         shopkeeper.messages.add(shopMessage);
         DungeonCrawler.shopkeepers.add(shopkeeper);

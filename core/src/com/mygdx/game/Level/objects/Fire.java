@@ -64,8 +64,6 @@ public class Fire {
             //DO TORCH SMALL FLAME
 
         }
-
-
         //ConeLight fireLight2 = new ConeLight(rayHandler, 400, new Color(0.25f,0.20f,0,0.85f),70,fireX+8,fireY+16,270,70);
     }
 
@@ -81,8 +79,6 @@ public class Fire {
 
     public void respawnEnemy(float time, int enemyType) {
         //respawn an enemy at the nearest Skull, then remove the Skull
-
-
 
     }
 }

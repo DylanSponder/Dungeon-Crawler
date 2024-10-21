@@ -27,7 +27,7 @@ public class Obstacle {
 
         this.obBody = bodyFactory.createObstacle(world, obX, obY);
 
-        this.obBody.setUserData("Wall");
+        this.obBody.setUserData("Obstacle");
 
         //this.obHitbox.setUserData("Obstacle");
 

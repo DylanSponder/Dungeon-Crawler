@@ -29,7 +29,7 @@ public class HUD {
     stage = new Stage(vp, sb);
     subStage = new Stage(vp, sb);
 
-    totalGold = 0;
+    totalGold = 12;
     totalGoldAsString = String.valueOf(totalGold);
 
     hudFade = 1f;

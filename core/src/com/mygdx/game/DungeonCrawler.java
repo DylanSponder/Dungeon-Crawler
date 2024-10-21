@@ -738,7 +738,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 
 				if ((keycode == Keys.SHIFT_LEFT || keycode == Keys.SHIFT_RIGHT) && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking) && player.hasShield) {
-					float playerShieldAttackSpeedInSeconds = 0.60f;
+					float playerShieldAttackSpeedInSeconds = 1f;
 					playerShieldAttacking = true;
 
 					if (tx.playerSprite.equals(tx.playerDown) || leanDown) {
@@ -993,7 +993,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			// kill game when player health is 0
 			if (hud.healthBar.currentHealth == 0) {
-				System.out.println("YOU DIED IN" + player.currentRoom);
+				System.out.println("YOU DIED IN ROOM " + player.currentRoom);
 				Gdx.app.exit();
 			}
 
@@ -1334,34 +1334,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 
 
-			if (!boneArrayMap.isEmpty()) {
 
-				if (!reversedBoneMap) {
-					boneArrayMap.reverse();
-					reversedBoneMap = true;
-				}
-
-				for (OrderedMap.Entry<Body, Bone> boneEntry : boneArrayMap.entries()) {
-					Body key = boneEntry.key;
-					//render each bone
-					boneBatch.begin();
-					Bone.renderBone(boneBatch, tx.boneSprite, key.getPosition().x, key.getPosition().y, key.getAngle());
-					boneBatch.end();
-				}
-
-				Iterator<Body> boneIt = boneBodiesCollided.iterator();
-				if (boneIt.hasNext()) {
-					Body boneBody = boneIt.next();
-					if (boneArrayMap.containsKey(boneBody)) {
-
-						bones.remove(boneBody);
-						boneArrayMap.removeKey(boneBody);
-						world.destroyBody(boneBody);
-						boneIt.remove();
-
-					}
-				}
-			}
 
 			playerBatch.begin();
 			//draw playerSprite on player Box2D object
@@ -1411,11 +1384,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 				if ((e.playerSighted && e.playerInRange)){
 					//System.out.println(Gdx.graphics.getDeltaTime());
-					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 110)){
-						//System.out.println("THROWING BONE...");
+					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 100)){
 						e.timeSinceAlerted = 0f;
 						Vector2 vec1 = new Vector2(e.enemyBody.getPosition());
-						Vector2 vec2 = new Vector2(player.playerBody.getPosition());
+						Vector2 vec2 = new Vector2(Player.playerBody.getPosition());
 
 						//throw bones directly at the player but add a small random offset
 						float x = MathUtils.atan2(vec2.y - vec1.y, vec2.x - vec1.x);
@@ -1431,8 +1403,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 							finalX.x = finalX.x - randomOffset;
 							finalX.y = finalX.y - randomOffset;
 						}
-
-						System.out.println(finalX + " = ANGLE");
 						//float result = (e.enemyAI.getOrientation() / (x * MathUtils.PI));
 						//result = result - MathUtils.PI / 2;
 						//System.out.println(x);
@@ -1440,9 +1410,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 						Bone bone = new Bone(world, e.enemyBody, e.enemyBody.getPosition().x, e.enemyBody.getPosition().y, false,  true, finalX);
 						bone.createBone();
 						bones.add(bone);
-						DungeonCrawler.boneArrayMap.put(bone.boneBody, bone);
+						boneArrayMap.put(bone.boneBody, bone);
+
+
+					} else {
+						e.timeSinceAlerted = e.timeSinceAlerted + Gdx.graphics.getDeltaTime();
 					}
-					e.timeSinceAlerted = e.timeSinceAlerted + Gdx.graphics.getDeltaTime();
+
 					//System.out.println("TIME SINCE ALERTED" + e.timeSinceAlerted);
 					//e.throwBoneAtPlayer();
 
@@ -1472,6 +1446,35 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 				enemyBatch.end();
 			}
+
+		if (!boneArrayMap.isEmpty()) {
+
+			if (!reversedBoneMap) {
+				boneArrayMap.reverse();
+				reversedBoneMap = true;
+			}
+
+			for (OrderedMap.Entry<Body, Bone> boneEntry : boneArrayMap.entries()) {
+				Body key = boneEntry.key;
+				//render each bone
+				boneBatch.begin();
+				Bone.renderBone(boneBatch, tx.boneSprite, key.getPosition().x, key.getPosition().y, key.getAngle());
+				boneBatch.end();
+			}
+
+			Iterator<Body> boneIt = boneBodiesCollided.iterator();
+			if (boneIt.hasNext()) {
+				Body boneBody = boneIt.next();
+				if (boneArrayMap.containsKey(boneBody)) {
+
+					boneArrayMap.removeKey(boneBody);
+					world.destroyBody(boneBody);
+					boneIt.remove();
+					bones.remove(boneBody);
+
+				}
+			}
+		}
 
 			for (Shopkeeper s : shopkeepers) {
 				playerBatch.begin();
@@ -1762,8 +1765,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 			playerBatch.setProjectionMatrix(camera.combined);
 			arrowBatch.setProjectionMatrix(camera.combined);
 			skullBatch.setProjectionMatrix(camera.combined);
-			boneBatch.setProjectionMatrix(camera.combined);
 			tutoBatch.setProjectionMatrix(camera.combined);
+			boneBatch.setProjectionMatrix(camera.combined);
 			enemyBatch.setProjectionMatrix(camera.combined);
 			lockBatch.setProjectionMatrix(camera.combined);
 			doorBatch.setProjectionMatrix(camera.combined);
@@ -1843,6 +1846,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		arrowBatch.dispose();
 		skullBatch.dispose();
 		boneBatch.dispose();
+		obstacleBatch.dispose();
+		flameBatch.dispose();
 		enemyBatch.dispose();
 		lockBatch.dispose();
 		doorBatch.dispose();

@@ -239,7 +239,7 @@ public class BodyFactory {
         skullShape.setRadius(r);
         Fixture skullHitbox = body.createFixture(skullShape, 1.0f);
         skullShape.dispose();
-        skullHitbox.setUserData("EnemyHitbox");
+        skullHitbox.setUserData("SkullHitbox");
         skullHitbox.setSensor(true);
         return skullHitbox;
     }

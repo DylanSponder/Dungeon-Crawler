@@ -50,10 +50,12 @@ public class Bone {
         this.outVector = new Vector2();
     }
 
-    public void createBone() {
+    public Body createBone() {
         BodyFactory bodyFactory = new BodyFactory();
 
         this.boneBody = bodyFactory.createBoneBody(world, skullBody, boneX, boneY);
+
+        this.boneBody.setUserData("Bone");
 
         //this.boneBody.applyLinearImpulse(0,0,0,0,true);
 
@@ -75,16 +77,19 @@ public class Bone {
 
         //this.boneHitbox = bodyFactory.createBone(world, boneBody, skullBody.getPosition().x, skullBody.getPosition().y);
 
-        this.boneBody.setUserData("Bone");
+
 
         this.boneCreated = true;
-
+        Body temp = this.boneBody;
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-                boneBodiesCollided.add(boneBody);
+                if (!boneBodiesCollided.contains(temp)) {
+               //     boneBodiesCollided.add(temp);
                 }
-            },10);
+                }
+            },5);
+        return this.boneBody;
         }
 
         public static void renderBone(SpriteBatch batch, Sprite boneSprite, float x, float y, float rotation) {
