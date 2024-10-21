@@ -395,7 +395,6 @@ public class GameContactListener implements ContactListener {
                             && collidee.getUserData() != "Spawner"
                             && collideeStr != "Bone"
                     ) {
-                        System.out.println("THIS IS A TEST FOR RESPAWNING ENEMIES " + collideeStr);
                         for (Fire f : fires) {
                             if (f.fireBody == collider.getBody()) {
                                 if (f.extinguish && f.type == 1) {
@@ -535,7 +534,14 @@ public class GameContactListener implements ContactListener {
                     if (collidee.getBody().getUserData() == "Potion") {
                         for (Potion p : potions) {
                             if (p.potionBody == collidee.getBody()) {
-                                collectedPotions.add(p);
+                                if (!(hud.inventory.Capacity == hud.inventory.Size)) {
+                                    collectedPotions.add(p);
+
+                                } else {
+                                    System.out.println("I'm not doing anything!");
+
+                                }
+
                             }
                         }
                     } else if (collidee.getUserData() == "ShopRadius") {
