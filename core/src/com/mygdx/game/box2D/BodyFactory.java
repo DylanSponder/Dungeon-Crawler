@@ -120,6 +120,21 @@ public class BodyFactory {
         return body;
     }
 
+    public static Body createCobweb(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 8f, y + 8.5f);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        CircleShape shape = new CircleShape();
+        shape.setRadius(8.4f);
+        Fixture cobFixture = body.createFixture(shape, 1.0f);
+        shape.dispose();
+        cobFixture.setSensor(true);
+        return body;
+    }
+
     public static Body createPot(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
@@ -266,7 +281,7 @@ public class BodyFactory {
     public Fixture createSpawnerDetectionRadius(Body body, float r){
         CircleShape enemyShape = new CircleShape();
         enemyShape.setRadius(r);
-        Fixture spawner = body.createFixture(enemyShape, 0.0f);
+        Fixture spawner = body.createFixture(enemyShape, 1.0f);
         enemyShape.dispose();
         spawner.setUserData("Spawner");
         spawner.setSensor(true);

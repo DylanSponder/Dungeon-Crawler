@@ -58,9 +58,9 @@ public class Shopkeeper {
 
         switch (kind) {
             case "KYKEON": {
-                System.out.println("POTION ADDED TO THE SHOPKEEPER INVENTORY");
+                System.out.println("KYKEON ADDED TO THE SHOPKEEPER INVENTORY");
                 String msg = (index + 1) + ".  KYKEON";
-                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, true, tx.potionItemSprite, 12f);
+                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, true, tx.potionItemSprite, 6.5f);
                 this.inventoryText.add(t);
                 //this.inventoryText.add(t2);
                 break;
@@ -68,7 +68,7 @@ public class Shopkeeper {
             case "SHIELD": {
                 System.out.println("SHIELD ADDED TO THE SHOPKEEPER INVENTORY");
                 String msg = (index + 1) + ".  SHIELD";
-                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, true,  tx.shieldItemSprite, 10f);
+                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, true,  tx.shieldItemSprite, 5.5f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()
                 this.inventoryText.add(t);
@@ -77,7 +77,7 @@ public class Shopkeeper {
             case "GREEK FIRE": {
                 System.out.println("GREEK FIRE ADDED TO THE SHOPKEEPER INVENTORY");
                 String msg = (index + 1) + ". GREEK FIRE";
-                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, false,  tx.coinItemSprite, 12f);
+                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, false,  tx.coinItemSprite, 6f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()
                 this.inventoryText.add(t);
@@ -86,7 +86,7 @@ public class Shopkeeper {
             case "TORCH": {
                 System.out.println("TORCH ADDED TO THE SHOPKEEPER INVENTORY");
                 String msg = (index + 1) + ".  TORCH";
-                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, true,  tx.torchItemSprite, 11f);
+                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, true,  tx.torchItemSprite, 5.5f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()
                 this.inventoryText.add(t);
@@ -95,7 +95,7 @@ public class Shopkeeper {
             case "BELT": {
                 System.out.println("BELT ADDED TO THE SHOPKEEPER INVENTORY");
                 String msg = (index + 1) + ". BACCHUS BELT";
-                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, false,  tx.coinItemSprite, 15f);
+                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, false,  tx.coinItemSprite, 6f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()
                 this.inventoryText.add(t);
@@ -104,7 +104,7 @@ public class Shopkeeper {
             case "CHISEL": {
                 System.out.println("CHISEL ADDED TO THE SHOPKEEPER INVENTORY");
                 String msg = (index + 1) + ". CHISEL";
-                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, false,  tx.coinItemSprite, 15f);
+                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, false,  tx.coinItemSprite, 6f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()
                 this.inventoryText.add(t);
@@ -113,7 +113,7 @@ public class Shopkeeper {
             case "LANCE": {
                 System.out.println("LANCE ADDED TO THE SHOPKEEPER INVENTORY");
                 String msg = (index + 1) + ". LANCE";
-                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, false,  tx.coinItemSprite, 15f);
+                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, false,  tx.coinItemSprite, 6f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()
                 this.inventoryText.add(t);
@@ -131,7 +131,7 @@ public class Shopkeeper {
             case "KYKEON": {
                 System.out.println("KYKEON DESCRIPTION ADDED TO A POTION");
                 String desc = "[ " + cost + "] HEAL (1.5 HEARTS)";
-                Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinItemSprite, 1.5f);
+                Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinItemSprite, -1.3f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()
                 this.inventoryText.add(t);
@@ -139,8 +139,8 @@ public class Shopkeeper {
             }
             case "SHIELD": {
                 System.out.println("SHIELD DESCRIPTION ADDED TO A SHIELD");
-                String desc = "[ " + cost + "] BLOCK (30 USES)";
-                Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinItemSprite, 1.5f);
+                String desc = "[ " + cost + "] BLOCK";
+                Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinItemSprite, -1.3f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()
                 this.inventoryText.add(t);
@@ -149,7 +149,7 @@ public class Shopkeeper {
             case "GREEK FIRE": {
                 System.out.println("GREEK FIRE DESCRIPTION ADDED TO A GREEK FIRE");
                 String desc = "[ " + cost + "] FLAMING ARROWS";
-                Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinItemSprite, 1.5f);
+                Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinItemSprite, -1.3f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()
                 this.inventoryText.add(t);
@@ -158,7 +158,7 @@ public class Shopkeeper {
             case "TORCH": {
                 System.out.println("TORCH DESCRIPTION ADDED TO A TORCH");
                 String desc = "[ " + cost + "] MORE LIGHT";
-                Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinItemSprite, 1.5f);
+                Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinItemSprite, -1.3f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()
                 this.inventoryText.add(t);
@@ -166,8 +166,8 @@ public class Shopkeeper {
             }
             case "BELT": {
                 System.out.println("BELT DESCRIPTION ADDED TO A BELT");
-                String desc = "[ " + cost + "] CAPACITY+1 (KYKEON)";
-                Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinItemSprite, 1.5f);
+                String desc = "[ " + cost + "] SPACE + 1 (KYKEON)";
+                Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinItemSprite, -1.3f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()
                 this.inventoryText.add(t);
@@ -176,7 +176,7 @@ public class Shopkeeper {
             case "CHISEL": {
                 System.out.println("CHISEL DESCRIPTION ADDED TO A CHISEL");
                 String desc = "[ " + cost + "] BREAK ROCKS (10 USES)";
-                Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinItemSprite, 1.5f);
+                Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinItemSprite, -1.3f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()
                 this.inventoryText.add(t);
@@ -185,7 +185,7 @@ public class Shopkeeper {
             case "LANCE": {
                 System.out.println("LANCE DESCRIPTION ADDED TO A LANCE");
                 String desc = "  " + cost + " RANGE UP";
-                Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinItemSprite, 10f);
+                Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinItemSprite, -1.3f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()
                 this.inventoryText.add(t);
@@ -201,15 +201,15 @@ public class Shopkeeper {
               int ihalf = i / 2;
 
               if (i >= 4) {
-                  this.inventoryText.get(i).textY = inventoryText.get(i).textY - (i * 12) - 36;
+                  this.inventoryText.get(i).textY = inventoryText.get(i).textY - (i * 12) - 15;
                   this.inventoryText.get(i).showing = true;
               }
               else if (i >= 2) {
                   //this.inventoryText.get(i).textY = inventoryText.get(i).textY - i * 12;
-                  this.inventoryText.get(i).textY = inventoryText.get(i).textY - (i * 12) - 24;
+                  this.inventoryText.get(i).textY = inventoryText.get(i).textY - (i * 12) - 10;
                   this.inventoryText.get(i).showing = true;
               } else {
-                  this.inventoryText.get(i).textY = inventoryText.get(i).textY - (i * 12) - 12;
+                  this.inventoryText.get(i).textY = inventoryText.get(i).textY - (i * 12) - 5;
                   this.inventoryText.get(i).showing = true;
               }
           } else {

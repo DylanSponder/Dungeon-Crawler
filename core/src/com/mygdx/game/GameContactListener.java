@@ -29,6 +29,8 @@ public class GameContactListener implements ContactListener {
         String collideeStr = collidee.getBody().getUserData().toString();
 
 
+
+
         if(((colliderStr == "Pot" && collideeStr == "Sword")
                 || (colliderStr == "Sword" && collideeStr == "Pot"))
                 || ((colliderStr == "Pot" && collideeStr.startsWith("Arrow"))
@@ -268,7 +270,7 @@ public class GameContactListener implements ContactListener {
             } else if (collideeStr == "Bone" && colliderStr == "Player") {
                 hud.healthBar.LoseHealth(0.5f);
                 if (collidee.getBody().getUserData() == "Bone") {
-                    player.playerBody.applyLinearImpulse(collidee.getBody().getLinearVelocity().x * 100, collidee.getBody().getLinearVelocity().y * 100, 0, 0, false);
+                    player.playerBody.applyLinearImpulse(collidee.getBody().getLinearVelocity().x * 500, collidee.getBody().getLinearVelocity().y * 500, 0, 0, true);
                     if (!boneBodiesCollided.contains(collidee.getBody())) {
                         boneBodiesCollided.add(collidee.getBody());
                     }
@@ -276,7 +278,7 @@ public class GameContactListener implements ContactListener {
 
             } else if (colliderStr == "Bone" && collideeStr == "Player") {
                 hud.healthBar.LoseHealth(0.5f);
-                player.playerBody.applyLinearImpulse(collider.getBody().getLinearVelocity().x * 100, collider.getBody().getLinearVelocity().y * 100, 0, 0, false);
+                player.playerBody.applyLinearImpulse(collider.getBody().getLinearVelocity().x * 500, collider.getBody().getLinearVelocity().y * 500, 0, 0, true);
                 if (!boneBodiesCollided.contains(collider.getBody())) {
                     boneBodiesCollided.add(collider.getBody());
                 }
@@ -319,11 +321,34 @@ public class GameContactListener implements ContactListener {
                 }
             }
 
+        if (collider.getUserData() == "Spawner") {
+
+            System.out.println("OOK now this is freakin epic");
+            if (collideeStr == "Enemy") {
+                if (collidee.getUserData() != "Proximity") {
+                    System.out.println("SEX!1");
+                    for (EnemySkull e : enemies) {
+                        if (e.enemyBody == collidee.getBody()) {
+                            e.inRespawnRange = true;
+                        }
+                    }
+                }
+            }
+        } else if (collidee.getUserData() == "Spawner") {
+
+
+
+
+
+
+        }
+
 
 
 
             //TODO: finish switch statement - ~40% done
             switch (colliderStr) {
+
                 case "Bone": {
 
                     if (collideeStr == "Wall") {
@@ -506,6 +531,17 @@ public class GameContactListener implements ContactListener {
                                 //e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
                             }
                         }
+                    } else if (collideeStr == "Spawner") {
+                        System.out.println("SEX NOW!");
+                        for (EnemySkull e : enemies) {
+                            if (collider.getUserData() != "Proximity") {
+                                System.out.println("SEX!2");
+                                if (e.enemyBody == collidee.getBody()) {
+                                    e.inRespawnRange = true;
+                                    e.rayCastable = true;
+                                }
+                            }
+                        }
                     }
                     break;
                 case "Player":
@@ -538,7 +574,7 @@ public class GameContactListener implements ContactListener {
                                     collectedPotions.add(p);
 
                                 } else {
-                                    System.out.println("I'm not doing anything!");
+
 
                                 }
 
@@ -580,6 +616,8 @@ public class GameContactListener implements ContactListener {
             }
 
             switch (collideeStr) {
+
+
                 case "Cobweb":
                     if ((colliderStr.startsWith("Arrow"))) {
                         for (OrderedMap.Entry<Body, Arrow> arrowEntry : arrowArrayMap.entries()) {
@@ -744,6 +782,35 @@ public class GameContactListener implements ContactListener {
                     }
                 }
                 break;
+            case "Enemy":
+                if (collider.getUserData() != "Proximity") {
+                    System.out.println("SEX!");
+                    if (collidee.getUserData() == "Spawner") {
+                        System.out.println("EXTREME SEX");
+                        for (EnemySkull e : enemies) {
+                            if (e.enemyBody == collider.getBody()) {
+                                e.inRespawnRange = false;
+                            }
+                        }
+                    }
+                break;
+            }
+            case "Spawner":
+                if (collideeAsString == "Enemy") {
+                if (collidee.getUserData() != "Proximity") {
+                    System.out.println("SEX4!");
+                        for (EnemySkull e : enemies) {
+                            if (e.enemyBody == collidee.getBody()) {
+                                e.inRespawnRange = false;
+                            }
+                        }
+                    }
+                    break;
+                }
+                break;
+            default:
+                //System.out.println("Unassessed exit collision");
+                //System.out.println(colliderAsString + " " +collideeAsString);
         }
 
         if (    (colliderAsString == "Player" && collideeAsString == "Enemy")

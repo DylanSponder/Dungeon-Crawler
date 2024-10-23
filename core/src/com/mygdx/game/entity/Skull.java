@@ -31,7 +31,7 @@ public class Skull {
     public boolean rayCastable, rayResult;
     public Ray respawnDetectionRay;
     public int room;
-    public boolean resurrecting;
+    public boolean resurrecting, resurrectable;
 
     public Skull(World world, float x, float y) {
         this.world = world;
@@ -79,6 +79,7 @@ public class Skull {
 
     }
 
+
     public boolean rayCastSkull(Room room, Fire fire) {
 
             rayResult = false;
@@ -101,7 +102,7 @@ public class Skull {
                 if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody){
                     //System.out.println("STATIC");
 
-                    //TODO: We need this to ignore the Player
+                    //TODO: We need this to ignore the Player and not look for fires out of range
 
                     if (fixture.getUserData() == "Spawner" || fixture.getBody().getUserData() == "Spawner") {
                         //System.out.println("TESTING 1");

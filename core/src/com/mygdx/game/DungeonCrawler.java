@@ -152,6 +152,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		vec.x = PLAYER_X;
 		vec.y = PLAYER_Y;
 
+		//TODO Set player speed here so we can use dynamic speed adjustment e.g entering a cobweb
+
 		//playerSightRay = new Ray<>(vec,);
 
 		//roomClear = Gdx.audio.newMusic(Gdx.files.internal("NinjaAdventure/Sounds/Menu/Accept.wav"));
@@ -161,6 +163,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		final CreateAssets tx = CreateAssets.getInstance();
 		GameContactListener lc = new GameContactListener();
 		tx.textureRegionBuilder();
+
 
 
 
@@ -209,6 +212,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		Viewport vp = new ExtendViewport(camera.viewportWidth, camera.viewportHeight);
 		hud = new HUD(vp, hudBatch);
+
+
 
 		//initialize map
 		TiledMap map = new TiledMap();
@@ -312,6 +317,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 
 			public boolean touchDown(int x, int y, int pointer, int button) {
+
+
 
 				if (button == 0 && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking)) {
 					//if player presses left mouse attack with the swordBody
@@ -503,6 +510,18 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 				else
 				*/
+
+
+				if (Gdx.input.isKeyPressed(Keys.F)) {
+					Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+				}
+
+				if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
+					Gdx.graphics.setWindowedMode(1280, 720);
+				}
+
+
+
 				if (player.buyingStock){
 
 					if (keycode == Keys.NUM_1) {
@@ -738,7 +757,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 
 				if ((keycode == Keys.SHIFT_LEFT || keycode == Keys.SHIFT_RIGHT) && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking) && player.hasShield) {
-					float playerShieldAttackSpeedInSeconds = 1f;
+					float playerShieldAttackSpeedInSeconds = 0.85f;
 					playerShieldAttacking = true;
 
 					if (tx.playerSprite.equals(tx.playerDown) || leanDown) {
@@ -986,6 +1005,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 		});
 		world.setContactListener(lc);
+
+		if (!debug) {
+			Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+		}
 	}
 
 	@Override
@@ -1078,6 +1101,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			for (Skull s : enemySkulls) {
 				if (!GenerateLevel.init.roomList.get(s.room).spawners.isEmpty()) {
 					for (Fire f : GenerateLevel.init.roomList.get(player.currentRoom).spawners) {
+						if (s.resurrectable) {
 						//System.out.println(GenerateLevel.init.roomList.get(player.currentRoom).index);
 						if (s.skullCreated) {
 							boolean rayResult = s.rayCastSkull(GenerateLevel.init.roomList.get(player.currentRoom), f);
@@ -1104,6 +1128,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 								//respawnFire.fireLight = null;
 								//respawnFire.fireBody.setActive(false);
 
+								}
 							}
 						}
 					}
@@ -1384,7 +1409,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 				if ((e.playerSighted && e.playerInRange)){
 					//System.out.println(Gdx.graphics.getDeltaTime());
-					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 100)){
+					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 140)){
 						e.timeSinceAlerted = 0f;
 						Vector2 vec1 = new Vector2(e.enemyBody.getPosition());
 						Vector2 vec2 = new Vector2(Player.playerBody.getPosition());
@@ -1689,7 +1714,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				if (t.showing) {
 					//defaultFont.draw(fontBatch,t.message,player.playerBody.getPosition().x, player.playerBody.getPosition().y);
 					//defaultFont.draw(fontBatch,t.message,t.textX, t.textY);
-					FontController.drawFadingFont(fontBatch, defaultFont, t.textX, t.textY, t);
+					FontController.drawFadingFont(fontBatch, defaultFont, t.textX, t.textY, t, 1f);
 				}
 			}
 			fontBatch.end();
@@ -1737,7 +1762,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					enemy.shapeRenderer.end();
 				}
 				for (Skull s : enemySkulls) {
-					if (s.skullCreated && !GenerateLevel.init.roomList.get(s.room).spawners.isEmpty()) {
+					if (s.skullCreated && !GenerateLevel.init.roomList.get(s.room).spawners.isEmpty() && s.resurrectable) {
 						s.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 						s.shapeRenderer.setProjectionMatrix(camera.combined);
 						s.shapeRenderer.setColor(1, 0, 0, 1);
@@ -1818,7 +1843,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		}
 
 		if (!GenerateLevel.init.roomList.get(player.currentRoom).isShop && !debug) {
-			camera.zoom = 0.75f;
+			camera.zoom = 1f;
 		}
 		else if (!debug){
 			camera.zoom = 1f;

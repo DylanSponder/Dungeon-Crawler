@@ -53,7 +53,7 @@ public class EnemySkull {
     public HUD hud;
     public Skull skull;
     public int room;
-    public boolean playerSighted, alerted, playerInRange, rayCastable;
+    public boolean playerSighted, alerted, playerInRange, rayCastable, inRespawnRange;
     public Ray playerDetectionRay;
     public int sightCounter;
     public Text alertMessage;
