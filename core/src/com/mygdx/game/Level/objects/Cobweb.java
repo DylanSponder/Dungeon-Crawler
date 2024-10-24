@@ -33,7 +33,7 @@ public class Cobweb {
 
         BodyFactory bodyFactory = new BodyFactory();
 
-        this.cobBody = bodyFactory.createObstacle(world, cobX, cobY);
+        this.cobBody = bodyFactory.createCobweb(world, cobX, cobY);
 
         this.cobBody.setUserData("Cobweb");
 

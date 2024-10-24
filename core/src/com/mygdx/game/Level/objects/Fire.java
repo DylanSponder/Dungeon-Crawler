@@ -56,7 +56,8 @@ public class Fire {
 
                 BodyFactory bf = new BodyFactory();
 
-                fireSpawnerBody = bf.createSpawnerDetectionRadius(fireBody, 60f);
+                fireSpawnerBody = bf.createSpawnerDetectionRadius(fireBody, 70f);
+                fireSpawnerBody.setUserData("Spawner");
 
             }
         }   else if (type == 3) {

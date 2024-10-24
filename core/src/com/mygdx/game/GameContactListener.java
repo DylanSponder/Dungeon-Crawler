@@ -107,7 +107,14 @@ public class GameContactListener implements ContactListener {
                                 //arrowBodiesCollided.add(fa.getBody());
                                 deadEnemyBodies.add(collider.getBody());
                             }
-                            enemySkulls.add(new Skull(world, collider.getBody().getPosition().x, collider.getBody().getPosition().y));
+
+                            Skull skull = new Skull(world, collider.getBody().getPosition().x, collider.getBody().getPosition().y);
+
+                            if (e.inRespawnRange) {
+                                skull.resurrectable = true;
+                            }
+
+                            enemySkulls.add(skull);
                             //skullArrayMap.put();
                             e.getStateMachine().changeState(EnemySkullState.DIE);
                             hud.updateGold(1, true);
@@ -173,7 +180,13 @@ public class GameContactListener implements ContactListener {
                             if (!deadEnemyBodies.contains(collidee.getBody())) {
                                 deadEnemyBodies.add(collidee.getBody());
                             }
-                            enemySkulls.add(new Skull(world, collidee.getBody().getPosition().x, collidee.getBody().getPosition().y));
+                            Skull skull = new Skull(world, collidee.getBody().getPosition().x, collidee.getBody().getPosition().y);
+
+                            if (e.inRespawnRange) {
+                                skull.resurrectable = true;
+                            }
+
+                            enemySkulls.add(skull);
                             e.getStateMachine().changeState(EnemySkullState.DIE);
                             hud.updateGold(1, true);
                             init.roomList.get(e.room).enemyCounter--;
@@ -323,12 +336,13 @@ public class GameContactListener implements ContactListener {
 
         if (collider.getUserData() == "Spawner") {
 
-            System.out.println("OOK now this is freakin epic");
+          //  System.out.println("in range");
             if (collideeStr == "Enemy") {
                 if (collidee.getUserData() != "Proximity") {
-                    System.out.println("SEX!1");
+                 //   System.out.println("not sensor");
                     for (EnemySkull e : enemies) {
                         if (e.enemyBody == collidee.getBody()) {
+                            System.out.println(colliderStr + " " + collideeStr);
                             e.inRespawnRange = true;
                         }
                     }
@@ -336,11 +350,18 @@ public class GameContactListener implements ContactListener {
             }
         } else if (collidee.getUserData() == "Spawner") {
 
-
-
-
-
-
+          //  System.out.println("in range");
+            if (colliderStr == "Enemy") {
+                if (collider.getUserData() != "Proximity") {
+                  //  System.out.println("not sensor");
+                    for (EnemySkull e : enemies) {
+                        if (e.enemyBody == collider.getBody()) {
+                            System.out.println(colliderStr + " " + collideeStr);
+                            e.inRespawnRange = true;
+                        }
+                    }
+                }
+            }
         }
 
 
@@ -529,17 +550,6 @@ public class GameContactListener implements ContactListener {
                                 e.playerInRange = true;
                                 // e.getStateMachine().changeState(EnemyState.GO_TO_PLAYER);
                                 //e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
-                            }
-                        }
-                    } else if (collideeStr == "Spawner") {
-                        System.out.println("SEX NOW!");
-                        for (EnemySkull e : enemies) {
-                            if (collider.getUserData() != "Proximity") {
-                                System.out.println("SEX!2");
-                                if (e.enemyBody == collidee.getBody()) {
-                                    e.inRespawnRange = true;
-                                    e.rayCastable = true;
-                                }
                             }
                         }
                     }
@@ -784,9 +794,8 @@ public class GameContactListener implements ContactListener {
                 break;
             case "Enemy":
                 if (collider.getUserData() != "Proximity") {
-                    System.out.println("SEX!");
                     if (collidee.getUserData() == "Spawner") {
-                        System.out.println("EXTREME SEX");
+                 //       System.out.println("out of range");
                         for (EnemySkull e : enemies) {
                             if (e.enemyBody == collider.getBody()) {
                                 e.inRespawnRange = false;
@@ -798,7 +807,7 @@ public class GameContactListener implements ContactListener {
             case "Spawner":
                 if (collideeAsString == "Enemy") {
                 if (collidee.getUserData() != "Proximity") {
-                    System.out.println("SEX4!");
+                //    System.out.println("out of range");
                         for (EnemySkull e : enemies) {
                             if (e.enemyBody == collidee.getBody()) {
                                 e.inRespawnRange = false;

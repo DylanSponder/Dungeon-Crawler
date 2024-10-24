@@ -65,6 +65,33 @@ public class CreateAssets {
     public TextureRegion obstacle2Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion obstacle3Texture = new TextureRegion(roomBackground, 0,0,16,16);
 
+    public TextureRegion roomTopFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomBottomFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomLeftFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomRightFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
+
+    public TextureRegion roomTopLeftCornerFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomTopRightCornerFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomBottomLeftCornerFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomBottomRightCornerFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
+
+    public TextureRegion roomTopLeftEndFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomTopRightEndFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomBottomLeftEndFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomBottomRightEndFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomLeftUpEndFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomLeftDownEndFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomRightUpEndFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomRightDownEndFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
+
+
+
+
+
+
+
+
+
     public TextureRegion amphoraTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion amphora2Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion damagedAmphoraTexture = new TextureRegion(roomBackground, 0,0,16,16);
@@ -337,9 +364,9 @@ public class CreateAssets {
 
         //0.0651f
 
-        //level1Track.play();
+        level1Track.play();
         //level1Track.setLooping(true);
-        level1Track.setVolume(0.3f);
+        level1Track.setVolume(0.2f);
 
         roomMiddleFloorTexture.setRegion(96, 16, 16, 16);
         roomMiddleFloor2Texture.setRegion(256, 32, 16, 16);
@@ -357,6 +384,27 @@ public class CreateAssets {
         roomTopRightTurnTexture.setRegion(48, 16, 16, 16);
         roomBottomLeftTurnTexture.setRegion(32, 32, 16, 16);
         roomBottomRightTurnTexture.setRegion(48, 32, 16, 16);
+
+        roomTopFence.setRegion(448, 0, 16, 16);
+        roomBottomFence.setRegion(448, 0, 16, 16);
+        roomLeftFence.setRegion(448, 0, 16, 16);
+        roomRightFence.setRegion(432, 16, 16, 16);
+
+        roomTopLeftCornerFence.setRegion(432, 48, 16, 16);
+        roomTopRightCornerFence.setRegion(448, 48, 16, 16);
+        roomBottomLeftCornerFence.setRegion(432, 64, 16, 16);
+        roomBottomRightCornerFence.setRegion(448, 64, 16, 16);
+
+        roomTopLeftEndFence.setRegion(384, 0, 16, 16);
+        roomTopRightEndFence.setRegion(384, 0, 16, 16);
+        roomBottomLeftEndFence.setRegion(400, 0, 16, 16);
+        roomBottomRightEndFence.setRegion(384, 0, 16, 16);
+        roomLeftUpEndFence.setRegion(0, 0, 16, 16);
+        roomLeftDownEndFence.setRegion(0, 0, 16, 16);
+        roomRightUpEndFence.setRegion(0, 0, 16, 16);
+        roomRightDownEndFence.setRegion(0, 0, 16, 16);
+
+
         //deprecated - changed to sprite
         //obstacle1Texture.setRegion(80,64,16,16);
         //obstacle2Texture.setRegion(96,64,16,16);

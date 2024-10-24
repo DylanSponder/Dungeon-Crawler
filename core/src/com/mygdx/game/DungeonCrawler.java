@@ -10,6 +10,7 @@ import com.badlogic.gdx.ai.utils.Ray;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -331,35 +332,35 @@ public class DungeonCrawler extends ApplicationAdapter {
 						swordHitbox = bf.createSwordHitbox(swordBody, false);
 						swordHitbox.setUserData("DownSword");
 						swordHitbox.setSensor(true);
-						player.playerBody.applyForce(0,-80000,0,0,true);
+						player.playerBody.applyForce(0,-100000,0,0,true);
 					} else if (tx.playerSprite.equals(tx.playerUp) || leanUp) {
 						tx.playerSprite = tx.playerAttackUp;
 						swordBody = bf.createSwordBody(world, player.playerBody, -2.5f, 17.5f);
 						swordHitbox = bf.createSwordHitbox(swordBody, false);
 						swordHitbox.setUserData("UpSword");
 						swordHitbox.setSensor(true);
-						player.playerBody.applyForce(0,80000,0,0,true);
+						player.playerBody.applyForce(0,100000,0,0,true);
 					} else if (tx.playerSprite.equals(tx.playerLeft)) {
 						tx.playerSprite = tx.playerAttackLeft;
-						swordBody = bf.createSwordBody(world, player.playerBody, -15.5f, -0.5f);
+						swordBody = bf.createSwordBody(world, player.playerBody, -15.5f, -1.5f);
 						swordHitbox = bf.createSwordHitbox(swordBody, true);
 						swordHitbox.setUserData("LeftSword");
 						swordHitbox.setSensor(true);
-						player.playerBody.applyForce(-80000,0,0,0,true);
+						player.playerBody.applyForce(-100000,0,0,0,true);
 					} else if (tx.playerSprite.equals(tx.playerRight)) {
 						tx.playerSprite = tx.playerAttackRight;
-						swordBody = bf.createSwordBody(world, player.playerBody, 15.5f, -0.5f);
+						swordBody = bf.createSwordBody(world, player.playerBody, 15.5f, -1.5f);
 						swordHitbox = bf.createSwordHitbox(swordBody, true);
 						swordHitbox.setUserData("RightSword");
 						swordHitbox.setSensor(true);
-						player.playerBody.applyForce(80000,0,0,0,true);
+						player.playerBody.applyForce(100000,0,0,0,true);
 					} else {
 						tx.playerSprite = tx.playerAttackDown;
 						swordBody = bf.createSwordBody(world, player.playerBody, -2.5f, -11.5f);
 						swordHitbox = bf.createSwordHitbox(swordBody, false);
 						swordHitbox.setUserData("DownSword");
 						swordHitbox.setSensor(true);
-						player.playerBody.applyForce(0,-80000,0,0,true);
+						player.playerBody.applyForce(0,-100000,0,0,true);
 					}
 
 					swordBody.setUserData("Sword");
@@ -838,7 +839,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						swordHitbox.setUserData("DownSword");
 						swordHitbox.setSensor(true);
 
-						player.playerBody.applyForce(0,-80000,0,0,true);
+						player.playerBody.applyForce(0,-100000,0,0,true);
 					} else if (tx.playerSprite.equals(tx.playerUp) || leanUp) {
 						tx.playerSprite = tx.playerAttackUp;
 						swordBody = bf.createSwordBody(world, player.playerBody, -2.5f, 17.5f);
@@ -846,23 +847,23 @@ public class DungeonCrawler extends ApplicationAdapter {
 						swordHitbox.setUserData("UpSword");
 						swordHitbox.setSensor(true);
 
-						player.playerBody.applyForce(0,80000,0,0,true);
+						player.playerBody.applyForce(0,100000,0,0,true);
 					} else if (tx.playerSprite.equals(tx.playerLeft)) {
 						tx.playerSprite = tx.playerAttackLeft;
-						swordBody = bf.createSwordBody(world, player.playerBody, -15.5f, -0.5f);
+						swordBody = bf.createSwordBody(world, player.playerBody, -15.5f, -1.5f);
 						swordHitbox = bf.createSwordHitbox(swordBody, true);
 						swordHitbox.setUserData("LeftSword");
 						swordHitbox.setSensor(true);
 
-						player.playerBody.applyForce(-80000,0,0,0,true);
+						player.playerBody.applyForce(-100000,0,0,0,true);
 					} else if (tx.playerSprite.equals(tx.playerRight)) {
 						tx.playerSprite = tx.playerAttackRight;
-						swordBody = bf.createSwordBody(world, player.playerBody, 15.5f, -0.5f);
+						swordBody = bf.createSwordBody(world, player.playerBody, 15.5f, -1.5f);
 						swordHitbox = bf.createSwordHitbox(swordBody, true);
 						swordHitbox.setUserData("RightSword");
 						swordHitbox.setSensor(true);
 
-						player.playerBody.applyForce(80000,0,0,0,true);
+						player.playerBody.applyForce(100000,0,0,0,true);
 					} else {
 						tx.playerSprite = tx.playerAttackDown;
 						swordBody = bf.createSwordBody(world, player.playerBody, -2.5f, -11.5f);
@@ -870,7 +871,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						swordHitbox.setUserData("DownSword");
 						swordHitbox.setSensor(true);
 
-						player.playerBody.applyForce(0,-80000,0,0,true);
+						player.playerBody.applyForce(0,-100000,0,0,true);
 					}
 
 					swordBody.setUserData("Sword");
@@ -1007,7 +1008,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 		world.setContactListener(lc);
 
 		if (!debug) {
+			//set the window mode to fullscreen and hide the cursor when in the game window
 			Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+			Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);
 		}
 	}
 
@@ -1099,6 +1102,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//for (Room r : GenerateLevel.init.roomList) {
 			for (Skull s : enemySkulls) {
+				//TODO Fix - skulls pick the furthest spawner
 				if (!GenerateLevel.init.roomList.get(s.room).spawners.isEmpty()) {
 					for (Fire f : GenerateLevel.init.roomList.get(player.currentRoom).spawners) {
 						if (s.resurrectable) {
@@ -1135,6 +1139,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 			//}
+
+		//respawnFireMap
+		//extinguishedRespawnFires
+		//GenerateLevel.init.roomList.get(player.currentRoom).spawners
+
+
+
 
 		if (!potionArrayMap.isEmpty()) {
 			for (OrderedMap.Entry<Body, Potion> potionEntry : potionArrayMap.entries()) {
@@ -1382,9 +1393,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 				} else if (tx.playerSprite.equals(tx.playerAttackDown)) {
 					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 6f, player.playerBody.getPosition().y - 18f, 7, 14, 7, 14, 1, 1, 0);
 				} else if (tx.playerSprite.equals(tx.playerAttackLeft)) {
-					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 15f, player.playerBody.getPosition().y - 18f, 7, 14, 7, 14, 1, 1, 270);
+					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 15f, player.playerBody.getPosition().y - 19f, 7, 14, 7, 14, 1, 1, 270);
 				} else if (tx.playerSprite.equals(tx.playerAttackRight)) {
-					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x + 1f, player.playerBody.getPosition().y - 11f, 7, 14, 7, 14, 1, 1, 90);
+					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x + 1f, player.playerBody.getPosition().y - 12f, 7, 14, 7, 14, 1, 1, 90);
 				}
 			}
 
@@ -1409,7 +1420,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 				if ((e.playerSighted && e.playerInRange)){
 					//System.out.println(Gdx.graphics.getDeltaTime());
-					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 140)){
+					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 120)){
 						e.timeSinceAlerted = 0f;
 						Vector2 vec1 = new Vector2(e.enemyBody.getPosition());
 						Vector2 vec2 = new Vector2(Player.playerBody.getPosition());
@@ -1761,11 +1772,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 					enemy.shapeRenderer.end();
 				}
+				//raycast skulls within respawner radius
 				for (Skull s : enemySkulls) {
-					if (s.skullCreated && !GenerateLevel.init.roomList.get(s.room).spawners.isEmpty() && s.resurrectable) {
+					if (s.resurrectable) {
 						s.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 						s.shapeRenderer.setProjectionMatrix(camera.combined);
-						s.shapeRenderer.setColor(1, 0, 0, 1);
+						s.shapeRenderer.setColor(0, 0, 1, 1);
 
 						s.tmp.set((Vector2) s.respawnDetectionRay.start);
 						s.tmp2.set((Vector2) s.respawnDetectionRay.end);
@@ -1843,7 +1855,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		}
 
 		if (!GenerateLevel.init.roomList.get(player.currentRoom).isShop && !debug) {
-			camera.zoom = 1f;
+			camera.zoom = 0.7f;
 		}
 		else if (!debug){
 			camera.zoom = 1f;

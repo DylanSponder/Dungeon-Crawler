@@ -36,7 +36,7 @@ public class GenerateLevel {
     private int doorTop, doorBottom, doorLeft, doorRight, doorResult;
     private String doorLeftX, doorLeftY, doorRightX, doorRightY;
     private List layerSizes;
-    private ArrayList list;
+    private ArrayList list, itemIndex;
     public ArrayList<Integer> path, directionsAvailableIndexed;
     public ArrayList<Room> rolledbackRooms;
     public HashMap<String, String> doorMap;
@@ -46,7 +46,7 @@ public class GenerateLevel {
     public Room rollbackRoom;
     private HashMap<String, String> doorMapPrevious;
     private String itemKind;
-    private int invMin, invMax, amountMin, amountMax, amountIndex, indexMin, indexMax, randomIndex, invRandom, cost;
+    private int invMin, invMax, amountMin, amountMax, amountIndex, indexMin, indexMax, randomIndex, randomChosenIndex, invRandom, cost;
     private int speechMinY, speechMaxY, randomSpeechYOffset;
     private int speechMinX, speechMaxX, randomSpeechXOffset;
 
@@ -1295,18 +1295,34 @@ for (int i = 0; i < layerSize; i++) {
             invMax = 4;
             invRandom = (int) (Math.random() * (invMax - invMin + 1)) + invMin;
 
+            itemIndex = new ArrayList();
+            itemIndex.add(0,1);
+            itemIndex.add(1,2);
+            itemIndex.add(2,3);
+            itemIndex.add(3,4);
+            itemIndex.add(4,5);
+            itemIndex.add(5,6);
+
+            indexMin = 0;
+            indexMax = 5;
+
             for (int i2 = 0; i2 < 6; i2++) {
             //TODO: Make this only pick between items that haven't been chosen yet
-            indexMin = 1;
-            indexMax = 6;
+
             randomIndex = (int) (Math.random() * (indexMax - indexMin + 1)) + indexMin;
 
+            randomChosenIndex = (int) itemIndex.get(randomIndex);
+            itemIndex.remove(randomIndex);
+
+            indexMax--;
+
+            System.out.println(itemIndex);
 
             amountMin = 1;
             amountMax = 1;
             amountIndex = (int) (Math.random() * (amountMax - amountMin + 1)) + amountMin;
 
-            switch (randomIndex) {
+            switch (randomChosenIndex) {
                 case 1:
                     itemKind = "KYKEON";
                     cost = 5;
@@ -1342,10 +1358,10 @@ for (int i = 0; i < layerSize; i++) {
                 s1.createItem(i2, itemKind, amountIndex, cost, t3);
                 shopkeeper.inventory.put(i2, s1);
                 //overall placement of the text
-                t2.textX = shopkeeper.posX - 85;
-                t2.textY = shopkeeper.posY + 40;
-                t3.textX = shopkeeper.posX - 80;
-                t3.textY = shopkeeper.posY + 40;
+                t2.textX = shopkeeper.posX - 77;
+                t2.textY = shopkeeper.posY + 35;
+                t3.textX = shopkeeper.posX - 72;
+                t3.textY = shopkeeper.posY + 35;
     }
         shopkeeper.messages.add(shopMessage);
         DungeonCrawler.shopkeepers.add(shopkeeper);

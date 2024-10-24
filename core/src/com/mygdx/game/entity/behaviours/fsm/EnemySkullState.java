@@ -134,10 +134,8 @@ public enum EnemySkullState implements State<EnemySkull> {
         final CreateAssets tx = CreateAssets.getInstance();
         @Override
         public void enter (EnemySkull enemy){
-            Skull skull = new Skull(world, enemy.enemyBody.getPosition().x, enemy.enemyBody.getPosition().y);
-            if (enemy.inRespawnRange) {
-                skull.resurrectable = true;
-            }
+            //Skull skull = new Skull(world, enemy.enemyBody.getPosition().x, enemy.enemyBody.getPosition().y);
+
             Iterator<EnemySkull> enemyIt = enemies.iterator();
 
             if (enemyIt.hasNext()) {
@@ -145,6 +143,7 @@ public enum EnemySkullState implements State<EnemySkull> {
                 enemies.remove(enemy);
                 //skull.createSkull();
             }
+
         }
         @Override
         public void update(EnemySkull enemy) {
