@@ -45,9 +45,13 @@ public class CreateAssets {
     //Texture font = new Texture(Gdx.files.internal("HellasDungeon/Font/GreekAlphabet.png"));
     //public TextureRegion fontTexture = new TextureRegion(font,0,0,16,16);
 
-    public TextureRegion roomMiddleFloorTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
-    public TextureRegion roomMiddleFloor2Texture = new TextureRegion(roomBackground, 256, 32, 16, 16);
-    public TextureRegion roomMiddleFloor3Texture = new TextureRegion(roomBackground, 272, 32, 16, 16);
+    public TextureRegion roomFloorTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomFloor2Texture = new TextureRegion(roomBackground, 256, 32, 16, 16);
+    public TextureRegion roomFloor3Texture = new TextureRegion(roomBackground, 272, 32, 16, 16);
+    public TextureRegion roomDecorativeFloorUpTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomDecorativeFloorDownTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomDecorativeFloorLeftTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomDecorativeFloorRightTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
 
     public TextureRegion roomLeftWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomRightWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
@@ -83,13 +87,6 @@ public class CreateAssets {
     public TextureRegion roomLeftDownEndFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomRightUpEndFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomRightDownEndFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
-
-
-
-
-
-
-
 
 
     public TextureRegion amphoraTexture = new TextureRegion(roomBackground, 0,0,16,16);
@@ -368,9 +365,13 @@ public class CreateAssets {
         //level1Track.setLooping(true);
         level1Track.setVolume(0.2f);
 
-        roomMiddleFloorTexture.setRegion(96, 16, 16, 16);
-        roomMiddleFloor2Texture.setRegion(256, 32, 16, 16);
-        roomMiddleFloor3Texture.setRegion(272, 32, 16, 16);
+        roomFloorTexture.setRegion(96, 16, 16, 16);
+        roomFloor2Texture.setRegion(256, 32, 16, 16);
+        roomFloor3Texture.setRegion(272, 32, 16, 16);
+        roomDecorativeFloorRightTexture.setRegion(240, 48, 16, 16);
+        roomDecorativeFloorUpTexture.setRegion(224, 32, 16, 16);
+        roomDecorativeFloorDownTexture.setRegion(208, 48, 16, 16);
+        roomDecorativeFloorLeftTexture.setRegion(224, 48, 16, 16);
 
         roomTopLeftWallTexture.setRegion(0, 0, 16, 16);
         roomTopWallTexture.setRegion(48, 0, 16, 16);
@@ -386,8 +387,8 @@ public class CreateAssets {
         roomBottomRightTurnTexture.setRegion(48, 32, 16, 16);
 
         roomTopFence.setRegion(448, 0, 16, 16);
-        roomBottomFence.setRegion(448, 0, 16, 16);
-        roomLeftFence.setRegion(448, 0, 16, 16);
+        roomBottomFence.setRegion(448, 32, 16, 16);
+        roomLeftFence.setRegion(448, 16, 16, 16);
         roomRightFence.setRegion(432, 16, 16, 16);
 
         roomTopLeftCornerFence.setRegion(432, 48, 16, 16);
@@ -395,14 +396,14 @@ public class CreateAssets {
         roomBottomLeftCornerFence.setRegion(432, 64, 16, 16);
         roomBottomRightCornerFence.setRegion(448, 64, 16, 16);
 
-        roomTopLeftEndFence.setRegion(384, 0, 16, 16);
+        roomTopLeftEndFence.setRegion(384, 16, 16, 16);
         roomTopRightEndFence.setRegion(384, 0, 16, 16);
-        roomBottomLeftEndFence.setRegion(400, 0, 16, 16);
-        roomBottomRightEndFence.setRegion(384, 0, 16, 16);
-        roomLeftUpEndFence.setRegion(0, 0, 16, 16);
-        roomLeftDownEndFence.setRegion(0, 0, 16, 16);
-        roomRightUpEndFence.setRegion(0, 0, 16, 16);
-        roomRightDownEndFence.setRegion(0, 0, 16, 16);
+        roomBottomLeftEndFence.setRegion(400, 32, 16, 16);
+        roomBottomRightEndFence.setRegion(384, 32, 16, 16);
+        roomLeftUpEndFence.setRegion(416, 16, 16, 16);
+        roomLeftDownEndFence.setRegion(400, 0, 16, 16);
+        roomRightUpEndFence.setRegion(400, 16, 16, 16);
+        roomRightDownEndFence.setRegion(416, 0, 16, 16);
 
 
         //deprecated - changed to sprite

@@ -370,6 +370,7 @@ public class GameContactListener implements ContactListener {
             //TODO: finish switch statement - ~40% done
             switch (colliderStr) {
 
+
                 case "Bone": {
 
                     if (collideeStr == "Wall") {
@@ -567,6 +568,11 @@ public class GameContactListener implements ContactListener {
                 }
                  */
 
+                    if ((collideeStr == "Cobweb")) {
+                        DungeonCrawler.PLAYER_SPEED_MULTI = 15f;
+                        break;
+                    }
+
                     if (collidee.getBody().getUserData() == "Enemy" && collidee.getUserData() != "Proximity") {
                         for (EnemySkull e : enemies) {
                             if ((e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody())) {
@@ -629,7 +635,12 @@ public class GameContactListener implements ContactListener {
 
 
                 case "Cobweb":
-                    if ((colliderStr.startsWith("Arrow"))) {
+                    if ((colliderStr == "Player")) {
+                       DungeonCrawler.PLAYER_SPEED_MULTI = 15f;
+                       break;
+                    }
+
+                    else if ((colliderStr.startsWith("Arrow"))) {
                         for (OrderedMap.Entry<Body, Arrow> arrowEntry : arrowArrayMap.entries()) {
                             Arrow value = arrowEntry.value;
                             if (value.arrowBody == collider.getBody()) {
@@ -785,6 +796,12 @@ public class GameContactListener implements ContactListener {
         String collideeAsString = collidee.getBody().getUserData().toString();
 
         switch (colliderAsString) {
+            case "Cobweb":
+                if ((colliderAsString == "Player")) {
+                    DungeonCrawler.PLAYER_SPEED_MULTI = 60f;
+                    break;
+                }
+            break;
             case "Player":
                 if (collidee.getUserData() == "ShopSell") {
                     for (Shopkeeper s : shopkeepers) {
@@ -821,6 +838,17 @@ public class GameContactListener implements ContactListener {
                 //System.out.println("Unassessed exit collision");
                 //System.out.println(colliderAsString + " " +collideeAsString);
         }
+
+        switch (collideeAsString) {
+            case "Cobweb":
+                if ((colliderAsString == "Player")) {
+                    DungeonCrawler.PLAYER_SPEED_MULTI = 60f;
+                    break;
+                }
+            default:
+                break;
+        }
+
 
         if (    (colliderAsString == "Player" && collideeAsString == "Enemy")
                 ||(colliderAsString == "Enemy" && collideeAsString == "Player")

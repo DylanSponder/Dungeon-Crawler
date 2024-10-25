@@ -44,7 +44,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch, flameBatch, cobBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch;
 	public static World world;
-	public static boolean debug = false;
+	public static boolean debug = true;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -76,7 +76,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Obstacle> obstacles;
 	public static  ArrayList<Fire> fires;
 	public static ArrayList<Column> columns;
-	public float PLAYER_HORIZONTAL_SPEED = 0f, PLAYER_VERTICAL_SPEED = 0f, PLAYER_X = 0f, PLAYER_Y = 0f;
+	public float PLAYER_HORIZONTAL_SPEED = 0f;
+	public float PLAYER_VERTICAL_SPEED = 0f;
+	public float PLAYER_X = 0f;
+	public float PLAYER_Y = 0f;
+	public static float PLAYER_SPEED_MULTI;
 	private TiledMapRenderer renderer;
 	public static OrthographicCamera camera;
 	public static final float DEFAULT_VIEWPORT_WIDTH = 300f;
@@ -152,6 +156,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		Vector2 vec = new Vector2();
 		vec.x = PLAYER_X;
 		vec.y = PLAYER_Y;
+		PLAYER_SPEED_MULTI = 60f;
 
 		//TODO Set player speed here so we can use dynamic speed adjustment e.g entering a cobweb
 
@@ -1201,6 +1206,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					cobwebs.remove(cob);
 					cobArrayMap.removeKey(cob.cobBody);
 					world.destroyBody(cob.cobBody);
+					world.destroyBody(cob.innerCobBody);
 					cobIt.remove();
 				}
 			}
@@ -1980,8 +1986,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 		vec.nor();
 
 		//multiply to get desired speed
-		PLAYER_HORIZONTAL_SPEED = vec.x * 60f;
-		PLAYER_VERTICAL_SPEED = vec.y * 60f;
+		//Player speed starts at 60
+		PLAYER_HORIZONTAL_SPEED = vec.x * PLAYER_SPEED_MULTI;
+		PLAYER_VERTICAL_SPEED = vec.y * PLAYER_SPEED_MULTI;
 
 		player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
 

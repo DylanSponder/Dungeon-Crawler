@@ -124,15 +124,29 @@ public class BodyFactory {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(x + 8f, y + 8.5f);
+        bodyDef.position.set(x + 8f, y + 8f);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         CircleShape shape = new CircleShape();
-        shape.setRadius(8.4f);
+        shape.setRadius(8f);
         Fixture cobFixture = body.createFixture(shape, 1.0f);
         shape.dispose();
         cobFixture.setSensor(true);
         return body;
+    }
+
+    public static Body createImpassableCobweb(World world, float x, float y) {
+        Body body2;
+        BodyDef bodyDef2 = new BodyDef();
+        bodyDef2.type = BodyDef.BodyType.StaticBody;
+        bodyDef2.position.set(x + 8f, y + 8f);
+        bodyDef2.fixedRotation = true;
+        body2 = world.createBody(bodyDef2);
+        CircleShape shape2 = new CircleShape();
+        shape2.setRadius(2.50f);
+        Fixture cobFixture2 = body2.createFixture(shape2, 1.0f);
+        shape2.dispose();
+        return body2;
     }
 
     public static Body createPot(World world, float x, float y) {
