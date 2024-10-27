@@ -7,6 +7,10 @@ public class CreateCell {
     public TiledMapTileLayer.Cell middleFloorTile;
     public TiledMapTileLayer.Cell middleFloor2Tile;
     public TiledMapTileLayer.Cell middleFloor3Tile;
+    public TiledMapTileLayer.Cell decorFloorUpTile;
+    public TiledMapTileLayer.Cell decorFloorDownTile;
+    public TiledMapTileLayer.Cell decorFloorLeftTile;
+    public TiledMapTileLayer.Cell decorFloorRightTile;
     public TiledMapTileLayer.Cell topLeftWallTile;
     public TiledMapTileLayer.Cell topWallTile;
     public TiledMapTileLayer.Cell topRightWallTile;
@@ -56,10 +60,35 @@ public class CreateCell {
     public TiledMapTileLayer.Cell torchWallUpTile;
     public TiledMapTileLayer.Cell torchWallDownTile;
 
+    public TiledMapTileLayer.Cell topLeftFenceTile;
+    public TiledMapTileLayer.Cell topRightFenceTile;
+    public TiledMapTileLayer.Cell bottomLeftFenceTile;
+    public TiledMapTileLayer.Cell bottomRightFenceTile;
+
+    public TiledMapTileLayer.Cell topFenceTile;
+    public TiledMapTileLayer.Cell bottomFenceTile;
+    public TiledMapTileLayer.Cell leftFenceTile;
+    public TiledMapTileLayer.Cell rightFenceTile;
+
+    public TiledMapTileLayer.Cell topFenceLeftEndTile;
+    public TiledMapTileLayer.Cell topFenceRightEndTile;
+    public TiledMapTileLayer.Cell bottomFenceLeftEndTile;
+    public TiledMapTileLayer.Cell bottomFenceRightEndTile;
+
+    public TiledMapTileLayer.Cell leftFenceTopEndTile;
+    public TiledMapTileLayer.Cell leftFenceBottomEndTile;
+    public TiledMapTileLayer.Cell rightFenceTopEndTile;
+    public TiledMapTileLayer.Cell rightFenceBottomEndTile;
+
+
     public void InitializeCells() {
         middleFloorTile = new TiledMapTileLayer.Cell();
         middleFloor2Tile = new TiledMapTileLayer.Cell();
         middleFloor3Tile = new TiledMapTileLayer.Cell();
+        decorFloorUpTile = new TiledMapTileLayer.Cell();
+        decorFloorDownTile = new TiledMapTileLayer.Cell();
+        decorFloorLeftTile = new TiledMapTileLayer.Cell();
+        decorFloorRightTile = new TiledMapTileLayer.Cell();
         topLeftWallTile = new TiledMapTileLayer.Cell();
         topWallTile = new TiledMapTileLayer.Cell();
         topRightWallTile = new TiledMapTileLayer.Cell();
@@ -76,6 +105,26 @@ public class CreateCell {
         obstacle2 = new TiledMapTileLayer.Cell();
         obstacle3 = new TiledMapTileLayer.Cell();
         tutorialTile = new TiledMapTileLayer.Cell();
+
+        topFenceTile = new TiledMapTileLayer.Cell();
+        bottomFenceTile = new TiledMapTileLayer.Cell();
+        leftFenceTile = new TiledMapTileLayer.Cell();
+        rightFenceTile = new TiledMapTileLayer.Cell();
+
+        topLeftFenceTile = new TiledMapTileLayer.Cell();
+        topRightFenceTile = new TiledMapTileLayer.Cell();
+        bottomLeftFenceTile = new TiledMapTileLayer.Cell();
+        bottomRightFenceTile = new TiledMapTileLayer.Cell();
+
+        topFenceLeftEndTile = new TiledMapTileLayer.Cell();
+        topFenceRightEndTile = new TiledMapTileLayer.Cell();
+        bottomFenceLeftEndTile = new TiledMapTileLayer.Cell();
+        bottomFenceRightEndTile = new TiledMapTileLayer.Cell();
+
+        leftFenceTopEndTile = new TiledMapTileLayer.Cell();
+        leftFenceBottomEndTile = new TiledMapTileLayer.Cell();
+        rightFenceTopEndTile = new TiledMapTileLayer.Cell();
+        rightFenceBottomEndTile = new TiledMapTileLayer.Cell();
 
         torchWallLeftTile = new TiledMapTileLayer.Cell();
         torchWallRightTile = new TiledMapTileLayer.Cell();

@@ -1,6 +1,5 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.ai.StandaloneFileSystem;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.mygdx.game.entity.Arrow;
@@ -29,7 +28,7 @@ public class GameContactListener implements ContactListener {
         String collideeStr = collidee.getBody().getUserData().toString();
 
 
-
+        //System.out.println(colliderStr + " " + collideeStr);
 
         if(((colliderStr == "Pot" && collideeStr == "Sword")
                 || (colliderStr == "Sword" && collideeStr == "Pot"))
@@ -57,7 +56,7 @@ public class GameContactListener implements ContactListener {
         ) {
             if (collider.getUserData() != "Proximity" &&
                     collidee.getUserData() != "Proximity") {
-                for (EnemySkull e : enemies) {
+                for (EnemySkull e : enemySkulls) {
                     if (e.enemyBody == collider.getBody()) {
 
                         String fbData = collidee.getUserData().toString();
@@ -114,7 +113,7 @@ public class GameContactListener implements ContactListener {
                                 skull.resurrectable = true;
                             }
 
-                            enemySkulls.add(skull);
+                            skulls.add(skull);
                             //skullArrayMap.put();
                             e.getStateMachine().changeState(EnemySkullState.DIE);
                             hud.updateGold(1, true);
@@ -186,7 +185,7 @@ public class GameContactListener implements ContactListener {
                                 skull.resurrectable = true;
                             }
 
-                            enemySkulls.add(skull);
+                            skulls.add(skull);
                             e.getStateMachine().changeState(EnemySkullState.DIE);
                             hud.updateGold(1, true);
                             init.roomList.get(e.room).enemyCounter--;
@@ -212,7 +211,7 @@ public class GameContactListener implements ContactListener {
         ) {
 
             if (collidee.getBody().getUserData() == "Skull") {
-                for (Skull s : enemySkulls) {
+                for (Skull s : skulls) {
                     if (collidee.getBody() == s.skullBody && !s.skullIFrame) {
                         if (s.SKULL_HEALTH > 0) {
                             s.SKULL_HEALTH--;
@@ -283,7 +282,7 @@ public class GameContactListener implements ContactListener {
             } else if (collideeStr == "Bone" && colliderStr == "Player") {
                 hud.healthBar.LoseHealth(0.5f);
                 if (collidee.getBody().getUserData() == "Bone") {
-                    player.playerBody.applyLinearImpulse(collidee.getBody().getLinearVelocity().x * 500, collidee.getBody().getLinearVelocity().y * 500, 0, 0, true);
+                    player.playerBody.applyLinearImpulse(collider.getBody().getLinearVelocity().x * 500, collider.getBody().getLinearVelocity().y * 500, 0, 0, true);
                     if (!boneBodiesCollided.contains(collidee.getBody())) {
                         boneBodiesCollided.add(collidee.getBody());
                     }
@@ -291,7 +290,7 @@ public class GameContactListener implements ContactListener {
 
             } else if (colliderStr == "Bone" && collideeStr == "Player") {
                 hud.healthBar.LoseHealth(0.5f);
-                player.playerBody.applyLinearImpulse(collider.getBody().getLinearVelocity().x * 500, collider.getBody().getLinearVelocity().y * 500, 0, 0, true);
+                player.playerBody.applyLinearImpulse(collidee.getBody().getLinearVelocity().x * 500, collidee.getBody().getLinearVelocity().y * 500, 0, 0, true);
                 if (!boneBodiesCollided.contains(collider.getBody())) {
                     boneBodiesCollided.add(collider.getBody());
                 }
@@ -323,8 +322,8 @@ public class GameContactListener implements ContactListener {
                 if ((collider.getUserData() == "Proximity" ||
                         collidee.getUserData() == "Proximity")
                 ) {
-                    System.out.println(colliderStr + " + " + collideeStr);
-                    for (EnemySkull e : enemies) {
+                   // System.out.println(colliderStr + " + " + collideeStr);
+                    for (EnemySkull e : enemySkulls) {
                         if (e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody()) {
                             e.playerInRange = true;
                             // e.getStateMachine().changeState(EnemyState.GO_TO_PLAYER);
@@ -340,7 +339,7 @@ public class GameContactListener implements ContactListener {
             if (collideeStr == "Enemy") {
                 if (collidee.getUserData() != "Proximity") {
                  //   System.out.println("not sensor");
-                    for (EnemySkull e : enemies) {
+                    for (EnemySkull e : enemySkulls) {
                         if (e.enemyBody == collidee.getBody()) {
                             System.out.println(colliderStr + " " + collideeStr);
                             e.inRespawnRange = true;
@@ -354,7 +353,7 @@ public class GameContactListener implements ContactListener {
             if (colliderStr == "Enemy") {
                 if (collider.getUserData() != "Proximity") {
                   //  System.out.println("not sensor");
-                    for (EnemySkull e : enemies) {
+                    for (EnemySkull e : enemySkulls) {
                         if (e.enemyBody == collider.getBody()) {
                             System.out.println(colliderStr + " " + collideeStr);
                             e.inRespawnRange = true;
@@ -412,6 +411,7 @@ public class GameContactListener implements ContactListener {
                     }
                     break;
                 case "Fire":
+
                     if (collideeStr.startsWith("Arrow")) {
                         for (Fire f : fires) {
                             if (f.fireBody == collider.getBody()) {
@@ -430,7 +430,7 @@ public class GameContactListener implements ContactListener {
                                             }
                                         }
                                     }
-                                } else if (f.extinguish && f.type == 2) {
+                                } else if (f.extinguish && f.type == 2 && collider.getUserData() != "Spawner") {
                                     f.smoking = true;
                                     f.extinguish = false;
 
@@ -476,7 +476,7 @@ public class GameContactListener implements ContactListener {
                         if (!arrowBodiesCollided.contains(collider.getBody())) {
                             arrowBodiesCollided.add(collider.getBody());
                         }
-                        for (EnemySkull e : enemies) {
+                        for (EnemySkull e : enemySkulls) {
                             if (e.enemyAI.getBody() == collidee.getBody()) {
                                 e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
                                 break;
@@ -484,12 +484,12 @@ public class GameContactListener implements ContactListener {
                         }
                     } else if (collideeStr == "Fire") {
                         for (Fire f : fires) {
-                            if (f.fireBody == collider.getBody()) {
+                            if (f.fireBody == collidee.getBody()) {
                                 if (f.extinguish && f.type == 1) {
                                     f.smoking = true;
                                     f.extinguish = false;
                                     for (Arrow a : arrows) {
-                                        if (a.arrowBody == collidee.getBody()) {
+                                        if (a.arrowBody == collider.getBody()) {
                                             if (a.onFire) {
 
                                                 if (!f.active) {
@@ -502,7 +502,8 @@ public class GameContactListener implements ContactListener {
 
                                         }
                                     }
-                                } else if (f.extinguish && f.type == 2) {
+                                    //
+                                } else if (f.extinguish && f.type == 2 && collidee.getUserData() != "Spawner") {
                                     f.smoking = true;
                                     f.extinguish = false;
 
@@ -545,7 +546,7 @@ public class GameContactListener implements ContactListener {
                     break;
                 case "Enemy":
                     if (collidee.getUserData() == "Player" && collider.getUserData() != "Proximity") {
-                        for (EnemySkull e : enemies) {
+                        for (EnemySkull e : enemySkulls) {
                             hud.healthBar.LoseHealth(0.5f);
                             if (e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody()) {
                                 e.playerInRange = true;
@@ -574,7 +575,7 @@ public class GameContactListener implements ContactListener {
                     }
 
                     if (collidee.getBody().getUserData() == "Enemy" && collidee.getUserData() != "Proximity") {
-                        for (EnemySkull e : enemies) {
+                        for (EnemySkull e : enemySkulls) {
                             if ((e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody())) {
                                 hud.healthBar.LoseHealth(0.5f);
                                 e.playerInRange = true;
@@ -610,8 +611,6 @@ public class GameContactListener implements ContactListener {
                                 //shop.message.showing = true;
 
                                 shop.ListStock();
-
-                                System.out.println("HEY THE SHOP SELL RADIUS WORKS");
 
                                 player.buyingStock = true;
                                 player.shopkeeper = shop;
@@ -661,7 +660,7 @@ public class GameContactListener implements ContactListener {
                     break;
                 case "Player":
                     if (colliderStr == "Enemy" && collider.getUserData() != "Proximity") {
-                        for (EnemySkull e : enemies) {
+                        for (EnemySkull e : enemySkulls) {
                             hud.healthBar.LoseHealth(0.5f);
                             if (e.enemyBody == collider.getBody() || e.enemyBody == collider.getBody()) {
                                 e.playerInRange = true;
@@ -813,7 +812,7 @@ public class GameContactListener implements ContactListener {
                 if (collider.getUserData() != "Proximity") {
                     if (collidee.getUserData() == "Spawner") {
                  //       System.out.println("out of range");
-                        for (EnemySkull e : enemies) {
+                        for (EnemySkull e : enemySkulls) {
                             if (e.enemyBody == collider.getBody()) {
                                 e.inRespawnRange = false;
                             }
@@ -825,7 +824,7 @@ public class GameContactListener implements ContactListener {
                 if (collideeAsString == "Enemy") {
                 if (collidee.getUserData() != "Proximity") {
                 //    System.out.println("out of range");
-                        for (EnemySkull e : enemies) {
+                        for (EnemySkull e : enemySkulls) {
                             if (e.enemyBody == collidee.getBody()) {
                                 e.inRespawnRange = false;
                             }
@@ -855,7 +854,7 @@ public class GameContactListener implements ContactListener {
         ){
             if  (collider.getUserData() == "Proximity"||
                     collidee.getUserData() == "Proximity"){
-                for (EnemySkull e : enemies){
+                for (EnemySkull e : enemySkulls){
                     if (e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody()){
                         e.playerInRange = false;
                         e.getStateMachine().changeState(EnemySkullState.WANDER);

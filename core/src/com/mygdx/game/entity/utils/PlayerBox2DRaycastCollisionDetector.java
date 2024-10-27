@@ -11,7 +11,7 @@ import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.entity.behaviours.fsm.EnemySkull;
 
-import static com.mygdx.game.DungeonCrawler.enemies;
+import static com.mygdx.game.DungeonCrawler.enemySkulls;
 
 public class PlayerBox2DRaycastCollisionDetector implements RaycastCollisionDetector<Vector2> {
 
@@ -63,7 +63,7 @@ public class PlayerBox2DRaycastCollisionDetector implements RaycastCollisionDete
                     //System.out.println("I'm colliding with a dynamic object!");
                     //System.out.println(fixture.getBody().getUserData());
                         if (fixture.getBody().getUserData() == "Player") {
-                            for (EnemySkull e : enemies) {
+                            for (EnemySkull e : enemySkulls) {
                                 if (e.enemyBody == fixture.getBody()) {
                                     System.out.println("ATTACKING");
                                     //e.getStateMachine().changeState(EnemyState.GO_TO_PLAYER);

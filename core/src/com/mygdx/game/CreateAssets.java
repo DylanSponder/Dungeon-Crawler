@@ -29,7 +29,7 @@ public class CreateAssets {
     Texture bowTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Bow/Sprite.png"));
     Texture arrowTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/Bow/Arrow.png"));
     Texture shieldTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Shield/Sprite.png"));
-    Texture enemySkullTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/Enemy/SpriteSheet.png"));
+    Texture enemySkullTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySkull/SpriteSheet.png"));
     Texture enemyEyeTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Eye/Eye.png"));
     Texture shopkeeperTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/OldMan3/SpriteSheet.png"));
     Texture tutorialTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Tuto.png"));
@@ -68,6 +68,9 @@ public class CreateAssets {
     public TextureRegion obstacle1Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion obstacle2Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion obstacle3Texture = new TextureRegion(roomBackground, 0,0,16,16);
+
+    public TextureRegion candleTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion candlesTexture = new TextureRegion(roomBackground, 0,0,16,16);
 
     public TextureRegion roomTopFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomBottomFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
@@ -266,6 +269,9 @@ public class CreateAssets {
     Sprite obstacle2Sprite = new Sprite(obstacle2Texture,96,48,16,16);
     Sprite obstacle3Sprite = new Sprite(obstacle3Texture,112,48,16,16);
 
+    Sprite candleSprite = new Sprite(candleTexture,384,64,16,16);
+    Sprite candlesSprite = new Sprite(candlesTexture,400,64,16,16);
+
     Sprite amphoraSprite = new Sprite(amphoraTexture, 208,0, 16, 16);
     Sprite amphora2Sprite = new Sprite(amphoraTexture, 208,16, 16, 16);
     Sprite damagedAmphoraSprite = new Sprite(damagedAmphoraTexture, 224,0, 16, 16);
@@ -361,7 +367,7 @@ public class CreateAssets {
 
         //0.0651f
 
-        level1Track.play();
+        //level1Track.play();
         //level1Track.setLooping(true);
         level1Track.setVolume(0.2f);
 

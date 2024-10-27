@@ -31,6 +31,22 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "middleFloor3Tile");
                         index++;
                         break;
+                    case "dfu":
+                        drawableLevelLayer.add(index, "decorFloorUpTile");
+                        index++;
+                        break;
+                    case "dfd":
+                        drawableLevelLayer.add(index, "decorFloorDownTile");
+                        index++;
+                        break;
+                    case "dfl":
+                        drawableLevelLayer.add(index, "decorFloorLeftTile");
+                        index++;
+                        break;
+                    case "dfr":
+                        drawableLevelLayer.add(index, "decorFloorRightTile");
+                        index++;
+                        break;
                     case "tlw":
                         drawableLevelLayer.add(index, "topLeftWallTile");
                         index++;
@@ -79,6 +95,77 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "bottomRightTurnTile");
                         index++;
                         break;
+
+                    case "tf":
+                        drawableLevelLayer.add(index, "topFenceTile");
+                        index++;
+                        break;
+                    case "bf":
+                        drawableLevelLayer.add(index, "bottomFenceTile");
+                        index++;
+                        break;
+                    case "lf":
+                        drawableLevelLayer.add(index, "leftFenceTile");
+                        index++;
+                        break;
+                    case "rf":
+                        drawableLevelLayer.add(index, "rightFenceTile");
+                        index++;
+                        break;
+
+                    case "trf":
+                        drawableLevelLayer.add(index, "topRightFenceTile");
+                        index++;
+                        break;
+                    case "tlf":
+                        drawableLevelLayer.add(index, "topLeftFenceTile");
+                        index++;
+                        break;
+                    case "blf":
+                        drawableLevelLayer.add(index, "bottomLeftFenceTile");
+                        index++;
+                        break;
+                    case "brf":
+                        drawableLevelLayer.add(index, "bottomRightFenceTile");
+                        index++;
+                        break;
+
+                    case "bfle":
+                        drawableLevelLayer.add(index, "bottomFenceLeftEndTile");
+                        index++;
+                        break;
+                    case "bfre":
+                        drawableLevelLayer.add(index, "bottomFenceRightEndTile");
+                        index++;
+                        break;
+                    case "tfre":
+                        drawableLevelLayer.add(index, "topFenceRightEndTile");
+                        index++;
+                        break;
+                    case "tfle":
+                        drawableLevelLayer.add(index, "topFenceLeftEndTile");
+                        index++;
+                        break;
+                    case "lfue":
+                        drawableLevelLayer.add(index, "leftFenceTopEndTile");
+                        index++;
+                        break;
+                    case "lfbe":
+                        drawableLevelLayer.add(index, "leftFenceBottomEndTile");
+                        index++;
+                        break;
+                    case "rfue":
+                        drawableLevelLayer.add(index, "rightFenceTopEndTile");
+                        index++;
+                        break;
+                    case "rfbe":
+                        drawableLevelLayer.add(index, "rightFenceBottomEndTile");
+                        index++;
+                        break;
+
+
+
+
                     case "dtl":
                         drawableLevelLayer.add(index, "doorTopLeftWall");
                         index++;

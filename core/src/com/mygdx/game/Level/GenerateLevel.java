@@ -140,7 +140,7 @@ public class GenerateLevel {
                     while (random == 5) {
                         random = Random.randomInt(6, 1);
                     }
-                    newRoom.roomNum = random;
+                    newRoom.roomNum = 5;
                 }
 
                 //determines which pre-gen room is placed next in sequence
@@ -845,6 +845,18 @@ for (int i = 0; i < layerSize; i++) {
         case "middleFloor3Tile":
             currentCell = init.cr.middleFloor3Tile;
             break;
+        case "decorFloorUpTile":
+            currentCell = init.cr.decorFloorUpTile;
+            break;
+        case "decorFloorDownTile":
+            currentCell = init.cr.decorFloorDownTile;
+            break;
+        case "decorFloorLeftTile":
+            currentCell = init.cr.decorFloorLeftTile;
+            break;
+        case "decorFloorRightTile":
+            currentCell = init.cr.decorFloorRightTile;
+            break;
         case "topLeftWallTile":
             currentCell = init.cr.topLeftWallTile;
             Body newTopLeftWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
@@ -905,6 +917,93 @@ for (int i = 0; i < layerSize; i++) {
             Body newBottomRightTurn = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 0.1f, 15.9f);
             newBottomRightTurn.setUserData("Wall");
             break;
+
+        case "topFenceTile":
+            currentCell = init.cr.topFenceTile;
+            Body newTopFence = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newTopFence.setUserData("Wall");
+            break;
+        case "bottomFenceTile":
+            currentCell = init.cr.bottomFenceTile;
+            Body newBottomFence = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newBottomFence.setUserData("Wall");
+            break;
+        case "leftFenceTile":
+            currentCell = init.cr.leftFenceTile;
+            Body newLeftFence = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newLeftFence.setUserData("Wall");
+            break;
+        case "rightFenceTile":
+            currentCell = init.cr.rightFenceTile;
+            Body newRightFence = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newRightFence.setUserData("Wall");
+            break;
+
+        case "bottomRightFenceTile":
+            currentCell = init.cr.bottomRightFenceTile;
+            Body newBottomRightFence = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newBottomRightFence.setUserData("Wall");
+            break;
+        case "bottomLeftFenceTile":
+            currentCell = init.cr.bottomLeftFenceTile;
+            Body newBottomLeftFence = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newBottomLeftFence.setUserData("Wall");
+            break;
+        case "topRightFenceTile":
+            currentCell = init.cr.topRightFenceTile;
+            Body newTopRightFence= init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newTopRightFence.setUserData("Wall");
+            break;
+        case "topLeftFenceTile":
+            currentCell = init.cr.topLeftFenceTile;
+            Body newTopLeftFence = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newTopLeftFence.setUserData("Wall");
+            break;
+
+        case "bottomFenceLeftEndTile":
+            currentCell = init.cr.bottomFenceLeftEndTile;
+            Body newBottomLeftEndFence = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newBottomLeftEndFence.setUserData("Wall");
+            break;
+        case "bottomFenceRightEndTile":
+            currentCell = init.cr.bottomFenceRightEndTile;
+            Body newBottomRightEndFence = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newBottomRightEndFence.setUserData("Wall");
+            break;
+        case "topFenceLeftEndTile":
+            currentCell = init.cr.topFenceLeftEndTile;
+            Body newTopLeftEndFence= init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newTopLeftEndFence.setUserData("Wall");
+            break;
+        case "topFenceRightEndTile":
+            currentCell = init.cr.topFenceRightEndTile;
+            Body newTopRightEndFence = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newTopRightEndFence.setUserData("Wall");
+            break;
+
+        case "leftFenceTopEndTile":
+            currentCell = init.cr.leftFenceTopEndTile;
+            Body newLeftTopEndFence = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newLeftTopEndFence.setUserData("Wall");
+            break;
+        case "leftFenceBottomEndTile":
+            currentCell = init.cr.leftFenceBottomEndTile;
+            Body newLeftBottomEndFence = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newLeftBottomEndFence.setUserData("Wall");
+            break;
+        case "rightFenceTopEndTile":
+            currentCell = init.cr.rightFenceTopEndTile;
+            Body newRightTopEndFence = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newRightTopEndFence.setUserData("Wall");
+            break;
+        case "rightFenceBottomEndTile":
+            currentCell = init.cr.rightFenceBottomEndTile;
+            Body newRightBottomEndFence = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newRightBottomEndFence.setUserData("Wall");
+            break;
+
+
+
         case "doorTopLeftWall":
             if (((nextDirection == 1 || doorDirection == 3))) {
                 currentCell = init.cr.doorTopLeftWall;
@@ -1273,7 +1372,7 @@ for (int i = 0; i < layerSize; i++) {
             init.roomList.get(roomIndex).enemyCounter++;
             init.roomList.get(roomIndex).enemies.add(enemy);
             enemy.room = roomIndex;
-            DungeonCrawler.enemies.add(enemy);
+            DungeonCrawler.enemySkulls.add(enemy);
             break;
         case "shop":
             currentCell = init.cr.middleFloor3Tile;

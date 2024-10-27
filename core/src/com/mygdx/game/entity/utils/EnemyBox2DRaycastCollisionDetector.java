@@ -12,7 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.entity.behaviours.fsm.EnemySkull;
 import com.mygdx.game.entity.behaviours.fsm.EnemySkullState;
 
-import static com.mygdx.game.DungeonCrawler.enemies;
+import static com.mygdx.game.DungeonCrawler.enemySkulls;
 
 public class EnemyBox2DRaycastCollisionDetector implements RaycastCollisionDetector<Vector2> {
 
@@ -64,7 +64,7 @@ public class EnemyBox2DRaycastCollisionDetector implements RaycastCollisionDetec
 
                 if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody){
                     collided = true;
-                    for (EnemySkull e : enemies) {
+                    for (EnemySkull e : enemySkulls) {
                         if (e.enemyBody == fixture.getBody() && !hitWall) {
                             hitWall = true;
                             System.out.println("WANDERING");

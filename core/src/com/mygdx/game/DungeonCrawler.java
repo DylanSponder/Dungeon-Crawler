@@ -44,7 +44,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch, flameBatch, cobBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch;
 	public static World world;
-	public static boolean debug = true;
+	public static boolean debug = false;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -62,8 +62,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public ArrayMap<Body, Fire> respawnFireMap;
 	public ArrayMap<Body, Pot> potArrayMap;
 	public boolean reversedArrowMap, reversedSkullMap, reversedPotMap, reversedPotionMap, reversedRespawnFireMap, reversedBoneMap;
-	public static ArrayList<EnemySkull> enemies;
-	public static ArrayList<Skull> enemySkulls, brokenSkulls;
+	public static ArrayList<EnemySkull> enemySkulls;
+	public static ArrayList<EnemySpider> enemySpiders;
+	public static ArrayList<Skull> skulls, brokenSkulls;
 	public static ArrayList<Fire> extinguishedRespawnFires;
 	public static ArrayList<Bone> bones;
 	public static ArrayList<Shopkeeper> shopkeepers;
@@ -128,9 +129,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 		reversedSkullMap = false;
 		reversedPotMap = false;
 		player = new Player();
-		enemies = new ArrayList<>();
-		deadEnemyBodies = new ArrayList<>();
 		enemySkulls = new ArrayList<>();
+		enemySpiders = new ArrayList<>();
+		deadEnemyBodies = new ArrayList<>();
+		skulls = new ArrayList<>();
 		brokenSkulls = new ArrayList<>();
 		bones = new ArrayList<>();
 		cobwebs = new ArrayList<>();
@@ -975,7 +977,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					//pause player in place while attacking (attacks must be timed correctly!)
 
 					arrowBody.setUserData("Arrow");
-					if (player.hasGreekFire && !(player.greekFireUses < 1)){
+					if (player.hasGreekFire){
 						arrows.add(arrow = new Arrow(arrowBody, playerDirection, 0f, true));
 						player.greekFireUses--;
 					} else {
@@ -1030,8 +1032,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//hud.startLevel();
 
-			// win the game if all enemies are dead
-			if (enemies.isEmpty()) {
+			// win the game if all enemySkulls are dead
+			if (enemySkulls.isEmpty()) {
 				hud.winLevel();
 			}
 
@@ -1069,7 +1071,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			String stringR = String.valueOf(radians);
 			float radiansF = Float.parseFloat(stringR);
 
-			//	if (!enemySkulls.isEmpty()) {
+			//	if (!skulls.isEmpty()) {
 
 			//	}
 
@@ -1085,7 +1087,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 				}
 
-				//render door locks when a player enters a new room with enemies
+				//render door locks when a player enters a new room with enemySkulls
 				for (Lock l : r.locks) {
 					if (l.visible) {
 						lockBatch.begin();
@@ -1096,7 +1098,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 
 			//adds all skulls that have been created to the array map for manipulation
-			for (Skull s : enemySkulls) {
+			for (Skull s : skulls) {
 
 				if (!s.skullCreated) {
 					skullArrayMap.put(s.createSkull(skullArrayMap), s);
@@ -1106,7 +1108,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 
 		//for (Room r : GenerateLevel.init.roomList) {
-			for (Skull s : enemySkulls) {
+			for (Skull s : skulls) {
 				//TODO Fix - skulls pick the furthest spawner
 				if (!GenerateLevel.init.roomList.get(s.room).spawners.isEmpty()) {
 					for (Fire f : GenerateLevel.init.roomList.get(player.currentRoom).spawners) {
@@ -1128,7 +1130,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 										if (f.active) {
 											brokenSkulls.add(s);
 											EnemySkull respawnedEnemy = new EnemySkull(world, s.skullX, s.skullY);
-											DungeonCrawler.enemies.add(respawnedEnemy);
+											DungeonCrawler.enemySkulls.add(respawnedEnemy);
 											respawnedEnemy.rayCastable = true;
 										}
 									}
@@ -1215,7 +1217,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			//destructible objects safe removers - Skulls - Arrows - Pots - Potions
 
 			GameObjectDestroyer skullBasher9000 = new GameObjectDestroyer();
-			//skullBasher9000.destroyObject(skullArrayMap,brokenSkulls,enemySkulls,"Skull",);
+			//skullBasher9000.destroyObject(skullArrayMap,brokenSkulls,skulls,"Skull",);
 
 			if (!skullArrayMap.isEmpty()) {
 				for (OrderedMap.Entry<Body, Skull> skullEntry : skullArrayMap.entries()) {
@@ -1249,7 +1251,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						bones.add(bone2);
 						boneArrayMap.put(bone2.boneBody, bone2);
 
-						enemySkulls.remove(skull);
+						skulls.remove(skull);
 						skullArrayMap.removeKey(skull.skullBody);
 						world.destroyBody(skull.skullBody);
 						skullIt.remove();
@@ -1420,13 +1422,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 			playerBatch.end();
 
 			//render enemy sprite
-			for (EnemySkull e : enemies) {
+			for (EnemySkull e : enemySkulls) {
 				if (e.rayCastable) {
 					e.detectPlayer();
 				}
 				if ((e.playerSighted && e.playerInRange)){
 					//System.out.println(Gdx.graphics.getDeltaTime());
-					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 120)){
+					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 110)){
 						e.timeSinceAlerted = 0f;
 						Vector2 vec1 = new Vector2(e.enemyBody.getPosition());
 						Vector2 vec2 = new Vector2(Player.playerBody.getPosition());
@@ -1752,7 +1754,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			//toggle to enable or disable visible collision boxes
 			if (debug) {
-				for (EnemySkull enemy : enemies) {
+				for (EnemySkull enemy : enemySkulls) {
 					//renders ray cast rays
 					Ray<Vector2>[] rays = enemy.rayConfigurations[0].getRays();
 
@@ -1779,7 +1781,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					enemy.shapeRenderer.end();
 				}
 				//raycast skulls within respawner radius
-				for (Skull s : enemySkulls) {
+				for (Skull s : skulls) {
 					if (s.resurrectable) {
 						s.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 						s.shapeRenderer.setProjectionMatrix(camera.combined);
@@ -1869,7 +1871,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//player.castRay();
 
-		for (EnemySkull e : enemies) {
+		for (EnemySkull e : enemySkulls) {
 			e.enemyAI.update(GdxAI.getTimepiece().getTime());
 			e.update(GdxAI.getTimepiece().getTime());
 			if (e.playerInRange){
@@ -1922,7 +1924,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		if (debug) {
 			if (Gdx.input.isKeyPressed(Keys.NUM_8)) {
-				enemies.clear();
+				enemySkulls.clear();
 			}
 		}
 

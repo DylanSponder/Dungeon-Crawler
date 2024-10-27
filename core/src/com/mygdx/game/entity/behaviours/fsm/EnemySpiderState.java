@@ -10,11 +10,11 @@ import java.util.Iterator;
 
 import static com.mygdx.game.DungeonCrawler.*;
 
-public enum EnemySkullState implements State<EnemySkull> {
+public enum EnemySpiderState implements State<EnemySpider> {
 
     WANDER() {
         @Override
-        public void enter(EnemySkull enemy) {
+        public void enter(EnemySpider enemy) {
             //set a random orientation for the enemy
             float orientation = MathUtils.random(-MathUtils.PI, MathUtils.PI);
             //enemy.alerted = false;
@@ -29,24 +29,24 @@ public enum EnemySkullState implements State<EnemySkull> {
         }
 
         @Override
-        public void update(EnemySkull enemy) {
+        public void update(EnemySpider enemy) {
             enemy.alerted = false;
         }
 
         @Override
-        public void exit(EnemySkull enemy) {
+        public void exit(EnemySpider enemy) {
 
         }
 
         @Override
-        public boolean onMessage(EnemySkull enemy, Telegram telegram) {
+        public boolean onMessage(EnemySpider enemy, Telegram telegram) {
             return false;
         }
     },
 
     DETECT() {
         @Override
-        public void enter(EnemySkull enemy) {
+        public void enter(EnemySpider enemy) {
             //set a random orientation for the enemy
             float orientation = MathUtils.random(-MathUtils.PI, MathUtils.PI);
             //enemy.playerDetectionRay.setBehaviour(null);
@@ -60,71 +60,45 @@ public enum EnemySkullState implements State<EnemySkull> {
         }
 
         @Override
-        public void update(EnemySkull enemy) {
+        public void update(EnemySpider enemy) {
 
         }
 
         @Override
-        public void exit(EnemySkull enemy) {
+        public void exit(EnemySpider enemy) {
 
         }
 
         @Override
-        public boolean onMessage(EnemySkull enemy, Telegram telegram) {
+        public boolean onMessage(EnemySpider enemy, Telegram telegram) {
             return false;
         }
     },
 
     GO_TO_PLAYER() {
         @Override
-        public void enter(EnemySkull enemy) {
+        public void enter(EnemySpider enemy) {
             enemy.enemyAI.setBehaviour(null);
             enemy.alerted = true;
 
             Arrive seekPlayer = enemy.arriveAtPlayer();
 
-          //  BlendedSteering blendedAttackSteering = enemy.blendSteering(attack, 3, 6);
+            //  BlendedSteering blendedAttackSteering = enemy.blendSteering(attack, 3, 6);
             enemy.enemyAI.setBehaviour(seekPlayer);
         }
 
         @Override
-        public void update(final EnemySkull enemy) {
-            //System.out.println(enemy.enemyAI.getLinearVelocity());
+        public void update(final EnemySpider enemy) {
             if (enemy.enemyAI.getLinearVelocity().x < 0.5 && enemy.enemyAI.getLinearVelocity().y < 0.5){
-                //System.out.println("Ack! I'm stuck!");
-                /*
-                final float stuckTimer = 2f;
-                float ori = enemy.enemyAI.getOrientation();
-
-                fleeSB = new Flee<Vector2>(enemy.enemyAI).setTarget(DungeonCrawler.player.playerB2D);
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        if (enemy.enemyAI.getLinearVelocity().x < 0.5 && enemy.enemyAI.getLinearVelocity().y < 0.5){
-                            System.out.println("Darn, I'm still stuck!");
-                            enemy.enemyAI.setBehaviour(null);
-                            enemy.enemyAI.setBehaviour(fleeSB);
-                        }
-                        Timer.schedule(new Timer.Task() {
-                            @Override
-                            public void run() {
-                            enemy.enemyAI.setBehaviour(null);
-                            enemy.enemyAI.setBehaviour(blendedAttackSteering);
-                           }
-                       }, stuckTimer);
-                    }
-                }, stuckTimer);
-                 */
             }
         }
 
         @Override
-        public void exit(EnemySkull enemy) {
-            //System.out.println("No longer attacking the player");
+        public void exit(EnemySpider enemy) {
         }
 
         @Override
-        public boolean onMessage(EnemySkull entity, Telegram telegram) {
+        public boolean onMessage(EnemySpider entity, Telegram telegram) {
             return false;
         }
     },
@@ -132,30 +106,30 @@ public enum EnemySkullState implements State<EnemySkull> {
     DIE() {
         final CreateAssets tx = CreateAssets.getInstance();
         @Override
-        public void enter (EnemySkull enemy){
+        public void enter (EnemySpider enemy){
             //Skull skull = new Skull(world, enemy.enemyBody.getPosition().x, enemy.enemyBody.getPosition().y);
 
-            Iterator<EnemySkull> enemyIt = enemySkulls.iterator();
+            Iterator<EnemySpider> enemyIt = enemySpiders.iterator();
 
             if (enemyIt.hasNext()) {
                 //enemy.die(enemy.enemyBody.getPosition().x, enemy.enemyBody.getPosition().y);
-                enemySkulls.remove(enemy);
+                enemySpiders.remove(enemy);
                 //skull.createSkull();
             }
 
         }
         @Override
-        public void update(EnemySkull enemy) {
+        public void update(EnemySpider enemy) {
 
         }
 
         @Override
-        public void exit(EnemySkull enemy) {
+        public void exit(EnemySpider enemy) {
 
         }
 
         @Override
-        public boolean onMessage(EnemySkull enemy, Telegram telegram) {
+        public boolean onMessage(EnemySpider enemy, Telegram telegram) {
             return false;
         }
     };

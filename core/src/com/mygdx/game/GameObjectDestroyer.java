@@ -34,7 +34,7 @@ public class GameObjectDestroyer {
                     case "Arrow":
                         break;
                     case "Skull":
-                        for (Skull s : enemySkulls){
+                        for (Skull s : skulls){
                             if (value == s) {
                                 if (s.SKULL_HEALTH < 1.5f){
                                     Skull.renderSkull(batch, tx.damagedSkullSprite, s.skullBody.getPosition().x, s.skullBody.getPosition().y);

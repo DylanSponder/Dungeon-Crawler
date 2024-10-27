@@ -40,9 +40,13 @@ public class InitLevel {
         xy = new SetRoomXandY();
 
         //sets tiles to their appropriate texture
-        cr.middleFloorTile.setTile(new StaticTiledMapTile(tx.roomMiddleFloorTexture));
-        cr.middleFloor2Tile.setTile(new StaticTiledMapTile(tx.roomMiddleFloor2Texture));
-        cr.middleFloor3Tile.setTile(new StaticTiledMapTile(tx.roomMiddleFloor3Texture));
+        cr.middleFloorTile.setTile(new StaticTiledMapTile(tx.roomFloorTexture));
+        cr.middleFloor2Tile.setTile(new StaticTiledMapTile(tx.roomFloor2Texture));
+        cr.middleFloor3Tile.setTile(new StaticTiledMapTile(tx.roomFloor3Texture));
+        cr.decorFloorUpTile.setTile(new StaticTiledMapTile(tx.roomDecorativeFloorUpTexture));
+        cr.decorFloorDownTile.setTile(new StaticTiledMapTile(tx.roomDecorativeFloorDownTexture));
+        cr.decorFloorLeftTile.setTile(new StaticTiledMapTile(tx.roomDecorativeFloorLeftTexture));
+        cr.decorFloorRightTile.setTile(new StaticTiledMapTile(tx.roomDecorativeFloorRightTexture));
         cr.topLeftWallTile.setTile(new StaticTiledMapTile(tx.roomTopLeftWallTexture));
         cr.topWallTile.setTile(new StaticTiledMapTile(tx.roomTopWallTexture));
         cr.topRightWallTile.setTile(new StaticTiledMapTile(tx.roomTopRightWallTexture));
@@ -59,6 +63,29 @@ public class InitLevel {
         //cr.obstacle2.setTile(new StaticTiledMapTile(tx.obstacle2Texture));
         //cr.obstacle3.setTile(new StaticTiledMapTile(tx.obstacle3Texture));
         cr.tutorialTile.setTile(new StaticTiledMapTile(tx.tutoTexture));
+
+        cr.topFenceTile.setTile(new StaticTiledMapTile(tx.roomTopFence));
+        cr.bottomFenceTile.setTile(new StaticTiledMapTile(tx.roomBottomFence));
+        cr.leftFenceTile.setTile(new StaticTiledMapTile(tx.roomLeftFence));
+        cr.rightFenceTile.setTile(new StaticTiledMapTile(tx.roomRightFence));
+
+        cr.topLeftFenceTile.setTile(new StaticTiledMapTile(tx.roomTopLeftCornerFence));
+        cr.topRightFenceTile.setTile(new StaticTiledMapTile(tx.roomTopRightCornerFence));
+        cr.bottomLeftFenceTile.setTile(new StaticTiledMapTile(tx.roomBottomLeftCornerFence));
+        cr.bottomRightFenceTile.setTile(new StaticTiledMapTile(tx.roomBottomRightCornerFence));
+
+        cr.leftFenceTopEndTile.setTile(new StaticTiledMapTile(tx.roomLeftUpEndFence));
+        cr.leftFenceBottomEndTile.setTile(new StaticTiledMapTile(tx.roomLeftDownEndFence));
+        cr.rightFenceTopEndTile.setTile(new StaticTiledMapTile(tx.roomRightUpEndFence));
+        cr.rightFenceBottomEndTile.setTile(new StaticTiledMapTile(tx.roomRightDownEndFence));
+
+        cr.topFenceLeftEndTile.setTile(new StaticTiledMapTile(tx.roomTopLeftEndFence));
+        cr.topFenceRightEndTile.setTile(new StaticTiledMapTile(tx.roomTopRightEndFence));
+        cr.bottomFenceLeftEndTile.setTile(new StaticTiledMapTile(tx.roomBottomLeftEndFence));
+        cr.bottomFenceRightEndTile.setTile(new StaticTiledMapTile(tx.roomBottomRightEndFence));
+
+
+
 
         cr.doorTopLeftWall.setTile(new StaticTiledMapTile(tx.doorTopLeftWallTexture));
         cr.doorTopRightWall.setTile(new StaticTiledMapTile(tx.doorTopRightWallTexture));

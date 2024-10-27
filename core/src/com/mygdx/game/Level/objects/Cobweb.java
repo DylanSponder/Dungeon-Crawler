@@ -13,7 +13,7 @@ import com.mygdx.game.box2D.BodyFactory;
 public class Cobweb {
     public float cobX, cobY;
     private World world;
-    public Body cobBody;
+    public Body cobBody, innerCobBody;
     public Fixture cobHitbox;
     public boolean cobCreated;
 
@@ -35,7 +35,13 @@ public class Cobweb {
 
         this.cobBody = bodyFactory.createCobweb(world, cobX, cobY);
 
+
+        this.innerCobBody = bodyFactory.createImpassableCobweb(world, cobX, cobY);
+
+
         this.cobBody.setUserData("Cobweb");
+
+        this.innerCobBody.setUserData("InnerCobweb");
 
         cobArrayMap.put(cobBody, this);
 
