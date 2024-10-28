@@ -120,6 +120,21 @@ public class BodyFactory {
         return body;
     }
 
+    public static Body createCandle(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 8f, y + 8.5f);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        CircleShape shape = new CircleShape();
+        shape.setRadius(8.4f);
+        Fixture candFix = body.createFixture(shape, 1.0f);
+        candFix.setSensor(true);
+        shape.dispose();
+        return body;
+    }
+
     public static Body createCobweb(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
@@ -219,8 +234,6 @@ public class BodyFactory {
         return swordHitbox;
     }
 
-    //unused - in case we want the bow to have collision in future
-    //TODO - IMPLEMENT AS SHIELD ITEM
     public Body createShieldBody(World world, Body player, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();

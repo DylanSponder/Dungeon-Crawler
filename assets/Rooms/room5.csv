@@ -1,11 +1,11 @@
 tlw,dtl,doortl,doortr,dtr,toru,tw,tw,tw,tw,trw
 lw,fped1fire,f,f,f,f,f,f,f,fped1fire,rw
 lw,fcol1,f,fcol10fire,f,f,f,fcol10fire,f,fcol1,rw
-lw,fcol7,f,fcol4,f,fped1fire,f,fcol4,f,fcol7,rw
+lw,fcol7,f,fcol4,f,fcands,f,fcol4,f,fcol7,rw
 dlu,f,f,fcol7,f3,f2,f3,fcol7,f,f,dru
-doorul,f,fped1fire,f,f2,fshop,f2,f,fped1fire,f,doorur
-doorll,f,f,fcol10fire,f3,f2,f3,fcol10fire,f,f,doorlr
-dll,fcol1,f,fcol4,f,fped1fire,f,fcol4,f,fcol1,drl
+doorul,f,fcand,f,f2,fshop,f2,f,fcands,f,doorur
+doorll,f,fcands,fcol10fire,f3,f2,f3,fcol10fire,fcand,f,doorlr
+dll,fcol1,f,fcol4,f,fcand,f,fcol4,f,fcol1,drl
 lw,fcol7,f,fcol7,f,f,f,fcol7,f,fcol7,rw
 lw,fped1fire,f,f,f,f,f,f,f,fped1fire,rw
 blw,bw,bw,bw,bw,tord,dbl,doorbl,doorbr,dbr,brw

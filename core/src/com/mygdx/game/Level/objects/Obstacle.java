@@ -35,9 +35,4 @@ public class Obstacle {
 
         return this.obBody;
     }
-
-    public static void renderPot(SpriteBatch batch, Sprite obstacleSprite, float x, float y) {
-
-        batch.draw(obstacleSprite,x - 8f,y - 8f,0,0,16,16,1,1,0);
-    }
 }

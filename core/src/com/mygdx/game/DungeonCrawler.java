@@ -41,10 +41,10 @@ import com.mygdx.game.level.InitLevel;
 
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch playerBatch, arrowBatch, enemyBatch, potBatch, hudBatch, tutoBatch, fontBatch, inventoryBatch;
-	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch, flameBatch, cobBatch;
+	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch, flameBatch, cobBatch, candleBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch;
 	public static World world;
-	public static boolean debug = false;
+	public static boolean debug;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	private String playerDirection;
@@ -75,6 +75,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Potion> potions, collectedPotions;
 	public static ArrayList<Torch> torches;
 	public static ArrayList<Obstacle> obstacles;
+	public static ArrayList<Candle> candles;
 	public static  ArrayList<Fire> fires;
 	public static ArrayList<Column> columns;
 	public float PLAYER_HORIZONTAL_SPEED = 0f;
@@ -102,6 +103,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 	@Override
 	public void create() {
+
+		debug = false;
+
 		world = new World(new Vector2(0, 0f), false);
 		assetManager = new AssetManager();
 		playerBatch = new SpriteBatch();
@@ -116,6 +120,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		potBatch = new SpriteBatch();
 		potionBatch = new SpriteBatch();
 		obstacleBatch = new SpriteBatch();
+		candleBatch = new SpriteBatch();
 		columnTopBatch = new SpriteBatch();
 		columnStemBatch = new SpriteBatch();
 		columnBaseBatch = new SpriteBatch();
@@ -153,6 +158,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//columnBases = new ArrayList<>();
 		collectedPotions = new ArrayList<Potion>();
 		obstacles = new ArrayList<Obstacle>();
+		candles = new ArrayList<Candle>();
 		messages = new ArrayList<Text>();
 
 		Vector2 vec = new Vector2();
@@ -761,6 +767,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 					if (hud.inventory.Size > 0) {
 						hud.inventory.usePotion(1);
 						hud.healthBar.GainHealth(1.5f);
+					}
+				}
+
+				if (keycode == Keys.P) {
+					if (!debug) {
+						debug = true;
+					} else {
+						debug = false;
 					}
 				}
 
@@ -1376,6 +1390,36 @@ public class DungeonCrawler extends ApplicationAdapter {
 				obstacleBatch.end();
 			}
 
+		for (Candle c : candles) {
+			candleBatch.begin();
+			switch (c.type){
+				case 1:
+					candleBatch.draw(tx.candleSprite, c.candBody.getPosition().x - 8f, c.candBody.getPosition().y - 8f, 16, 16);
+					break;
+				case 2:
+					candleBatch.draw(tx.candlesSprite, c.candBody.getPosition().x - 8f, c.candBody.getPosition().y - 8f, 16, 16);
+					break;
+			}
+			candleBatch.end();
+		}
+
+		for (Fire f : fires) {
+			if (f.type == 3) {
+				//TODO: Finish small flame
+				currentFrame = tx.flameAnimation.getKeyFrame(stateTime, f.active);
+
+				fireBatch.begin();
+				if (f.upDown) {
+					Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, true);
+				} else {
+					Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, false);
+				}
+
+				fireBatch.end();
+			}
+
+
+		}
 
 
 
@@ -1698,6 +1742,15 @@ public class DungeonCrawler extends ApplicationAdapter {
 					} else {
 					if (f.type == 1) {
 						currentFrame = tx.fireAnimation.getKeyFrame(stateTime, f.active);
+
+						fireBatch.begin();
+						if (f.upDown) {
+							Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, true);
+						} else {
+							Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, false);
+						}
+
+						fireBatch.end();
 					} else if (f.type == 2) {
 
 						//we want blue fire to respawn dead Enemies nearby every X number of frames
@@ -1705,19 +1758,18 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 
 						currentFrame = tx.blueFireAnimation.getKeyFrame(stateTime, f.active);
-					} else if (f.type == 3) {
-						//TODO: Finish small flame
-						currentFrame = tx.flameAnimation.getKeyFrame(stateTime, f.active);
+
+						fireBatch.begin();
+						if (f.upDown) {
+							Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, true);
+						} else {
+							Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, false);
+						}
+
+						fireBatch.end();
 					}
 
-					fireBatch.begin();
-					if (f.upDown) {
-						Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, true);
-					} else {
-						Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, false);
-					}
 
-					fireBatch.end();
 
 					}
 
@@ -1807,6 +1859,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			rayHandler.render();
 			rayHandler.setCombinedMatrix(camera);
 			obstacleBatch.setProjectionMatrix(camera.combined);
+			candleBatch.setProjectionMatrix(camera.combined);
 			playerBatch.setProjectionMatrix(camera.combined);
 			arrowBatch.setProjectionMatrix(camera.combined);
 			skullBatch.setProjectionMatrix(camera.combined);

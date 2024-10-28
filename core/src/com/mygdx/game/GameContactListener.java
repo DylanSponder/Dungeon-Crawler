@@ -557,17 +557,6 @@ public class GameContactListener implements ContactListener {
                     }
                     break;
                 case "Player":
-                /*
-                if (collidee.getBody().getUserData() == "Bone") {
-                    System.out.println("RAHHHHHHHHHHHHHHHHHHHHHHHHH");
-                    System.out.println(colliderStr + " + " + collideeStr);
-                    if (!boneBodiesCollided.contains(collidee.getBody())) {
-                        System.out.println("RAHRAHRAHRAHRAH");
-                        boneBodiesCollided.add(collidee.getBody());
-                    }
-
-                }
-                 */
 
                     if ((collideeStr == "Cobweb")) {
                         DungeonCrawler.PLAYER_SPEED_MULTI = 15f;
