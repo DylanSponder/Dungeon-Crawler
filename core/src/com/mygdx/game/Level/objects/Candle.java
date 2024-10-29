@@ -22,10 +22,12 @@ public class Candle {
         this.type = type;
     }
 
-    public Body createObstacle() {
+    public Body createCandle() {
         BodyFactory bodyFactory = new BodyFactory();
 
-        this.candBody = bodyFactory.createObstacle(world, candX, candY);
+    //    this.candBody = bodyFactory.createObstacle(world, candX, candY);
+
+        this.candBody = bodyFactory.createCandle(world, candX, candY);
 
         this.candBody.setUserData("Candle");
 

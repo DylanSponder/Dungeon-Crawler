@@ -27,7 +27,12 @@ public class GameContactListener implements ContactListener {
         String colliderStr = collider.getBody().getUserData().toString();
         String collideeStr = collidee.getBody().getUserData().toString();
 
+        if ((colliderStr == "Sword" && collideeStr == "Fire" && collidee.getUserData() != "Spawner")
+        || (collideeStr == "Sword" && colliderStr == "Fire" && collider.getUserData() != "Spawner"))
+        {
+            System.out.println("Hello");
 
+        }
         //System.out.println(colliderStr + " " + collideeStr);
 
         if(((colliderStr == "Pot" && collideeStr == "Sword")
@@ -437,11 +442,8 @@ public class GameContactListener implements ContactListener {
                                 }
                             }
                         }
-                    } else if ((collidee.getUserData() != "Proximity" && collideeStr != "Enemy")
-                            && collideeStr != "Player"
-                            && collidee.getUserData() != "Spawner"
-                            && collideeStr != "Bone"
-                    ) {
+                    }
+                    else if (collideeStr == "Sword" || collideeStr == "Lance") {
                         for (Fire f : fires) {
                             if (f.fireBody == collider.getBody()) {
                                 if (f.extinguish && f.type == 1) {
@@ -451,6 +453,15 @@ public class GameContactListener implements ContactListener {
                             }
                         }
                     }
+                    /*else if ((collidee.getUserData() != "Proximity" && collideeStr != "Enemy")
+                            && collideeStr != "Player"
+                            && collidee.getUserData() != "Spawner"
+                            && collideeStr != "Bone"
+                    ) {
+
+                    }
+
+                     */
                     break;
                 case "Wall":
                     if (collideeStr == "Arrow") {
@@ -543,6 +554,16 @@ public class GameContactListener implements ContactListener {
                     }
                     break;
                 case "Sword":
+                    if (collideeStr == "Fire" && collidee.getUserData() != "Spawner"){
+                        for (Fire f : fires) {
+                            if (f.fireBody == collidee.getBody()) {
+                                if (f.extinguish && f.type == 1) {
+                                    f.smoking = true;
+                                    f.extinguish = false;
+                                }
+                            }
+                        }
+                    }
                     break;
                 case "Enemy":
                     if (collidee.getUserData() == "Player" && collider.getUserData() != "Proximity") {
@@ -746,7 +767,7 @@ public class GameContactListener implements ContactListener {
                 if (collidee.getBody().getUserData() == "Player") {
                     String[] roomIndexAsString = collider.getBody().getUserData().toString().split("-");
                     player.currentRoom = Integer.parseInt(roomIndexAsString[1]);
-                    for (EnemySkull e : init.roomList.get(player.currentRoom).enemies) {
+                    for (EnemySkull e : init.roomList.get(player.currentRoom).enemySkulls) {
                         e.rayCastable = true;
                     }
                     player.touchingRoom = true;

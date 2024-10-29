@@ -20,7 +20,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.Skull;
-import com.mygdx.game.entity.utils.EnemyBox2DSteeringEntity;
+import com.mygdx.game.entity.utils.EnemySkullBox2DSteeringEntity;
 import com.mygdx.game.entity.utils.EnemyBox2DRaycastCollisionDetector;
 import com.mygdx.game.HUD;
 import com.mygdx.game.level.objects.Text;
@@ -31,9 +31,10 @@ import static com.mygdx.game.DungeonCrawler.*;
 public class EnemySkull {
     private StateMachine<EnemySkull, EnemySkullState> stateMachine;
     public Body enemyBody, enemyDetectionBody, enemyPlayerDetectionBody;
+    public int enemyID = 1;
     public Fixture enemyHitbox;
     public Fixture enemyDetectionRadius;
-    public EnemyBox2DSteeringEntity enemyAI;
+    public EnemySkullBox2DSteeringEntity enemyAI;
     //public PlayerBox2DRaycastCollisionDetector playerDetectionRay;
     public ShapeRenderer shapeRenderer;
     public Vector2 tmp = new Vector2();
@@ -87,7 +88,7 @@ public class EnemySkull {
 
         //enemyDetectionRadius.setSensor(true);
 
-        enemyAI = new EnemyBox2DSteeringEntity(enemyBody, 10);
+        enemyAI = new EnemySkullBox2DSteeringEntity(enemyBody, 10);
         //playerDetectionRay = new EnemyBox2DSteeringEntity(enemyBody,10);
 
         stateMachine = new DefaultStateMachine<EnemySkull, EnemySkullState>(this, EnemySkullState.WANDER);
@@ -155,7 +156,7 @@ public class EnemySkull {
 
     }
 
-    public Wander<Vector2> wander(EnemyBox2DSteeringEntity owner, float wanderOrientation) {
+    public Wander<Vector2> wander(EnemySkullBox2DSteeringEntity owner, float wanderOrientation) {
         wanderSB = new Wander<Vector2>(owner)
                 .setFaceEnabled(false)
                 //.setAlignTolerance(0.001f)

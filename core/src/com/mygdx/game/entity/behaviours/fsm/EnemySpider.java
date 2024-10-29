@@ -20,21 +20,20 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.Skull;
-import com.mygdx.game.entity.utils.EnemyBox2DSteeringEntity;
+import com.mygdx.game.entity.utils.EnemySkullBox2DSteeringEntity;
 import com.mygdx.game.entity.utils.EnemyBox2DRaycastCollisionDetector;
 import com.mygdx.game.HUD;
 import com.mygdx.game.level.objects.Text;
-// import jdk.internal.jshell.tool.StopDetectingInputStream;
 
 import static com.mygdx.game.DungeonCrawler.*;
 
 public class EnemySpider {
     private StateMachine<EnemySpider, EnemySpiderState> stateMachine;
+    public int enemyID = 2;
     public Body enemyBody, enemyDetectionBody, enemyPlayerDetectionBody;
     public Fixture enemyHitbox;
     public Fixture enemyDetectionRadius;
-    public EnemyBox2DSteeringEntity enemyAI;
-    //public PlayerBox2DRaycastCollisionDetector playerDetectionRay;
+    public EnemySkullBox2DSteeringEntity enemyAI;
     public ShapeRenderer shapeRenderer;
     public Vector2 tmp = new Vector2();
     public Vector2 tmp2 = new Vector2();
@@ -58,6 +57,7 @@ public class EnemySpider {
     public int sightCounter;
     public Text alertMessage;
     public float timeSinceAlerted;
+    public String facing;
 
     public EnemySpider(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
@@ -87,7 +87,7 @@ public class EnemySpider {
 
         //enemyDetectionRadius.setSensor(true);
 
-        enemyAI = new EnemyBox2DSteeringEntity(enemyBody, 10);
+        enemyAI = new EnemySkullBox2DSteeringEntity(enemyBody, 10);
         //playerDetectionRay = new EnemyBox2DSteeringEntity(enemyBody,10);
 
         stateMachine = new DefaultStateMachine<EnemySpider, EnemySpiderState>(this, EnemySpiderState.WANDER);
@@ -137,25 +137,7 @@ public class EnemySpider {
  */
     }
 
-    /*
-    public void showAlertMessage() {
-        alertMessage.textX = this.enemyAI.getBody().getPosition().x;
-        alertMessage.textY = this.enemyAI.getBody().getPosition().y;
-    }
-    */
-
-    public void throwBoneAtPlayer() {
-
-
-
-        // angle =
-
-        // Bone bone = new Bone(world, skull.skullBody, skull.skullBody.getPosition().x, skull.skullBody.getPosition().y, false, 0, true, angle);
-
-
-    }
-
-    public Wander<Vector2> wander(EnemyBox2DSteeringEntity owner, float wanderOrientation) {
+    public Wander<Vector2> wander(EnemySkullBox2DSteeringEntity owner, float wanderOrientation) {
         wanderSB = new Wander<Vector2>(owner)
                 .setFaceEnabled(false)
                 //.setAlignTolerance(0.001f)
@@ -220,8 +202,6 @@ public class EnemySpider {
                         boolean sighted = false;
 
                         if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody && fixture.getBody().getUserData() != "Skull" && fixture.getBody().getUserData() != "Fire") {
-                            //sighted = true;
-                            //System.out.println(fixture.getBody().getUserData());
                             sightCounter = 0;
                             playerSighted = false;
                             return 0;
@@ -287,7 +267,12 @@ public class EnemySpider {
     }
 
     public void update (float delta) {
-
+        if (this.enemyAI.getLinearVelocity().y > 0) {
+            this.facing = "Up";
+        }
+        else {
+            this.facing = "Down";
+        }
         stateMachine.update();
     }
     public StateMachine<EnemySpider, EnemySpiderState> getStateMachine () {

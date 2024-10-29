@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.mygdx.game.entity.behaviours.fsm.EnemySkull;
+import com.mygdx.game.entity.behaviours.fsm.EnemySpider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +21,8 @@ public class Room {
     public ArrayList<Lock> locks;
     public ArrayList<Door> doors;
     public ArrayMap<String, Door> doorArrayMap;
-    public ArrayList<EnemySkull> enemies;
+    public ArrayList<EnemySkull> enemySkulls;
+    public ArrayList<EnemySpider> enemySpiders;
     public ArrayList<Fire> spawners;
 
     public boolean isShop;
@@ -31,7 +33,8 @@ public class Room {
         doorArrayMap = new ArrayMap<String, Door>();
         locks = new ArrayList<Lock>();
         doors = new ArrayList<Door>();
-        enemies = new ArrayList<EnemySkull>();
+        enemySkulls = new ArrayList<EnemySkull>();
+        enemySpiders = new ArrayList<EnemySpider>();
         spawners = new ArrayList<Fire>();
     }
 

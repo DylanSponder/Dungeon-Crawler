@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.mygdx.game.box2D.Box2DSteeringUtils;
 
-public class EnemyBox2DSteeringEntity implements Steerable<Vector2> {
+public class EnemySpiderBox2DSteeringEntity implements Steerable<Vector2> {
     public Vector3 halfExtents;
     Body body;
     boolean tagged;
@@ -19,7 +19,7 @@ public class EnemyBox2DSteeringEntity implements Steerable<Vector2> {
     SteeringBehavior<Vector2> behaviour;
     SteeringAcceleration<Vector2> steeringOutput;
 
-    public EnemyBox2DSteeringEntity(Body body, float boundingRadius){
+    public EnemySpiderBox2DSteeringEntity(Body body, float boundingRadius){
         this.body = body;
         this.boundingRadius = boundingRadius;
 

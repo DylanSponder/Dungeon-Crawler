@@ -31,8 +31,9 @@ public class Arrow {
 
     public void createArrowFlameLight(Arrow key) {
         if (!flameCreated) {
-            this.flameLight = new PointLight(rayHandler,400, new Color(0.25f,0.20f,0,0.7f),60, arrowX + 8, arrowY + 8);
+            this.flameLight = new PointLight(rayHandler,400, new Color(0.25f,0.20f,0,0.7f),40, arrowX + 8, arrowY + 8);
             this.flameLight.attachToBody(key.arrowBody);
+            this.flameLight.setSoftnessLength(45f);
             flameCreated = true;
         }
     }

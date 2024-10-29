@@ -4,12 +4,14 @@ import box2dLight.ConeLight;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.ai.utils.Ray;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.game.CreateAssets;
 import com.mygdx.game.box2D.BodyFactory;
 
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ public class Fire {
     public float stateTime;
     public int type;
     public boolean upDown;
+    public Sound fireAmbient;
 
     public Fire(World world, RayHandler rayHandler, float x, float y, boolean extinguish, float stateTime, int type, boolean upDown) {
         this.world = world;
@@ -36,6 +39,8 @@ public class Fire {
         this.stateTime = stateTime;
         this.type = type;
         this.upDown = upDown;
+        final CreateAssets tx = CreateAssets.getInstance();
+        this.fireAmbient = tx.fireAmbient;
     }
 
     public void createFire(Color color, int distance) {
@@ -44,6 +49,9 @@ public class Fire {
 
         this.smoking = false;
         this.active = true;
+
+        this.fireAmbient.play();
+        this.fireAmbient.setVolume(1,0.3f);
 
         if (this.extinguish) {
 

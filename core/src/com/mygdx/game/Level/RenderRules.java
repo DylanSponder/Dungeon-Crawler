@@ -317,13 +317,25 @@ public class RenderRules {
                                         break;
                             }
                             switch (str) {
+                                case "cand":
+                                    drawableLevelLayer.add(index,"cand");
+                                    index++;
+                                    break;
+                                case "cands":
+                                    drawableLevelLayer.add(index,"cands");
+                                    index++;
+                                    break;
                                 case "cob":
                                     drawableLevelLayer.add(index,"cobweb");
                                     index++;
                                     break;
                                     //enemy
                                 case "enemy":
-                                    drawableLevelLayer.add(index, "enemy");
+                                    drawableLevelLayer.add(index, "enemySkull");
+                                    index++;
+                                    break;
+                                case "enemy2":
+                                    drawableLevelLayer.add(index, "enemySpider");
                                     index++;
                                     break;
                                     //shopkeeper entity

@@ -8,6 +8,7 @@ import com.mygdx.game.*;
 import com.mygdx.game.Random;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.behaviours.fsm.EnemySkull;
+import com.mygdx.game.entity.behaviours.fsm.EnemySpider;
 import com.mygdx.game.entity.behaviours.fsm.Shopkeeper;
 import com.mygdx.game.level.objects.*;
 import com.mygdx.game.entity.Tutorial;
@@ -140,12 +141,14 @@ public class GenerateLevel {
                     while (random == 5) {
                         random = Random.randomInt(6, 1);
                     }
-                    newRoom.roomNum = 5;
+                    //assign the room its random index
+                    newRoom.roomNum = random;
                 }
 
                 //determines which pre-gen room is placed next in sequence
                 //rooms are numbered, room1 etc
 
+                //shops are always unlocked
                 if (newRoom.roomNum == 5) {
                     newRoom.isShop = true;
                     newRoom.unlockAllDoors(world, newRoom,false);
@@ -1298,6 +1301,28 @@ for (int i = 0; i < layerSize; i++) {
             //newObstacle3.setUserData("Obstacle");
             obstacles.add(newObstacle3);
             break;
+        case "cand":
+            currentCell = init.cr.middleFloorTile;
+            Candle newCandle = new Candle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 1);
+            Body candBody = newCandle.createCandle();
+            Fire fCan = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 5.5f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 3.5f, false,0f, 3, false);
+            fires.add(fCan);
+            fCan.createFire(new Color(0.25f,0.20f,0,0.7f),20);
+            candles.add(newCandle);
+            break;
+        case "cands":
+            currentCell = init.cr.middleFloorTile;
+            Candle newCandles = new Candle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 2);
+            Body candsBody = newCandles.createCandle();
+            Fire fCans = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 4.5f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 2.5f, false,0f, 3, false);
+            fires.add(fCans);
+            fCans.createFire(new Color(0.25f,0.20f,0,0.5f),20);
+            Fire fCans2 = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 8.5f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 6.5f, false,0f, 3, false);
+            fires.add(fCans2);
+            fCans2.createFire(new Color(0.25f,0.20f,0,0.5f),20);
+
+            candles.add(newCandles);
+            break;
         //tutorial in starting room
         case "tuto":
             currentCell = init.cr.middleFloorTile;
@@ -1366,13 +1391,21 @@ for (int i = 0; i < layerSize; i++) {
             break;
 
         //entities
-        case "enemy":
+        case "enemySkull":
             currentCell = init.cr.middleFloorTile;
             EnemySkull enemy = new EnemySkull(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
             init.roomList.get(roomIndex).enemyCounter++;
-            init.roomList.get(roomIndex).enemies.add(enemy);
+            init.roomList.get(roomIndex).enemySkulls.add(enemy);
             enemy.room = roomIndex;
             DungeonCrawler.enemySkulls.add(enemy);
+            break;
+        case "enemySpider":
+            currentCell = init.cr.middleFloorTile;
+            EnemySpider enemy2 = new EnemySpider(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            init.roomList.get(roomIndex).enemyCounter++;
+            init.roomList.get(roomIndex).enemySpiders.add(enemy2);
+            enemy2.room = roomIndex;
+            DungeonCrawler.enemySpiders.add(enemy2);
             break;
         case "shop":
             currentCell = init.cr.middleFloor3Tile;

@@ -1,18 +1,9 @@
 package com.mygdx.game.entity.behaviours.fsm;
 
-import com.badlogic.gdx.ai.steer.behaviors.RaycastObstacleAvoidance;
-import com.badlogic.gdx.ai.steer.utils.rays.CentralRayWithWhiskersConfiguration;
-import com.badlogic.gdx.ai.steer.utils.rays.RayConfigurationBase;
-import com.badlogic.gdx.ai.utils.RaycastCollisionDetector;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
-import com.mygdx.game.entity.utils.EnemyBox2DRaycastCollisionDetector;
-import com.mygdx.game.entity.utils.EnemyBox2DSteeringEntity;
 import com.mygdx.game.entity.utils.PlayerBox2DSteeringEntity;
 
 public class Player {
@@ -36,7 +27,7 @@ public class Player {
     public Player() {
         PLAYER_HEALTH = 12;
         midAnimationFrame = false;
-        hasGreekFire = false;
+        hasGreekFire = true;
         hasShield = false;
     }
 

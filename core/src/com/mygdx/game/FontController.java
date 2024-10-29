@@ -46,7 +46,7 @@ public class FontController {
     }
 
     public static void drawDriftingFont(SpriteBatch fontBatch, BitmapFont font2, float x, float y, Text text, int speed) {
-        //TODO: Finish implementation - this is meant for 'floating money leaving the players total money and disappearing'
+        //TODO: Finish implementation - this is meant for 'floating money leaving the players total money and disappearing after a shop purchase'
         int x2;
         int y2;
 

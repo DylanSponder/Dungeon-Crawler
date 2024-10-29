@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -30,6 +31,7 @@ public class CreateAssets {
     Texture arrowTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/Bow/Arrow.png"));
     Texture shieldTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Shield/Sprite.png"));
     Texture enemySkullTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySkull/SpriteSheet.png"));
+    Texture enemySpiderTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySpider/SpriteSheet.png"));
     Texture enemyEyeTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Eye/Eye.png"));
     Texture shopkeeperTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/OldMan3/SpriteSheet.png"));
     Texture tutorialTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Tuto.png"));
@@ -41,6 +43,7 @@ public class CreateAssets {
     Texture arrowAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Bow/ArrowAnimation.png"));
     Texture columnsTextureSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Columns.png"));
     Music level1Track = Gdx.audio.newMusic(Gdx.files.internal("HellasDungeon/Music/Level1Track.mp3"));
+    public Sound fireAmbient = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/Fire.mp3"));
 
     //Texture font = new Texture(Gdx.files.internal("HellasDungeon/Font/GreekAlphabet.png"));
     //public TextureRegion fontTexture = new TextureRegion(font,0,0,16,16);
@@ -247,8 +250,11 @@ public class CreateAssets {
     Sprite shieldSprite = new Sprite(shieldTexture,0,0, 16, 8);
     Sprite arrowSprite = new Sprite(arrowTexture,0,0,13,5);
     //outline enemy sprites
-    Sprite enemySprite = new Sprite(enemySkullTexture,0,0,16,16);
-    Sprite enemyAlertedSprite = new Sprite(enemySkullTexture,16,0,16,16);
+    Sprite enemySkullSprite = new Sprite(enemySkullTexture,0,0,16,16);
+    Sprite enemySkullAlertedSprite = new Sprite(enemySkullTexture,16,0,16,16);
+
+    Sprite enemySpiderUpSprite = new Sprite(enemySpiderTexture,0,0,16,16);
+    Sprite enemySpiderDownSprite = new Sprite(enemySpiderTexture,16,0,16,16);
     Sprite enemyEyeSprite = new Sprite(enemyEyeTexture,0,0,16,16);
 
     //outline HUD sprites
