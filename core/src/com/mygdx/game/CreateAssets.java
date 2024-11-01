@@ -181,6 +181,8 @@ public class CreateAssets {
     public TextureRegion pedestal3 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion pedestal4 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
 
+    public TextureRegion roofTexture = new TextureRegion(roomBackground,0,0,64,80);
+
     public TextureRegion skullTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion boneTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion tutoTexture = new TextureRegion(tutorialTexture, 0,0,87,57);
@@ -255,6 +257,8 @@ public class CreateAssets {
 
     Sprite enemySpiderUpSprite = new Sprite(enemySpiderTexture,0,0,16,16);
     Sprite enemySpiderDownSprite = new Sprite(enemySpiderTexture,16,0,16,16);
+    Sprite enemySpiderLeftSprite = new Sprite(enemySpiderTexture,32,0,16,16);
+    Sprite enemySpiderRightSprite = new Sprite(enemySpiderTexture,48,0,16,16);
     Sprite enemyEyeSprite = new Sprite(enemyEyeTexture,0,0,16,16);
 
     //outline HUD sprites
@@ -439,6 +443,8 @@ public class CreateAssets {
         pedestal2.setRegion(48, 32, 16, 16);
         pedestal3.setRegion(64, 32, 16, 16);
         pedestal4.setRegion(80, 32, 16, 16);
+
+        roofTexture.setRegion(464, 0, 64, 80);
 
         doorTopLeftTexture.setRegion(128, 0, 16, 16);
         doorTopRightTexture.setRegion(144, 0, 16, 16);

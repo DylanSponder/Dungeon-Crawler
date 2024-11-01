@@ -113,6 +113,7 @@ public enum EnemySpiderState implements State<EnemySpider> {
 
             if (enemyIt.hasNext()) {
                 //enemy.die(enemy.enemyBody.getPosition().x, enemy.enemyBody.getPosition().y);
+                //enemy.alive = false;
                 enemySpiders.remove(enemy);
                 //skull.createSkull();
             }

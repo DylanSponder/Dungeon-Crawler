@@ -1396,6 +1396,8 @@ for (int i = 0; i < layerSize; i++) {
             EnemySkull enemy = new EnemySkull(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
             init.roomList.get(roomIndex).enemyCounter++;
             init.roomList.get(roomIndex).enemySkulls.add(enemy);
+            enemy.createEnemy(1);
+            enemies.add(enemy);
             enemy.room = roomIndex;
             DungeonCrawler.enemySkulls.add(enemy);
             break;
@@ -1404,6 +1406,8 @@ for (int i = 0; i < layerSize; i++) {
             EnemySpider enemy2 = new EnemySpider(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
             init.roomList.get(roomIndex).enemyCounter++;
             init.roomList.get(roomIndex).enemySpiders.add(enemy2);
+            enemy2.createEnemy(2);
+            enemies.add(enemy2);
             enemy2.room = roomIndex;
             DungeonCrawler.enemySpiders.add(enemy2);
             break;

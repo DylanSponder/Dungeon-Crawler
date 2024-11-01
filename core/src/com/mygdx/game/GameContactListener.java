@@ -2,11 +2,10 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.OrderedMap;
+import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.entity.Arrow;
-import com.mygdx.game.entity.behaviours.fsm.EnemySkull;
-import com.mygdx.game.entity.behaviours.fsm.EnemySkullState;
+import com.mygdx.game.entity.behaviours.fsm.*;
 import com.mygdx.game.entity.Skull;
-import com.mygdx.game.entity.behaviours.fsm.Shopkeeper;
 import com.mygdx.game.level.objects.*;
 
 import static com.mygdx.game.DungeonCrawler.*;
@@ -61,7 +60,7 @@ public class GameContactListener implements ContactListener {
         ) {
             if (collider.getUserData() != "Proximity" &&
                     collidee.getUserData() != "Proximity") {
-                for (EnemySkull e : enemySkulls) {
+                for (Enemy e : enemies) {
                     if (e.enemyBody == collider.getBody()) {
 
                         String fbData = collidee.getUserData().toString();
@@ -109,18 +108,41 @@ public class GameContactListener implements ContactListener {
                         if (e.ENEMY_HEALTH < 1) {
                             if (!deadEnemyBodies.contains(collider.getBody())) {
                                 //arrowBodiesCollided.add(fa.getBody());
-                                deadEnemyBodies.add(collider.getBody());
+
+
+
+                                System.out.println(e.enemyID);
+
+                                if (e.enemyID == 1){
+                                    for (EnemySkull skull2 : enemySkulls) {
+                                        if (skull2.enemyBody == collider.getBody()) {
+                                            Skull skull = new Skull(world, collider.getBody().getPosition().x, collider.getBody().getPosition().y);
+
+                                            if (e.inRespawnRange) {
+                                                skull.resurrectable = true;
+                                            }
+
+                                            skulls.add(skull);
+                                            deadEnemyBodies.add(collider.getBody());
+                                            dyingSkulls.add(skull2);
+                                        }
+                                    }
+                                }
+                                else if (e.enemyID == 2) {
+                                    for (EnemySpider spider : enemySpiders) {
+                                        if (spider.enemyBody == collider.getBody()) {
+                                            //deadEnemyBodies.add(collider.getBody());
+                                            deadEnemyBodies.add(collider.getBody());
+                                            dyingSpiders.add(spider);
+                                        }
+                                    }
+                                }
+
                             }
 
-                            Skull skull = new Skull(world, collider.getBody().getPosition().x, collider.getBody().getPosition().y);
-
-                            if (e.inRespawnRange) {
-                                skull.resurrectable = true;
-                            }
-
-                            skulls.add(skull);
                             //skullArrayMap.put();
-                            e.getStateMachine().changeState(EnemySkullState.DIE);
+
+
                             hud.updateGold(1, true);
 
                             init.roomList.get(e.room).enemyCounter--;
@@ -182,16 +204,35 @@ public class GameContactListener implements ContactListener {
 
                         if (e.ENEMY_HEALTH < 1) {
                             if (!deadEnemyBodies.contains(collidee.getBody())) {
-                                deadEnemyBodies.add(collidee.getBody());
-                            }
-                            Skull skull = new Skull(world, collidee.getBody().getPosition().x, collidee.getBody().getPosition().y);
 
-                            if (e.inRespawnRange) {
-                                skull.resurrectable = true;
+                                System.out.println(e.enemyID);
+
+                                if (e.enemyID == 1) {
+                                    for (EnemySkull skull2 : enemySkulls) {
+                                        if (skull2.enemyBody == collidee.getBody()) {
+                                            //deadEnemyBodies.add(collidee.getBody());
+                                            Skull skull = new Skull(world, collidee.getBody().getPosition().x, collidee.getBody().getPosition().y);
+                                            if (e.inRespawnRange) {
+                                                skull.resurrectable = true;
+                                            }
+
+                                            skulls.add(skull);
+                                            deadEnemyBodies.add(collidee.getBody());
+                                            dyingSkulls.add(skull2);
+                                        }
+                                    }
+                                } else if (e.enemyID == 2) {
+                                    for (EnemySpider spider : enemySpiders) {
+                                        if (spider.enemyBody == collidee.getBody()) {
+                                            deadEnemyBodies.add(collidee.getBody());
+                                            dyingSpiders.add(spider);
+                                        }
+                                    }
+                                }
+
                             }
 
-                            skulls.add(skull);
-                            e.getStateMachine().changeState(EnemySkullState.DIE);
+
                             hud.updateGold(1, true);
                             init.roomList.get(e.room).enemyCounter--;
                             if (init.roomList.get(e.room).enemyCounter < 1) {

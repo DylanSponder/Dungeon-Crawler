@@ -50,7 +50,7 @@ public class Fire {
         this.smoking = false;
         this.active = true;
 
-        this.fireAmbient.play();
+       // this.fireAmbient.play();
         this.fireAmbient.setVolume(1,0.3f);
 
         if (this.extinguish) {

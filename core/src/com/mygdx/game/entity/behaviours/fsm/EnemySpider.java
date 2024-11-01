@@ -27,41 +27,19 @@ import com.mygdx.game.level.objects.Text;
 
 import static com.mygdx.game.DungeonCrawler.*;
 
-public class EnemySpider {
+public class EnemySpider extends Enemy {
     private StateMachine<EnemySpider, EnemySpiderState> stateMachine;
-    public int enemyID = 2;
-    public Body enemyBody, enemyDetectionBody, enemyPlayerDetectionBody;
-    public Fixture enemyHitbox;
-    public Fixture enemyDetectionRadius;
-    public EnemySkullBox2DSteeringEntity enemyAI;
-    public ShapeRenderer shapeRenderer;
-    public Vector2 tmp = new Vector2();
-    public Vector2 tmp2 = new Vector2();
-    public Vector2 tmp3 = new Vector2();
-    public Vector2 tmp4 = new Vector2();
-    public RayConfigurationBase<Vector2>[] rayConfigurations, rayConfigurations2;
-    public RaycastObstacleAvoidance<Vector2> raycastObstacleAvoidanceSB, raycastPlayerDetectionSB;
-    public Seek seekSB;
-    public Arrive arriveSB;
-    public BlendedSteering blendedSteeringSB;
-    public Vector2 wanderCenter;
-    public int ENEMY_HEALTH;
-    public boolean debug;
-    public Wander<Vector2> wanderSB;
-    public IndexedGraph worldMap;
-    public HUD hud;
-    public Skull skull;
-    public int room;
-    public boolean playerSighted, alerted, playerInRange, rayCastable;
-    public Ray playerDetectionRay;
-    public int sightCounter;
-    public Text alertMessage;
-    public float timeSinceAlerted;
+    public int enemyID;
     public String facing;
+    public boolean alive;
 
     public EnemySpider(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
         shapeRenderer = new ShapeRenderer();
+
+        alive = true;
+
+        //enemyID = 2;
 
         alertMessage = new Text(DungeonCrawler.defaultFont,"!", Color.WHITE,true,1f,0.0045f,false, false, null, 0);
 
@@ -267,11 +245,21 @@ public class EnemySpider {
     }
 
     public void update (float delta) {
-        if (this.enemyAI.getLinearVelocity().y > 0) {
+        if (this.enemyAI.getLinearVelocity().y > 0
+        && this.enemyAI.getLinearVelocity().y > this.enemyAI.getLinearVelocity().x) {
             this.facing = "Up";
         }
-        else {
+        else if (this.enemyAI.getLinearVelocity().y < 0
+        && this.enemyAI.getLinearVelocity().y < this.enemyAI.getLinearVelocity().x) {
             this.facing = "Down";
+        }
+        else if (this.enemyAI.getLinearVelocity().x > 0
+        && this.enemyAI.getLinearVelocity().x > this.enemyAI.getLinearVelocity().y) {
+            this.facing = "Right";
+        }
+        else if (this.enemyAI.getLinearVelocity().x < 0
+        && this.enemyAI.getLinearVelocity().x < this.enemyAI.getLinearVelocity().y) {
+            this.facing = "Left";
         }
         stateMachine.update();
     }

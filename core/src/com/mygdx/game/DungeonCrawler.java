@@ -42,7 +42,7 @@ import com.mygdx.game.level.InitLevel;
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch playerBatch, arrowBatch, enemySkullBatch, enemySpiderBatch, potBatch, hudBatch, tutoBatch, fontBatch, inventoryBatch;
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch, flameBatch, cobBatch, candleBatch;
-	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch;
+	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch, roofBatch;
 	public static World world;
 	public static boolean debug;
 	private Box2DDebugRenderer b2dr;
@@ -55,7 +55,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Arrow> arrows;
 	public static ArrayList<Body> arrowBodiesCollided, boneBodiesCollided, skullBodiesDestroyed, deadEnemyBodies;
 	public static ArrayMap<Body, Arrow> arrowArrayMap;
-	public static ArrayList<Object> enemies;
+	public static ArrayList<Enemy> enemies;
 	public ArrayMap<Body, Skull> skullArrayMap;
 	public static ArrayMap<Body, Bone> boneArrayMap;
 	public ArrayMap<Body, Potion> potionArrayMap;
@@ -63,8 +63,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public ArrayMap<Body, Fire> respawnFireMap;
 	public ArrayMap<Body, Pot> potArrayMap;
 	public boolean reversedArrowMap, reversedSkullMap, reversedPotMap, reversedPotionMap, reversedRespawnFireMap, reversedBoneMap;
-	public static ArrayList<EnemySkull> enemySkulls;
-	public static ArrayList<EnemySpider> enemySpiders;
+	public static ArrayList<EnemySkull> enemySkulls, dyingSkulls;
+	public static ArrayList<EnemySpider> enemySpiders, dyingSpiders;
 	public static ArrayList<Skull> skulls, brokenSkulls;
 	public static ArrayList<Fire> extinguishedRespawnFires;
 	public static ArrayList<Bone> bones;
@@ -79,6 +79,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Candle> candles;
 	public static  ArrayList<Fire> fires;
 	public static ArrayList<Column> columns;
+	public static ArrayList<Roof> roofs;
 	public float PLAYER_HORIZONTAL_SPEED = 0f;
 	public float PLAYER_VERTICAL_SPEED = 0f;
 	public float PLAYER_X = 0f;
@@ -130,15 +131,20 @@ public class DungeonCrawler extends ApplicationAdapter {
 		fireBatch = new SpriteBatch();
 		flameBatch = new SpriteBatch();
 		fontBatch = new SpriteBatch();
+		roofBatch = new SpriteBatch();
+		roofs = new ArrayList<>();
 		inventoryBatch = new SpriteBatch();
 		cobBatch = new SpriteBatch();
 		reversedArrowMap = false;
 		reversedSkullMap = false;
 		reversedPotMap = false;
 		player = new Player();
+		enemies = new ArrayList<>();
 		enemySkulls = new ArrayList<>();
 		enemySpiders = new ArrayList<>();
 		deadEnemyBodies = new ArrayList<>();
+		dyingSkulls = new ArrayList<>();
+		dyingSpiders = new ArrayList<>();
 		skulls = new ArrayList<>();
 		brokenSkulls = new ArrayList<>();
 		bones = new ArrayList<>();
@@ -1467,6 +1473,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 			playerBatch.end();
 
+
+
 			//render enemy skull sprites
 			for (EnemySkull e : enemySkulls) {
 				if (e.rayCastable) {
@@ -1533,9 +1541,16 @@ public class DungeonCrawler extends ApplicationAdapter {
 				} else {
 					enemySkullBatch.draw(tx.enemySkullSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
 				}
-
 				enemySkullBatch.end();
 			}
+
+		//if (!dyingSpiders.isEmpty()) {
+			for (EnemySkull deadSkull : dyingSkulls) {
+				deadSkull.getStateMachine().changeState(EnemySkullState.DIE);
+			}
+			dyingSkulls.clear();
+		//}
+
 
 		//render enemy skull sprites
 		for (EnemySpider e2 : enemySpiders) {
@@ -1573,16 +1588,35 @@ public class DungeonCrawler extends ApplicationAdapter {
 				e2.getStateMachine().changeState(EnemySpiderState.GO_TO_PLAYER);
 				//e.playerSighted = false;
 			}
-			enemySkullBatch.begin();
-			if (e2.facing == "Up") {
-				enemySkullBatch.draw(tx.enemySpiderUpSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
-			} else {
-				enemySkullBatch.draw(tx.enemySpiderDownSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
+			enemySpiderBatch.begin();
+			if (!e2.alerted) {
+				if (e2.facing == "Up") {
+					enemySpiderBatch.draw(tx.enemySpiderUpSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
+				} else if (e2.facing == "Down") {
+					enemySpiderBatch.draw(tx.enemySpiderDownSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
+				} else if (e2.facing == "Left") {
+					enemySpiderBatch.draw(tx.enemySpiderLeftSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
+				} else if (e2.facing == "Right") {
+					enemySpiderBatch.draw(tx.enemySpiderRightSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
+				}
 			}
-
-
-			enemySkullBatch.end();
+			enemySpiderBatch.end();
 		}
+
+		//if (!dyingSpiders.isEmpty()) {
+			for (EnemySpider deadSpider : dyingSpiders) {
+				deadSpider.getStateMachine().changeState(EnemySpiderState.DIE);
+			}
+			dyingSpiders.clear();
+		//}
+
+		for (Body body : deadEnemyBodies) {
+			world.destroyBody(body);
+		}
+
+		deadEnemyBodies.clear();
+
+
 
 		if (!boneArrayMap.isEmpty()) {
 
@@ -1715,11 +1749,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 				}
 			}
-			for (Body body : deadEnemyBodies) {
-				world.destroyBody(body);
-			}
 
-			deadEnemyBodies.clear();
 
 
 
@@ -1829,6 +1859,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 				//}
 			}
 
+		for (Roof r : roofs) {
+			roofBatch.begin();
+			roofBatch.draw(tx.roofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 64, 80);
+			roofBatch.end();
+		}
+
 			fontBatch.begin();
 			for (Text t : messages) {
 				if (t.showing) {
@@ -1855,31 +1891,31 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			//toggle to enable or disable visible collision boxes
 			if (debug) {
-				for (EnemySkull enemy : enemySkulls) {
+				for (EnemySkull enemySkull : enemySkulls) {
 					//renders ray cast rays
-					Ray<Vector2>[] rays = enemy.rayConfigurations[0].getRays();
+					Ray<Vector2>[] rays = enemySkull.rayConfigurations[0].getRays();
 
 
-					enemy.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-					enemy.shapeRenderer.setProjectionMatrix(camera.combined);
-					enemy.shapeRenderer.setColor(1, 0, 0, 1);
+					enemySkull.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+					enemySkull.shapeRenderer.setProjectionMatrix(camera.combined);
+					enemySkull.shapeRenderer.setColor(1, 0, 0, 1);
 					// shapeRenderer.setColor(Color.RED);
 					//transform.idt();
 					//shapeRenderer.setTransformMatrix(transform);
 					for (int i = 0; i < rays.length; i++) {
 						Ray<Vector2> ray = rays[i];
-						enemy.tmp.set(ray.start);
-						enemy.tmp2.set(ray.end);
-						enemy.shapeRenderer.line(enemy.tmp, enemy.tmp2);
+						enemySkull.tmp.set(ray.start);
+						enemySkull.tmp2.set(ray.end);
+						enemySkull.shapeRenderer.line(enemySkull.tmp, enemySkull.tmp2);
 					}
 
 					//render player rayCasts to Enemies
-					if (enemy.rayCastable) {
-						enemy.tmp3.set((Vector2) enemy.playerDetectionRay.start);
-						enemy.tmp4.set((Vector2) enemy.playerDetectionRay.end);
-						enemy.shapeRenderer.line(enemy.tmp3, enemy.tmp4);
+					if (enemySkull.rayCastable) {
+						enemySkull.tmp3.set((Vector2) enemySkull.playerDetectionRay.start);
+						enemySkull.tmp4.set((Vector2) enemySkull.playerDetectionRay.end);
+						enemySkull.shapeRenderer.line(enemySkull.tmp3, enemySkull.tmp4);
 					}
-					enemy.shapeRenderer.end();
+					enemySkull.shapeRenderer.end();
 				}
 				//raycast skulls within respawner radius
 				for (Skull s : skulls) {
@@ -1894,6 +1930,33 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 						s.shapeRenderer.end();
 					}
+				}
+
+				for (EnemySpider enemySpider : enemySpiders) {
+					//renders ray cast rays
+					Ray<Vector2>[] rays = enemySpider.rayConfigurations[0].getRays();
+
+
+					enemySpider.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+					enemySpider.shapeRenderer.setProjectionMatrix(camera.combined);
+					enemySpider.shapeRenderer.setColor(1, 0, 0, 1);
+					// shapeRenderer.setColor(Color.RED);
+					//transform.idt();
+					//shapeRenderer.setTransformMatrix(transform);
+					for (int i = 0; i < rays.length; i++) {
+						Ray<Vector2> ray = rays[i];
+						enemySpider.tmp.set(ray.start);
+						enemySpider.tmp2.set(ray.end);
+						enemySpider.shapeRenderer.line(enemySpider.tmp, enemySpider.tmp2);
+					}
+
+					//render player rayCasts to Enemies
+					if (enemySpider.rayCastable) {
+						enemySpider.tmp3.set((Vector2) enemySpider.playerDetectionRay.start);
+						enemySpider.tmp4.set((Vector2) enemySpider.playerDetectionRay.end);
+						enemySpider.shapeRenderer.line(enemySpider.tmp3, enemySpider.tmp4);
+					}
+					enemySpider.shapeRenderer.end();
 				}
 
 
@@ -1915,6 +1978,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			tutoBatch.setProjectionMatrix(camera.combined);
 			boneBatch.setProjectionMatrix(camera.combined);
 			enemySkullBatch.setProjectionMatrix(camera.combined);
+			enemySpiderBatch.setProjectionMatrix(camera.combined);
 			lockBatch.setProjectionMatrix(camera.combined);
 			doorBatch.setProjectionMatrix(camera.combined);
 			potBatch.setProjectionMatrix(camera.combined);
@@ -1926,6 +1990,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			pedestalBatch.setProjectionMatrix(camera.combined);
 			fireBatch.setProjectionMatrix(camera.combined);
 			flameBatch.setProjectionMatrix(camera.combined);
+			roofBatch.setProjectionMatrix(camera.combined);
 			fontBatch.setProjectionMatrix(camera.combined);
 			inventoryBatch.setProjectionMatrix(camera.combined);
 			hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
@@ -2004,6 +2069,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		obstacleBatch.dispose();
 		flameBatch.dispose();
 		enemySkullBatch.dispose();
+		enemySpiderBatch.dispose();
 		lockBatch.dispose();
 		doorBatch.dispose();
 		potBatch.dispose();
