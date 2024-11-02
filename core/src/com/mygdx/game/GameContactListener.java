@@ -368,12 +368,17 @@ public class GameContactListener implements ContactListener {
                 if ((collider.getUserData() == "Proximity" ||
                         collidee.getUserData() == "Proximity")
                 ) {
-                   // System.out.println(colliderStr + " + " + collideeStr);
-                    for (EnemySkull e : enemySkulls) {
-                        if (e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody()) {
-                            e.playerInRange = true;
-                            // e.getStateMachine().changeState(EnemyState.GO_TO_PLAYER);
-                            //e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
+                    // System.out.println(colliderStr + " + " + collideeStr);
+                    for (Enemy e : enemies) {
+                        for (EnemySkull e2 : enemySkulls) {
+                            if (e2.enemyBody == collider.getBody() || e2.enemyBody == collidee.getBody()) {
+                                e2.playerInRange = true;
+                            }
+                        }
+                        for (EnemySpider e3 : enemySpiders) {
+                            if (e3.enemyBody == collider.getBody() || e3.enemyBody == collidee.getBody()) {
+                                e3.playerInRange = true;
+                            }
                         }
                     }
                 }
@@ -810,6 +815,9 @@ public class GameContactListener implements ContactListener {
                     player.currentRoom = Integer.parseInt(roomIndexAsString[1]);
                     for (EnemySkull e : init.roomList.get(player.currentRoom).enemySkulls) {
                         e.rayCastable = true;
+                    }
+                    for (EnemySpider e2 : init.roomList.get(player.currentRoom).enemySpiders) {
+                        e2.rayCastable = true;
                     }
                     player.touchingRoom = true;
                 }

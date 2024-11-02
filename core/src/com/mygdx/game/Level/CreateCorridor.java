@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.level.objects.Fire;
+import com.mygdx.game.level.objects.Roof;
 import com.mygdx.game.level.objects.Torch;
 
 import static com.mygdx.game.DungeonCrawler.*;
@@ -22,10 +23,13 @@ public class CreateCorridor {
                 int doorXasInt = (int) doorX;
                 int doorYAsInt = (int) doorY;
 
-                if (i == 1) {
+                if (i == 0) {
                     TiledMapTileLayer.Cell newLeftCorridorWallCell;
                     newLeftCorridorWallCell = GenerateLevel.init.cr.torchWallLeftTile;
                     Body newLeftCorridorWall = GenerateLevel.init.bf.createWall(world, (doorX * 16) + 15*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16);
+                    Fire fL = new Fire(world,rayHandler,(((doorX) * 16) + 16 * 16) + 6 - 4 - 16,(doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 4, false,0f, 3, false);
+                    fires.add(fL);
+                    fL.createFire(new Color(0.25f,0.20f,0,0.7f),60);
                     layer.setCell(doorXasInt+15, doorYAsInt-i, newLeftCorridorWallCell);
                     newLeftCorridorWall.setUserData("Wall");
 
@@ -40,6 +44,9 @@ public class CreateCorridor {
                     TiledMapTileLayer.Cell newRightCorridorWallCell;
                     newRightCorridorWallCell = GenerateLevel.init.cr.torchWallRightTile;
                     Body newRightCorridorWall = GenerateLevel.init.bf.createWall(world, ((doorX+3) * 16) + 15*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16);
+                    Fire fR = new Fire(world,rayHandler,(((doorX) * 16) + 16 * 16) + 6 - 4 - 16 + 45,(doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 4, false,0f, 3, false);
+                    fires.add(fR);
+                    fR.createFire(new Color(0.25f,0.20f,0,0.7f),60);
                     layer.setCell(doorXasInt+18, doorYAsInt-i, newRightCorridorWallCell);
                     newRightCorridorWall.setUserData("Wall");
                 }
@@ -63,6 +70,11 @@ public class CreateCorridor {
                     Body newRightCorridorWall = GenerateLevel.init.bf.createWall(world, ((doorX+3) * 16) + 15*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16);
                     layer.setCell(doorXasInt+18, doorYAsInt-i, newRightCorridorWallCell);
                     newRightCorridorWall.setUserData("Wall");
+                }
+
+                if (i == 3) {
+                    Roof r = new Roof(world, ((doorX+3) * 16) + 12*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 16);
+                    roofs.add(r);
                 }
             }
         }

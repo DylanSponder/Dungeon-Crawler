@@ -580,8 +580,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 								}
 								case "GREEK FIRE": {
 									player.hasGreekFire = true;
-									player.greekFireUses = 10;
-									//TODO: add fire arrows
+									//player.greekFireUses = 10;
 									break;
 								}
 								case "TORCH": {
@@ -648,7 +647,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 								}
 								case "GREEK FIRE": {
 									player.hasGreekFire = true;
-									player.greekFireUses = 10;
+									//player.greekFireUses = 30;
 									break;
 								}
 								case "TORCH": {
@@ -724,7 +723,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 								}
 								case "GREEK FIRE": {
 									player.hasGreekFire = true;
-									player.greekFireUses = 10;
+									//player.greekFireUses = 30;
 									break;
 								}
 								case "TORCH": {
@@ -1560,6 +1559,32 @@ public class DungeonCrawler extends ApplicationAdapter {
 			if ((e2.playerSighted && e2.playerInRange)){
 				//System.out.println(Gdx.graphics.getDeltaTime());
 				if (e2.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 110)){
+						e2.timeSinceAlerted = 0f;
+						Vector2 vec1 = new Vector2(e2.enemyBody.getPosition());
+						Vector2 vec2 = new Vector2(Player.playerBody.getPosition());
+
+						//throw bones directly at the player but add a small random offset
+						float x = MathUtils.atan2(vec2.y - vec1.y, vec2.x - vec1.x);
+						float randomOffset = Random.randomFloat(1.3f,0.3f);
+						randomOffset = randomOffset / 10;
+						boolean random = Random.randomBoolean();
+						Vector2 finalX = new Vector2((float)Math.cos(x),(float)Math.sin(x));
+
+						if (random) {
+							finalX.x = finalX.x + randomOffset;
+							finalX.y = finalX.y + randomOffset;
+						} else {
+							finalX.x = finalX.x - randomOffset;
+							finalX.y = finalX.y - randomOffset;
+						}
+						//float result = (e.enemyAI.getOrientation() / (x * MathUtils.PI));
+						//result = result - MathUtils.PI / 2;
+						//System.out.println(x);
+
+						Bone bone = new Bone(world, e2.enemyBody, e2.enemyBody.getPosition().x, e2.enemyBody.getPosition().y, false,  true, finalX);
+						bone.createBone();
+						bones.add(bone);
+						boneArrayMap.put(bone.boneBody, bone);
 					//float result = (e.enemyAI.getOrientation() / (x * MathUtils.PI));
 					//result = result - MathUtils.PI / 2;
 					//System.out.println(x);
