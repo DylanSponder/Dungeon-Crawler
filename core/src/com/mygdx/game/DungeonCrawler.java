@@ -106,7 +106,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	@Override
 	public void create() {
 
-		debug = false;
+		debug = true;
 
 		world = new World(new Vector2(0, 0f), false);
 		assetManager = new AssetManager();
@@ -1886,7 +1886,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		for (Roof r : roofs) {
 			roofBatch.begin();
-			roofBatch.draw(tx.roofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 64, 80);
+			if (r.upDown) {
+				roofBatch.draw(tx.roofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 64, 80);
+			} else {
+				roofBatch.draw(tx.roofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 0,0,64, 80,1,1,90);
+			}
+
+
 			roofBatch.end();
 		}
 
