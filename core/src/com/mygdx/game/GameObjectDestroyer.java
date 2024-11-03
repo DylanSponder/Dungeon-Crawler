@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.OrderedMap;
-import com.mygdx.game.entity.Skull;
+import com.mygdx.game.entity.projectiles.Skull;
 
 import java.util.ArrayList;
 import java.util.Iterator;

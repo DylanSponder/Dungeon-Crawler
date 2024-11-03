@@ -1,13 +1,10 @@
-package com.mygdx.game.entity;
+package com.mygdx.game.entity.projectiles;
 
 import box2dLight.PointLight;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
-
-import java.awt.*;
 
 import static com.mygdx.game.DungeonCrawler.rayHandler;
 

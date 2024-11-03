@@ -183,6 +183,8 @@ public class CreateAssets {
 
     public TextureRegion roofTexture = new TextureRegion(roomBackground,0,0,64,80);
 
+    public TextureRegion ruinedRoofTexture = new TextureRegion(roomBackground,0,0,64,80);
+
     public TextureRegion skullTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion boneTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion tutoTexture = new TextureRegion(tutorialTexture, 0,0,87,57);
@@ -444,7 +446,8 @@ public class CreateAssets {
         pedestal3.setRegion(64, 32, 16, 16);
         pedestal4.setRegion(80, 32, 16, 16);
 
-        roofTexture.setRegion(464, 0, 64, 80);
+        roofTexture.setRegion(464, 0, 64, 96);
+        ruinedRoofTexture.setRegion(528, 0, 64, 80);
 
         doorTopLeftTexture.setRegion(128, 0, 16, 16);
         doorTopRightTexture.setRegion(144, 0, 16, 16);

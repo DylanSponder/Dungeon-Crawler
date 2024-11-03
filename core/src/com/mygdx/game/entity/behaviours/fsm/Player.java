@@ -17,7 +17,7 @@ public class Player {
     public int currentRoom;
     public boolean touchingRoom;
     public boolean midAnimationFrame;
-    public boolean hasGreekFire, hasShield;
+    public boolean hasGreekFire, hasShield, hasTorch, torchApplied;
     public int greekFireUses;
     public boolean floorCleared, roomCleared, playerInput;
 
@@ -29,6 +29,8 @@ public class Player {
         midAnimationFrame = false;
         hasGreekFire = true;
         hasShield = false;
+        hasTorch = true;
+        torchApplied = false;
     }
 
     public Body createPlayer(World world, float PLAYER_X, float PLAYER_Y){

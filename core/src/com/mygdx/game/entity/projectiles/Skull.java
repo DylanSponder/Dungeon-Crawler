@@ -1,4 +1,4 @@
-package com.mygdx.game.entity;
+package com.mygdx.game.entity.projectiles;
 
 import com.badlogic.gdx.ai.utils.Ray;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -11,9 +11,6 @@ import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.level.objects.Fire;
 import com.mygdx.game.level.objects.Room;
-
-import static com.mygdx.game.DungeonCrawler.player;
-import static com.mygdx.game.DungeonCrawler.world;
 
 public class Skull {
 

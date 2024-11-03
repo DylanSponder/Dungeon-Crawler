@@ -29,9 +29,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.mygdx.game.box2D.BodyFactory;
-import com.mygdx.game.entity.Arrow;
-import com.mygdx.game.entity.Bone;
-import com.mygdx.game.entity.Skull;
+import com.mygdx.game.entity.projectiles.Arrow;
+import com.mygdx.game.entity.projectiles.Bone;
+import com.mygdx.game.entity.projectiles.Skull;
 import com.mygdx.game.entity.Tutorial;
 import com.mygdx.game.entity.behaviours.fsm.*;
 import com.mygdx.game.level.CreateCell;
@@ -106,7 +106,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	@Override
 	public void create() {
 
-		debug = true;
+		debug = false;
 
 		world = new World(new Vector2(0, 0f), false);
 		assetManager = new AssetManager();
@@ -256,6 +256,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		rayHandler.setAmbientLight(0f, 0f, 0f, 0.010f);
 		if (debug) {
 			rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
+
 		}
 
 		//world.setContactListener(rlc);
@@ -584,11 +585,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 									break;
 								}
 								case "TORCH": {
-									playerTorch.remove();
-									playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.85f), 95, PLAYER_X, PLAYER_Y);
-									playerTorch.attachToBody(player.playerBody);
-									playerTorch.setIgnoreAttachedBody(true);
-									playerTorch.setSoftnessLength(100f);
+									player.hasTorch = true;
 									break;
 								}
 								case "BELT": {
@@ -651,11 +648,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 									break;
 								}
 								case "TORCH": {
-									playerTorch.remove();
-									playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.85f), 95, PLAYER_X, PLAYER_Y);
-									playerTorch.attachToBody(player.playerBody);
-									playerTorch.setIgnoreAttachedBody(true);
-									playerTorch.setSoftnessLength(100f);
+									player.hasTorch = true;
 									break;
 								}
 								case "BELT": {
@@ -727,11 +720,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 									break;
 								}
 								case "TORCH": {
-									playerTorch.remove();
-									playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.85f), 95, PLAYER_X, PLAYER_Y);
-									playerTorch.attachToBody(player.playerBody);
-									playerTorch.setIgnoreAttachedBody(true);
-									playerTorch.setSoftnessLength(100f);
+									player.hasTorch = true;
 									//playerTorch.setXray(true);
 									break;
 								}
@@ -1481,7 +1470,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 				if ((e.playerSighted && e.playerInRange)){
 					//System.out.println(Gdx.graphics.getDeltaTime());
-					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 110)){
+					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 130)){
 						e.timeSinceAlerted = 0f;
 						Vector2 vec1 = new Vector2(e.enemyBody.getPosition());
 						Vector2 vec2 = new Vector2(Player.playerBody.getPosition());
@@ -1558,7 +1547,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 			if ((e2.playerSighted && e2.playerInRange)){
 				//System.out.println(Gdx.graphics.getDeltaTime());
-				if (e2.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 110)){
+				if (e2.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 130)){
 						e2.timeSinceAlerted = 0f;
 						Vector2 vec1 = new Vector2(e2.enemyBody.getPosition());
 						Vector2 vec2 = new Vector2(Player.playerBody.getPosition());
@@ -1887,9 +1876,17 @@ public class DungeonCrawler extends ApplicationAdapter {
 		for (Roof r : roofs) {
 			roofBatch.begin();
 			if (r.upDown) {
-				roofBatch.draw(tx.roofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 64, 80);
+				if (r.ruined) {
+					roofBatch.draw(tx.ruinedRoofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 64, 80);
+				} else {
+					roofBatch.draw(tx.roofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 64, 96);
+				}
 			} else {
-				roofBatch.draw(tx.roofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 0,0,64, 80,1,1,90);
+				if (r.ruined) {
+					roofBatch.draw(tx.ruinedRoofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 0,0,64, 80,1,1,90);
+				} else {
+					roofBatch.draw(tx.roofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 0,0,64, 96,1,1,90);
+				}
 			}
 
 
@@ -2058,6 +2055,16 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		if (player.playerInput) {
 			hud.fadeHUD(hud.startWords);
+		}
+
+		if (player.hasTorch && !player.torchApplied) {
+			playerTorch.remove();
+			playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.85f), 95, PLAYER_X, PLAYER_Y);
+			playerTorch.attachToBody(player.playerBody);
+			playerTorch.setIgnoreAttachedBody(true);
+			playerTorch.setSoftnessLength(100f);
+			player.torchApplied = true;
+
 		}
 
 		if (!GenerateLevel.init.roomList.get(player.currentRoom).isShop && !debug) {
