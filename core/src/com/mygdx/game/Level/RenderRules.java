@@ -162,10 +162,6 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "rightFenceBottomEndTile");
                         index++;
                         break;
-
-
-
-
                     case "dtl":
                         drawableLevelLayer.add(index, "doorTopLeftWall");
                         index++;
@@ -198,8 +194,16 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "doorBottomRightWall");
                         index++;
                         break;
+                    case "doorftl":
+                        drawableLevelLayer.add(index, "doorTopLeftFence");
+                        index++;
+                        break;
                     case "doortl":
                         drawableLevelLayer.add(index, "doorTopLeft");
+                        index++;
+                        break;
+                    case "doorftr":
+                        drawableLevelLayer.add(index, "doorTopRightFence");
                         index++;
                         break;
                     case "doortr":
@@ -210,24 +214,48 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "doorLeftUpper");
                         index++;
                         break;
+                    case "doorful":
+                        drawableLevelLayer.add(index, "doorLeftUpperFence");
+                        index++;
+                        break;
                     case "doorll":
                         drawableLevelLayer.add(index, "doorLeftLower");
+                        index++;
+                        break;
+                    case "doorfll":
+                        drawableLevelLayer.add(index, "doorLeftLowerFence");
                         index++;
                         break;
                     case "doorur":
                         drawableLevelLayer.add(index, "doorRightUpper");
                         index++;
                         break;
+                    case "doorfur":
+                        drawableLevelLayer.add(index, "doorRightUpperFence");
+                        index++;
+                        break;
                     case "doorlr":
                         drawableLevelLayer.add(index, "doorRightLower");
+                        index++;
+                        break;
+                    case "doorflr":
+                        drawableLevelLayer.add(index, "doorRightLowerFence");
                         index++;
                         break;
                     case "doorbl":
                         drawableLevelLayer.add(index, "doorBottomLeft");
                         index++;
                         break;
+                    case "doorfbl":
+                        drawableLevelLayer.add(index, "doorBottomLeftFence");
+                        index++;
+                        break;
                     case "doorbr":
                         drawableLevelLayer.add(index, "doorBottomRight");
+                        index++;
+                        break;
+                    case "doorfbr":
+                        drawableLevelLayer.add(index, "doorBottomRightFence");
                         index++;
                         break;
                     case "torl":
@@ -663,17 +691,20 @@ public class RenderRules {
                     index++;
                     break;
                 case "doortl":
-                        //TODO: Make function in AlignDoors that takes roomX levelY, current and previous direction
-                        //String topLeftX = Integer.toString((roomX + index) + 16);
-                        map.remove("TopLeft");
-                        String topLeftX = Integer.toString(roomX);
-                        String topLeftY = Integer.toString(levelY);
-                        String topLeft = topLeftX + "," + topLeftY;
-                        map.put("TopLeft", topLeft);
-                        //System.out.println(map.get("TopLeft") + " MAP TOPLEFT DOOR X AND Y VALUES");
+                case "doorftl":
+                    //TODO: Make function in AlignDoors that takes roomX levelY, current and previous direction
+                    //String topLeftX = Integer.toString((roomX + index) + 16);
+                    map.remove("TopLeft");
+                    String topLeftXF = Integer.toString(roomX);
+                    String topLeftYF = Integer.toString(levelY);
+                    String topLeftF = topLeftXF + "," + topLeftYF;
+                    map.put("TopLeft", topLeftF);
+                    //System.out.println(map.get("TopLeft") + " MAP TOPLEFT DOOR X AND Y VALUES");
                     index++;
                     break;
+                //System.out.println(map.get("TopLeft") + " MAP TOPLEFT DOOR X AND Y VALUES");
                 case "doortr":
+                case "doorftr":
                     map.remove("TopRight");
                         String topRightX = Integer.toString(roomX);
                         String topRightY = Integer.toString(levelY);
@@ -683,6 +714,7 @@ public class RenderRules {
                     index++;
                     break;
                 case "doorul":
+                case "doorful":
                     map.remove("UpperLeft");
                         String upperLeftX = Integer.toString(roomX);
                         String upperLeftY = Integer.toString(levelY);
@@ -692,6 +724,7 @@ public class RenderRules {
                     index++;
                     break;
                 case "doorll":
+                case "doorfll":
                     map.remove("LowerLeft");
                         String lowerLeftX = Integer.toString(roomX);
                         String lowerLeftY = Integer.toString(levelY);
@@ -701,6 +734,7 @@ public class RenderRules {
                     index++;
                     break;
                 case "doorur":
+                case "doorfur":
                     map.remove("UpperRight");
                         String upperRightX = Integer.toString(roomX);
                         String upperRightY = Integer.toString(levelY);
@@ -710,6 +744,7 @@ public class RenderRules {
                     index++;
                     break;
                 case "doorlr":
+                case "doorflr":
                     map.remove("LowerRight");
                         String lowerRightX = Integer.toString(roomX);
                         String lowerRightY = Integer.toString(levelY);
@@ -719,6 +754,7 @@ public class RenderRules {
                     index++;
                     break;
                 case "doorbl":
+                case "doorfbl":
                     map.remove("BottomLeft");
                         String bottomLeftX = Integer.toString(roomX);
                         String bottomLeftY = Integer.toString(levelY);
@@ -728,6 +764,7 @@ public class RenderRules {
                     index++;
                     break;
                 case "doorbr":
+                case "doorfbr":
                     map.remove("BottomRight");
                         String bottomRightX = Integer.toString(roomX);
                         String bottomRightY = Integer.toString(levelY);

@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.mygdx.game.HUD;
-import com.mygdx.game.entity.projectiles.Skull;
+import com.mygdx.game.entity.behaviours.fsm.drops.Skull;
 import com.mygdx.game.entity.utils.EnemySkullBox2DSteeringEntity;
 import com.mygdx.game.level.objects.Text;
 

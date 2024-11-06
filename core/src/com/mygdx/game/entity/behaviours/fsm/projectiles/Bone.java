@@ -1,4 +1,4 @@
-package com.mygdx.game.entity.projectiles;
+package com.mygdx.game.entity.behaviours.fsm.projectiles;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

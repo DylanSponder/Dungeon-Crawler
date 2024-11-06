@@ -29,10 +29,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.mygdx.game.box2D.BodyFactory;
-import com.mygdx.game.entity.projectiles.Arrow;
-import com.mygdx.game.entity.projectiles.Bone;
-import com.mygdx.game.entity.projectiles.Skull;
-import com.mygdx.game.entity.Tutorial;
+import com.mygdx.game.entity.behaviours.fsm.projectiles.Arrow;
+import com.mygdx.game.entity.behaviours.fsm.projectiles.Bone;
+import com.mygdx.game.entity.behaviours.fsm.drops.Skull;
+import com.mygdx.game.level.objects.Tutorial;
 import com.mygdx.game.entity.behaviours.fsm.*;
 import com.mygdx.game.level.CreateCell;
 import com.mygdx.game.level.objects.*;
@@ -40,7 +40,7 @@ import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.InitLevel;
 
 public class DungeonCrawler extends ApplicationAdapter {
-	private SpriteBatch playerBatch, arrowBatch, enemySkullBatch, enemySpiderBatch, potBatch, hudBatch, tutoBatch, fontBatch, inventoryBatch;
+	private SpriteBatch playerBatch, arrowBatch, enemySkullBatch, enemySpiderBatch, enemyGhostBatch, potBatch, hudBatch, tutoBatch, fontBatch, inventoryBatch;
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch, flameBatch, cobBatch, candleBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch, roofBatch;
 	public static World world;
@@ -65,6 +65,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public boolean reversedArrowMap, reversedSkullMap, reversedPotMap, reversedPotionMap, reversedRespawnFireMap, reversedBoneMap;
 	public static ArrayList<EnemySkull> enemySkulls, dyingSkulls;
 	public static ArrayList<EnemySpider> enemySpiders, dyingSpiders;
+	public static ArrayList<EnemyGhost> enemyGhosts, dyingGhosts;
 	public static ArrayList<Skull> skulls, brokenSkulls;
 	public static ArrayList<Fire> extinguishedRespawnFires;
 	public static ArrayList<Bone> bones;
@@ -115,6 +116,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		tutoBatch = new SpriteBatch();
 		enemySkullBatch = new SpriteBatch();
 		enemySpiderBatch = new SpriteBatch();
+		enemyGhostBatch = new SpriteBatch();
 		arrowBatch = new SpriteBatch();
 		skullBatch = new SpriteBatch();
 		boneBatch = new SpriteBatch();
@@ -142,9 +144,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 		enemies = new ArrayList<>();
 		enemySkulls = new ArrayList<>();
 		enemySpiders = new ArrayList<>();
+		enemyGhosts = new ArrayList<>();
 		deadEnemyBodies = new ArrayList<>();
 		dyingSkulls = new ArrayList<>();
 		dyingSpiders = new ArrayList<>();
+		dyingGhosts = new ArrayList<>();
 		skulls = new ArrayList<>();
 		brokenSkulls = new ArrayList<>();
 		bones = new ArrayList<>();
@@ -1142,6 +1146,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 											EnemySkull respawnedEnemy = new EnemySkull(world, s.skullX, s.skullY);
 											DungeonCrawler.enemySkulls.add(respawnedEnemy);
 											respawnedEnemy.rayCastable = true;
+											enemies.add(respawnedEnemy);
 										}
 									}
 								}, 5f);
@@ -1417,6 +1422,24 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		}
 
+		for (Column c : columns) {
+			pedestalBatch.begin();
+			switch (c.type) {
+				case 14:
+					pedestalBatch.draw(tx.pedestal1,c.columnX,c.columnY);
+					break;
+				case 15:
+					pedestalBatch.draw(tx.pedestal2,c.columnX,c.columnY);
+					break;
+				case 16:
+					pedestalBatch.draw(tx.pedestal3,c.columnX,c.columnY);
+					break;
+				case 17:
+					pedestalBatch.draw(tx.pedestal4,c.columnX,c.columnY);
+					break;
+			}
+			pedestalBatch.end();
+		}
 
 
 
@@ -1535,12 +1558,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//if (!dyingSpiders.isEmpty()) {
 			for (EnemySkull deadSkull : dyingSkulls) {
 				deadSkull.getStateMachine().changeState(EnemySkullState.DIE);
+				enemies.remove(deadSkull);
 			}
 			dyingSkulls.clear();
 		//}
 
 
-		//render enemy skull sprites
+		//render enemy spider sprites
 		for (EnemySpider e2 : enemySpiders) {
 			if (e2.rayCastable) {
 				e2.detectPlayer();
@@ -1616,12 +1640,83 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 			enemySpiderBatch.end();
 		}
+		//if (!dyingSpiders.isEmpty()) {
+		for (EnemySpider deadSpider : dyingSpiders) {
+			deadSpider.getStateMachine().changeState(EnemySpiderState.DIE);
+			enemies.remove(deadSpider);
+		}
+		dyingSpiders.clear();
+
+		for (EnemyGhost e2 : enemyGhosts) {
+			if (e2.rayCastable) {
+				e2.detectPlayer();
+			}
+			if ((e2.playerSighted && e2.playerInRange)){
+				//System.out.println(Gdx.graphics.getDeltaTime());
+				if (e2.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 130)){
+					e2.timeSinceAlerted = 0f;
+					Vector2 vec1 = new Vector2(e2.enemyBody.getPosition());
+					Vector2 vec2 = new Vector2(Player.playerBody.getPosition());
+
+					//throw bones directly at the player but add a small random offset
+					float x = MathUtils.atan2(vec2.y - vec1.y, vec2.x - vec1.x);
+					float randomOffset = Random.randomFloat(1.3f,0.3f);
+					randomOffset = randomOffset / 10;
+					boolean random = Random.randomBoolean();
+					Vector2 finalX = new Vector2((float)Math.cos(x),(float)Math.sin(x));
+
+					if (random) {
+						finalX.x = finalX.x + randomOffset;
+						finalX.y = finalX.y + randomOffset;
+					} else {
+						finalX.x = finalX.x - randomOffset;
+						finalX.y = finalX.y - randomOffset;
+					}
+
+
+				} else {
+					e2.timeSinceAlerted = e2.timeSinceAlerted + Gdx.graphics.getDeltaTime();
+				}
+
+				//System.out.println("TIME SINCE ALERTED" + e.timeSinceAlerted);
+				//e.throwBoneAtPlayer();
+
+				if (!e2.alerted) {
+
+					//FontController.drawFont(fontBatch,);
+					e2.alertMessage.showing = true;
+					e2.alertMessage.fade = true;
+					e2.alerted = true;
+
+					//System.out.println("LOG");
+					e2.alertMessage.textX = e2.enemyAI.getBody().getPosition().x - 2f;
+					e2.alertMessage.textY = e2.enemyAI.getBody().getPosition().y + 8f;
+					messages.add(e2.alertMessage);
+				}
+				e2.getStateMachine().changeState(EnemyGhostState.GO_TO_PLAYER);
+				//e.playerSighted = false;
+			}
+			enemyGhostBatch.begin();
+			if (!e2.alerted) {
+				if (e2.facing == "Up") {
+					enemyGhostBatch.draw(tx.enemyGhostUpSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
+				} else if (e2.facing == "Down") {
+					enemyGhostBatch.draw(tx.enemyGhostDownSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
+				} else if (e2.facing == "Left") {
+					enemyGhostBatch.draw(tx.enemyGhostLeftSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
+				} else if (e2.facing == "Right") {
+					enemyGhostBatch.draw(tx.enemyGhostRightSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
+				}
+			}
+			enemyGhostBatch.end();
+		}
 
 		//if (!dyingSpiders.isEmpty()) {
-			for (EnemySpider deadSpider : dyingSpiders) {
-				deadSpider.getStateMachine().changeState(EnemySpiderState.DIE);
+			for (EnemyGhost deadGhost : dyingGhosts) {
+				deadGhost.getStateMachine().changeState(EnemyGhostState.DIE);
+				enemies.remove(deadGhost);
 			}
-			dyingSpiders.clear();
+			dyingGhosts.clear();
 		//}
 
 		for (Body body : deadEnemyBodies) {
@@ -1686,24 +1781,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 			columnBaseBatch.end();
 		}
 
-		for (Column c : columns) {
-			pedestalBatch.begin();
-			switch (c.type) {
-				case 14:
-					pedestalBatch.draw(tx.pedestal1,c.columnX,c.columnY);
-					break;
-				case 15:
-					pedestalBatch.draw(tx.pedestal2,c.columnX,c.columnY);
-					break;
-				case 16:
-					pedestalBatch.draw(tx.pedestal3,c.columnX,c.columnY);
-					break;
-				case 17:
-					pedestalBatch.draw(tx.pedestal4,c.columnX,c.columnY);
-					break;
-			}
-			pedestalBatch.end();
-		}
 
 			//check if there are any fired arrows
 			if (!arrowArrayMap.isEmpty()) {
@@ -1877,13 +1954,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 			roofBatch.begin();
 			if (r.upDown) {
 				if (r.ruined) {
-					roofBatch.draw(tx.ruinedRoofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 64, 80);
+					roofBatch.draw(tx.ruinedRoofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 64, 96);
 				} else {
 					roofBatch.draw(tx.roofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 64, 96);
 				}
 			} else {
 				if (r.ruined) {
-					roofBatch.draw(tx.ruinedRoofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 0,0,64, 80,1,1,90);
+					roofBatch.draw(tx.ruinedRoofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 0,0,64, 96,1,1,90);
 				} else {
 					roofBatch.draw(tx.roofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 0,0,64, 96,1,1,90);
 				}
@@ -2000,6 +2077,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			rayHandler.setCombinedMatrix(camera);
 			obstacleBatch.setProjectionMatrix(camera.combined);
 			candleBatch.setProjectionMatrix(camera.combined);
+			pedestalBatch.setProjectionMatrix(camera.combined);
 			playerBatch.setProjectionMatrix(camera.combined);
 			arrowBatch.setProjectionMatrix(camera.combined);
 			skullBatch.setProjectionMatrix(camera.combined);
@@ -2015,7 +2093,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			columnBaseBatch.setProjectionMatrix(camera.combined);
 			columnStemBatch.setProjectionMatrix(camera.combined);
 			columnTopBatch.setProjectionMatrix(camera.combined);
-			pedestalBatch.setProjectionMatrix(camera.combined);
+
 			fireBatch.setProjectionMatrix(camera.combined);
 			flameBatch.setProjectionMatrix(camera.combined);
 			roofBatch.setProjectionMatrix(camera.combined);

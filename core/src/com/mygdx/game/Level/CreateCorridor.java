@@ -1,12 +1,14 @@
 package com.mygdx.game.level;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ai.utils.Ray;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.Random;
 import com.mygdx.game.box2D.BodyFactory;
+import com.mygdx.game.level.objects.Candle;
 import com.mygdx.game.level.objects.Fire;
 import com.mygdx.game.level.objects.Roof;
 import com.mygdx.game.level.objects.Torch;
@@ -20,7 +22,7 @@ public class CreateCorridor {
     private int rand1, rand2, rand3, rand4;
 
     public void CreateCorridor (TiledMapTileLayer layer, World world, float doorX, float doorY, boolean upDown){
-        rand1 = Random.randomInt(2, 1);
+        rand1 = Random.randomInt(2, 2);
         if (upDown) {
 
             if (rand1 == 2) {
@@ -50,6 +52,43 @@ public class CreateCorridor {
                         layer.setCell(doorXasInt + 18, doorYAsInt - i, newRightCorridorWallCell);
                         newRightCorridorWall.setUserData("Wall");
                         }
+                    else if (i == 2) {
+                        TiledMapTileLayer.Cell newLeftCorridorWallCell;
+                        newLeftCorridorWallCell = GenerateLevel.init.cr.leftFenceTile;
+                        Body newLeftCorridorWall = GenerateLevel.init.bf.createWall(world, (doorX * 16) + 15 * 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i * 16);
+                        layer.setCell(doorXasInt + 15, doorYAsInt - i, newLeftCorridorWallCell);
+                        newLeftCorridorWall.setUserData("Wall");
+
+                        TiledMapTileLayer.Cell newLeftCorridorFloorCell;
+                        newLeftCorridorFloorCell = GenerateLevel.init.cr.middleFloorTile;
+                        layer.setCell(doorXasInt + 16, doorYAsInt - i, newLeftCorridorFloorCell);
+
+                        int randCand = Random.randomInt(2,1);
+
+                       // if (randCand == 2) {
+
+                            Candle c = new Candle(world, ((doorX + 3) * 16) + 15 * 16 - 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i * 16, 2);
+                            c.createCandle();
+                            candles.add(c);
+                            Fire fCans = new Fire(world,rayHandler,(((doorX + i) * 16) + 16 * 16) + 6 - 4.5f - 16,(doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 2.5f - 32, false,0f, 3, false);
+                            fires.add(fCans);
+                            fCans.createFire(new Color(0.25f,0.20f,0,0.5f),20);
+                            Fire fCans2 = new Fire(world,rayHandler,(((doorX + i) * 16) + 16 * 16) + 6 - 8.5f - 16,(doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 6.5f - 32, false,0f, 3, false);
+                            fires.add(fCans2);
+                            fCans2.createFire(new Color(0.25f,0.20f,0,0.5f),20);
+                       // }
+
+                        TiledMapTileLayer.Cell newRightCorridorFloorCell;
+                        newRightCorridorFloorCell = GenerateLevel.init.cr.middleFloorTile;
+                        layer.setCell(doorXasInt + 17, doorYAsInt - i, newRightCorridorFloorCell);
+
+                        TiledMapTileLayer.Cell newRightCorridorWallCell;
+                        newRightCorridorWallCell = GenerateLevel.init.cr.rightFenceTile;
+                        Body newRightCorridorWall = GenerateLevel.init.bf.createWall(world, ((doorX + 3) * 16) + 15 * 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i * 16);
+                        layer.setCell(doorXasInt + 18, doorYAsInt - i, newRightCorridorWallCell);
+                        newRightCorridorWall.setUserData("Wall");
+
+                    }
                     else if (i == 3) {
                         TiledMapTileLayer.Cell newLeftCorridorWallCell;
                         newLeftCorridorWallCell = GenerateLevel.init.cr.leftFenceBottomEndTile;
@@ -71,16 +110,16 @@ public class CreateCorridor {
                         layer.setCell(doorXasInt + 18, doorYAsInt - i, newRightCorridorWallCell);
                         newRightCorridorWall.setUserData("Wall");
 
-                        int rand = Random.randomInt(2,1);
+                        int rand = Random.randomInt(4,1);
 
-                        int rand2 = Random.randomInt(2,1);
+                        int rand2 = Random.randomInt(4,1);
 
-                        if (rand == 2) {
-                            if (rand2 == 2) {
-                                Roof r = new Roof(world, ((doorX+3) * 16) + 12*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 16, upDown,false);
+                        if (rand == 1 || rand == 2 || rand == 3) {
+                            if (rand2 != 4) {
+                                Roof r = new Roof(world, ((doorX+3) * 16) + 12*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 16, 4,6,upDown,false);
                                 roofs.add(r);
                             } else {
-                                Roof r = new Roof(world, ((doorX+3) * 16) + 12*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 16, upDown,true);
+                                Roof r = new Roof(world, ((doorX+3) * 16) + 12*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 16, 4,6,upDown,true);
                                 roofs.add(r);
                             }
 
@@ -117,9 +156,6 @@ public class CreateCorridor {
                     int doorYAsInt = (int) doorY;
 
                     if (i2 == 0) {
-                        TiledMapTileLayer.Cell newLeftCorridorWallCell;
-                        newLeftCorridorWallCell = GenerateLevel.init.cr.torchWallLeftTile;
-                        Body newLeftCorridorWall = GenerateLevel.init.bf.createWall(world, (doorX * 16) + 15 * 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i2 * 16);
                         int rand = Random.randomInt(2, 1);
 
                         if (rand == 2) {
@@ -128,6 +164,9 @@ public class CreateCorridor {
                             fL.createFire(new Color(0.25f, 0.20f, 0, 0.7f), 60);
                         }
 
+                        TiledMapTileLayer.Cell newLeftCorridorWallCell;
+                        newLeftCorridorWallCell = GenerateLevel.init.cr.torchWallLeftTile;
+                        Body newLeftCorridorWall = GenerateLevel.init.bf.createWall(world, (doorX * 16) + 15 * 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i2 * 16);
                         layer.setCell(doorXasInt + 15, doorYAsInt - i2, newLeftCorridorWallCell);
                         newLeftCorridorWall.setUserData("Wall");
 
@@ -151,23 +190,56 @@ public class CreateCorridor {
 
                         layer.setCell(doorXasInt + 18, doorYAsInt - i2, newRightCorridorWallCell);
                         newRightCorridorWall.setUserData("Wall");
-                        if (i2 == 3) {
+                    } else if (i2 == 3) {
+                            int randR = Random.randomInt(4,1);
+                            int randR2 = Random.randomInt(4,1);
 
-                            int randR2 = Random.randomInt(2,1);
-
-                            if (rand == 2) {
-                                if (randR2 == 2) {
-                                    Roof r = new Roof(world, ((doorX + 3) * 16) + 12 * 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i2 * 16 - 16, upDown,false);
+                            if (randR == 1 || randR == 2 || randR == 3) {
+                                if (randR2 != 4) {
+                                    Roof r = new Roof(world, ((doorX + 3) * 16) + 12 * 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i2 * 16 - 16, 4,6, upDown,false);
                                     roofs.add(r);
                                 } else {
-                                    Roof r = new Roof(world, ((doorX + 3) * 16) + 12 * 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i2 * 16 - 16, upDown,true);
+                                    Roof r = new Roof(world, ((doorX + 3) * 16) + 12 * 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i2 * 16 - 16, 4,6, upDown,true);
                                     roofs.add(r);
                                 }
                             }
+                        TiledMapTileLayer.Cell newLeftCorridorWallCell;
+                        newLeftCorridorWallCell = GenerateLevel.init.cr.leftWallTile;
+                        Body newLeftCorridorWall = GenerateLevel.init.bf.createWall(world, (doorX * 16) + 15 * 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i2 * 16);
+                        layer.setCell(doorXasInt + 15, doorYAsInt - i2, newLeftCorridorWallCell);
+                        newLeftCorridorWall.setUserData("Wall");
+
+                        TiledMapTileLayer.Cell newLeftCorridorFloorCell;
+                        newLeftCorridorFloorCell = GenerateLevel.init.cr.middleFloorTile;
+                        layer.setCell(doorXasInt + 16, doorYAsInt - i2, newLeftCorridorFloorCell);
+
+                        int randCand = Random.randomInt(2,1);
+
+                        // if (randCand == 2) {
+
+                        Candle c = new Candle(world, ((doorX + 3) * 16) + 15 * 16 - 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i2 * 16, 2);
+                        c.createCandle();
+                        candles.add(c);
+                        Fire fCans = new Fire(world,rayHandler,(((doorX + i2) * 16) + 16 * 16) + 6 - 4.5f - 16,(doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 2.5f - 32, false,0f, 3, false);
+                        fires.add(fCans);
+                        fCans.createFire(new Color(0.25f,0.20f,0,0.5f),20);
+                        Fire fCans2 = new Fire(world,rayHandler,(((doorX + i2) * 16) + 16 * 16) + 6 - 8.5f - 16,(doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 6.5f - 32, false,0f, 3, false);
+                        fires.add(fCans2);
+                        fCans2.createFire(new Color(0.25f,0.20f,0,0.5f),20);
+
+                        TiledMapTileLayer.Cell newRightCorridorFloorCell;
+                        newRightCorridorFloorCell = GenerateLevel.init.cr.middleFloorTile;
+                        layer.setCell(doorXasInt + 17, doorYAsInt - i2, newRightCorridorFloorCell);
+
+                        TiledMapTileLayer.Cell newRightCorridorWallCell;
+                        newRightCorridorWallCell = GenerateLevel.init.cr.rightWallTile;
+                        Body newRightCorridorWall = GenerateLevel.init.bf.createWall(world, ((doorX + 3) * 16) + 15 * 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i2 * 16);
+                        layer.setCell(doorXasInt + 18, doorYAsInt - i2, newRightCorridorWallCell);
+                        newRightCorridorWall.setUserData("Wall");
                     }
 
 
-                    } else {
+                     else {
                         TiledMapTileLayer.Cell newLeftCorridorWallCell;
                         newLeftCorridorWallCell = GenerateLevel.init.cr.leftWallTile;
                         Body newLeftCorridorWall = GenerateLevel.init.bf.createWall(world, (doorX * 16) + 15 * 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i2 * 16);
@@ -196,7 +268,7 @@ public class CreateCorridor {
         else if (!upDown) {
             rand2 = Random.randomInt(2,1);
             rand3 = Random.randomInt(2,1);
-            rand4 = Random.randomInt(2,1);
+            rand4 = Random.randomInt(1,1);
             if (rand4 == 2) {
                 for(int i=0;i<5;i++) {
 
@@ -224,11 +296,11 @@ public class CreateCorridor {
 
                                 int randR = Random.randomInt(4,1);
                                 if (rand3 == 2) {
-                                    if (randR == 4) {
-                                        Roof r = new Roof(world, ((doorX+3) * 16) + 17*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 32 + 1, upDown,true);
+                                    if (randR != 4) {
+                                        Roof r = new Roof(world, ((doorX+3) * 16) + 17*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 32, 4,6,upDown,false);
                                         roofs.add(r);
                                     } else {
-                                        Roof r = new Roof(world, ((doorX+3) * 16) + 17*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 32 + 1, upDown,false);
+                                        Roof r = new Roof(world, ((doorX+3) * 16) + 17*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 32, 4,6,upDown,true);
                                         roofs.add(r);
                                     }
                                 }
@@ -314,12 +386,12 @@ public class CreateCorridor {
                                 int randR = Random.randomInt(4,1);
 
                                 if (rand3 == 2) {
-                                    if (randR == 4) {
-                                        Roof r = new Roof(world, ((doorX+3) * 16) + 17*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 32 + 1, upDown,true);
+                                    if (randR != 4) {
+                                        Roof r = new Roof(world, ((doorX+3) * 16) + 17*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 32, 4,6, upDown,false);
                                         roofs.add(r);
                                     }
                                     else {
-                                        Roof r = new Roof(world, ((doorX+3) * 16) + 17*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 32 + 1, upDown,false);
+                                        Roof r = new Roof(world, ((doorX+3) * 16) + 17*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 32, 4,6, upDown,true);
                                         roofs.add(r);
                                     }
                                 }

@@ -1,4 +1,4 @@
-package com.mygdx.game.entity.projectiles;
+package com.mygdx.game.entity.behaviours.fsm.projectiles;
 
 import box2dLight.PointLight;
 import com.badlogic.gdx.graphics.Color;

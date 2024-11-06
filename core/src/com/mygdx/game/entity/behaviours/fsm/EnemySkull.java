@@ -31,42 +31,43 @@ public class EnemySkull extends Enemy {
 
     public EnemySkull(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
-        shapeRenderer = new ShapeRenderer();
+        this.shapeRenderer = new ShapeRenderer();
 
-        alertMessage = new Text(DungeonCrawler.defaultFont,"!", Color.WHITE,true,1f,0.0045f,false, false, null, 0);
+        this.alertMessage = new Text(DungeonCrawler.defaultFont,"!", Color.WHITE,true,1f,0.0045f,false, false, null, 0);
 
-        rayCastable = false;
+        this.rayCastable = false;
 
         //enemyID = 1;
 
-        sightCounter = 0;
+        this.sightCounter = 0;
 
-        alerted = false;
+        this.alerted = false;
 
         Viewport vp = new ExtendViewport(camera.viewportWidth, camera.viewportHeight);
 
-        ENEMY_HEALTH = 3;
+        this.ENEMY_HEALTH = 3;
 
-        playerInRange = false;
+        this.playerInRange = false;
 
         //creates an enemy with a body, hitbox and steering entity
-        enemyBody = bodyFactory.createSimpleBody(world, x, y);
-        enemyDetectionBody = bodyFactory.createSimpleBody(world, x, y);
+        this.enemyBody = bodyFactory.createSimpleBody(world, x, y);
+        this.enemyDetectionBody = bodyFactory.createSimpleBody(world, x, y);
 
-        enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 7f);
+        this.enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 7f);
 
-        enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 120f);
+        this.enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 120f);
 
         //enemyDetectionRadius.setSensor(true);
 
-        enemyAI = new EnemySkullBox2DSteeringEntity(enemyBody, 10);
+        this.enemyAI = new EnemySkullBox2DSteeringEntity(enemyBody, 10);
         //playerDetectionRay = new EnemyBox2DSteeringEntity(enemyBody,10);
 
         stateMachine = new DefaultStateMachine<EnemySkull, EnemySkullState>(this, EnemySkullState.WANDER);
         stateMachine.changeState(EnemySkullState.WANDER);
         this.enemyBody.setUserData("Enemy");
+        this.enemyHitbox.setUserData("EnemySkull");
 
-        debug = false;
+        this.debug = false;
 /*
         IndexedAStarPathFinder pathFinder;
 
