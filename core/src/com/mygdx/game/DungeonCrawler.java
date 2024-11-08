@@ -1288,15 +1288,45 @@ public class DungeonCrawler extends ApplicationAdapter {
 					potBatch.begin();
 					if (value.POT_HEALTH < 1.5f) {
 						if (value.type == 1) {
-							Pot.renderPot(potBatch, tx.damagedAmphoraSprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+							//Pot.renderPot(potBatch, tx.damagedAmphoraSprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
 						} else {
-							Pot.renderPot(potBatch, tx.damagedAmphora2Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+							//Pot.renderPot(potBatch, tx.damagedAmphora2Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
 						}
 					} else {
-						if (value.type == 1) {
-							Pot.renderPot(potBatch, tx.amphoraSprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
-						} else {
-							Pot.renderPot(potBatch, tx.amphora2Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+						switch (value.type) {
+							case 1:
+								Pot.renderPot(potBatch, tx.pot1Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+								break;
+							case 2:
+								Pot.renderPot(potBatch, tx.pot2Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+								break;
+							case 3:
+								Pot.renderPot(potBatch, tx.pot3Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+								break;
+							case 4:
+								Pot.renderPot(potBatch, tx.pot4Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+								break;
+							case 5:
+								Pot.renderPot(potBatch, tx.pot5Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+								break;
+							case 6:
+								Pot.renderPot(potBatch, tx.pot6Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+								break;
+							case 7:
+								Pot.renderPot(potBatch, tx.pot7Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+								break;
+							case 8:
+								Pot.renderPot(potBatch, tx.pot8Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+								break;
+							case 9:
+								Pot.renderPot(potBatch, tx.pot9Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+								break;
+							case 10:
+								Pot.renderPot(potBatch, tx.pot10Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+								break;
+							case 11:
+								Pot.renderPot(potBatch, tx.pot11Sprite, potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+								break;
 						}
 
 						if (!reversedPotMap) {
@@ -1503,7 +1533,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 				if ((e.playerSighted && e.playerInRange)){
 					//System.out.println(Gdx.graphics.getDeltaTime());
-					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 130)){
+					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 150)){
 						e.timeSinceAlerted = 0f;
 						Vector2 vec1 = new Vector2(e.enemyBody.getPosition());
 						Vector2 vec2 = new Vector2(Player.playerBody.getPosition());

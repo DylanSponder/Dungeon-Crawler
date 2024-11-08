@@ -28,7 +28,7 @@ public class GameContactListener implements ContactListener {
         if ((colliderStr == "Sword" && collideeStr == "Fire" && collidee.getUserData() != "Spawner")
         || (collideeStr == "Sword" && colliderStr == "Fire" && collider.getUserData() != "Spawner"))
         {
-            System.out.println("Hello");
+
 
         }
         //System.out.println(colliderStr + " " + collideeStr);
@@ -40,10 +40,19 @@ public class GameContactListener implements ContactListener {
             if (collidee.getBody().getUserData() == "Pot") {
                 for (Pot p : pots) {
                     if (collidee.getBody() == p.potBody) {
-                        if (p.POT_HEALTH >= 1) {
-                            p.POT_HEALTH--;
-                            if (p.POT_HEALTH <= 0) {
-                                brokenPots.add(p);
+                        int rand = Random.randomInt(3,1);
+
+                            if (p.POT_HEALTH >= 1) {
+                                if (rand == 1) {
+                                    p.POT_HEALTH--;
+                                    p.POT_HEALTH--;
+                                if (p.POT_HEALTH <= 0) {
+                                    brokenPots.add(p);
+                                }
+                            } else {
+                                    p.POT_HEALTH--;
+                                    p.POT_HEALTH--;
+                                    brokenPots.add(p);
                             }
                         }
                     }
@@ -807,6 +816,7 @@ public class GameContactListener implements ContactListener {
                                 if (!d.locked) {
                                     d.open = true;
                                     if (collideeStr == "Player") {
+                                        System.out.println("TEST");
                                         player.touchingDoor = true;
 
                                     }
@@ -997,7 +1007,7 @@ public class GameContactListener implements ContactListener {
         if (collider.getBody().getUserData() == "Door" && collidee.getBody().getUserData() == "Player"
                 || (collider.getBody().getUserData() == "Door" && collidee.getBody().getUserData() == "Door")) {
             //player must be touching a room but not a door
-            if (collidee.getBody().getUserData() == "Player" && player.touchingRoom && player.touchingDoor) {
+            if (collidee.getBody().getUserData() == "Player" && player.touchingRoom && !player.touchingDoor) {
                 if (player.currentRoom != 0) {
                     if (init.roomList.get(player.currentRoom).enemyCounter != 0) {
                         init.roomList.get(player.currentRoom).lockAllDoors(world, init.roomList.get(player.currentRoom), true);

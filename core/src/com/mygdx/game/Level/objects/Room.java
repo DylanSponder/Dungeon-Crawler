@@ -72,7 +72,7 @@ public class Room {
                     topLeftDoor.doorHitbox.setSensor(true);
                     topLeftDoor.locked = false;
                     Door topRightDoor = room.doorArrayMap.get("TopRight");
-                    topRightDoor.doorHitbox.setSensor(true);
+                    //topRightDoor.doorHitbox.setSensor(true);
                     topRightDoor.locked = false;
                     break;
                 case 2:
@@ -80,7 +80,7 @@ public class Room {
                     upperRightDoor.doorHitbox.setSensor(true);
                     upperRightDoor.locked = false;
                     Door lowerRightDoor = room.doorArrayMap.get("LowerRight");
-                    lowerRightDoor.doorHitbox.setSensor(true);
+                    //lowerRightDoor.doorHitbox.setSensor(true);
                     lowerRightDoor.locked = false;
                     break;
                 case 3:
@@ -88,7 +88,7 @@ public class Room {
                     bottomLeftDoor.doorHitbox.setSensor(true);
                     bottomLeftDoor.locked = false;
                     Door bottomRightDoor = room.doorArrayMap.get("BottomRight");
-                    bottomRightDoor.doorHitbox.setSensor(true);
+                    //bottomRightDoor.doorHitbox.setSensor(true);
                     bottomRightDoor.locked = false;
                     break;
                 case 4:
@@ -96,17 +96,19 @@ public class Room {
                     upperLeftDoor.doorHitbox.setSensor(true);
                     upperLeftDoor.locked = false;
                     Door lowerLeftDoor = room.doorArrayMap.get("LowerLeft");
-                    lowerLeftDoor.doorHitbox.setSensor(true);
+                    //lowerLeftDoor.doorHitbox.setSensor(true);
                     lowerLeftDoor.locked = false;
                     break;
             }
         }
         else {
             for (Door d : room.doors) {
-                d.locked = false;
-                d.doorHitbox.setSensor(true);
-                for (Lock l : room.locks) {
-                    l.visible = false;
+                if (d.createHitbox) {
+                    d.locked = false;
+                    d.doorHitbox.setSensor(true);
+                    for (Lock l : room.locks) {
+                        l.visible = false;
+                    }
                 }
             }
         }
@@ -119,7 +121,7 @@ public class Room {
                 bottomLeftDoor.doorHitbox.setSensor(true);
                 bottomLeftDoor.locked = false;
                 Door bottomRightDoor = room.doorArrayMap.get("BottomRight");
-                bottomRightDoor.doorHitbox.setSensor(true);
+                //bottomRightDoor.doorHitbox.setSensor(true);
                 bottomRightDoor.locked = false;
                 break;
             case 2:
@@ -127,7 +129,7 @@ public class Room {
                 upperLeftDoor.doorHitbox.setSensor(true);
                 upperLeftDoor.locked = false;
                 Door lowerLeftDoor = room.doorArrayMap.get("LowerLeft");
-                lowerLeftDoor.doorHitbox.setSensor(true);
+                //lowerLeftDoor.doorHitbox.setSensor(true);
                 lowerLeftDoor.locked = false;
                 break;
             case 3:
@@ -135,7 +137,7 @@ public class Room {
                 topLeftDoor.doorHitbox.setSensor(true);
                 topLeftDoor.locked = false;
                 Door topRightDoor = room.doorArrayMap.get("TopRight");
-                topRightDoor.doorHitbox.setSensor(true);
+                //topRightDoor.doorHitbox.setSensor(true);
                 topRightDoor.locked = false;
                 break;
             case 4:
@@ -143,7 +145,7 @@ public class Room {
                 upperRightDoor.doorHitbox.setSensor(true);
                 upperRightDoor.locked = false;
                 Door lowerRightDoor = room.doorArrayMap.get("LowerRight");
-                lowerRightDoor.doorHitbox.setSensor(true);
+                //lowerRightDoor.doorHitbox.setSensor(true);
                 lowerRightDoor.locked = false;
                 break;
         }
@@ -154,7 +156,9 @@ public class Room {
 
     public void lockAllDoors(World world, Room room, boolean visible) {
         for (Door d : room.doors) {
-            d.doorHitbox.setSensor(false);
+            if (d.createHitbox) {
+                d.doorHitbox.setSensor(false);
+            }
             if (visible) {
                 for (Lock l : room.locks) {
                     d.locked = true;
@@ -171,7 +175,7 @@ public class Room {
                 bottomLeftDoor.doorHitbox.setSensor(false);
                 bottomLeftDoor.locked = true;
                 Door bottomRightDoor = room.doorArrayMap.get("BottomRight");
-                bottomRightDoor.doorHitbox.setSensor(false);
+                //bottomRightDoor.doorHitbox.setSensor(false);
                 bottomRightDoor.locked = true;
                 for (Lock l : locks) {
                     if (l.direction == 3) {
@@ -184,7 +188,7 @@ public class Room {
                 upperLeftDoor.doorHitbox.setSensor(false);
                 upperLeftDoor.locked = true;
                 Door lowerLeftDoor = room.doorArrayMap.get("LowerLeft");
-                lowerLeftDoor.doorHitbox.setSensor(false);
+                //lowerLeftDoor.doorHitbox.setSensor(false);
                 lowerLeftDoor.locked = true;
                 for (Lock l : locks) {
                     if (l.direction == 4) {
@@ -197,7 +201,7 @@ public class Room {
                 topLeftDoor.doorHitbox.setSensor(false);
                 topLeftDoor.locked = true;
                 Door topRightDoor = room.doorArrayMap.get("TopRight");
-                topRightDoor.doorHitbox.setSensor(false);
+                //topRightDoor.doorHitbox.setSensor(false);
                 topRightDoor.locked = true;
                 for (Lock l : locks) {
                     if (l.direction == 1) {
@@ -210,7 +214,7 @@ public class Room {
                 upperRightDoor.doorHitbox.setSensor(false);
                 upperRightDoor.locked = true;
                 Door lowerRightDoor = room.doorArrayMap.get("LowerRight");
-                lowerRightDoor.doorHitbox.setSensor(false);
+               // lowerRightDoor.doorHitbox.setSensor(false);
                 lowerRightDoor.locked = true;
                 for (Lock l : locks) {
                     if (l.direction == 2) {

@@ -8,7 +8,7 @@
 ,,,,,,,,,,,,,,,lw,fob1,f,fob2,fcol4,fcol4,fob3,f,fob2,rw
 ,,,,,,,,,,,,,,tlw,brt,f,f,f,fcol7,fcol7,f,f,f,rw
 ,,,,,,,,,,,,,tlw,brt,fob2,f,fob3,f,fob1,fob2,f,tlt,bw,brw
-,,,,,,,,,tlw,tw,tw,tw,brt,f,f,f,f,f,f,f,f,rw,,
+,,,,,,,,,tlw,tw,tw,tw,brt,f,f,f,f,fpot,f,f,f,rw,,
 ,,,,,,,,tlw,brt,f,f,f,f,f,fob1,f,fob1,tlt,bw,bw,bw,brw,,
 ,,,,,,,,lw,f,f,fenemy,fped1fireb,f,f,f,f,tlt,brw,,,,,,
 ,,,,,,,,lw,f,f2,f2,f2,f2,f2,f,tlt,brw,,,,,,,

@@ -42,6 +42,7 @@ public class CreateAssets {
     Texture fireOutAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/FireOut.png"));
     Texture arrowAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Bow/ArrowAnimation.png"));
     Texture columnsTextureSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Columns.png"));
+    Texture potsSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Pots.png"));
     Music level1Track = Gdx.audio.newMusic(Gdx.files.internal("HellasDungeon/Music/Level1Track.mp3"));
     public Sound fireAmbient = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/Fire.mp3"));
 
@@ -95,7 +96,7 @@ public class CreateAssets {
     public TextureRegion roomRightDownEndFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
 
 
-    public TextureRegion amphoraTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion amphoraTexture = new TextureRegion(potsSheet, 0,0,16,16);
     public TextureRegion amphora2Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion damagedAmphoraTexture = new TextureRegion(roomBackground, 0,0,16,16);
 
@@ -293,8 +294,19 @@ public class CreateAssets {
     Sprite candleSprite = new Sprite(candleTexture,384,64,16,16);
     Sprite candlesSprite = new Sprite(candlesTexture,400,64,16,16);
 
-    Sprite amphoraSprite = new Sprite(amphoraTexture, 208,0, 16, 16);
-    Sprite amphora2Sprite = new Sprite(amphoraTexture, 208,16, 16, 16);
+    Sprite pot1Sprite = new Sprite(amphoraTexture, 16,16, 16, 16);
+    Sprite pot2Sprite = new Sprite(amphoraTexture, 32,16, 16, 16);
+    Sprite pot3Sprite = new Sprite(amphoraTexture, 48,16, 16, 16);
+    Sprite pot4Sprite = new Sprite(amphoraTexture, 64,16, 16, 16);
+    Sprite pot5Sprite = new Sprite(amphoraTexture, 80,16, 16, 16);
+    Sprite pot6Sprite = new Sprite(amphoraTexture, 96,16, 16, 16);
+    Sprite pot7Sprite = new Sprite(amphoraTexture, 112,16, 16, 16);
+    Sprite pot8Sprite = new Sprite(amphoraTexture, 128,16, 16, 16);
+    Sprite pot9Sprite = new Sprite(amphoraTexture, 144,16, 16, 16);
+    Sprite pot10Sprite = new Sprite(amphoraTexture, 160,16, 16, 16);
+    Sprite pot11Sprite = new Sprite(amphoraTexture, 176,16, 16, 16);
+
+
     Sprite damagedAmphoraSprite = new Sprite(damagedAmphoraTexture, 224,0, 16, 16);
     Sprite damagedAmphora2Sprite = new Sprite(damagedAmphoraTexture, 224,16, 16, 16);
 
