@@ -18,8 +18,8 @@ public class Column {
     public float columnX, columnY;
     public World world;
     public Body columnBody;
-    public boolean visible;
-    public int type; //1-9 types
+    public boolean visible, lowerCreated;
+    public int type; //1-X types
     public ArrayList<Column> localColumn;
 
     public Column(World world, float x, float y, int type) {
@@ -81,6 +81,27 @@ public class Column {
 
 
 
+      //  this.columnBody = bodyFactory.createColumnBase(world, columnX, columnY);
+
+        //ColumnTop col1 = new ColumnTop(world, columnX, columnY, type, solid);
+
+        //DungeonCrawler.columnTops.add(col1);
+
+       // this.columnBody.setUserData("Column");
+
+        //potArrayMap.put(potBody, this);
+
+        //this.potCreated = true;
+
+        //return this.columnBody;
+    }
+
+    public void createColumnBaseLower() {
+
+        BodyFactory bodyFactory = new BodyFactory();
+
+        DungeonCrawler.columns.add(this);
+
         this.columnBody = bodyFactory.createColumnBase(world, columnX, columnY);
 
         //ColumnTop col1 = new ColumnTop(world, columnX, columnY, type, solid);
@@ -89,11 +110,8 @@ public class Column {
 
         this.columnBody.setUserData("Column");
 
-        //potArrayMap.put(potBody, this);
 
-        //this.potCreated = true;
 
-        //return this.columnBody;
     }
 
     public void createPedestal() {

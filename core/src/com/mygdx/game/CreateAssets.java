@@ -176,6 +176,8 @@ public class CreateAssets {
     public TextureRegion colStemDamaged2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colBase = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colBase2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion colBaseLower = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+
     public TextureRegion pedestal1 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion pedestal2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion pedestal3 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
@@ -448,6 +450,7 @@ public class CreateAssets {
         colStem3.setRegion(64, 16, 16, 16);
         colBase.setRegion(0, 32, 16, 16);
         colBase2.setRegion(16, 32, 16, 16);
+        colBaseLower.setRegion(0,48,16,5);
         pedestal1.setRegion(32, 32, 16, 16);
         pedestal2.setRegion(48, 32, 16, 16);
         pedestal3.setRegion(64, 32, 16, 16);
@@ -456,24 +459,24 @@ public class CreateAssets {
         roofTexture.setRegion(464, 0, 64, 96);
         ruinedRoofTexture.setRegion(528, 0, 64, 96);
 
-        doorTopLeftTexture.setRegion(128, 0, 16, 16);
+        doorTopLeftTexture.setRegion(128, 0, 32, 16);
         doorTopRightTexture.setRegion(144, 0, 16, 16);
-        doorTopLeftOpenTexture.setRegion(128, 16, 16, 16);
+        doorTopLeftOpenTexture.setRegion(128, 16, 32, 16);
         doorTopRightOpenTexture.setRegion(144, 16, 16, 16);
 
         doorLeftUpperTexture.setRegion(160, 32, 16, 16);
         doorLeftLowerTexture.setRegion(160, 48, 16, 16);
-        doorLeftUpperOpenTexture.setRegion(160, 0, 16, 16);
+        doorLeftUpperOpenTexture.setRegion(160, 0, 16, 32);
         doorLeftLowerOpenTexture.setRegion(160, 16, 16, 16);
 
         doorRightUpperTexture.setRegion(176, 32, 16, 16);
         doorRightLowerTexture.setRegion(176, 48, 16, 16);
-        doorRightUpperOpenTexture.setRegion(176, 0, 16, 16);
+        doorRightUpperOpenTexture.setRegion(176, 0, 16, 32);
         doorRightLowerOpenTexture.setRegion(176, 16, 16, 16);
 
-        doorBottomLeftTexture.setRegion(128, 32, 16, 16);
+        doorBottomLeftTexture.setRegion(128, 32, 32, 16);
         doorBottomRightTexture.setRegion(144, 32, 16, 16);
-        doorBottomLeftOpenTexture.setRegion(128, 48, 16, 16);
+        doorBottomLeftOpenTexture.setRegion(128, 48, 32, 16);
         doorBottomRightOpenTexture.setRegion(144, 48, 16, 16);
 
         doorTopLeftWallTexture.setRegion(16, 0, 16, 16);

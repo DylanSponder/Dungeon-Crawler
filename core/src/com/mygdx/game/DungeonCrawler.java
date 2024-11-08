@@ -42,7 +42,7 @@ import com.mygdx.game.level.InitLevel;
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch playerBatch, arrowBatch, enemySkullBatch, enemySpiderBatch, enemyGhostBatch, potBatch, hudBatch, tutoBatch, fontBatch, inventoryBatch;
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch, flameBatch, cobBatch, candleBatch;
-	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch, roofBatch;
+	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch, roofBatch, columnBaseLowerBatch;
 	public static World world;
 	public static boolean debug;
 	private Box2DDebugRenderer b2dr;
@@ -129,6 +129,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		columnTopBatch = new SpriteBatch();
 		columnStemBatch = new SpriteBatch();
 		columnBaseBatch = new SpriteBatch();
+		columnBaseLowerBatch = new SpriteBatch();
 		pedestalBatch = new SpriteBatch();
 		fireBatch = new SpriteBatch();
 		flameBatch = new SpriteBatch();
@@ -1096,7 +1097,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					//render open doors here
 					if (d.open) {
 						doorBatch.begin();
-						d.renderOpen(doorBatch, r.directionTaken, d.doorX, d.doorY);
+							d.renderOpen(doorBatch, r.directionTaken, d.doorX, d.doorY);
 						doorBatch.end();
 					}
 				}
@@ -1442,6 +1443,15 @@ public class DungeonCrawler extends ApplicationAdapter {
 		}
 
 
+		for (Column c : columns) {
+			columnBaseLowerBatch.begin();
+			if (c.type == 70) {
+				columnBaseLowerBatch.draw(tx.colBaseLower,c.columnX,c.columnY);
+
+			}
+			columnBaseLowerBatch.end();
+		}
+
 
 			playerBatch.begin();
 			//draw playerSprite on player Box2D object
@@ -1767,6 +1777,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 			switch (c.type) {
 				case 7:
 					columnBaseBatch.draw(tx.colBase, c.columnX, c.columnY);
+					if (!c.lowerCreated) {
+						c.lowerCreated = true;
+					}
 					break;
 				case 8:
 					columnBaseBatch.draw(tx.pedestal1, c.columnX, c.columnY);
@@ -2077,6 +2090,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			rayHandler.setCombinedMatrix(camera);
 			obstacleBatch.setProjectionMatrix(camera.combined);
 			candleBatch.setProjectionMatrix(camera.combined);
+			columnBaseLowerBatch.setProjectionMatrix(camera.combined);
 			pedestalBatch.setProjectionMatrix(camera.combined);
 			playerBatch.setProjectionMatrix(camera.combined);
 			arrowBatch.setProjectionMatrix(camera.combined);

@@ -1107,7 +1107,7 @@ for (int i = 0; i < layerSize; i++) {
         case "doorTopLeft":
             if (!startingRoom) {
                 if (doorTop <= 1 && ((nextDirection == 1 || doorDirection == 3))) {
-                    Door newDoorTopLeft = new Door(world, "TopLeft", init.roomList.get(roomIndex).doorLocations.get("TopLeft"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                    Door newDoorTopLeft = new Door(world, "TopLeft", init.roomList.get(roomIndex).doorLocations.get("TopLeft"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, false, true);
                     newDoorTopLeft.createDoor();
                     init.roomList.get(roomIndex).doorArrayMap.put("TopLeft", newDoorTopLeft);
                     init.roomList.get(roomIndex).doors.add(newDoorTopLeft);
@@ -1126,7 +1126,7 @@ for (int i = 0; i < layerSize; i++) {
         case "doorTopLeftFence":
             if (!startingRoom) {
                 if (doorTop <= 1 && ((nextDirection == 1 || doorDirection == 3))) {
-                    Door newDoorTopLeft = new Door(world, "TopLeft", init.roomList.get(roomIndex).doorLocations.get("TopLeft"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                    Door newDoorTopLeft = new Door(world, "TopLeft", init.roomList.get(roomIndex).doorLocations.get("TopLeft"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, false, true);
                     newDoorTopLeft.createDoor();
                     init.roomList.get(roomIndex).doorArrayMap.put("TopLeft", newDoorTopLeft);
                     init.roomList.get(roomIndex).doors.add(newDoorTopLeft);
@@ -1146,7 +1146,7 @@ for (int i = 0; i < layerSize; i++) {
             if (!startingRoom) {
                 if (doorTop <= 1 && ((nextDirection == 1 || doorDirection == 3))) {
 
-                    Door newDoorTopRight = new Door(world, "TopRight", init.roomList.get(roomIndex).doorLocations.get("TopRight"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                    Door newDoorTopRight = new Door(world, "TopRight", init.roomList.get(roomIndex).doorLocations.get("TopRight"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, false, false);
                     newDoorTopRight.createDoor();
                     init.roomList.get(roomIndex).doorArrayMap.put("TopRight", newDoorTopRight);
                     init.roomList.get(roomIndex).doors.add(newDoorTopRight);
@@ -1166,7 +1166,7 @@ for (int i = 0; i < layerSize; i++) {
             if (!startingRoom) {
                 if (doorTop <= 1 && ((nextDirection == 1 || doorDirection == 3))) {
 
-                    Door newDoorTopRight = new Door(world, "TopRight", init.roomList.get(roomIndex).doorLocations.get("TopRight"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                    Door newDoorTopRight = new Door(world, "TopRight", init.roomList.get(roomIndex).doorLocations.get("TopRight"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, false, false);
                     newDoorTopRight.createDoor();
                     init.roomList.get(roomIndex).doorArrayMap.put("TopRight", newDoorTopRight);
                     init.roomList.get(roomIndex).doors.add(newDoorTopRight);
@@ -1187,7 +1187,7 @@ for (int i = 0; i < layerSize; i++) {
             if (!startingRoom) {
                 if (doorLeft <= 1 && ((nextDirection == 4 || doorDirection == 2))) {
 
-                    Door newDoorLeftUpper = new Door(world, "UpperLeft", init.roomList.get(roomIndex).doorLocations.get("UpperLeft"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                    Door newDoorLeftUpper = new Door(world, "UpperLeft", init.roomList.get(roomIndex).doorLocations.get("UpperLeft"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, true, true);
                     newDoorLeftUpper.createDoor();
                     init.roomList.get(roomIndex).doorArrayMap.put("UpperLeft", newDoorLeftUpper);
                     init.roomList.get(roomIndex).doors.add(newDoorLeftUpper);
@@ -1209,7 +1209,7 @@ for (int i = 0; i < layerSize; i++) {
             if (!startingRoom) {
                 if (doorLeft <= 1 && ((nextDirection == 4 || doorDirection == 2))) {
 
-                    Door newDoorLeftUpper = new Door(world, "UpperLeft", init.roomList.get(roomIndex).doorLocations.get("UpperLeft"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                    Door newDoorLeftUpper = new Door(world, "UpperLeft", init.roomList.get(roomIndex).doorLocations.get("UpperLeft"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, true, true);
                     newDoorLeftUpper.createDoor();
                     init.roomList.get(roomIndex).doorArrayMap.put("UpperLeft", newDoorLeftUpper);
                     init.roomList.get(roomIndex).doors.add(newDoorLeftUpper);
@@ -1231,7 +1231,7 @@ for (int i = 0; i < layerSize; i++) {
             if (!startingRoom) {
                 if (doorLeft <= 1 && ((nextDirection == 4 || doorDirection == 2))) {
 
-                    Door newDoorLeftLower = new Door(world, "LowerLeft", init.roomList.get(roomIndex).doorLocations.get("LowerLeft"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                    Door newDoorLeftLower = new Door(world, "LowerLeft", init.roomList.get(roomIndex).doorLocations.get("LowerLeft"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, true, false);
                     newDoorLeftLower.createDoor();
                     init.roomList.get(roomIndex).doorArrayMap.put("LowerLeft", newDoorLeftLower);
                     init.roomList.get(roomIndex).doors.add(newDoorLeftLower);
@@ -1253,7 +1253,7 @@ for (int i = 0; i < layerSize; i++) {
             if (!startingRoom) {
                 if (doorLeft <= 1 && ((nextDirection == 4 || doorDirection == 2))) {
 
-                    Door newDoorLeftLower = new Door(world, "LowerLeft", init.roomList.get(roomIndex).doorLocations.get("LowerLeft"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                    Door newDoorLeftLower = new Door(world, "LowerLeft", init.roomList.get(roomIndex).doorLocations.get("LowerLeft"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, true, false);
                     newDoorLeftLower.createDoor();
                     init.roomList.get(roomIndex).doorArrayMap.put("LowerLeft", newDoorLeftLower);
                     init.roomList.get(roomIndex).doors.add(newDoorLeftLower);
@@ -1274,7 +1274,7 @@ for (int i = 0; i < layerSize; i++) {
             if (!startingRoom) {
                 if (doorRight <= 1 && ((nextDirection == 2 || doorDirection == 4))) {
 
-                    Door newDoorRightUpper = new Door(world, "UpperRight", init.roomList.get(roomIndex).doorLocations.get("UpperRight"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                    Door newDoorRightUpper = new Door(world, "UpperRight", init.roomList.get(roomIndex).doorLocations.get("UpperRight"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, true, true);
                     newDoorRightUpper.createDoor();
                     init.roomList.get(roomIndex).doorArrayMap.put("UpperRight", newDoorRightUpper);
                     init.roomList.get(roomIndex).doors.add(newDoorRightUpper);
@@ -1295,7 +1295,7 @@ for (int i = 0; i < layerSize; i++) {
             if (!startingRoom) {
                 if (doorRight <= 1 && ((nextDirection == 2 || doorDirection == 4))) {
 
-                    Door newDoorRightUpper = new Door(world, "UpperRight", init.roomList.get(roomIndex).doorLocations.get("UpperRight"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                    Door newDoorRightUpper = new Door(world, "UpperRight", init.roomList.get(roomIndex).doorLocations.get("UpperRight"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, true, true);
                     newDoorRightUpper.createDoor();
                     init.roomList.get(roomIndex).doorArrayMap.put("UpperRight", newDoorRightUpper);
                     init.roomList.get(roomIndex).doors.add(newDoorRightUpper);
@@ -1316,7 +1316,7 @@ for (int i = 0; i < layerSize; i++) {
             if (!startingRoom) {
                 if (doorRight <= 2 && ((nextDirection == 2 || doorDirection == 4))) {
 
-                    Door newDoorRightLower = new Door(world, "LowerRight", init.roomList.get(roomIndex).doorLocations.get("LowerRight"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                    Door newDoorRightLower = new Door(world, "LowerRight", init.roomList.get(roomIndex).doorLocations.get("LowerRight"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, true, false);
                     newDoorRightLower.createDoor();
                     init.roomList.get(roomIndex).doorArrayMap.put("LowerRight", newDoorRightLower);
                     init.roomList.get(roomIndex).doors.add(newDoorRightLower);
@@ -1337,7 +1337,7 @@ for (int i = 0; i < layerSize; i++) {
             if (!startingRoom) {
                 if (doorRight <= 2 && ((nextDirection == 2 || doorDirection == 4))) {
 
-                    Door newDoorRightLower = new Door(world, "LowerRight", init.roomList.get(roomIndex).doorLocations.get("LowerRight"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                    Door newDoorRightLower = new Door(world, "LowerRight", init.roomList.get(roomIndex).doorLocations.get("LowerRight"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, true, false);
                     newDoorRightLower.createDoor();
                     init.roomList.get(roomIndex).doorArrayMap.put("LowerRight", newDoorRightLower);
                     init.roomList.get(roomIndex).doors.add(newDoorRightLower);
@@ -1358,7 +1358,7 @@ for (int i = 0; i < layerSize; i++) {
             if (!startingRoom) {
                 if (doorBottom <= 1 && ((nextDirection == 3 || doorDirection == 1))) {
 
-                    Door newDoorBottomLeft = new Door(world, "BottomLeft", init.roomList.get(roomIndex).doorLocations.get("BottomLeft"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                    Door newDoorBottomLeft = new Door(world, "BottomLeft", init.roomList.get(roomIndex).doorLocations.get("BottomLeft"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, false, true);
                     newDoorBottomLeft.createDoor();
                     init.roomList.get(roomIndex).doorArrayMap.put("BottomLeft", newDoorBottomLeft);
                     init.roomList.get(roomIndex).doors.add(newDoorBottomLeft);
@@ -1379,7 +1379,7 @@ for (int i = 0; i < layerSize; i++) {
             if (!startingRoom) {
                 if (doorBottom <= 1 && ((nextDirection == 3 || doorDirection == 1))) {
 
-                    Door newDoorBottomLeft = new Door(world, "BottomLeft", init.roomList.get(roomIndex).doorLocations.get("BottomLeft"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                    Door newDoorBottomLeft = new Door(world, "BottomLeft", init.roomList.get(roomIndex).doorLocations.get("BottomLeft"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, false, true);
                     newDoorBottomLeft.createDoor();
                     init.roomList.get(roomIndex).doorArrayMap.put("BottomLeft", newDoorBottomLeft);
                     init.roomList.get(roomIndex).doors.add(newDoorBottomLeft);
@@ -1400,7 +1400,7 @@ for (int i = 0; i < layerSize; i++) {
             if (!startingRoom) {
                 if (doorBottom <= 1 && (nextDirection == 3 || doorDirection == 1)) {
 
-                    Door newDoorBottomRight = new Door(world, "BottomRight", init.roomList.get(roomIndex).doorLocations.get("BottomRight"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                    Door newDoorBottomRight = new Door(world, "BottomRight", init.roomList.get(roomIndex).doorLocations.get("BottomRight"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, false, false);
                     newDoorBottomRight.createDoor();
                     init.roomList.get(roomIndex).doorArrayMap.put("BottomRight", newDoorBottomRight);
                     init.roomList.get(roomIndex).doors.add(newDoorBottomRight);
@@ -1421,7 +1421,7 @@ for (int i = 0; i < layerSize; i++) {
             if (!startingRoom) {
                 if (doorBottom <= 1 && (nextDirection == 3 || doorDirection == 1)) {
 
-                    Door newDoorBottomRight = new Door(world, "BottomRight", init.roomList.get(roomIndex).doorLocations.get("BottomRight"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                    Door newDoorBottomRight = new Door(world, "BottomRight", init.roomList.get(roomIndex).doorLocations.get("BottomRight"), ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, false, false);
                     newDoorBottomRight.createDoor();
                     init.roomList.get(roomIndex).doorArrayMap.put("BottomRight", newDoorBottomRight);
                     init.roomList.get(roomIndex).doors.add(newDoorBottomRight);
@@ -1790,6 +1790,8 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.middleFloorTile;
             Column col7 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,7);
             col7.createColumnBase();
+            Column colLower = new Column(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 70);
+            colLower.createColumnBaseLower();
             break;
         case "fcol8":
             currentCell = init.cr.middleFloorTile;

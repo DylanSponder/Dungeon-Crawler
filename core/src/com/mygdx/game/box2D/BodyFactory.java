@@ -37,11 +37,11 @@ public class BodyFactory {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(x + 8, y + 2.5f);
+        bodyDef.position.set(x + 8, y + 2.02f);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(8, 1.47f);
+        shape.setAsBox(8, 1.95f);
         body.createFixture(shape, 1.0f);
         shape.dispose();
         return body;
@@ -61,20 +61,30 @@ public class BodyFactory {
         return body;
     }
 
-    public Body createDoorBody(World world, float x, float y) {
+    public Body createDoorBody(World world, float x, float y, boolean upDown) {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(x + 8, y + 8);
+        if (upDown) {
+            bodyDef.position.set(x + 8, y);
+
+        } else {
+            bodyDef.position.set(x + 16, y + 8);
+        }
+
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         body.setUserData("Door");
         return body;
     }
 
-    public Fixture createDoorHitbox(Body body) {
+    public Fixture createDoorHitbox(Body body, boolean upDown) {
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(8, 8);
+        if (upDown) {
+            shape.setAsBox(8, 16);
+        } else {
+            shape.setAsBox(16, 8);
+        }
         Fixture fixture = body.createFixture(shape, 1.0f);
         shape.dispose();
         fixture.setSensor(true);

@@ -806,6 +806,10 @@ public class GameContactListener implements ContactListener {
                             if (d.doorBody == collider.getBody()) {
                                 if (!d.locked) {
                                     d.open = true;
+                                    if (collideeStr == "Player") {
+                                        player.touchingDoor = true;
+
+                                    }
                                 }
                             }
                         }
@@ -818,6 +822,10 @@ public class GameContactListener implements ContactListener {
                             if (d.doorBody == collider.getBody()) {
                                 if (!d.locked) {
                                     d.open = true;
+                                    if (colliderStr == "Player") {
+                                        player.touchingDoor = true;
+
+                                    }
                                 }
                             }
                         }
@@ -947,7 +955,7 @@ public class GameContactListener implements ContactListener {
                         }
                     }
                 }
-        }
+            }
 
         if (collider.getBody().getUserData().toString().startsWith("Room")) {
             if (collidee.getBody().getUserData() == "Player") {
@@ -969,16 +977,17 @@ public class GameContactListener implements ContactListener {
                     for (Door d : r.doors) {
                         if (d.doorBody == collider.getBody()) {
                             d.open = false;
+                            player.touchingDoor = false;
                         }
                     }
                 }
-
             }
             if (collidee.getBody().getUserData() == "Door"){
                 for (Room r : init.roomList) {
                     for (Door d : r.doors) {
                         if (d.doorBody == collider.getBody()) {
                             d.open = false;
+                            player.touchingDoor = false;
                         }
                     }
                 }
@@ -988,7 +997,7 @@ public class GameContactListener implements ContactListener {
         if (collider.getBody().getUserData() == "Door" && collidee.getBody().getUserData() == "Player"
                 || (collider.getBody().getUserData() == "Door" && collidee.getBody().getUserData() == "Door")) {
             //player must be touching a room but not a door
-            if (collidee.getBody().getUserData() == "Player" && player.touchingRoom) {
+            if (collidee.getBody().getUserData() == "Player" && player.touchingRoom && player.touchingDoor) {
                 if (player.currentRoom != 0) {
                     if (init.roomList.get(player.currentRoom).enemyCounter != 0) {
                         init.roomList.get(player.currentRoom).lockAllDoors(world, init.roomList.get(player.currentRoom), true);
