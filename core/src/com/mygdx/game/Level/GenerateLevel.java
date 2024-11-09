@@ -1535,7 +1535,8 @@ for (int i = 0; i < layerSize; i++) {
             break;
         case "pot":
             currentCell = init.cr.middleFloorTile;
-            Pot p = new Pot(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 1);
+            int rand = Random.randomInt(9,1);
+            Pot p = new Pot(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, rand);
             pots.add(p);
             break;
         case "pot2":
@@ -1752,10 +1753,34 @@ for (int i = 0; i < layerSize; i++) {
             twfirecol10.createFire(new Color(0.25f,0.20f,0,0.75f),60);
             fires.add(twfirecol10);
             break;
+        case "fcolIo":
+            currentCell = init.cr.middleFloorTile;
+            Column colIo = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16,1);
+            colIo.createColumnTop(false);
+            Column colIoBase = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,7);
+            colIoBase.createColumnBase();
+            Column colIoBaseLower = new Column(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 70);
+            colIoBaseLower.createColumnBaseLower();
+            break;
+        case "fcolDo":
+            currentCell = init.cr.middleFloorTile;
+            Column colDo = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16,11);
+            colDo.createColumnTop(false);
+            Column colDoBase = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,7);
+            colDoBase.createColumnBase();
+            Column colDoBaseLower = new Column(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 70);
+            colDoBaseLower.createColumnBaseLower();
+            break;
+        case "fcolTu":
+            currentCell = init.cr.middleFloorTile;
+            Column colTu = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16,10);
+            colTu.createColumnTop(false);
+            Column colTuBase = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,7);
+            colTuBase.createColumnBase();
+            Column colTuBaseLower = new Column(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 70);
+            colTuBaseLower.createColumnBaseLower();
+            break;
 
-        //TODO finish. string splitting an option to get column downward offset e.g col16 for 6 y-offset
-        //TODO: OR we can grab the previous columns in columns and check to see if it col4,5 or 6, and keep checking
-        //TODO: until we hit a col1, 2 or 3. Then simply x 6 to get the total offset 'naturally' - lower overhead to map making
         case "fcol1":
             currentCell = init.cr.middleFloorTile;
             Column col1 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,1);

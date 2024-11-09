@@ -391,6 +391,19 @@ public class RenderRules {
                                     index++;
                                     break;
                                     //columns
+                                //preset columns
+                                case "coldo":
+                                    drawableLevelLayer.add(index, "fcolDo");
+                                    index++;
+                                    break;
+                                case "colio":
+                                    drawableLevelLayer.add(index, "fcolIo");
+                                    index++;
+                                    break;
+                                case "coltu":
+                                    drawableLevelLayer.add(index, "fcolTu");
+                                    index++;
+                                    break;
                                 case "col1":
                                     drawableLevelLayer.add(index, "fcol1");
                                     index++;
