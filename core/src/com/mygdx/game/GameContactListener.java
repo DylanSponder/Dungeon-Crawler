@@ -52,9 +52,12 @@ public class GameContactListener implements ContactListener {
                                     //tx.potBreaking.setVolume(100,0.05f);
                                     brokenPots.add(p);
                                     Sound potSmash = tx.potBreaking;
-                                    potSmash.setVolume(potSmash.play(),0.001f);
-                                    float randy = Random.randomFloat(0.8f,0.7f);
-                                    potSmash.setPitch(potSmash.play(),randy);
+                                    long id = potSmash.play();
+                                    float randall = Random.randomFloat(8.5f,6.5f);
+
+                                    potSmash.setPitch(id,randall/10);
+                                    potSmash.setVolume(id,0.1f);
+                                    //potSmash.dispose();
                                 }
                             } else {
                                     final CreateAssets tx = CreateAssets.getInstance();
@@ -63,9 +66,13 @@ public class GameContactListener implements ContactListener {
                                     p.POT_HEALTH--;
                                     brokenPots.add(p);
                                     Sound potSmash = tx.potBreaking;
-                                    potSmash.setVolume(potSmash.play(),0.001f);
-                                    float randy = Random.randomFloat(0.8f,0.7f);
-                                    potSmash.setPitch(potSmash.play(),randy);
+                                    long id = potSmash.play();
+                                    float randall = Random.randomFloat(8.5f,6.5f);
+
+                                    potSmash.setPitch(id,randall/10);
+                                    potSmash.setVolume(id,0.1f);
+                                    System.out.println(randall);
+                                    //potSmash.dispose();
 
                             }
                         }

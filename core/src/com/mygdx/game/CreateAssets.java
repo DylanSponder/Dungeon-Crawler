@@ -405,7 +405,7 @@ public class CreateAssets {
         //level1Track.play();
         //level1Track.setLooping(true);
         level1Track.setVolume(0.2f);
-        potBreaking.setPitch(0,0.1f);
+        //potBreaking.setPitch(0,0.1f);
 
 
         roomFloorTexture.setRegion(96, 16, 16, 16);

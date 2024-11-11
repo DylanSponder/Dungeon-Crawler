@@ -96,13 +96,23 @@ public class GenerateLevel {
         int previousDoorDirection = 0;
         currentDoorDirection =  pd.pickInitialDirection(currentDoorDirection);
 
+
         /*
         path.add(0,0);
         path.add(1,1);
         path.add(2,1);
-        path.add(3,4);
-        path.add(4,4);
+        path.add(3,1);
+        path.add(4,1);
+        path.add(5,1);
+        path.add(6,1);
+        path.add(7,1);
+        path.add(8,1);
+        path.add(8,1);
+
          */
+        //path.add(9,1);
+        //path.add(10,1);
+        //path.add(11,1);
 
         for (int i = 0; i<numRooms*2; i++){
             if (i-1 != -1){
@@ -113,8 +123,10 @@ public class GenerateLevel {
             }
             currentDoorDirection =  pd.pickInitialDirection(currentDoorDirection);
 
-            path.add(i, currentDoorDirection);
-            path.add(i+1, currentDoorDirection);
+
+            //path.add(i,1);
+            path.add(i, 1);
+            path.add(i+1, 1);
             i++;
         }
 
@@ -143,6 +155,7 @@ public class GenerateLevel {
                     }
                     //assign the room its random index
                     newRoom.roomNum = random;
+                    System.out.println(random);
                 }
 
                 //determines which pre-gen room is placed next in sequence
@@ -1894,7 +1907,7 @@ for (int i = 0; i < layerSize; i++) {
             Column ped1fireb = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
             ped1fireb.createPedestal();
             Fire fireped1b = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, true, 0f, 2, false);
-            Color colorb = new Color(0,0,1f,0.7f);
+            Color colorb = new Color(0.3f,0,1f,0.7f);
             fireped1b.createFire(colorb, 10);
             fires.add(fireped1b);
             init.roomList.get(roomIndex).spawners.add(fireped1b);
