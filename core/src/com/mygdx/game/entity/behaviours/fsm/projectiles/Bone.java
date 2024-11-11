@@ -68,7 +68,7 @@ public class Bone {
 
             this.boneBody.setLinearVelocity(this.outVector.x*vecMulti,this.outVector.y*vecMulti);
         } else {
-            this.vecMulti = MathUtils.random(30, 35);
+            this.vecMulti = MathUtils.random(30, 32);
 
             this.outVector =  this.orientationVector;
 

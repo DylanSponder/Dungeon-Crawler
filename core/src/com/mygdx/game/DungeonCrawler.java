@@ -258,7 +258,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//create the Box2D ray handler
 		rayHandler = new RayHandler(world);
-		rayHandler.setAmbientLight(0f, 0f, 0f, 0.010f);
+		rayHandler.setAmbientLight(0f, 0f, 0f, 0.013f);
 		if (debug) {
 			rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
 
@@ -1054,7 +1054,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			final CreateAssets tx = CreateAssets.getInstance();
 			//clear all assets and replace with background color
-			ScreenUtils.clear(1, 1, 1, 1);
+
+			ScreenUtils.clear(0.15f, 0, 0.4f, 1);
 
 			//update game physics, camera and held down inputs
 			update(Gdx.graphics.getDeltaTime());
@@ -1062,7 +1063,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			rayHandler.render();
 
 			//clear graphics
-			Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f);
+			Gdx.gl.glClearColor(0.15f, 0.1f, 0.40f, 1f);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 			//rayHandler.render();
@@ -1135,7 +1136,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 							if (rayResult && !s.resurrecting && f.active) {
 								//System.out.println("Resurrecting dead enemy");
 								Fire respawnFire = new Fire(world, rayHandler, s.skullX - 4, s.skullY - 8, false, 0f, 2, false);
-								respawnFire.createFire(new Color(0,0,1f,0.6f), 15);
+								respawnFire.createFire(new Color(0.3f,0,1f,0.6f), 15);
 								fires.add(respawnFire);
 								s.resurrecting = true;
 								Timer.schedule(new Timer.Task() {
@@ -1533,7 +1534,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 				if ((e.playerSighted && e.playerInRange)){
 					//System.out.println(Gdx.graphics.getDeltaTime());
-					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 150)){
+					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 130)){
 						e.timeSinceAlerted = 0f;
 						Vector2 vec1 = new Vector2(e.enemyBody.getPosition());
 						Vector2 vec2 = new Vector2(Player.playerBody.getPosition());

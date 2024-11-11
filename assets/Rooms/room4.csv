@@ -1,13 +1,13 @@
 tlw,tw,toru,tw,tw,tw,dtl,doortl,doortr,dtr,tw,tw,trw
 lw,f,f,fob1,f,f,fob1,fenemy,fenemy,f,f,fob1,dru
-dlu,fenemy,f,fpot,fenemy,f,fpot,f,f,f,fpot2,f,doorur
+dlu,fenemy,f,fpot,fenemy,f,fpot,f,f,f,fpot,f,doorur
 doorul,f,f,fob1,f,f,fob1,fob1,fpot,fob1,f,f,doorlr
 doorll,f,f,fob3,f,f,fob3,f,f,f,f,f,drl
 dll,fenemy,f,fob1,fenemy,f,fpot,f,f,f,f,f,rw
 lw,f,f,fob2,f,f,fob2,f,f,f,f,f,torr
 blw,bw,tord,bw,bw,bw,bw,trt,f,f,f,f,rw
 ,,,,,,,lw,fpot,fob3,f,f,rw
-,,,,,,,lw,f,f,fpot2,f,rw
+,,,,,,,lw,f,f,fpot,f,rw
 ,,,,,,,lw,fenemy,f,f,fob2,rw
 ,,,,,,,torl,f,fenemy,f,f,rw
 ,,,,,,,lw,f,f,f,f,rw

@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.mygdx.game.entity.behaviours.fsm.projectiles.Arrow;
@@ -47,12 +48,25 @@ public class GameContactListener implements ContactListener {
                                     p.POT_HEALTH--;
                                     p.POT_HEALTH--;
                                 if (p.POT_HEALTH <= 0) {
+                                    final CreateAssets tx = CreateAssets.getInstance();
+                                    //tx.potBreaking.setVolume(100,0.05f);
                                     brokenPots.add(p);
+                                    Sound potSmash = tx.potBreaking;
+                                    potSmash.setVolume(potSmash.play(),0.001f);
+                                    float randy = Random.randomFloat(0.8f,0.7f);
+                                    potSmash.setPitch(potSmash.play(),randy);
                                 }
                             } else {
+                                    final CreateAssets tx = CreateAssets.getInstance();
+                                    //tx.potBreaking.setVolume(100,0.05f);
                                     p.POT_HEALTH--;
                                     p.POT_HEALTH--;
                                     brokenPots.add(p);
+                                    Sound potSmash = tx.potBreaking;
+                                    potSmash.setVolume(potSmash.play(),0.001f);
+                                    float randy = Random.randomFloat(0.8f,0.7f);
+                                    potSmash.setPitch(potSmash.play(),randy);
+
                             }
                         }
                     }
@@ -970,7 +984,7 @@ public class GameContactListener implements ContactListener {
         if (collider.getBody().getUserData().toString().startsWith("Room")) {
             if (collidee.getBody().getUserData() == "Player") {
                 player.touchingRoom = false;
-                if (player.currentRoom <= 9){
+                if (player.currentRoom <= 9){ //TODO: Check for level progress before adding to current room
                         init.roomList.get(player.currentRoom).unlockDoor(world, init.roomList.get(player.currentRoom+1),false);
                 }
             }

@@ -44,6 +44,8 @@ public class CreateAssets {
     Texture columnsTextureSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Columns.png"));
     Texture potsSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Pots.png"));
     Music level1Track = Gdx.audio.newMusic(Gdx.files.internal("HellasDungeon/Music/Level1Track.mp3"));
+    public Sound potBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/potbreaking.mp3"));
+
     public Sound fireAmbient = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/Fire.mp3"));
 
     //Texture font = new Texture(Gdx.files.internal("HellasDungeon/Font/GreekAlphabet.png"));
@@ -403,6 +405,8 @@ public class CreateAssets {
         //level1Track.play();
         //level1Track.setLooping(true);
         level1Track.setVolume(0.2f);
+        potBreaking.setPitch(0,0.1f);
+
 
         roomFloorTexture.setRegion(96, 16, 16, 16);
         roomFloor2Texture.setRegion(256, 32, 16, 16);
