@@ -182,7 +182,7 @@ public class BodyFactory {
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         CircleShape shape = new CircleShape();
-        shape.setRadius(8.5f);
+        shape.setRadius(8f);
         body.createFixture(shape, 1.0f);
         shape.dispose();
         return body;

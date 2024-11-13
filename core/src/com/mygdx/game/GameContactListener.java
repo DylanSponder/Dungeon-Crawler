@@ -50,13 +50,9 @@ public class GameContactListener implements ContactListener {
                                 if (p.POT_HEALTH <= 0) {
                                     final CreateAssets tx = CreateAssets.getInstance();
                                     //tx.potBreaking.setVolume(100,0.05f);
-                                    brokenPots.add(p);
-                                    Sound potSmash = tx.potBreaking;
-                                    long id = potSmash.play();
-                                    float randall = Random.randomFloat(8.5f,6.5f);
 
-                                    potSmash.setPitch(id,randall/10);
-                                    potSmash.setVolume(id,0.1f);
+                                    soundController.playSound("Pot",6,5,0.1f);
+                                    brokenPots.add(p);
                                     //potSmash.dispose();
                                 }
                             } else {
@@ -64,14 +60,9 @@ public class GameContactListener implements ContactListener {
                                     //tx.potBreaking.setVolume(100,0.05f);
                                     p.POT_HEALTH--;
                                     p.POT_HEALTH--;
-                                    brokenPots.add(p);
-                                    Sound potSmash = tx.potBreaking;
-                                    long id = potSmash.play();
-                                    float randall = Random.randomFloat(8.5f,6.5f);
 
-                                    potSmash.setPitch(id,randall/10);
-                                    potSmash.setVolume(id,0.1f);
-                                    System.out.println(randall);
+                                    soundController.playSound("Pot",6,5,0.1f);
+                                    brokenPots.add(p);
                                     //potSmash.dispose();
 
                             }
@@ -290,6 +281,7 @@ public class GameContactListener implements ContactListener {
                             s.SKULL_HEALTH--;
                             if (s.SKULL_HEALTH <= 0) {
                                 brokenSkulls.add(s);
+                                soundController.playSound("Skull",7f,6f,0.1f);
                             }
                         }
                     }

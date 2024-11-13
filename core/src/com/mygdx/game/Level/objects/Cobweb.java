@@ -16,17 +16,19 @@ public class Cobweb {
     public Body cobBody, innerCobBody;
     public Fixture cobHitbox;
     public boolean cobCreated;
+    public boolean impassable;
 
     // Cobwebs are solid and block entities
 // can be set alight and then burned/destroyed by fire arrows that collide with fire from columns and pedestals (torches?)
 // The Player and Enemies can send attacks through (if sighted)
 //
 
-    public Cobweb(World world, float x, float y) {
+    public Cobweb(World world, float x, float y, boolean impassable) {
         this.world = world;
         this.cobX = x;
         this.cobY = y;
         this.cobCreated = false;
+        this.impassable = impassable;
     }
 
     public Body createCobweb(ArrayMap<Body, Cobweb> cobArrayMap) {
@@ -36,12 +38,12 @@ public class Cobweb {
         this.cobBody = bodyFactory.createCobweb(world, cobX, cobY);
 
 
-        this.innerCobBody = bodyFactory.createImpassableCobweb(world, cobX, cobY);
-
+        if (this.impassable) {
+            this.innerCobBody = bodyFactory.createImpassableCobweb(world, cobX, cobY);
+            this.innerCobBody.setUserData("InnerCobweb");
+        }
 
         this.cobBody.setUserData("Cobweb");
-
-        this.innerCobBody.setUserData("InnerCobweb");
 
         cobArrayMap.put(cobBody, this);
 

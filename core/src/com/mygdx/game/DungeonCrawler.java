@@ -94,6 +94,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static final float DEFAULT_VIEWPORT_WIDTH = 300f;
 	public static HUD hud;
 	public static Music roomClear, swordSlash, level1Music;
+	public static SoundController soundController;
 	public static RayHandler rayHandler;
 	private PointLight playerTorch;
 	private BitmapFont.BitmapFontData bmfData;
@@ -114,6 +115,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		world = new World(new Vector2(0, 0f), false);
 		assetManager = new AssetManager();
+		soundController = new SoundController();
 		playerBatch = new SpriteBatch();
 		hudBatch = new SpriteBatch();
 		tutoBatch = new SpriteBatch();
@@ -263,7 +265,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//create the Box2D ray handler
 		rayHandler = new RayHandler(world);
-		rayHandler.setAmbientLight(0f, 0f, 0f, 0.013f);
+		rayHandler.setAmbientLight(0f, 0f, 0f, 0.010f);
 		if (debug) {
 			rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
 
@@ -2264,7 +2266,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			camera.zoom = 0.6f;
 		}
 		else if (!debug){
-			camera.zoom = 1f;
+			camera.zoom = 0.8f;
 		}
 
 		//player.castRay();
