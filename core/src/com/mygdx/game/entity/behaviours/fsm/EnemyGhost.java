@@ -2,6 +2,7 @@ package com.mygdx.game.entity.behaviours.fsm;
 
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.StateMachine;
+import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.ai.steer.SteeringBehavior;
 import com.badlogic.gdx.ai.steer.behaviors.*;
 import com.badlogic.gdx.ai.steer.limiters.LinearAccelerationLimiter;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
+import com.mygdx.game.entity.utils.EnemyGhostBox2DSteeringEntity;
 import com.mygdx.game.entity.utils.EnemySkullBox2DSteeringEntity;
 import com.mygdx.game.entity.utils.EnemyBox2DRaycastCollisionDetector;
 import com.mygdx.game.level.objects.Text;
@@ -29,6 +31,7 @@ public class EnemyGhost extends Enemy {
     public int enemyID;
     public String facing;
     public boolean alive;
+    public EnemyGhostBox2DSteeringEntity enemyAI;
 
     public EnemyGhost(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
@@ -62,13 +65,16 @@ public class EnemyGhost extends Enemy {
 
         //enemyDetectionRadius.setSensor(true);
 
-        this.enemyAI = new EnemySkullBox2DSteeringEntity(enemyBody, 10);
+        this.enemyAI = new EnemyGhostBox2DSteeringEntity(enemyBody, 10);
         //playerDetectionRay = new EnemyBox2DSteeringEntity(enemyBody,10);
 
         this.stateMachine = new DefaultStateMachine<EnemyGhost, EnemyGhostState>(this, EnemyGhostState.WANDER);
         this.stateMachine.changeState(EnemyGhostState.WANDER);
         this.enemyBody.setUserData("Enemy");
+
         this.enemyHitbox.setUserData("EnemyGhost");
+
+        this.enemyHitbox.setSensor(true);
 
         this.debug = false;
 /*
@@ -113,7 +119,7 @@ public class EnemyGhost extends Enemy {
  */
     }
 
-    public Wander<Vector2> wander(EnemySkullBox2DSteeringEntity owner, float wanderOrientation) {
+    public Wander<Vector2> wander(Steerable<Vector2> owner, float wanderOrientation) {
         wanderSB = new Wander<Vector2>(owner)
                 .setFaceEnabled(false)
                 //.setAlignTolerance(0.001f)
@@ -177,7 +183,9 @@ public class EnemyGhost extends Enemy {
 
                         boolean sighted = false;
 
-                        if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody && fixture.getBody().getUserData() != "Skull" && fixture.getBody().getUserData() != "Fire") {
+                        if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody && fixture.getBody().getUserData() != "Skull" && fixture.getBody().getUserData() != "Fire"
+                                && fixture.getBody().getUserData() != "Candle"
+                                && fixture.getBody().getUserData() != "Cobweb") {
                             sightCounter = 0;
                             playerSighted = false;
                             return 0;

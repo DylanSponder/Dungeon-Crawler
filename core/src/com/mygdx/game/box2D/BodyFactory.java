@@ -51,11 +51,11 @@ public class BodyFactory {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(x + 8, y + 8.5f);
+        bodyDef.position.set(x + 8, y + 8.02f);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(8, 7.5f);
+        shape.setAsBox(8, 7.95f);
         body.createFixture(shape, 1.0f);
         shape.dispose();
         return body;
@@ -219,6 +219,24 @@ public class BodyFactory {
         return boneBody;
     }
 
+    public Body createWebBody(World world, Body web, float x, float y, float angle) {
+        Body webBody;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(web.getPosition().x, web.getPosition().y);
+        bodyDef.angle = angle;
+        bodyDef.fixedRotation = true;
+        webBody = world.createBody(bodyDef);
+        CircleShape webShape = new CircleShape();
+        //webShape.setAsBox(8f, 8f);
+        webShape.setRadius(8f);
+        Fixture webHitbox = webBody.createFixture(webShape, 0f);
+        webShape.dispose();
+        webHitbox.setUserData("Bone");
+        webHitbox.setSensor(true);
+        return webBody;
+    }
+
     public Body createSwordBody(World world, Body player, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
@@ -276,6 +294,7 @@ public class BodyFactory {
         body = world.createBody(bodyDef);
         return body;
     }
+
 
     public Body createSkullBody(World world, float x, float y) {
         Body body;

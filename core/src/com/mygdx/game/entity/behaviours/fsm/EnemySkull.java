@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
+import com.mygdx.game.entity.utils.EnemyGhostBox2DSteeringEntity;
 import com.mygdx.game.entity.utils.EnemySkullBox2DSteeringEntity;
 import com.mygdx.game.entity.utils.EnemyBox2DRaycastCollisionDetector;
 import com.mygdx.game.level.objects.Text;
@@ -28,6 +29,7 @@ import static com.mygdx.game.DungeonCrawler.*;
 public class EnemySkull extends Enemy {
     private StateMachine<EnemySkull, EnemySkullState> stateMachine;
     public int enemyID;
+    public EnemySkullBox2DSteeringEntity enemyAI;
 
     public EnemySkull(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
@@ -53,7 +55,7 @@ public class EnemySkull extends Enemy {
         this.enemyBody = bodyFactory.createSimpleBody(world, x, y);
         this.enemyDetectionBody = bodyFactory.createSimpleBody(world, x, y);
 
-        this.enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 7f);
+        this.enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 6f);
 
         this.enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 120f);
 
@@ -192,7 +194,9 @@ public class EnemySkull extends Enemy {
 
                         boolean sighted = false;
 
-                        if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody && fixture.getBody().getUserData() != "Skull" && fixture.getBody().getUserData() != "Fire") {
+                        if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody && fixture.getBody().getUserData() != "Skull" && fixture.getBody().getUserData() != "Fire"
+                                && fixture.getBody().getUserData() != "Candle"
+                                && fixture.getBody().getUserData() != "Cobweb") {
                             //sighted = true;
                             //System.out.println(fixture.getBody().getUserData());
                             sightCounter = 0;

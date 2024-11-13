@@ -23,7 +23,7 @@ public class Enemy {
     public Body enemyBody, enemyDetectionBody, enemyPlayerDetectionBody;
     public Fixture enemyHitbox;
     public Fixture enemyDetectionRadius;
-    public EnemySkullBox2DSteeringEntity enemyAI;
+
     //public PlayerBox2DRaycastCollisionDetector playerDetectionRay;
     public ShapeRenderer shapeRenderer;
     public Vector2 tmp = new Vector2();

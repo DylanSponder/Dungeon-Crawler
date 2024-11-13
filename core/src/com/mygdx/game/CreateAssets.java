@@ -32,6 +32,7 @@ public class CreateAssets {
     Texture shieldTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Shield/Sprite.png"));
     Texture enemySkullTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySkull/SpriteSheet.png"));
     Texture enemySpiderTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySpider/SpriteSheet.png"));
+    Texture enemyGhostTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemyGhost/SpriteSheet.png"));
     Texture enemyEyeTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Eye/Eye.png"));
     Texture shopkeeperTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/OldMan3/SpriteSheet.png"));
     Texture tutorialTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Tuto.png"));
@@ -43,7 +44,12 @@ public class CreateAssets {
     Texture arrowAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Bow/ArrowAnimation.png"));
     Texture columnsTextureSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Columns.png"));
     Texture potsSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Pots.png"));
-    Music level1Track = Gdx.audio.newMusic(Gdx.files.internal("HellasDungeon/Music/Level1Track.mp3"));
+    Texture webTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySpider/WebSpit.png"));
+
+
+
+            Music level1Track = Gdx.audio.newMusic(Gdx.files.internal("HellasDungeon/Music/Level1Track.mp3"));
+
     public Sound potBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/potbreaking.mp3"));
 
     public Sound fireAmbient = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/Fire.mp3"));
@@ -101,6 +107,7 @@ public class CreateAssets {
     public TextureRegion amphoraTexture = new TextureRegion(potsSheet, 0,0,16,16);
     public TextureRegion amphora2Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion damagedAmphoraTexture = new TextureRegion(roomBackground, 0,0,16,16);
+
 
     public TextureRegion cobwebTexture = new TextureRegion(roomBackground,0,0,16,16);
 
@@ -191,6 +198,7 @@ public class CreateAssets {
     public TextureRegion ruinedRoofTexture = new TextureRegion(roomBackground,0,0,64,96);
 
     public TextureRegion skullTexture = new TextureRegion(roomBackground, 0,0,16,16);
+
     public TextureRegion boneTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion tutoTexture = new TextureRegion(tutorialTexture, 0,0,87,57);
 
@@ -262,16 +270,16 @@ public class CreateAssets {
     Sprite enemySkullSprite = new Sprite(enemySkullTexture,0,0,16,16);
     Sprite enemySkullAlertedSprite = new Sprite(enemySkullTexture,16,0,16,16);
 
+
     Sprite enemySpiderUpSprite = new Sprite(enemySpiderTexture,0,0,16,16);
     Sprite enemySpiderDownSprite = new Sprite(enemySpiderTexture,16,0,16,16);
     Sprite enemySpiderLeftSprite = new Sprite(enemySpiderTexture,32,0,16,16);
     Sprite enemySpiderRightSprite = new Sprite(enemySpiderTexture,48,0,16,16);
 
-    Sprite enemyGhostUpSprite = new Sprite(enemySpiderTexture,0,0,16,16);
-    Sprite enemyGhostDownSprite = new Sprite(enemySpiderTexture,16,0,16,16);
-    Sprite enemyGhostLeftSprite = new Sprite(enemySpiderTexture,32,0,16,16);
-    Sprite enemyGhostRightSprite = new Sprite(enemySpiderTexture,48,0,16,16);
-
+    Sprite enemyGhostDownSprite = new Sprite(enemyGhostTexture,0,0,16,16);
+    Sprite enemyGhostUpSprite = new Sprite(enemyGhostTexture,16,0,16,16);
+    Sprite enemyGhostLeftSprite = new Sprite(enemyGhostTexture,32,0,16,16);
+    Sprite enemyGhostRightSprite = new Sprite(enemyGhostTexture,48,0,16,16);
 
     Sprite enemyEyeSprite = new Sprite(enemyEyeTexture,0,0,16,16);
 
@@ -288,6 +296,7 @@ public class CreateAssets {
     Sprite boneSprite = new Sprite(boneTexture, 192,64, 16, 16);
 
     public Sprite cobwebSprite = new Sprite(cobwebTexture,351,0,16,16);
+    public Sprite webSprite = new Sprite(roomBackground,368,0,16,16);
 
     Sprite obstacle1Sprite = new Sprite(obstacle1Texture,80,48,16,16);
     Sprite obstacle2Sprite = new Sprite(obstacle2Texture,96,48,16,16);

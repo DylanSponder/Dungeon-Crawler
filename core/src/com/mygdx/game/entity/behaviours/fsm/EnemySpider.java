@@ -20,6 +20,7 @@ import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.utils.EnemySkullBox2DSteeringEntity;
 import com.mygdx.game.entity.utils.EnemyBox2DRaycastCollisionDetector;
+import com.mygdx.game.entity.utils.EnemySpiderBox2DSteeringEntity;
 import com.mygdx.game.level.objects.Text;
 
 import static com.mygdx.game.DungeonCrawler.*;
@@ -29,6 +30,8 @@ public class EnemySpider extends Enemy {
     public int enemyID;
     public String facing;
     public boolean alive;
+    public EnemySpiderBox2DSteeringEntity enemyAI;
+    public float exitAngle;
 
     public EnemySpider(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
@@ -56,13 +59,13 @@ public class EnemySpider extends Enemy {
         this.enemyBody = bodyFactory.createSimpleBody(world, x, y);
         this.enemyDetectionBody = bodyFactory.createSimpleBody(world, x, y);
 
-        this.enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 7f);
+        this.enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 6f);
 
         this.enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 120f);
 
         //enemyDetectionRadius.setSensor(true);
 
-        this.enemyAI = new EnemySkullBox2DSteeringEntity(enemyBody, 10);
+        this.enemyAI = new EnemySpiderBox2DSteeringEntity(enemyBody, 10);
         //playerDetectionRay = new EnemyBox2DSteeringEntity(enemyBody,10);
 
         this.stateMachine = new DefaultStateMachine<EnemySpider, EnemySpiderState>(this, EnemySpiderState.WANDER);
@@ -113,7 +116,7 @@ public class EnemySpider extends Enemy {
  */
     }
 
-    public Wander<Vector2> wander(EnemySkullBox2DSteeringEntity owner, float wanderOrientation) {
+    public Wander<Vector2> wander(EnemySpiderBox2DSteeringEntity owner, float wanderOrientation) {
         wanderSB = new Wander<Vector2>(owner)
                 .setFaceEnabled(false)
                 //.setAlignTolerance(0.001f)
@@ -177,7 +180,10 @@ public class EnemySpider extends Enemy {
 
                         boolean sighted = false;
 
-                        if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody && fixture.getBody().getUserData() != "Skull" && fixture.getBody().getUserData() != "Fire") {
+                        if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody && fixture.getBody().getUserData() != "Skull" && fixture.getBody().getUserData() != "Fire"
+                                && fixture.getBody().getUserData() != "Candle"
+                                && fixture.getBody().getUserData() != "Cobweb"
+                        ) {
                             sightCounter = 0;
                             playerSighted = false;
                             return 0;

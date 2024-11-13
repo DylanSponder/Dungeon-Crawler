@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.*;
 import com.mygdx.game.Random;
 import com.mygdx.game.box2D.BodyFactory;
+import com.mygdx.game.entity.behaviours.fsm.EnemyGhost;
 import com.mygdx.game.entity.behaviours.fsm.EnemySkull;
 import com.mygdx.game.entity.behaviours.fsm.EnemySpider;
 import com.mygdx.game.entity.behaviours.fsm.Shopkeeper;
@@ -154,7 +155,7 @@ public class GenerateLevel {
                         random = Random.randomInt(6, 1);
                     }
                     //assign the room its random index
-                    newRoom.roomNum = random;
+                    newRoom.roomNum = 1;
                     System.out.println(random);
                 }
 
@@ -1560,7 +1561,7 @@ for (int i = 0; i < layerSize; i++) {
 
         case "cobweb":
             currentCell = init.cr.middleFloorTile;
-            Cobweb c1 = new Cobweb(world,((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            Cobweb c1 = new Cobweb(world,((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, true);
             cobwebs.add(c1);
             break;
 
@@ -1584,6 +1585,16 @@ for (int i = 0; i < layerSize; i++) {
             enemies.add(enemy2);
             enemy2.room = roomIndex;
             DungeonCrawler.enemySpiders.add(enemy2);
+            break;
+        case "enemyGhost":
+            currentCell = init.cr.middleFloorTile;
+            EnemyGhost enemy3 = new EnemyGhost(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            init.roomList.get(roomIndex).enemyCounter++;
+            init.roomList.get(roomIndex).enemyGhosts.add(enemy3);
+            enemy3.createEnemy(3);
+            enemies.add(enemy3);
+            enemy3.room = roomIndex;
+            DungeonCrawler.enemyGhosts.add(enemy3);
             break;
         case "shop":
             currentCell = init.cr.middleFloor3Tile;

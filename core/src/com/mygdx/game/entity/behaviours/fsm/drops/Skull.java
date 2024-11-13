@@ -53,7 +53,7 @@ public class Skull {
 
         BodyFactory bodyFactory = new BodyFactory();
 
-        //this.boneBody = bodyFactory.createSkullBody(DungeonCrawler.world,boneX,boneY);
+        //this.boneBody = bodyFactory.createSkullBody(DungeonCrawler.world,webX,boneY);
 
         this.rayCastable = false;
 

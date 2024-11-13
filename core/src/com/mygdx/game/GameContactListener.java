@@ -297,8 +297,8 @@ public class GameContactListener implements ContactListener {
             }
         }
 
-        if ((colliderStr == "Bone" && collidee.getUserData() != "Enemy" && collideeStr != "Bone" && collideeStr != "Sword" && !collideeStr.startsWith("Arrow") && !collideeStr.startsWith("Room"))
-                || (collideeStr == "Bone" && collider.getUserData() != "Enemy" && colliderStr != "Bone" && colliderStr != "Sword" && !colliderStr.startsWith("Arrow") && !colliderStr.startsWith("Room"))
+        if (((colliderStr == "Bone" || collideeStr == "Web") && collidee.getUserData() != "Enemy" && collideeStr != "Bone" && collideeStr != "Sword" && !collideeStr.startsWith("Arrow") && !collideeStr.startsWith("Room"))
+                || ((collideeStr == "Bone" || collideeStr == "Web") && collider.getUserData() != "Enemy" && colliderStr != "Bone" && colliderStr != "Sword" && !colliderStr.startsWith("Arrow") && !colliderStr.startsWith("Room"))
         ) {
 
             if ((((collideeStr == "Wall")
@@ -352,7 +352,64 @@ public class GameContactListener implements ContactListener {
                     }
                 }
 
-            } else if (collideeStr == "Bone" && colliderStr == "Player") {
+            }
+
+            if ((((collideeStr == "Wall")
+                    || collideeStr == "Shield")
+                    || collideeStr =="Door")
+                    && colliderStr =="Web") {
+                if (collideeStr == "Wall" || collideeStr == "Shield") {
+                    if (collidee.getBody().getUserData() == "Door") {
+                        for (Room r : init.roomList) {
+                            for (Door d : r.doors) {
+                                if (d.doorBody == collidee.getBody()) {
+                                    if (!d.open) {
+                                        if (!webBodiesCollected.contains(collider.getBody())) {
+                                            webBodiesCollected.add(collider.getBody());
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } else if (collideeStr == "Shield") {
+                        if (!boneBodiesCollided.contains(collider.getBody())) {
+                            boneBodiesCollided.add(collider.getBody());
+                        }
+                    }
+                }
+            }
+            else if ((((colliderStr == "Wall")
+                    || colliderStr == "Door")
+                    || colliderStr == "Shield")
+                    && collideeStr == "Web") {
+
+                if (colliderStr == "Wall" || colliderStr == "Shield") {
+
+                    if (!webBodiesCollected.contains(collidee.getBody())) {
+                        webBodiesCollected.add(collidee.getBody());
+                    } else {
+
+                    }
+                } else if (colliderStr == "Door") {
+                    for (Room r : init.roomList) {
+                        for (Door d : r.doors) {
+                            if (d.doorBody == collider.getBody()) {
+                                if (!d.open) {
+                                    if (!webBodiesCollected.contains(collidee.getBody())) {
+                                        webBodiesCollected.add(collidee.getBody());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+
+
+
+            else if (collideeStr == "Bone" && colliderStr == "Player") {
                 hud.healthBar.LoseHealth(0.5f);
                 if (collidee.getBody().getUserData() == "Bone") {
                     player.playerBody.applyLinearImpulse(collider.getBody().getLinearVelocity().x * 500, collider.getBody().getLinearVelocity().y * 500, 0, 0, true);
@@ -363,6 +420,22 @@ public class GameContactListener implements ContactListener {
 
             } else if (colliderStr == "Bone" && collideeStr == "Player") {
                 hud.healthBar.LoseHealth(0.5f);
+                player.playerBody.applyLinearImpulse(collidee.getBody().getLinearVelocity().x * 500, collidee.getBody().getLinearVelocity().y * 500, 0, 0, true);
+                if (!boneBodiesCollided.contains(collider.getBody())) {
+                    boneBodiesCollided.add(collider.getBody());
+                }
+            }
+            else if (collideeStr == "Web" && colliderStr == "Player") {
+               // hud.healthBar.LoseHealth(0.5f);
+                if (collidee.getBody().getUserData() == "Bone") {
+                    player.playerBody.applyLinearImpulse(collider.getBody().getLinearVelocity().x * 500, collider.getBody().getLinearVelocity().y * 500, 0, 0, true);
+                    if (!boneBodiesCollided.contains(collidee.getBody())) {
+                        boneBodiesCollided.add(collidee.getBody());
+                    }
+                }
+
+            } else if (colliderStr == "Web" && collideeStr == "Player") {
+              //  hud.healthBar.LoseHealth(0.5f);
                 player.playerBody.applyLinearImpulse(collidee.getBody().getLinearVelocity().x * 500, collidee.getBody().getLinearVelocity().y * 500, 0, 0, true);
                 if (!boneBodiesCollided.contains(collider.getBody())) {
                     boneBodiesCollided.add(collider.getBody());
@@ -397,12 +470,17 @@ public class GameContactListener implements ContactListener {
                 ) {
                     // System.out.println(colliderStr + " + " + collideeStr);
                     for (Enemy e : enemies) {
-                        for (EnemySkull e2 : enemySkulls) {
+                        for (EnemySkull e1 : enemySkulls) {
+                            if (e1.enemyBody == collider.getBody() || e1.enemyBody == collidee.getBody()) {
+                                e1.playerInRange = true;
+                            }
+                        }
+                        for (EnemySpider e2 : enemySpiders) {
                             if (e2.enemyBody == collider.getBody() || e2.enemyBody == collidee.getBody()) {
                                 e2.playerInRange = true;
                             }
                         }
-                        for (EnemySpider e3 : enemySpiders) {
+                        for (EnemyGhost e3 : enemyGhosts) {
                             if (e3.enemyBody == collider.getBody() || e3.enemyBody == collidee.getBody()) {
                                 e3.playerInRange = true;
                             }
@@ -574,6 +652,13 @@ public class GameContactListener implements ContactListener {
                                     break;
                                 }
                             }
+                        } else if (collidee.getUserData() == "EnemyGhost") {
+                            for (EnemyGhost e3 : enemyGhosts) {
+                                if (e3.enemyAI.getBody() == collidee.getBody()) {
+                                    e3.getStateMachine().changeState(EnemyGhostState.GO_TO_PLAYER);
+                                    break;
+                                }
+                            }
                         }
 
                         //TODO COPY FURTHER ENEMY CODE HERE
@@ -665,28 +750,42 @@ public class GameContactListener implements ContactListener {
                     break;
                 case "Player":
 
+                    if ((collideeStr == "Web")) {
+                        Cobweb web = new Cobweb(world, collider.getBody().getPosition().x - 8,collider.getBody().getPosition().y - 8, false);
+                        cobwebs.add(web);
+                        webBodiesCollected.add(collidee.getBody());
+                        break;
+                    }
+
                     if ((collideeStr == "Cobweb")) {
                         DungeonCrawler.PLAYER_SPEED_MULTI = 15f;
                         break;
                     }
 
-                    if (collidee.getBody().getUserData() == "Enemy" && collidee.getUserData() != "Proximity" && collidee.getUserData() == "Skull") {
+                    if (collidee.getBody().getUserData() == "Enemy" && collidee.getUserData() != "Proximity" && collidee.getUserData() == "EnemySkull") {
                         for (EnemySkull e : enemySkulls) {
                             if ((e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody())) {
                                 hud.healthBar.LoseHealth(0.5f);
                                 e.playerInRange = true;
                             }
                         }
-                    } else if (collidee.getBody().getUserData() == "Enemy" && collidee.getUserData() != "Proximity" && collidee.getUserData() == "Spider") {
+                    } else if (collidee.getBody().getUserData() == "Enemy" && collidee.getUserData() != "Proximity" && collidee.getUserData() == "EnemySpider") {
                         for (EnemySpider e : enemySpiders) {
                             if ((e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody())) {
                                 hud.healthBar.LoseHealth(0.5f);
                                 e.playerInRange = true;
                             }
                         }
-
-
                     }
+                    else if (collidee.getBody().getUserData() == "Enemy" && collidee.getUserData() != "Proximity" && collidee.getUserData() == "EnemyGhost") {
+                        for (EnemyGhost e : enemyGhosts) {
+                            if ((e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody())) {
+                                hud.healthBar.LoseHealth(0.5f);
+                                e.playerInRange = true;
+                            }
+                        }
+                    }
+
 
 
                     if (collidee.getBody().getUserData() == "Potion") {
@@ -877,6 +976,9 @@ public class GameContactListener implements ContactListener {
                     for (EnemySpider e2 : init.roomList.get(player.currentRoom).enemySpiders) {
                         e2.rayCastable = true;
                     }
+                    for (EnemyGhost e3 : init.roomList.get(player.currentRoom).enemyGhosts) {
+                        e3.rayCastable = true;
+                    }
                     player.touchingRoom = true;
                 }
                 if (init.roomList.get(player.currentRoom).isShop) {
@@ -959,6 +1061,13 @@ public class GameContactListener implements ContactListener {
             case "Cobweb":
                 if ((colliderAsString == "Player")) {
                     DungeonCrawler.PLAYER_SPEED_MULTI = 60f;
+                    for (Cobweb cob : cobwebs) {
+                        if (cob.cobBody == collidee.getBody()) {
+                            if (!cob.impassable) {
+                                burnedCobwebs.add(cob);
+                            }
+                        }
+                    }
                     break;
                 }
             default:
@@ -985,6 +1094,12 @@ public class GameContactListener implements ContactListener {
                             e.getStateMachine().changeState(EnemySpiderState.WANDER);
                         }
                     }
+                for (EnemyGhost e : enemyGhosts){
+                    if (e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody()){
+                        e.playerInRange = false;
+                        e.getStateMachine().changeState(EnemyGhostState.WANDER);
+                    }
+                }
                 }
             }
 

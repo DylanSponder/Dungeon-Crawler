@@ -32,6 +32,7 @@ import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.behaviours.fsm.projectiles.Arrow;
 import com.mygdx.game.entity.behaviours.fsm.projectiles.Bone;
 import com.mygdx.game.entity.behaviours.fsm.drops.Skull;
+import com.mygdx.game.entity.behaviours.fsm.projectiles.Web;
 import com.mygdx.game.level.objects.Tutorial;
 import com.mygdx.game.entity.behaviours.fsm.*;
 import com.mygdx.game.level.CreateCell;
@@ -41,7 +42,7 @@ import com.mygdx.game.level.InitLevel;
 
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch playerBatch, arrowBatch, enemySkullBatch, enemySpiderBatch, enemyGhostBatch, potBatch, hudBatch, tutoBatch, fontBatch, inventoryBatch;
-	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch, flameBatch, cobBatch, candleBatch;
+	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch, flameBatch, webBatch, cobBatch, candleBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch, roofBatch, columnBaseLowerBatch;
 	public static World world;
 	public static boolean debug;
@@ -53,22 +54,24 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private Fixture swordHitbox, arrowHitbox, shieldHitbox;
 	private Arrow arrow;
 	public static ArrayList<Arrow> arrows;
-	public static ArrayList<Body> arrowBodiesCollided, boneBodiesCollided, skullBodiesDestroyed, deadEnemyBodies;
+	public static ArrayList<Body> arrowBodiesCollided, boneBodiesCollided, skullBodiesDestroyed, deadEnemyBodies, webBodiesCollected;
 	public static ArrayMap<Body, Arrow> arrowArrayMap;
 	public static ArrayList<Enemy> enemies;
 	public ArrayMap<Body, Skull> skullArrayMap;
 	public static ArrayMap<Body, Bone> boneArrayMap;
+	public static ArrayMap<Body, Web> webArrayMap;
 	public ArrayMap<Body, Potion> potionArrayMap;
 	public ArrayMap<Body, Cobweb> cobArrayMap;
 	public ArrayMap<Body, Fire> respawnFireMap;
 	public ArrayMap<Body, Pot> potArrayMap;
-	public boolean reversedArrowMap, reversedSkullMap, reversedPotMap, reversedPotionMap, reversedRespawnFireMap, reversedBoneMap;
+	public boolean reversedArrowMap, reversedSkullMap, reversedPotMap, reversedPotionMap, reversedRespawnFireMap, reversedBoneMap, reversedWebMap;
 	public static ArrayList<EnemySkull> enemySkulls, dyingSkulls;
 	public static ArrayList<EnemySpider> enemySpiders, dyingSpiders;
 	public static ArrayList<EnemyGhost> enemyGhosts, dyingGhosts;
 	public static ArrayList<Skull> skulls, brokenSkulls;
 	public static ArrayList<Fire> extinguishedRespawnFires;
 	public static ArrayList<Bone> bones;
+	public static ArrayList<Web> webs;
 	public static ArrayList<Shopkeeper> shopkeepers;
 	public static ArrayList<Lock> locks;
 	public static ArrayList<Tutorial> tutorial;
@@ -120,6 +123,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		arrowBatch = new SpriteBatch();
 		skullBatch = new SpriteBatch();
 		boneBatch = new SpriteBatch();
+		webBatch = new SpriteBatch();
 		doorBatch = new SpriteBatch();
 		lockBatch = new SpriteBatch();
 		potBatch = new SpriteBatch();
@@ -153,6 +157,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		skulls = new ArrayList<>();
 		brokenSkulls = new ArrayList<>();
 		bones = new ArrayList<>();
+		webs = new ArrayList<>();
 		cobwebs = new ArrayList<>();
 		burnedCobwebs = new ArrayList<>();
 		shopkeepers = new ArrayList<>();
@@ -177,7 +182,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		Vector2 vec = new Vector2();
 		vec.x = PLAYER_X;
 		vec.y = PLAYER_Y;
-		PLAYER_SPEED_MULTI = 60f;
+		PLAYER_SPEED_MULTI = 50f;
 
 		//TODO Set player speed here so we can use dynamic speed adjustment e.g entering a cobweb
 
@@ -305,11 +310,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//playerTorch.setXray(true);
 
 		arrowBodiesCollided = new ArrayList<Body>();
+		webBodiesCollected = new ArrayList<Body>();
 		boneBodiesCollided = new ArrayList<Body>();
 		skullBodiesDestroyed = new ArrayList<Body>();
 		arrowArrayMap = new ArrayMap<Body, Arrow>();
 		skullArrayMap = new ArrayMap<Body, Skull>();
 		boneArrayMap = new ArrayMap<Body, Bone>();
+		webArrayMap = new ArrayMap<Body, Web>();
 		arrows = new ArrayList<Arrow>();
 		potionArrayMap = new ArrayMap<Body, Potion>();
 		respawnFireMap = new ArrayMap<Body, Fire>();
@@ -1225,7 +1232,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 					cobwebs.remove(cob);
 					cobArrayMap.removeKey(cob.cobBody);
 					world.destroyBody(cob.cobBody);
-					world.destroyBody(cob.innerCobBody);
+					if (cob.impassable) {
+						world.destroyBody(cob.innerCobBody);
+					}
 					cobIt.remove();
 				}
 			}
@@ -1345,9 +1354,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 					if (brokenPots.contains(pot)) {
 						//one in 20 chance to get a potion from a pot - subject to change (was 7)
 						int min = 1;
-						int max = 12;
+						int max = 15;
 						int potionChance = (int) (Math.random() * (max - min + 1)) + min;
-						if (potionChance == 12) {
+						if (potionChance == 15) {
 							//create potion object
 							Potion potion = new Potion(world, pot.potBody.getPosition().x, pot.potBody.getPosition().y, 1);
 							potion.createPotion(potionArrayMap, rayHandler);
@@ -1612,33 +1621,38 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 			if ((e2.playerSighted && e2.playerInRange)){
 				//System.out.println(Gdx.graphics.getDeltaTime());
-				if (e2.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 130)){
+				if (e2.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 120)){
 						e2.timeSinceAlerted = 0f;
 						Vector2 vec1 = new Vector2(e2.enemyBody.getPosition());
 						Vector2 vec2 = new Vector2(Player.playerBody.getPosition());
 
 						//throw bones directly at the player but add a small random offset
 						float x = MathUtils.atan2(vec2.y - vec1.y, vec2.x - vec1.x);
+
+						e2.exitAngle = MathUtils.atan2(vec2.y - vec1.y, vec2.x - vec1.x);
+
+
 						float randomOffset = Random.randomFloat(1.3f,0.3f);
 						randomOffset = randomOffset / 10;
 						boolean random = Random.randomBoolean();
-						Vector2 finalX = new Vector2((float)Math.cos(x),(float)Math.sin(x));
+						Vector2 finalX = new Vector2((float)Math.cos(e2.exitAngle),(float)Math.sin(e2.exitAngle));
 
 						if (random) {
-							finalX.x = finalX.x + randomOffset;
-							finalX.y = finalX.y + randomOffset;
+							//finalX.x = finalX.x + randomOffset;
+							//finalX.y = finalX.y + randomOffset;
 						} else {
-							finalX.x = finalX.x - randomOffset;
-							finalX.y = finalX.y - randomOffset;
+							//finalX.x = finalX.x - randomOffset;
+							//finalX.y = finalX.y - randomOffset;
 						}
 						//float result = (e.enemyAI.getOrientation() / (x * MathUtils.PI));
 						//result = result - MathUtils.PI / 2;
 						//System.out.println(x);
 
-						Bone bone = new Bone(world, e2.enemyBody, e2.enemyBody.getPosition().x, e2.enemyBody.getPosition().y, false,  true, finalX);
-						bone.createBone();
-						bones.add(bone);
-						boneArrayMap.put(bone.boneBody, bone);
+						Web web = new Web(world, e2.enemyBody, e2.enemyBody.getPosition().x, e2.enemyBody.getPosition().y, false,  true, finalX);
+						web.exitAngle = e2.exitAngle;
+						web.createWeb(web.exitAngle);
+						webs.add(web);
+						webArrayMap.put(web.webBody, web);
 					//float result = (e.enemyAI.getOrientation() / (x * MathUtils.PI));
 					//result = result - MathUtils.PI / 2;
 					//System.out.println(x);
@@ -1668,7 +1682,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 				//e.playerSighted = false;
 			}
 			enemySpiderBatch.begin();
-			if (!e2.alerted) {
 				if (e2.facing == "Up") {
 					enemySpiderBatch.draw(tx.enemySpiderUpSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
 				} else if (e2.facing == "Down") {
@@ -1678,7 +1691,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 				} else if (e2.facing == "Right") {
 					enemySpiderBatch.draw(tx.enemySpiderRightSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
 				}
-			}
 			enemySpiderBatch.end();
 		}
 		//if (!dyingSpiders.isEmpty()) {
@@ -1766,7 +1778,34 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		deadEnemyBodies.clear();
 
+		if (!webArrayMap.isEmpty()) {
 
+			if (!reversedWebMap) {
+				webArrayMap.reverse();
+				reversedWebMap = true;
+			}
+
+			for (OrderedMap.Entry<Body, Web> webEntry : webArrayMap.entries()) {
+				Body key = webEntry.key;
+				Web value = webEntry.value;
+				//render each web spit attack sprite
+				webBatch.begin();
+				Web.renderWeb(webBatch, tx.webSprite, key.getPosition().x, key.getPosition().y,value.exitAngle + 2.35f);
+				webBatch.end();
+			}
+
+			Iterator<Body> webIt = webBodiesCollected.iterator();
+			if (webIt.hasNext()) {
+				Body webBody = webIt.next();
+				if (webArrayMap.containsKey(webBody)) {
+
+					webArrayMap.removeKey(webBody);
+					world.destroyBody(webBody);
+					webIt.remove();
+					webs.remove(webBody);
+				}
+			}
+		}
 
 		if (!boneArrayMap.isEmpty()) {
 
@@ -1796,6 +1835,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 		}
+
+
 
 			for (Shopkeeper s : shopkeepers) {
 				playerBatch.begin();
@@ -2108,6 +2149,33 @@ public class DungeonCrawler extends ApplicationAdapter {
 					enemySpider.shapeRenderer.end();
 				}
 
+				for (EnemyGhost enemyGhost : enemyGhosts) {
+					//renders ray cast rays
+					Ray<Vector2>[] rays = enemyGhost.rayConfigurations[0].getRays();
+
+
+					enemyGhost.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+					enemyGhost.shapeRenderer.setProjectionMatrix(camera.combined);
+					enemyGhost.shapeRenderer.setColor(1, 0, 0, 1);
+					// shapeRenderer.setColor(Color.RED);
+					//transform.idt();
+					//shapeRenderer.setTransformMatrix(transform);
+					for (int i = 0; i < rays.length; i++) {
+						Ray<Vector2> ray = rays[i];
+						enemyGhost.tmp.set(ray.start);
+						enemyGhost.tmp2.set(ray.end);
+						enemyGhost.shapeRenderer.line(enemyGhost.tmp, enemyGhost.tmp2);
+					}
+
+					//render player rayCasts to Enemies
+					if (enemyGhost.rayCastable) {
+						enemyGhost.tmp3.set((Vector2) enemyGhost.playerDetectionRay.start);
+						enemyGhost.tmp4.set((Vector2) enemyGhost.playerDetectionRay.end);
+						enemyGhost.shapeRenderer.line(enemyGhost.tmp3, enemyGhost.tmp4);
+					}
+					enemyGhost.shapeRenderer.end();
+				}
+
 
 				b2dr.render(world, camera.combined);
 
@@ -2127,9 +2195,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 			arrowBatch.setProjectionMatrix(camera.combined);
 			skullBatch.setProjectionMatrix(camera.combined);
 			tutoBatch.setProjectionMatrix(camera.combined);
+			webBatch.setProjectionMatrix(camera.combined);
 			boneBatch.setProjectionMatrix(camera.combined);
 			enemySkullBatch.setProjectionMatrix(camera.combined);
 			enemySpiderBatch.setProjectionMatrix(camera.combined);
+			enemyGhostBatch.setProjectionMatrix(camera.combined);
 			lockBatch.setProjectionMatrix(camera.combined);
 			doorBatch.setProjectionMatrix(camera.combined);
 			potBatch.setProjectionMatrix(camera.combined);
@@ -2212,6 +2282,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 			e2.update(GdxAI.getTimepiece().getTime());
 			if (e2.playerInRange){
 				e2.detectPlayer();
+			}
+		}
+
+		for (EnemyGhost e3 : enemyGhosts) {
+			e3.enemyAI.update(GdxAI.getTimepiece().getTime());
+			e3.update(GdxAI.getTimepiece().getTime());
+			if (e3.playerInRange){
+				e3.detectPlayer();
 			}
 		}
 

@@ -366,6 +366,10 @@ public class RenderRules {
                                     drawableLevelLayer.add(index, "enemySpider");
                                     index++;
                                     break;
+                                case "enemy3":
+                                    drawableLevelLayer.add(index, "enemyGhost");
+                                    index++;
+                                    break;
                                     //shopkeeper entity
                                 case "shop":
                                     drawableLevelLayer.add(index, "shop");
