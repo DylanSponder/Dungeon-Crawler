@@ -9,6 +9,7 @@ import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.ai.utils.Ray;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
@@ -22,6 +23,12 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -45,14 +52,17 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch, flameBatch, webBatch, cobBatch, candleBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch, roofBatch, columnBaseLowerBatch;
 	public static World world;
-	public static boolean debug;
+	public static Stage menuStage;
+	public static Table menuContainer;
+	public static boolean debug, menuClosed, allowPlayerInput;
+	public GameInputProcessor gip;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
-	private String playerDirection;
-	private boolean playerPaused, playerMeleeAttacking, playerRangedAttacking, playerShieldAttacking;
-	private Body swordBody, arrowBody, shieldBody;
-	private Fixture swordHitbox, arrowHitbox, shieldHitbox;
-	private Arrow arrow;
+	public static String playerDirection;
+	public static boolean playerPaused, playerMeleeAttacking, playerRangedAttacking, playerShieldAttacking;
+	public static Body swordBody, arrowBody, shieldBody;
+	public static Fixture swordHitbox, arrowHitbox, shieldHitbox;
+	public static Arrow arrow;
 	public static ArrayList<Arrow> arrows;
 	public static ArrayList<Body> arrowBodiesCollided, boneBodiesCollided, skullBodiesDestroyed, deadEnemyBodies, webBodiesCollected;
 	public static ArrayMap<Body, Arrow> arrowArrayMap;
@@ -60,10 +70,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public ArrayMap<Body, Skull> skullArrayMap;
 	public static ArrayMap<Body, Bone> boneArrayMap;
 	public static ArrayMap<Body, Web> webArrayMap;
-	public ArrayMap<Body, Potion> potionArrayMap;
-	public ArrayMap<Body, Cobweb> cobArrayMap;
-	public ArrayMap<Body, Fire> respawnFireMap;
-	public ArrayMap<Body, Pot> potArrayMap;
+	public static ArrayMap<Body, Potion> potionArrayMap;
+	public static ArrayMap<Body, Cobweb> cobArrayMap;
+	public static ArrayMap<Body, Fire> respawnFireMap;
+	public static ArrayMap<Body, Pot> potArrayMap;
 	public boolean reversedArrowMap, reversedSkullMap, reversedPotMap, reversedPotionMap, reversedRespawnFireMap, reversedBoneMap, reversedWebMap;
 	public static ArrayList<EnemySkull> enemySkulls, dyingSkulls;
 	public static ArrayList<EnemySpider> enemySpiders, dyingSpiders;
@@ -84,10 +94,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static  ArrayList<Fire> fires;
 	public static ArrayList<Column> columns;
 	public static ArrayList<Roof> roofs;
-	public float PLAYER_HORIZONTAL_SPEED = 0f;
-	public float PLAYER_VERTICAL_SPEED = 0f;
-	public float PLAYER_X = 0f;
-	public float PLAYER_Y = 0f;
+	public static float PLAYER_HORIZONTAL_SPEED = 0f;
+	public static float PLAYER_VERTICAL_SPEED = 0f;
+	public static float PLAYER_X = 0f;
+	public static float PLAYER_Y = 0f;
 	public static float PLAYER_SPEED_MULTI;
 	private TiledMapRenderer renderer;
 	public static OrthographicCamera camera;
@@ -96,17 +106,17 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static Music roomClear, swordSlash, level1Music;
 	public static SoundController soundController;
 	public static RayHandler rayHandler;
-	private PointLight playerTorch;
+	private PointLight playerLight;
 	private BitmapFont.BitmapFontData bmfData;
 	public static BitmapFont defaultFont, defaultFont2;
 	public static ArrayList<Text> messages;
 	public AssetManager assetManager;
-	public float stateTime, stateTime2, stateTime3;
+	public static float stateTime, stateTime2, stateTime3;
 	public int index = 0;
 	public TextureRegion currentFrame;
 	public Ray playerSightRay;
 
-	private boolean leanDown = false, leanUp = false, leanLeft = false, leanRight = false, leanUpLeft = false, leanUpRight = false;
+	public static boolean leanDown = false, leanUp = false, leanLeft = false, leanRight = false, leanUpLeft = false, leanUpRight = false;
 
 	@Override
 	public void create() {
@@ -221,6 +231,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 		defaultFont2 = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.fnt"),
 				Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.png"), false);
 
+
+
+
+
+
 		Color c = new Color();
 		c.set(1,1,1,1);
 		//Text t =  new Text(defaultFont, "TEST MESSAGE", c, false);
@@ -248,7 +263,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 		hud = new HUD(vp, hudBatch);
 
 
-
 		//initialize map
 		TiledMap map = new TiledMap();
 		MapLayers layers = map.getLayers();
@@ -271,11 +285,49 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		}
 
-		//world.setContactListener(rlc);
+		menuStage = new Stage(vp);
+
+		//Menu code
+		Skin skin = new Skin();
+		skin.add("default-font",defaultFont, BitmapFont.class);
+		FileHandle fileHandle = Gdx.files.internal("HellasDungeon/HUD");
+		FileHandle atlasFile = fileHandle.sibling("HUD/uiskin.atlas");
+		skin.addRegions(new TextureAtlas(atlasFile));
+		skin.load(Gdx.files.internal("HellasDungeon/HUD/uiskin.json"));
+
+		// https://libgdx.com/wiki/graphics/2d/scene2d/skin
+		//uiskin.atlas, uiskin.json, uiskin.png, default.png and default.fnt all required
+
+		menuContainer = new Table();
+		menuContainer.setFillParent(true);
+
+		TextButton playButton = new TextButton("CONTINUE", skin, "default");
+		playButton.addListener(new ClickListener() {
+			@Override
+			public void clicked (InputEvent event, float x, float y) {
+				menuClosed = true;
+				// Called when player clicks on Play button
+			}
+		});
+		menuContainer.add(playButton);
+
+		TextButton exitButton = new TextButton("EXIT", skin);
+		exitButton.addListener(new ClickListener() {
+			@Override
+			public void clicked (InputEvent event, float x, float y) {
+				Gdx.app.exit();
+				// Called when player clicks on Exit button
+			}
+		});
+		menuContainer.add(exitButton).expandX();
+
+		menuStage.addActor(menuContainer);
+		menuClosed = true;
+
+
 		GenerateLevel level = new GenerateLevel();
 		InitLevel initLevel = new InitLevel();
 		initLevel.InitializeLevel();
-		//level.initLevel();
 		List list = level.generateLevel(0, 0);
 
 		layer = (TiledMapTileLayer) list.get(0);
@@ -305,11 +357,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 		layers.add(layer);
 
 		//create a point light and attach it to the player
-		playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.45f), 100, PLAYER_X, PLAYER_Y);
-		playerTorch.attachToBody(player.playerBody);
-		playerTorch.setSoftnessLength(65);
-		//playerTorch.isSoft();
-		//playerTorch.setXray(true);
+		playerLight = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.45f), 60, PLAYER_X, PLAYER_Y);
+		playerLight.attachToBody(player.playerBody);
+		playerLight.setSoftnessLength(65);
+		//playerLight.isSoft();
+		//playerLight.setXray(true);
 
 		arrowBodiesCollided = new ArrayList<Body>();
 		webBodiesCollected = new ArrayList<Body>();
@@ -326,722 +378,19 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//create an input processor to handle single input events - see inputUpdate() for held down inputs
 
+		gip = new GameInputProcessor();
 
-		Gdx.input.setInputProcessor(new GameInputProcessor() {
-			@Override
-			public boolean scrolled(float amountX, float amountY) {
-				if (debug) {
-					//camera zoom should be between 0.3 and 1.3 - may be changed during testing
-					if ((camera.zoom >= 0.3f && camera.zoom <= 24f)) {
-						if (camera.zoom == 24f) {
-							if (amountY < 0f) {
-								camera.zoom += amountY * 0.1f;
-							}
-						} else if (camera.zoom == 0.3f) {
-							if (amountY > 0f) {
-								camera.zoom += amountY * 0.1f;
-							}
-						} else {
-							camera.zoom += amountY * 0.1f;
-						}
-					} else if (camera.zoom > 24f) {
-						camera.zoom = 24f;
-					} else if (camera.zoom < 0.3f) {
-						camera.zoom = 0.3f;
-					}
-				}
-				return true;
-			}
 
-			public boolean touchDown(int x, int y, int pointer, int button) {
 
-
-
-				if (button == 0 && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking)) {
-					//if player presses left mouse attack with the swordBody
-					float playerMeleeAttackSpeedInSeconds = 0.40f;
-					playerMeleeAttacking = true;
-
-					if (tx.playerSprite.equals(tx.playerDown)) {
-						tx.playerSprite = tx.playerAttackDown;
-						swordBody = bf.createSwordBody(world, player.playerBody, -2.5f, -11.5f);
-						swordHitbox = bf.createSwordHitbox(swordBody, false);
-						swordHitbox.setUserData("DownSword");
-						swordHitbox.setSensor(true);
-						player.playerBody.applyForce(0,-100000,0,0,true);
-					} else if (tx.playerSprite.equals(tx.playerUp) || leanUp) {
-						tx.playerSprite = tx.playerAttackUp;
-						swordBody = bf.createSwordBody(world, player.playerBody, -2.5f, 17.5f);
-						swordHitbox = bf.createSwordHitbox(swordBody, false);
-						swordHitbox.setUserData("UpSword");
-						swordHitbox.setSensor(true);
-						player.playerBody.applyForce(0,100000,0,0,true);
-					} else if (tx.playerSprite.equals(tx.playerLeft)) {
-						tx.playerSprite = tx.playerAttackLeft;
-						swordBody = bf.createSwordBody(world, player.playerBody, -15.5f, -1.5f);
-						swordHitbox = bf.createSwordHitbox(swordBody, true);
-						swordHitbox.setUserData("LeftSword");
-						swordHitbox.setSensor(true);
-						player.playerBody.applyForce(-100000,0,0,0,true);
-					} else if (tx.playerSprite.equals(tx.playerRight)) {
-						tx.playerSprite = tx.playerAttackRight;
-						swordBody = bf.createSwordBody(world, player.playerBody, 15.5f, -1.5f);
-						swordHitbox = bf.createSwordHitbox(swordBody, true);
-						swordHitbox.setUserData("RightSword");
-						swordHitbox.setSensor(true);
-						player.playerBody.applyForce(100000,0,0,0,true);
-					} else {
-						tx.playerSprite = tx.playerAttackDown;
-						swordBody = bf.createSwordBody(world, player.playerBody, -2.5f, -11.5f);
-						swordHitbox = bf.createSwordHitbox(swordBody, false);
-						swordHitbox.setUserData("DownSword");
-						swordHitbox.setSensor(true);
-						player.playerBody.applyForce(0,-100000,0,0,true);
-					}
-
-					swordBody.setUserData("Sword");
-
-					//pause player in place while attacking (attacks must be timed correctly!)
-					playerPaused = true;
-					PLAYER_HORIZONTAL_SPEED = 0;
-					PLAYER_VERTICAL_SPEED = 0;
-					player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
-					//CreateSound.slash.play();
-					//roomClear.play();
-					//swordSlash.setLooping(true);
-					//swordSlash.play();
-					//swordSlash.setVolume(1f);
-					//swordSlash.dispose();
-
-					Timer.schedule(new Timer.Task() {
-						@Override
-						public void run() {
-							//resume player movement after a short delay and remove swordBody hitbox
-							playerPaused = false;
-							swordBody.destroyFixture(swordHitbox);
-
-							//reset playerSprite to before the attack input
-							if (tx.playerSprite.equals(tx.playerAttackDown)) {
-								tx.playerSprite = tx.playerDown;
-							} else if (tx.playerSprite.equals(tx.playerAttackUp)) {
-								tx.playerSprite = tx.playerUp;
-							} else if (tx.playerSprite.equals(tx.playerAttackLeft)) {
-								tx.playerSprite = tx.playerLeft;
-							} else if (tx.playerSprite.equals(tx.playerAttackRight)) {
-								tx.playerSprite = tx.playerRight;
-							}
-
-							playerMeleeAttacking = false;
-						}
-					}, playerMeleeAttackSpeedInSeconds);
-				}
-
-				//if player presses right mouse attack with a bow
-				if (button == 1 && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking)) {
-					float playerRangedAttackSpeedInSeconds = 0.50f;
-					playerRangedAttacking = true;
-
-					if (tx.playerSprite.equals(tx.playerDown)) {
-						playerDirection = "Down";
-						tx.playerSprite = tx.playerAttackDown;
-						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y - 14f);
-						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
-						arrowHitbox.setUserData("DownArrow");
-						arrowBody.setLinearVelocity(0, -400f);
-						player.playerBody.applyForce(0,150000,0,0,true);
-					} else if (tx.playerSprite.equals(tx.playerUp) || leanUp) {
-						playerDirection = "Up";
-						tx.playerSprite = tx.playerAttackUp;
-						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y + 14f);
-						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
-						arrowHitbox.setUserData("UpArrow");
-						arrowBody.setLinearVelocity(0, 400f);
-						player.playerBody.applyForce(0,-150000,0,0,true);
-					} else if (tx.playerSprite.equals(tx.playerLeft)) {
-						playerDirection = "Left";
-						tx.playerSprite = tx.playerAttackLeft;
-						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 14f, player.playerBody.getPosition().y+1);
-						arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
-						arrowHitbox.setUserData("LeftArrow");
-						arrowBody.setLinearVelocity(-400f, 0);
-						player.playerBody.applyForce(150000,0,0,0,true);
-					} else if (tx.playerSprite.equals(tx.playerRight)) {
-						playerDirection = "Right";
-						tx.playerSprite = tx.playerAttackRight;
-						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x + 14f, player.playerBody.getPosition().y+1);
-						arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
-						arrowHitbox.setUserData("RightArrow");
-						arrowBody.setLinearVelocity(400f, 0);
-						player.playerBody.applyForce(-150000,0,0,0,true);
-					}
-					//only triggers if the player hasn't moved at all yet - player starts facing down
-					else {
-						playerDirection = "Down";
-						tx.playerSprite = tx.playerAttackDown;
-						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y - 14f);
-						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
-						arrowHitbox.setUserData("DownArrow");
-						arrowBody.setLinearVelocity(0, -400f);
-						player.playerBody.applyForce(0,150000,0,0,true);
-					}
-					//pause player in place while attacking (attacks must be timed correctly!)
-					arrowBody.setUserData("Arrow");
-					if (player.hasGreekFire){
-						arrows.add(arrow = new Arrow(arrowBody, playerDirection, 0f, true));
-						//player.greekFireUses--;
-					} else {
-						arrows.add(arrow = new Arrow(arrowBody, playerDirection, 0f, false));
-					}
-					arrowArrayMap.put(arrowBody, arrow);
-
-					playerPaused = true;
-					PLAYER_HORIZONTAL_SPEED = 0;
-					PLAYER_VERTICAL_SPEED = 0;
-					player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
-
-					Timer.schedule(new Timer.Task() {
-						@Override
-						public void run() {
-							//resume player movement after a short delay and remove swordBody hitbox
-							playerPaused = false;
-							//reset playerSprite to before the attack input
-							if (tx.playerSprite.equals(tx.playerAttackDown)) {
-								tx.playerSprite = tx.playerDown;
-							} else if (tx.playerSprite.equals(tx.playerAttackUp)) {
-								tx.playerSprite = tx.playerUp;
-							} else if (tx.playerSprite.equals(tx.playerAttackLeft)) {
-								tx.playerSprite = tx.playerLeft;
-							} else if (tx.playerSprite.equals(tx.playerAttackRight)) {
-								tx.playerSprite = tx.playerRight;
-							}
-							playerRangedAttacking = false;
-						}
-					}, playerRangedAttackSpeedInSeconds);
-				}
-				return true;
-			}
-
-			public boolean keyDown(int keycode) {
-
-				if (debug) {
-
-					// (For Debugging) Add potion
-					if (keycode == Keys.NUM_9) {
-						hud.inventory.addPotion();
-					}
-				}
-				/*
-
-					// (For Debugging) Damage player
-					if (keycode == Keys.NUM_0) {
-						hud.healthBar.LoseHealth(0.5f);
-					}
-
-					if (keycode == Keys.NUM_2) {
-						camera.zoom = 1f;
-					}
-
-					if (keycode == 10) {
-						camera.zoom = 10f;
-					}
-				}
-				else
-				*/
-
-
-				if (Gdx.input.isKeyPressed(Keys.F)) {
-					Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-				}
-
-				if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
-					Gdx.graphics.setWindowedMode(1280, 720);
-				}
-
-
-
-				if (player.buyingStock){
-
-					if (keycode == Keys.NUM_1) {
-						//String amount = player.shopkeeper.inventory.get(1).toString();
-						//int x = Integer.parseInt(amount);
-						//System.out.println(x);
-
-						ShopItem item = (ShopItem) player.shopkeeper.inventory.get(0);
-
-						int money = Integer.parseInt(hud.totalGoldAsString);
-
-						if (money >= item.cost && !item.purchased) {
-
-							System.out.println(item.kind + "<- THE TYPE OF ITEM");
-
-							item.purchased = true;
-							switch (item.kind) {
-
-								case "KYKEON": {
-									//System.out.println("THIS IS A TEST TO SEE IF POTIONS CAN BE ADDED VIA THE HUD");
-									//hud.inventory.addPotion();
-									Potion potion = new Potion(world, player.shopkeeper.posX, player.shopkeeper.posY+ 16,1);
-									potion.createPotion(potionArrayMap,rayHandler);
-									potions.add(potion);
-									potionArrayMap.put(potion.potionBody, potion);
-									break;
-
-								}
-								case "SHIELD": {
-									player.hasShield = true;
-
-									break;
-
-								}
-								case "GREEK FIRE": {
-									player.hasGreekFire = true;
-									//player.greekFireUses = 10;
-									break;
-								}
-								case "TORCH": {
-									player.hasTorch = true;
-									break;
-								}
-								case "BELT": {
-									//hud.inventory.Capacity = hud.inventory.Capacity + 2;
-									hud.inventory.changeCapacity(1, true);
-									break;
-								}
-							}
-
-							//int moneyAfterPurchase = money - item.cost;
-
-							hud.updateGold(item.cost, false);
-
-							System.out.println(item.kind);
-							System.out.println(item.index);
-							//item.amount--;
-
-							player.shopkeeper.inventoryText.remove(0);
-							player.shopkeeper.inventoryText.remove(0);
-
-							Text t1 = player.shopkeeper.Stock(item.kind, item.index);
-							Text t2 = player.shopkeeper.DescribeStock(item.kind,item.index,item.cost);
-						}
-					}
-
-					if (keycode == Keys.NUM_2) {
-						//String amount = player.shopkeeper.inventory.get(1).toString();
-						//int x = Integer.parseInt(amount);
-						//System.out.println(x);
-						ShopItem firstItem = (ShopItem) player.shopkeeper.inventory.get(0);
-						ShopItem item = (ShopItem) player.shopkeeper.inventory.get(1);
-
-						int money = Integer.parseInt(hud.totalGoldAsString);
-
-						if (money >= item.cost && !item.purchased) {
-							item.purchased = true;
-
-							switch (item.kind) {
-
-								case "KYKEON": {
-									//System.out.println("THIS IS A TEST TO SEE IF POTIONS CAN BE ADDED VIA THE HUD");
-									//hud.inventory.addPotion();
-									Potion potion = new Potion(world, player.shopkeeper.posX, player.shopkeeper.posY+ 16,1);
-									potion.createPotion(potionArrayMap,rayHandler);
-									potions.add(potion);
-									potionArrayMap.put(potion.potionBody, potion);
-									break;
-
-								}
-								case "SHIELD": {
-									//TODO: add shield item
-									player.hasShield = true;
-
-									break;
-
-								}
-								case "GREEK FIRE": {
-									player.hasGreekFire = true;
-									//player.greekFireUses = 30;
-									break;
-								}
-								case "TORCH": {
-									player.hasTorch = true;
-									break;
-								}
-								case "BELT": {
-									//hud.inventory.Capacity = hud.inventory.Capacity + 2;
-									hud.inventory.changeCapacity(1, true);
-									break;
-								}
-							}
-							//int moneyAfterPurchase = money - item.cost;
-
-							hud.updateGold(item.cost, false);
-
-						System.out.println(item.kind);
-						System.out.println(item.index);
-						//item.amount--;
-
-					//	x--;
-							if (firstItem.purchased) {
-								player.shopkeeper.inventoryText.remove(0);
-								player.shopkeeper.inventoryText.remove(0);
-							}
-							else {
-								player.shopkeeper.inventoryText.remove(2);
-								player.shopkeeper.inventoryText.remove(2);
-							}
-
-
-						Text t1 = player.shopkeeper.Stock(item.kind, item.index);
-						Text t2 = player.shopkeeper.DescribeStock(item.kind,item.index,item.cost);
-						}
-					}
-
-					if (keycode == Keys.NUM_3) {
-						//String amount = player.shopkeeper.inventory.get(1).toString();
-						//int x = Integer.parseInt(amount);
-						//System.out.println(x);
-						ShopItem firstItem = (ShopItem) player.shopkeeper.inventory.get(0);
-						ShopItem secondItem = (ShopItem) player.shopkeeper.inventory.get(1);
-						ShopItem item = (ShopItem) player.shopkeeper.inventory.get(2);
-
-						int money = Integer.parseInt(hud.totalGoldAsString);
-
-						if (money >= item.cost && !item.purchased) {
-							item.purchased = true;
-
-							switch (item.kind) {
-
-								case "KYKEON": {
-									//System.out.println("THIS IS A TEST TO SEE IF POTIONS CAN BE ADDED VIA THE HUD");
-									//hud.inventory.addPotion();
-									Potion potion = new Potion(world, player.shopkeeper.posX, player.shopkeeper.posY+ 16,1);
-									potion.createPotion(potionArrayMap,rayHandler);
-									potions.add(potion);
-									potionArrayMap.put(potion.potionBody, potion);
-									break;
-
-								}
-								case "SHIELD": {
-									//TODO: add shield item
-									player.hasShield = true;
-
-
-									break;
-
-								}
-								case "GREEK FIRE": {
-									player.hasGreekFire = true;
-									//player.greekFireUses = 30;
-									break;
-								}
-								case "TORCH": {
-									player.hasTorch = true;
-									//playerTorch.setXray(true);
-									break;
-								}
-								case "BELT": {
-									//hud.inventory.Capacity = hud.inventory.Capacity + 2;
-									hud.inventory.changeCapacity(1, true);
-									break;
-								}
-							}
-							//int moneyAfterPurchase = money - item.cost;
-
-							hud.updateGold(item.cost, false);
-
-							System.out.println(item.kind);
-							System.out.println(item.index);
-							//item.amount--;
-
-							//	x--;
-							if (firstItem.purchased && !secondItem.purchased) {
-								player.shopkeeper.inventoryText.remove(2);
-								player.shopkeeper.inventoryText.remove(2);
-							}
-							else if (secondItem.purchased && !firstItem.purchased) {
-								player.shopkeeper.inventoryText.remove(0);
-								player.shopkeeper.inventoryText.remove(0);
-							}
-							else {
-								player.shopkeeper.inventoryText.remove(4);
-								player.shopkeeper.inventoryText.remove(4);
-							}
-
-
-							Text t1 = player.shopkeeper.Stock(item.kind, item.index);
-							Text t2 = player.shopkeeper.DescribeStock(item.kind,item.index,item.cost);
-						}
-					}
-				}
-				// Use potion
-				if (keycode == Keys.E) {
-					if (hud.inventory.Size > 0) {
-						hud.inventory.usePotion(1);
-						hud.healthBar.GainHealth(1.5f);
-					}
-				}
-
-				if (keycode == Keys.P) {
-					if (!debug) {
-						debug = true;
-					} else {
-						debug = false;
-					}
-				}
-
-				if ((keycode == Keys.SHIFT_LEFT || keycode == Keys.SHIFT_RIGHT) && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking) && player.hasShield) {
-					float playerShieldAttackSpeedInSeconds = 0.85f;
-					playerShieldAttacking = true;
-
-					if (tx.playerSprite.equals(tx.playerDown) || leanDown) {
-						tx.playerSprite = tx.playerAttackDown;
-						shieldBody = bf.createShieldBody(world, player.playerBody, -2f, -9.5f);
-						shieldHitbox = bf.createShieldHitbox(shieldBody, false);
-						shieldHitbox.setUserData("DownShield");
-					}
-					if (tx.playerSprite.equals(tx.playerUp) || leanUp) {
-						tx.playerSprite = tx.playerAttackUp;
-						shieldBody = bf.createShieldBody(world, player.playerBody, -3f, 12.5f);
-						shieldHitbox = bf.createShieldHitbox(shieldBody, false);
-						shieldHitbox.setUserData("UpShield");
-					}
-					if (tx.playerSprite.equals(tx.playerLeft)) {
-						tx.playerSprite = tx.playerAttackLeft;
-						shieldBody = bf.createShieldBody(world, player.playerBody, -11.5f, -2f);
-						shieldHitbox = bf.createShieldHitbox(shieldBody, true);
-						shieldHitbox.setUserData("LeftShield");
-					}
-					if (tx.playerSprite.equals(tx.playerRight)) {
-						tx.playerSprite = tx.playerAttackRight;
-						shieldBody = bf.createShieldBody(world, player.playerBody, 12.5f, -2f);
-						shieldHitbox = bf.createShieldHitbox(shieldBody, true);
-						shieldHitbox.setUserData("RightShield");
-					}
-
-					shieldBody.setUserData("Shield");
-
-					//pause player in place while attacking (attacks must be timed correctly!)
-					playerPaused = true;
-					PLAYER_HORIZONTAL_SPEED = 0;
-					PLAYER_VERTICAL_SPEED = 0;
-					player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
-
-					Timer.schedule(new Timer.Task() {
-						@Override
-						public void run() {
-							//resume player movement after a short delay and remove swordBody hitbox
-							playerPaused = false;
-							shieldBody.destroyFixture(shieldHitbox);
-
-							//reset playerSprite to before the attack input
-							if (tx.playerSprite.equals(tx.playerAttackDown)) {
-								tx.playerSprite = tx.playerDown;
-							} else if (tx.playerSprite.equals(tx.playerAttackUp)) {
-								tx.playerSprite = tx.playerUp;
-							} else if (tx.playerSprite.equals(tx.playerAttackLeft)) {
-								tx.playerSprite = tx.playerLeft;
-							} else if (tx.playerSprite.equals(tx.playerAttackRight)) {
-								tx.playerSprite = tx.playerRight;
-							}
-
-							playerShieldAttacking = false;
-						}
-					}, playerShieldAttackSpeedInSeconds);
-				}
-
-				//pressing '6' shows some debug data
-				if (keycode == 13) {
-					//System.out.println("PLAYER X: " + player.playerBody.getPosition().x);
-					//System.out.println(" PLAYER Y: " + player.playerBody.getPosition().y);
-					System.out.println(GenerateLevel.init.roomList.get(player.currentRoom).x1);
-					System.out.println(GenerateLevel.init.roomList.get(player.currentRoom).y1);
-					System.out.println(GenerateLevel.init.roomList.get(player.currentRoom).doorLocations);
-					System.out.println(GenerateLevel.init.roomList.get(player.currentRoom + 1).doorLocations);
-				}
-
-				//if player presses space attack with the swordBody
-				if (((keycode == 62)) && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking)) {
-					float playerMeleeAttackSpeedInSeconds = 0.40f;
-					playerMeleeAttacking = true;
-
-					if (tx.playerSprite.equals(tx.playerDown)) {
-						tx.playerSprite = tx.playerAttackDown;
-						swordBody = bf.createSwordBody(world, player.playerBody, -2.5f, -11.5f);
-						swordHitbox = bf.createSwordHitbox(swordBody, false);
-						swordHitbox.setUserData("DownSword");
-						swordHitbox.setSensor(true);
-
-						player.playerBody.applyForce(0,-100000,0,0,true);
-					} else if (tx.playerSprite.equals(tx.playerUp) || leanUp) {
-						tx.playerSprite = tx.playerAttackUp;
-						swordBody = bf.createSwordBody(world, player.playerBody, -2.5f, 17.5f);
-						swordHitbox = bf.createSwordHitbox(swordBody, false);
-						swordHitbox.setUserData("UpSword");
-						swordHitbox.setSensor(true);
-
-						player.playerBody.applyForce(0,100000,0,0,true);
-					} else if (tx.playerSprite.equals(tx.playerLeft)) {
-						tx.playerSprite = tx.playerAttackLeft;
-						swordBody = bf.createSwordBody(world, player.playerBody, -15.5f, -1.5f);
-						swordHitbox = bf.createSwordHitbox(swordBody, true);
-						swordHitbox.setUserData("LeftSword");
-						swordHitbox.setSensor(true);
-
-						player.playerBody.applyForce(-100000,0,0,0,true);
-					} else if (tx.playerSprite.equals(tx.playerRight)) {
-						tx.playerSprite = tx.playerAttackRight;
-						swordBody = bf.createSwordBody(world, player.playerBody, 15.5f, -1.5f);
-						swordHitbox = bf.createSwordHitbox(swordBody, true);
-						swordHitbox.setUserData("RightSword");
-						swordHitbox.setSensor(true);
-
-						player.playerBody.applyForce(100000,0,0,0,true);
-					} else {
-						tx.playerSprite = tx.playerAttackDown;
-						swordBody = bf.createSwordBody(world, player.playerBody, -2.5f, -11.5f);
-						swordHitbox = bf.createSwordHitbox(swordBody, false);
-						swordHitbox.setUserData("DownSword");
-						swordHitbox.setSensor(true);
-
-						player.playerBody.applyForce(0,-100000,0,0,true);
-					}
-
-					swordBody.setUserData("Sword");
-
-					//pause player in place while attacking (attacks must be timed correctly!)
-					playerPaused = true;
-					PLAYER_HORIZONTAL_SPEED = 0;
-					PLAYER_VERTICAL_SPEED = 0;
-					player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
-					//CreateSound.slash.play();
-					//roomClear.play();
-					//swordSlash.setLooping(true);
-					//swordSlash.play();
-					//swordSlash.setVolume(1f);
-					//swordSlash.dispose();
-
-					Timer.schedule(new Timer.Task() {
-						@Override
-						public void run() {
-							//resume player movement after a short delay and remove swordBody hitbox
-							playerPaused = false;
-							swordBody.destroyFixture(swordHitbox);
-
-							//reset playerSprite to before the attack input
-							if (tx.playerSprite.equals(tx.playerAttackDown)) {
-								tx.playerSprite = tx.playerDown;
-							} else if (tx.playerSprite.equals(tx.playerAttackUp)) {
-								tx.playerSprite = tx.playerUp;
-							} else if (tx.playerSprite.equals(tx.playerAttackLeft)) {
-								tx.playerSprite = tx.playerLeft;
-							} else if (tx.playerSprite.equals(tx.playerAttackRight)) {
-								tx.playerSprite = tx.playerRight;
-							}
-
-							playerMeleeAttacking = false;
-						}
-					}, playerMeleeAttackSpeedInSeconds);
-				}
-
-				//if player presses enter attack with a bow
-				if (keycode == 66 && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking)) {
-					float playerRangedAttackSpeedInSeconds = 0.50f;
-					stateTime2 = 0f;
-					playerRangedAttacking = true;
-
-					if (tx.playerSprite.equals(tx.playerDown)) {
-						playerDirection = "Down";
-						tx.playerSprite = tx.playerAttackDown;
-						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y - 14f);
-						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
-						arrowHitbox.setUserData("DownArrow");
-						arrowBody.setLinearVelocity(0, -400f);
-
-						player.playerBody.applyForce(0,150000,0,0,true);
-					} else if (tx.playerSprite.equals(tx.playerUp) || leanUp) {
-						playerDirection = "Up";
-						tx.playerSprite = tx.playerAttackUp;
-						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y + 14f);
-						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
-						arrowHitbox.setUserData("UpArrow");
-						arrowBody.setLinearVelocity(0, 400f);
-
-						player.playerBody.applyForce(0,-150000,0,0,true);
-
-					} else if (tx.playerSprite.equals(tx.playerLeft)) {
-						playerDirection = "Left";
-						tx.playerSprite = tx.playerAttackLeft;
-						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 14f, player.playerBody.getPosition().y+1);
-						arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
-						arrowHitbox.setUserData("LeftArrow");
-						arrowBody.setLinearVelocity(-400f, 0);
-
-						player.playerBody.applyForce(150000,0,0,0,true);
-
-					} else if (tx.playerSprite.equals(tx.playerRight)) {
-						playerDirection = "Right";
-						tx.playerSprite = tx.playerAttackRight;
-						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x + 14f, player.playerBody.getPosition().y+1);
-						arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
-						arrowHitbox.setUserData("RightArrow");
-						arrowBody.setLinearVelocity(400f, 0);
-
-						player.playerBody.applyForce(-150000,0,0,0,true);
-					}
-					//only triggers if the player hasn't moved at all yet - player starts facing down
-					else {
-						playerDirection = "Down";
-						tx.playerSprite = tx.playerAttackDown;
-						arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y - 14f);
-						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
-						arrowHitbox.setUserData("DownArrow");
-						arrowBody.setLinearVelocity(0, -400f);
-
-						player.playerBody.applyForce(0,150000,0,0,true);
-					}
-					//pause player in place while attacking (attacks must be timed correctly!)
-
-					arrowBody.setUserData("Arrow");
-					if (player.hasGreekFire){
-						arrows.add(arrow = new Arrow(arrowBody, playerDirection, 0f, true));
-						player.greekFireUses--;
-					} else {
-						arrows.add(arrow = new Arrow(arrowBody, playerDirection, 0f, false));
-					}
-					arrowArrayMap.put(arrowBody, arrow);
-
-					playerPaused = true;
-					PLAYER_HORIZONTAL_SPEED = 0;
-					PLAYER_VERTICAL_SPEED = 0;
-					player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
-
-					Timer.schedule(new Timer.Task() {
-						@Override
-						public void run() {
-							//resume player movement after a short delay and remove swordBody hitbox
-							playerPaused = false;
-							//reset playerSprite to before the attack input
-							if (tx.playerSprite.equals(tx.playerAttackDown)) {
-								tx.playerSprite = tx.playerDown;
-							} else if (tx.playerSprite.equals(tx.playerAttackUp)) {
-								tx.playerSprite = tx.playerUp;
-							} else if (tx.playerSprite.equals(tx.playerAttackLeft)) {
-								tx.playerSprite = tx.playerLeft;
-							} else if (tx.playerSprite.equals(tx.playerAttackRight)) {
-								tx.playerSprite = tx.playerRight;
-							}
-							playerRangedAttacking = false;
-						}
-					}, playerRangedAttackSpeedInSeconds);
-				}
-				return false;
-			}
-		});
+		//TODO Set only to menu on game start
+		Gdx.input.setInputProcessor(menuStage);
 		world.setContactListener(lc);
 
 		if (!debug) {
 			//set the window mode to fullscreen and hide the cursor when in the game window
 			Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-			Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);
+			//TODO RE-ENABLE
+		//	Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);
 		}
 	}
 
@@ -1132,6 +481,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			}
 
+			if (menuClosed) {
+
+			}
 		//for (Room r : GenerateLevel.init.roomList) {
 			for (Skull s : skulls) {
 				//TODO Fix - skulls pick the furthest spawner
@@ -1498,7 +850,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			playerBatch.begin();
 			//draw playerSprite on player Box2D object
 		if (playerShieldAttacking) {
-			if (tx.playerSprite.equals(tx.playerAttackUp)) {
+			if (tx.playerTextureRegion.equals(tx.playerAttackUp)) {
 				playerBatch.draw(tx.shieldSprite, player.playerBody.getPosition().x - 11f, player.playerBody.getPosition().y + 7f, 16, 8, 16, 8, 1, 1, 0);
 			} else if (tx.playerSprite.equals(tx.playerAttackDown)) {
 				playerBatch.draw(tx.shieldSprite, player.playerBody.getPosition().x - 26f, player.playerBody.getPosition().y - 20f, 16, 8, 16, 8, 1, 1, 180);
@@ -1508,29 +860,32 @@ public class DungeonCrawler extends ApplicationAdapter {
 				playerBatch.draw(tx.shieldSprite, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y - 18f, 16, 8, 16, 8, 1, 1, 270);
 			}
 		}
-			playerBatch.draw(tx.playerSprite, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 6f, 16, 16);
+		//	playerBatch.draw(tx.playerSprite, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 6f, 16, 16);
+			Player.renderPlayer(playerBatch, tx.playerTextureRegion, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 6f);
+
+
 			if (playerMeleeAttacking) {
 				//add the lanceSprite to the corresponding attack playerDirection
-				if (tx.playerSprite.equals(tx.playerAttackUp)) {
+				if (tx.playerTextureRegion.equals(tx.playerAttackUp)) {
 					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 13f, player.playerBody.getPosition().y - 4f, 7, 14, 7, 14, 1, 1, 180);
-				} else if (tx.playerSprite.equals(tx.playerAttackDown)) {
+				} else if (tx.playerTextureRegion.equals(tx.playerAttackDown)) {
 					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 6f, player.playerBody.getPosition().y - 18f, 7, 14, 7, 14, 1, 1, 0);
-				} else if (tx.playerSprite.equals(tx.playerAttackLeft)) {
+				} else if (tx.playerTextureRegion.equals(tx.playerAttackLeft)) {
 					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 15f, player.playerBody.getPosition().y - 19f, 7, 14, 7, 14, 1, 1, 270);
-				} else if (tx.playerSprite.equals(tx.playerAttackRight)) {
+				} else if (tx.playerTextureRegion.equals(tx.playerAttackRight)) {
 					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x + 1f, player.playerBody.getPosition().y - 12f, 7, 14, 7, 14, 1, 1, 90);
 				}
 			}
 
 			if (playerRangedAttacking) {
 				//add the bowSprite and arrowSprite to the corresponding attack playerDirection
-				if (tx.playerSprite.equals(tx.playerAttackUp)) {
+				if (tx.playerTextureRegion.equals(tx.playerAttackUp)) {
 					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 2f, 8, 10, 18, 8, 1, 1, 180);
-				} else if (tx.playerSprite.equals(tx.playerAttackDown)) {
+				} else if (tx.playerTextureRegion.equals(tx.playerAttackDown)) {
 					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 10f, player.playerBody.getPosition().y - 14f, 7, 12, 18, 8, 1, 1, 0);
-				} else if (tx.playerSprite.equals(tx.playerAttackLeft)) {
+				} else if (tx.playerTextureRegion.equals(tx.playerAttackLeft)) {
 					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 11f, player.playerBody.getPosition().y - 9f, 7, 12, 18, 8, 1, 1, 270);
-				} else if (tx.playerSprite.equals(tx.playerAttackRight)) {
+				} else if (tx.playerTextureRegion.equals(tx.playerAttackRight)) {
 					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 3f, player.playerBody.getPosition().y - 13f, 7, 12, 18, 8, 1, 1, 90);
 				}
 			}
@@ -1543,9 +898,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 				if (e.rayCastable) {
 					e.detectPlayer();
 				}
-				if ((e.playerSighted && e.playerInRange)){
+				if ((e.playerSighted && e.playerInRange) && menuClosed){
 					//System.out.println(Gdx.graphics.getDeltaTime());
-					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 130)){
+					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 140) ){
 						e.timeSinceAlerted = 0f;
 						Vector2 vec1 = new Vector2(e.enemyBody.getPosition());
 						Vector2 vec2 = new Vector2(Player.playerBody.getPosition());
@@ -1621,9 +976,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 			if (e2.rayCastable) {
 				e2.detectPlayer();
 			}
-			if ((e2.playerSighted && e2.playerInRange)){
+			if ((e2.playerSighted && e2.playerInRange) && menuClosed){
 				//System.out.println(Gdx.graphics.getDeltaTime());
-				if (e2.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 120)){
+				if (e2.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 120) ){
 						e2.timeSinceAlerted = 0f;
 						Vector2 vec1 = new Vector2(e2.enemyBody.getPosition());
 						Vector2 vec2 = new Vector2(Player.playerBody.getPosition());
@@ -1655,6 +1010,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 						web.createWeb(web.exitAngle);
 						webs.add(web);
 						webArrayMap.put(web.webBody, web);
+						soundController.playSound("SpiderAttack",6f,5f,0.2f);
+
 					//float result = (e.enemyAI.getOrientation() / (x * MathUtils.PI));
 					//result = result - MathUtils.PI / 2;
 					//System.out.println(x);
@@ -1706,9 +1063,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 			if (e2.rayCastable) {
 				e2.detectPlayer();
 			}
-			if ((e2.playerSighted && e2.playerInRange)){
+			if ((e2.playerSighted && e2.playerInRange) && menuClosed){
 				//System.out.println(Gdx.graphics.getDeltaTime());
-				if (e2.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 130)){
+				if (e2.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 130) ){
 					e2.timeSinceAlerted = 0f;
 					Vector2 vec1 = new Vector2(e2.enemyBody.getPosition());
 					Vector2 vec2 = new Vector2(Player.playerBody.getPosition());
@@ -1927,9 +1284,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 				}
 			}
-
-
-
 
 		for (Column c : columns) {
 			columnStemBatch.begin();
@@ -2217,9 +1571,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 			fontBatch.setProjectionMatrix(camera.combined);
 			inventoryBatch.setProjectionMatrix(camera.combined);
 			hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
+			//TODO uncomment
 			hud.stage.draw();
+
 			hudBatch.setProjectionMatrix(hud.subStage.getCamera().combined);
 			hud.subStage.draw();
+			menuStage.draw();
 	}
 
 	@Override
@@ -2236,10 +1593,52 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 	//update method for physics, camera and held down inputs
 	public void update(float delta) {
-		world.step(1 / 60f, 6, 2);
+
 		//rayHandler.setCombinedMatrix(camera.combined);
 		rayHandler.update();
 		rayHandler.setCombinedMatrix(camera);
+
+		if (menuClosed) {
+			world.step(1 / 60f, 6, 2);
+			allowPlayerInput = true;
+			Gdx.input.setInputProcessor(gip);
+			menuContainer.setVisible(false);
+
+			for (EnemySkull e : enemySkulls) {
+				e.enemyAI.update(GdxAI.getTimepiece().getTime());
+				e.update(GdxAI.getTimepiece().getTime());
+				if (e.playerInRange){
+					e.detectPlayer();
+				}
+			}
+
+			for (EnemySpider e2 : enemySpiders) {
+				e2.enemyAI.update(GdxAI.getTimepiece().getTime());
+				e2.update(GdxAI.getTimepiece().getTime());
+				if (e2.playerInRange){
+					e2.detectPlayer();
+				}
+			}
+
+			for (EnemyGhost e3 : enemyGhosts) {
+				e3.enemyAI.update(GdxAI.getTimepiece().getTime());
+				e3.update(GdxAI.getTimepiece().getTime());
+				if (e3.playerInRange){
+					e3.detectPlayer();
+				}
+			}
+		} else {
+
+
+			allowPlayerInput = false;
+			Gdx.input.setInputProcessor(menuStage);
+			menuContainer.setVisible(true);
+			if (debug) {
+				menuStage.setDebugAll(true);
+			} else {
+				menuStage.setDebugAll(false);
+			}
+		}
 
 		if (player.floorCleared){
 			hud.fadeHUD(hud.winWords);
@@ -2253,11 +1652,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 		}
 
 		if (player.hasTorch && !player.torchApplied) {
-			playerTorch.remove();
-			playerTorch = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.85f), 95, PLAYER_X, PLAYER_Y);
-			playerTorch.attachToBody(player.playerBody);
-			playerTorch.setIgnoreAttachedBody(true);
-			playerTorch.setSoftnessLength(100f);
+			playerLight.remove();
+			playerLight = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.85f), 95, PLAYER_X, PLAYER_Y);
+			playerLight.attachToBody(player.playerBody);
+			playerLight.setIgnoreAttachedBody(true);
+			playerLight.setSoftnessLength(100f);
 			player.torchApplied = true;
 
 		}
@@ -2271,29 +1670,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//player.castRay();
 
-		for (EnemySkull e : enemySkulls) {
-			e.enemyAI.update(GdxAI.getTimepiece().getTime());
-			e.update(GdxAI.getTimepiece().getTime());
-			if (e.playerInRange){
-				e.detectPlayer();
-			}
-		}
 
-		for (EnemySpider e2 : enemySpiders) {
-			e2.enemyAI.update(GdxAI.getTimepiece().getTime());
-			e2.update(GdxAI.getTimepiece().getTime());
-			if (e2.playerInRange){
-				e2.detectPlayer();
-			}
-		}
-
-		for (EnemyGhost e3 : enemyGhosts) {
-			e3.enemyAI.update(GdxAI.getTimepiece().getTime());
-			e3.update(GdxAI.getTimepiece().getTime());
-			if (e3.playerInRange){
-				e3.detectPlayer();
-			}
-		}
 
 		if (!playerPaused) {
 			inputUpdate();
@@ -2346,59 +1723,67 @@ public class DungeonCrawler extends ApplicationAdapter {
 		}
 
 		//move playerSprite Sprite by delta speed according to button WASD press
-		if (Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP)) {
-			PLAYER_VERTICAL_SPEED = 1f;
-			leanUp = true;
-			if (leanLeft){
-				PLAYER_HORIZONTAL_SPEED = -1f;
-				tx.playerSprite = tx.playerUpLeftLean;
-			} else if (leanRight) {
-				PLAYER_HORIZONTAL_SPEED = 1f;
-				tx.playerSprite = tx.playerUpRightLean;
-			}
-			else {
-				tx.playerSprite = tx.playerUp;
-			}
-		}
-
-		if (Gdx.input.isKeyPressed(Keys.A)||Gdx.input.isKeyPressed(Keys.LEFT)) {
-			PLAYER_HORIZONTAL_SPEED = -1f;
-			leanLeft = true;
-			if (leanDown) {
-				PLAYER_VERTICAL_SPEED = -1f;
-				tx.playerSprite = tx.playerDownLeftLean;
-			} else if (leanUp) {
+		if (allowPlayerInput) {
+			if (Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP)) {
 				PLAYER_VERTICAL_SPEED = 1f;
-				tx.playerSprite = tx.playerUpLeftLean;
-			} else {
-				tx.playerSprite = tx.playerLeft;
+				leanUp = true;
+				if (leanLeft){
+					PLAYER_HORIZONTAL_SPEED = -1f;
+
+					tx.playerSprite = tx.playerUpLeftLean;
+				} else if (leanRight) {
+					PLAYER_HORIZONTAL_SPEED = 1f;
+
+					tx.playerSprite = tx.playerUpRightLean;
+
+				}
+				else {
+					currentFrame = tx.playerWalkUpAnimation.getKeyFrame(stateTime3);
+					tx.playerTextureRegion = currentFrame;
+				}
+			}
+
+			if (Gdx.input.isKeyPressed(Keys.A)||Gdx.input.isKeyPressed(Keys.LEFT)) {
+				PLAYER_HORIZONTAL_SPEED = -1f;
+				leanLeft = true;
+				if (leanDown) {
+					PLAYER_VERTICAL_SPEED = -1f;
+					tx.playerTextureRegion = tx.playerDownLeftLean;
+				} else if (leanUp) {
+					PLAYER_VERTICAL_SPEED = 1f;
+					tx.playerTextureRegion = tx.playerUpLeftLean;
+				} else {
+					tx.playerTextureRegion = tx.playerLeft;
+				}
+			}
+
+			if (Gdx.input.isKeyPressed(Keys.S)||Gdx.input.isKeyPressed(Keys.DOWN)) {
+				PLAYER_VERTICAL_SPEED = -1f;
+				leanDown = true;
+				if (leanLeft) {
+					PLAYER_HORIZONTAL_SPEED = -1f;
+					tx.playerTextureRegion = tx.playerDownLeftLean;
+				} else if (leanRight) {
+					PLAYER_HORIZONTAL_SPEED = 1f;
+					tx.playerTextureRegion = tx.playerDownRightLean;
+				} else {
+					tx.playerTextureRegion = tx.playerDown;
+				}
+			}
+			if (Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.RIGHT)) {
+				PLAYER_HORIZONTAL_SPEED = 1f;
+				leanRight = true;
+				if (leanDown) {
+					tx.playerTextureRegion = tx.playerDownRightLean;
+				} else if (leanUp) {
+					tx.playerTextureRegion = tx.playerUpRightLean;
+				} else {
+					tx.playerTextureRegion = tx.playerRight;
+				}
 			}
 		}
 
-		if (Gdx.input.isKeyPressed(Keys.S)||Gdx.input.isKeyPressed(Keys.DOWN)) {
-			PLAYER_VERTICAL_SPEED = -1f;
-			leanDown = true;
-			if (leanLeft) {
-				PLAYER_HORIZONTAL_SPEED = -1f;
-				tx.playerSprite = tx.playerDownLeftLean;
-			} else if (leanRight) {
-				PLAYER_HORIZONTAL_SPEED = 1f;
-				tx.playerSprite = tx.playerDownRightLean;
-			} else {
-				tx.playerSprite = tx.playerDown;
-			}
-		}
-		if (Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.RIGHT)) {
-			PLAYER_HORIZONTAL_SPEED = 1f;
-			leanRight = true;
-			if (leanDown) {
-				tx.playerSprite = tx.playerDownRightLean;
-			} else if (leanUp) {
-				tx.playerSprite = tx.playerUpRightLean;
-			} else {
-				tx.playerSprite = tx.playerRight;
-			}
-		}
+
 
 		//create a movement vector and normalize it for diagonal movement
 		Vector2 vec = new Vector2(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);

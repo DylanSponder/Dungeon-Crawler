@@ -1,4 +1,9 @@
 package com.mygdx.game;
 
-public class GameInputProcessorController extends GameInputProcessor{
+import com.badlogic.gdx.InputProcessor;
+
+import static com.mygdx.game.DungeonCrawler.camera;
+
+public class GameInputProcessorController {
+
 }

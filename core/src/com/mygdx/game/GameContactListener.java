@@ -51,7 +51,7 @@ public class GameContactListener implements ContactListener {
                                     final CreateAssets tx = CreateAssets.getInstance();
                                     //tx.potBreaking.setVolume(100,0.05f);
 
-                                    soundController.playSound("Pot",6,5,0.1f);
+                                    soundController.playSound("Pot",5f,4f,0.1f);
                                     brokenPots.add(p);
                                     //potSmash.dispose();
                                 }
@@ -61,7 +61,7 @@ public class GameContactListener implements ContactListener {
                                     p.POT_HEALTH--;
                                     p.POT_HEALTH--;
 
-                                    soundController.playSound("Pot",6,5,0.1f);
+                                    soundController.playSound("Pot",5f,4f,0.1f);
                                     brokenPots.add(p);
                                     //potSmash.dispose();
 
@@ -281,7 +281,7 @@ public class GameContactListener implements ContactListener {
                             s.SKULL_HEALTH--;
                             if (s.SKULL_HEALTH <= 0) {
                                 brokenSkulls.add(s);
-                                soundController.playSound("Skull",7f,6f,0.1f);
+                                soundController.playSound("Skull",8.5f,7.5f,0.1f);
                             }
                         }
                     }

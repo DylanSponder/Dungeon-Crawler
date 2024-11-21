@@ -22,6 +22,7 @@ public class CreateAssets {
     Texture emptySlotTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Potion/Empty.png"));
     Texture coinTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Coin2Preview.png"));
     Texture playerTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SpriteSheet.png"));
+    Texture playerWalkAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/Walk.png"));
     Texture playerAttackTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/Attack.png"));
     Texture roomBackground = new Texture(Gdx.files.internal("HellasDungeon/Level/Level 1/CustomTileset.png"));
     //Texture roomDoorTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHouse.png"));
@@ -50,9 +51,10 @@ public class CreateAssets {
 
             Music level1Track = Gdx.audio.newMusic(Gdx.files.internal("HellasDungeon/Music/Level1Track.mp3"));
 
-    public Sound potBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/potbreaking.mp3"));
+    public Sound potBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/potbreaking2.mp3"));
     public Sound skullBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/skullbreaking.mp3"));
     public Sound boneBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/bonebreaking.mp3"));
+    public Sound spiderAttack = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/spiderattack.mp3"));
 
     public Sound fireAmbient = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/Fire.mp3"));
 
@@ -106,7 +108,7 @@ public class CreateAssets {
     public TextureRegion roomRightDownEndFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
 
 
-    public TextureRegion amphoraTexture = new TextureRegion(potsSheet, 0,0,16,16);
+    public TextureRegion amphoraeTexture = new TextureRegion(potsSheet, 0,0,16,16);
     public TextureRegion amphora2Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion damagedAmphoraTexture = new TextureRegion(roomBackground, 0,0,16,16);
 
@@ -114,6 +116,39 @@ public class CreateAssets {
     public TextureRegion cobwebTexture = new TextureRegion(roomBackground,0,0,16,16);
 
     //animations
+    public TextureRegion playerWalkUpAnimationTexture = new TextureRegion(playerWalkAnimationSheet,0,0,16,16);
+    public TextureRegion playerWalkDownAnimationTexture = new TextureRegion(playerWalkAnimationSheet,16,0,16,16);
+    public TextureRegion playerWalkLeftAnimationTexture = new TextureRegion(playerWalkAnimationSheet,32,0,16,16);
+    public TextureRegion playerWalkRightAnimationTexture = new TextureRegion(playerWalkAnimationSheet,48,0,16,16);
+
+    public Animation<TextureRegion> playerWalkUpAnimation = new Animation<TextureRegion>(0.50f, playerWalkUpAnimationTexture);
+    public Animation<TextureRegion> playerWalkDownAnimation = new Animation<TextureRegion>(0.50f, playerWalkDownAnimationTexture);
+    public Animation<TextureRegion> playerWalkLeftAnimation = new Animation<TextureRegion>(0.50f, playerWalkLeftAnimationTexture);
+    public Animation<TextureRegion> playerWalkRightAnimation = new Animation<TextureRegion>(0.50f, playerWalkRightAnimationTexture);
+
+    TextureRegion[][] playerWalkUpTextureArray = TextureRegion.split(playerWalkAnimationSheet,
+            playerWalkAnimationSheet.getWidth() / 1,
+            playerWalkAnimationSheet.getHeight() / 4);
+
+    TextureRegion[] playerWalkUpFrames = new TextureRegion[1 * 4];
+
+    TextureRegion[][] playerWalkDownTextureArray = TextureRegion.split(playerWalkAnimationSheet,
+            playerWalkAnimationSheet.getWidth() / 1,
+            playerWalkAnimationSheet.getHeight() / 4);
+
+    TextureRegion[] playerWalkDownFrames = new TextureRegion[1 * 4];
+
+    TextureRegion[][] playerWalkLeftTextureArray = TextureRegion.split(playerWalkAnimationSheet,
+            playerWalkAnimationSheet.getWidth() / 1,
+            playerWalkAnimationSheet.getHeight() / 4);
+
+    TextureRegion[] playerWalkLeftFrames = new TextureRegion[1 * 4];
+
+    TextureRegion[][] playerWalkRightTextureArray = TextureRegion.split(playerWalkAnimationSheet,
+            playerWalkAnimationSheet.getWidth() / 1,
+            playerWalkAnimationSheet.getHeight() / 4);
+
+    TextureRegion[] playerWalkRightFrames = new TextureRegion[1 * 4];
 
     public TextureRegion fireAnimationTexture = new TextureRegion(fireAnimationSheet,0,0,16,16);
     public TextureRegion flameAnimationTexture = new TextureRegion(flameAnimationSheet,0,0,16,16);
@@ -128,6 +163,7 @@ public class CreateAssets {
 
     public Animation<TextureRegion> smokeAnimation = new Animation<TextureRegion>(0.25f, smokeAnimationTexture);
     public Animation<TextureRegion> fireOutAnimation = new Animation<TextureRegion>(0.10f, fireOutAnimationTexture);
+
 
     TextureRegion[][] flameTextureArray = TextureRegion.split(flameAnimationSheet,
             flameAnimationSheet.getWidth() / 3,
@@ -173,7 +209,10 @@ public class CreateAssets {
     int index4 = 0;
     int index5 = 0;
     int index6 = 0;
-
+    int index7 = 0;
+    int index8 = 0;
+    int index9 = 0;
+    int index10 = 0;
 
     public TextureRegion colTop1 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colTop2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
@@ -249,6 +288,7 @@ public class CreateAssets {
 
     //outline player sprites
     Sprite playerSprite = new Sprite(playerTexture, 0, 0, 16, 16);
+    TextureRegion playerTextureRegion = new TextureRegion(playerTexture, 0, 0, 16, 16);
     Sprite playerUp = new Sprite(playerTexture, 16, 0, 16, 16);
     Sprite playerDown = new Sprite(playerTexture, 0, 0, 16, 16);
     Sprite playerLeft = new Sprite(playerTexture, 32, 0, 16, 16);
@@ -307,17 +347,17 @@ public class CreateAssets {
     Sprite candleSprite = new Sprite(candleTexture,384,64,16,16);
     Sprite candlesSprite = new Sprite(candlesTexture,400,64,16,16);
 
-    Sprite pot1Sprite = new Sprite(amphoraTexture, 16,16, 16, 16);
-    Sprite pot2Sprite = new Sprite(amphoraTexture, 32,16, 16, 16);
-    Sprite pot3Sprite = new Sprite(amphoraTexture, 48,16, 16, 16);
-    Sprite pot4Sprite = new Sprite(amphoraTexture, 64,16, 16, 16);
-    Sprite pot5Sprite = new Sprite(amphoraTexture, 80,16, 16, 16);
-    Sprite pot6Sprite = new Sprite(amphoraTexture, 96,16, 16, 16);
-    Sprite pot7Sprite = new Sprite(amphoraTexture, 112,16, 16, 16);
-    Sprite pot8Sprite = new Sprite(amphoraTexture, 128,16, 16, 16);
-    Sprite pot9Sprite = new Sprite(amphoraTexture, 144,16, 16, 16);
-    Sprite pot10Sprite = new Sprite(amphoraTexture, 160,16, 16, 16);
-    Sprite pot11Sprite = new Sprite(amphoraTexture, 176,16, 16, 16);
+    Sprite pot1Sprite = new Sprite(amphoraeTexture, 16,16, 16, 16);
+    Sprite pot2Sprite = new Sprite(amphoraeTexture, 32,16, 16, 16);
+    Sprite pot3Sprite = new Sprite(amphoraeTexture, 48,16, 16, 16);
+    Sprite pot4Sprite = new Sprite(amphoraeTexture, 64,16, 16, 16);
+    Sprite pot5Sprite = new Sprite(amphoraeTexture, 80,16, 16, 16);
+    Sprite pot6Sprite = new Sprite(amphoraeTexture, 96,16, 16, 16);
+    Sprite pot7Sprite = new Sprite(amphoraeTexture, 112,16, 16, 16);
+    Sprite pot8Sprite = new Sprite(amphoraeTexture, 128,16, 16, 16);
+    Sprite pot9Sprite = new Sprite(amphoraeTexture, 144,16, 16, 16);
+    Sprite pot10Sprite = new Sprite(amphoraeTexture, 160,16, 16, 16);
+    Sprite pot11Sprite = new Sprite(amphoraeTexture, 176,16, 16, 16);
 
 
     Sprite damagedAmphoraSprite = new Sprite(damagedAmphoraTexture, 224,0, 16, 16);
@@ -350,6 +390,42 @@ public class CreateAssets {
         //music2.play();
         //music2.setVolume(0.5f);
        // music2.setLooping(true);
+
+        //player walk up animation
+
+        for (int g = 0; g < 4; g++) {
+            for (int w = 0; w < 1; w++) {
+                playerWalkUpFrames[index7++] = playerWalkUpTextureArray[g][w];
+            }
+        }
+
+        playerWalkUpAnimation = new Animation<TextureRegion>(0.50f, playerWalkUpFrames);
+
+        for (int g = 0; g < 4; g++) {
+            for (int w = 0; w < 1; w++) {
+                playerWalkDownFrames[index8++] = playerWalkDownTextureArray[g][w];
+            }
+        }
+
+        playerWalkDownAnimation = new Animation<TextureRegion>(0.50f, playerWalkDownFrames);
+
+        for (int g = 0; g < 4; g++) {
+            for (int w = 0; w < 1; w++) {
+                playerWalkLeftFrames[index9++] = playerWalkLeftTextureArray[g][w];
+            }
+        }
+
+        playerWalkLeftAnimation = new Animation<TextureRegion>(0.50f, playerWalkLeftFrames);
+
+        for (int g = 0; g < 4; g++) {
+            for (int w = 0; w < 1; w++) {
+                playerWalkRightFrames[index10++] = playerWalkRightTextureArray[g][w];
+            }
+        }
+
+        playerWalkRightAnimation = new Animation<TextureRegion>(0.50f, playerWalkRightFrames);
+
+
 
         //fire animation
         for (int p = 0; p < 2; p++) {

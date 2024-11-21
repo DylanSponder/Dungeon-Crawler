@@ -21,7 +21,6 @@ public class SoundController {
                 float randall1 = Random.randomFloat(pitchMax,pitchMin);
                 potSmash.setPitch(id,randall1/10);
                 potSmash.setVolume(id,volume);
-
                 break;
 
             case "Skull":
@@ -31,6 +30,22 @@ public class SoundController {
                 skullSmash.setPitch(id2,randall2/10);
                 skullSmash.setVolume(id2,volume);
                 break;
+
+            case "Bone":
+                Sound boneSmash = tx.boneBreaking;
+                long id3 = boneSmash.play();
+                float randall3 = Random.randomFloat(pitchMax,pitchMin);
+                boneSmash.setPitch(id3,randall3/10);
+                boneSmash.setVolume(id3,volume);
+                break;
+            case "SpiderAttack":
+                Sound spiderAttack = tx.spiderAttack;
+                long id4 = spiderAttack.play();
+                float randall4 = Random.randomFloat(pitchMax,pitchMin);
+                spiderAttack.setPitch(id4,randall4/10);
+                spiderAttack.setVolume(id4,volume);
+                break;
+
 
         }
 

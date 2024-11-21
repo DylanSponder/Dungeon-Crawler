@@ -144,9 +144,8 @@ public class EnemySpider extends Enemy {
 
     public Arrive<Vector2> arriveAtPlayer() {
         arriveSB = new Arrive<Vector2>(enemyAI, DungeonCrawler.player.playerB2D)
-                .setTimeToTarget(0.03f)
-                .setArrivalTolerance(16f)
-                .setDecelerationRadius(8f);
+                .setTimeToTarget(0.1f)
+                .setArrivalTolerance(16f);
         return arriveSB;
     }
 
