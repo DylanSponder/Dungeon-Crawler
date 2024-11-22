@@ -52,8 +52,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch, flameBatch, webBatch, cobBatch, candleBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch, roofBatch, columnBaseLowerBatch;
 	public static World world;
+	public Viewport vp;
 	public static Stage menuStage;
 	public static Table menuContainer;
+	public ShapeRenderer menuRenderer;
 	public static boolean debug, menuClosed, allowPlayerInput;
 	public GameInputProcessor gip;
 	private Box2DDebugRenderer b2dr;
@@ -126,6 +128,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		world = new World(new Vector2(0, 0f), false);
 		assetManager = new AssetManager();
 		soundController = new SoundController();
+		menuRenderer = new ShapeRenderer();
 		playerBatch = new SpriteBatch();
 		hudBatch = new SpriteBatch();
 		tutoBatch = new SpriteBatch();
@@ -208,23 +211,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 		GameContactListener lc = new GameContactListener();
 		tx.textureRegionBuilder();
 
-
-
-
-//		final CreateSound cs = new CreateSound();
-//		cs.createSound();
-
-		//FileHandle file = new FileHandle("");
-		//bmfData = new BitmapFont.BitmapFontData();
-		//bmfData.fontFile = file;
-		//defaultFont = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/GreekAlphabet-export.fnt"));
-
-		//defaultFont = new BitmapFont(bmfData.fontFile,tx.fontTexture);
-
-		//defaultFont = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/GreekAlphabetConcise-export.fnt"),
-		//		Gdx.files.internal("HellasDungeon/Font/GreekAlphabetConcise-export.png"), false);
-
-
 		defaultFont = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.fnt"),
 				Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.png"), false);
 
@@ -232,24 +218,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 				Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.png"), false);
 
 
-
-
-
-
 		Color c = new Color();
 		c.set(1,1,1,1);
-		//Text t =  new Text(defaultFont, "TEST MESSAGE", c, false);
-		//messages.add(t);
 
 		Text level1StartText =  new Text(defaultFont, "CLAY CATACOMBS", c, true, 10f, 1f, true, false, null, 0);
-		//messages.add(level1StartText);
-		//0.045f
-
-		//Text roomCleared =  new Text(defaultFont, "ROOM CLEARED", c, true, 1f, 0.045f, true);
-		//messages.add(roomCleared);
-
-		//defaultFont.getData();
-		//bmfData.setGlyphRegion();
 
 		//get width and height of the game window
 		int h = Gdx.graphics.getHeight();
@@ -259,9 +231,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		camera = new OrthographicCamera(1000, 1000);
 		camera.setToOrtho(false, w / 3, h / 3);
 
-		Viewport vp = new ExtendViewport(camera.viewportWidth, camera.viewportHeight);
+		vp = new ExtendViewport(camera.viewportWidth, camera.viewportHeight);
 		hud = new HUD(vp, hudBatch);
-
 
 		//initialize map
 		TiledMap map = new TiledMap();
@@ -274,20 +245,17 @@ public class DungeonCrawler extends ApplicationAdapter {
 		renderer = new OrthogonalTiledMapRenderer(map);
 		b2dr = new Box2DDebugRenderer();
 
-
-		//TODO: Add basic menu/loading screen here
-
 		//create the Box2D ray handler
 		rayHandler = new RayHandler(world);
 		rayHandler.setAmbientLight(0f, 0f, 0f, 0.010f);
 		if (debug) {
 			rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
-
 		}
 
 		menuStage = new Stage(vp);
 
 		//Menu code
+		//TODO Move to separate class
 		Skin skin = new Skin();
 		skin.add("default-font",defaultFont, BitmapFont.class);
 		FileHandle fileHandle = Gdx.files.internal("HellasDungeon/HUD");
@@ -389,8 +357,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		if (!debug) {
 			//set the window mode to fullscreen and hide the cursor when in the game window
 			Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-			//TODO RE-ENABLE
-		//	Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);
+			Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);
 		}
 	}
 
@@ -1570,12 +1537,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 			roofBatch.setProjectionMatrix(camera.combined);
 			fontBatch.setProjectionMatrix(camera.combined);
 			inventoryBatch.setProjectionMatrix(camera.combined);
-			hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
-			//TODO uncomment
-			hud.stage.draw();
 
+			hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
+			hud.stage.draw();
 			hudBatch.setProjectionMatrix(hud.subStage.getCamera().combined);
 			hud.subStage.draw();
+			menuRenderer.setProjectionMatrix(camera.combined);
 			menuStage.draw();
 	}
 
@@ -1595,14 +1562,17 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public void update(float delta) {
 
 		//rayHandler.setCombinedMatrix(camera.combined);
-		rayHandler.update();
 		rayHandler.setCombinedMatrix(camera);
+		rayHandler.update();
+
 
 		if (menuClosed) {
+			rayHandler.setAmbientLight(0f, 0f, 0f, 0.010f);
 			world.step(1 / 60f, 6, 2);
 			allowPlayerInput = true;
 			Gdx.input.setInputProcessor(gip);
 			menuContainer.setVisible(false);
+			Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);
 
 			for (EnemySkull e : enemySkulls) {
 				e.enemyAI.update(GdxAI.getTimepiece().getTime());
@@ -1628,8 +1598,17 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 		} else {
+			//rayHandler.setAmbientLight(0f, 0f, 0f, 0f);
 
+			Gdx.gl.glEnable(GL20.GL_BLEND);
+			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+			menuRenderer.begin(ShapeRenderer.ShapeType.Filled);
+			menuRenderer.setColor(new Color(0, 0, 0, 0.5f));
+			menuRenderer.rect(vp.getScreenX(),vp.getScreenY(),Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+			menuRenderer.end();
+			Gdx.gl.glDisable(GL20.GL_BLEND);
 
+			Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Arrow);
 			allowPlayerInput = false;
 			Gdx.input.setInputProcessor(menuStage);
 			menuContainer.setVisible(true);
@@ -1658,7 +1637,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 			playerLight.setIgnoreAttachedBody(true);
 			playerLight.setSoftnessLength(100f);
 			player.torchApplied = true;
-
 		}
 
 		if (!GenerateLevel.init.roomList.get(player.currentRoom).isShop && !debug) {
@@ -1669,8 +1647,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 		}
 
 		//player.castRay();
-
-
 
 		if (!playerPaused) {
 			inputUpdate();
@@ -1693,6 +1669,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		potBatch.dispose();
 		potionBatch.dispose();
 		columnTopBatch.dispose();
+		//menuRenderer.dispose();
 		columnStemBatch.dispose();
 		columnBaseBatch.dispose();
 		fireBatch.dispose();
@@ -1738,7 +1715,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 				}
 				else {
-					currentFrame = tx.playerWalkUpAnimation.getKeyFrame(stateTime3);
+					currentFrame = tx.playerWalkUpAnimation.getKeyFrame(stateTime3, true);
+					stateTime3 += Gdx.graphics.getDeltaTime();
 					tx.playerTextureRegion = currentFrame;
 				}
 			}
@@ -1753,7 +1731,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 					PLAYER_VERTICAL_SPEED = 1f;
 					tx.playerTextureRegion = tx.playerUpLeftLean;
 				} else {
-					tx.playerTextureRegion = tx.playerLeft;
+					currentFrame = tx.playerWalkLeftAnimation.getKeyFrame(stateTime3, true);
+					stateTime3 += Gdx.graphics.getDeltaTime();
+					tx.playerTextureRegion = currentFrame;
 				}
 			}
 
@@ -1767,7 +1747,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 					PLAYER_HORIZONTAL_SPEED = 1f;
 					tx.playerTextureRegion = tx.playerDownRightLean;
 				} else {
-					tx.playerTextureRegion = tx.playerDown;
+					currentFrame = tx.playerWalkDownAnimation.getKeyFrame(stateTime3, true);
+					stateTime3 += Gdx.graphics.getDeltaTime();
+					tx.playerTextureRegion = currentFrame;
 				}
 			}
 			if (Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.RIGHT)) {
@@ -1778,7 +1760,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 				} else if (leanUp) {
 					tx.playerTextureRegion = tx.playerUpRightLean;
 				} else {
-					tx.playerTextureRegion = tx.playerRight;
+					currentFrame = tx.playerWalkRightAnimation.getKeyFrame(stateTime3, true);
+					stateTime3 += Gdx.graphics.getDeltaTime();
+					tx.playerTextureRegion = currentFrame;
 				}
 			}
 		}

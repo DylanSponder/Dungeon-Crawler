@@ -231,6 +231,9 @@ public class GameInputProcessor implements InputProcessor {
 
     public boolean keyDown(int keycode) {
 
+        tx = CreateAssets.getInstance();
+        bf = new BodyFactory();
+
         if (debug) {
 
             // (For Debugging) Add potion

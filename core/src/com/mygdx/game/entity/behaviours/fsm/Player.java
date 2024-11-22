@@ -22,6 +22,7 @@ public class Player {
     public boolean hasGreekFire, hasShield, hasTorch, torchApplied;
     public int greekFireUses;
     public boolean floorCleared, roomCleared, playerInput;
+    public float stateTime;
 
     public Fixture playerDetectionFixture;
     public boolean buyingStock;

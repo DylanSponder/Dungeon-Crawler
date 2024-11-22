@@ -22,7 +22,10 @@ public class CreateAssets {
     Texture emptySlotTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Potion/Empty.png"));
     Texture coinTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Coin2Preview.png"));
     Texture playerTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SpriteSheet.png"));
-    Texture playerWalkAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/Walk.png"));
+    Texture playerWalkUpAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkUp.png"));
+    Texture playerWalkDownAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkDown.png"));
+    Texture playerWalkLeftAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkLeft.png"));
+    Texture playerWalkRightAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkRight.png"));
     Texture playerAttackTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/Attack.png"));
     Texture roomBackground = new Texture(Gdx.files.internal("HellasDungeon/Level/Level 1/CustomTileset.png"));
     //Texture roomDoorTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHouse.png"));
@@ -116,37 +119,37 @@ public class CreateAssets {
     public TextureRegion cobwebTexture = new TextureRegion(roomBackground,0,0,16,16);
 
     //animations
-    public TextureRegion playerWalkUpAnimationTexture = new TextureRegion(playerWalkAnimationSheet,0,0,16,16);
-    public TextureRegion playerWalkDownAnimationTexture = new TextureRegion(playerWalkAnimationSheet,16,0,16,16);
-    public TextureRegion playerWalkLeftAnimationTexture = new TextureRegion(playerWalkAnimationSheet,32,0,16,16);
-    public TextureRegion playerWalkRightAnimationTexture = new TextureRegion(playerWalkAnimationSheet,48,0,16,16);
+    public TextureRegion playerWalkUpAnimationTexture = new TextureRegion(playerWalkUpAnimationSheet,0,0,16,16);
+    public TextureRegion playerWalkDownAnimationTexture = new TextureRegion(playerWalkDownAnimationSheet,16,0,16,16);
+    public TextureRegion playerWalkLeftAnimationTexture = new TextureRegion(playerWalkLeftAnimationSheet,32,0,16,16);
+    public TextureRegion playerWalkRightAnimationTexture = new TextureRegion(playerWalkRightAnimationSheet,48,0,16,16);
 
-    public Animation<TextureRegion> playerWalkUpAnimation = new Animation<TextureRegion>(0.50f, playerWalkUpAnimationTexture);
-    public Animation<TextureRegion> playerWalkDownAnimation = new Animation<TextureRegion>(0.50f, playerWalkDownAnimationTexture);
-    public Animation<TextureRegion> playerWalkLeftAnimation = new Animation<TextureRegion>(0.50f, playerWalkLeftAnimationTexture);
-    public Animation<TextureRegion> playerWalkRightAnimation = new Animation<TextureRegion>(0.50f, playerWalkRightAnimationTexture);
+    public Animation<TextureRegion> playerWalkUpAnimation = new Animation<TextureRegion>(0.20f, playerWalkUpAnimationTexture);
+    public Animation<TextureRegion> playerWalkDownAnimation = new Animation<TextureRegion>(0.20f, playerWalkDownAnimationTexture);
+    public Animation<TextureRegion> playerWalkLeftAnimation = new Animation<TextureRegion>(0.20f, playerWalkLeftAnimationTexture);
+    public Animation<TextureRegion> playerWalkRightAnimation = new Animation<TextureRegion>(0.20f, playerWalkRightAnimationTexture);
 
-    TextureRegion[][] playerWalkUpTextureArray = TextureRegion.split(playerWalkAnimationSheet,
-            playerWalkAnimationSheet.getWidth() / 1,
-            playerWalkAnimationSheet.getHeight() / 4);
+    TextureRegion[][] playerWalkUpTextureArray = TextureRegion.split(playerWalkUpAnimationSheet,
+            playerWalkUpAnimationSheet.getWidth() / 1,
+            playerWalkUpAnimationSheet.getHeight() / 4);
 
     TextureRegion[] playerWalkUpFrames = new TextureRegion[1 * 4];
 
-    TextureRegion[][] playerWalkDownTextureArray = TextureRegion.split(playerWalkAnimationSheet,
-            playerWalkAnimationSheet.getWidth() / 1,
-            playerWalkAnimationSheet.getHeight() / 4);
+    TextureRegion[][] playerWalkDownTextureArray = TextureRegion.split(playerWalkDownAnimationSheet,
+            playerWalkDownAnimationSheet.getWidth() / 1,
+            playerWalkDownAnimationSheet.getHeight() / 4);
 
     TextureRegion[] playerWalkDownFrames = new TextureRegion[1 * 4];
 
-    TextureRegion[][] playerWalkLeftTextureArray = TextureRegion.split(playerWalkAnimationSheet,
-            playerWalkAnimationSheet.getWidth() / 1,
-            playerWalkAnimationSheet.getHeight() / 4);
+    TextureRegion[][] playerWalkLeftTextureArray = TextureRegion.split(playerWalkLeftAnimationSheet,
+            playerWalkLeftAnimationSheet.getWidth() / 1,
+            playerWalkLeftAnimationSheet.getHeight() / 4);
 
     TextureRegion[] playerWalkLeftFrames = new TextureRegion[1 * 4];
 
-    TextureRegion[][] playerWalkRightTextureArray = TextureRegion.split(playerWalkAnimationSheet,
-            playerWalkAnimationSheet.getWidth() / 1,
-            playerWalkAnimationSheet.getHeight() / 4);
+    TextureRegion[][] playerWalkRightTextureArray = TextureRegion.split(playerWalkRightAnimationSheet,
+            playerWalkRightAnimationSheet.getWidth() / 1,
+            playerWalkRightAnimationSheet.getHeight() / 4);
 
     TextureRegion[] playerWalkRightFrames = new TextureRegion[1 * 4];
 
@@ -288,7 +291,7 @@ public class CreateAssets {
 
     //outline player sprites
     Sprite playerSprite = new Sprite(playerTexture, 0, 0, 16, 16);
-    TextureRegion playerTextureRegion = new TextureRegion(playerTexture, 0, 0, 16, 16);
+    public TextureRegion playerTextureRegion = new TextureRegion(playerTexture, 0, 0, 16, 16);
     Sprite playerUp = new Sprite(playerTexture, 16, 0, 16, 16);
     Sprite playerDown = new Sprite(playerTexture, 0, 0, 16, 16);
     Sprite playerLeft = new Sprite(playerTexture, 32, 0, 16, 16);
@@ -399,7 +402,7 @@ public class CreateAssets {
             }
         }
 
-        playerWalkUpAnimation = new Animation<TextureRegion>(0.50f, playerWalkUpFrames);
+        playerWalkUpAnimation = new Animation<TextureRegion>(0.15f, playerWalkUpFrames);
 
         for (int g = 0; g < 4; g++) {
             for (int w = 0; w < 1; w++) {
@@ -407,7 +410,7 @@ public class CreateAssets {
             }
         }
 
-        playerWalkDownAnimation = new Animation<TextureRegion>(0.50f, playerWalkDownFrames);
+        playerWalkDownAnimation = new Animation<TextureRegion>(0.15f, playerWalkDownFrames);
 
         for (int g = 0; g < 4; g++) {
             for (int w = 0; w < 1; w++) {
@@ -415,7 +418,7 @@ public class CreateAssets {
             }
         }
 
-        playerWalkLeftAnimation = new Animation<TextureRegion>(0.50f, playerWalkLeftFrames);
+        playerWalkLeftAnimation = new Animation<TextureRegion>(0.15f, playerWalkLeftFrames);
 
         for (int g = 0; g < 4; g++) {
             for (int w = 0; w < 1; w++) {
@@ -423,7 +426,7 @@ public class CreateAssets {
             }
         }
 
-        playerWalkRightAnimation = new Animation<TextureRegion>(0.50f, playerWalkRightFrames);
+        playerWalkRightAnimation = new Animation<TextureRegion>(0.15f, playerWalkRightFrames);
 
 
 
