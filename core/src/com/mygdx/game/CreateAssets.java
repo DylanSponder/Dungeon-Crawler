@@ -26,6 +26,11 @@ public class CreateAssets {
     Texture playerWalkDownAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkDown.png"));
     Texture playerWalkLeftAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkLeft.png"));
     Texture playerWalkRightAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkRight.png"));
+    Texture playerWalkDownRightAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkDownRight.png"));
+    Texture playerWalkDownLeftAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkDownLeft.png"));
+    Texture playerWalkUpLeftAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkUpLeft.png"));
+    Texture playerWalkUpRightAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkUpRight.png"));
+
     Texture playerAttackTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/Attack.png"));
     Texture roomBackground = new Texture(Gdx.files.internal("HellasDungeon/Level/Level 1/CustomTileset.png"));
     //Texture roomDoorTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHouse.png"));
@@ -50,9 +55,7 @@ public class CreateAssets {
     Texture potsSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Pots.png"));
     Texture webTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySpider/WebSpit.png"));
 
-
-
-            Music level1Track = Gdx.audio.newMusic(Gdx.files.internal("HellasDungeon/Music/Level1Track.mp3"));
+    Music level1Track = Gdx.audio.newMusic(Gdx.files.internal("HellasDungeon/Music/Level1Track.mp3"));
 
     public Sound potBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/potbreaking2.mp3"));
     public Sound skullBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/skullbreaking.mp3"));
@@ -153,6 +156,41 @@ public class CreateAssets {
 
     TextureRegion[] playerWalkRightFrames = new TextureRegion[1 * 4];
 
+    public TextureRegion playerWalkUpRightAnimationTexture = new TextureRegion(playerWalkUpAnimationSheet,0,0,16,16);
+    public TextureRegion playerWalkDownRightAnimationTexture = new TextureRegion(playerWalkDownAnimationSheet,16,0,16,16);
+    public TextureRegion playerWalkDownLeftAnimationTexture = new TextureRegion(playerWalkLeftAnimationSheet,32,0,16,16);
+    public TextureRegion playerWalkUpLeftAnimationTexture = new TextureRegion(playerWalkRightAnimationSheet,48,0,16,16);
+
+    public Animation<TextureRegion> playerWalkUpLeftAnimation = new Animation<TextureRegion>(0.20f, playerWalkUpAnimationTexture);
+    public Animation<TextureRegion> playerWalkUpRightAnimation = new Animation<TextureRegion>(0.20f, playerWalkDownAnimationTexture);
+    public Animation<TextureRegion> playerWalkDownLeftAnimation = new Animation<TextureRegion>(0.20f, playerWalkLeftAnimationTexture);
+    public Animation<TextureRegion> playerWalkDownRightAnimation = new Animation<TextureRegion>(0.20f, playerWalkRightAnimationTexture);
+
+    TextureRegion[][] playerWalkUpLeftTextureArray = TextureRegion.split(playerWalkUpLeftAnimationSheet,
+            playerWalkUpLeftAnimationSheet.getWidth() / 1,
+            playerWalkUpLeftAnimationSheet.getHeight() / 4);
+
+    TextureRegion[] playerWalkUpLeftFrames = new TextureRegion[1 * 4];
+
+    TextureRegion[][] playerWalkDownLeftTextureArray = TextureRegion.split(playerWalkDownLeftAnimationSheet,
+            playerWalkDownLeftAnimationSheet.getWidth() / 1,
+            playerWalkDownLeftAnimationSheet.getHeight() / 4);
+
+    TextureRegion[] playerWalkDownLeftFrames = new TextureRegion[1 * 4];
+
+    TextureRegion[][] playerWalkUpRightTextureArray = TextureRegion.split(playerWalkUpRightAnimationSheet,
+            playerWalkUpRightAnimationSheet.getWidth() / 1,
+            playerWalkUpRightAnimationSheet.getHeight() / 4);
+
+    TextureRegion[] playerWalkUpRightFrames = new TextureRegion[1 * 4];
+
+    TextureRegion[][] playerWalkDownRightTextureArray = TextureRegion.split(playerWalkDownRightAnimationSheet,
+            playerWalkDownRightAnimationSheet.getWidth() / 1,
+            playerWalkDownRightAnimationSheet.getHeight() / 4);
+
+    TextureRegion[] playerWalkDownRightFrames = new TextureRegion[1 * 4];
+
+
     public TextureRegion fireAnimationTexture = new TextureRegion(fireAnimationSheet,0,0,16,16);
     public TextureRegion flameAnimationTexture = new TextureRegion(flameAnimationSheet,0,0,16,16);
     public TextureRegion blueFireAnimationTexture = new TextureRegion(blueFireAnimationSheet,0,0,16,16);
@@ -216,6 +254,10 @@ public class CreateAssets {
     int index8 = 0;
     int index9 = 0;
     int index10 = 0;
+    int index11 = 0;
+    int index12 = 0;
+    int index13 = 0;
+    int index14 = 0;
 
     public TextureRegion colTop1 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colTop2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
@@ -394,7 +436,7 @@ public class CreateAssets {
         //music2.setVolume(0.5f);
        // music2.setLooping(true);
 
-        //player walk up animation
+        //player walk animations
 
         for (int g = 0; g < 4; g++) {
             for (int w = 0; w < 1; w++) {
@@ -429,6 +471,39 @@ public class CreateAssets {
         playerWalkRightAnimation = new Animation<TextureRegion>(0.15f, playerWalkRightFrames);
 
 
+        //player diagonal walk animations
+
+        for (int g = 0; g < 4; g++) {
+            for (int w = 0; w < 1; w++) {
+                playerWalkUpLeftFrames[index11++] = playerWalkUpLeftTextureArray[g][w];
+            }
+        }
+
+        playerWalkUpLeftAnimation = new Animation<TextureRegion>(0.15f, playerWalkUpLeftFrames);
+
+        for (int g = 0; g < 4; g++) {
+            for (int w = 0; w < 1; w++) {
+                playerWalkDownLeftFrames[index12++] = playerWalkDownLeftTextureArray[g][w];
+            }
+        }
+
+        playerWalkDownLeftAnimation = new Animation<TextureRegion>(0.15f, playerWalkDownLeftFrames);
+
+        for (int g = 0; g < 4; g++) {
+            for (int w = 0; w < 1; w++) {
+                playerWalkDownRightFrames[index13++] = playerWalkDownRightTextureArray[g][w];
+            }
+        }
+
+        playerWalkDownRightAnimation = new Animation<TextureRegion>(0.15f, playerWalkDownRightFrames);
+
+        for (int g = 0; g < 4; g++) {
+            for (int w = 0; w < 1; w++) {
+                playerWalkUpRightFrames[index14++] = playerWalkUpRightTextureArray[g][w];
+            }
+        }
+
+        playerWalkUpRightAnimation = new Animation<TextureRegion>(0.15f, playerWalkUpRightFrames);
 
         //fire animation
         for (int p = 0; p < 2; p++) {

@@ -50,28 +50,28 @@ public class GameInputProcessor implements InputProcessor {
             float playerMeleeAttackSpeedInSeconds = 0.40f;
             playerMeleeAttacking = true;
 
-            if (tx.playerTextureRegion.equals(tx.playerDown)) {
+            if (moveDown || player.facing == 3) {
                 tx.playerTextureRegion = tx.playerAttackDown;
                 swordBody = bf.createSwordBody(world, player.playerBody, -2.5f, -11.5f);
                 swordHitbox = bf.createSwordHitbox(swordBody, false);
                 swordHitbox.setUserData("DownSword");
                 swordHitbox.setSensor(true);
                 player.playerBody.applyForce(0,-100000,0,0,true);
-            } else if (tx.playerTextureRegion.equals(tx.playerUp) || leanUp) {
+            } else if (moveUp || player.facing == 1) {
                 tx.playerTextureRegion = tx.playerAttackUp;
                 swordBody = bf.createSwordBody(world, player.playerBody, -2.5f, 17.5f);
                 swordHitbox = bf.createSwordHitbox(swordBody, false);
                 swordHitbox.setUserData("UpSword");
                 swordHitbox.setSensor(true);
                 player.playerBody.applyForce(0,100000,0,0,true);
-            } else if (tx.playerTextureRegion.equals(tx.playerLeft)) {
+            } else if (moveLeft || player.facing == 4) {
                 tx.playerTextureRegion = tx.playerAttackLeft;
                 swordBody = bf.createSwordBody(world, player.playerBody, -15.5f, -1.5f);
                 swordHitbox = bf.createSwordHitbox(swordBody, true);
                 swordHitbox.setUserData("LeftSword");
                 swordHitbox.setSensor(true);
                 player.playerBody.applyForce(-100000,0,0,0,true);
-            } else if (tx.playerTextureRegion.equals(tx.playerRight)) {
+            } else if (moveRight || player.facing == 2) {
                 tx.playerTextureRegion = tx.playerAttackRight;
                 swordBody = bf.createSwordBody(world, player.playerBody, 15.5f, -1.5f);
                 swordHitbox = bf.createSwordHitbox(swordBody, true);
@@ -129,7 +129,7 @@ public class GameInputProcessor implements InputProcessor {
             float playerRangedAttackSpeedInSeconds = 0.50f;
             playerRangedAttacking = true;
 
-            if (tx.playerTextureRegion.equals(tx.playerDown)) {
+            if (moveDown || player.facing == 3) {
                 playerDirection = "Down";
                 tx.playerTextureRegion = tx.playerAttackDown;
                 arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y - 14f);
@@ -137,7 +137,7 @@ public class GameInputProcessor implements InputProcessor {
                 arrowHitbox.setUserData("DownArrow");
                 arrowBody.setLinearVelocity(0, -400f);
                 player.playerBody.applyForce(0,150000,0,0,true);
-            } else if (tx.playerTextureRegion.equals(tx.playerUp) || leanUp) {
+            } else if (moveUp || player.facing == 1) {
                 playerDirection = "Up";
                 tx.playerTextureRegion = tx.playerAttackUp;
                 arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y + 14f);
@@ -145,7 +145,7 @@ public class GameInputProcessor implements InputProcessor {
                 arrowHitbox.setUserData("UpArrow");
                 arrowBody.setLinearVelocity(0, 400f);
                 player.playerBody.applyForce(0,-150000,0,0,true);
-            } else if (tx.playerTextureRegion.equals(tx.playerLeft)) {
+            } else if (moveLeft || player.facing == 4) {
                 playerDirection = "Left";
                 tx.playerTextureRegion = tx.playerAttackLeft;
                 arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 14f, player.playerBody.getPosition().y+1);
@@ -153,7 +153,7 @@ public class GameInputProcessor implements InputProcessor {
                 arrowHitbox.setUserData("LeftArrow");
                 arrowBody.setLinearVelocity(-400f, 0);
                 player.playerBody.applyForce(150000,0,0,0,true);
-            } else if (tx.playerTextureRegion.equals(tx.playerRight)) {
+            } else if (moveRight || player.facing == 2) {
                 playerDirection = "Right";
                 tx.playerTextureRegion = tx.playerAttackRight;
                 arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x + 14f, player.playerBody.getPosition().y+1);
@@ -506,25 +506,25 @@ public class GameInputProcessor implements InputProcessor {
             float playerShieldAttackSpeedInSeconds = 0.85f;
             playerShieldAttacking = true;
 
-            if (tx.playerTextureRegion.equals(tx.playerDown) || leanDown) {
+            if (moveDown || player.facing == 3) {
                 tx.playerTextureRegion = tx.playerAttackDown;
                 shieldBody = bf.createShieldBody(world, player.playerBody, -2f, -9.5f);
                 shieldHitbox = bf.createShieldHitbox(shieldBody, false);
                 shieldHitbox.setUserData("DownShield");
             }
-            if (tx.playerTextureRegion.equals(tx.playerUp) || leanUp) {
+            if (moveUp || player.facing == 1) {
                 tx.playerTextureRegion = tx.playerAttackUp;
                 shieldBody = bf.createShieldBody(world, player.playerBody, -3f, 12.5f);
                 shieldHitbox = bf.createShieldHitbox(shieldBody, false);
                 shieldHitbox.setUserData("UpShield");
             }
-            if (tx.playerTextureRegion.equals(tx.playerLeft)) {
+            if (moveLeft || player.facing == 4) {
                 tx.playerTextureRegion = tx.playerAttackLeft;
                 shieldBody = bf.createShieldBody(world, player.playerBody, -11.5f, -2f);
                 shieldHitbox = bf.createShieldHitbox(shieldBody, true);
                 shieldHitbox.setUserData("LeftShield");
             }
-            if (tx.playerTextureRegion.equals(tx.playerRight)) {
+            if (moveRight || player.facing == 2) {
                 tx.playerTextureRegion = tx.playerAttackRight;
                 shieldBody = bf.createShieldBody(world, player.playerBody, 12.5f, -2f);
                 shieldHitbox = bf.createShieldHitbox(shieldBody, true);
@@ -577,7 +577,7 @@ public class GameInputProcessor implements InputProcessor {
             float playerMeleeAttackSpeedInSeconds = 0.40f;
             playerMeleeAttacking = true;
 
-            if (tx.playerTextureRegion.equals(tx.playerDown)) {
+            if (moveDown || player.facing == 3) {
                 tx.playerTextureRegion = tx.playerAttackDown;
                 swordBody = bf.createSwordBody(world, player.playerBody, -2.5f, -11.5f);
                 swordHitbox = bf.createSwordHitbox(swordBody, false);
@@ -585,7 +585,7 @@ public class GameInputProcessor implements InputProcessor {
                 swordHitbox.setSensor(true);
 
                 player.playerBody.applyForce(0,-100000,0,0,true);
-            } else if (tx.playerTextureRegion.equals(tx.playerUp) || leanUp) {
+            } else if (moveUp || player.facing == 1) {
                 tx.playerTextureRegion = tx.playerAttackUp;
                 swordBody = bf.createSwordBody(world, player.playerBody, -2.5f, 17.5f);
                 swordHitbox = bf.createSwordHitbox(swordBody, false);
@@ -593,7 +593,7 @@ public class GameInputProcessor implements InputProcessor {
                 swordHitbox.setSensor(true);
 
                 player.playerBody.applyForce(0,100000,0,0,true);
-            } else if (tx.playerTextureRegion.equals(tx.playerLeft)) {
+            } else if (moveLeft || player.facing == 4) {
                 tx.playerTextureRegion = tx.playerAttackLeft;
                 swordBody = bf.createSwordBody(world, player.playerBody, -15.5f, -1.5f);
                 swordHitbox = bf.createSwordHitbox(swordBody, true);
@@ -601,7 +601,7 @@ public class GameInputProcessor implements InputProcessor {
                 swordHitbox.setSensor(true);
 
                 player.playerBody.applyForce(-100000,0,0,0,true);
-            } else if (tx.playerTextureRegion.equals(tx.playerRight)) {
+            } else if (moveRight || player.facing == 2) {
                 tx.playerTextureRegion = tx.playerAttackRight;
                 swordBody = bf.createSwordBody(world, player.playerBody, 15.5f, -1.5f);
                 swordHitbox = bf.createSwordHitbox(swordBody, true);
@@ -662,7 +662,7 @@ public class GameInputProcessor implements InputProcessor {
             stateTime2 = 0f;
             playerRangedAttacking = true;
 
-            if (tx.playerTextureRegion.equals(tx.playerDown)) {
+            if (moveDown || player.facing == 3) {
                 playerDirection = "Down";
                 tx.playerTextureRegion = tx.playerAttackDown;
                 arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y - 14f);
@@ -671,7 +671,7 @@ public class GameInputProcessor implements InputProcessor {
                 arrowBody.setLinearVelocity(0, -400f);
 
                 player.playerBody.applyForce(0,150000,0,0,true);
-            } else if (tx.playerTextureRegion.equals(tx.playerUp) || leanUp) {
+            } else if (moveUp || player.facing == 1) {
                 playerDirection = "Up";
                 tx.playerTextureRegion = tx.playerAttackUp;
                 arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y + 14f);
@@ -681,7 +681,7 @@ public class GameInputProcessor implements InputProcessor {
 
                 player.playerBody.applyForce(0,-150000,0,0,true);
 
-            } else if (tx.playerTextureRegion.equals(tx.playerLeft)) {
+            } else if (moveLeft || player.facing == 2) {
                 playerDirection = "Left";
                 tx.playerTextureRegion = tx.playerAttackLeft;
                 arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 14f, player.playerBody.getPosition().y+1);
@@ -691,7 +691,7 @@ public class GameInputProcessor implements InputProcessor {
 
                 player.playerBody.applyForce(150000,0,0,0,true);
 
-            } else if (tx.playerTextureRegion.equals(tx.playerRight)) {
+            } else if (moveRight || player.facing == 4) {
                 playerDirection = "Right";
                 tx.playerTextureRegion = tx.playerAttackRight;
                 arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x + 14f, player.playerBody.getPosition().y+1);

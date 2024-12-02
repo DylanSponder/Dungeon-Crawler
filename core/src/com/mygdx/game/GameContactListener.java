@@ -743,14 +743,18 @@ public class GameContactListener implements ContactListener {
                 case "Player":
 
                     if ((collideeStr == "Web")) {
-                        Cobweb web = new Cobweb(world, collider.getBody().getPosition().x - 8,collider.getBody().getPosition().y - 8, false);
-                        cobwebs.add(web);
+                        if (!player.touchingCobweb) {
+                            Cobweb web = new Cobweb(world, collider.getBody().getPosition().x - 8,collider.getBody().getPosition().y - 8, false);
+                            cobwebs.add(web);
+                            player.touchingCobweb = true;
+                        }
                         webBodiesCollected.add(collidee.getBody());
                         break;
                     }
 
                     if ((collideeStr == "Cobweb")) {
                         DungeonCrawler.PLAYER_SPEED_MULTI = 15f;
+                        player.touchingCobweb = true;
                         break;
                     }
 
@@ -832,6 +836,7 @@ public class GameContactListener implements ContactListener {
                 case "Cobweb":
                     if ((colliderStr == "Player")) {
                        DungeonCrawler.PLAYER_SPEED_MULTI = 15f;
+                        player.touchingCobweb = true;
                        break;
                     }
 
@@ -1009,6 +1014,7 @@ public class GameContactListener implements ContactListener {
             case "Cobweb":
                 if ((colliderAsString == "Player")) {
                     DungeonCrawler.PLAYER_SPEED_MULTI = 60f;
+                    player.touchingCobweb = false;
                     break;
                 }
             break;
@@ -1053,6 +1059,7 @@ public class GameContactListener implements ContactListener {
             case "Cobweb":
                 if ((colliderAsString == "Player")) {
                     DungeonCrawler.PLAYER_SPEED_MULTI = 60f;
+                    player.touchingCobweb = false;
                     for (Cobweb cob : cobwebs) {
                         if (cob.cobBody == collidee.getBody()) {
                             if (!cob.impassable) {

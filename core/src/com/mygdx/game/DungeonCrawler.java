@@ -10,10 +10,7 @@ import com.badlogic.gdx.ai.utils.Ray;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Cursor;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
@@ -119,6 +116,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public Ray playerSightRay;
 
 	public static boolean leanDown = false, leanUp = false, leanLeft = false, leanRight = false, leanUpLeft = false, leanUpRight = false;
+	public static boolean moveUp = false, moveDown = false, moveLeft = false, moveRight = false;
 
 	@Override
 	public void create() {
@@ -262,6 +260,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		FileHandle atlasFile = fileHandle.sibling("HUD/uiskin.atlas");
 		skin.addRegions(new TextureAtlas(atlasFile));
 		skin.load(Gdx.files.internal("HellasDungeon/HUD/uiskin.json"));
+
+
 
 		// https://libgdx.com/wiki/graphics/2d/scene2d/skin
 		//uiskin.atlas, uiskin.json, uiskin.png, default.png and default.fnt all required
@@ -1686,6 +1686,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 		leanRight = false;
 		leanUpLeft = false;
 		leanUpRight = false;
+		moveUp = false;
+		moveDown = false;
+		moveLeft = false;
+		moveRight = false;
+
 
 		PLAYER_HORIZONTAL_SPEED = 0;
 		PLAYER_VERTICAL_SPEED = 0;
@@ -1704,19 +1709,22 @@ public class DungeonCrawler extends ApplicationAdapter {
 			if (Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP)) {
 				PLAYER_VERTICAL_SPEED = 1f;
 				leanUp = true;
+				moveUp = true;
+				player.facing = 1;
 				if (leanLeft){
 					PLAYER_HORIZONTAL_SPEED = -1f;
-
-					tx.playerSprite = tx.playerUpLeftLean;
+					currentFrame = tx.playerWalkUpLeftAnimation.getKeyFrame(stateTime3, true);
+					tx.playerTextureRegion = currentFrame;
+					//tx.playerSprite = tx.playerUpLeftLean;
 				} else if (leanRight) {
 					PLAYER_HORIZONTAL_SPEED = 1f;
-
-					tx.playerSprite = tx.playerUpRightLean;
+					currentFrame = tx.playerWalkUpRightAnimation.getKeyFrame(stateTime3, true);
+					tx.playerTextureRegion = currentFrame;
+					//tx.playerSprite = tx.playerUpRightLean;
 
 				}
 				else {
 					currentFrame = tx.playerWalkUpAnimation.getKeyFrame(stateTime3, true);
-					stateTime3 += Gdx.graphics.getDeltaTime();
 					tx.playerTextureRegion = currentFrame;
 				}
 			}
@@ -1724,15 +1732,20 @@ public class DungeonCrawler extends ApplicationAdapter {
 			if (Gdx.input.isKeyPressed(Keys.A)||Gdx.input.isKeyPressed(Keys.LEFT)) {
 				PLAYER_HORIZONTAL_SPEED = -1f;
 				leanLeft = true;
+				moveLeft = true;
+				player.facing = 4;
 				if (leanDown) {
 					PLAYER_VERTICAL_SPEED = -1f;
-					tx.playerTextureRegion = tx.playerDownLeftLean;
+					currentFrame = tx.playerWalkDownLeftAnimation.getKeyFrame(stateTime3, true);
+					tx.playerTextureRegion = currentFrame;
+					//tx.playerTextureRegion = tx.playerDownLeftLean;
 				} else if (leanUp) {
 					PLAYER_VERTICAL_SPEED = 1f;
-					tx.playerTextureRegion = tx.playerUpLeftLean;
+					//tx.playerTextureRegion = tx.playerUpLeftLean;
+					currentFrame = tx.playerWalkUpLeftAnimation.getKeyFrame(stateTime3, true);
+					tx.playerTextureRegion = currentFrame;
 				} else {
 					currentFrame = tx.playerWalkLeftAnimation.getKeyFrame(stateTime3, true);
-					stateTime3 += Gdx.graphics.getDeltaTime();
 					tx.playerTextureRegion = currentFrame;
 				}
 			}
@@ -1740,31 +1753,42 @@ public class DungeonCrawler extends ApplicationAdapter {
 			if (Gdx.input.isKeyPressed(Keys.S)||Gdx.input.isKeyPressed(Keys.DOWN)) {
 				PLAYER_VERTICAL_SPEED = -1f;
 				leanDown = true;
+				moveDown = true;
+				player.facing = 3;
 				if (leanLeft) {
 					PLAYER_HORIZONTAL_SPEED = -1f;
-					tx.playerTextureRegion = tx.playerDownLeftLean;
+					currentFrame = tx.playerWalkDownLeftAnimation.getKeyFrame(stateTime3, true);
+					tx.playerTextureRegion = currentFrame;
+					//tx.playerTextureRegion = tx.playerDownLeftLean;
 				} else if (leanRight) {
 					PLAYER_HORIZONTAL_SPEED = 1f;
-					tx.playerTextureRegion = tx.playerDownRightLean;
+					currentFrame = tx.playerWalkDownRightAnimation.getKeyFrame(stateTime3, true);
+					tx.playerTextureRegion = currentFrame;
+					//tx.playerTextureRegion = tx.playerDownRightLean;
 				} else {
 					currentFrame = tx.playerWalkDownAnimation.getKeyFrame(stateTime3, true);
-					stateTime3 += Gdx.graphics.getDeltaTime();
 					tx.playerTextureRegion = currentFrame;
 				}
 			}
 			if (Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.RIGHT)) {
 				PLAYER_HORIZONTAL_SPEED = 1f;
 				leanRight = true;
+				moveRight = true;
+				player.facing = 2;
 				if (leanDown) {
-					tx.playerTextureRegion = tx.playerDownRightLean;
+					//tx.playerTextureRegion = tx.playerDownRightLean;
+					currentFrame = tx.playerWalkDownRightAnimation.getKeyFrame(stateTime3, true);
+					tx.playerTextureRegion = currentFrame;
 				} else if (leanUp) {
-					tx.playerTextureRegion = tx.playerUpRightLean;
+					//tx.playerTextureRegion = tx.playerUpRightLean;
+					currentFrame = tx.playerWalkUpRightAnimation.getKeyFrame(stateTime3, true);
+					tx.playerTextureRegion = currentFrame;
 				} else {
 					currentFrame = tx.playerWalkRightAnimation.getKeyFrame(stateTime3, true);
-					stateTime3 += Gdx.graphics.getDeltaTime();
 					tx.playerTextureRegion = currentFrame;
 				}
 			}
+			stateTime3 += Gdx.graphics.getDeltaTime();
 		}
 
 

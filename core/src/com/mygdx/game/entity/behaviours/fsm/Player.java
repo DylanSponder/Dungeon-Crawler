@@ -17,7 +17,8 @@ public class Player {
     public static Body playerBody;
     public Shopkeeper shopkeeper;
     public int currentRoom;
-    public boolean touchingRoom, touchingDoor;
+    public int facing;
+    public boolean touchingRoom, touchingDoor, touchingCobweb;
     public boolean midAnimationFrame;
     public boolean hasGreekFire, hasShield, hasTorch, torchApplied;
     public int greekFireUses;
