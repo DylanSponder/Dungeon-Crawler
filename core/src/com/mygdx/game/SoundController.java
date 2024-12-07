@@ -45,15 +45,17 @@ public class SoundController {
                 spiderAttack.setPitch(id4,randall4/10);
                 spiderAttack.setVolume(id4,volume);
                 break;
+            case "SpiderDeath":
+                Sound spiderDeath = tx.spiderDeath;
+                long id5 = spiderDeath.play();
+                float randall5 = Random.randomFloat(pitchMax,pitchMin);
+                spiderDeath.setPitch(id5,randall5/10);
+                spiderDeath.setVolume(id5,volume);
+                break;
+
+
 
 
         }
-
-
-
-
-
-
-
     }
 }

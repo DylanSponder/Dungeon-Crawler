@@ -268,7 +268,7 @@ public class GameInputProcessor implements InputProcessor {
 
             menuClosed = false;
 
-         //   Gdx.graphics.setWindowedMode(1280, 720);
+            Gdx.graphics.setWindowedMode(1280, 720);
         }
 
 
@@ -681,7 +681,7 @@ public class GameInputProcessor implements InputProcessor {
 
                 player.playerBody.applyForce(0,-150000,0,0,true);
 
-            } else if (moveLeft || player.facing == 2) {
+            } else if (moveLeft || player.facing == 4) {
                 playerDirection = "Left";
                 tx.playerTextureRegion = tx.playerAttackLeft;
                 arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 14f, player.playerBody.getPosition().y+1);
@@ -691,7 +691,7 @@ public class GameInputProcessor implements InputProcessor {
 
                 player.playerBody.applyForce(150000,0,0,0,true);
 
-            } else if (moveRight || player.facing == 4) {
+            } else if (moveRight || player.facing == 2) {
                 playerDirection = "Right";
                 tx.playerTextureRegion = tx.playerAttackRight;
                 arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x + 14f, player.playerBody.getPosition().y+1);

@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.Timer;
@@ -52,6 +53,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public Viewport vp;
 	public static Stage menuStage;
 	public static Table menuContainer;
+	public static VerticalGroup menuGroup;
 	public ShapeRenderer menuRenderer;
 	public static boolean debug, menuClosed, allowPlayerInput;
 	public GameInputProcessor gip;
@@ -261,12 +263,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 		skin.addRegions(new TextureAtlas(atlasFile));
 		skin.load(Gdx.files.internal("HellasDungeon/HUD/uiskin.json"));
 
-
-
 		// https://libgdx.com/wiki/graphics/2d/scene2d/skin
 		//uiskin.atlas, uiskin.json, uiskin.png, default.png and default.fnt all required
 
 		menuContainer = new Table();
+		//menuContainer.padLeft(275);
+		//menuContainer.padBottom(150);
+		menuGroup = new VerticalGroup();
 		menuContainer.setFillParent(true);
 
 		TextButton playButton = new TextButton("CONTINUE", skin, "default");
@@ -277,7 +280,18 @@ public class DungeonCrawler extends ApplicationAdapter {
 				// Called when player clicks on Play button
 			}
 		});
-		menuContainer.add(playButton);
+		playButton.getLabelCell().align(Align.right);
+		playButton.padLeft(6.5f);
+
+		TextButton settingsButton = new TextButton("SETTINGS", skin, "default");
+		settingsButton.addListener(new ClickListener() {
+			@Override
+			public void clicked (InputEvent event, float x, float y) {
+				menuClosed = true;
+				// Called when player clicks on Play button
+			}
+		});
+		settingsButton.padLeft(6.5f);
 
 		TextButton exitButton = new TextButton("EXIT", skin);
 		exitButton.addListener(new ClickListener() {
@@ -287,7 +301,16 @@ public class DungeonCrawler extends ApplicationAdapter {
 				// Called when player clicks on Exit button
 			}
 		});
-		menuContainer.add(exitButton).expandX();
+		exitButton.padLeft(6.5f);
+		//menuContainer.add(exitButton).expandY();
+
+
+		menuGroup.addActor(playButton);
+		menuGroup.addActor(settingsButton);
+		menuGroup.addActor(exitButton);
+
+
+		menuContainer.add(menuGroup);
 
 		menuStage.addActor(menuContainer);
 		menuClosed = true;
@@ -325,7 +348,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		layers.add(layer);
 
 		//create a point light and attach it to the player
-		playerLight = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.45f), 60, PLAYER_X, PLAYER_Y);
+		playerLight = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.50f), 60, PLAYER_X, PLAYER_Y);
 		playerLight.attachToBody(player.playerBody);
 		playerLight.setSoftnessLength(65);
 		//playerLight.isSoft();
@@ -836,7 +859,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				if (tx.playerTextureRegion.equals(tx.playerAttackUp)) {
 					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 13f, player.playerBody.getPosition().y - 4f, 7, 14, 7, 14, 1, 1, 180);
 				} else if (tx.playerTextureRegion.equals(tx.playerAttackDown)) {
-					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 6f, player.playerBody.getPosition().y - 18f, 7, 14, 7, 14, 1, 1, 0);
+					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 6f, player.playerBody.getPosition().y - 20f, 7, 14, 7, 14, 1, 1, 0);
 				} else if (tx.playerTextureRegion.equals(tx.playerAttackLeft)) {
 					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 15f, player.playerBody.getPosition().y - 19f, 7, 14, 7, 14, 1, 1, 270);
 				} else if (tx.playerTextureRegion.equals(tx.playerAttackRight)) {
@@ -1034,6 +1057,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				//System.out.println(Gdx.graphics.getDeltaTime());
 				if (e2.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 130) ){
 					e2.timeSinceAlerted = 0f;
+					//e2.enemyHitbox.setSensor(true);
 					Vector2 vec1 = new Vector2(e2.enemyBody.getPosition());
 					Vector2 vec2 = new Vector2(Player.playerBody.getPosition());
 
@@ -1077,6 +1101,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 			enemyGhostBatch.begin();
 			if (!e2.alerted) {
+				e2.enemyHitbox.setSensor(false);
 				if (e2.facing == "Up") {
 					enemyGhostBatch.draw(tx.enemyGhostUpSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
 				} else if (e2.facing == "Down") {
@@ -1085,6 +1110,17 @@ public class DungeonCrawler extends ApplicationAdapter {
 					enemyGhostBatch.draw(tx.enemyGhostLeftSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
 				} else if (e2.facing == "Right") {
 					enemyGhostBatch.draw(tx.enemyGhostRightSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
+				}
+			} else {
+				//e2.enemyHitbox.setSensor(true);
+				if (e2.facing == "Up") {
+					enemyGhostBatch.draw(tx.enemyGhostAlertUpSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
+				} else if (e2.facing == "Down") {
+					enemyGhostBatch.draw(tx.enemyGhostAlertDownSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
+				} else if (e2.facing == "Left") {
+					enemyGhostBatch.draw(tx.enemyGhostAlertLeftSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
+				} else if (e2.facing == "Right") {
+					enemyGhostBatch.draw(tx.enemyGhostAlertRightSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
 				}
 			}
 			enemyGhostBatch.end();
@@ -1686,6 +1722,18 @@ public class DungeonCrawler extends ApplicationAdapter {
 		leanRight = false;
 		leanUpLeft = false;
 		leanUpRight = false;
+
+		//revert to standing sprite when input is released
+		if (player.facing == 1) {
+			tx.playerTextureRegion = tx.playerUp;
+		} else if (player.facing == 3) {
+			tx.playerTextureRegion = tx.playerDown;
+		} else if (player.facing == 4) {
+			tx.playerTextureRegion = tx.playerLeft;
+		} else if (player.facing == 2) {
+			tx.playerTextureRegion = tx.playerRight;
+		}
+
 		moveUp = false;
 		moveDown = false;
 		moveLeft = false;

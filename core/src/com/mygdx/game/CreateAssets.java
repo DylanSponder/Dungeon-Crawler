@@ -42,6 +42,7 @@ public class CreateAssets {
     Texture enemySkullTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySkull/SpriteSheet.png"));
     Texture enemySpiderTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySpider/SpriteSheet.png"));
     Texture enemyGhostTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemyGhost/SpriteSheet.png"));
+    Texture enemyGhostAlertTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemyGhost/SpriteSheetAlerted.png"));
     Texture enemyEyeTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Eye/Eye.png"));
     Texture shopkeeperTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/OldMan3/SpriteSheet.png"));
     Texture tutorialTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Tuto.png"));
@@ -61,6 +62,7 @@ public class CreateAssets {
     public Sound skullBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/skullbreaking.mp3"));
     public Sound boneBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/bonebreaking.mp3"));
     public Sound spiderAttack = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/spiderattack.mp3"));
+    public Sound spiderDeath = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/spiderdying.mp3"));
 
     public Sound fireAmbient = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/Fire.mp3"));
 
@@ -368,6 +370,11 @@ public class CreateAssets {
     Sprite enemyGhostLeftSprite = new Sprite(enemyGhostTexture,32,0,16,16);
     Sprite enemyGhostRightSprite = new Sprite(enemyGhostTexture,48,0,16,16);
 
+    Sprite enemyGhostAlertDownSprite = new Sprite(enemyGhostAlertTexture,0,0,16,16);
+    Sprite enemyGhostAlertUpSprite = new Sprite(enemyGhostAlertTexture,16,0,16,16);
+    Sprite enemyGhostAlertLeftSprite = new Sprite(enemyGhostAlertTexture,32,0,16,16);
+    Sprite enemyGhostAlertRightSprite = new Sprite(enemyGhostAlertTexture,48,0,16,16);
+
     Sprite enemyEyeSprite = new Sprite(enemyEyeTexture,0,0,16,16);
 
     //outline HUD sprites
@@ -438,13 +445,15 @@ public class CreateAssets {
 
         //player walk animations
 
+        float playerWalkSpeed = 0.13f;
+
         for (int g = 0; g < 4; g++) {
             for (int w = 0; w < 1; w++) {
                 playerWalkUpFrames[index7++] = playerWalkUpTextureArray[g][w];
             }
         }
 
-        playerWalkUpAnimation = new Animation<TextureRegion>(0.15f, playerWalkUpFrames);
+        playerWalkUpAnimation = new Animation<TextureRegion>(playerWalkSpeed, playerWalkUpFrames);
 
         for (int g = 0; g < 4; g++) {
             for (int w = 0; w < 1; w++) {
@@ -452,7 +461,7 @@ public class CreateAssets {
             }
         }
 
-        playerWalkDownAnimation = new Animation<TextureRegion>(0.15f, playerWalkDownFrames);
+        playerWalkDownAnimation = new Animation<TextureRegion>(playerWalkSpeed, playerWalkDownFrames);
 
         for (int g = 0; g < 4; g++) {
             for (int w = 0; w < 1; w++) {
@@ -460,7 +469,7 @@ public class CreateAssets {
             }
         }
 
-        playerWalkLeftAnimation = new Animation<TextureRegion>(0.15f, playerWalkLeftFrames);
+        playerWalkLeftAnimation = new Animation<TextureRegion>(playerWalkSpeed, playerWalkLeftFrames);
 
         for (int g = 0; g < 4; g++) {
             for (int w = 0; w < 1; w++) {
@@ -468,7 +477,7 @@ public class CreateAssets {
             }
         }
 
-        playerWalkRightAnimation = new Animation<TextureRegion>(0.15f, playerWalkRightFrames);
+        playerWalkRightAnimation = new Animation<TextureRegion>(playerWalkSpeed, playerWalkRightFrames);
 
 
         //player diagonal walk animations
@@ -479,7 +488,7 @@ public class CreateAssets {
             }
         }
 
-        playerWalkUpLeftAnimation = new Animation<TextureRegion>(0.15f, playerWalkUpLeftFrames);
+        playerWalkUpLeftAnimation = new Animation<TextureRegion>(playerWalkSpeed, playerWalkUpLeftFrames);
 
         for (int g = 0; g < 4; g++) {
             for (int w = 0; w < 1; w++) {
@@ -487,7 +496,7 @@ public class CreateAssets {
             }
         }
 
-        playerWalkDownLeftAnimation = new Animation<TextureRegion>(0.15f, playerWalkDownLeftFrames);
+        playerWalkDownLeftAnimation = new Animation<TextureRegion>(playerWalkSpeed, playerWalkDownLeftFrames);
 
         for (int g = 0; g < 4; g++) {
             for (int w = 0; w < 1; w++) {
@@ -495,7 +504,7 @@ public class CreateAssets {
             }
         }
 
-        playerWalkDownRightAnimation = new Animation<TextureRegion>(0.15f, playerWalkDownRightFrames);
+        playerWalkDownRightAnimation = new Animation<TextureRegion>(playerWalkSpeed, playerWalkDownRightFrames);
 
         for (int g = 0; g < 4; g++) {
             for (int w = 0; w < 1; w++) {
@@ -503,7 +512,7 @@ public class CreateAssets {
             }
         }
 
-        playerWalkUpRightAnimation = new Animation<TextureRegion>(0.15f, playerWalkUpRightFrames);
+        playerWalkUpRightAnimation = new Animation<TextureRegion>(playerWalkSpeed, playerWalkUpRightFrames);
 
         //fire animation
         for (int p = 0; p < 2; p++) {

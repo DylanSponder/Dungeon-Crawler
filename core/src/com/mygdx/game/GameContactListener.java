@@ -153,11 +153,19 @@ public class GameContactListener implements ContactListener {
                                         if (spider.enemyBody == collider.getBody()) {
                                             //deadEnemyBodies.add(collider.getBody());
                                             deadEnemyBodies.add(collider.getBody());
+                                            soundController.playSound("SpiderDeath",8.5f,7.5f,0.1f);
                                             dyingSpiders.add(spider);
                                         }
                                     }
                                 }
-
+                                else if (e.enemyID == 3) {
+                                    for (EnemyGhost ghost : enemyGhosts) {
+                                        if (ghost.enemyBody == collidee.getBody()) {
+                                            deadEnemyBodies.add(collidee.getBody());
+                                            dyingGhosts.add(ghost);
+                                        }
+                                    }
+                                }
                             }
 
                             //skullArrayMap.put();
@@ -245,7 +253,17 @@ public class GameContactListener implements ContactListener {
                                     for (EnemySpider spider : enemySpiders) {
                                         if (spider.enemyBody == collidee.getBody()) {
                                             deadEnemyBodies.add(collidee.getBody());
+                                            soundController.playSound("SpiderDeath",8.5f,7.5f,0.1f);
                                             dyingSpiders.add(spider);
+
+                                        }
+                                    }
+                                }
+                                else if (e.enemyID == 3) {
+                                    for (EnemyGhost ghost : enemyGhosts) {
+                                        if (ghost.enemyBody == collidee.getBody()) {
+                                            deadEnemyBodies.add(collidee.getBody());
+                                            dyingGhosts.add(ghost);
                                         }
                                     }
                                 }

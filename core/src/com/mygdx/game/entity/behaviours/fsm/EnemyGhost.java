@@ -51,7 +51,7 @@ public class EnemyGhost extends Enemy {
 
         Viewport vp = new ExtendViewport(camera.viewportWidth, camera.viewportHeight);
 
-        this.ENEMY_HEALTH = 3;
+        this.ENEMY_HEALTH = 1;
 
         this.playerInRange = false;
 
@@ -59,7 +59,7 @@ public class EnemyGhost extends Enemy {
         this.enemyBody = bodyFactory.createSimpleBody(world, x, y);
         this.enemyDetectionBody = bodyFactory.createSimpleBody(world, x, y);
 
-        this.enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 7f);
+        this.enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 6f);
 
         this.enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 120f);
 
@@ -74,7 +74,7 @@ public class EnemyGhost extends Enemy {
 
         this.enemyHitbox.setUserData("EnemyGhost");
 
-        this.enemyHitbox.setSensor(true);
+       // this.enemyHitbox.setSensor(true);
 
         this.debug = false;
 /*

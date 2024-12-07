@@ -512,6 +512,10 @@ public class RenderRules {
                         StringBuffer sb2 = new StringBuffer(i);
                         sb2.delete(0, 2);
                         String str = sb2.toString();
+
+
+
+
                         System.out.println(str);
                             switch (str) {
                                 case "col10fire":
@@ -610,6 +614,23 @@ public class RenderRules {
                                     break;
                             }
                         }
+                        else if (levelLayer.get(index).matches("t+l+w+.+")) {
+                        StringBuffer sb2 = new StringBuffer(i);
+                        sb2.delete(0, 3);
+                        String str = sb2.toString();
+
+                            drawableLevelLayer.add(index, "topLeftWallTile");
+                            index++;
+
+
+
+                            if (str.matches("([0-9])+")) {
+
+                                System.out.println(str);
+                            }
+
+
+                    }
                         else {
                             if (!i.equals("")){
                                 System.out.println("UNKNOWN TILE: " + "'" + i + "'");
