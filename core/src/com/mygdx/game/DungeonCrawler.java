@@ -68,6 +68,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Body> arrowBodiesCollided, boneBodiesCollided, skullBodiesDestroyed, deadEnemyBodies, webBodiesCollected;
 	public static ArrayMap<Body, Arrow> arrowArrayMap;
 	public static ArrayList<Enemy> enemies;
+	public static ArrayList<Light> lights;
 	public ArrayMap<Body, Skull> skullArrayMap;
 	public static ArrayMap<Body, Bone> boneArrayMap;
 	public static ArrayMap<Body, Web> webArrayMap;
@@ -107,6 +108,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static Music roomClear, swordSlash, level1Music;
 	public static SoundController soundController;
 	public static RayHandler rayHandler;
+	public static LightController lightController;
 	private PointLight playerLight;
 	private BitmapFont.BitmapFontData bmfData;
 	public static BitmapFont defaultFont, defaultFont2;
@@ -128,6 +130,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		world = new World(new Vector2(0, 0f), false);
 		assetManager = new AssetManager();
 		soundController = new SoundController();
+		lightController = new LightController();
 		menuRenderer = new ShapeRenderer();
 		playerBatch = new SpriteBatch();
 		hudBatch = new SpriteBatch();
@@ -162,6 +165,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		reversedPotMap = false;
 		player = new Player();
 		enemies = new ArrayList<>();
+		lights = new ArrayList<>();
 		enemySkulls = new ArrayList<>();
 		enemySpiders = new ArrayList<>();
 		enemyGhosts = new ArrayList<>();
@@ -247,7 +251,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//create the Box2D ray handler
 		rayHandler = new RayHandler(world);
-		rayHandler.setAmbientLight(0f, 0f, 0f, 0.010f);
+		rayHandler.setAmbientLight(0f, 0f, 0f, 0.050f);
 		if (debug) {
 			rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
 		}
@@ -370,8 +374,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//create an input processor to handle single input events - see inputUpdate() for held down inputs
 
 		gip = new GameInputProcessor();
-
-
 
 		//TODO Set only to menu on game start
 		Gdx.input.setInputProcessor(menuStage);
@@ -1330,7 +1332,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		for (Fire f : fires) {
 			if (f.smoking) {
-				f.fireLight.setColor(f.fireLight.getColor().r, f.fireLight.getColor().g, f.fireLight.getColor().b, 0.65f);
+				f.light.setColor(f.light.getColor().r, f.light.getColor().g, f.light.getColor().b, 0.65f);
 				TextureRegion currentFrame = tx.smokeAnimation.getKeyFrame(f.stateTime, false);
 				fireBatch.begin();
 				//fireBatch.draw(currentFrame, f.fireX, f.fireY);
@@ -1340,7 +1342,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 				if (tx.smokeAnimation.isAnimationFinished(f.stateTime)) {
 						f.active = false;
-						f.fireLight.setActive(false);
+						f.light.setActive(false);
 						f.stateTime = 0;
 						f.smoking = false;
 				}
@@ -1379,14 +1381,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 						} else {
 							Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, false);
 						}
-
 						fireBatch.end();
+						}
 					}
-
-
-
-					}
-
 				}
 
 				//stateTime3 += Gdx.graphics.getDeltaTime();
@@ -1602,8 +1599,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 		rayHandler.update();
 
 
+
+
 		if (menuClosed) {
-			rayHandler.setAmbientLight(0f, 0f, 0f, 0.010f);
+			//rayHandler.setAmbientLight(0f, 0f, 0f, 0.010f);
+			lightController.fadeLight(fires);
 			world.step(1 / 60f, 6, 2);
 			allowPlayerInput = true;
 			Gdx.input.setInputProcessor(gip);
@@ -1680,6 +1680,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		}
 		else if (!debug){
 			camera.zoom = 0.8f;
+		} else {
+
 		}
 
 		//player.castRay();

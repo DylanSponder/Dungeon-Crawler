@@ -16,7 +16,7 @@ import com.mygdx.game.box2D.BodyFactory;
 
 import java.util.ArrayList;
 
-public class Fire {
+public class Fire extends Light{
     public float fireX, fireY;
     public World world;
     public ArrayList<Fire> fires;
@@ -41,11 +41,12 @@ public class Fire {
         this.upDown = upDown;
         final CreateAssets tx = CreateAssets.getInstance();
         this.fireAmbient = tx.fireAmbient;
+        this.lightType = 2;
     }
 
     public void createFire(Color color, int distance) {
-        this.fireLight = new PointLight(rayHandler,400, color,60, fireX + 8, fireY + 8);
-        this.fireLight.setXray(true);
+        this.light = new PointLight(rayHandler,400, color,60, fireX + 8, fireY + 8);
+        this.light.setXray(true);
 
         this.smoking = false;
         this.active = true;

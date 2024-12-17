@@ -428,10 +428,12 @@ public class CreateAssets {
     public void textureRegionBuilder() {
 
         assetManager = new AssetManager();
-        assetManager.load("HellasDungeon/Font/HellasFontStylized-extended.fnt", BitmapFont.class);
+        //assetManager.load("HellasDungeon/Font/HellasFontStylized-extended.fnt", BitmapFont.class);
 
-        assetManager.load("HellasDungeon/Music/Level1Track.mp3", Music.class);
-        //assetManager.finishLoading();
+        //assetManager.load(level1Track.toString(), Music.class);
+
+        //assetManager.load("", Sound.class);
+        assetManager.finishLoading();
 
 
         //do not use yet - need to understand how assetloading music works properly

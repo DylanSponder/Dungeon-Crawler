@@ -210,6 +210,7 @@ public class EnemySkull extends Enemy {
                                     && fixture.getUserData() != "Proximity"
                                     && fixture.getUserData() != "EnemyHitbox"
                                     && fixture.getUserData() != "Bone"
+                                    && fixture.getUserData() != "Candle"
                                     //&& !fixture.isSensor()
                             ) {
                                 //System.out.println("NOT A PLAYER BUT DYNAMIC");
