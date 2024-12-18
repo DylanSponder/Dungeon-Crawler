@@ -1483,6 +1483,7 @@ for (int i = 0; i < layerSize; i++) {
             fires.add(fCan);
             fCan.createFire(new Color(0.25f,0.20f,0,0.7f),20);
             candles.add(newCandle);
+            lights.add(fCan);
             break;
         case "cands":
             currentCell = init.cr.middleFloorTile;
@@ -1490,9 +1491,11 @@ for (int i = 0; i < layerSize; i++) {
             Body candsBody = newCandles.createCandle();
             Fire fCans = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 4.5f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 2.5f, false,0f, 3, false);
             fires.add(fCans);
+            lights.add(fCans);
             fCans.createFire(new Color(0.25f,0.20f,0,0.5f),20);
             Fire fCans2 = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 8.5f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 6.5f, false,0f, 3, false);
             fires.add(fCans2);
+            lights.add(fCans2);
             fCans2.createFire(new Color(0.25f,0.20f,0,0.5f),20);
 
             candles.add(newCandles);
@@ -1511,6 +1514,7 @@ for (int i = 0; i < layerSize; i++) {
             Fire fL = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 4,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 4, false,0f, 3, false);
             fires.add(fL);
             torches.add(torL);
+            lights.add(torL);
             fL.createFire(new Color(0.25f,0.20f,0,0.7f),60);
             torL.createTorch(4);
             break;
@@ -1522,6 +1526,7 @@ for (int i = 0; i < layerSize; i++) {
             Fire fR = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 7,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 4, false,0f, 3, false);
             fires.add(fR);
             torches.add(torR);
+            lights.add(torR);
             fR.createFire(new Color(0.25f,0.20f,0,0.7f),60);
             torR.createTorch(2);
             break;
@@ -1533,6 +1538,7 @@ for (int i = 0; i < layerSize; i++) {
             Fire fU = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 5,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 5, false,0f, 3, false);
             fires.add(fU);
             torches.add(torU);
+            lights.add(torU);
             fU.createFire(new Color(0.25f,0.20f,0,0.7f),60);
             torU.createTorch(1);
             break;
@@ -1544,6 +1550,7 @@ for (int i = 0; i < layerSize; i++) {
             Fire fD = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 + 10,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 + 7, false,0f, 3, true);
             fires.add(fD);
             torches.add(torD);
+            lights.add(torD);
             fD.createFire(new Color(0.25f,0.20f,0,0.7f),60);
             torD.createTorch(3);
             break;
@@ -1776,6 +1783,7 @@ for (int i = 0; i < layerSize; i++) {
             Fire twfirecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 3, false, 0f, 1, false);
             twfirecol10.createFire(new Color(0.25f,0.20f,0,0.75f),60);
             fires.add(twfirecol10);
+            lights.add(twfirecol10);
             break;
         case "fcolIo":
             currentCell = init.cr.middleFloorTile;
@@ -1864,6 +1872,7 @@ for (int i = 0; i < layerSize; i++) {
             Fire firecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 3, false, 0f, 1, false);
             firecol10.createFire(new Color(0.25f,0.20f,0,0.75f),60);
             fires.add(firecol10);
+            lights.add(firecol10);
             break;
         case "fcol11":
             currentCell = init.cr.middleFloorTile;
@@ -1912,6 +1921,7 @@ for (int i = 0; i < layerSize; i++) {
             Fire fireped1 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, true, 0f, 1, false);
             fireped1.createFire(new Color(0.25f,0.20f,0,0.75f), 60);
             fires.add(fireped1);
+            lights.add(fireped1);
             break;
         case "fped1fireB":
             currentCell = init.cr.middleFloorTile;
@@ -1921,6 +1931,7 @@ for (int i = 0; i < layerSize; i++) {
             Color colorb = new Color(0.3f,0,1f,0.7f);
             fireped1b.createFire(colorb, 10);
             fires.add(fireped1b);
+            lights.add(fireped1b);
             init.roomList.get(roomIndex).spawners.add(fireped1b);
             break;
     }

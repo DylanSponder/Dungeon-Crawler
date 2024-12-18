@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.mygdx.game.box2D.BodyFactory;
 
-public class Candle {
+public class Candle extends Light{
     public float candX, candY;
     private World world;
     public Body candBody;

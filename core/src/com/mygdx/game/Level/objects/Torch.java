@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.DungeonCrawler;
 
-public class Torch {
+public class Torch extends Light{
     public float torchX, torchY;
     private World world;
     private RayHandler rayHandler;
@@ -19,6 +19,7 @@ public class Torch {
         this.world = world;
         this.torchX = x;
         this.torchY = y;
+        this.lightType = 1;
     }
 
     public void createTorch(int direction) {

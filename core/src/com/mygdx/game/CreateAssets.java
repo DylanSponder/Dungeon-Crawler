@@ -389,7 +389,7 @@ public class CreateAssets {
     Sprite damagedSkullSprite = new Sprite(skullTexture, 192,48, 16, 16);
     Sprite boneSprite = new Sprite(boneTexture, 192,64, 16, 16);
 
-    public Sprite cobwebSprite = new Sprite(cobwebTexture,351,0,16,16);
+    public Sprite cobwebSprite = new Sprite(cobwebTexture,352,0,16,16);
     public Sprite webSprite = new Sprite(roomBackground,368,0,16,16);
 
     Sprite obstacle1Sprite = new Sprite(obstacle1Texture,80,48,16,16);
@@ -649,7 +649,8 @@ public class CreateAssets {
         pedestal4.setRegion(80, 32, 16, 16);
 
         roofTexture.setRegion(464, 0, 64, 96);
-        ruinedRoofTexture.setRegion(528, 0, 64, 96);
+        //ruinedRoofTexture.setRegion(528, 0, 64, 96);
+        ruinedRoofTexture.setRegion(464, 0, 64, 96);
 
         doorTopLeftTexture.setRegion(128, 0, 32, 16);
         doorTopRightTexture.setRegion(144, 0, 16, 16);

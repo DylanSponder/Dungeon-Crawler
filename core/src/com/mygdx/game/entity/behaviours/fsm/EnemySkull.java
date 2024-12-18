@@ -1,5 +1,6 @@
 package com.mygdx.game.entity.behaviours.fsm;
 
+import box2dLight.PointLight;
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.badlogic.gdx.ai.steer.SteeringBehavior;
@@ -24,15 +25,19 @@ import com.mygdx.game.entity.utils.EnemyBox2DRaycastCollisionDetector;
 import com.mygdx.game.level.objects.Text;
 // import jdk.internal.jshell.tool.StopDetectingInputStream;
 
+import java.awt.*;
+
 import static com.mygdx.game.DungeonCrawler.*;
 
 public class EnemySkull extends Enemy {
     private StateMachine<EnemySkull, EnemySkullState> stateMachine;
     public int enemyID;
     public EnemySkullBox2DSteeringEntity enemyAI;
+    public PointLight skullLight;
 
     public EnemySkull(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
+
         this.shapeRenderer = new ShapeRenderer();
 
         this.alertMessage = new Text(DungeonCrawler.defaultFont,"!", Color.WHITE,true,1f,0.0045f,false, false, null, 0);
@@ -70,6 +75,11 @@ public class EnemySkull extends Enemy {
         this.enemyHitbox.setUserData("EnemySkull");
 
         this.debug = false;
+
+        this.skullLight = new PointLight(rayHandler, 60, new Color(0.3f,0,1f,0.5f),50,this.enemyBody.getPosition().x,this.enemyBody.getPosition().y);
+        this.skullLight.attachToBody(this.enemyBody);
+        this.skullLight.setSoftnessLength(65);
+        this.skullLight.setActive(false);
 /*
         IndexedAStarPathFinder pathFinder;
 

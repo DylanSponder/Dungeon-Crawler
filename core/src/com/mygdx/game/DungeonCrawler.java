@@ -251,7 +251,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//create the Box2D ray handler
 		rayHandler = new RayHandler(world);
-		rayHandler.setAmbientLight(0f, 0f, 0f, 0.050f);
+		rayHandler.setAmbientLight(0f, 0f, 0f, 0.065f);
 		if (debug) {
 			rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
 		}
@@ -330,7 +330,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		PLAYER_X = (float) list.get(1);
 		PLAYER_Y = (float) list.get(2);
 
-		player.createPlayer(world, PLAYER_X, PLAYER_Y);
+		player.createPlayer(world, PLAYER_X, PLAYER_Y, rayHandler);
 
 		CreateCell cr = new CreateCell();
 		cr.InitializeCells();
@@ -352,9 +352,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		layers.add(layer);
 
 		//create a point light and attach it to the player
-		playerLight = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.50f), 60, PLAYER_X, PLAYER_Y);
-		playerLight.attachToBody(player.playerBody);
-		playerLight.setSoftnessLength(65);
+
 		//playerLight.isSoft();
 		//playerLight.setXray(true);
 
@@ -894,6 +892,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					//System.out.println(Gdx.graphics.getDeltaTime());
 					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 140) ){
 						e.timeSinceAlerted = 0f;
+
 						Vector2 vec1 = new Vector2(e.enemyBody.getPosition());
 						Vector2 vec2 = new Vector2(Player.playerBody.getPosition());
 
@@ -945,10 +944,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 				enemySkullBatch.begin();
 				if (!e.alerted) {
+					e.skullLight.setActive(false);
 					enemySkullBatch.draw(tx.enemySkullSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
 				} else if (e.timeSinceAlerted >= 1) {
+					e.skullLight.setActive(true);
 					enemySkullBatch.draw(tx.enemySkullAlertedSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
 				} else {
+					e.skullLight.setActive(false);
 					enemySkullBatch.draw(tx.enemySkullSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
 				}
 				enemySkullBatch.end();
@@ -956,6 +958,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//if (!dyingSpiders.isEmpty()) {
 			for (EnemySkull deadSkull : dyingSkulls) {
+				deadSkull.skullLight.setActive(false);
 				deadSkull.getStateMachine().changeState(EnemySkullState.DIE);
 				enemies.remove(deadSkull);
 			}
@@ -1597,8 +1600,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//rayHandler.setCombinedMatrix(camera.combined);
 		rayHandler.setCombinedMatrix(camera);
 		rayHandler.update();
-
-
 
 
 		if (menuClosed) {
