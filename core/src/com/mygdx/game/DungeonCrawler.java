@@ -251,7 +251,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//create the Box2D ray handler
 		rayHandler = new RayHandler(world);
-		rayHandler.setAmbientLight(0f, 0f, 0f, 0.065f);
+		rayHandler.setAmbientLight(0f, 0f, 0f, 0.025f);
 		if (debug) {
 			rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
 		}
@@ -1395,23 +1395,97 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 
 		for (Roof r : roofs) {
-			roofBatch.begin();
-			if (r.upDown) {
-				if (r.ruined) {
-					roofBatch.draw(tx.ruinedRoofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 64, 96);
+
+			if (r.type == 0) {
+				roofBatch.begin();
+				if (r.upDown) {
+					roofBatch.draw(tx.corridorRoofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 64, 96);
 				} else {
-					roofBatch.draw(tx.roofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 64, 96);
+					roofBatch.draw(tx.corridorRoofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 0, 0, 64, 96, 1, 1, 90);
 				}
-			} else {
-				if (r.ruined) {
-					roofBatch.draw(tx.ruinedRoofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 0,0,64, 96,1,1,90);
-				} else {
-					roofBatch.draw(tx.roofTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y, 0,0,64, 96,1,1,90);
-				}
+				roofBatch.end();
 			}
 
 
-			roofBatch.end();
+		}
+
+		for (Room room : GenerateLevel.init.roomList) {
+			for (Roof r : room.roofs) {
+				if (r.visible) {
+					roofBatch.begin();
+
+					switch (r.type) {
+						case 1:
+							if (r.visible) {
+								roofBatch.draw(tx.roof3x3UpperTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - 16, 80, 32);
+								if (r.ext != 0) {
+									for (int i = 0; i < r.ext; i++) {
+										roofBatch.draw(tx.roof3x3MiddleTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - (32 + (i * 16)), 80, 16);
+									}
+									roofBatch.draw(tx.roof3x3LowerTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - (48 + (r.ext * 16)), 80, 32);
+								} else {
+									roofBatch.draw(tx.roof3x3LowerTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - 48, 80, 32);
+								}
+							}
+
+							break;
+						case 2:
+							if (r.visible) {
+								roofBatch.draw(tx.roof5x5UpperTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y + (r.ext * 8) + 8, 112, 32);
+								if (r.ext != 0) {
+									for (int i = 0; i < r.ext; i++) {
+										roofBatch.draw(tx.roof5x5MiddleTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y - (32 + (i * 16)) + 24 + (r.ext * 8), 112, 16);
+									}
+									roofBatch.draw(tx.roof5x5LowerTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y - (64 + (r.ext * 16)) + 24 + (r.ext * 8), 112, 48);
+								} else {
+									roofBatch.draw(tx.roof5x5LowerTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y - 64 + 24 + (r.ext * 8), 112, 48);
+								}
+							}
+
+							break;
+						case 3:
+							if (r.visible) {
+								roofBatch.draw(tx.roof7x7UpperTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - 32, 144, 48);
+								if (r.ext != 0) {
+									for (int i = 0; i < r.ext; i++) {
+										roofBatch.draw(tx.roof7x7MiddleTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - (48 + (i * 16)), 144, 16);
+									}
+									roofBatch.draw(tx.roof7x7LowerTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - (96 + (r.ext * 16)), 144, 64);
+								} else {
+									roofBatch.draw(tx.roof7x7LowerTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - 96, 144, 64);
+								}
+							}
+							break;
+						case 4:
+							if (r.visible) {
+								roofBatch.draw(tx.roof11x11UpperTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - 48, 208, 64);
+								if (r.ext != 0) {
+									for (int i = 0; i < r.ext; i++) {
+										roofBatch.draw(tx.roof11x11MiddleTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - (64 + (i * 16)), 208, 16);
+									}
+									roofBatch.draw(tx.roof11x11LowerTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - (128 + (r.ext * 16)), 208, 80);
+								} else {
+									roofBatch.draw(tx.roof11x11LowerTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - 128, 208, 80);
+								}
+							}
+							break;
+						case 5:
+							if (r.visible) {
+								roofBatch.draw(tx.roof15x15UpperTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - 64, 272, 80);
+								if (r.ext != 0) {
+									for (int i = 0; i < r.ext; i++) {
+										roofBatch.draw(tx.roof15x15MiddleTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - (80 + (i * 16)), 272, 16);
+									}
+									roofBatch.draw(tx.roof15x15LowerTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - (160 + (r.ext * 16)), 272, 96);
+								} else {
+									roofBatch.draw(tx.roof15x15LowerTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - 160, 272, 96);
+								}
+							}
+							break;
+					}
+					roofBatch.end();
+				}
+			}
 		}
 
 			fontBatch.begin();
@@ -1668,19 +1742,20 @@ public class DungeonCrawler extends ApplicationAdapter {
 		}
 
 		if (player.hasTorch && !player.torchApplied) {
-			playerLight.remove();
-			playerLight = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.85f), 95, PLAYER_X, PLAYER_Y);
-			playerLight.attachToBody(player.playerBody);
-			playerLight.setIgnoreAttachedBody(true);
-			playerLight.setSoftnessLength(100f);
+			player.playerLight.remove();
+			player.playerLight = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.85f), 95, PLAYER_X, PLAYER_Y);
+			player.playerLight.attachToBody(player.playerBody);
+			player.playerLight.setIgnoreAttachedBody(true);
+			player.playerLight.setSoftnessLength(100f);
 			player.torchApplied = true;
 		}
 
 		if (!GenerateLevel.init.roomList.get(player.currentRoom).isShop && !debug) {
-			camera.zoom = 0.6f;
+			camera.zoom = 0.7f;
 		}
 		else if (!debug){
-			camera.zoom = 0.8f;
+			//camera.zoom = 0.8f;
+			camera.zoom = 1f;
 		} else {
 
 		}
@@ -1704,6 +1779,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		enemySkullBatch.dispose();
 		enemySpiderBatch.dispose();
 		lockBatch.dispose();
+		roofBatch.dispose();
 		doorBatch.dispose();
 		potBatch.dispose();
 		potionBatch.dispose();

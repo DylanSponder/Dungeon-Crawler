@@ -18,7 +18,6 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
-import com.mygdx.game.entity.utils.EnemySkullBox2DSteeringEntity;
 import com.mygdx.game.entity.utils.EnemyBox2DRaycastCollisionDetector;
 import com.mygdx.game.entity.utils.EnemySpiderBox2DSteeringEntity;
 import com.mygdx.game.level.objects.Text;
@@ -56,8 +55,8 @@ public class EnemySpider extends Enemy {
         this.playerInRange = false;
 
         //creates an enemy with a body, hitbox and steering entity
-        this.enemyBody = bodyFactory.createSimpleBody(world, x, y);
-        this.enemyDetectionBody = bodyFactory.createSimpleBody(world, x, y);
+        this.enemyBody = bodyFactory.createSimpleDynamicBody(world, x, y);
+        this.enemyDetectionBody = bodyFactory.createSimpleDynamicBody(world, x, y);
 
         this.enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 6f);
 

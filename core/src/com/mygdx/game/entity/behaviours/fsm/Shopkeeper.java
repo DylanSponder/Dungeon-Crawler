@@ -36,7 +36,7 @@ public class Shopkeeper {
         this.posX = x;
         this.posY = y;
         this.shopDetectionBody = bodyFactory.createShopBody(world, x, y);
-        this.shopSellBody = bodyFactory.createSimpleBody(world, x, y);
+        this.shopSellBody = bodyFactory.createSimpleDynamicBody(world, x, y);
 
         this.shopHitbox = bodyFactory.createShopHitbox(shopBody, 7.5f);
 
@@ -76,8 +76,8 @@ public class Shopkeeper {
             }
             case "GREEK FIRE": {
                 System.out.println("GREEK FIRE ADDED TO THE SHOPKEEPER INVENTORY");
-                String msg = (index + 1) + ". GREEK FIRE";
-                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, false,  tx.coinItemSprite, 6f);
+                String msg = (index + 1) + ".  GREEK FIRE";
+                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, true,  tx.greekfireItemSprite, 6f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()
                 this.inventoryText.add(t);
@@ -94,8 +94,8 @@ public class Shopkeeper {
             }
             case "BELT": {
                 System.out.println("BELT ADDED TO THE SHOPKEEPER INVENTORY");
-                String msg = (index + 1) + ". BACCHUS BELT";
-                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, false,  tx.coinItemSprite, 6f);
+                String msg = (index + 1) + ".  BACCHUS BELT";
+                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, true,  tx.beltItemSprite, 6f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()
                 this.inventoryText.add(t);
@@ -104,7 +104,7 @@ public class Shopkeeper {
             case "CHISEL": {
                 System.out.println("CHISEL ADDED TO THE SHOPKEEPER INVENTORY");
                 String msg = (index + 1) + ". CHISEL";
-                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, false,  tx.coinItemSprite, 6f);
+                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, true,  tx.chiselItemSprite, 6f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()
                 this.inventoryText.add(t);

@@ -1,5 +1,6 @@
 package com.mygdx.game.box2D;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class BodyFactory {
@@ -14,6 +15,46 @@ public class BodyFactory {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(8, 8);
         body.createFixture(shape, 1.0f);
+        shape.dispose();
+        return body;
+    }
+
+    public Body createRoofHitbox(World world, float x, float y, int type, int ext) {
+        PolygonShape shape = new PolygonShape();
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        switch (type) {
+            case 0:
+                shape.setAsBox(16, 16);
+                bodyDef.position.set(x ,y);
+                break;
+            case 1:
+                shape.setAsBox(16, 16);
+                bodyDef.position.set(x ,y);
+                break;
+            case 2:
+                shape.setAsBox(40, 32 + (ext * 8));
+                bodyDef.position.set(x + 56,y - (24 + (ext * 8)));
+
+                break;
+            case 3:
+                bodyDef.position.set(x + 48,y);
+                shape.setAsBox(16, 8 + (ext * 8));
+                break;
+            case 4:
+                bodyDef.position.set(x,y);
+                shape.setAsBox(16, 8 + (ext * 8));
+                break;
+            case 5:
+                bodyDef.position.set(x,y);
+                shape.setAsBox(16, 8 + (ext * 8));
+                break;
+        }
+        body = world.createBody(bodyDef);
+        //shape.setAsBox(8, 8);
+        Fixture fix = body.createFixture(shape, 1.0f);
+        fix.setSensor(true);
         shape.dispose();
         return body;
     }
@@ -285,12 +326,20 @@ public class BodyFactory {
         return shieldHitbox;
     }
 
-    public Body createSimpleBody(World world, float x, float y) {
+    public Body createSimpleDynamicBody(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x,y);
         bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        return body;
+    }
+
+    public Body createSimpleStaticBody(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
         body = world.createBody(bodyDef);
         return body;
     }
@@ -411,12 +460,51 @@ public class BodyFactory {
         bodyDef.position.set(playerX, playerY);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
-        PolygonShape playerShape = new PolygonShape();
-        playerShape.setAsBox(6f, 6f);
-        Fixture playerHitbox = body.createFixture(playerShape, 1.0f);
+        PolygonShape playerShape1 = new PolygonShape();
+        PolygonShape playerShape2 = new PolygonShape();
+        CircleShape playerCornerShape1 = new CircleShape();
+        CircleShape playerCornerShape2 = new CircleShape();
+        CircleShape playerCornerShape3 = new CircleShape();
+        CircleShape playerCornerShape4 = new CircleShape();
+        playerCornerShape1.setRadius(3);
+        playerCornerShape2.setRadius(3);
+        playerCornerShape3.setRadius(3);
+        playerCornerShape4.setRadius(3);
+        Vector2 vec1 = new Vector2(playerCornerShape1.getPosition().x+3,playerCornerShape1.getPosition().y+3);
+        Vector2 vec2 = new Vector2(playerCornerShape1.getPosition().x-3,playerCornerShape1.getPosition().y-3);
+        Vector2 vec3 = new Vector2(playerCornerShape1.getPosition().x-3,playerCornerShape1.getPosition().y+3);
+        Vector2 vec4 = new Vector2(playerCornerShape1.getPosition().x+3,playerCornerShape1.getPosition().y-3);
+        playerCornerShape1.setPosition(vec1);
+        playerCornerShape2.setPosition(vec2);
+        playerCornerShape3.setPosition(vec3);
+        playerCornerShape4.setPosition(vec4);
+
+        playerShape1.setAsBox(3f, 5.98f);
+        playerShape2.setAsBox(5.98f, 3f);
+
+        Fixture playerHitbox = body.createFixture(playerShape1, 1.0f);
+        Fixture playerHitbox2 = body.createFixture(playerShape2, 1.0f);
+
+
+        Fixture playerCornerHitbox1 = body.createFixture(playerCornerShape1,1.0f);
+        Fixture playerCornerHitbox2 = body.createFixture(playerCornerShape2,1.0f);
+        Fixture playerCornerHitbox3 = body.createFixture(playerCornerShape3,1.0f);
+        Fixture playerCornerHitbox4 = body.createFixture(playerCornerShape4,1.0f);
+
+
         body.setUserData("Player");
+        playerCornerHitbox1.setUserData("PlayerHitbox");
+        playerCornerHitbox2.setUserData("PlayerHitbox");
+        playerCornerHitbox3.setUserData("PlayerHitbox");
+        playerCornerHitbox4.setUserData("PlayerHitbox");
         playerHitbox.setUserData("PlayerHitbox");
-        playerShape.dispose();
+        playerHitbox2.setUserData("PlayerHitbox");
+        playerCornerShape1.dispose();
+        playerCornerShape2.dispose();
+        playerCornerShape3.dispose();
+        playerCornerShape4.dispose();
+        playerShape1.dispose();
+        playerShape2.dispose();
         return body;
     }
 }

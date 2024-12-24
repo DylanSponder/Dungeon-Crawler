@@ -240,6 +240,17 @@ public class GameInputProcessor implements InputProcessor {
             if (keycode == Input.Keys.NUM_9) {
                 hud.inventory.addPotion();
             }
+            if (keycode == Input.Keys.NUM_1) {
+                rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
+            }
+            if (keycode == Input.Keys.NUM_2) {
+                rayHandler.setAmbientLight(0f, 0f, 0f, 0.025f);
+            }
+            if (keycode == Input.Keys.NUM_3) {
+                hud.updateGold(20,true);
+            }
+
+
         }
 				/*
 

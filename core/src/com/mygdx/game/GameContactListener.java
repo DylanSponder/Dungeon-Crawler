@@ -535,6 +535,16 @@ public class GameContactListener implements ContactListener {
             //TODO: finish switch statement - ~40% done
             switch (colliderStr) {
 
+                case "Roof":
+                    if (collideeStr == "Player") {
+                        for (Roof r : roofs) {
+                            if (r.roofBody == collider.getBody()) {
+                                r.visible = false;
+                            }
+                        }
+                }
+                break;
+
 
                 case "Bone": {
 
@@ -933,6 +943,15 @@ public class GameContactListener implements ContactListener {
                     }
                 }
                     break;
+                case "Roof":
+                    if (colliderStr == "Player") {
+                        for (Roof r : roofs) {
+                            if (r.roofBody == collidee.getBody()) {
+                                r.visible = false;
+                            }
+                        }
+                    }
+                    break;
                 default: {
                     break;
                 }
@@ -983,6 +1002,7 @@ public class GameContactListener implements ContactListener {
                 // && (fb.getUserData() != "Wall" || fb.getUserData() !="Enemy" || fb.getUserData() != "Player"))
 
                 if (collidee.getBody().getUserData() == "Player") {
+
                     String[] roomIndexAsString = collider.getBody().getUserData().toString().split("-");
                     player.currentRoom = Integer.parseInt(roomIndexAsString[1]);
                     for (EnemySkull e : init.roomList.get(player.currentRoom).enemySkulls) {
@@ -995,7 +1015,16 @@ public class GameContactListener implements ContactListener {
                         e3.rayCastable = true;
                     }
                     player.touchingRoom = true;
+
+                    System.out.println(player.currentRoom);
+
+                    for (Roof r : init.roomList.get(player.currentRoom).roofs) {
+                      //  r.visible = false;
+                    }
                 }
+
+
+
                 if (init.roomList.get(player.currentRoom).isShop) {
                     init.roomList.get(player.currentRoom).enemyCounter = 0;
                     init.roomList.get(player.currentRoom).unlockAllDoors(world, init.roomList.get(player.currentRoom), false);
@@ -1068,6 +1097,15 @@ public class GameContactListener implements ContactListener {
                     break;
                 }
                 break;
+            case "Roof":
+                if (collideeAsString == "Player") {
+                    for (Roof r : roofs) {
+                        if (r.roofBody == collider.getBody()) {
+                            r.visible = true;
+                        }
+                    }
+                }
+                break;
             default:
                 //System.out.println("Unassessed exit collision");
                 //System.out.println(colliderAsString + " " +collideeAsString);
@@ -1087,6 +1125,16 @@ public class GameContactListener implements ContactListener {
                     }
                     break;
                 }
+            case "Roof":
+                if (colliderAsString == "Player") {
+                    for (Roof r : roofs) {
+                        if (r.roofBody.getUserData() == collideeAsString) {
+                            r.visible = true;
+                        }
+                    }
+                }
+                break;
+
             default:
                 break;
         }
@@ -1121,7 +1169,16 @@ public class GameContactListener implements ContactListener {
             }
 
         if (collider.getBody().getUserData().toString().startsWith("Room")) {
+
+
+
             if (collidee.getBody().getUserData() == "Player") {
+
+                System.out.println(player.currentRoom);
+
+                for (Roof r : init.roomList.get(player.currentRoom).roofs) {
+                   // r.visible = true;
+                }
                 player.touchingRoom = false;
                 if (player.currentRoom <= 9){ //TODO: Check for level progress before adding to current room
                         init.roomList.get(player.currentRoom).unlockDoor(world, init.roomList.get(player.currentRoom+1),false);

@@ -6,7 +6,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -19,6 +18,10 @@ public class CreateAssets {
     Texture potionItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/LifePot.png"));
     Texture torchItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Torch.png"));
     Texture shieldItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Shield.png"));
+    Texture beltItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Belt.png"));
+    Texture chiselItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Chisel.png"));
+    Texture greekfireItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Greekfire.png"));
+
     Texture emptySlotTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Potion/Empty.png"));
     Texture coinTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Coin2Preview.png"));
     Texture playerTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SpriteSheet.png"));
@@ -32,8 +35,10 @@ public class CreateAssets {
     Texture playerWalkUpRightAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkUpRight.png"));
 
     Texture playerAttackTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/Attack.png"));
+
+    //Main texture sheet
     Texture roomBackground = new Texture(Gdx.files.internal("HellasDungeon/Level/Level 1/CustomTileset.png"));
-    //Texture roomDoorTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHouse.png"));
+
     //Texture roomHoleTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHole.png"));
     Texture swordTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Sword/SpriteInHand.png"));
     Texture bowTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Bow/Sprite.png"));
@@ -56,6 +61,12 @@ public class CreateAssets {
     Texture potsSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Pots.png"));
     Texture webTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySpider/WebSpit.png"));
 
+    Texture roof3x3 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/3x3.png"));
+    Texture roof5x5 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/5x5.png"));
+    Texture roof7x7 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/7x7.png"));
+    Texture roof11x11 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/11x11.png"));
+    Texture roof15x15 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/15x15.png"));
+
     Music level1Track = Gdx.audio.newMusic(Gdx.files.internal("HellasDungeon/Music/Level1Track.mp3"));
 
     public Sound potBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/potbreaking2.mp3"));
@@ -69,6 +80,9 @@ public class CreateAssets {
     //Texture font = new Texture(Gdx.files.internal("HellasDungeon/Font/GreekAlphabet.png"));
     //public TextureRegion fontTexture = new TextureRegion(font,0,0,16,16);
 
+
+    //Floor textures
+
     public TextureRegion roomFloorTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomFloor2Texture = new TextureRegion(roomBackground, 256, 32, 16, 16);
     public TextureRegion roomFloor3Texture = new TextureRegion(roomBackground, 272, 32, 16, 16);
@@ -76,6 +90,8 @@ public class CreateAssets {
     public TextureRegion roomDecorativeFloorDownTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomDecorativeFloorLeftTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomDecorativeFloorRightTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+
+    //Wall textures
 
     public TextureRegion roomLeftWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomRightWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
@@ -93,8 +109,7 @@ public class CreateAssets {
     public TextureRegion obstacle2Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion obstacle3Texture = new TextureRegion(roomBackground, 0,0,16,16);
 
-    public TextureRegion candleTexture = new TextureRegion(roomBackground, 0,0,16,16);
-    public TextureRegion candlesTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    //Fence textures
 
     public TextureRegion roomTopFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomBottomFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
@@ -120,6 +135,8 @@ public class CreateAssets {
     public TextureRegion amphora2Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion damagedAmphoraTexture = new TextureRegion(roomBackground, 0,0,16,16);
 
+    public TextureRegion candleTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion candlesTexture = new TextureRegion(roomBackground, 0,0,16,16);
 
     public TextureRegion cobwebTexture = new TextureRegion(roomBackground,0,0,16,16);
 
@@ -246,20 +263,10 @@ public class CreateAssets {
 
     TextureRegion[] fireOutFrames = new TextureRegion[5 * 4];
 
-    int index = 0;
-    int index2 = 0;
-    int index3 = 0;
-    int index4 = 0;
-    int index5 = 0;
-    int index6 = 0;
-    int index7 = 0;
-    int index8 = 0;
-    int index9 = 0;
-    int index10 = 0;
-    int index11 = 0;
-    int index12 = 0;
-    int index13 = 0;
-    int index14 = 0;
+
+    //TODO: this is lazy - refactor
+    int index = 0, index2 = 0, index3 = 0, index4 = 0, index5 = 0, index6 = 0, index7 = 0, index8 = 0, index9 = 0, index10 = 0;
+    int index11 = 0, index12 = 0, index13 = 0, index14 = 0;
 
     public TextureRegion colTop1 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colTop2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
@@ -281,9 +288,30 @@ public class CreateAssets {
     public TextureRegion pedestal3 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion pedestal4 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
 
-    public TextureRegion roofTexture = new TextureRegion(roomBackground,0,0,64,96);
+    //Roof textures
 
-    public TextureRegion ruinedRoofTexture = new TextureRegion(roomBackground,0,0,64,96);
+    public TextureRegion corridorRoofTexture = new TextureRegion(roomBackground,0,0,64,96);
+    public TextureRegion ruinedCorridorRoofTexture = new TextureRegion(roomBackground,0,0,64,96);
+
+    public TextureRegion roof3x3UpperTexture = new TextureRegion(roof3x3,0,0,80,32);
+    public TextureRegion roof3x3MiddleTexture = new TextureRegion(roof3x3,80,32,80,16);
+    public TextureRegion roof3x3LowerTexture = new TextureRegion(roof3x3,0,48,80,32);
+
+    public TextureRegion roof5x5UpperTexture = new TextureRegion(roof5x5,0,0,112,32);
+    public TextureRegion roof5x5MiddleTexture = new TextureRegion(roof5x5,96,32,112,16);
+    public TextureRegion roof5x5LowerTexture = new TextureRegion(roof5x5,0,48,112,48);
+
+    public TextureRegion roof7x7UpperTexture = new TextureRegion(roof7x7,0,0,144,48);
+    public TextureRegion roof7x7MiddleTexture = new TextureRegion(roof7x7,128,48,144,16);
+    public TextureRegion roof7x7LowerTexture = new TextureRegion(roof7x7,0,64,144,64);
+
+    public TextureRegion roof11x11UpperTexture = new TextureRegion(roof11x11,0,0,208,64);
+    public TextureRegion roof11x11MiddleTexture = new TextureRegion(roof11x11,192,64,208,16);
+    public TextureRegion roof11x11LowerTexture = new TextureRegion(roof11x11,0,80,208,80);
+
+    public TextureRegion roof15x15UpperTexture = new TextureRegion(roof15x15,0,0,272,80);
+    public TextureRegion roof15x15MiddleTexture = new TextureRegion(roof15x15,272,80,272,16);
+    public TextureRegion roof15x15LowerTexture = new TextureRegion(roof15x15,0,96,272,96);
 
     public TextureRegion skullTexture = new TextureRegion(roomBackground, 0,0,16,16);
 
@@ -383,6 +411,9 @@ public class CreateAssets {
     public Sprite potionItemSprite = new Sprite(potionItemTexture, 16, 16);
     public Sprite torchItemSprite = new Sprite(torchItemTexture, 10, 15);
     public Sprite shieldItemSprite = new Sprite(shieldItemTexture, 11, 11);
+    public Sprite beltItemSprite = new Sprite(beltItemTexture, 13, 12);
+    public Sprite chiselItemSprite = new Sprite(chiselItemTexture, 13, 13);
+    public Sprite greekfireItemSprite = new Sprite(greekfireItemTexture, 14, 15);
 
     Sprite shopkeeperSprite = new Sprite(shopkeeperTexture, 0,0, 16, 16);
     Sprite skullSprite = new Sprite(skullTexture, 176,64, 16, 16);
@@ -648,9 +679,11 @@ public class CreateAssets {
         pedestal3.setRegion(64, 32, 16, 16);
         pedestal4.setRegion(80, 32, 16, 16);
 
-        roofTexture.setRegion(464, 0, 64, 96);
-        //ruinedRoofTexture.setRegion(528, 0, 64, 96);
-        ruinedRoofTexture.setRegion(464, 0, 64, 96);
+
+
+        corridorRoofTexture.setRegion(464, 0, 64, 96);
+        //ruinedCorridorRoofTexture.setRegion(528, 0, 64, 96);
+        ruinedCorridorRoofTexture.setRegion(464, 0, 64, 96);
 
         doorTopLeftTexture.setRegion(128, 0, 32, 16);
         doorTopRightTexture.setRegion(144, 0, 16, 16);
