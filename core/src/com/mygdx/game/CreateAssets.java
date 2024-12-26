@@ -44,6 +44,7 @@ public class CreateAssets {
     Texture bowTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Bow/Sprite.png"));
     Texture arrowTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/Bow/Arrow.png"));
     Texture shieldTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Shield/Sprite.png"));
+    Texture chiselTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Chisel/SpriteInHand.png"));
     Texture enemySkullTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySkull/SpriteSheet.png"));
     Texture enemySpiderTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySpider/SpriteSheet.png"));
     Texture enemyGhostTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemyGhost/SpriteSheet.png"));
@@ -382,6 +383,7 @@ public class CreateAssets {
     Sprite swordSprite = new Sprite(swordTexture, 0, 0, 7, 14);
     Sprite bowSprite = new Sprite(bowTexture,0,0,19,8);
     Sprite shieldSprite = new Sprite(shieldTexture,0,0, 16, 8);
+    Sprite chiselSprite = new Sprite(chiselTexture,0,0, 7, 14);
     Sprite arrowSprite = new Sprite(arrowTexture,0,0,13,5);
     //outline enemy sprites
     Sprite enemySkullSprite = new Sprite(enemySkullTexture,0,0,16,16);

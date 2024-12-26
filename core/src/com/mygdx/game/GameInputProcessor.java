@@ -236,10 +236,6 @@ public class GameInputProcessor implements InputProcessor {
 
         if (debug) {
 
-            // (For Debugging) Add potion
-            if (keycode == Input.Keys.NUM_9) {
-                hud.inventory.addPotion();
-            }
             if (keycode == Input.Keys.NUM_1) {
                 rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
             }
@@ -249,31 +245,16 @@ public class GameInputProcessor implements InputProcessor {
             if (keycode == Input.Keys.NUM_3) {
                 hud.updateGold(20,true);
             }
-
+            if (keycode == Input.Keys.NUM_9) {
+                hud.inventory.addPotion();
+            }
 
         }
-				/*
-
-					// (For Debugging) Damage player
-					if (keycode == Keys.NUM_0) {
-						hud.healthBar.LoseHealth(0.5f);
-					}
-
-					if (keycode == Keys.NUM_2) {
-						camera.zoom = 1f;
-					}
-
-					if (keycode == 10) {
-						camera.zoom = 10f;
-					}
-				}
-				else
-				*/
-
 
         if (Gdx.input.isKeyPressed(Input.Keys.F)) {
             Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
         }
+
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
 
@@ -325,6 +306,10 @@ public class GameInputProcessor implements InputProcessor {
                         }
                         case "TORCH": {
                             player.hasTorch = true;
+                            break;
+                        }
+                        case "CHISEL": {
+                            player.hasChisel = true;
                             break;
                         }
                         case "BELT": {
@@ -388,6 +373,10 @@ public class GameInputProcessor implements InputProcessor {
                         }
                         case "TORCH": {
                             player.hasTorch = true;
+                            break;
+                        }
+                        case "CHISEL": {
+                            player.hasChisel = true;
                             break;
                         }
                         case "BELT": {
@@ -463,6 +452,10 @@ public class GameInputProcessor implements InputProcessor {
                             //playerLight.setXray(true);
                             break;
                         }
+                        case "CHISEL": {
+                            player.hasChisel = true;
+                            break;
+                        }
                         case "BELT": {
                             //hud.inventory.Capacity = hud.inventory.Capacity + 2;
                             hud.inventory.changeCapacity(1, true);
@@ -513,8 +506,74 @@ public class GameInputProcessor implements InputProcessor {
             }
         }
 
-        if ((keycode == Input.Keys.SHIFT_LEFT || keycode == Input.Keys.SHIFT_RIGHT) && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking) && player.hasShield) {
+        if (keycode == Input.Keys.C && player.hasChisel && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking && !playerUsingChisel)) {
+            float playerChiselUseSpeedInSeconds = 0.85f;
+            playerUsingChisel = true;
+
+            if (moveDown || player.facing == 3) {
+                tx.playerTextureRegion = tx.playerAttackDown;
+                chiselBody = bf.createChiselBody(world, player.playerBody, -2f, -9.5f);
+                chiselHitbox = bf.createChiselHitbox(chiselBody, false);
+                chiselHitbox.setUserData("DownChisel");
+                chiselHitbox.setSensor(true);
+            }
+            if (moveUp || player.facing == 1) {
+                tx.playerTextureRegion = tx.playerAttackUp;
+                chiselBody = bf.createChiselBody(world, player.playerBody, -3f, 12.5f);
+                chiselHitbox = bf.createChiselHitbox(chiselBody, false);
+                chiselHitbox.setUserData("UpChisel");
+                chiselHitbox.setSensor(true);
+            }
+            if (moveLeft || player.facing == 4) {
+                tx.playerTextureRegion = tx.playerAttackLeft;
+                chiselBody = bf.createChiselBody(world, player.playerBody, -11.5f, -2f);
+                chiselHitbox = bf.createChiselHitbox(chiselBody, true);
+                chiselHitbox.setUserData("LeftChisel");
+                chiselHitbox.setSensor(true);
+            }
+            if (moveRight || player.facing == 2) {
+                tx.playerTextureRegion = tx.playerAttackRight;
+                chiselBody = bf.createChiselBody(world, player.playerBody, 12.5f, -2f);
+                chiselHitbox = bf.createChiselHitbox(chiselBody, true);
+                chiselHitbox.setUserData("RightChisel");
+                chiselHitbox.setSensor(true);
+            }
+
+            chiselBody.setUserData("Chisel");
+
+            //pause player in place while attacking (attacks must be timed correctly!)
+            playerPaused = true;
+            PLAYER_HORIZONTAL_SPEED = 0;
+            PLAYER_VERTICAL_SPEED = 0;
+            player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
+
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    //resume player movement after a short delay and remove swordBody hitbox
+                    playerPaused = false;
+                    chiselBody.destroyFixture(chiselHitbox);
+
+                    //reset playerSprite to before the attack input
+                    if (tx.playerTextureRegion.equals(tx.playerAttackDown)) {
+                        tx.playerTextureRegion = tx.playerDown;
+                    } else if (tx.playerTextureRegion.equals(tx.playerAttackUp)) {
+                        tx.playerTextureRegion = tx.playerUp;
+                    } else if (tx.playerTextureRegion.equals(tx.playerAttackLeft)) {
+                        tx.playerTextureRegion = tx.playerLeft;
+                    } else if (tx.playerTextureRegion.equals(tx.playerAttackRight)) {
+                        tx.playerTextureRegion = tx.playerRight;
+                    }
+
+                    playerUsingChisel = false;
+                }
+            }, playerChiselUseSpeedInSeconds);
+
+        }
+
+        if ((keycode == Input.Keys.SHIFT_LEFT || keycode == Input.Keys.SHIFT_RIGHT) && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking && !playerUsingChisel) && player.hasShield) {
             float playerShieldAttackSpeedInSeconds = 0.85f;
+            //0.85
             playerShieldAttacking = true;
 
             if (moveDown || player.facing == 3) {

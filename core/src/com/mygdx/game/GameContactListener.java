@@ -544,6 +544,16 @@ public class GameContactListener implements ContactListener {
                         }
                 }
                 break;
+                case "Chisel":
+
+                    if (collideeStr == "Obstacle") {
+                        for (Obstacle ob : obstacles) {
+                            if (collidee.getBody() == ob.obBody) {
+                                obstacleBodiesCollected.add(collidee.getBody());
+                            }
+                        }
+                    }
+                    break;
 
 
                 case "Bone": {

@@ -24,7 +24,7 @@ public class Player {
     public int facing;
     public boolean touchingRoom, touchingDoor, touchingCobweb;
     public boolean midAnimationFrame;
-    public boolean hasGreekFire, hasShield, hasTorch, torchApplied;
+    public boolean hasGreekFire, hasShield, hasTorch, torchApplied, hasChisel;
     public int greekFireUses;
     public boolean floorCleared, roomCleared, playerInput;
     public float stateTime;
@@ -40,6 +40,7 @@ public class Player {
         hasShield = false;
         hasTorch = false;
         torchApplied = false;
+        hasChisel = false;
     }
 
     public Body createPlayer(World world, float PLAYER_X, float PLAYER_Y, RayHandler rayHandler){

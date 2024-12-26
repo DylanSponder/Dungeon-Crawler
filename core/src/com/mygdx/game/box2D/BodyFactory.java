@@ -3,6 +3,8 @@ package com.mygdx.game.box2D;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
+import static com.mygdx.game.DungeonCrawler.chiselHitbox;
+
 public class BodyFactory {
 
     public Body createWall(World world, float x, float y) {
@@ -326,6 +328,30 @@ public class BodyFactory {
         return shieldHitbox;
     }
 
+    public Body createChiselBody(World world, Body player, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(player.getPosition().x+x, player.getPosition().y+y);
+        // bodyDef.fixedRotation = false;
+        body = world.createBody(bodyDef);
+        return body;
+    }
+
+    public Fixture createChiselHitbox(Body chisel,boolean r){
+        PolygonShape chiselShape = new PolygonShape();
+        if (r){
+            chiselShape.setAsBox(6f, 2.5f);
+        }
+        else {
+            chiselShape.setAsBox(2.5f, 6f);
+        }
+        Fixture chiselHitbox = chisel.createFixture(chiselShape, 1.0f);
+        chiselShape.dispose();
+        chiselHitbox.setSensor(true);
+        return chiselHitbox;
+    }
+
     public Body createSimpleDynamicBody(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
@@ -513,6 +539,7 @@ public class BodyFactory {
         playerCornerShape4.dispose();
         playerShape1.dispose();
         playerShape2.dispose();
+        playerShape3.dispose();
         return body;
     }
 }

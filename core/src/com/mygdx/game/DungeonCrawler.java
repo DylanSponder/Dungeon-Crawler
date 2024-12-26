@@ -60,12 +60,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
 	public static String playerDirection;
-	public static boolean playerPaused, playerMeleeAttacking, playerRangedAttacking, playerShieldAttacking;
-	public static Body swordBody, arrowBody, shieldBody;
-	public static Fixture swordHitbox, arrowHitbox, shieldHitbox;
+	public static boolean playerPaused, playerMeleeAttacking, playerRangedAttacking, playerShieldAttacking, playerUsingChisel;
+	public static Body swordBody, arrowBody, shieldBody, chiselBody;
+	public static Fixture swordHitbox, arrowHitbox, shieldHitbox, chiselHitbox;
 	public static Arrow arrow;
 	public static ArrayList<Arrow> arrows;
-	public static ArrayList<Body> arrowBodiesCollided, boneBodiesCollided, skullBodiesDestroyed, deadEnemyBodies, webBodiesCollected;
+	public static ArrayList<Body> arrowBodiesCollided, boneBodiesCollided, skullBodiesDestroyed, deadEnemyBodies, webBodiesCollected, obstacleBodiesCollected;
 	public static ArrayMap<Body, Arrow> arrowArrayMap;
 	public static ArrayList<Enemy> enemies;
 	public static ArrayList<Light> lights;
@@ -76,7 +76,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayMap<Body, Cobweb> cobArrayMap;
 	public static ArrayMap<Body, Fire> respawnFireMap;
 	public static ArrayMap<Body, Pot> potArrayMap;
-	public boolean reversedArrowMap, reversedSkullMap, reversedPotMap, reversedPotionMap, reversedRespawnFireMap, reversedBoneMap, reversedWebMap;
+	public static ArrayMap<Body, Obstacle> obArrayMap;
+	public boolean reversedArrowMap, reversedSkullMap, reversedPotMap, reversedPotionMap, reversedRespawnFireMap, reversedBoneMap, reversedWebMap, reversedObMap;
 	public static ArrayList<EnemySkull> enemySkulls, dyingSkulls;
 	public static ArrayList<EnemySpider> enemySpiders, dyingSpiders;
 	public static ArrayList<EnemyGhost> enemyGhosts, dyingGhosts;
@@ -358,6 +359,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		arrowBodiesCollided = new ArrayList<Body>();
 		webBodiesCollected = new ArrayList<Body>();
+		obstacleBodiesCollected = new ArrayList<Body>();
 		boneBodiesCollided = new ArrayList<Body>();
 		skullBodiesDestroyed = new ArrayList<Body>();
 		arrowArrayMap = new ArrayMap<Body, Arrow>();
@@ -366,6 +368,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		webArrayMap = new ArrayMap<Body, Web>();
 		arrows = new ArrayList<Arrow>();
 		potionArrayMap = new ArrayMap<Body, Potion>();
+		obArrayMap = new ArrayMap<Body, Obstacle>();
 		respawnFireMap = new ArrayMap<Body, Fire>();
 		cobArrayMap = new ArrayMap<Body, Cobweb>();
 
@@ -760,20 +763,53 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 
-			for (Obstacle o : obstacles) {
+		for (Obstacle ob : obstacles) {
+			if (!ob.obCreated) {
+				obArrayMap.put(ob.createObstacle(obArrayMap), ob);
+			}
+		}
+
+		if (!obArrayMap.isEmpty()) {
+
+			if (!reversedObMap) {
+				obArrayMap.reverse();
+				reversedObMap = true;
+			}
+
+			for (OrderedMap.Entry<Body, Obstacle> obEntry : obArrayMap.entries()) {
+				Body key = obEntry.key;
+				Obstacle value = obEntry.value;
+				//render each web spit attack sprite
 				obstacleBatch.begin();
-				switch (o.type){
+				switch (value.type){
 					case 1:
-						obstacleBatch.draw(tx.obstacle1Sprite, o.obBody.getPosition().x - 8f, o.obBody.getPosition().y - 8f, 16, 16);
+						obstacleBatch.draw(tx.obstacle1Sprite, value.obBody.getPosition().x - 8f, value.obBody.getPosition().y - 8f, 16, 16);
 						break;
 					case 2:
-						obstacleBatch.draw(tx.obstacle2Sprite, o.obBody.getPosition().x - 8f, o.obBody.getPosition().y - 8f, 16, 16);
+						obstacleBatch.draw(tx.obstacle2Sprite, value.obBody.getPosition().x - 8f, value.obBody.getPosition().y - 8f, 16, 16);
 						break;
 					case 3:
-						obstacleBatch.draw(tx.obstacle3Sprite, o.obBody.getPosition().x - 8f, o.obBody.getPosition().y - 8f, 16, 16);
+						obstacleBatch.draw(tx.obstacle3Sprite, value.obBody.getPosition().x - 8f, value.obBody.getPosition().y - 8f, 16, 16);
 						break;
 				}
 				obstacleBatch.end();
+			}
+
+			Iterator<Body> obIt = obstacleBodiesCollected.iterator();
+			if (obIt.hasNext()) {
+				Body obBody = obIt.next();
+				if (obArrayMap.containsKey(obBody)) {
+
+					obArrayMap.removeKey(obBody);
+					world.destroyBody(obBody);
+					obIt.remove();
+					obstacles.remove(obBody);
+				}
+			}
+		}
+
+			for (Obstacle o : obstacles) {
+
 			}
 
 		for (Candle c : candles) {
@@ -842,11 +878,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 		if (playerShieldAttacking) {
 			if (tx.playerTextureRegion.equals(tx.playerAttackUp)) {
 				playerBatch.draw(tx.shieldSprite, player.playerBody.getPosition().x - 11f, player.playerBody.getPosition().y + 7f, 16, 8, 16, 8, 1, 1, 0);
-			} else if (tx.playerSprite.equals(tx.playerAttackDown)) {
+			} else if (tx.playerTextureRegion.equals(tx.playerAttackDown)) {
 				playerBatch.draw(tx.shieldSprite, player.playerBody.getPosition().x - 26f, player.playerBody.getPosition().y - 20f, 16, 8, 16, 8, 1, 1, 180);
-			} else if (tx.playerSprite.equals(tx.playerAttackLeft)) {
+			} else if (tx.playerTextureRegion.equals(tx.playerAttackLeft)) {
 				playerBatch.draw(tx.shieldSprite, player.playerBody.getPosition().x - 30f, player.playerBody.getPosition().y - 2f, 16, 8, 16, 8, 1, 1, 90);
-			} else if (tx.playerSprite.equals(tx.playerAttackRight)) {
+			} else if (tx.playerTextureRegion.equals(tx.playerAttackRight)) {
 				playerBatch.draw(tx.shieldSprite, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y - 18f, 16, 8, 16, 8, 1, 1, 270);
 			}
 		}
@@ -877,6 +913,19 @@ public class DungeonCrawler extends ApplicationAdapter {
 					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 11f, player.playerBody.getPosition().y - 9f, 7, 12, 18, 8, 1, 1, 270);
 				} else if (tx.playerTextureRegion.equals(tx.playerAttackRight)) {
 					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 3f, player.playerBody.getPosition().y - 13f, 7, 12, 18, 8, 1, 1, 90);
+				}
+			}
+
+			if (playerUsingChisel) {
+				//add the lanceSprite to the corresponding attack playerDirection
+				if (tx.playerTextureRegion.equals(tx.playerAttackUp)) {
+					playerBatch.draw(tx.chiselSprite, player.playerBody.getPosition().x - 13f, player.playerBody.getPosition().y - 4f, 7, 14, 7, 14, 1, 1, 180);
+				} else if (tx.playerTextureRegion.equals(tx.playerAttackDown)) {
+					playerBatch.draw(tx.chiselSprite, player.playerBody.getPosition().x - 6f, player.playerBody.getPosition().y - 20f, 7, 14, 7, 14, 1, 1, 0);
+				} else if (tx.playerTextureRegion.equals(tx.playerAttackLeft)) {
+					playerBatch.draw(tx.chiselSprite, player.playerBody.getPosition().x - 15f, player.playerBody.getPosition().y - 19f, 7, 14, 7, 14, 1, 1, 270);
+				} else if (tx.playerTextureRegion.equals(tx.playerAttackRight)) {
+					playerBatch.draw(tx.chiselSprite, player.playerBody.getPosition().x + 1f, player.playerBody.getPosition().y - 12f, 7, 14, 7, 14, 1, 1, 90);
 				}
 			}
 			playerBatch.end();
@@ -1173,6 +1222,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 		}
+
+
 
 		if (!boneArrayMap.isEmpty()) {
 
