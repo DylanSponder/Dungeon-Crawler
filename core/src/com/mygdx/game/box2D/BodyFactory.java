@@ -462,6 +462,7 @@ public class BodyFactory {
         body = world.createBody(bodyDef);
         PolygonShape playerShape1 = new PolygonShape();
         PolygonShape playerShape2 = new PolygonShape();
+        PolygonShape playerShape3 = new PolygonShape();
         CircleShape playerCornerShape1 = new CircleShape();
         CircleShape playerCornerShape2 = new CircleShape();
         CircleShape playerCornerShape3 = new CircleShape();
@@ -482,8 +483,14 @@ public class BodyFactory {
         playerShape1.setAsBox(3f, 5.98f);
         playerShape2.setAsBox(5.98f, 3f);
 
+        //player bounds for room door locking
+        playerShape3.setAsBox(6.5f, 6.5f);
+
         Fixture playerHitbox = body.createFixture(playerShape1, 1.0f);
         Fixture playerHitbox2 = body.createFixture(playerShape2, 1.0f);
+
+        Fixture playerBoundHitbox = body.createFixture(playerShape3, 1.0f);
+        playerBoundHitbox.setSensor(true);
 
 
         Fixture playerCornerHitbox1 = body.createFixture(playerCornerShape1,1.0f);
@@ -499,6 +506,7 @@ public class BodyFactory {
         playerCornerHitbox4.setUserData("PlayerHitbox");
         playerHitbox.setUserData("PlayerHitbox");
         playerHitbox2.setUserData("PlayerHitbox");
+        playerBoundHitbox.setUserData("PlayerBound");
         playerCornerShape1.dispose();
         playerCornerShape2.dispose();
         playerCornerShape3.dispose();

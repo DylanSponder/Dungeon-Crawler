@@ -1001,7 +1001,7 @@ public class GameContactListener implements ContactListener {
             if (collider.getBody().getUserData().toString().startsWith("Room")) {
                 // && (fb.getUserData() != "Wall" || fb.getUserData() !="Enemy" || fb.getUserData() != "Player"))
 
-                if (collidee.getBody().getUserData() == "Player") {
+                if (collidee.getUserData() == "PlayerBound") {
 
                     String[] roomIndexAsString = collider.getBody().getUserData().toString().split("-");
                     player.currentRoom = Integer.parseInt(roomIndexAsString[1]);
@@ -1014,9 +1014,9 @@ public class GameContactListener implements ContactListener {
                     for (EnemyGhost e3 : init.roomList.get(player.currentRoom).enemyGhosts) {
                         e3.rayCastable = true;
                     }
+
                     player.touchingRoom = true;
 
-                    System.out.println(player.currentRoom);
 
                     for (Roof r : init.roomList.get(player.currentRoom).roofs) {
                       //  r.visible = false;
@@ -1172,7 +1172,7 @@ public class GameContactListener implements ContactListener {
 
 
 
-            if (collidee.getBody().getUserData() == "Player") {
+            if (collidee.getUserData() == "PlayerBound") {
 
                 System.out.println(player.currentRoom);
 
@@ -1186,8 +1186,8 @@ public class GameContactListener implements ContactListener {
             }
         }
 
-        if ((collider.getBody().getUserData() == "Door" && collidee.getBody().getUserData() == "Player")
-            ||(collider.getBody().getUserData() == "Player" && collidee.getBody().getUserData() == "Door")
+        if ((collider.getBody().getUserData() == "Door" && collidee.getUserData() == "PlayerBound")
+            ||(collider.getUserData() == "PlayerBound" & collidee.getBody().getUserData() == "Door")
                 || ((collider.getBody().getUserData() == "Door" && collidee.getBody().getUserData() == "Enemy")
                 ||(collider.getBody().getUserData() == "Enemy" && collidee.getBody().getUserData() == "Door"))
         )
@@ -1197,7 +1197,9 @@ public class GameContactListener implements ContactListener {
                     for (Door d : r.doors) {
                         if (d.doorBody == collider.getBody()) {
                             d.open = false;
-                            player.touchingDoor = false;
+                            if (collidee.getUserData() == "PlayerBound") {
+                                player.touchingDoor = false;
+                            }
                         }
                     }
                 }
@@ -1207,17 +1209,19 @@ public class GameContactListener implements ContactListener {
                     for (Door d : r.doors) {
                         if (d.doorBody == collider.getBody()) {
                             d.open = false;
-                            player.touchingDoor = false;
+                            if (collider.getUserData() == "PlayerBound") {
+                                player.touchingDoor = false;
+                            }
                         }
                     }
                 }
             }
         }
 
-        if (collider.getBody().getUserData() == "Door" && collidee.getBody().getUserData() == "Player"
+        if (collider.getBody().getUserData() == "Door" && collidee.getUserData() == "PlayerBound"
                 || (collider.getBody().getUserData() == "Door" && collidee.getBody().getUserData() == "Door")) {
             //player must be touching a room but not a door
-            if (collidee.getBody().getUserData() == "Player" && player.touchingRoom && !player.touchingDoor) {
+            if (collidee.getUserData() == "PlayerBound" && player.touchingRoom && !player.touchingDoor) {
                 if (player.currentRoom != 0) {
                     if (init.roomList.get(player.currentRoom).enemyCounter != 0) {
                         init.roomList.get(player.currentRoom).lockAllDoors(world, init.roomList.get(player.currentRoom), true);

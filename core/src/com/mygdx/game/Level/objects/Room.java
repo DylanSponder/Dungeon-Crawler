@@ -26,6 +26,7 @@ public class Room {
     public ArrayList<EnemySpider> enemySpiders;
     public ArrayList<EnemyGhost> enemyGhosts;
     public ArrayList<Fire> spawners;
+    public ArrayList<Roof> roofs;
 
     public boolean isShop;
 
@@ -39,6 +40,7 @@ public class Room {
         enemySpiders = new ArrayList<EnemySpider>();
         enemyGhosts = new ArrayList<EnemyGhost>();
         spawners = new ArrayList<Fire>();
+        roofs = new ArrayList<Roof>();
     }
 
     public void createLocks(World world) {

@@ -1,11 +1,16 @@
 package com.mygdx.game.level;
 
+import com.badlogic.gdx.Gdx;
 import com.mygdx.game.DungeonCrawler;
+import com.mygdx.game.level.objects.Roof;
 
+import javax.rmi.ssl.SslRMIClientSocketFactory;
 import java.awt.dnd.InvalidDnDOperationException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static com.mygdx.game.DungeonCrawler.roofs;
 
 public class RenderRules {
     public List<String> translateSymbols(List<List<String>> level, int layer, int roomsIndex, HashMap<String, String> map, int roomX, int levelY) {
@@ -338,11 +343,52 @@ public class RenderRules {
                             sb.delete(0, 1);
                             String str = sb.toString();
                             //floor + columntop4 + fire
+
+                            if (str.matches("([0-9])+")) {
+
+                                String roof = str;
+                                String strRoofExt = "0";
+
+                                StringBuffer sb3 = new StringBuffer(roof);
+                                sb3.delete(1, 3);
+                                String strRoofType = sb3.toString();
+
+                                StringBuffer sb4 = new StringBuffer(str);
+                                sb4.delete(0, 1);
+                                if (!sb4.toString().isEmpty()) {
+                                    strRoofExt = sb4.toString();
+                                }
+
+                                switch (strRoofType) {
+                                    case "1":
+                                        String roofFinal1;
+                                        roofFinal1 = "froof1" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal1);
+                                        break;
+                                    case "2":
+                                        String roofFinal2;
+                                        roofFinal2 = "froof2" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal2);
+                                        break;
+                                    case "3":
+                                        String roofFinal3;
+                                        roofFinal3 = "froof3" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal3);
+                                        break;
+                                    case "4":
+                                        String roofFinal4;
+                                        roofFinal4 = "froof4" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal4);
+                                        break;
+                                }
+                                index++;
+                            } else {
                             switch (str) {
                                     case "col10fire":
                                         drawableLevelLayer.add(index, "fcol10fire");
                                         index++;
                                         break;
+
                             }
                             switch (str) {
                                 case "cand":
@@ -505,7 +551,8 @@ public class RenderRules {
                                 case "trap":
                                     index++;
                                     break;
-                             }
+                                }
+                            }
                         }
 
                         else if (levelLayer.get(index).matches("t+w+.+")) {
@@ -513,10 +560,6 @@ public class RenderRules {
                         sb2.delete(0, 2);
                         String str = sb2.toString();
 
-
-
-
-                        System.out.println(str);
                             switch (str) {
                                 case "col10fire":
                                     drawableLevelLayer.add(index, "twCol10Fire");
@@ -619,18 +662,101 @@ public class RenderRules {
                         sb2.delete(0, 3);
                         String str = sb2.toString();
 
-                            drawableLevelLayer.add(index, "topLeftWallTile");
-                            index++;
-
+                        //    drawableLevelLayer.add(index, "topLeftWallTile");
 
 
                             if (str.matches("([0-9])+")) {
 
-                                System.out.println(str);
+                                String roof = str;
+                                String strRoofExt = "0";
+
+                                StringBuffer sb3 = new StringBuffer(roof);
+                                sb3.delete(1, 3);
+                                String strRoofType = sb3.toString();
+
+                                StringBuffer sb4 = new StringBuffer(str);
+                                sb4.delete(0, 1);
+                                if (!sb4.toString().isEmpty()) {
+                                    strRoofExt = sb4.toString();
+                                }
+
+                                switch (strRoofType) {
+                                    case "1":
+                                        String roofFinal1;
+                                        roofFinal1 = "roof1" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal1);
+                                        break;
+                                    case "2":
+                                        String roofFinal2;
+                                        roofFinal2 = "roof2" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal2);
+                                        break;
+                                    case "3":
+                                        String roofFinal3;
+                                        roofFinal3 = "roof3" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal3);
+                                        break;
+                                    case "4":
+                                        String roofFinal4;
+                                        roofFinal4 = "roof4" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal4);
+                                        break;
+                                }
+                                index++;
                             }
 
 
                     }
+                        else if (levelLayer.get(index).matches("t+l+f+.+")) {
+                            StringBuffer sb2 = new StringBuffer(i);
+                            sb2.delete(0, 3);
+                            String str = sb2.toString();
+
+                            //    drawableLevelLayer.add(index, "topLeftWallTile");
+
+
+                            if (str.matches("([0-9])+")) {
+
+                                String roof = str;
+                                String strRoofExt = "0";
+
+                                StringBuffer sb3 = new StringBuffer(roof);
+                                sb3.delete(1, 3);
+                                String strRoofType = sb3.toString();
+
+                                StringBuffer sb4 = new StringBuffer(str);
+                                sb4.delete(0, 1);
+                                if (!sb4.toString().isEmpty()) {
+                                    strRoofExt = sb4.toString();
+                                }
+
+                                switch (strRoofType) {
+                                    case "1":
+                                        String roofFinal1;
+                                        roofFinal1 = "Froof1" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal1);
+                                        break;
+                                    case "2":
+                                        String roofFinal2;
+                                        roofFinal2 = "Froof2" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal2);
+                                        break;
+                                    case "3":
+                                        String roofFinal3;
+                                        roofFinal3 = "Froof3" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal3);
+                                        break;
+                                    case "4":
+                                        String roofFinal4;
+                                        roofFinal4 = "Froof4" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal4);
+                                        break;
+                                }
+                                index++;
+                            }
+
+
+                        }
                         else {
                             if (!i.equals("")){
                                 System.out.println("UNKNOWN TILE: " + "'" + i + "'");

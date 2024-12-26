@@ -116,10 +116,10 @@ public class CreateCorridor {
 
                         if (rand == 1 || rand == 2 || rand == 3) {
                             if (rand2 != 4) {
-                                Roof r = new Roof(world, ((doorX+3) * 16) + 12*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 16, 4,6,upDown,false);
+                                Roof r = new Roof(world, ((doorX+3) * 16) + 12*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 16,upDown,false, 0,0);
                                 roofs.add(r);
                             } else {
-                                Roof r = new Roof(world, ((doorX+3) * 16) + 12*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 16, 4,6,upDown,true);
+                                Roof r = new Roof(world, ((doorX+3) * 16) + 12*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 16,upDown,false, 0,0);
                                 roofs.add(r);
                             }
 
@@ -196,10 +196,11 @@ public class CreateCorridor {
 
                             if (randR == 1 || randR == 2 || randR == 3) {
                                 if (randR2 != 4) {
-                                    Roof r = new Roof(world, ((doorX + 3) * 16) + 12 * 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i2 * 16 - 16, 4,6, upDown,false);
+                                    Roof r = new Roof(world, ((doorX + 3) * 16) + 12 * 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i2 * 16 - 16,  upDown,false, 0,0);
                                     roofs.add(r);
+
                                 } else {
-                                    Roof r = new Roof(world, ((doorX + 3) * 16) + 12 * 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i2 * 16 - 16, 4,6, upDown,true);
+                                    Roof r = new Roof(world, ((doorX + 3) * 16) + 12 * 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i2 * 16 - 16,  upDown,false, 0,0);
                                     roofs.add(r);
                                 }
                             }
@@ -297,10 +298,10 @@ public class CreateCorridor {
                                 int randR = Random.randomInt(4,1);
                                 if (rand3 == 2) {
                                     if (randR != 4) {
-                                        Roof r = new Roof(world, ((doorX+3) * 16) + 17*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 32, 4,6,upDown,false);
+                                        Roof r = new Roof(world, ((doorX+3) * 16) + 17*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 32, upDown,false, 0,0);
                                         roofs.add(r);
                                     } else {
-                                        Roof r = new Roof(world, ((doorX+3) * 16) + 17*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 32, 4,6,upDown,true);
+                                        Roof r = new Roof(world, ((doorX+3) * 16) + 17*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 32, upDown,false, 0,0);
                                         roofs.add(r);
                                     }
                                 }
@@ -387,11 +388,11 @@ public class CreateCorridor {
 
                                 if (rand3 == 2) {
                                     if (randR != 4) {
-                                        Roof r = new Roof(world, ((doorX+3) * 16) + 17*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 32, 4,6, upDown,false);
+                                        Roof r = new Roof(world, ((doorX+3) * 16) + 17*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 32, upDown,false, 0,0);
                                         roofs.add(r);
                                     }
                                     else {
-                                        Roof r = new Roof(world, ((doorX+3) * 16) + 17*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 32, 4,6, upDown,true);
+                                        Roof r = new Roof(world, ((doorX+3) * 16) + 17*16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i*16 - 32, upDown,false, 0,0);
                                         roofs.add(r);
                                     }
                                 }

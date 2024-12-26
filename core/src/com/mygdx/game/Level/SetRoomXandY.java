@@ -13,7 +13,6 @@ public class SetRoomXandY {
                 GenerateLevel.testLevelY = GenerateLevel.testLevelY + currentRoomSize + 4;
             }
             else if (doorDirection == 2) {
-                //GenerateLevel.testLevelY = Gene rateLevel.testLevelY + currentRoomSize;
                 GenerateLevel.testRoomX = GenerateLevel.testRoomX + previousLongestRow + 4;
             }
             else if (doorDirection == 3){

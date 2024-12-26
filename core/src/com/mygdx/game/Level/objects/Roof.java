@@ -6,16 +6,23 @@ import com.mygdx.game.box2D.BodyFactory;
 
 public class Roof {
     public Body roofBody;
-    public boolean upDown, ruined;
+    public boolean upDown, ruined, visible;
+    public int type, ext;
     //public Fixture tutorialHitbox;
 
-    public Roof(World world, float x, float y, int width, int height, boolean upDown, boolean ruined) {
+    public Roof(World world, float x, float y, boolean upDown, boolean ruined, int type, int ext) {
+
+        this.type = type;
+
+        this.ext = ext;
+
+        this.visible = true;
 
         this.upDown = upDown;
 
         BodyFactory bodyFactory = new BodyFactory();
 
-        roofBody = bodyFactory.createTutorialBody(world, x, y);
+        roofBody = bodyFactory.createRoofHitbox(world, x, y, type, ext);
 
         this.ruined = ruined;
 
@@ -23,7 +30,7 @@ public class Roof {
     }
 
     public void createVariableRoof() {
-    //TODO: take the values from the room hitbox and translate into roof tiles
+
 
 
 
