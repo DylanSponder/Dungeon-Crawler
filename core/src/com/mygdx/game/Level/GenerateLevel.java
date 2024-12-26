@@ -1456,13 +1456,13 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.middleFloorTile;
             //Body newObstacle1 = bf.createObstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
             Obstacle newObstacle1 = new Obstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 1);
-            Body ob1Body = newObstacle1.createObstacle();
+            //Body ob1Body = newObstacle1.createObstacle(obArrayMap);
             obstacles.add(newObstacle1);
             break;
         case "obstacle2":
             currentCell = init.cr.middleFloorTile;
             Obstacle newObstacle2 = new Obstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 2);
-            Body ob2Body = newObstacle2.createObstacle();
+            //Body ob2Body = newObstacle2.createObstacle(obArrayMap);
             obstacles.add(newObstacle2);
             //Body newObstacle2 = bf.createObstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
             //newObstacle2.setUserData("Obstacle");
@@ -1470,7 +1470,7 @@ for (int i = 0; i < layerSize; i++) {
         case "obstacle3":
             currentCell = init.cr.middleFloorTile;
             Obstacle newObstacle3 = new Obstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 3);
-            Body ob3Body = newObstacle3.createObstacle();
+            //Body ob3Body = newObstacle3.createObstacle(obArrayMap);
             //Body newObstacle3 = bf.createObstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
             //newObstacle3.setUserData("Obstacle");
             obstacles.add(newObstacle3);

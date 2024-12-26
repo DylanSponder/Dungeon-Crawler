@@ -14,24 +14,30 @@ public class Obstacle {
     public Body obBody;
     public Fixture obHitbox;
     public int type;
+    public boolean obCreated;
 
     public Obstacle(World world, float x, float y, int type) {
         this.world = world;
         this.obX = x;
         this.obY = y;
         this.type = type;
+        this.obCreated = false;
     }
 
-    public Body createObstacle() {
+    public Body createObstacle(ArrayMap<Body, Obstacle> obArrayMap) {
         BodyFactory bodyFactory = new BodyFactory();
 
         this.obBody = bodyFactory.createObstacle(world, obX, obY);
 
         this.obBody.setUserData("Obstacle");
 
+        this.obCreated = true;
+
         //this.obHitbox.setUserData("Obstacle");
 
         //potArrayMap.put(obBody, this);
+
+        obArrayMap.put(obBody, this);
 
         return this.obBody;
     }
