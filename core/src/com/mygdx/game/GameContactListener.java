@@ -8,6 +8,8 @@ import com.mygdx.game.entity.behaviours.fsm.*;
 import com.mygdx.game.entity.behaviours.fsm.drops.Skull;
 import com.mygdx.game.level.objects.*;
 
+import java.sql.SQLSyntaxErrorException;
+
 import static com.mygdx.game.DungeonCrawler.*;
 import static com.mygdx.game.level.GenerateLevel.init;
 
@@ -48,23 +50,16 @@ public class GameContactListener implements ContactListener {
                                     p.POT_HEALTH--;
                                     p.POT_HEALTH--;
                                 if (p.POT_HEALTH <= 0) {
-                                    final CreateAssets tx = CreateAssets.getInstance();
-                                    //tx.potBreaking.setVolume(100,0.05f);
 
-                                    soundController.playSound("Pot",5f,4f,0.1f);
+                                    soundController.playSound("PotSmash",5f,4f,0.1f);
                                     brokenPots.add(p);
-                                    //potSmash.dispose();
                                 }
                             } else {
-                                    final CreateAssets tx = CreateAssets.getInstance();
-                                    //tx.potBreaking.setVolume(100,0.05f);
-                                    p.POT_HEALTH--;
-                                    p.POT_HEALTH--;
 
-                                    soundController.playSound("Pot",5f,4f,0.1f);
+                                    soundController.playSound("PotSmash",5f,4f,0.1f);
+                                    p.POT_HEALTH--;
+                                    p.POT_HEALTH--;
                                     brokenPots.add(p);
-                                    //potSmash.dispose();
-
                             }
                         }
                     }
@@ -125,6 +120,12 @@ public class GameContactListener implements ContactListener {
                         //e.enemyBody.applyForceToCenter(0,0, true);
                         e.enemyBody.setLinearVelocity(0, 0);
 
+                        if (colliderStr.startsWith("Arrow") || collideeStr.startsWith("Arrow")) {
+                            soundController.playSound("ArrowHit", 10f,8f,0.1f);
+                        }
+
+
+
                         if (e.ENEMY_HEALTH < 1) {
                             if (!deadEnemyBodies.contains(e.enemyBody)) {
                                 //arrowBodiesCollided.add(fa.getBody());
@@ -162,6 +163,7 @@ public class GameContactListener implements ContactListener {
                                     for (EnemyGhost ghost : enemyGhosts) {
                                         if (ghost.enemyBody == collidee.getBody()) {
                                             deadEnemyBodies.add(collidee.getBody());
+                                            soundController.playSound("GhostDeath",8.5f,7.5f,0.1f);
                                             dyingGhosts.add(ghost);
                                         }
                                     }
@@ -230,6 +232,10 @@ public class GameContactListener implements ContactListener {
                                 break;
                         }
 
+                        if (colliderStr.startsWith("Arrow") || collideeStr.startsWith("Arrow")) {
+                            soundController.playSound("ArrowHit", 10f,8f,0.1f);
+                        }
+
                         if (e.ENEMY_HEALTH < 1) {
                             if (!deadEnemyBodies.contains(e.enemyBody)) {
 
@@ -263,6 +269,7 @@ public class GameContactListener implements ContactListener {
                                     for (EnemyGhost ghost : enemyGhosts) {
                                         if (ghost.enemyBody == collidee.getBody()) {
                                             deadEnemyBodies.add(collidee.getBody());
+                                            soundController.playSound("GhostDeath",8.5f,7.5f,0.1f);
                                             dyingGhosts.add(ghost);
                                         }
                                     }
@@ -535,6 +542,18 @@ public class GameContactListener implements ContactListener {
             //TODO: finish switch statement - ~40% done
             switch (colliderStr) {
 
+                case "TrapArea":
+                    if (collidee.getUserData() == "PlayerBound") {
+                        for (Trap tr : traps) {
+                            if (tr.trapArea == collider.getBody()) {
+                                if (!tr.active) {
+                                    tr.fireArrow(tr.trapX, tr.trapY);
+                                }
+                            }
+                        }
+                    }
+                    break;
+
                 case "Roof":
                     if (collideeStr == "Player") {
                         for (Roof r : roofs) {
@@ -660,8 +679,9 @@ public class GameContactListener implements ContactListener {
                     break;
 
                 case "Arrow":
-                    //System.out.println(fa.getBody().getUserData() + " " + fb.getBody().getUserData());
-                    //System.out.println(fa.getUserData() + " " + fb.getUserData());
+                    if (collidee.getUserData() == "PlayerBound") {
+                        hud.healthBar.LoseHealth(0.5f);
+                    }
 
                     if ((((collideeStr == "Enemy" && collidee.getUserData() != "Proximity") && collideeStr != "Cobweb")
                             || collideeStr == "Wall")) {
@@ -870,9 +890,20 @@ public class GameContactListener implements ContactListener {
 
             switch (collideeStr) {
 
+                case "TrapArea":
+                    if (collider.getUserData() == "PlayerBound") {
+                        for (Trap tr : traps) {
+                            if (tr.trapArea == collidee.getBody()) {
+                                if (!tr.active) {
+                                    tr.fireArrow(tr.trapX,tr.trapY);
+                                }
+                            }
+                        }
+                    }
+                    break;
 
                 case "Cobweb":
-                    if ((colliderStr == "Player")) {
+                    if (collider.getUserData() == "PlayerBound") {
                        DungeonCrawler.PLAYER_SPEED_MULTI = 15f;
                         player.touchingCobweb = true;
                        break;
@@ -898,6 +929,7 @@ public class GameContactListener implements ContactListener {
                     }
                     break;
                 case "Player":
+                    //TODO: revise - unused
                     if (colliderStr == "Enemy" && collider.getUserData() != "Proximity") {
                         for (EnemySkull e : enemySkulls) {
                             hud.healthBar.LoseHealth(0.5f);
@@ -917,7 +949,9 @@ public class GameContactListener implements ContactListener {
                     }
                     break;
                 case "Arrow":
-
+                    if (collider.getUserData() == "PlayerBound") {
+                        hud.healthBar.LoseHealth(0.5f);
+                    }
 
                     if (colliderStr.equals("Obstacle")) {
                         if (!arrowBodiesCollided.contains(collidee.getBody())) {

@@ -61,6 +61,7 @@ public class CreateAssets {
     Texture columnsTextureSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Columns.png"));
     Texture potsSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Pots.png"));
     Texture webTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySpider/WebSpit.png"));
+    Texture arrowTrapTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/ArrowTrap.png"));
 
     Texture roof3x3 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/3x3.png"));
     Texture roof5x5 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/5x5.png"));
@@ -70,11 +71,22 @@ public class CreateAssets {
 
     Music level1Track = Gdx.audio.newMusic(Gdx.files.internal("HellasDungeon/Music/Level1Track.mp3"));
 
-    public Sound potBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/potbreaking2.mp3"));
+    public Sound potBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/potbreaking4.mp3"));
     public Sound skullBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/skullbreaking.mp3"));
     public Sound boneBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/bonebreaking.mp3"));
     public Sound spiderAttack = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/spiderattack.mp3"));
-    public Sound spiderDeath = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/spiderdying.mp3"));
+    public Sound spiderDeath = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/spiderdying2.mp3"));
+    public Sound ghostDeath = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/ghostdying.mp3"));
+    public Sound playerHurt = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/playerhurt.mp3"));
+
+    public Sound arrowHit = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/arrowhit.mp3"));
+    public Sound swordSwing = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/swordswing.mp3"));
+    public Sound swordSwing2 = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/swordswing2.mp3"));
+    public Sound bowAttack = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/bowattack.mp3"));
+    public Sound bowAttack2 = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/bowattack2.mp3"));
+    public Sound bowAttack3 = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/bowattack3.mp3"));
+    public Sound trapOpening = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/trapopens2.mp3"));
+    public Sound trapClosing = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/trapcloses2.mp3"));
 
     public Sound fireAmbient = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/Fire.mp3"));
 
@@ -269,6 +281,8 @@ public class CreateAssets {
     int index = 0, index2 = 0, index3 = 0, index4 = 0, index5 = 0, index6 = 0, index7 = 0, index8 = 0, index9 = 0, index10 = 0;
     int index11 = 0, index12 = 0, index13 = 0, index14 = 0;
 
+    //Column textures
+
     public TextureRegion colTop1 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colTop2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colTop3 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
@@ -314,6 +328,8 @@ public class CreateAssets {
     public TextureRegion roof15x15MiddleTexture = new TextureRegion(roof15x15,272,80,272,16);
     public TextureRegion roof15x15LowerTexture = new TextureRegion(roof15x15,0,96,272,96);
 
+    //Level object textures
+
     public TextureRegion skullTexture = new TextureRegion(roomBackground, 0,0,16,16);
 
     public TextureRegion boneTexture = new TextureRegion(roomBackground, 0,0,16,16);
@@ -324,10 +340,15 @@ public class CreateAssets {
     public TextureRegion torchUpTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion torchDownTexture = new TextureRegion(roomBackground, 0,0,16,16);
 
+    public TextureRegion arrowTrap = new TextureRegion(arrowTrapTexture, 0,0,16,16);
+    public TextureRegion arrowTrapActivated = new TextureRegion(arrowTrapTexture, 16,0,16,16);
+
     public TextureRegion lockUpTexture = new TextureRegion(roomBackground, 160,64,16,16);
     public TextureRegion lockDownTexture = new TextureRegion(roomBackground, 192,32,16,16);
     public TextureRegion lockLeftTexture = new TextureRegion(roomBackground, 192,16,16,16);
     public TextureRegion lockRightTexture = new TextureRegion(roomBackground, 192,0,16,16);
+
+    //Door textures
 
     public TextureRegion doorTopLeftWallTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion doorTopRightWallTexture = new TextureRegion(roomBackground, 0,0,16,16);
@@ -379,16 +400,19 @@ public class CreateAssets {
     Sprite playerAttackDown = new Sprite(playerAttackTexture, 0, 0, 16, 16);
     Sprite playerAttackLeft = new Sprite(playerAttackTexture, 32, 0, 16, 16);
     Sprite playerAttackRight = new Sprite(playerAttackTexture, 48, 0, 16, 16);
-    //outline weapon sprites
+
+    //Weapon sprites
+
     Sprite swordSprite = new Sprite(swordTexture, 0, 0, 7, 14);
     Sprite bowSprite = new Sprite(bowTexture,0,0,19,8);
     Sprite shieldSprite = new Sprite(shieldTexture,0,0, 16, 8);
     Sprite chiselSprite = new Sprite(chiselTexture,0,0, 7, 14);
     Sprite arrowSprite = new Sprite(arrowTexture,0,0,13,5);
-    //outline enemy sprites
+
+    //Enemy sprites
+
     Sprite enemySkullSprite = new Sprite(enemySkullTexture,0,0,16,16);
     Sprite enemySkullAlertedSprite = new Sprite(enemySkullTexture,16,0,16,16);
-
 
     Sprite enemySpiderUpSprite = new Sprite(enemySpiderTexture,0,0,16,16);
     Sprite enemySpiderDownSprite = new Sprite(enemySpiderTexture,16,0,16,16);
@@ -407,7 +431,8 @@ public class CreateAssets {
 
     Sprite enemyEyeSprite = new Sprite(enemyEyeTexture,0,0,16,16);
 
-    //outline HUD sprites
+    //HUD sprites
+
     public Sprite coinItemSprite = new Sprite(coinTexture, 10, 10);
     public Sprite heartSprite = new Sprite(heartHUDTexture, 16, 16);
     public Sprite potionItemSprite = new Sprite(potionItemTexture, 16, 16);
@@ -431,6 +456,8 @@ public class CreateAssets {
 
     Sprite candleSprite = new Sprite(candleTexture,384,64,16,16);
     Sprite candlesSprite = new Sprite(candlesTexture,400,64,16,16);
+
+    //Pot sprites
 
     Sprite pot1Sprite = new Sprite(amphoraeTexture, 16,16, 16, 16);
     Sprite pot2Sprite = new Sprite(amphoraeTexture, 32,16, 16, 16);

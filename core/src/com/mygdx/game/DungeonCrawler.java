@@ -49,6 +49,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch playerBatch, arrowBatch, enemySkullBatch, enemySpiderBatch, enemyGhostBatch, potBatch, hudBatch, tutoBatch, fontBatch, inventoryBatch;
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch, flameBatch, webBatch, cobBatch, candleBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch, roofBatch, columnBaseLowerBatch;
+	public SpriteBatch trapBatch;
 	public static World world;
 	public Viewport vp;
 	public static Stage menuStage;
@@ -59,7 +60,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public GameInputProcessor gip;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
-	public static String playerDirection;
+	public static String playerDirection, arrowDirection;
 	public static boolean playerPaused, playerMeleeAttacking, playerRangedAttacking, playerShieldAttacking, playerUsingChisel;
 	public static Body swordBody, arrowBody, shieldBody, chiselBody;
 	public static Fixture swordHitbox, arrowHitbox, shieldHitbox, chiselHitbox;
@@ -67,8 +68,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Arrow> arrows;
 	public static ArrayList<Body> arrowBodiesCollided, boneBodiesCollided, skullBodiesDestroyed, deadEnemyBodies, webBodiesCollected, obstacleBodiesCollected;
 	public static ArrayMap<Body, Arrow> arrowArrayMap;
+	public static ArrayMap<Trap, Integer> arrowsToBeFired;
 	public static ArrayList<Enemy> enemies;
 	public static ArrayList<Light> lights;
+	public static ArrayList<Trap> traps;
 	public ArrayMap<Body, Skull> skullArrayMap;
 	public static ArrayMap<Body, Bone> boneArrayMap;
 	public static ArrayMap<Body, Web> webArrayMap;
@@ -146,6 +149,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		doorBatch = new SpriteBatch();
 		lockBatch = new SpriteBatch();
 		potBatch = new SpriteBatch();
+		trapBatch = new SpriteBatch();
 		potionBatch = new SpriteBatch();
 		obstacleBatch = new SpriteBatch();
 		candleBatch = new SpriteBatch();
@@ -167,6 +171,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		player = new Player();
 		enemies = new ArrayList<>();
 		lights = new ArrayList<>();
+		traps = new ArrayList<>();
 		enemySkulls = new ArrayList<>();
 		enemySpiders = new ArrayList<>();
 		enemyGhosts = new ArrayList<>();
@@ -252,7 +257,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//create the Box2D ray handler
 		rayHandler = new RayHandler(world);
-		rayHandler.setAmbientLight(0f, 0f, 0f, 0.025f);
+		rayHandler.setAmbientLight(0f, 0f, 0f, 0.030f);
 		if (debug) {
 			rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
 		}
@@ -363,6 +368,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		boneBodiesCollided = new ArrayList<Body>();
 		skullBodiesDestroyed = new ArrayList<Body>();
 		arrowArrayMap = new ArrayMap<Body, Arrow>();
+		arrowsToBeFired = new ArrayMap<Trap, Integer>();
 		skullArrayMap = new ArrayMap<Body, Skull>();
 		boneArrayMap = new ArrayMap<Body, Bone>();
 		webArrayMap = new ArrayMap<Body, Web>();
@@ -399,7 +405,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//hud.startLevel();
 
 			// win the game if all enemySkulls are dead
-			if (enemySkulls.isEmpty()) {
+			if (enemies.isEmpty()) {
 				hud.winLevel();
 			}
 
@@ -431,6 +437,34 @@ public class DungeonCrawler extends ApplicationAdapter {
 				tutoBatch.begin();
 				tutoBatch.draw(tx.tutorialTexture, t.tutorialBody.getPosition().x - 16f, t.tutorialBody.getPosition().y + 7f, 96, 64);
 				tutoBatch.end();
+			}
+
+			for (Trap tr : traps) {
+				trapBatch.begin();
+				if (!tr.active) {
+					switch (tr.type) {
+						case 1:
+							Trap.renderTrap(trapBatch, tr.direction, tr.trapBody.getPosition().x, tr.trapBody.getPosition().y);
+							//trapBatch.draw(tx.arrowTrap, tr.trapBody.getPosition().x, tr.trapBody.getPosition().y, 16,16);
+							break;
+						case 2:
+							break;
+						case 3:
+							break;
+					}
+				} else {
+					switch (tr.type) {
+						case 1:
+							Trap.renderTrapActive(trapBatch, tr.direction, tr.trapBody.getPosition().x, tr.trapBody.getPosition().y);
+							//trapBatch.draw(tx.arrowTrap, tr.trapBody.getPosition().x, tr.trapBody.getPosition().y, 16,16);
+							break;
+						case 2:
+							break;
+						case 3:
+							break;
+					}
+				}
+				trapBatch.end();
 			}
 
 
@@ -567,7 +601,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				Cobweb value = cobEntry.value;
 				//render each cobweb
 				cobBatch.begin();
-				Cobweb.renderCobweb(cobBatch,tx.cobwebSprite,cobEntry.key.getPosition().x, cobEntry.key.getPosition().y);
+				Cobweb.renderCobweb(cobBatch, cobEntry.key.getPosition().x, cobEntry.key.getPosition().y);
 				cobBatch.end();
 			}
 
@@ -1284,6 +1318,51 @@ public class DungeonCrawler extends ApplicationAdapter {
 			columnBaseBatch.end();
 		}
 
+		if (!arrowsToBeFired.isEmpty()) {
+			for (OrderedMap.Entry<Trap, Integer> firedArrowEntry : arrowsToBeFired.entries()) {
+				Integer value = firedArrowEntry.value;
+				Trap key = firedArrowEntry.key;
+				switch (value) {
+					case 1:
+						arrowBody = Arrow.createArrowBody(DungeonCrawler.world, key.trapBody.getPosition().x + 8f, key.trapBody.getPosition().y - 7f);
+						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
+						arrowHitbox.setUserData("DownArrow");
+						arrowBody.setUserData("Arrow");
+						arrowBody.setLinearVelocity(0, -250f);
+						arrowDirection = "Down";
+						break;
+					case 2:
+						arrowBody = Arrow.createArrowBody(DungeonCrawler.world, key.trapBody.getPosition().x - 7f, key.trapBody.getPosition().y - 8f);
+						arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
+						arrowHitbox.setUserData("LeftArrow");
+						arrowBody.setUserData("Arrow");
+						arrowBody.setLinearVelocity(-250f, 0);
+						arrowDirection = "Left";
+						break;
+					case 3:
+						arrowBody = Arrow.createArrowBody(DungeonCrawler.world, key.trapBody.getPosition().x - 8f, key.trapBody.getPosition().y + 23f);
+						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
+						arrowHitbox.setUserData("UpArrow");
+						arrowBody.setUserData("Arrow");
+						arrowBody.setLinearVelocity(0, 250f);
+						arrowDirection = "Up";
+						break;
+					case 4:
+						arrowBody = Arrow.createArrowBody(world, key.trapBody.getPosition().x + 23f, key.trapBody.getPosition().y + 8f);
+						arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
+						arrowHitbox.setUserData("RightArrow");
+						arrowBody.setUserData("Arrow");
+						arrowBody.setLinearVelocity(250f, 0);
+						arrowDirection = "Right";
+						break;
+				}
+
+				arrows.add(arrow = new Arrow(arrowBody, arrowDirection , 0f, false));
+				arrowArrayMap.put(arrowBody, arrow);
+				arrowsToBeFired.removeKey(key);
+			}
+		}
+
 
 			//check if there are any fired arrows
 			if (!arrowArrayMap.isEmpty()) {
@@ -1468,14 +1547,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 					switch (r.type) {
 						case 1:
 							if (r.visible) {
-								roofBatch.draw(tx.roof3x3UpperTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - 16, 80, 32);
+								roofBatch.draw(tx.roof3x3UpperTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y + (r.ext * 8), 80, 32);
 								if (r.ext != 0) {
 									for (int i = 0; i < r.ext; i++) {
-										roofBatch.draw(tx.roof3x3MiddleTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - (32 + (i * 16)), 80, 16);
+										roofBatch.draw(tx.roof3x3MiddleTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - 16 - (i * 16) + (r.ext * 8), 80, 16);
 									}
-									roofBatch.draw(tx.roof3x3LowerTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - (48 + (r.ext * 16)), 80, 32);
+									roofBatch.draw(tx.roof3x3LowerTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - (32 + (r.ext * 16)) + (r.ext * 8), 80, 32);
 								} else {
-									roofBatch.draw(tx.roof3x3LowerTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - 48, 80, 32);
+									roofBatch.draw(tx.roof3x3LowerTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - (32 + (r.ext * 8)), 80, 32);
 								}
 							}
 
@@ -1671,6 +1750,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			hud.update();
 			rayHandler.render();
 			rayHandler.setCombinedMatrix(camera);
+			trapBatch.setProjectionMatrix(camera.combined);
 			obstacleBatch.setProjectionMatrix(camera.combined);
 			candleBatch.setProjectionMatrix(camera.combined);
 			columnBaseLowerBatch.setProjectionMatrix(camera.combined);
@@ -1685,6 +1765,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			enemySpiderBatch.setProjectionMatrix(camera.combined);
 			enemyGhostBatch.setProjectionMatrix(camera.combined);
 			lockBatch.setProjectionMatrix(camera.combined);
+
 			doorBatch.setProjectionMatrix(camera.combined);
 			potBatch.setProjectionMatrix(camera.combined);
 			cobBatch.setProjectionMatrix(camera.combined);
@@ -1806,7 +1887,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		}
 		else if (!debug){
 			//camera.zoom = 0.8f;
-			camera.zoom = 1f;
+			camera.zoom = 0.9f;
 		} else {
 
 		}

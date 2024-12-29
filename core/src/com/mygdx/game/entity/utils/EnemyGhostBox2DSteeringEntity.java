@@ -23,7 +23,7 @@ public class EnemyGhostBox2DSteeringEntity implements Steerable<Vector2> {
         this.body = body;
         this.boundingRadius = boundingRadius;
 
-        this.maxLinearSpeed = 60;
+        this.maxLinearSpeed = 55;
         this.maxLinearAcceleration = 600;
         this.maxAngularSpeed = 0;
         this.maxAngularAcceleration = 0;

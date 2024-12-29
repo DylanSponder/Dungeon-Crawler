@@ -57,9 +57,9 @@ public class Shopkeeper {
         final CreateAssets tx = CreateAssets.getInstance();
 
         switch (kind) {
-            case "KYKEON": {
-                System.out.println("KYKEON ADDED TO THE SHOPKEEPER INVENTORY");
-                String msg = (index + 1) + ".  KYKEON";
+            case "WINE": {
+                System.out.println("WINE ADDED TO THE SHOPKEEPER INVENTORY");
+                String msg = (index + 1) + ".  WINE";
                 Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, true, tx.potionItemSprite, 6.5f);
                 this.inventoryText.add(t);
                 //this.inventoryText.add(t2);
@@ -119,6 +119,15 @@ public class Shopkeeper {
                 this.inventoryText.add(t);
                 break;
             }
+            case "HELM": {
+                System.out.println("HELM ADDED TO THE SHOPKEEPER INVENTORY");
+                String msg = (index + 1) + ". HELM OF HADES";
+                Text t = new Text(DungeonCrawler.defaultFont, msg, Color.WHITE, false,100, 0.1f, false, false,  tx.coinItemSprite, 6f);
+                // DungeonCrawler.messages.add(t);
+                //this.inventoryText.add()
+                this.inventoryText.add(t);
+                break;
+            }
         }
         return inventoryText.get(index);
      // this.inventoryText.add(item);
@@ -166,7 +175,7 @@ public class Shopkeeper {
             }
             case "BELT": {
                 System.out.println("BELT DESCRIPTION ADDED TO A BELT");
-                String desc = "[ " + cost + "] SPACE + 1 (KYKEON)";
+                String desc = "[ " + cost + "] SPACE + 1 (WINE)";
                 Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinItemSprite, -1.3f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()
@@ -185,6 +194,15 @@ public class Shopkeeper {
             case "LANCE": {
                 System.out.println("LANCE DESCRIPTION ADDED TO A LANCE");
                 String desc = "  " + cost + " RANGE UP";
+                Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinItemSprite, -1.3f);
+                // DungeonCrawler.messages.add(t);
+                //this.inventoryText.add()
+                this.inventoryText.add(t);
+                break;
+            }
+            case "HELM": {
+                System.out.println("HELM DESCRIPTION ADDED TO A LANCE");
+                String desc = "  " + cost + " INVISIBILITY (10 SECONDS PER ROOM)";
                 Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinItemSprite, -1.3f);
                 // DungeonCrawler.messages.add(t);
                 //this.inventoryText.add()

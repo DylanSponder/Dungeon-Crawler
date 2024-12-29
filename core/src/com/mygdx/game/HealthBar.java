@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+import static com.mygdx.game.DungeonCrawler.soundController;
+
 public class HealthBar extends Table {
   float maxHealth;
   public float currentHealth;
@@ -20,7 +22,9 @@ public class HealthBar extends Table {
   int numberOfActors;
 
   public void LoseHealth(float health) {
+
     if (vulnerable) {
+      soundController.playSound("PlayerHurt",10,8,0.1f);
       float result = currentHealth - health;
       if (result < 0) {
         currentHealth = 0;

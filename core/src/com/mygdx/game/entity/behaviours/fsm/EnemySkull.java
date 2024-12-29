@@ -203,7 +203,8 @@ public class EnemySkull extends Enemy {
 
                         if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody && fixture.getBody().getUserData() != "Skull" && fixture.getBody().getUserData() != "Fire"
                                 && fixture.getBody().getUserData() != "Candle"
-                                && fixture.getBody().getUserData() != "Cobweb") {
+                                && fixture.getBody().getUserData() != "Cobweb"
+                                && fixture.getBody().getUserData() != "Roof") {
                             //sighted = true;
                             //System.out.println(fixture.getBody().getUserData());
                             sightCounter = 0;
@@ -218,6 +219,7 @@ public class EnemySkull extends Enemy {
                                     && fixture.getUserData() != "EnemyHitbox"
                                     && fixture.getUserData() != "Bone"
                                     && fixture.getUserData() != "Candle"
+                                    && fixture.getUserData() != "Roof"
                                     //&& !fixture.isSensor()
                             ) {
                                 //System.out.println("NOT A PLAYER BUT DYNAMIC");

@@ -94,12 +94,14 @@ public class GameInputProcessor implements InputProcessor {
             PLAYER_HORIZONTAL_SPEED = 0;
             PLAYER_VERTICAL_SPEED = 0;
             player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
-            //CreateSound.slash.play();
-            //roomClear.play();
-            //swordSlash.setLooping(true);
-            //swordSlash.play();
-            //swordSlash.setVolume(1f);
-            //swordSlash.dispose();
+
+            boolean swing = Random.randomBoolean();
+
+            if (swing) {
+                soundController.playSound("SwordSwing1", 8,6,0.1f);
+            } else {
+                soundController.playSound("SwordSwing2", 8,6,0.2f);
+            }
 
             Timer.schedule(new Timer.Task() {
                 @Override
@@ -181,6 +183,8 @@ public class GameInputProcessor implements InputProcessor {
                 arrows.add(arrow = new Arrow(arrowBody, playerDirection, 0f, false));
             }
             arrowArrayMap.put(arrowBody, arrow);
+
+            soundController.playSound("BowAttack3", 10,6,0.1f);
 
             playerPaused = true;
             PLAYER_HORIZONTAL_SPEED = 0;
@@ -283,7 +287,7 @@ public class GameInputProcessor implements InputProcessor {
                     item.purchased = true;
                     switch (item.kind) {
 
-                        case "KYKEON": {
+                        case "WINE": {
                             //System.out.println("THIS IS A TEST TO SEE IF POTIONS CAN BE ADDED VIA THE HUD");
                             //hud.inventory.addPotion();
                             Potion potion = new Potion(world, player.shopkeeper.posX, player.shopkeeper.posY+ 16,1);
@@ -349,7 +353,7 @@ public class GameInputProcessor implements InputProcessor {
 
                     switch (item.kind) {
 
-                        case "KYKEON": {
+                        case "WINE": {
                             //System.out.println("THIS IS A TEST TO SEE IF POTIONS CAN BE ADDED VIA THE HUD");
                             //hud.inventory.addPotion();
                             Potion potion = new Potion(world, player.shopkeeper.posX, player.shopkeeper.posY+ 16,1);
@@ -362,7 +366,6 @@ public class GameInputProcessor implements InputProcessor {
                         case "SHIELD": {
                             //TODO: add shield item
                             player.hasShield = true;
-
                             break;
 
                         }
@@ -424,23 +427,17 @@ public class GameInputProcessor implements InputProcessor {
 
                     switch (item.kind) {
 
-                        case "KYKEON": {
-                            //System.out.println("THIS IS A TEST TO SEE IF POTIONS CAN BE ADDED VIA THE HUD");
-                            //hud.inventory.addPotion();
+                        case "WINE": {
                             Potion potion = new Potion(world, player.shopkeeper.posX, player.shopkeeper.posY+ 16,1);
                             potion.createPotion(potionArrayMap,rayHandler);
                             potions.add(potion);
                             potionArrayMap.put(potion.potionBody, potion);
                             break;
-
                         }
                         case "SHIELD": {
                             //TODO: add shield item
                             player.hasShield = true;
-
-
                             break;
-
                         }
                         case "GREEK FIRE": {
                             player.hasGreekFire = true;
@@ -483,7 +480,6 @@ public class GameInputProcessor implements InputProcessor {
                         player.shopkeeper.inventoryText.remove(4);
                         player.shopkeeper.inventoryText.remove(4);
                     }
-
 
                     Text t1 = player.shopkeeper.Stock(item.kind, item.index);
                     Text t2 = player.shopkeeper.DescribeStock(item.kind,item.index,item.cost);
@@ -696,12 +692,14 @@ public class GameInputProcessor implements InputProcessor {
             PLAYER_HORIZONTAL_SPEED = 0;
             PLAYER_VERTICAL_SPEED = 0;
             player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
-            //CreateSound.slash.play();
-            //roomClear.play();
-            //swordSlash.setLooping(true);
-            //swordSlash.play();
-            //swordSlash.setVolume(1f);
-            //swordSlash.dispose();
+
+            boolean swing = Random.randomBoolean();
+
+            if (swing) {
+                soundController.playSound("SwordSwing1", 8,6,0.1f);
+            } else {
+                soundController.playSound("SwordSwing2", 8,6,0.2f);
+            }
 
             Timer.schedule(new Timer.Task() {
                 @Override
@@ -792,6 +790,9 @@ public class GameInputProcessor implements InputProcessor {
                 arrows.add(arrow = new Arrow(arrowBody, playerDirection, 0f, false));
             }
             arrowArrayMap.put(arrowBody, arrow);
+
+            soundController.playSound("BowAttack3", 10,6,0.1f);
+
 
             playerPaused = true;
             PLAYER_HORIZONTAL_SPEED = 0;

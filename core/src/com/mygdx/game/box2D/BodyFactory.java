@@ -32,8 +32,8 @@ public class BodyFactory {
                 bodyDef.position.set(x ,y);
                 break;
             case 1:
-                shape.setAsBox(16, 16);
-                bodyDef.position.set(x ,y);
+                shape.setAsBox(24, 24 + (ext * 8));
+                bodyDef.position.set(x + 40 ,y - (16 + (ext * 8)));
                 break;
             case 2:
                 shape.setAsBox(40, 32 + (ext * 8));
@@ -57,6 +57,7 @@ public class BodyFactory {
         //shape.setAsBox(8, 8);
         Fixture fix = body.createFixture(shape, 1.0f);
         fix.setSensor(true);
+        fix.setUserData("Roof");
         shape.dispose();
         return body;
     }
@@ -65,14 +66,45 @@ public class BodyFactory {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(x + 8, y + 10f);
+        bodyDef.position.set(x + 8, y + 10.5f);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(4.5f, 5f);
+        shape.setAsBox(4.5f, 5.5f);
         Fixture fix = body.createFixture(shape, 1.0f);
         shape.dispose();
         fix.setSensor(true);
+        return body;
+    }
+
+    public Body createTrapArea(World world, float x, float y, int direction) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.fixedRotation = true;
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        PolygonShape shape = new PolygonShape();
+        switch (direction) {
+            case 1:
+                shape.setAsBox(4f, 12f);
+                bodyDef.position.set(x + 8, y - 12);
+                break;
+            case 2:
+                shape.setAsBox(12f, 4f);
+                bodyDef.position.set(x - 12, y - 8);
+                break;
+            case 3:
+                shape.setAsBox(4f, 12f);
+                bodyDef.position.set(x - 8, y + 28);
+                break;
+            case 4:
+                shape.setAsBox(12f, 4f);
+                bodyDef.position.set(x + 28, y + 8);
+                break;
+        }
+        body = world.createBody(bodyDef);
+        Fixture fix = body.createFixture(shape, 1.0f);
+        fix.setSensor(true);
+        shape.dispose();
         return body;
     }
 
@@ -366,6 +398,8 @@ public class BodyFactory {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x,y);
+        bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         return body;
     }
@@ -518,12 +552,10 @@ public class BodyFactory {
         Fixture playerBoundHitbox = body.createFixture(playerShape3, 1.0f);
         playerBoundHitbox.setSensor(true);
 
-
         Fixture playerCornerHitbox1 = body.createFixture(playerCornerShape1,1.0f);
         Fixture playerCornerHitbox2 = body.createFixture(playerCornerShape2,1.0f);
         Fixture playerCornerHitbox3 = body.createFixture(playerCornerShape3,1.0f);
         Fixture playerCornerHitbox4 = body.createFixture(playerCornerShape4,1.0f);
-
 
         body.setUserData("Player");
         playerCornerHitbox1.setUserData("PlayerHitbox");
