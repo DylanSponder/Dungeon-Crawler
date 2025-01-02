@@ -46,10 +46,10 @@ import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.InitLevel;
 
 public class DungeonCrawler extends ApplicationAdapter {
-	private SpriteBatch playerBatch, arrowBatch, enemySkullBatch, enemySpiderBatch, enemyGhostBatch, potBatch, hudBatch, tutoBatch, fontBatch, inventoryBatch;
+	private SpriteBatch arrowBatch, enemySkullBatch, enemySpiderBatch, enemyGhostBatch, potBatch, hudBatch, tutoBatch, fontBatch, inventoryBatch;
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch, flameBatch, webBatch, cobBatch, candleBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch, roofBatch, columnBaseLowerBatch;
-	public SpriteBatch trapBatch;
+	public static SpriteBatch trapBatch,playerBatch;
 	public static World world;
 	public Viewport vp;
 	public static Stage menuStage;
@@ -242,7 +242,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		camera.setToOrtho(false, w / 3, h / 3);
 
 		vp = new ExtendViewport(camera.viewportWidth, camera.viewportHeight);
-		hud = new HUD(vp, hudBatch);
+
 
 		//initialize map
 		TiledMap map = new TiledMap();
@@ -326,6 +326,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		menuClosed = true;
 
 
+		hud = new HUD(vp, hudBatch);
+
 		GenerateLevel level = new GenerateLevel();
 		InitLevel initLevel = new InitLevel();
 		initLevel.InitializeLevel();
@@ -388,7 +390,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		if (!debug) {
 			//set the window mode to fullscreen and hide the cursor when in the game window
-			Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+			//Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+			Gdx.graphics.setWindowedMode(Gdx.graphics.getWidth()*2,Gdx.graphics.getHeight()*2);
 			Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);
 		}
 	}
@@ -1278,7 +1281,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			if (boneIt.hasNext()) {
 				Body boneBody = boneIt.next();
 				if (boneArrayMap.containsKey(boneBody)) {
-
+					soundController.playSound("Bone", 5, 4, 0.1f);
 					boneArrayMap.removeKey(boneBody);
 					world.destroyBody(boneBody);
 					boneIt.remove();
@@ -1287,8 +1290,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 		}
-
-
 
 			for (Shopkeeper s : shopkeepers) {
 				playerBatch.begin();
@@ -1541,12 +1542,23 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		for (Room room : GenerateLevel.init.roomList) {
 			for (Roof r : room.roofs) {
-				if (r.visible) {
 					roofBatch.begin();
 
 					switch (r.type) {
 						case 1:
 							if (r.visible) {
+								roofBatch.setColor(1,1,1,1);
+								roofBatch.draw(tx.roof3x3UpperTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y + (r.ext * 8), 80, 32);
+								if (r.ext != 0) {
+									for (int i = 0; i < r.ext; i++) {
+										roofBatch.draw(tx.roof3x3MiddleTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - 16 - (i * 16) + (r.ext * 8), 80, 16);
+									}
+									roofBatch.draw(tx.roof3x3LowerTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - (32 + (r.ext * 16)) + (r.ext * 8), 80, 32);
+								} else {
+									roofBatch.draw(tx.roof3x3LowerTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - (32 + (r.ext * 8)), 80, 32);
+								}
+							} else {
+								roofBatch.setColor(1,1,1,0.35f);
 								roofBatch.draw(tx.roof3x3UpperTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y + (r.ext * 8), 80, 32);
 								if (r.ext != 0) {
 									for (int i = 0; i < r.ext; i++) {
@@ -1561,6 +1573,18 @@ public class DungeonCrawler extends ApplicationAdapter {
 							break;
 						case 2:
 							if (r.visible) {
+								roofBatch.setColor(1,1,1,1);
+								roofBatch.draw(tx.roof5x5UpperTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y + (r.ext * 8) + 8, 112, 32);
+								if (r.ext != 0) {
+									for (int i = 0; i < r.ext; i++) {
+										roofBatch.draw(tx.roof5x5MiddleTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y - (32 + (i * 16)) + 24 + (r.ext * 8), 112, 16);
+									}
+									roofBatch.draw(tx.roof5x5LowerTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y - (64 + (r.ext * 16)) + 24 + (r.ext * 8), 112, 48);
+								} else {
+									roofBatch.draw(tx.roof5x5LowerTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y - 64 + 24 + (r.ext * 8), 112, 48);
+								}
+							} else {
+								roofBatch.setColor(1,1,1,0.35f);
 								roofBatch.draw(tx.roof5x5UpperTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y + (r.ext * 8) + 8, 112, 32);
 								if (r.ext != 0) {
 									for (int i = 0; i < r.ext; i++) {
@@ -1575,14 +1599,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 							break;
 						case 3:
 							if (r.visible) {
-								roofBatch.draw(tx.roof7x7UpperTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - 32, 144, 48);
+								roofBatch.draw(tx.roof7x7UpperTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y + (r.ext * 8) + 8, 144, 48);
 								if (r.ext != 0) {
 									for (int i = 0; i < r.ext; i++) {
-										roofBatch.draw(tx.roof7x7MiddleTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - (48 + (i * 16)), 144, 16);
+										roofBatch.draw(tx.roof7x7MiddleTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y - (72 + (i * 16)) + 64 + (r.ext * 8), 144, 16);
 									}
-									roofBatch.draw(tx.roof7x7LowerTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - (96 + (r.ext * 16)), 144, 64);
+									roofBatch.draw(tx.roof7x7LowerTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y - (80 + 40 + (r.ext * 16)) + 48 + 16 + (r.ext * 8), 144, 64);
 								} else {
-									roofBatch.draw(tx.roof7x7LowerTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - 96, 144, 64);
+									roofBatch.draw(tx.roof7x7LowerTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y - 96 + 40 + (r.ext * 8), 144, 64);
 								}
 							}
 							break;
@@ -1614,7 +1638,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 							break;
 					}
 					roofBatch.end();
-				}
+
 			}
 		}
 
@@ -1887,7 +1911,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		}
 		else if (!debug){
 			//camera.zoom = 0.8f;
-			camera.zoom = 0.9f;
+			camera.zoom = 0.7f;
 		} else {
 
 		}

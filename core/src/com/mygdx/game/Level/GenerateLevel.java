@@ -155,8 +155,7 @@ public class GenerateLevel {
                         random = Random.randomInt(6, 1);
                     }
                     //assign the room its random index
-                    newRoom.roomNum = random;
-                    System.out.println(random);
+                    newRoom.roomNum = 2;
                 }
 
                 //determines which pre-gen room is placed next in sequence
@@ -874,6 +873,18 @@ for (int i = 0; i < layerSize; i++) {
         case "decorFloorRightTile":
             currentCell = init.cr.decorFloorRightTile;
             break;
+        case "decorFloorTopLeftTile":
+            currentCell = init.cr.decorFloorTopLeftTile;
+            break;
+        case "decorFloorTopRightTile":
+            currentCell = init.cr.decorFloorTopRightTile;
+            break;
+        case "decorFloorBottomLeftTile":
+            currentCell = init.cr.decorFloorBottomLeftTile;
+            break;
+        case "decorFloorBottomRightTile":
+            currentCell = init.cr.decorFloorBottomRightTile;
+            break;
         case "topLeftWallTile":
             currentCell = init.cr.topLeftWallTile;
             Body newTopLeftWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
@@ -883,6 +894,14 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.topWallTile;
             Body newTopWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
             newTopWall.setUserData("Wall");
+            break;
+        case "topWallTrapTile":
+            currentCell = init.cr.topWallTile;
+            Body newTopWallTrap = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newTopWallTrap.setUserData("Wall");
+            Trap topWallTrap = new Trap(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,1, 1);
+            topWallTrap.createTrap();
+            traps.add(topWallTrap);
             break;
         case "topRightWallTile":
             currentCell = init.cr.topRightWallTile;
@@ -894,10 +913,26 @@ for (int i = 0; i < layerSize; i++) {
             Body newLeftWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
             newLeftWall.setUserData("Wall");
             break;
+        case "leftWallTrapTile":
+            currentCell = init.cr.leftWallTile;
+            Body newLeftWallTrap = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newLeftWallTrap.setUserData("Wall");
+            Trap leftWallTrap = new Trap(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,1, 4);
+            leftWallTrap.createTrap();
+            traps.add(leftWallTrap);
+            break;
         case "rightWallTile":
             currentCell = init.cr.rightWallTile;
             Body newRightWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
             newRightWall.setUserData("Wall");
+            break;
+        case "rightWallTrapTile":
+            currentCell = init.cr.rightWallTile;
+            Body newRightWallTrap = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newRightWallTrap.setUserData("Wall");
+            Trap rightWallTrap = new Trap(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30,1, 2);
+            rightWallTrap.createTrap();
+            traps.add(rightWallTrap);
             break;
         case "bottomLeftWallTile":
             currentCell = init.cr.bottomLeftWallTile;
@@ -908,6 +943,14 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.bottomWallTile;
             Body newBottomWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
             newBottomWall.setUserData("Wall");
+            break;
+        case "bottomWallTrapTile":
+            currentCell = init.cr.bottomWallTile;
+            Body newBottomWallTrap = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newBottomWallTrap.setUserData("Wall");
+            Trap bottomWallTrap = new Trap(world, ((roomX + i) * 16) + 16 * 16 + 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,1, 3);
+            bottomWallTrap.createTrap();
+            traps.add(bottomWallTrap);
             break;
         case "bottomRightWallTile":
             currentCell = init.cr.bottomRightWallTile;
@@ -1452,27 +1495,25 @@ for (int i = 0; i < layerSize; i++) {
                 }
             }
             break;
+        case "obstacle":
+            int rand = Random.randomInt(3,1);
+            currentCell = init.cr.middleFloorTile;
+            Obstacle newObstacle = new Obstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, rand);
+            obstacles.add(newObstacle);
+            break;
         case "obstacle1":
             currentCell = init.cr.middleFloorTile;
-            //Body newObstacle1 = bf.createObstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
             Obstacle newObstacle1 = new Obstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 1);
-            //Body ob1Body = newObstacle1.createObstacle(obArrayMap);
             obstacles.add(newObstacle1);
             break;
         case "obstacle2":
             currentCell = init.cr.middleFloorTile;
             Obstacle newObstacle2 = new Obstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 2);
-            //Body ob2Body = newObstacle2.createObstacle(obArrayMap);
             obstacles.add(newObstacle2);
-            //Body newObstacle2 = bf.createObstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
-            //newObstacle2.setUserData("Obstacle");
             break;
         case "obstacle3":
             currentCell = init.cr.middleFloorTile;
             Obstacle newObstacle3 = new Obstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 3);
-            //Body ob3Body = newObstacle3.createObstacle(obArrayMap);
-            //Body newObstacle3 = bf.createObstacle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
-            //newObstacle3.setUserData("Obstacle");
             obstacles.add(newObstacle3);
             break;
         case "cand":
@@ -1556,8 +1597,8 @@ for (int i = 0; i < layerSize; i++) {
             break;
         case "pot":
             currentCell = init.cr.middleFloorTile;
-            int rand = Random.randomInt(9,1);
-            Pot p = new Pot(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, rand);
+            int randOb = Random.randomInt(9,1);
+            Pot p = new Pot(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, randOb);
             pots.add(p);
             break;
         case "pot2":
@@ -1652,7 +1693,7 @@ for (int i = 0; i < layerSize; i++) {
 
             switch (randomChosenIndex) {
                 case 1:
-                    itemKind = "KYKEON";
+                    itemKind = "WINE";
                     cost = 5;
                     break;
                 case 2:
@@ -1679,6 +1720,10 @@ for (int i = 0; i < layerSize; i++) {
                     itemKind = "LANCE";
                     cost = 10;
                     break;
+                case 8:
+                    itemKind = "HELM";
+                    cost = 10;
+                    break;
             }
                 Text t2 = shopkeeper.Stock(itemKind, i2);
                 Text t3 = shopkeeper.DescribeStock(itemKind, i2, cost);
@@ -1686,10 +1731,10 @@ for (int i = 0; i < layerSize; i++) {
                 s1.createItem(i2, itemKind, amountIndex, cost, t3);
                 shopkeeper.inventory.put(i2, s1);
                 //overall placement of the text
-                t2.textX = shopkeeper.posX - 70;
-                t2.textY = shopkeeper.posY + 35;
-                t3.textX = shopkeeper.posX - 65;
-                t3.textY = shopkeeper.posY + 35;
+                t2.textX = shopkeeper.posX - 74;
+                t2.textY = shopkeeper.posY + 37;
+                t3.textX = shopkeeper.posX - 69;
+                t3.textY = shopkeeper.posY + 37;
     }
         shopkeeper.messages.add(shopMessage);
         DungeonCrawler.shopkeepers.add(shopkeeper);

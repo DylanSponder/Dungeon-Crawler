@@ -52,7 +52,7 @@ public class Cobweb {
         return this.cobBody;
     }
 
-    public static void renderCobweb(SpriteBatch batch, Sprite potionSprite, float x, float y) {
+    public static void renderCobweb(SpriteBatch batch, float x, float y) {
 
         CreateAssets tx = CreateAssets.getInstance();
 

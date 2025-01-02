@@ -52,12 +52,32 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "decorFloorRightTile");
                         index++;
                         break;
+                    case "dftl":
+                        drawableLevelLayer.add(index, "decorFloorTopLeftTile");
+                        index++;
+                        break;
+                    case "dftr":
+                        drawableLevelLayer.add(index, "decorFloorTopRightTile");
+                        index++;
+                        break;
+                    case "dfbl":
+                        drawableLevelLayer.add(index, "decorFloorBottomLeftTile");
+                        index++;
+                        break;
+                    case "dfbr":
+                        drawableLevelLayer.add(index, "decorFloorBottomRightTile");
+                        index++;
+                        break;
                     case "tlw":
                         drawableLevelLayer.add(index, "topLeftWallTile");
                         index++;
                         break;
                     case "tw":
                         drawableLevelLayer.add(index, "topWallTile");
+                        index++;
+                        break;
+                    case "twtr":
+                        drawableLevelLayer.add(index, "topWallTrapTile");
                         index++;
                         break;
                     case "trw":
@@ -68,8 +88,16 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "leftWallTile");
                         index++;
                         break;
+                    case "lwtr":
+                        drawableLevelLayer.add(index, "leftWallTrapTile");
+                        index++;
+                        break;
                     case "rw":
                         drawableLevelLayer.add(index, "rightWallTile");
+                        index++;
+                        break;
+                    case "rwtr":
+                        drawableLevelLayer.add(index, "rightWallTrapTile");
                         index++;
                         break;
                     case "blw":
@@ -78,6 +106,10 @@ public class RenderRules {
                         break;
                     case "bw":
                         drawableLevelLayer.add(index, "bottomWallTile");
+                        index++;
+                        break;
+                    case "bwtr":
+                        drawableLevelLayer.add(index, "bottomWallTrapTile");
                         index++;
                         break;
                     case "brw":
@@ -536,6 +568,10 @@ public class RenderRules {
                                     index++;
                                     break;
                                     //obstacles
+                                case "ob":
+                                    drawableLevelLayer.add(index, "obstacle");
+                                    index++;
+                                    break;
                                 case "ob1":
                                     drawableLevelLayer.add(index, "obstacle1");
                                     index++;

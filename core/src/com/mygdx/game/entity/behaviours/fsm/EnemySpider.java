@@ -182,6 +182,7 @@ public class EnemySpider extends Enemy {
                                 && fixture.getBody().getUserData() != "Candle"
                                 && fixture.getBody().getUserData() != "Cobweb"
                                 && fixture.getBody().getUserData() != "Roof"
+                                && fixture.getBody().getUserData() != "TrapArea"
                         ) {
                             sightCounter = 0;
                             playerSighted = false;
@@ -196,6 +197,7 @@ public class EnemySpider extends Enemy {
                                     && fixture.getUserData() != "Bone"
                                     && fixture.getUserData() != "Candle"
                                     && fixture.getUserData() != "Roof"
+                                    && fixture.getUserData() != "TrapArea"
                                 //&& !fixture.isSensor()
                             ) {
                                 //System.out.println("NOT A PLAYER BUT DYNAMIC");

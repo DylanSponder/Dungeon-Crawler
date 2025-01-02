@@ -16,13 +16,19 @@ public class CreateAssets {
     //TODO Link all textures to HellasDungeon path
     Texture heartHUDTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Heart.png"));
     Texture potionItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/LifePot.png"));
+    Texture potionSlotTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Potion/Empty.png"));
     Texture torchItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Torch.png"));
+    Texture torchSlotTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/TorchSlot.png"));
     Texture shieldItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Shield.png"));
+    Texture shieldSlotTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/ShieldSlot.png"));
     Texture beltItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Belt.png"));
+    Texture beltSlotTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/BeltSlot.png"));
     Texture chiselItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Chisel.png"));
+    Texture chiselSlotTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/ChiselSlot.png"));
     Texture greekfireItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Greekfire.png"));
+    Texture greekfireSlotTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/GreekfireSlot.png"));
 
-    Texture emptySlotTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Potion/Empty.png"));
+
     Texture coinTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Coin2Preview.png"));
     Texture playerTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SpriteSheet.png"));
     Texture playerWalkUpAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkUp.png"));
@@ -103,6 +109,10 @@ public class CreateAssets {
     public TextureRegion roomDecorativeFloorDownTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomDecorativeFloorLeftTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomDecorativeFloorRightTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomDecorativeFloorTopLeftTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomDecorativeFloorTopRightTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomDecorativeFloorBottomLeftTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomDecorativeFloorBottomRightTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
 
     //Wall textures
 
@@ -435,12 +445,23 @@ public class CreateAssets {
 
     public Sprite coinItemSprite = new Sprite(coinTexture, 10, 10);
     public Sprite heartSprite = new Sprite(heartHUDTexture, 16, 16);
+
     public Sprite potionItemSprite = new Sprite(potionItemTexture, 16, 16);
+
     public Sprite torchItemSprite = new Sprite(torchItemTexture, 10, 15);
+    public Sprite torchSlotSprite = new Sprite(torchSlotTexture, 10, 15);
+
     public Sprite shieldItemSprite = new Sprite(shieldItemTexture, 11, 11);
+    public Sprite shieldSlotSprite = new Sprite(shieldSlotTexture, 11, 11);
+
     public Sprite beltItemSprite = new Sprite(beltItemTexture, 13, 12);
+    public Sprite beltSlotSprite = new Sprite(beltSlotTexture, 13, 13);
+
     public Sprite chiselItemSprite = new Sprite(chiselItemTexture, 13, 13);
+    public Sprite chiselSlotSprite = new Sprite(chiselSlotTexture, 13, 13);
+
     public Sprite greekfireItemSprite = new Sprite(greekfireItemTexture, 14, 15);
+    public Sprite greekfireSlotSprite = new Sprite(greekfireSlotTexture, 13, 13);
 
     Sprite shopkeeperSprite = new Sprite(shopkeeperTexture, 0,0, 16, 16);
     Sprite skullSprite = new Sprite(skullTexture, 176,64, 16, 16);
@@ -652,6 +673,11 @@ public class CreateAssets {
         roomDecorativeFloorDownTexture.setRegion(208, 48, 16, 16);
         roomDecorativeFloorLeftTexture.setRegion(224, 48, 16, 16);
 
+        roomDecorativeFloorTopLeftTexture.setRegion(208, 64, 16, 16);
+        roomDecorativeFloorTopRightTexture.setRegion(224, 64, 16, 16);
+        roomDecorativeFloorBottomLeftTexture.setRegion(208, 80, 16, 16);
+        roomDecorativeFloorBottomRightTexture.setRegion(224, 80, 16, 16);
+
         roomTopLeftWallTexture.setRegion(0, 0, 16, 16);
         roomTopWallTexture.setRegion(48, 0, 16, 16);
         roomTopRightWallTexture.setRegion(64, 0, 16, 16);
@@ -685,11 +711,6 @@ public class CreateAssets {
         roomRightDownEndFence.setRegion(416, 0, 16, 16);
 
 
-        //deprecated - changed to sprite
-        //obstacle1Texture.setRegion(80,64,16,16);
-        //obstacle2Texture.setRegion(96,64,16,16);
-        //obstacle3Texture.setRegion(112,64,16,16);
-
         colTop1.setRegion(0, 0, 16, 16);
         colTop2.setRegion(16, 0, 16, 16);
         colTop3.setRegion(32, 0, 16, 16);
@@ -702,7 +723,7 @@ public class CreateAssets {
         colStem3.setRegion(64, 16, 16, 16);
         colBase.setRegion(0, 32, 16, 16);
         colBase2.setRegion(16, 32, 16, 16);
-        colBaseLower.setRegion(0,48,16,5);
+        colBaseLower.setRegion(0,48,16,11);
         pedestal1.setRegion(32, 32, 16, 16);
         pedestal2.setRegion(48, 32, 16, 16);
         pedestal3.setRegion(64, 32, 16, 16);
@@ -746,8 +767,12 @@ public class CreateAssets {
         tutoTexture.setRegion(0, 0, 87, 57);
 
         potionItemSprite.setRegion(0, 0, 9, 11);
+
         torchItemSprite.setRegion(0, 0, 10, 15);
+        torchSlotSprite.setRegion(0,0,13,15);
+
         shieldItemSprite.setRegion(0, 0, 11, 11);
+        shieldSlotSprite.setRegion(0, 0, 13, 13);
 
         torchLeftTexture.setRegion(16, 32, 16, 16);
         torchRightTexture.setRegion(16, 48, 16, 16);

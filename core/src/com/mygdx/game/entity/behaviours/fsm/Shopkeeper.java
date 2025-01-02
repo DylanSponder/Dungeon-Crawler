@@ -137,8 +137,8 @@ public class Shopkeeper {
         final CreateAssets tx = CreateAssets.getInstance();
 
         switch (kind) {
-            case "KYKEON": {
-                System.out.println("KYKEON DESCRIPTION ADDED TO A POTION");
+            case "WINE": {
+                System.out.println("WINE DESCRIPTION ADDED TO A POTION");
                 String desc = "[ " + cost + "] HEAL (1.5 HEARTS)";
                 Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinItemSprite, -1.3f);
                 // DungeonCrawler.messages.add(t);

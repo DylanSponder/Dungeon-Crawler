@@ -185,7 +185,8 @@ public class EnemyGhost extends Enemy {
                         if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody && fixture.getBody().getUserData() != "Skull" && fixture.getBody().getUserData() != "Fire"
                                 && fixture.getBody().getUserData() != "Candle"
                                 && fixture.getBody().getUserData() != "Cobweb"
-                                && fixture.getBody().getUserData() != "Roof") {
+                                && fixture.getBody().getUserData() != "Roof"
+                                && fixture.getBody().getUserData() != "TrapArea") {
                             sightCounter = 0;
                             playerSighted = false;
                             return 0;
@@ -199,6 +200,7 @@ public class EnemyGhost extends Enemy {
                                     && fixture.getUserData() != "Bone"
                                     && fixture.getUserData() != "Candle"
                                     && fixture.getUserData() != "Roof"
+                                    && fixture.getUserData() != "TrapArea"
                                 //&& !fixture.isSensor()
                             ) {
                                 //System.out.println("NOT A PLAYER BUT DYNAMIC");

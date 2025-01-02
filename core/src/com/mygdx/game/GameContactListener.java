@@ -1,14 +1,11 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.mygdx.game.entity.behaviours.fsm.projectiles.Arrow;
 import com.mygdx.game.entity.behaviours.fsm.*;
 import com.mygdx.game.entity.behaviours.fsm.drops.Skull;
 import com.mygdx.game.level.objects.*;
-
-import java.sql.SQLSyntaxErrorException;
 
 import static com.mygdx.game.DungeonCrawler.*;
 import static com.mygdx.game.level.GenerateLevel.init;
@@ -427,7 +424,7 @@ public class GameContactListener implements ContactListener {
 
 
             else if (collideeStr == "Bone" && colliderStr == "Player") {
-                hud.healthBar.LoseHealth(0.5f);
+                hud.healthBar.loseHealth(0.5f);
                 if (collidee.getBody().getUserData() == "Bone") {
                     player.playerBody.applyLinearImpulse(collider.getBody().getLinearVelocity().x * 500, collider.getBody().getLinearVelocity().y * 500, 0, 0, true);
                     if (!boneBodiesCollided.contains(collidee.getBody())) {
@@ -436,7 +433,7 @@ public class GameContactListener implements ContactListener {
                 }
 
             } else if (colliderStr == "Bone" && collideeStr == "Player") {
-                hud.healthBar.LoseHealth(0.5f);
+                hud.healthBar.loseHealth(0.5f);
                 player.playerBody.applyLinearImpulse(collidee.getBody().getLinearVelocity().x * 500, collidee.getBody().getLinearVelocity().y * 500, 0, 0, true);
                 if (!boneBodiesCollided.contains(collider.getBody())) {
                     boneBodiesCollided.add(collider.getBody());
@@ -555,7 +552,7 @@ public class GameContactListener implements ContactListener {
                     break;
 
                 case "Roof":
-                    if (collideeStr == "Player") {
+                    if (collidee.getUserData() == "PlayerBound") {
                         for (Roof r : roofs) {
                             if (r.roofBody == collider.getBody()) {
                                 r.visible = false;
@@ -680,7 +677,7 @@ public class GameContactListener implements ContactListener {
 
                 case "Arrow":
                     if (collidee.getUserData() == "PlayerBound") {
-                        hud.healthBar.LoseHealth(0.5f);
+                        hud.healthBar.loseHealth(0.5f);
                     }
 
                     if ((((collideeStr == "Enemy" && collidee.getUserData() != "Proximity") && collideeStr != "Cobweb")
@@ -789,7 +786,7 @@ public class GameContactListener implements ContactListener {
                 case "Enemy":
                     if (collidee.getUserData() == "Player" && collider.getUserData() != "Proximity") {
                         for (EnemySkull e : enemySkulls) {
-                            hud.healthBar.LoseHealth(0.5f);
+                            hud.healthBar.loseHealth(0.5f);
                             if (e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody()) {
                                 e.playerInRange = true;
                                 // e.getStateMachine().changeState(EnemyState.GO_TO_PLAYER);
@@ -819,14 +816,14 @@ public class GameContactListener implements ContactListener {
                     if (collidee.getBody().getUserData() == "Enemy" && collidee.getUserData() != "Proximity" && collidee.getUserData() == "EnemySkull") {
                         for (EnemySkull e : enemySkulls) {
                             if ((e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody())) {
-                                hud.healthBar.LoseHealth(0.5f);
+                                hud.healthBar.loseHealth(0.5f);
                                 e.playerInRange = true;
                             }
                         }
                     } else if (collidee.getBody().getUserData() == "Enemy" && collidee.getUserData() != "Proximity" && collidee.getUserData() == "EnemySpider") {
                         for (EnemySpider e : enemySpiders) {
                             if ((e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody())) {
-                                hud.healthBar.LoseHealth(0.5f);
+                                hud.healthBar.loseHealth(0.5f);
                                 e.playerInRange = true;
                             }
                         }
@@ -834,7 +831,7 @@ public class GameContactListener implements ContactListener {
                     else if (collidee.getBody().getUserData() == "Enemy" && collidee.getUserData() != "Proximity" && collidee.getUserData() == "EnemyGhost") {
                         for (EnemyGhost e : enemyGhosts) {
                             if ((e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody())) {
-                                hud.healthBar.LoseHealth(0.5f);
+                                hud.healthBar.loseHealth(0.5f);
                                 e.playerInRange = true;
                             }
                         }
@@ -932,7 +929,7 @@ public class GameContactListener implements ContactListener {
                     //TODO: revise - unused
                     if (colliderStr == "Enemy" && collider.getUserData() != "Proximity") {
                         for (EnemySkull e : enemySkulls) {
-                            hud.healthBar.LoseHealth(0.5f);
+                            hud.healthBar.loseHealth(0.5f);
                             if (e.enemyBody == collider.getBody() || e.enemyBody == collider.getBody()) {
                                 e.playerInRange = true;
                                 // e.getStateMachine().changeState(EnemyState.GO_TO_PLAYER);
@@ -950,7 +947,7 @@ public class GameContactListener implements ContactListener {
                     break;
                 case "Arrow":
                     if (collider.getUserData() == "PlayerBound") {
-                        hud.healthBar.LoseHealth(0.5f);
+                        hud.healthBar.loseHealth(0.5f);
                     }
 
                     if (colliderStr.equals("Obstacle")) {
@@ -988,7 +985,7 @@ public class GameContactListener implements ContactListener {
                 }
                     break;
                 case "Roof":
-                    if (colliderStr == "Player") {
+                    if (collider.getUserData() == "PlayerBound") {
                         for (Roof r : roofs) {
                             if (r.roofBody == collidee.getBody()) {
                                 r.visible = false;
@@ -1103,7 +1100,7 @@ public class GameContactListener implements ContactListener {
 
         switch (colliderAsString) {
             case "Cobweb":
-                if ((colliderAsString == "Player")) {
+                if (collider.getUserData() == "PlayerBound") {
                     DungeonCrawler.PLAYER_SPEED_MULTI = 60f;
                     player.touchingCobweb = false;
                     break;
@@ -1142,7 +1139,7 @@ public class GameContactListener implements ContactListener {
                 }
                 break;
             case "Roof":
-                if (collideeAsString == "Player") {
+                if (collidee.getUserData() == "PlayerBound") {
                     for (Roof r : roofs) {
                         if (r.roofBody == collider.getBody()) {
                             r.visible = true;
@@ -1157,7 +1154,7 @@ public class GameContactListener implements ContactListener {
 
         switch (collideeAsString) {
             case "Cobweb":
-                if ((colliderAsString == "Player")) {
+                if (collider.getUserData() == "PlayerBound") {
                     DungeonCrawler.PLAYER_SPEED_MULTI = 60f;
                     player.touchingCobweb = false;
                     for (Cobweb cob : cobwebs) {
@@ -1170,7 +1167,7 @@ public class GameContactListener implements ContactListener {
                     break;
                 }
             case "Roof":
-                if (colliderAsString == "Player") {
+                if (collider.getUserData() == "PlayerBound") {
                     for (Roof r : roofs) {
                         if (r.roofBody.getUserData() == collideeAsString) {
                             r.visible = true;

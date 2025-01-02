@@ -28,11 +28,4 @@ public class Roof {
 
         this.roofBody.setUserData("Roof");
     }
-
-    public void createVariableRoof() {
-
-
-
-
-    }
 }

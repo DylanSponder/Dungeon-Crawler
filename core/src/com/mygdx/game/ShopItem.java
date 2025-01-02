@@ -22,25 +22,4 @@ public class ShopItem {
         this.purchased = purchased;
         this.desc = desc;
     }
-
-    public void giveItemToPlayer(String kind) {
-        switch (kind) {
-            case "POTION": {
-                System.out.println("THIS IS A TEST TO SEE IF POTIONS CAN BE ADDED VIA THE HUD");
-                DungeonCrawler.hud.inventory.addPotion();
-                break;
-
-            }
-            case "SHIELD": {
-                //TODO: add shield item
-
-                break;
-
-            }
-            case "GREEK FIRE": {
-                //TODO: add fire arrows
-                break;
-            }
-        }
-    }
 }

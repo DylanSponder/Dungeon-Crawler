@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-public class Inventory extends Table {
+public class PotionSlotInventory extends Table {
   TextureRegionDrawable potion;
   TextureRegionDrawable emptySlot;
   ArrayList<Image> actors;
@@ -17,7 +17,7 @@ public class Inventory extends Table {
   public int Capacity;
   public int Size;
 
-  public Inventory(Sprite potionSymbol, Sprite emptySlotSymbol, int capacity, int cooldown) {
+  public PotionSlotInventory(Sprite potionSymbol, Sprite emptySlotSymbol, int capacity, int cooldown) {
     Cooldown = cooldown;
     potion = new TextureRegionDrawable(potionSymbol);
     emptySlot = new TextureRegionDrawable(emptySlotSymbol);

@@ -47,6 +47,10 @@ public class InitLevel {
         cr.decorFloorDownTile.setTile(new StaticTiledMapTile(tx.roomDecorativeFloorDownTexture));
         cr.decorFloorLeftTile.setTile(new StaticTiledMapTile(tx.roomDecorativeFloorLeftTexture));
         cr.decorFloorRightTile.setTile(new StaticTiledMapTile(tx.roomDecorativeFloorRightTexture));
+        cr.decorFloorTopLeftTile.setTile(new StaticTiledMapTile(tx.roomDecorativeFloorTopLeftTexture));
+        cr.decorFloorTopRightTile.setTile(new StaticTiledMapTile(tx.roomDecorativeFloorTopRightTexture));
+        cr.decorFloorBottomLeftTile.setTile(new StaticTiledMapTile(tx.roomDecorativeFloorBottomLeftTexture));
+        cr.decorFloorBottomRightTile.setTile(new StaticTiledMapTile(tx.roomDecorativeFloorBottomRightTexture));
         cr.topLeftWallTile.setTile(new StaticTiledMapTile(tx.roomTopLeftWallTexture));
         cr.topWallTile.setTile(new StaticTiledMapTile(tx.roomTopWallTexture));
         cr.topRightWallTile.setTile(new StaticTiledMapTile(tx.roomTopRightWallTexture));

@@ -32,25 +32,28 @@ public class BodyFactory {
                 bodyDef.position.set(x ,y);
                 break;
             case 1:
-                shape.setAsBox(24, 24 + (ext * 8));
+                shape.setAsBox(26, 24 + (ext * 8));
                 bodyDef.position.set(x + 40 ,y - (16 + (ext * 8)));
                 break;
             case 2:
-                shape.setAsBox(40, 32 + (ext * 8));
+                shape.setAsBox(43, 32 + (ext * 8));
                 bodyDef.position.set(x + 56,y - (24 + (ext * 8)));
 
                 break;
             case 3:
-                bodyDef.position.set(x + 48,y);
-                shape.setAsBox(16, 8 + (ext * 8));
+                shape.setAsBox(62, 48 + (ext * 8));
+                bodyDef.position.set(x + 72,y - (40 + (ext * 8)));
+
                 break;
             case 4:
-                bodyDef.position.set(x,y);
                 shape.setAsBox(16, 8 + (ext * 8));
+                bodyDef.position.set(x,y);
+
                 break;
             case 5:
-                bodyDef.position.set(x,y);
                 shape.setAsBox(16, 8 + (ext * 8));
+                bodyDef.position.set(x,y);
+
                 break;
         }
         body = world.createBody(bodyDef);
@@ -112,11 +115,11 @@ public class BodyFactory {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(x + 8, y + 2.02f);
+        bodyDef.position.set(x + 8, y + 2.03f);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(8, 1.95f);
+        shape.setAsBox(8, 1.96f);
         body.createFixture(shape, 1.0f);
         shape.dispose();
         return body;
@@ -243,7 +246,7 @@ public class BodyFactory {
         bodyDef2.fixedRotation = true;
         body2 = world.createBody(bodyDef2);
         CircleShape shape2 = new CircleShape();
-        shape2.setRadius(2.50f);
+        shape2.setRadius(4f);
         Fixture cobFixture2 = body2.createFixture(shape2, 1.0f);
         shape2.dispose();
         return body2;

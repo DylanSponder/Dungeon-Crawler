@@ -490,7 +490,7 @@ public class GameInputProcessor implements InputProcessor {
         if (keycode == Input.Keys.E) {
             if (hud.inventory.Size > 0) {
                 hud.inventory.usePotion(1);
-                hud.healthBar.GainHealth(1.5f);
+                hud.healthBar.gainHealth(1.5f);
             }
         }
 

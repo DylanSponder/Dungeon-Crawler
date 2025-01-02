@@ -11,6 +11,10 @@ public class CreateCell {
     public TiledMapTileLayer.Cell decorFloorDownTile;
     public TiledMapTileLayer.Cell decorFloorLeftTile;
     public TiledMapTileLayer.Cell decorFloorRightTile;
+    public TiledMapTileLayer.Cell decorFloorTopLeftTile;
+    public TiledMapTileLayer.Cell decorFloorTopRightTile;
+    public TiledMapTileLayer.Cell decorFloorBottomLeftTile;
+    public TiledMapTileLayer.Cell decorFloorBottomRightTile;
     public TiledMapTileLayer.Cell topLeftWallTile;
     public TiledMapTileLayer.Cell topWallTile;
     public TiledMapTileLayer.Cell topRightWallTile;
@@ -89,6 +93,10 @@ public class CreateCell {
         decorFloorDownTile = new TiledMapTileLayer.Cell();
         decorFloorLeftTile = new TiledMapTileLayer.Cell();
         decorFloorRightTile = new TiledMapTileLayer.Cell();
+        decorFloorTopLeftTile = new TiledMapTileLayer.Cell();
+        decorFloorTopRightTile = new TiledMapTileLayer.Cell();
+        decorFloorBottomLeftTile = new TiledMapTileLayer.Cell();
+        decorFloorBottomRightTile = new TiledMapTileLayer.Cell();
         topLeftWallTile = new TiledMapTileLayer.Cell();
         topWallTile = new TiledMapTileLayer.Cell();
         topRightWallTile = new TiledMapTileLayer.Cell();

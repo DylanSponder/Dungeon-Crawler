@@ -6,8 +6,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Timer;
+import com.mygdx.game.level.objects.Trap;
 
-import static com.mygdx.game.DungeonCrawler.soundController;
+import static com.mygdx.game.DungeonCrawler.*;
 
 public class HealthBar extends Table {
   float maxHealth;
@@ -21,10 +23,12 @@ public class HealthBar extends Table {
   boolean vulnerable;
   int numberOfActors;
 
-  public void LoseHealth(float health) {
+  public void loseHealth(float health) {
 
     if (vulnerable) {
+      float hurtDelay = 0.35f;
       soundController.playSound("PlayerHurt",10,8,0.1f);
+      playerBatch.setColor(1,0,0,0.8f);
       float result = currentHealth - health;
       if (result < 0) {
         currentHealth = 0;
@@ -32,10 +36,16 @@ public class HealthBar extends Table {
         currentHealth = result;
       }
       vulnerable = false;
+      Timer.schedule(new Timer.Task() {
+        @Override
+        public void run() {
+          playerBatch.setColor(1,1,1,1);
+        }
+      }, hurtDelay);
     }
   }
 
-  public void GainHealth(float health) {
+  public void gainHealth(float health) {
     float result = currentHealth + health;
     if (result > maxHealth) {
       currentHealth = maxHealth;
