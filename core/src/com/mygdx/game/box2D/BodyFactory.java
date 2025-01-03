@@ -269,7 +269,7 @@ public class BodyFactory {
     public static Body createPotion(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
@@ -277,14 +277,14 @@ public class BodyFactory {
         shape.setRadius(5.5f);
         Fixture potionFixture = body.createFixture(shape, 1.0f);
         shape.dispose();
-        potionFixture.setSensor(true);
+       // potionFixture.setSensor(true);
         return body;
     }
 
     public static Body createCoin(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
@@ -292,7 +292,7 @@ public class BodyFactory {
         shape.setRadius(3.5f);
         Fixture potionFixture = body.createFixture(shape, 1.0f);
         shape.dispose();
-        potionFixture.setSensor(true);
+       // potionFixture.setSensor(true);
         return body;
     }
 
@@ -304,7 +304,8 @@ public class BodyFactory {
         bodyDef.fixedRotation = false;
         boneBody = world.createBody(bodyDef);
         PolygonShape boneShape = new PolygonShape();
-        boneShape.setAsBox(5.5f, 3.5f);
+        boneShape.setAsBox(5f, 2.5f);
+        //was 5.5, 3.5
         Fixture boneHitbox = boneBody.createFixture(boneShape, 0f);
         boneShape.dispose();
         boneHitbox.setUserData("Bone");

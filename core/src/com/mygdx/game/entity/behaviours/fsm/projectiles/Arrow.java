@@ -61,6 +61,7 @@ public class Arrow {
         }
         Fixture arrowHitbox = arrow.createFixture(arrowShape, 1.0f);
         arrowShape.dispose();
+        //TODO Change to non-sensor but fix interactions
         arrowHitbox.setSensor(true);
         return arrowHitbox;
     }

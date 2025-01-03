@@ -155,7 +155,7 @@ public class GenerateLevel {
                         random = Random.randomInt(6, 1);
                     }
                     //assign the room its random index
-                    newRoom.roomNum = 2;
+                    newRoom.roomNum = random;
                 }
 
                 //determines which pre-gen room is placed next in sequence
@@ -1694,35 +1694,35 @@ for (int i = 0; i < layerSize; i++) {
             switch (randomChosenIndex) {
                 case 1:
                     itemKind = "WINE";
-                    cost = 5;
+                    cost = 3;
                     break;
                 case 2:
                     itemKind = "GREEK FIRE";
-                    cost = 10;
+                    cost = 6;
                     break;
                 case 3:
                     itemKind = "SHIELD";
-                    cost = 12;
+                    cost = 8;
                     break;
                 case 4:
                     itemKind = "TORCH";
-                    cost = 10;
+                    cost = 6;
                     break;
                 case 5:
                     itemKind = "BELT";
-                    cost = 8;
+                    cost = 4;
                     break;
                 case 6:
                     itemKind = "CHISEL";
-                    cost = 8;
+                    cost = 4;
                     break;
                 case 7:
                     itemKind = "LANCE";
-                    cost = 10;
+                    cost = 5;
                     break;
                 case 8:
                     itemKind = "HELM";
-                    cost = 10;
+                    cost = 5;
                     break;
             }
                 Text t2 = shopkeeper.Stock(itemKind, i2);
@@ -1988,12 +1988,9 @@ for (int i = 0; i < layerSize; i++) {
 
                 String roofType = String.valueOf(strRoof.charAt(0));
 
-
-               // String roof = levelTextures.get(i);
                 StringBuffer sb2 = new StringBuffer(strRoof);
                 sb2.delete(0, 1);
                 String strRoofExt = sb2.toString();
-                System.out.println(strRoofExt);
 
                 currentCell = init.cr.topLeftWallTile;
                 Body newTopLeftWall2 = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
@@ -2010,12 +2007,9 @@ for (int i = 0; i < layerSize; i++) {
 
                 String roofType = String.valueOf(strRoof.charAt(0));
 
-
-                // String roof = levelTextures.get(i);
                 StringBuffer sb2 = new StringBuffer(strRoof);
                 sb2.delete(0, 1);
                 String strRoofExt = sb2.toString();
-                System.out.println(strRoofExt);
 
                 currentCell = init.cr.topLeftFenceTile;
                 Body newTopLeftFenceRoof = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
@@ -2032,14 +2026,87 @@ for (int i = 0; i < layerSize; i++) {
 
                 String roofType = String.valueOf(strRoof.charAt(0));
 
-
-                // String roof = levelTextures.get(i);
                 StringBuffer sb2 = new StringBuffer(strRoof);
                 sb2.delete(0, 1);
                 String strRoofExt = sb2.toString();
-                System.out.println(strRoofExt);
 
                 currentCell = init.cr.middleFloorTile;
+                Roof roof = new Roof(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,false,false, Integer.parseInt(roofType), Integer.parseInt(strRoofExt));
+                roofs.add(roof);
+                init.roomList.get(roomIndex).roofs.add(roof);
+            }
+            else if (levelTextures.get(i).matches("TWroof.+")) {
+                String roofStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(roofStr);
+                sb.delete(0, 6);
+                String strRoof = sb.toString();
+
+                String roofType = String.valueOf(strRoof.charAt(0));
+
+                StringBuffer sb2 = new StringBuffer(strRoof);
+                sb2.delete(0, 1);
+                String strRoofExt = sb2.toString();
+
+                currentCell = init.cr.topWallTile;
+                Body newTopWallRoof = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                newTopWallRoof.setUserData("Wall");
+                Roof roof = new Roof(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,false,false, Integer.parseInt(roofType), Integer.parseInt(strRoofExt));
+                roofs.add(roof);
+                init.roomList.get(roomIndex).roofs.add(roof);
+            }
+            else if (levelTextures.get(i).matches("LWroof.+")) {
+                String roofStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(roofStr);
+                sb.delete(0, 6);
+                String strRoof = sb.toString();
+
+                String roofType = String.valueOf(strRoof.charAt(0));
+
+                StringBuffer sb2 = new StringBuffer(strRoof);
+                sb2.delete(0, 1);
+                String strRoofExt = sb2.toString();
+
+                currentCell = init.cr.leftWallTile;
+                Body newTopWallRoof = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                newTopWallRoof.setUserData("Wall");
+                Roof roof = new Roof(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,false,false, Integer.parseInt(roofType), Integer.parseInt(strRoofExt));
+                roofs.add(roof);
+                init.roomList.get(roomIndex).roofs.add(roof);
+            }
+            else if (levelTextures.get(i).matches("RWroof.+")) {
+                String roofStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(roofStr);
+                sb.delete(0, 6);
+                String strRoof = sb.toString();
+
+                String roofType = String.valueOf(strRoof.charAt(0));
+
+                StringBuffer sb2 = new StringBuffer(strRoof);
+                sb2.delete(0, 1);
+                String strRoofExt = sb2.toString();
+
+                currentCell = init.cr.rightWallTile;
+                Body newTopWallRoof = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                newTopWallRoof.setUserData("Wall");
+                Roof roof = new Roof(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,false,false, Integer.parseInt(roofType), Integer.parseInt(strRoofExt));
+                roofs.add(roof);
+                init.roomList.get(roomIndex).roofs.add(roof);
+            }
+            else if (levelTextures.get(i).matches("BWroof.+")) {
+                String roofStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(roofStr);
+                sb.delete(0, 6);
+                String strRoof = sb.toString();
+
+                String roofType = String.valueOf(strRoof.charAt(0));
+
+                StringBuffer sb2 = new StringBuffer(strRoof);
+                sb2.delete(0, 1);
+                String strRoofExt = sb2.toString();
+
+                currentCell = init.cr.bottomWallTile;
+                Body newTopWallRoof = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                newTopWallRoof.setUserData("Wall");
                 Roof roof = new Roof(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,false,false, Integer.parseInt(roofType), Integer.parseInt(strRoofExt));
                 roofs.add(roof);
                 init.roomList.get(roomIndex).roofs.add(roof);

@@ -213,7 +213,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		Vector2 vec = new Vector2();
 		vec.x = PLAYER_X;
 		vec.y = PLAYER_Y;
-		PLAYER_SPEED_MULTI = 50f;
+		PLAYER_SPEED_MULTI = 45f;
 
 		//TODO Set player speed here so we can use dynamic speed adjustment e.g entering a cobweb
 
@@ -263,7 +263,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//create the Box2D ray handler
 		rayHandler = new RayHandler(world);
-		rayHandler.setAmbientLight(0f, 0f, 0f, 0.030f);
+		rayHandler.setAmbientLight(0f, 0f, 0f, 0.020f);
 		if (debug) {
 			rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
 		}
@@ -592,11 +592,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 					//if (hud.inventory.Size )
 					hud.inventory.addPotion();
-					potion.potionLight.remove();
+					potion.potionLight.setActive(false);
 					potions.remove(potion);
 					potionArrayMap.removeKey(potion.potionBody);
 					world.destroyBody(potion.potionBody);
 					potionIt.remove();
+					collectedPotions.remove(potion);
 				}
 			}
 		}
@@ -621,11 +622,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 				if (collectedCoins.contains(coin)) {
 
 					hud.updateGold(1,true);
-					coin.coinLight.remove();
+					coin.coinLight.setActive(false);
 					coins.remove(coin);
 					coinArrayMap.removeKey(coin.coinBody);
 					world.destroyBody(coin.coinBody);
 					coinIt.remove();
+					collectedCoins.remove(coin);
 				}
 			}
 		}
@@ -1022,8 +1024,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 				if ((e.playerSighted && e.playerInRange) && menuClosed){
 					//System.out.println(Gdx.graphics.getDeltaTime());
-					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 140) ){
+					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 120) ){
 						e.timeSinceAlerted = 0f;
+
+						e.enemyAI.setMaxLinearSpeed(0);
 
 						Vector2 vec1 = new Vector2(e.enemyBody.getPosition());
 						Vector2 vec2 = new Vector2(Player.playerBody.getPosition());
@@ -1053,6 +1057,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 
 					} else {
+						e.enemyAI.setMaxLinearSpeed(35);
 						e.timeSinceAlerted = e.timeSinceAlerted + Gdx.graphics.getDeltaTime();
 					}
 
@@ -1073,6 +1078,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 					e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
 					//e.playerSighted = false;
+				} else {
+					e.timeSinceAlerted = 0f;
 				}
 				enemySkullBatch.begin();
 				if (!e.alerted) {
@@ -1107,6 +1114,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 				//System.out.println(Gdx.graphics.getDeltaTime());
 				if (e2.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 120) ){
 						e2.timeSinceAlerted = 0f;
+
+						e2.enemyAI.setMaxLinearSpeed(0);
+
 						Vector2 vec1 = new Vector2(e2.enemyBody.getPosition());
 						Vector2 vec2 = new Vector2(Player.playerBody.getPosition());
 
@@ -1146,6 +1156,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 
 				} else {
+					e2.enemyAI.setMaxLinearSpeed(55);
 					e2.timeSinceAlerted = e2.timeSinceAlerted + Gdx.graphics.getDeltaTime();
 				}
 
@@ -1166,6 +1177,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 				e2.getStateMachine().changeState(EnemySpiderState.GO_TO_PLAYER);
 				//e.playerSighted = false;
+			} else {
+				e2.timeSinceAlerted = 0f;
 			}
 			enemySpiderBatch.begin();
 				if (e2.facing == "Up") {
@@ -1954,11 +1967,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 		}
 
 		if (!GenerateLevel.init.roomList.get(player.currentRoom).isShop && !debug) {
-			camera.zoom = 0.7f;
+			camera.zoom = 0.5f;
 		}
 		else if (!debug){
 			//camera.zoom = 0.8f;
-			camera.zoom = 0.7f;
+			camera.zoom = 0.9f;
 		} else {
 
 		}

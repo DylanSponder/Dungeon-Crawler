@@ -288,8 +288,6 @@ public class GameInputProcessor implements InputProcessor {
                     switch (item.kind) {
 
                         case "WINE": {
-                            //System.out.println("THIS IS A TEST TO SEE IF POTIONS CAN BE ADDED VIA THE HUD");
-                            //hud.inventory.addPotion();
                             Potion potion = new Potion(world, player.shopkeeper.posX, player.shopkeeper.posY+ 16,1);
                             potion.createPotion(potionArrayMap,rayHandler);
                             potions.add(potion);
@@ -299,26 +297,29 @@ public class GameInputProcessor implements InputProcessor {
                         }
                         case "SHIELD": {
                             player.hasShield = true;
-
+                            hud.addItem(2);
                             break;
 
                         }
                         case "GREEK FIRE": {
                             player.hasGreekFire = true;
-                            //player.greekFireUses = 10;
+                            hud.addItem(4);
                             break;
                         }
                         case "TORCH": {
                             player.hasTorch = true;
+                            hud.addItem(1);
                             break;
                         }
                         case "CHISEL": {
                             player.hasChisel = true;
+                            hud.addItem(3);
                             break;
                         }
                         case "BELT": {
                             //hud.inventory.Capacity = hud.inventory.Capacity + 2;
                             hud.inventory.changeCapacity(1, true);
+                            hud.addItem(5);
                             break;
                         }
                     }
@@ -364,27 +365,30 @@ public class GameInputProcessor implements InputProcessor {
 
                         }
                         case "SHIELD": {
-                            //TODO: add shield item
                             player.hasShield = true;
+                            hud.addItem(2);
                             break;
 
                         }
                         case "GREEK FIRE": {
                             player.hasGreekFire = true;
-                            //player.greekFireUses = 30;
+                            hud.addItem(4);
                             break;
                         }
                         case "TORCH": {
                             player.hasTorch = true;
+                            hud.addItem(1);
                             break;
                         }
                         case "CHISEL": {
                             player.hasChisel = true;
+                            hud.addItem(3);
                             break;
                         }
                         case "BELT": {
                             //hud.inventory.Capacity = hud.inventory.Capacity + 2;
                             hud.inventory.changeCapacity(1, true);
+                            hud.addItem(5);
                             break;
                         }
                     }
@@ -435,27 +439,29 @@ public class GameInputProcessor implements InputProcessor {
                             break;
                         }
                         case "SHIELD": {
-                            //TODO: add shield item
                             player.hasShield = true;
+                            hud.addItem(2);
                             break;
                         }
                         case "GREEK FIRE": {
                             player.hasGreekFire = true;
-                            //player.greekFireUses = 30;
+                            hud.addItem(4);
                             break;
                         }
                         case "TORCH": {
                             player.hasTorch = true;
-                            //playerLight.setXray(true);
+                            hud.addItem(1);
                             break;
                         }
                         case "CHISEL": {
                             player.hasChisel = true;
+                            hud.addItem(3);
                             break;
                         }
                         case "BELT": {
                             //hud.inventory.Capacity = hud.inventory.Capacity + 2;
                             hud.inventory.changeCapacity(1, true);
+                            hud.addItem(5);
                             break;
                         }
                     }

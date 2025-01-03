@@ -28,7 +28,7 @@ public class CreateAssets {
     Texture greekfireItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Greekfire.png"));
     Texture greekfireSlotTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/GreekfireSlot.png"));
 
-    Texture coinItemTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/GoldCoin.png"));
+    Texture coinItemTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/CoinItem.png"));
 
 
     Texture coinHUDTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Coin2Preview.png"));

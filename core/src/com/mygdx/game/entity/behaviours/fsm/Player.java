@@ -50,7 +50,7 @@ public class Player {
 
         this.playerBody = bf.createPlayerBody(world, PLAYER_X, PLAYER_Y);
 
-        this.playerLight = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.50f), 60, PLAYER_X, PLAYER_Y);
+        this.playerLight = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.50f), 55, PLAYER_X, PLAYER_Y);
         this.playerLight.attachToBody(this.playerBody);
         this.playerLight.setSoftnessLength(65);
 

@@ -18,6 +18,7 @@ public class HUD {
   int topPadding;
   public HealthBar healthBar;
   public PotionSlotInventory inventory;
+  public VerticalGroup itemVerticalGroup;
   private Label moneyAmount;
   private Table moneyTable, itemTable;
   private Image moneySymbol;
@@ -25,6 +26,10 @@ public class HUD {
   public String totalGoldAsString;
   public Label winWords, startWords, roomWords;
   private float hudFade;
+  public static TextureRegionDrawable torchSlot, beltSlot, shieldSlot, greekfireSlot, chiselSlot;
+  public static TextureRegionDrawable torchItem, beltItem, shieldItem, greekfireItem, chiselItem;
+  public static Image torchSlotImage, beltSlotImage, shieldSlotImage, greekfireSlotImage, chiselSlotImage;
+  public static Image torchItemImage, beltItemImage, shieldItemImage, greekfireItemImage, chiselItemImage;
   //private CreateTexture tx;
 
   public HUD(Viewport vp, SpriteBatch sb) {
@@ -37,7 +42,7 @@ public class HUD {
     hudFade = 1f;
 
     Table table = new Table();
-    VerticalGroup itemVerticalGroup = new VerticalGroup();
+    itemVerticalGroup = new VerticalGroup();
 
     Group itemGroup = new Group();
 
@@ -53,27 +58,30 @@ public class HUD {
     table.top();
     table.setFillParent(true);
 
-
-
-
-
     CreateAssets tx = CreateAssets.getInstance();
 
+    //create empty item slot icons of all the items the player can collect
 
-    TextureRegionDrawable torchSlot = new TextureRegionDrawable(tx.torchSlotSprite);
-    itemVerticalGroup.addActor(new Image(torchSlot));
+    torchSlot = new TextureRegionDrawable(tx.torchSlotSprite);
+    torchSlotImage = new Image(torchSlot);
+    itemVerticalGroup.addActor(torchSlotImage);
 
-    TextureRegionDrawable shieldSlot = new TextureRegionDrawable(tx.shieldSlotSprite);
-    itemVerticalGroup.addActor(new Image(shieldSlot));
+    shieldSlot = new TextureRegionDrawable(tx.shieldSlotSprite);
+    shieldSlotImage = new Image(shieldSlot);
+    itemVerticalGroup.addActor(shieldSlotImage);
 
-    TextureRegionDrawable chiselSlot = new TextureRegionDrawable(tx.chiselSlotSprite);
-    itemVerticalGroup.addActor(new Image(chiselSlot));
+    chiselSlot = new TextureRegionDrawable(tx.chiselSlotSprite);
+    chiselSlotImage = new Image(chiselSlot);
+    itemVerticalGroup.addActor(chiselSlotImage);
 
-    TextureRegionDrawable greekfireSlot = new TextureRegionDrawable(tx.greekfireSlotSprite);
-    itemVerticalGroup.addActor(new Image(greekfireSlot));
+    greekfireSlot = new TextureRegionDrawable(tx.greekfireSlotSprite);
+    greekfireSlotImage = new Image(greekfireSlot);
+    itemVerticalGroup.addActor(greekfireSlotImage);
 
-    TextureRegionDrawable beltSlot = new TextureRegionDrawable(tx.beltSlotSprite);
-    itemVerticalGroup.addActor(new Image(beltSlot));
+    beltSlot = new TextureRegionDrawable(tx.beltSlotSprite);
+    beltSlotImage = new Image(beltSlot);
+    itemVerticalGroup.addActor(beltSlotImage);
+
 
     table.add(itemGroup);
    // test.padTop(100);
@@ -103,6 +111,55 @@ public class HUD {
     table.add(moneyTable);
 
     menuStage.addActor(table);
+  }
+
+  public void addItem(int type) {
+
+    CreateAssets tx = CreateAssets.getInstance();
+
+    //this is super hacky but works like a charm
+    //we create a new Image with the texture of the item
+    //then swap it with the slot it belongs to
+    //and finally just delete the slot image
+    //(there has got to be a more efficient way to do this)
+
+    switch (type) {
+      case 1:
+        torchItem = new TextureRegionDrawable(tx.torchItemSprite);
+        torchItemImage = new Image(torchItem);
+        itemVerticalGroup.addActor(torchItemImage);
+        itemVerticalGroup.swapActor(torchSlotImage, torchItemImage);
+        itemVerticalGroup.removeActor(torchSlotImage);
+        break;
+      case 2:
+        shieldItem = new TextureRegionDrawable(tx.shieldItemSprite);
+        shieldItemImage = new Image(shieldItem);
+        itemVerticalGroup.addActor(shieldItemImage);
+        itemVerticalGroup.swapActor(shieldSlotImage, shieldItemImage);
+        itemVerticalGroup.removeActor(shieldSlotImage);
+        break;
+      case 3:
+        chiselItem = new TextureRegionDrawable(tx.chiselItemSprite);
+        chiselItemImage = new Image(chiselItem);
+        itemVerticalGroup.addActor(chiselItemImage);
+        itemVerticalGroup.swapActor(chiselSlotImage, chiselItemImage);
+        itemVerticalGroup.removeActor(chiselSlotImage);
+        break;
+      case 4:
+        greekfireItem = new TextureRegionDrawable(tx.greekfireItemSprite);
+        greekfireItemImage = new Image(greekfireItem);
+        itemVerticalGroup.addActor(greekfireItemImage);
+        itemVerticalGroup.swapActor(greekfireSlotImage, greekfireItemImage);
+        itemVerticalGroup.removeActor(greekfireSlotImage);
+        break;
+      case 5:
+        beltItem = new TextureRegionDrawable(tx.beltItemSprite);
+        beltItemImage = new Image(beltItem);
+        itemVerticalGroup.addActor(beltItemImage);
+        itemVerticalGroup.swapActor(beltSlotImage, beltItemImage);
+        itemVerticalGroup.removeActor(beltSlotImage);
+        break;
+    }
   }
 
   public void startLevel() {
@@ -164,7 +221,7 @@ public class HUD {
      }
 
     totalGoldAsString  = String.valueOf(totalGold);
-    moneyAmount = new Label(totalGoldAsString, new LabelStyle(DungeonCrawler.defaultFont, Color.YELLOW));
+    moneyAmount = new Label(totalGoldAsString, new LabelStyle(DungeonCrawler.defaultFont, Color.GOLD));
     moneyTable.add(moneyAmount).padTop(25);
     moneySymbol = new Image(new Sprite(tx.coinHUDTexture, 10, 10));
     moneyTable.add(moneySymbol).padBottom(0);
