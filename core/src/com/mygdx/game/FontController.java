@@ -29,7 +29,7 @@ public class FontController {
         else if((text2.hasSprite && text2.sprite == CreateAssets.getInstance().greekfireItemSprite)) {
             inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-8f,14,15,14,15,0.6f,0.6f,0);
         }
-        else if (text2.hasSprite && text2.sprite == CreateAssets.getInstance().coinItemSprite) {
+        else if (text2.hasSprite && text2.sprite == CreateAssets.getInstance().coinHUDSprite) {
             inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-7f,10,10,9,9,0.6f,0.6f,0);
         }
 

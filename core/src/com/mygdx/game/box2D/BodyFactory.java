@@ -281,6 +281,21 @@ public class BodyFactory {
         return body;
     }
 
+    public static Body createCoin(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x, y);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        CircleShape shape = new CircleShape();
+        shape.setRadius(3.5f);
+        Fixture potionFixture = body.createFixture(shape, 1.0f);
+        shape.dispose();
+        potionFixture.setSensor(true);
+        return body;
+    }
+
     public Body createBoneBody(World world, Body skull, float x, float y) {
         Body boneBody;
         BodyDef bodyDef = new BodyDef();

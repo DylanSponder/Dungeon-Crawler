@@ -47,7 +47,7 @@ import com.mygdx.game.level.InitLevel;
 
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch arrowBatch, enemySkullBatch, enemySpiderBatch, enemyGhostBatch, potBatch, hudBatch, tutoBatch, fontBatch, inventoryBatch;
-	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, obstacleBatch, fireBatch, flameBatch, webBatch, cobBatch, candleBatch;
+	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, coinBatch, obstacleBatch, fireBatch, flameBatch, webBatch, cobBatch, candleBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch, roofBatch, columnBaseLowerBatch;
 	public static SpriteBatch trapBatch,playerBatch;
 	public static World world;
@@ -76,11 +76,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayMap<Body, Bone> boneArrayMap;
 	public static ArrayMap<Body, Web> webArrayMap;
 	public static ArrayMap<Body, Potion> potionArrayMap;
+	public static ArrayMap<Body, Coin> coinArrayMap;
 	public static ArrayMap<Body, Cobweb> cobArrayMap;
 	public static ArrayMap<Body, Fire> respawnFireMap;
 	public static ArrayMap<Body, Pot> potArrayMap;
 	public static ArrayMap<Body, Obstacle> obArrayMap;
-	public boolean reversedArrowMap, reversedSkullMap, reversedPotMap, reversedPotionMap, reversedRespawnFireMap, reversedBoneMap, reversedWebMap, reversedObMap;
+	public boolean reversedArrowMap, reversedSkullMap, reversedPotMap, reversedRespawnFireMap, reversedBoneMap, reversedWebMap, reversedObMap;
+	public boolean reversedCoinMap, reversedPotionMap;
 	public static ArrayList<EnemySkull> enemySkulls, dyingSkulls;
 	public static ArrayList<EnemySpider> enemySpiders, dyingSpiders;
 	public static ArrayList<EnemyGhost> enemyGhosts, dyingGhosts;
@@ -94,6 +96,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Pot> pots, brokenPots;
 	public static ArrayList<Cobweb> cobwebs, burnedCobwebs;
 	public static ArrayList<Potion> potions, collectedPotions;
+	public static ArrayList<Coin> coins, collectedCoins;
 	public static ArrayList<Torch> torches;
 	public static ArrayList<Obstacle> obstacles;
 	public static ArrayList<Candle> candles;
@@ -151,6 +154,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		potBatch = new SpriteBatch();
 		trapBatch = new SpriteBatch();
 		potionBatch = new SpriteBatch();
+		coinBatch = new SpriteBatch();
 		obstacleBatch = new SpriteBatch();
 		candleBatch = new SpriteBatch();
 		columnTopBatch = new SpriteBatch();
@@ -193,6 +197,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		potArrayMap = new ArrayMap<>();
 		torches = new ArrayList<>();
 		potions = new ArrayList<>();
+		coins = new ArrayList<>();
 		columns = new ArrayList<>();
 		fires = new ArrayList<>();
 		extinguishedRespawnFires = new ArrayList<>();
@@ -200,6 +205,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//columnStems = new ArrayList<>();
 		//columnBases = new ArrayList<>();
 		collectedPotions = new ArrayList<Potion>();
+		collectedCoins = new ArrayList<Coin>();
 		obstacles = new ArrayList<Obstacle>();
 		candles = new ArrayList<Candle>();
 		messages = new ArrayList<Text>();
@@ -376,6 +382,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		webArrayMap = new ArrayMap<Body, Web>();
 		arrows = new ArrayList<Arrow>();
 		potionArrayMap = new ArrayMap<Body, Potion>();
+		coinArrayMap = new ArrayMap<Body, Coin>();
 		obArrayMap = new ArrayMap<Body, Obstacle>();
 		respawnFireMap = new ArrayMap<Body, Fire>();
 		cobArrayMap = new ArrayMap<Body, Cobweb>();
@@ -593,6 +600,37 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 		}
+
+		if (!coinArrayMap.isEmpty()) {
+			for (OrderedMap.Entry<Body, Coin> coinEntry : coinArrayMap.entries()) {
+				Coin value = coinEntry.value;
+				//render each coin
+				coinBatch.begin();
+					Coin.renderCoin(coinBatch, tx.coinItemSprite, coinEntry.key.getPosition().x, coinEntry.key.getPosition().y);
+				coinBatch.end();
+			}
+
+			if (!reversedCoinMap) {
+				coinArrayMap.reverse();
+				reversedCoinMap = true;
+			}
+
+			Iterator<Coin> coinIt = collectedCoins.iterator();
+			if (coinIt.hasNext()) {
+				Coin coin = coinIt.next();
+				if (collectedCoins.contains(coin)) {
+
+					hud.updateGold(1,true);
+					coin.coinLight.remove();
+					coins.remove(coin);
+					coinArrayMap.removeKey(coin.coinBody);
+					world.destroyBody(coin.coinBody);
+					coinIt.remove();
+				}
+			}
+		}
+
+
 		for (Cobweb c : cobwebs) {
 			if (!c.cobCreated) {
 				cobArrayMap.put(c.createCobweb(cobArrayMap), c);
@@ -738,27 +776,35 @@ public class DungeonCrawler extends ApplicationAdapter {
 					if (brokenPots.contains(pot)) {
 						//one in 20 chance to get a potion from a pot - subject to change (was 7)
 						int min = 1;
-						int max = 15;
-						int potionChance = (int) (Math.random() * (max - min + 1)) + min;
-						if (potionChance == 15) {
+						int max = 20;
+						int lootChance = Random.randomInt(20,1);
+
+						//5% chance to get a Potion
+						if (lootChance == 20) {
 							//create potion object
 							Potion potion = new Potion(world, pot.potBody.getPosition().x, pot.potBody.getPosition().y, 1);
 							potion.createPotion(potionArrayMap, rayHandler);
 							potions.add(potion);
 							potionArrayMap.put(potion.potionBody, potion);
-						} else if (potionChance == 1) {
-							//Bone bone = new Bone(world, pot.potBody, pot.potBody.getPosition().x, pot.potBody.getPosition().y, false, false, new Vector2());
-							//bone.createBone();
-							//bones.add(bone);
-							//boneArrayMap.put(bone.boneBody, bone);
 
+						//20% chance to get a Coin
+						} else if (lootChance == 1
+								|| lootChance == 2
+								|| lootChance == 3
+								|| lootChance == 4) {
+							Coin coin = new Coin(world, pot.potBody.getPosition().x, pot.potBody.getPosition().y);
+							coin.createCoin(coinArrayMap, rayHandler);
+							coins.add(coin);
+							coinArrayMap.put(coin.coinBody, coin);
+
+						//10% chance to get a Heart
+						} else if (lootChance == 5 || lootChance == 6) {
 							//create heart object
 							//Heart heart = new Heart(world, heart.heartBody.getPosition().x, heart.heartBody.getPosition().y, 1);
 							//heart.createHeart(heartArrayMap, rayHandler);
 							//hearts.add(heart);
 							//heartArrayMap.put(heart.heartBody, heart);
 						}
-
 						pots.remove(pot);
 						potArrayMap.removeKey(pot.potBody);
 						world.destroyBody(pot.potBody);
@@ -1794,6 +1840,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			potBatch.setProjectionMatrix(camera.combined);
 			cobBatch.setProjectionMatrix(camera.combined);
 			potionBatch.setProjectionMatrix(camera.combined);
+			coinBatch.setProjectionMatrix(camera.combined);
 			columnBaseBatch.setProjectionMatrix(camera.combined);
 			columnStemBatch.setProjectionMatrix(camera.combined);
 			columnTopBatch.setProjectionMatrix(camera.combined);

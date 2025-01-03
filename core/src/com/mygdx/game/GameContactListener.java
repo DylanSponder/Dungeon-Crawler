@@ -170,7 +170,7 @@ public class GameContactListener implements ContactListener {
                             //skullArrayMap.put();
 
 
-                            hud.updateGold(1, true);
+                            //hud.updateGold(1, true);
 
                             init.roomList.get(e.room).enemyCounter--;
                             if (init.roomList.get(e.room).enemyCounter < 1) {
@@ -273,7 +273,7 @@ public class GameContactListener implements ContactListener {
                                 }
                             }
 
-                            hud.updateGold(1, true);
+                            //hud.updateGold(1, true);
                             init.roomList.get(e.room).enemyCounter--;
                             if (init.roomList.get(e.room).enemyCounter < 1) {
                                 init.roomList.get(player.currentRoom).unlockAllDoors(world, init.roomList.get(player.currentRoom), false);
@@ -844,15 +844,20 @@ public class GameContactListener implements ContactListener {
                             if (p.potionBody == collidee.getBody()) {
                                 if (!(hud.inventory.Capacity == hud.inventory.Size)) {
                                     collectedPotions.add(p);
-
-                                } else {
-
-
                                 }
-
                             }
                         }
-                    } else if (collidee.getUserData() == "ShopRadius") {
+                     }
+
+                    if (collidee.getBody().getUserData() == "Coin") {
+                        for (Coin c : coins) {
+                            if (c.coinBody == collidee.getBody()) {
+                                collectedCoins.add(c);
+                        }
+                    }
+                }
+
+                    if (collidee.getUserData() == "ShopRadius") {
                         for (Shopkeeper shop : shopkeepers) {
                             if (collidee.getBody() == shop.shopBody) {
                                 shop.message = shop.messages.get(0);

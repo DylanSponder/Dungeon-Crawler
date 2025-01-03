@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.sun.org.apache.bcel.internal.generic.IADD;
 
 import static com.mygdx.game.DungeonCrawler.menuStage;
 
@@ -88,9 +87,9 @@ public class HUD {
     healthBar = new HealthBar(3f, healthSymbol, healthSymbolHalf, healthSymbolEmpty, 60);
     
     moneyTable = new Table();
-    moneyAmount = new Label(totalGoldAsString, new LabelStyle(DungeonCrawler.defaultFont, Color.YELLOW));
+    moneyAmount = new Label(totalGoldAsString, new LabelStyle(DungeonCrawler.defaultFont, Color.GOLD));
     moneyTable.add(moneyAmount).padTop(25);
-    moneySymbol = new Image(new Sprite(tx.coinTexture, 10, 10));
+    moneySymbol = new Image(new Sprite(tx.coinHUDTexture, 10, 10));
     moneyTable.add(moneySymbol).padBottom(0);
 
     Sprite potionSymbol = new Sprite(tx.potionItemTexture, 9, 11);
@@ -167,7 +166,7 @@ public class HUD {
     totalGoldAsString  = String.valueOf(totalGold);
     moneyAmount = new Label(totalGoldAsString, new LabelStyle(DungeonCrawler.defaultFont, Color.YELLOW));
     moneyTable.add(moneyAmount).padTop(25);
-    moneySymbol = new Image(new Sprite(tx.coinTexture, 10, 10));
+    moneySymbol = new Image(new Sprite(tx.coinHUDTexture, 10, 10));
     moneyTable.add(moneySymbol).padBottom(0);
   }
 

@@ -13,7 +13,7 @@ public class CreateAssets {
 
     public AssetManager assetManager;
 
-    //TODO Link all textures to HellasDungeon path
+    //TODO Make sure to link all textures to HellasDungeon path
     Texture heartHUDTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Heart.png"));
     Texture potionItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/LifePot.png"));
     Texture potionSlotTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Potion/Empty.png"));
@@ -28,8 +28,10 @@ public class CreateAssets {
     Texture greekfireItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Greekfire.png"));
     Texture greekfireSlotTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/GreekfireSlot.png"));
 
+    Texture coinItemTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/GoldCoin.png"));
 
-    Texture coinTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Coin2Preview.png"));
+
+    Texture coinHUDTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Coin2Preview.png"));
     Texture playerTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SpriteSheet.png"));
     Texture playerWalkUpAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkUp.png"));
     Texture playerWalkDownAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkDown.png"));
@@ -443,9 +445,10 @@ public class CreateAssets {
 
     //HUD sprites
 
-    public Sprite coinItemSprite = new Sprite(coinTexture, 10, 10);
+    public Sprite coinHUDSprite = new Sprite(coinHUDTexture, 10, 10);
     public Sprite heartSprite = new Sprite(heartHUDTexture, 16, 16);
 
+    public Sprite coinItemSprite = new Sprite(coinItemTexture, 7,7);
     public Sprite potionItemSprite = new Sprite(potionItemTexture, 16, 16);
 
     public Sprite torchItemSprite = new Sprite(torchItemTexture, 10, 15);
