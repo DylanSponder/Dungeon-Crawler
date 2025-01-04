@@ -38,6 +38,8 @@ public class FontController {
     public static void drawFadingFont(SpriteBatch fontBatch, BitmapFont font2, float x, float y, Text text, float fontScale) {
             font2.getData().setScale(fontScale);
 
+            font2.setColor(text.color);
+
             font2.draw(fontBatch, text.message, x, y);
             if (text.hasSprite){
           //      fontBatch.draw(text.sprite,text.textX-16,text.textY);

@@ -1112,7 +1112,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 			if ((e2.playerSighted && e2.playerInRange) && menuClosed){
 				//System.out.println(Gdx.graphics.getDeltaTime());
-				if (e2.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 120) ){
+				if (e2.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 110) ){
 						e2.timeSinceAlerted = 0f;
 
 						e2.enemyAI.setMaxLinearSpeed(0);
@@ -1617,7 +1617,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 									roofBatch.draw(tx.roof3x3LowerTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - (32 + (r.ext * 8)), 80, 32);
 								}
 							} else {
-								roofBatch.setColor(1,1,1,0.35f);
+								roofBatch.setColor(1,1,1,0.30f);
 								roofBatch.draw(tx.roof3x3UpperTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y + (r.ext * 8), 80, 32);
 								if (r.ext != 0) {
 									for (int i = 0; i < r.ext; i++) {
@@ -1643,7 +1643,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 									roofBatch.draw(tx.roof5x5LowerTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y - 64 + 24 + (r.ext * 8), 112, 48);
 								}
 							} else {
-								roofBatch.setColor(1,1,1,0.35f);
+								roofBatch.setColor(1,1,1,0.30f);
 								roofBatch.draw(tx.roof5x5UpperTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y + (r.ext * 8) + 8, 112, 32);
 								if (r.ext != 0) {
 									for (int i = 0; i < r.ext; i++) {
@@ -1967,7 +1967,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		}
 
 		if (!GenerateLevel.init.roomList.get(player.currentRoom).isShop && !debug) {
-			camera.zoom = 0.5f;
+			camera.zoom = 0.65f;
 		}
 		else if (!debug){
 			//camera.zoom = 0.8f;

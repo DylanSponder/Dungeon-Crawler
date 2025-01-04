@@ -40,7 +40,7 @@ public class EnemyGhost extends Enemy {
 
         //enemyID = 2;
 
-        this.alertMessage = new Text(DungeonCrawler.defaultFont,"!", Color.WHITE,true,1f,0.0045f,false, false, null, 0);
+        this.alertMessage = new Text(DungeonCrawler.defaultFont,"!", Color.RED,true,1f,0.0045f,false, false, null, 0);
 
         this.rayCastable = false;
 

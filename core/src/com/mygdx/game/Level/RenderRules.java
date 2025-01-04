@@ -369,8 +369,7 @@ public class RenderRules {
                             index++;
                             break;
                         }
-                        else if (levelLayer.get(index).matches("[f].+")
-) {
+                        else if (levelLayer.get(index).matches("[f].+")) {
                             StringBuffer sb = new StringBuffer(i);
                             sb.delete(0, 1);
                             String str = sb.toString();
@@ -589,12 +588,187 @@ public class RenderRules {
                                     break;
                                 }
                             }
+                        } else if (levelLayer.get(index).matches("l+w+.+")) {
+                            StringBuffer sb2 = new StringBuffer(i);
+                            sb2.delete(0, 2);
+                            String str = sb2.toString();
+
+                            if (str.matches("([0-9])+")) {
+
+                                String roof = str;
+                                String strRoofExt = "0";
+
+                                StringBuffer sb3 = new StringBuffer(roof);
+                                sb3.delete(1, 2);
+                                String strRoofType = sb3.toString();
+
+                                StringBuffer sb4 = new StringBuffer(str);
+                                sb4.delete(0, 1);
+                                if (!sb4.toString().isEmpty()) {
+                                    strRoofExt = sb4.toString();
+                                }
+
+                                switch (strRoofType) {
+                                    case "1":
+                                        String roofFinal1;
+                                        roofFinal1 = "LWroof1" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal1);
+                                        break;
+                                    case "2":
+                                        String roofFinal2;
+                                        roofFinal2 = "LWroof2" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal2);
+                                        break;
+                                    case "3":
+                                        String roofFinal3;
+                                        roofFinal3 = "LWroof3" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal3);
+                                        break;
+                                    case "4":
+                                        String roofFinal4;
+                                        roofFinal4 = "LWroof4" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal4);
+                                        break;
+                                }
+                                index++;
+                            }
+                        }
+                        else if (levelLayer.get(index).matches("r+w+.+")) {
+                            StringBuffer sb2 = new StringBuffer(i);
+                            sb2.delete(0, 2);
+                            String str = sb2.toString();
+
+                            if (str.matches("([0-9])+")) {
+
+                                String roof = str;
+                                String strRoofExt = "0";
+
+                                StringBuffer sb3 = new StringBuffer(roof);
+                                sb3.delete(1, 2);
+                                String strRoofType = sb3.toString();
+
+                                StringBuffer sb4 = new StringBuffer(str);
+                                sb4.delete(0, 1);
+                                if (!sb4.toString().isEmpty()) {
+                                    strRoofExt = sb4.toString();
+                                }
+
+                                switch (strRoofType) {
+                                    case "1":
+                                        String roofFinal1;
+                                        roofFinal1 = "RWroof1" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal1);
+                                        break;
+                                    case "2":
+                                        String roofFinal2;
+                                        roofFinal2 = "RWroof2" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal2);
+                                        break;
+                                    case "3":
+                                        String roofFinal3;
+                                        roofFinal3 = "RWroof3" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal3);
+                                        break;
+                                    case "4":
+                                        String roofFinal4;
+                                        roofFinal4 = "RWroof4" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal4);
+                                        break;
+                                }
+                                index++;
+                            }
+                        }
+                        else if (levelLayer.get(index).matches("b+w+.+")) {
+                            StringBuffer sb2 = new StringBuffer(i);
+                            sb2.delete(0, 2);
+                            String str = sb2.toString();
+
+                            if (str.matches("([0-9])+")) {
+
+                                String roof = str;
+                                String strRoofExt = "0";
+
+                                StringBuffer sb3 = new StringBuffer(roof);
+                                sb3.delete(1, 2);
+                                String strRoofType = sb3.toString();
+
+                                StringBuffer sb4 = new StringBuffer(str);
+                                sb4.delete(0, 1);
+                                if (!sb4.toString().isEmpty()) {
+                                    strRoofExt = sb4.toString();
+                                }
+
+                                switch (strRoofType) {
+                                    case "1":
+                                        String roofFinal1;
+                                        roofFinal1 = "BWroof1" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal1);
+                                        break;
+                                    case "2":
+                                        String roofFinal2;
+                                        roofFinal2 = "BWroof2" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal2);
+                                        break;
+                                    case "3":
+                                        String roofFinal3;
+                                        roofFinal3 = "BWroof3" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal3);
+                                        break;
+                                    case "4":
+                                        String roofFinal4;
+                                        roofFinal4 = "BWroof4" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal4);
+                                        break;
+                                }
+                                index++;
+                            }
                         }
 
                         else if (levelLayer.get(index).matches("t+w+.+")) {
                         StringBuffer sb2 = new StringBuffer(i);
                         sb2.delete(0, 2);
                         String str = sb2.toString();
+
+
+                            if (str.matches("([0-9])+")) {
+
+                                String roof = str;
+                                String strRoofExt = "0";
+
+                                StringBuffer sb3 = new StringBuffer(roof);
+                                sb3.delete(1, 2);
+                                String strRoofType = sb3.toString();
+
+                                StringBuffer sb4 = new StringBuffer(str);
+                                sb4.delete(0, 1);
+                                if (!sb4.toString().isEmpty()) {
+                                    strRoofExt = sb4.toString();
+                                }
+
+                                switch (strRoofType) {
+                                    case "1":
+                                        String roofFinal1;
+                                        roofFinal1 = "TWroof1" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal1);
+                                        break;
+                                    case "2":
+                                        String roofFinal2;
+                                        roofFinal2 = "TWroof2" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal2);
+                                        break;
+                                    case "3":
+                                        String roofFinal3;
+                                        roofFinal3 = "TWroof3" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal3);
+                                        break;
+                                    case "4":
+                                        String roofFinal4;
+                                        roofFinal4 = "TWroof4" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal4);
+                                        break;
+                                }
+                                index++;
+                            }
 
                             switch (str) {
                                 case "col10fire":

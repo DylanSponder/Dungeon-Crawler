@@ -1,6 +1,6 @@
 tlw,tw,tw,tw,tw,twtr,tw,dtl,doortl,doortr,dtr,tw,twtr,tw,tw,tw,tw,tw,tw,tw,trw
 lw,fped1fireb,f,fob1,fob1,f,f,fob1,f,f,fob1,f,f,f,f20,f,f,f,f,f,rw
-lw,fenemy,fpot,f,f,f,f,fob1,f,f,fob1,f,fob1,fpot,fob1,f,f2,f2,f2,f,rwtr
+lw,fenemy,fpot,f,f,f,f,fob1,f,f,fob1,f,fob1,fpot,fob1,f,f2,f2,f2,fcand,rwtr
 lw,fob1,f,f,fcol11,f,fob1,fob1,f,f,fob1,f,fob1,f,fob1,fenemy,f2,fped1fire,f2,f,rw
 lw,fob1,f,fcol11,fcol7,f,fob1,fob1,f,f,fob1,f,fob1,f,fob1,f,f2,f2,f2,fenemy,rw
 lw,f,f,fcol7,f,f,fenemy,fob1,f,fob1,f,f,fob1,f,fob1,fob1,fob1,fcob,fob1,fob1,rw
@@ -14,8 +14,8 @@ doorll,f,f,f,f,f,f,fob1,f,f,fob1,f,f,fob1,fob1,fob1,fob1,fob1,fob1,f,rwtr
 dll,fob1,fob1,fob1,fob1,fob1,f,f,fob1,fob1,f,f,fped1fire,f,f,f,f,f,fpot,f,rw
 lw20,fob1,fpot,fpot,fpot,fob1,fob1,f,fob1,fob1,f,fob1,f,f,fob1,fob1,fob1,fob1,fob1,f,rw
 lw,fob1,fob1,fcob,fob1,fob1,fob1,f,fob1,f,f,fob1,f,fob1,fenemy,f,f,fcol11,f,f,rw
-lwtr,fenemy,f2,f2,f2,f,fob1,f,fob1,f,fob1,f,f,fob1,fob1,f,fcol11,fcol7,f,fob1,rw
-lw,f,f2,fped1fire,f2,f,fob1,f,fob1,f,fob1,f,f,fob1,fob1,f,fcol7,f,f,fob1,rw
+lwtr,fcand,f2,f2,f2,f,fob1,f,fob1,f,fob1,f,f,fob1,fob1,f,fcol11,fcol7,f,fob1,rw
+lw,fenemy,f2,fped1fire,f2,f,fob1,f,fob1,f,fob1,f,f,fob1,fob1,f,fcol7,f,f,fob1,rw
 lw,f,f2,f2,f2,f,fob1,fpot,fob1,f,fob1,f,f,fob1,f,f,f,f,fpot,f,rw
 lw,fcolio,f,fenemy,f,fcolio,f,f,f,f,fob1,f,f,fob1,fenemy,f,fob1,fob1,fenemy,fped1fireb,rw
 blw,bw,bw,bw,bw,bw,bw,bw,bw,bw,dbl,doorbl,doorbr,dbr,bw,bwtr,bw,bw,bw,bw,brw

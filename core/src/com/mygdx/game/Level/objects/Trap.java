@@ -88,7 +88,7 @@ public class Trap {
 
     public void fireArrow(float x, float y) {
         trapSoundDelay = 1f;
-        trapDelay = 0.8f;
+        trapDelay = 0.95f;
         trapResetDelay = 2.2f;
         soundController.playSound("TrapOpens", 9, 9,0.1f);
         switch (this.direction) {

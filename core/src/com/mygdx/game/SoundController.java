@@ -22,7 +22,6 @@ public class SoundController {
                 potSmash.setPitch(id,randall1/10);
                 potSmash.setVolume(id,volume);
                 break;
-
             case "Skull":
                 Sound skullSmash = tx.skullBreaking;
                 long id2 = skullSmash.play();
@@ -30,7 +29,6 @@ public class SoundController {
                 skullSmash.setPitch(id2,randall2/10);
                 skullSmash.setVolume(id2,volume);
                 break;
-
             case "Bone":
                 Sound boneSmash = tx.boneBreaking;
                 long id3 = boneSmash.play();
@@ -121,6 +119,20 @@ public class SoundController {
                 float randall15 = Random.randomFloat(pitchMax,pitchMin);
                 playerHurt.setPitch(id15, randall15/10);
                 playerHurt.setVolume(id15,volume);
+                break;
+            case "DoorOpen":
+                Sound doorOpening = tx.doorOpening;
+                long id16 = doorOpening.play();
+                float randall16 = Random.randomFloat(pitchMax,pitchMin);
+                doorOpening.setPitch(id16, randall16/10);
+                doorOpening.setVolume(id16,volume);
+                break;
+            case "DoorClose":
+                Sound doorClosing = tx.doorClosing;
+                long id17 = doorClosing.play();
+                float randall17 = Random.randomFloat(pitchMax,pitchMin);
+                doorClosing.setPitch(id17, randall17/10);
+                doorClosing.setVolume(id17,volume);
                 break;
 
 

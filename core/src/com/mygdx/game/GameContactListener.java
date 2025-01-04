@@ -441,18 +441,17 @@ public class GameContactListener implements ContactListener {
             }
             else if (collideeStr == "Web" && colliderStr == "Player") {
                // hud.healthBar.LoseHealth(0.5f);
-                if (collidee.getBody().getUserData() == "Bone") {
                     player.playerBody.applyLinearImpulse(collider.getBody().getLinearVelocity().x * 500, collider.getBody().getLinearVelocity().y * 500, 0, 0, true);
-                    if (!boneBodiesCollided.contains(collidee.getBody())) {
-                        boneBodiesCollided.add(collidee.getBody());
-                    }
+                    if (!webBodiesCollected.contains(collidee.getBody())) {
+                        webBodiesCollected.add(collidee.getBody());
+
                 }
 
             } else if (colliderStr == "Web" && collideeStr == "Player") {
               //  hud.healthBar.LoseHealth(0.5f);
                 player.playerBody.applyLinearImpulse(collidee.getBody().getLinearVelocity().x * 500, collidee.getBody().getLinearVelocity().y * 500, 0, 0, true);
-                if (!boneBodiesCollided.contains(collider.getBody())) {
-                    boneBodiesCollided.add(collider.getBody());
+                if (!webBodiesCollected.contains(collider.getBody())) {
+                    webBodiesCollected.add(collider.getBody());
                 }
             }
                            /*else if (collider.getBody().getUserData() == "Enemy") {
@@ -803,7 +802,10 @@ public class GameContactListener implements ContactListener {
                             cobwebs.add(web);
                             player.touchingCobweb = true;
                         }
-                        webBodiesCollected.add(collidee.getBody());
+                        if (!webBodiesCollected.contains(collidee.getBody())) {
+                            webBodiesCollected.add(collidee.getBody());
+                        }
+
                         break;
                     }
 
@@ -1003,8 +1005,8 @@ public class GameContactListener implements ContactListener {
                 }
             }
 
-            if ((collider.getBody().getUserData() == "Door" && collidee.getBody().getUserData() == "Player")
-                    || (collider.getBody().getUserData() == "Player" && collidee.getBody().getUserData() == "Door")
+            if ((collider.getBody().getUserData() == "Door" && collidee.getUserData() == "PlayerBound")
+                    || (collider.getUserData() == "PlayerBound" && collidee.getBody().getUserData() == "Door")
                     || ((collider.getBody().getUserData() == "Door" && collidee.getBody().getUserData() == "Enemy")
                     || (collider.getBody().getUserData() == "Enemy" && collidee.getBody().getUserData() == "Door"))
             ) {
@@ -1015,26 +1017,35 @@ public class GameContactListener implements ContactListener {
                             if (d.doorBody == collider.getBody()) {
                                 if (!d.locked) {
                                     d.open = true;
-                                    if (collideeStr == "Player") {
-                                        System.out.println("TEST");
-                                        player.touchingDoor = true;
 
+                                    if (collidee.getUserData() == "PlayerBound") {
+                                        player.touchingDoor = true;
+                                        soundController.playSound("DoorOpen", 8f, 8f, 0.1f);
+
+                                    }
+                                } else {
+                                    if (collidee.getUserData() == "PlayerBound") {
+                                        soundController.playSound("DoorClose", 10, 10, 0.1f);
                                     }
                                 }
                             }
                         }
                     }
                 }
-                if (collidee.getBody().getUserData() == "Door"
+                else if (collidee.getBody().getUserData() == "Door"
                         && (collider.getUserData() != "Proximity")) {
                     for (Room r : init.roomList) {
                         for (Door d : r.doors) {
                             if (d.doorBody == collider.getBody()) {
                                 if (!d.locked) {
                                     d.open = true;
-                                    if (colliderStr == "Player") {
+                                    if (collider.getUserData() == "PlayerBound") {
                                         player.touchingDoor = true;
-
+                                        soundController.playSound("DoorOpen", 8f, 8f, 0.1f);
+                                    }
+                                } else {
+                                    if (collider.getUserData() == "PlayerBound") {
+                                        soundController.playSound("DoorClose", 10, 10, 0.1f);
                                     }
                                 }
                             }
@@ -1243,25 +1254,33 @@ public class GameContactListener implements ContactListener {
                     for (Door d : r.doors) {
                         if (d.doorBody == collider.getBody()) {
                             d.open = false;
+
                             if (collidee.getUserData() == "PlayerBound") {
                                 player.touchingDoor = false;
+                                if (!d.locked) {
+                                    soundController.playSound("DoorClose", 10, 10, 0.1f);
+                                }
                             }
                         }
                     }
                 }
             }
-            if (collidee.getBody().getUserData() == "Door"){
+            else if (collidee.getBody().getUserData() == "Door"){
                 for (Room r : init.roomList) {
                     for (Door d : r.doors) {
                         if (d.doorBody == collider.getBody()) {
                             d.open = false;
                             if (collider.getUserData() == "PlayerBound") {
                                 player.touchingDoor = false;
+                                if (!d.locked) {
+                                    soundController.playSound("DoorClose", 10, 10, 0.1f);
+                                }
                             }
                         }
                     }
                 }
             }
+
         }
 
         if (collider.getBody().getUserData() == "Door" && collidee.getUserData() == "PlayerBound"

@@ -269,30 +269,30 @@ public class BodyFactory {
     public static Body createPotion(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(x, y);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         CircleShape shape = new CircleShape();
         shape.setRadius(5.5f);
         Fixture potionFixture = body.createFixture(shape, 1.0f);
+        potionFixture.setSensor(true);
         shape.dispose();
-       // potionFixture.setSensor(true);
         return body;
     }
 
     public static Body createCoin(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(x, y);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         CircleShape shape = new CircleShape();
         shape.setRadius(3.5f);
-        Fixture potionFixture = body.createFixture(shape, 1.0f);
+        Fixture coinFixture = body.createFixture(shape, 1.0f);
+        coinFixture.setSensor(true);
         shape.dispose();
-       // potionFixture.setSensor(true);
         return body;
     }
 
@@ -563,7 +563,7 @@ public class BodyFactory {
         playerShape2.setAsBox(5.98f, 3f);
 
         //player bounds for room door locking
-        playerShape3.setAsBox(6.5f, 6.5f);
+        playerShape3.setAsBox(6.2f, 6.2f);
 
         Fixture playerHitbox = body.createFixture(playerShape1, 1.0f);
         Fixture playerHitbox2 = body.createFixture(playerShape2, 1.0f);
@@ -577,12 +577,12 @@ public class BodyFactory {
         Fixture playerCornerHitbox4 = body.createFixture(playerCornerShape4,1.0f);
 
         body.setUserData("Player");
-        playerCornerHitbox1.setUserData("PlayerHitbox");
-        playerCornerHitbox2.setUserData("PlayerHitbox");
-        playerCornerHitbox3.setUserData("PlayerHitbox");
-        playerCornerHitbox4.setUserData("PlayerHitbox");
-        playerHitbox.setUserData("PlayerHitbox");
-        playerHitbox2.setUserData("PlayerHitbox");
+        playerCornerHitbox1.setUserData("Player");
+        playerCornerHitbox2.setUserData("Player");
+        playerCornerHitbox3.setUserData("Player");
+        playerCornerHitbox4.setUserData("Player");
+        playerHitbox.setUserData("Player");
+        playerHitbox2.setUserData("Player");
         playerBoundHitbox.setUserData("PlayerBound");
         playerCornerShape1.dispose();
         playerCornerShape2.dispose();

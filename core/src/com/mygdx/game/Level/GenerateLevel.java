@@ -147,7 +147,7 @@ public class GenerateLevel {
             }
 
             else {
-                if (i == 5 || i == 1) {
+                if (i == 5) {
                     newRoom.roomNum = 5;
                 } else {
                     int random = Random.randomInt(6, 1);
