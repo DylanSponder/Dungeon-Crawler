@@ -71,15 +71,16 @@ public class SoundController {
                 swordSwing2.setPitch(id8,randall8/10);
                 swordSwing2.setVolume(id8,volume);
                 break;
-            case "BowAttack1":
+                //currently unused
+            case "BowAttack":
                 Sound bowAttack1 = tx.bowAttack;
                 long id9 = bowAttack1.play();
                 float randall9 = Random.randomFloat(pitchMax,pitchMin);
                 bowAttack1.setPitch(id9,randall9/10);
                 bowAttack1.setVolume(id9,volume);
                 break;
-            case "BowAttack2":
-                Sound bowAttack2 = tx.bowAttack2;
+            case "Whoosh":
+                Sound bowAttack2 = tx.whoosh;
                 long id10 = bowAttack2.play();
                 float randall10 = Random.randomFloat(pitchMax,pitchMin);
                 bowAttack2.setPitch(id10,randall10/10);
@@ -133,6 +134,62 @@ public class SoundController {
                 float randall17 = Random.randomFloat(pitchMax,pitchMin);
                 doorClosing.setPitch(id17, randall17/10);
                 doorClosing.setVolume(id17,volume);
+                break;
+            case "Footstep1":
+                Sound footstep1 = tx.footstep1;
+                long id18 = footstep1.play();
+                float randall18 = Random.randomFloat(pitchMax,pitchMin);
+                footstep1.setPitch(id18, randall18/10);
+                footstep1.setVolume(id18,volume);
+                break;
+            case "Footstep2":
+                Sound footstep2 = tx.footstep2;
+                long id19 = footstep2.play();
+                float randall19 = Random.randomFloat(pitchMax,pitchMin);
+                footstep2.setPitch(id19, randall19/10);
+                footstep2.setVolume(id19,volume);
+                break;
+            case "Footstep3":
+                Sound footstep3 = tx.footstep3;
+                long id20 = footstep3.play();
+                float randall20 = Random.randomFloat(pitchMax,pitchMin);
+                footstep3.setPitch(id20, randall20/10);
+                footstep3.setVolume(id20,volume);
+                break;
+            case "Coin":
+                Sound coin = tx.coin;
+                long id21 = coin.play();
+                float randall21 = Random.randomFloat(pitchMax,pitchMin);
+                coin.setPitch(id21, randall21/10);
+                coin.setVolume(id21,volume);
+                break;
+            case "Buy":
+                Sound buy = tx.buy;
+                long id22 = buy.play();
+                float randall22 = Random.randomFloat(pitchMax,pitchMin);
+                buy.setPitch(id22, randall22/10);
+                buy.setVolume(id22,volume);
+                break;
+            case "Shop":
+                Sound shop = tx.shop;
+                long id23 = shop.play();
+                float randall23 = Random.randomFloat(pitchMax,pitchMin);
+                shop.setPitch(id23, randall23/10);
+                shop.setVolume(id23,volume);
+                break;
+            case "Chisel":
+                Sound chiselUsed = tx.chiselUsed;
+                long id24 = chiselUsed.play();
+                float randall24 = Random.randomFloat(pitchMax,pitchMin);
+                chiselUsed.setPitch(id24, randall24/10);
+                chiselUsed.setVolume(id24,volume);
+                break;
+            case "SkullDeath":
+                Sound skullDeath = tx.skullDeath;
+                long id25 = skullDeath.play();
+                float randall25 = Random.randomFloat(pitchMax,pitchMin);
+                skullDeath.setPitch(id25, randall25/10);
+                skullDeath.setVolume(id25,volume);
                 break;
 
 

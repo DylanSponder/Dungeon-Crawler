@@ -116,14 +116,14 @@ public class Shopkeeper {
         switch (kind) {
             case "WINE": {
                 System.out.println("WINE DESCRIPTION ADDED TO A POTION");
-                String desc = "[ " + cost + "] HEAL (1.5 HEARTS)";
+                String desc = "[ " + cost + "] HEAL 1.5 HEARTS (E)";
                 Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinHUDSprite, -1.3f);
                 this.inventoryText.add(t);
                 break;
             }
             case "SHIELD": {
                 System.out.println("SHIELD DESCRIPTION ADDED TO A SHIELD");
-                String desc = "[ " + cost + "] BLOCK";
+                String desc = "[ " + cost + "] BLOCK (SHIFT)";
                 Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinHUDSprite, -1.3f);
                 this.inventoryText.add(t);
                 break;
@@ -151,7 +151,7 @@ public class Shopkeeper {
             }
             case "CHISEL": {
                 System.out.println("CHISEL DESCRIPTION ADDED TO A CHISEL");
-                String desc = "[ " + cost + "] BREAK ROCKS (10 USES)";
+                String desc = "[ " + cost + "] BREAK ROCKS (C)";
                 Text t = new Text(DungeonCrawler.defaultFont, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinHUDSprite, -1.3f);
                 this.inventoryText.add(t);
                 break;

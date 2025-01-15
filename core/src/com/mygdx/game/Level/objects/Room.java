@@ -28,9 +28,10 @@ public class Room {
     public ArrayList<Fire> spawners;
     public ArrayList<Roof> roofs;
 
-    public boolean isShop;
+    public boolean isShop, isEntered;
 
     public Room() {
+        isEntered = false;
         doorLocations = new HashMap();
         doorFixtures = new ArrayList<Fixture>();
         doorArrayMap = new ArrayMap<String, Door>();

@@ -88,8 +88,8 @@ public class Trap {
 
     public void fireArrow(float x, float y) {
         trapSoundDelay = 1f;
-        trapDelay = 0.95f;
-        trapResetDelay = 2.2f;
+        trapDelay = 1.3f;
+        trapResetDelay = 3f;
         soundController.playSound("TrapOpens", 9, 9,0.1f);
         switch (this.direction) {
 
@@ -98,7 +98,7 @@ public class Trap {
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
-                        soundController.playSound("BowAttack1", 7, 6,0.1f);
+                        soundController.playSound("Whoosh", 7, 6,0.1f);
                     }
                 }, trapSoundDelay);
                 Timer.schedule(new Timer.Task() {
@@ -120,7 +120,7 @@ public class Trap {
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
-                        soundController.playSound("BowAttack1", 7, 6,0.1f);
+                        soundController.playSound("Whoosh", 7, 6,0.1f);
                     }
                 }, trapSoundDelay);
                 Timer.schedule(new Timer.Task() {
@@ -142,7 +142,7 @@ public class Trap {
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
-                        soundController.playSound("BowAttack1", 7, 6,0.1f);
+                        soundController.playSound("Whoosh", 7, 6,0.1f);
                     }
                 }, trapSoundDelay);
                 Timer.schedule(new Timer.Task() {
@@ -164,7 +164,7 @@ public class Trap {
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
-                        soundController.playSound("BowAttack1", 7, 6,0.1f);
+                        soundController.playSound("Whoosh", 7, 6,0.1f);
                     }
                 }, trapSoundDelay);
                 Timer.schedule(new Timer.Task() {

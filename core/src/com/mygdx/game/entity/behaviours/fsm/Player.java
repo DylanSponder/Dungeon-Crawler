@@ -27,7 +27,7 @@ public class Player {
     public boolean hasGreekFire, hasShield, hasTorch, torchApplied, hasChisel;
     public int greekFireUses;
     public boolean floorCleared, roomCleared, playerInput;
-    public float stateTime;
+    public float stateTime, timeSinceMoved;
     public PointLight playerLight;
 
     public Fixture playerDetectionFixture;
@@ -50,7 +50,7 @@ public class Player {
 
         this.playerBody = bf.createPlayerBody(world, PLAYER_X, PLAYER_Y);
 
-        this.playerLight = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.50f), 55, PLAYER_X, PLAYER_Y);
+        this.playerLight = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.45f), 45, PLAYER_X, PLAYER_Y);
         this.playerLight.attachToBody(this.playerBody);
         this.playerLight.setSoftnessLength(65);
 

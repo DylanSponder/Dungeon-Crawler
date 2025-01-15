@@ -28,8 +28,11 @@ public class CreateAssets {
     Texture greekfireItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Greekfire.png"));
     Texture greekfireSlotTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/GreekfireSlot.png"));
 
-    Texture heartItemTexture = new Texture(Gdx.files.internal("HellasDungeon/Levle/Objects/HeartItem.png"));
-    Texture halfheartItemTexture = new Texture(Gdx.files.internal("HellasDungeon/Levle/Objects/HalfHeartItem.png"));
+    Texture compassTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Compass.png"));
+    Texture compassArrowTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/CompassArrow.png"));
+
+    Texture heartItemTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/HeartItem.png"));
+    Texture halfheartItemTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/HalfHeartItem.png"));
 
     Texture coinItemTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/CoinItem.png"));
 
@@ -84,23 +87,34 @@ public class CreateAssets {
 
     public Sound potBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/potbreaking4.mp3"));
     public Sound skullBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/skullbreaking.mp3"));
-    public Sound boneBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/bonebreaking.mp3"));
+    public Sound boneBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/bonebreaking2.mp3"));
+    public Sound skullDeath = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/skulldeath.mp3"));
     public Sound spiderAttack = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/spiderattack.mp3"));
     public Sound spiderDeath = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/spiderdying2.mp3"));
     public Sound ghostDeath = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/ghostdying.mp3"));
-    public Sound playerHurt = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/playerhurt.mp3"));
 
+    public Sound playerHurt = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/playerhurt.mp3"));
     public Sound arrowHit = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/arrowhit.mp3"));
     public Sound swordSwing = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/swordswing.mp3"));
     public Sound swordSwing2 = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/swordswing2.mp3"));
     public Sound bowAttack = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/bowattack.mp3"));
-    public Sound bowAttack2 = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/bowattack2.mp3"));
+    public Sound whoosh = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/whoosh.mp3"));
     public Sound bowAttack3 = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/bowattack3.mp3"));
     public Sound trapOpening = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/trapopens2.mp3"));
     public Sound trapClosing = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/trapcloses2.mp3"));
 
+
+    public Sound chiselUsed = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/usechisel.mp3"));
     public Sound doorOpening = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/dooropen.mp3"));
     public Sound doorClosing = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/doorclose.mp3"));
+
+    public Sound footstep1 = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/footstep1.mp3"));
+    public Sound footstep2 = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/footstep2.mp3"));
+    public Sound footstep3 = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/footstep3.mp3"));
+
+    public Sound coin = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/coin.mp3"));
+    public Sound buy = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/buy.mp3"));
+    public Sound shop = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/shop2.mp3"));
 
     public Sound fireAmbient = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/Fire.mp3"));
 
@@ -457,13 +471,16 @@ public class CreateAssets {
     public Sprite coinItemSprite = new Sprite(coinItemTexture, 7,7);
     public Sprite potionItemSprite = new Sprite(potionItemTexture, 16, 16);
 
+    public Sprite heartItemSprite = new Sprite(heartItemTexture, 9, 8);
+    public Sprite halfHeartItemSprite = new Sprite(halfheartItemTexture, 9, 8);
+
     public Sprite torchItemSprite = new Sprite(torchItemTexture, 10, 15);
     public Sprite torchSlotSprite = new Sprite(torchSlotTexture, 10, 15);
 
     public Sprite shieldItemSprite = new Sprite(shieldItemTexture, 11, 11);
     public Sprite shieldSlotSprite = new Sprite(shieldSlotTexture, 11, 11);
 
-    public Sprite beltItemSprite = new Sprite(beltItemTexture, 13, 12);
+    public Sprite beltItemSprite = new Sprite(beltItemTexture, 13, 13);
     public Sprite beltSlotSprite = new Sprite(beltSlotTexture, 13, 13);
 
     public Sprite chiselItemSprite = new Sprite(chiselItemTexture, 13, 13);
@@ -471,6 +488,10 @@ public class CreateAssets {
 
     public Sprite greekfireItemSprite = new Sprite(greekfireItemTexture, 14, 15);
     public Sprite greekfireSlotSprite = new Sprite(greekfireSlotTexture, 13, 13);
+
+    public Sprite compassSprite = new Sprite(compassTexture, 27,27);
+    public Sprite compassArrowSprite = new Sprite(compassArrowTexture, 13,22);
+   // public Sprite emptyCompass = new Sprite()
 
     Sprite shopkeeperSprite = new Sprite(shopkeeperTexture, 0,0, 16, 16);
     Sprite skullSprite = new Sprite(skullTexture, 176,64, 16, 16);

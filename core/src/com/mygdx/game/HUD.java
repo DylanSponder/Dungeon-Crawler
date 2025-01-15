@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -15,17 +18,22 @@ import static com.mygdx.game.DungeonCrawler.menuStage;
 public class HUD {
   public Stage stage;
   public Stage subStage;
+  public Group itemGroup, compassGroup;
   int topPadding;
   public HealthBar healthBar;
   public PotionSlotInventory inventory;
-  public VerticalGroup itemVerticalGroup;
+  public VerticalGroup itemVerticalGroup, compassVerticalGroupSpacer, compassVerticalGroup;
   private Label moneyAmount;
   private Table moneyTable, itemTable;
-  private Image moneySymbol;
+  private Container compassSpacerContainer, compassContainer;
+  public static RotateByAction rotateArrow;
+  public static RepeatAction repeatAction;
+  public static Image moneySymbol, compassImage, compassArrowImage;
   public int totalGold;
   public String totalGoldAsString;
   public Label winWords, startWords, roomWords;
   private float hudFade;
+  public static TextureRegionDrawable compassDrawable, compassArrowDrawable;
   public static TextureRegionDrawable torchSlot, beltSlot, shieldSlot, greekfireSlot, chiselSlot;
   public static TextureRegionDrawable torchItem, beltItem, shieldItem, greekfireItem, chiselItem;
   public static Image torchSlotImage, beltSlotImage, shieldSlotImage, greekfireSlotImage, chiselSlotImage;
@@ -42,21 +50,24 @@ public class HUD {
     hudFade = 1f;
 
     Table table = new Table();
-    itemVerticalGroup = new VerticalGroup();
-
-    Group itemGroup = new Group();
-
-    itemTable = new Table();
-    itemVerticalGroup.addActor(itemTable);
-    itemVerticalGroup.columnLeft();
-
-    itemVerticalGroup.padTop(15);
-    itemVerticalGroup.padRight(45);
-
-    itemGroup.addActor(itemVerticalGroup);
-
     table.top();
     table.setFillParent(true);
+
+
+
+    //compassGroup.addActor(compassTable);
+
+
+
+    itemGroup = new Group();
+    itemTable = new Table();
+    itemVerticalGroup = new VerticalGroup();
+    itemVerticalGroup.addActor(itemTable);
+    itemVerticalGroup.columnLeft();
+    itemVerticalGroup.padTop(15);
+    itemVerticalGroup.padRight(30);
+    itemGroup.addActor(itemVerticalGroup);
+
 
     CreateAssets tx = CreateAssets.getInstance();
 
@@ -86,8 +97,6 @@ public class HUD {
     table.add(itemGroup);
    // test.padTop(100);
 
-    table.padBottom(100);
-
     Sprite healthSymbol = new Sprite(tx.heartHUDTexture, 0, 0, 16, 16);
     Sprite healthSymbolHalf = new Sprite(tx.heartHUDTexture, 32, 0, 16, 16);
     Sprite healthSymbolEmpty = new Sprite(tx.heartHUDTexture, 64, 0, 16, 16);
@@ -110,7 +119,85 @@ public class HUD {
     table.add(inventory).padLeft(spacing-(potionSymbol.getWidth()*3)).padRight(spacing);//.align(Align.top);//.spaceLeft(spacing-potionSymbol.getWidth());
     table.add(moneyTable);
 
+    //create the compass that guides players to the exit door for that room
+    //TODO finish implementation
+
+    compassGroup = new Group();
+    compassContainer = new Container();
+    compassSpacerContainer = new Container();
+    compassVerticalGroupSpacer = new VerticalGroup();
+    compassVerticalGroup = new VerticalGroup();
+
+    compassVerticalGroup.columnRight();
+    compassVerticalGroup.padTop(55);
+    compassVerticalGroup.padBottom(0);
+    compassVerticalGroup.padLeft(25);
+
+    compassVerticalGroupSpacer.columnRight();
+    compassVerticalGroupSpacer.padTop(0);
+    compassVerticalGroupSpacer.padBottom(0);
+    compassVerticalGroupSpacer.padLeft(25);
+
+    compassDrawable = new TextureRegionDrawable(tx.compassSprite);
+    compassImage = new Image(compassDrawable);
+
+    compassArrowDrawable = new TextureRegionDrawable(tx.compassArrowSprite);
+    compassArrowImage = new Image(compassArrowDrawable);
+
+    compassVerticalGroupSpacer.addActor(compassSpacerContainer);
+   // compassVerticalGroupSpacer.addActor(compassImage);
+    compassVerticalGroup.addActor(compassContainer);
+    compassVerticalGroup.addActor(compassImage);
+    compassVerticalGroup.addActor(compassArrowImage);
+
+
+
+    //compassContainer.setRotation();
+
+    compassGroup.addActor(compassVerticalGroupSpacer);
+    compassGroup.addActor(compassVerticalGroup);
+
+    compassArrowImage.setOrigin(compassArrowImage.getWidth()/2,compassArrowImage.getHeight()/2);
+
+    MoveToAction moveToCompass = new MoveToAction();
+    moveToCompass.setPosition(compassImage.getX() + compassImage.getWidth()/2 - compassImage.getWidth()/3 + 1.5f,compassImage.getY() - 55 - compassImage.getHeight() + 2.5f);
+
+    rotateArrow = new RotateByAction();
+    rotateArrow.setAmount(1);
+
+    repeatAction = new RepeatAction();
+   // repeatAction.setCount(100000);
+
+
+    compassArrowImage.addAction(moveToCompass);
+
+    //compassArrowImage.addAction(rotateArrow);
+    //compassArrowImage.addAction(repeatAction);
+    SpriteBatch batch = new SpriteBatch();
+
+   // compassArrowImage.setRotation(60);
+
+
+    //compassVerticalGroupSpacer.align(Align.bottom);
+
+
+    //compassImage.setAlign(Align.bottom);
+    //compassTable.padTop(1000);
+    //table.add(compassImage).align(Align.bottom);
+
+  //  table.add();
+   // compassGroup.addActor(compassImage);
+    table.add(compassGroup);
+
+
+
     menuStage.addActor(table);
+  }
+
+  public void rotateCompassArrow() {
+    CreateAssets tx = CreateAssets.getInstance();
+
+
   }
 
   public void addItem(int type) {
@@ -119,9 +206,8 @@ public class HUD {
 
     //this is super hacky but works like a charm
     //we create a new Image with the texture of the item
-    //then swap it with the slot it belongs to
+    //then swap it with its respective slot
     //and finally just delete the slot image
-    //(there has got to be a more efficient way to do this)
 
     switch (type) {
       case 1:
@@ -181,6 +267,8 @@ public class HUD {
     roomWords = new Label("ROOM CLEARED!", new LabelStyle(DungeonCrawler.defaultFont, color));
     winTable.add(roomWords);
     subStage.addActor(winTable);
+
+    Compass.showCompass();
   }
 
   public void winLevel() {

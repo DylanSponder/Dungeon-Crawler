@@ -272,19 +272,16 @@ public class GameInputProcessor implements InputProcessor {
         if (player.buyingStock){
 
             if (keycode == Input.Keys.NUM_1) {
-                //String amount = player.shopkeeper.inventory.get(1).toString();
-                //int x = Integer.parseInt(amount);
-                //System.out.println(x);
-
                 ShopItem item = (ShopItem) player.shopkeeper.inventory.get(0);
 
                 int money = Integer.parseInt(hud.totalGoldAsString);
 
                 if (money >= item.cost && !item.purchased) {
 
-                    System.out.println(item.kind + "<- THE TYPE OF ITEM");
-
                     item.purchased = true;
+
+                    soundController.playSound("Buy",10,10,0.1f);
+
                     switch (item.kind) {
 
                         case "WINE": {
@@ -328,8 +325,6 @@ public class GameInputProcessor implements InputProcessor {
 
                     hud.updateGold(item.cost, false);
 
-                    System.out.println(item.kind);
-                    System.out.println(item.index);
                     //item.amount--;
 
                     player.shopkeeper.inventoryText.remove(0);
@@ -341,16 +336,16 @@ public class GameInputProcessor implements InputProcessor {
             }
 
             if (keycode == Input.Keys.NUM_2) {
-                //String amount = player.shopkeeper.inventory.get(1).toString();
-                //int x = Integer.parseInt(amount);
-                //System.out.println(x);
                 ShopItem firstItem = (ShopItem) player.shopkeeper.inventory.get(0);
                 ShopItem item = (ShopItem) player.shopkeeper.inventory.get(1);
 
                 int money = Integer.parseInt(hud.totalGoldAsString);
 
                 if (money >= item.cost && !item.purchased) {
+
                     item.purchased = true;
+
+                    soundController.playSound("Buy",10,10,0.1f);
 
                     switch (item.kind) {
 
@@ -396,8 +391,6 @@ public class GameInputProcessor implements InputProcessor {
 
                     hud.updateGold(item.cost, false);
 
-                    System.out.println(item.kind);
-                    System.out.println(item.index);
                     //item.amount--;
 
                     //	x--;
@@ -417,9 +410,6 @@ public class GameInputProcessor implements InputProcessor {
             }
 
             if (keycode == Input.Keys.NUM_3) {
-                //String amount = player.shopkeeper.inventory.get(1).toString();
-                //int x = Integer.parseInt(amount);
-                //System.out.println(x);
                 ShopItem firstItem = (ShopItem) player.shopkeeper.inventory.get(0);
                 ShopItem secondItem = (ShopItem) player.shopkeeper.inventory.get(1);
                 ShopItem item = (ShopItem) player.shopkeeper.inventory.get(2);
@@ -428,6 +418,8 @@ public class GameInputProcessor implements InputProcessor {
 
                 if (money >= item.cost && !item.purchased) {
                     item.purchased = true;
+
+                    soundController.playSound("Buy",10,10,0.1f);
 
                     switch (item.kind) {
 
@@ -469,18 +461,17 @@ public class GameInputProcessor implements InputProcessor {
 
                     hud.updateGold(item.cost, false);
 
-                    System.out.println(item.kind);
-                    System.out.println(item.index);
                     //item.amount--;
 
                     //	x--;
-                    if (firstItem.purchased && !secondItem.purchased) {
+
+                    if (firstItem.purchased) {
                         player.shopkeeper.inventoryText.remove(2);
                         player.shopkeeper.inventoryText.remove(2);
                     }
-                    else if (secondItem.purchased && !firstItem.purchased) {
-                        player.shopkeeper.inventoryText.remove(0);
-                        player.shopkeeper.inventoryText.remove(0);
+                    else if (secondItem.purchased) {
+                        player.shopkeeper.inventoryText.remove(2);
+                        player.shopkeeper.inventoryText.remove(2);
                     }
                     else {
                         player.shopkeeper.inventoryText.remove(4);
@@ -508,36 +499,37 @@ public class GameInputProcessor implements InputProcessor {
             }
         }
 
-        if (keycode == Input.Keys.C && player.hasChisel && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking && !playerUsingChisel)) {
+
+        if ((keycode == 31 && player.hasChisel) && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking && !playerUsingChisel)) {
             float playerChiselUseSpeedInSeconds = 0.85f;
             playerUsingChisel = true;
-
+            System.out.println("SEXY BANA1NA");
             if (moveDown || player.facing == 3) {
                 tx.playerTextureRegion = tx.playerAttackDown;
                 chiselBody = bf.createChiselBody(world, player.playerBody, -2f, -9.5f);
                 chiselHitbox = bf.createChiselHitbox(chiselBody, false);
-                chiselHitbox.setUserData("DownChisel");
+                chiselHitbox.setUserData("Chisel");
                 chiselHitbox.setSensor(true);
             }
-            if (moveUp || player.facing == 1) {
+            else if (moveUp || player.facing == 1) {
                 tx.playerTextureRegion = tx.playerAttackUp;
                 chiselBody = bf.createChiselBody(world, player.playerBody, -3f, 12.5f);
                 chiselHitbox = bf.createChiselHitbox(chiselBody, false);
-                chiselHitbox.setUserData("UpChisel");
+                chiselHitbox.setUserData("Chisel");
                 chiselHitbox.setSensor(true);
             }
-            if (moveLeft || player.facing == 4) {
+            else if (moveLeft || player.facing == 4) {
                 tx.playerTextureRegion = tx.playerAttackLeft;
                 chiselBody = bf.createChiselBody(world, player.playerBody, -11.5f, -2f);
                 chiselHitbox = bf.createChiselHitbox(chiselBody, true);
-                chiselHitbox.setUserData("LeftChisel");
+                chiselHitbox.setUserData("Chisel");
                 chiselHitbox.setSensor(true);
             }
-            if (moveRight || player.facing == 2) {
+            else if (moveRight || player.facing == 2) {
                 tx.playerTextureRegion = tx.playerAttackRight;
                 chiselBody = bf.createChiselBody(world, player.playerBody, 12.5f, -2f);
                 chiselHitbox = bf.createChiselHitbox(chiselBody, true);
-                chiselHitbox.setUserData("RightChisel");
+                chiselHitbox.setUserData("Chisel");
                 chiselHitbox.setSensor(true);
             }
 
@@ -548,6 +540,8 @@ public class GameInputProcessor implements InputProcessor {
             PLAYER_HORIZONTAL_SPEED = 0;
             PLAYER_VERTICAL_SPEED = 0;
             player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
+            
+
 
             Timer.schedule(new Timer.Task() {
                 @Override
@@ -584,19 +578,19 @@ public class GameInputProcessor implements InputProcessor {
                 shieldHitbox = bf.createShieldHitbox(shieldBody, false);
                 shieldHitbox.setUserData("DownShield");
             }
-            if (moveUp || player.facing == 1) {
+            else if (moveUp || player.facing == 1) {
                 tx.playerTextureRegion = tx.playerAttackUp;
                 shieldBody = bf.createShieldBody(world, player.playerBody, -3f, 12.5f);
                 shieldHitbox = bf.createShieldHitbox(shieldBody, false);
                 shieldHitbox.setUserData("UpShield");
             }
-            if (moveLeft || player.facing == 4) {
+            else if (moveLeft || player.facing == 4) {
                 tx.playerTextureRegion = tx.playerAttackLeft;
                 shieldBody = bf.createShieldBody(world, player.playerBody, -11.5f, -2f);
                 shieldHitbox = bf.createShieldHitbox(shieldBody, true);
                 shieldHitbox.setUserData("LeftShield");
             }
-            if (moveRight || player.facing == 2) {
+            else if (moveRight || player.facing == 2) {
                 tx.playerTextureRegion = tx.playerAttackRight;
                 shieldBody = bf.createShieldBody(world, player.playerBody, 12.5f, -2f);
                 shieldHitbox = bf.createShieldHitbox(shieldBody, true);
@@ -638,10 +632,10 @@ public class GameInputProcessor implements InputProcessor {
         if (keycode == 13) {
             //System.out.println("PLAYER X: " + player.playerBody.getPosition().x);
             //System.out.println(" PLAYER Y: " + player.playerBody.getPosition().y);
-            System.out.println(GenerateLevel.init.roomList.get(player.currentRoom).x1);
-            System.out.println(GenerateLevel.init.roomList.get(player.currentRoom).y1);
-            System.out.println(GenerateLevel.init.roomList.get(player.currentRoom).doorLocations);
-            System.out.println(GenerateLevel.init.roomList.get(player.currentRoom + 1).doorLocations);
+            System.out.println("Current room X" + GenerateLevel.init.roomList.get(player.currentRoom).x1);
+            System.out.println("Current room Y" +GenerateLevel.init.roomList.get(player.currentRoom).y1);
+            System.out.println("Current room door locations" +GenerateLevel.init.roomList.get(player.currentRoom).doorLocations);
+            System.out.println("Next room door locations" +GenerateLevel.init.roomList.get(player.currentRoom + 1).doorLocations);
         }
 
         //if player presses space attack with the swordBody

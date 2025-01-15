@@ -5,6 +5,7 @@ import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.ai.steer.behaviors.*;
 import com.badlogic.gdx.ai.steer.utils.rays.RayConfigurationBase;
 import com.badlogic.gdx.ai.utils.Ray;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -43,11 +44,12 @@ public class Enemy {
     public HUD hud;
     public Skull skull;
     public int room;
-    public boolean playerSighted, alerted, playerInRange, rayCastable, inRespawnRange;
+    public boolean playerSighted, alerted, playerInRange, rayCastable, inRespawnRange, lostSight;
     public Ray playerDetectionRay;
     public int sightCounter;
-    public Text alertMessage;
+    public Text alertMessage, lostSightMessage;
     public float timeSinceAlerted;
+    public SpriteBatch sightBatch;
 
 
     public void createEnemy(int enemyID) {

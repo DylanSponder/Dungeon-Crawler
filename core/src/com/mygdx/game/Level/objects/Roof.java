@@ -22,7 +22,7 @@ public class Roof {
 
         BodyFactory bodyFactory = new BodyFactory();
 
-        roofBody = bodyFactory.createRoofHitbox(world, x, y, type, ext);
+        roofBody = bodyFactory.createRoofHitbox(world, x, y, type, ext, upDown);
 
         this.ruined = ruined;
 

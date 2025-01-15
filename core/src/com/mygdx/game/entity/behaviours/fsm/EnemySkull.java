@@ -39,6 +39,8 @@ public class EnemySkull extends Enemy {
 
         this.alertMessage = new Text(DungeonCrawler.defaultFont,"!", Color.RED,true,1f,0.0045f,false, false, null, 0);
 
+        this.lostSightMessage = new Text(DungeonCrawler.defaultFont,"?", Color.YELLOW,true,1f,0.0045f,false, false, null, 0);
+
         this.rayCastable = false;
 
         //enemyID = 1;
@@ -57,9 +59,9 @@ public class EnemySkull extends Enemy {
         this.enemyBody = bodyFactory.createSimpleDynamicBody(world, x, y);
         this.enemyDetectionBody = bodyFactory.createSimpleDynamicBody(world, x, y);
 
-        this.enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 6f);
+        this.enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 5.95f);
 
-        this.enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 120f);
+        this.enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 80f);
 
         //enemyDetectionRadius.setSensor(true);
 

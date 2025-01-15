@@ -16,7 +16,7 @@ public class Potion {
     public float potionX, potionY;
     private World world;
     public Body potionBody;
-    public Fixture potHitbox;
+    public Fixture potionHitbox;
     public boolean potionCreated;
     public int type;
     public PointLight potionLight;

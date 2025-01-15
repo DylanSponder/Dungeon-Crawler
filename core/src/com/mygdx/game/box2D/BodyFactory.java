@@ -21,15 +21,20 @@ public class BodyFactory {
         return body;
     }
 
-    public Body createRoofHitbox(World world, float x, float y, int type, int ext) {
+    public Body createRoofHitbox(World world, float x, float y, int type, int ext, boolean upDown) {
         PolygonShape shape = new PolygonShape();
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
         switch (type) {
             case 0:
-                shape.setAsBox(16, 16);
-                bodyDef.position.set(x ,y);
+                if (upDown) {
+                    shape.setAsBox(26, 40);
+                    bodyDef.position.set(x + 32 ,y + 48);
+                } else {
+                    shape.setAsBox(40, 26);
+                    bodyDef.position.set(x - 48 ,y + 32);
+                }
                 break;
             case 1:
                 shape.setAsBox(26, 24 + (ext * 8));
@@ -217,7 +222,7 @@ public class BodyFactory {
         body = world.createBody(bodyDef);
         CircleShape shape = new CircleShape();
         shape.setRadius(8.4f);
-        Fixture candFix = body.createFixture(shape, 1.0f);
+        Fixture candFix = body.createFixture(shape, 0.8f);
         candFix.setSensor(true);
         shape.dispose();
         return body;
@@ -231,8 +236,8 @@ public class BodyFactory {
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         CircleShape shape = new CircleShape();
-        shape.setRadius(8f);
-        Fixture cobFixture = body.createFixture(shape, 1.0f);
+        shape.setRadius(7.5f);
+        Fixture cobFixture = body.createFixture(shape, 0.8f);
         shape.dispose();
         cobFixture.setSensor(true);
         return body;
@@ -275,7 +280,8 @@ public class BodyFactory {
         body = world.createBody(bodyDef);
         CircleShape shape = new CircleShape();
         shape.setRadius(5.5f);
-        Fixture potionFixture = body.createFixture(shape, 1.0f);
+
+        Fixture potionFixture = body.createFixture(shape, 0.8f);
         potionFixture.setSensor(true);
         shape.dispose();
         return body;
@@ -290,7 +296,9 @@ public class BodyFactory {
         body = world.createBody(bodyDef);
         CircleShape shape = new CircleShape();
         shape.setRadius(3.5f);
-        Fixture coinFixture = body.createFixture(shape, 1.0f);
+
+        Fixture coinFixture = body.createFixture(shape, 0.8f);
+        coinFixture.setUserData("Coin");
         coinFixture.setSensor(true);
         shape.dispose();
         return body;
@@ -306,7 +314,7 @@ public class BodyFactory {
         PolygonShape boneShape = new PolygonShape();
         boneShape.setAsBox(5f, 2.5f);
         //was 5.5, 3.5
-        Fixture boneHitbox = boneBody.createFixture(boneShape, 0f);
+        Fixture boneHitbox = boneBody.createFixture(boneShape, 0.8f);
         boneShape.dispose();
         boneHitbox.setUserData("Bone");
         boneHitbox.setSensor(true);
@@ -324,10 +332,10 @@ public class BodyFactory {
         CircleShape webShape = new CircleShape();
         //webShape.setAsBox(8f, 8f);
         webShape.setRadius(8f);
-        Fixture webHitbox = webBody.createFixture(webShape, 0f);
+        Fixture webHitbox = webBody.createFixture(webShape, 0.8f);
         webShape.dispose();
-        webHitbox.setUserData("Bone");
         webHitbox.setSensor(true);
+        webHitbox.setUserData("Web");
         return webBody;
     }
 
@@ -349,10 +357,10 @@ public class BodyFactory {
         else {
             swordShape.setAsBox(2.5f, 5.5f);
         }
-        Fixture swordHitbox = sword.createFixture(swordShape, 1.0f);
+        Fixture swordHitbox = sword.createFixture(swordShape, 0.8f);
         swordShape.dispose();
+        swordHitbox.setSensor(true);
         swordHitbox.setUserData("Sword");
-        swordHitbox.isSensor();
         return swordHitbox;
     }
 
@@ -376,6 +384,7 @@ public class BodyFactory {
         }
         Fixture shieldHitbox = shield.createFixture(shieldShape, 1.0f);
         shieldShape.dispose();
+        shieldHitbox.setUserData("Shield");
         return shieldHitbox;
     }
 
@@ -386,6 +395,7 @@ public class BodyFactory {
         bodyDef.position.set(player.getPosition().x+x, player.getPosition().y+y);
         // bodyDef.fixedRotation = false;
         body = world.createBody(bodyDef);
+        body.setUserData("Chisel");
         return body;
     }
 
@@ -397,9 +407,10 @@ public class BodyFactory {
         else {
             chiselShape.setAsBox(2.5f, 6f);
         }
-        Fixture chiselHitbox = chisel.createFixture(chiselShape, 1.0f);
+        Fixture chiselHitbox = chisel.createFixture(chiselShape, 0.8f);
         chiselShape.dispose();
         chiselHitbox.setSensor(true);
+        chiselHitbox.setUserData("Chisel");
         return chiselHitbox;
     }
 
@@ -436,7 +447,7 @@ public class BodyFactory {
     public Fixture createSkullHitbox(Body body, float r) {
         CircleShape skullShape = new CircleShape();
         skullShape.setRadius(r);
-        Fixture skullHitbox = body.createFixture(skullShape, 1.0f);
+        Fixture skullHitbox = body.createFixture(skullShape, 0.8f);
         skullShape.dispose();
         skullHitbox.setUserData("SkullHitbox");
         skullHitbox.setSensor(true);
@@ -465,7 +476,7 @@ public class BodyFactory {
     public Fixture createSpawnerDetectionRadius(Body body, float r){
         CircleShape enemyShape = new CircleShape();
         enemyShape.setRadius(r);
-        Fixture spawner = body.createFixture(enemyShape, 1.0f);
+        Fixture spawner = body.createFixture(enemyShape, 0.8f);
         enemyShape.dispose();
         spawner.setUserData("Spawner");
         spawner.setSensor(true);

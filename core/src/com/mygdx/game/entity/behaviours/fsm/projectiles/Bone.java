@@ -62,7 +62,7 @@ public class Bone {
         this.boneBody.setAngularVelocity(8f);
 
         if (!aimed) {
-            this.vecMulti = MathUtils.random(20, 40);
+            this.vecMulti = MathUtils.random(25, 40);
 
             this.outVector = Box2DSteeringUtils.angleToVector(this.outVector, this.orientation);
 
