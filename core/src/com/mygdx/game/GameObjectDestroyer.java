@@ -13,6 +13,8 @@ import static com.mygdx.game.DungeonCrawler.*;
 
 public class GameObjectDestroyer {
 
+    //this class is currently unused - it is intended to save space on the main DungeonCrawler.java file
+    //and allow for easy new destructible objects to be created
     public void destroyObject(ArrayMap<Object, Object> map,
                               ArrayList brokenList,
                               ArrayList objectList,

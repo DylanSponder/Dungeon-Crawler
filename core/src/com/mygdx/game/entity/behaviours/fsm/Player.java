@@ -40,7 +40,7 @@ public class Player {
         hasShield = false;
         hasTorch = false;
         torchApplied = false;
-        hasChisel = true;
+        hasChisel = false;
     }
 
     public Body createPlayer(World world, float PLAYER_X, float PLAYER_Y, RayHandler rayHandler){
@@ -50,11 +50,9 @@ public class Player {
 
         this.playerBody = bf.createPlayerBody(world, PLAYER_X, PLAYER_Y);
 
-        this.playerLight = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.45f), 45, PLAYER_X, PLAYER_Y);
+        this.playerLight = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.55f), 45, PLAYER_X, PLAYER_Y);
         this.playerLight.attachToBody(this.playerBody);
         this.playerLight.setSoftnessLength(65);
-
-        //this.playerDetectionFixture = bf.createEnemyDetectionRadius(playerBody,150f);
 
         this.playerB2D = new PlayerBox2DSteeringEntity(playerBody,10);
 
@@ -68,20 +66,4 @@ public class Player {
         batch.draw(playerSprite,x,y);
 
     }
-
-    /*
-    public RaycastObstacleAvoidance sightEnemy(){
-
-        RayConfigurationBase<Vector2>[] localRayConfigurations = new RayConfigurationBase[] {
-                new CentralRayWithWhiskersConfiguration<Vector2>(playerAI, 20f,
-                        15f, 15 * MathUtils.degreesToRadians)};
-        rayConfigurations = localRayConfigurations;
-
-        RaycastCollisionDetector<Vector2> raycastCollisionDetector = new EnemyBox2DRaycastCollisionDetector(DungeonCrawler.world);
-        raycastObstacleAvoidanceSB = new RaycastObstacleAvoidance<Vector2>(enemyAI, rayConfigurations[0],
-                raycastCollisionDetector, 200);
-
-        return raycastObstacleAvoidanceSB;
-    }
-     */
 }

@@ -36,8 +36,6 @@ public class Bone {
         } else {
             if (!multiplied) {
                 this.orientationVector = orientation;
-                        //MathUtils.random(-MathUtils.PI, MathUtils.PI);
-                System.out.println(MathUtils.random(-MathUtils.PI, MathUtils.PI));
             }
             else {
                 float testAngle = MathUtils.random(-MathUtils.PI, MathUtils.PI);
@@ -57,8 +55,6 @@ public class Bone {
 
         this.boneBody.setUserData("Bone");
 
-        //this.boneBody.applyLinearImpulse(0,0,0,0,true);
-
         this.boneBody.setAngularVelocity(8f);
 
         if (!aimed) {
@@ -75,17 +71,13 @@ public class Bone {
             this.boneBody.setLinearVelocity(this.outVector.x*vecMulti,this.outVector.y*vecMulti);
         }
 
-        //this.webHitbox = bodyFactory.createBone(world, boneBody, skullBody.getPosition().x, skullBody.getPosition().y);
-
-
-
         this.boneCreated = true;
         Body temp = this.boneBody;
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
                 if (!boneBodiesCollided.contains(temp)) {
-               //     boneBodiesCollided.add(temp);
+                    //destroy bone - may need this in future, currently unused
                 }
                 }
             },5);

@@ -130,11 +130,6 @@ public class GameContactListener implements ContactListener {
 
                         if (e.ENEMY_HEALTH < 1) {
                             if (!deadEnemyBodies.contains(e.enemyBody)) {
-                                //arrowBodiesCollided.add(fa.getBody());
-
-
-
-                                System.out.println(e.enemyID);
 
                                 if (e.enemyID == 1){
                                     for (EnemySkull skull2 : enemySkulls) {
@@ -186,7 +181,6 @@ public class GameContactListener implements ContactListener {
                                 //init.roomList.get(player.currentRoom).doorLocations.get()
                                 switch (GenerateLevel.path.get(player.currentRoom+1)){
                                     case 1:
-                                        System.out.println("1 BABBYYBYBYBYBYB");
                                         String topLeft = init.roomList.get(player.currentRoom).doorLocations.get("TopLeft");
                                         String[] topLeftXY = topLeft.split(",");
                                         String topLeftX = topLeftXY[0].toString();
@@ -194,13 +188,10 @@ public class GameContactListener implements ContactListener {
                                         Compass.calculateAngle(Integer.parseInt(topLeftX), Integer.parseInt(topLeftY));
                                         break;
                                     case 2:
-                                        System.out.println("2 BABBYYBYBYBYBYB");
                                         break;
                                     case 3:
-                                        System.out.println("3 BABBYYBYBYBYBYB");
                                         break;
                                     case 4:
-                                        System.out.println("4 BABBYYBYBYBYBYB");
                                         break;
                                 }
 
@@ -266,8 +257,6 @@ public class GameContactListener implements ContactListener {
                         if (e.ENEMY_HEALTH < 1) {
                             if (!deadEnemyBodies.contains(e.enemyBody)) {
 
-                                System.out.println(e.enemyID);
-
                                 if (e.enemyID == 1) {
                                     for (EnemySkull skull2 : enemySkulls) {
                                         if (skull2.enemyBody == collidee.getBody()) {
@@ -309,58 +298,46 @@ public class GameContactListener implements ContactListener {
                             if (init.roomList.get(e.room).enemyCounter < 1) {
                                 init.roomList.get(player.currentRoom).unlockAllDoors(world, init.roomList.get(player.currentRoom), false);
                                 player.roomCleared = true;
+                                if (init.roomList.get(player.currentRoom).index < GenerateLevel.numRooms) {
+                                    Compass.showCompass();
 
-                                Compass.showCompass();
-
-                                switch (GenerateLevel.path.get(player.currentRoom+1)){
-                                    case 1:
-                                        System.out.println("DOORTOP");
-
-                                        for (Door d : init.roomList.get(player.currentRoom).doors) {
-                                            if (Objects.equals(d.doorName, "TopLeft")) {
-                                                Compass.calculateAngle(d.doorX, d.doorY);
-                                                System.out.println("DOOR X " + d.doorX);
-                                                System.out.println("DOOR Y" + d.doorY);
+                                    switch (GenerateLevel.path.get(player.currentRoom + 1)) {
+                                        case 1:
+                                            for (Door d : init.roomList.get(player.currentRoom + 1).doors) {
+                                                if (Objects.equals(d.doorName, "BottomLeft")) {
+                                                    Compass.calculateAngle(d.doorX, d.doorY);
+                                                }
                                             }
-                                        }
 
-                                        break;
-                                    case 2:
-                                        System.out.println("DOORRIGHT");
-                                        for (Door d : init.roomList.get(player.currentRoom).doors) {
-                                            if (Objects.equals(d.doorName, "UpperRight")) {
-                                                Compass.calculateAngle(d.doorX, d.doorY);
-                                                System.out.println("DOOR X " + d.doorX);
-                                                System.out.println("DOOR Y" + d.doorY);
+                                            break;
+                                        case 2:
+                                            for (Door d : init.roomList.get(player.currentRoom).doors) {
+                                                if (Objects.equals(d.doorName, "UpperRight")) {
+                                                    Compass.calculateAngle(d.doorX, d.doorY);
+                                                }
                                             }
-                                        }
-                                        break;
-                                    case 3:
-                                        System.out.println("DOORBOTTOM");
-                                        for (Door d : init.roomList.get(player.currentRoom).doors) {
-                                            if (Objects.equals(d.doorName, "BottomLeft")) {
-                                                Compass.calculateAngle(d.doorX, d.doorY);
-                                                System.out.println("DOOR X " + d.doorX);
-                                                System.out.println("DOOR Y" + d.doorY);
+                                            break;
+                                        case 3:
+                                            for (Door d : init.roomList.get(player.currentRoom + 1).doors) {
+                                                if (Objects.equals(d.doorName, "TopLeft")) {
+                                                    Compass.calculateAngle(d.doorX, d.doorY);
+                                                }
                                             }
-                                        }
 
-                                        break;
-                                    case 4:
-                                        System.out.println("DOORLEFT");
-                                        for (Door d : init.roomList.get(player.currentRoom).doors) {
-                                            if (Objects.equals(d.doorName, "UpperLeft")) {
-                                                Compass.calculateAngle(d.doorX, d.doorY);
-                                                System.out.println("DOOR X " + d.doorX);
-                                                System.out.println("DOOR Y" + d.doorY);
+                                            break;
+                                        case 4:
+                                            for (Door d : init.roomList.get(player.currentRoom).doors) {
+                                                if (Objects.equals(d.doorName, "UpperLeft")) {
+                                                    Compass.calculateAngle(d.doorX, d.doorY);
+                                                }
                                             }
-                                        }
-                                        break;
+                                            break;
+                                    }
+                                    //DungeonCrawler.roomClear.play();
+                                    //DungeonCrawler.roomClear.dispose();
                                 }
-                                //DungeonCrawler.roomClear.play();
-                                //DungeonCrawler.roomClear.dispose();
+                                break;
                             }
-                            break;
                         }
                     }
                 }
@@ -533,26 +510,8 @@ public class GameContactListener implements ContactListener {
                     webBodiesCollected.add(collider.getBody());
                 }
             }
-                           /*else if (collider.getBody().getUserData() == "Enemy") {
-                    player.playerBody.applyLinearImpulse(collider.getBody().getLinearVelocity().x * 50, collider.getBody().getLinearVelocity().y * 50, 0, 0, true);
-                    collider.getBody().applyLinearImpulse(-collidee.getBody().getLinearVelocity().x * 2, -collidee.getBody().getLinearVelocity().y * 2, 0, 0, true);
-
-                } else if (collidee.getBody().getUserData() == "Enemy") {
-                    player.playerBody.applyLinearImpulse(collidee.getBody().getLinearVelocity().x * 50, collidee.getBody().getLinearVelocity().y * 50, 0, 0, true);
-
-                    if (collider.getBody().getLinearVelocity().x < 10 && collider.getBody().getLinearVelocity().y < 10) {
-                        collider.getBody().applyLinearImpulse(-collidee.getBody().getLinearVelocity().x, -collidee.getBody().getLinearVelocity().y + 150, 0, 0, true);
-                    } else {
-                        collider.getBody().applyLinearImpulse(-collidee.getBody().getLinearVelocity().x + 150, -collidee.getBody().getLinearVelocity().y + 150, 0, 0, true);
-                        }
-                    }
-
-                 */
         }
 
-
-            //bone branch needs to be revisited - faulty logic is causing bones not to get destroyed somewhere here
-            //split into two if-statements
             if (((colliderStr == "Player" && collideeStr == "Enemy")
                     || (colliderStr == "Enemy" && collideeStr == "Player"))
             ) {
@@ -589,7 +548,7 @@ public class GameContactListener implements ContactListener {
                  //   System.out.println("not sensor");
                     for (EnemySkull e : enemySkulls) {
                         if (e.enemyBody == collidee.getBody()) {
-                            System.out.println(colliderStr + " " + collideeStr);
+                            //System.out.println(colliderStr + " " + collideeStr);
                             e.inRespawnRange = true;
                         }
                     }
@@ -600,10 +559,9 @@ public class GameContactListener implements ContactListener {
           //  System.out.println("in range");
             if (colliderStr == "Enemy") {
                 if (collider.getUserData() != "Proximity") {
-                  //  System.out.println("not sensor");
                     for (EnemySkull e : enemySkulls) {
                         if (e.enemyBody == collider.getBody()) {
-                            System.out.println(colliderStr + " " + collideeStr);
+                            //System.out.println(colliderStr + " " + collideeStr);
                             e.inRespawnRange = true;
                         }
                     }
@@ -640,9 +598,6 @@ public class GameContactListener implements ContactListener {
 
         }
 
-
-
-            //TODO: finish switch statement - ~40% done
             switch (colliderStr) {
 
                 case "TrapArea":
@@ -704,24 +659,7 @@ public class GameContactListener implements ContactListener {
                     if (collideeStr == "Skull") {
 
                     }
-                /*
-                if (fbAsString == "Skull") {
-                    //TODO Yeah this doesn't work. Bodies don't actually collide with other bodies when they are added to the world
-                    //TODO Use b2::Contact instead
-                    // check for coordinates instead
-                    if (!deadEnemyBodies.contains(fa.getBody())) {
-                        //arrowBodiesCollided.add(fa.getBody());
-                        deadEnemyBodies.add(fa.getBody());
-                    }
-                    if (!deadEnemyBodies.contains(fb.getBody())) {
-                        //arrowBodiesCollided.add(fa.getBody());
-                        deadEnemyBodies.add(fb.getBody());
-                    }
 
-                    //SkullPile.createSkullPile
-
-                }
-                */
                     break;
                 case "Column":
                     if (collideeStr.startsWith("Arrow")) {
@@ -769,15 +707,6 @@ public class GameContactListener implements ContactListener {
                             }
                         }
                     }
-                    /*else if ((collidee.getUserData() != "Proximity" && collideeStr != "Enemy")
-                            && collideeStr != "Player"
-                            && collidee.getUserData() != "Spawner"
-                            && collideeStr != "Bone"
-                    ) {
-
-                    }
-
-                     */
                     break;
                 case "Wall":
                     if (collideeStr == "Arrow") {
@@ -827,7 +756,6 @@ public class GameContactListener implements ContactListener {
                             }
                         }
 
-                        //TODO COPY FURTHER ENEMY CODE HERE
 
 
                     } else if (collideeStr == "Fire") {
@@ -1125,8 +1053,11 @@ public class GameContactListener implements ContactListener {
                                     if (collidee.getUserData() == "PlayerBound") {
                                         player.touchingDoor = true;
                                         soundController.playSound("DoorOpen", 8f, 8f, 0.1f);
-                                        Compass.resetCompass();
-                                        Compass.hideCompass();
+                                        if (!d.opened) {
+                                            Compass.resetCompass();
+                                            Compass.hideCompass();
+                                        }
+                                        d.opened = true;
                                     }
                                 } else {
                                     if (collidee.getUserData() == "PlayerBound") {
@@ -1147,6 +1078,11 @@ public class GameContactListener implements ContactListener {
                                     if (collider.getUserData() == "PlayerBound") {
                                         player.touchingDoor = true;
                                         soundController.playSound("DoorOpen", 8f, 8f, 0.1f);
+                                        if (!d.opened) {
+                                            Compass.resetCompass();
+                                            Compass.hideCompass();
+                                        }
+                                        d.opened = true;
                                     }
                                 } else {
                                     if (collider.getUserData() == "PlayerBound") {
@@ -1340,13 +1276,11 @@ public class GameContactListener implements ContactListener {
 
             if (collidee.getUserData() == "PlayerBound") {
 
-                System.out.println(player.currentRoom);
-
                 for (Roof r : init.roomList.get(player.currentRoom).roofs) {
                    // r.visible = true;
                 }
                 player.touchingRoom = false;
-                if (player.currentRoom <= 9){ //TODO: Check for level progress before adding to current room
+                if (player.currentRoom < GenerateLevel.numRooms){ //TODO: Check for level progress before adding to current room
                         init.roomList.get(player.currentRoom).unlockDoor(world, init.roomList.get(player.currentRoom+1),false);
                 }
             }

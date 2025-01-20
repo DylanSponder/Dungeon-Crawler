@@ -16,7 +16,7 @@ public class CreateAssets {
     //TODO Make sure to link all textures to HellasDungeon path
     Texture heartHUDTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Heart.png"));
     Texture potionItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/LifePot.png"));
-    Texture potionSlotTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Potion/Empty.png"));
+    Texture potionSlotTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/PotionSlot.png"));
     Texture torchItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Torch.png"));
     Texture torchSlotTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/TorchSlot.png"));
     Texture shieldItemTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Shield.png"));
@@ -53,18 +53,17 @@ public class CreateAssets {
     //Main texture sheet
     Texture roomBackground = new Texture(Gdx.files.internal("HellasDungeon/Level/Level 1/CustomTileset.png"));
 
-    //Texture roomHoleTexture = new Texture(Gdx.files.internal("NinjaAdventure/Backgrounds/Tilesets/TilesetHole.png"));
     Texture swordTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Sword/SpriteInHand.png"));
     Texture bowTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Bow/Sprite.png"));
-    Texture arrowTexture = new Texture(Gdx.files.internal("NinjaAdventure/Items/Weapons/Bow/Arrow.png"));
+    Texture arrowTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Bow/Arrow.png"));
     Texture shieldTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Shield/Sprite.png"));
     Texture chiselTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Chisel/SpriteInHand.png"));
     Texture enemySkullTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySkull/SpriteSheet.png"));
     Texture enemySpiderTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySpider/SpriteSheet.png"));
     Texture enemyGhostTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemyGhost/SpriteSheet.png"));
     Texture enemyGhostAlertTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemyGhost/SpriteSheetAlerted.png"));
-    Texture enemyEyeTexture =  new Texture(Gdx.files.internal("NinjaAdventure/Actor/Monsters/Eye/Eye.png"));
-    Texture shopkeeperTexture = new Texture(Gdx.files.internal("NinjaAdventure/Actor/Characters/OldMan3/SpriteSheet.png"));
+    Texture enemyEyeTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemyCyclops/Eye.png"));
+    Texture shopkeeperTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Shopkeeper/SpriteSheet.png"));
     Texture tutorialTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Tuto.png"));
     Texture fireAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Fire.png"));
     Texture flameAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Flame.png"));

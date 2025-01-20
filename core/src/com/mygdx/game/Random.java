@@ -2,6 +2,8 @@ package com.mygdx.game;
 
 public class Random {
 
+    //utility class for random numbers and booleans
+
     public static int randomInt(int max, int min) {
         int random = min + (int) (Math.random() * ((max - min) + 1));
         return random;

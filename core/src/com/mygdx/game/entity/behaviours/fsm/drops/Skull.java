@@ -85,8 +85,6 @@ public class Skull {
             translatedCoords.x = skullBody.getPosition().x;
             translatedCoords.y = skullBody.getPosition().y;
 
-            //Ray<Vector2> ray = new Ray<>(enemyBody.getPosition(),player.playerBody.getPosition());
-
             respawnDetectionRay = new Ray<>(translatedCoords,fire.fireBody.getPosition());
 
             //two ways to do this
@@ -94,28 +92,19 @@ public class Skull {
             //send a ray to each spawner, if it collides with the spawner radius, ignore.
 
             world.rayCast((fixture, point, normal, fraction) -> {
-                //System.out.println(fixture.getBody().getUserData());
-                //System.out.println(fixture.getUserData());
                 if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody){
-                    //System.out.println("STATIC");
 
                     //TODO: We need this to ignore the Player and not look for fires out of range
 
                     if (fixture.getUserData() == "Spawner" || fixture.getBody().getUserData() == "Spawner") {
-                        //System.out.println("TESTING 1");
                         return 0;
                     }
                     else if (fixture.getUserData() == "Fire" || fixture.getBody().getUserData() == "Fire") {
                         rayResult = true;
-                        //System.out.println("TESTING 2");
-
                         return 0;
                     }
-
                 } else
                 if (fixture.getBody().getType() == BodyDef.BodyType.DynamicBody){
-
-
 
                 }
                 return 0;

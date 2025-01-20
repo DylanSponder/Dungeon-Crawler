@@ -8,7 +8,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.ai.utils.Ray;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -58,7 +57,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static Table menuContainer;
 	public static VerticalGroup menuGroup;
 	public ShapeRenderer menuRenderer;
-	public static boolean debug, menuClosed, allowPlayerInput, compassMoving;
+	public static boolean debug, menuClosed, allowPlayerInput;
 	public GameInputProcessor gip;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
@@ -116,19 +115,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static OrthographicCamera camera;
 	public static final float DEFAULT_VIEWPORT_WIDTH = 300f;
 	public static HUD hud;
-	public static Music roomClear, swordSlash, level1Music;
 	public static SoundController soundController;
 	public static RayHandler rayHandler;
 	public static LightController lightController;
-	private PointLight playerLight;
-	private BitmapFont.BitmapFontData bmfData;
 	public static BitmapFont defaultFont, defaultFont2;
 	public static ArrayList<Text> messages;
 	public AssetManager assetManager;
 	public static float stateTime, stateTime2, stateTime3;
-	public int index = 0;
 	public TextureRegion currentFrame;
-	public Ray playerSightRay;
 
 	public static boolean leanDown = false, leanUp = false, leanLeft = false, leanRight = false, leanUpLeft = false, leanUpRight = false;
 	public static boolean moveUp = false, moveDown = false, moveLeft = false, moveRight = false;
@@ -136,8 +130,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 	@Override
 	public void create() {
 
+		//the game is not in debug mode by default
 		debug = false;
 
+		//instantiate the game world, all sprite batches, world objects,
+		//collectible items and light sources
 		world = new World(new Vector2(0, 0f), false);
 		assetManager = new AssetManager();
 		soundController = new SoundController();
@@ -207,9 +204,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 		columns = new ArrayList<>();
 		fires = new ArrayList<>();
 		extinguishedRespawnFires = new ArrayList<>();
-		//columnTops = new ArrayList<>();
-		//columnStems = new ArrayList<>();
-		//columnBases = new ArrayList<>();
 		collectedPotions = new ArrayList<Potion>();
 		collectedCoins = new ArrayList<Coin>();
 		collectedHearts = new ArrayList<Heart>();
@@ -217,34 +211,26 @@ public class DungeonCrawler extends ApplicationAdapter {
 		candles = new ArrayList<Candle>();
 		messages = new ArrayList<Text>();
 
+		//set player speed multiplier
 		Vector2 vec = new Vector2();
 		vec.x = PLAYER_X;
 		vec.y = PLAYER_Y;
 		PLAYER_SPEED_MULTI = 45f;
 
-		//TODO Set player speed here so we can use dynamic speed adjustment e.g entering a cobweb
-
-		//playerSightRay = new Ray<>(vec,);
-
-		//roomClear = Gdx.audio.newMusic(Gdx.files.internal("NinjaAdventure/Sounds/Menu/Accept.wav"));
-		//swordSlash = Gdx.audio.newMusic(Gdx.files.internal("Sounds/slash.mp3"));
-
+		//initialize the Box2D body factory, asset instance
+		//and collision listener
 		final BodyFactory bf = new BodyFactory();
 		final CreateAssets tx = CreateAssets.getInstance();
 		GameContactListener lc = new GameContactListener();
 		tx.textureRegionBuilder();
 
+		//instantiate the font used in the game
 		defaultFont = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.fnt"),
 				Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.png"), false);
 
+		//used for drawing the inventory text in shops
 		defaultFont2 = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.fnt"),
 				Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.png"), false);
-
-
-		Color c = new Color();
-		c.set(1,1,1,1);
-
-		Text level1StartText =  new Text(defaultFont, "CLAY CATACOMBS", c, true, 10f, 1f, true, false, null, 0);
 
 		//get width and height of the game window
 		int h = Gdx.graphics.getHeight();
@@ -256,7 +242,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		vp = new ExtendViewport(camera.viewportWidth, camera.viewportHeight);
 
-
 		//initialize map
 		TiledMap map = new TiledMap();
 		MapLayers layers = map.getLayers();
@@ -265,20 +250,22 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//set to 1000 tile layers wide and high but can be changed if required
 		TiledMapTileLayer layer = new TiledMapTileLayer(1000, 1000, 16, 16);
 
+		//create the renderer and debug renderer
 		renderer = new OrthogonalTiledMapRenderer(map);
 		b2dr = new Box2DDebugRenderer();
 
 		//create the Box2D ray handler
 		rayHandler = new RayHandler(world);
 		rayHandler.setAmbientLight(0f, 0f, 0f, 0.015f);
+		//fullbright if in debug mode
 		if (debug) {
 			rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
 		}
 
+		//create a menu stage which uses the same viewport as the camera
 		menuStage = new Stage(vp);
 
-		//Menu code
-		//TODO Move to separate class
+		//menu code
 		Skin skin = new Skin();
 		skin.add("default-font",defaultFont, BitmapFont.class);
 		FileHandle fileHandle = Gdx.files.internal("HellasDungeon/HUD");
@@ -290,8 +277,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//uiskin.atlas, uiskin.json, uiskin.png, default.png and default.fnt all required
 
 		menuContainer = new Table();
-		//menuContainer.padLeft(275);
-		//menuContainer.padBottom(150);
 		menuGroup = new VerticalGroup();
 		menuContainer.setFillParent(true);
 
@@ -311,7 +296,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			@Override
 			public void clicked (InputEvent event, float x, float y) {
 				menuClosed = true;
-				// Called when player clicks on Play button
+				// Called when player clicks on Options button
 			}
 		});
 		settingsButton.padLeft(6.5f);
@@ -325,35 +310,31 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 		});
 		exitButton.padLeft(6.5f);
-		//menuContainer.add(exitButton).expandY();
 
-
+		//add all menu buttons to the menu group
 		menuGroup.addActor(playButton);
 		menuGroup.addActor(settingsButton);
 		menuGroup.addActor(exitButton);
 
-
 		menuContainer.add(menuGroup);
-
 		menuStage.addActor(menuContainer);
 		menuClosed = true;
 
-
+		//initialize HUD and hide the compass
 		hud = new HUD(vp, hudBatch);
+		Compass.hideCompass();
 
+		//generate the level
 		GenerateLevel level = new GenerateLevel();
 		InitLevel initLevel = new InitLevel();
 		initLevel.InitializeLevel();
 		List list = level.generateLevel(0, 0);
-
 		layer = (TiledMapTileLayer) list.get(0);
 
+		//place player
 		PLAYER_X = (float) list.get(1);
 		PLAYER_Y = (float) list.get(2);
-
 		player.createPlayer(world, PLAYER_X, PLAYER_Y, rayHandler);
-
-		Compass.hideCompass();
 
 		CreateCell cr = new CreateCell();
 		cr.InitializeCells();
@@ -361,6 +342,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//add current layers to the TileMap and assign it a renderer
 		layers.add(layer);
 
+		//initialize all removable level objects
 		arrowBodiesCollided = new ArrayList<Body>();
 		webBodiesCollected = new ArrayList<Body>();
 		obstacleBodiesCollected = new ArrayList<Body>();
@@ -380,11 +362,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 		cobArrayMap = new ArrayMap<Body, Cobweb>();
 
 		//create an input processor to handle single input events - see inputUpdate() for held down inputs
-
 		gip = new GameInputProcessor();
 
-		//TODO Set only to menu on game start
+		//allow button presses on the menu
 		Gdx.input.setInputProcessor(menuStage);
+		//enable the collision listener to listen to world collision events
 		world.setContactListener(lc);
 
 		if (!debug) {
@@ -404,9 +386,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				Gdx.app.exit();
 			}
 
-		//hud.startLevel();
-
-			// win the game if all enemySkulls are dead
+			// win the game if all enemies are dead
 			if (enemies.isEmpty()) {
 				hud.winLevel();
 			}
@@ -419,19 +399,18 @@ public class DungeonCrawler extends ApplicationAdapter {
 			//update game physics, camera and held down inputs
 			update(Gdx.graphics.getDeltaTime());
 
+			//render lighting
 			rayHandler.render();
 
 			//clear graphics
 			Gdx.gl.glClearColor(0.15f, 0.1f, 0.40f, 1f);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-			//rayHandler.render();
-
 			//set the view of the map to the camera and then render the map
 			renderer.setView(camera);
 			renderer.render();
 
-			//set camera position to always be centred on the playerSprite
+			//set camera position to always be centred on the player body
 			camera.position.set(player.playerBody.getPosition().x + tx.playerSprite.getWidth() / 2 - 8, player.playerBody.getPosition().y + tx.playerSprite.getHeight() / 2 - 8, 0);
 
 			//tutorial texture in the starting room
@@ -441,13 +420,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 				tutoBatch.end();
 			}
 
+			//wall arrow traps
 			for (Trap tr : traps) {
 				trapBatch.begin();
 				if (!tr.active) {
 					switch (tr.type) {
 						case 1:
 							Trap.renderTrap(trapBatch, tr.direction, tr.trapBody.getPosition().x, tr.trapBody.getPosition().y);
-							//trapBatch.draw(tx.arrowTrap, tr.trapBody.getPosition().x, tr.trapBody.getPosition().y, 16,16);
 							break;
 						case 2:
 							break;
@@ -458,7 +437,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 					switch (tr.type) {
 						case 1:
 							Trap.renderTrapActive(trapBatch, tr.direction, tr.trapBody.getPosition().x, tr.trapBody.getPosition().y);
-							//trapBatch.draw(tx.arrowTrap, tr.trapBody.getPosition().x, tr.trapBody.getPosition().y, 16,16);
 							break;
 						case 2:
 							break;
@@ -469,20 +447,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 				trapBatch.end();
 			}
 
-
-			double radians = Math.PI / 180;
-			String stringR = String.valueOf(radians);
-			float radiansF = Float.parseFloat(stringR);
-
-			//	if (!skulls.isEmpty()) {
-
-			//	}
-
+			//render open doors
 			for (Room r : GenerateLevel.init.roomList) {
-
-
 				for (Door d : r.doors) {
-					//render open doors here
 					if (d.open) {
 						doorBatch.begin();
 							d.renderOpen(doorBatch, r.directionTaken, d.doorX, d.doorY);
@@ -490,7 +457,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 				}
 
-				//render door locks when a player enters a new room with enemySkulls
+				//render door locks when a player enters a new room with enemies
 				for (Lock l : r.locks) {
 					if (l.visible) {
 						lockBatch.begin();
@@ -502,26 +469,21 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			//adds all skulls that have been created to the array map for manipulation
 			for (Skull s : skulls) {
-
 				if (!s.skullCreated) {
 					skullArrayMap.put(s.createSkull(skullArrayMap), s);
 					s.room = player.currentRoom;
 				}
-
 			}
 
-		//for (Room r : GenerateLevel.init.roomList) {
+			//render skull level objects that drop from enemySkulls - unfinished
 			for (Skull s : skulls) {
 				//TODO Fix - skulls pick the furthest spawner
 				if (!GenerateLevel.init.roomList.get(s.room).spawners.isEmpty()) {
 					for (Fire f : GenerateLevel.init.roomList.get(player.currentRoom).spawners) {
 						if (s.resurrectable) {
-						//System.out.println(GenerateLevel.init.roomList.get(player.currentRoom).index);
 						if (s.skullCreated) {
 							boolean rayResult = s.rayCastSkull(GenerateLevel.init.roomList.get(player.currentRoom), f);
-							//System.out.println("ROOM INDEX OF FIRE" + GenerateLevel.init.roomList.get(player.currentRoom).index);
 							if (rayResult && !s.resurrecting && f.active) {
-								//System.out.println("Resurrecting dead enemy");
 								Fire respawnFire = new Fire(world, rayHandler, s.skullX - 4, s.skullY - 8, false, 0f, 2, false);
 								respawnFire.createFire(new Color(0.3f,0,1f,0.6f), 15);
 								fires.add(respawnFire);
@@ -529,7 +491,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 								Timer.schedule(new Timer.Task() {
 									@Override
 									public void run() {
-										//System.out.println("RESPAWNING SKULL AFTER DELAY");
 										if (f.active) {
 											brokenSkulls.add(s);
 											EnemySkull respawnedEnemy = new EnemySkull(world, s.skullX, s.skullY);
@@ -540,28 +501,17 @@ public class DungeonCrawler extends ApplicationAdapter {
 									}
 								}, 5f);
 								extinguishedRespawnFires.add(respawnFire);
-								//respawnFire.fireLight = null;
-								//respawnFire.fireBody.setActive(false);
-
 								}
 							}
 						}
 					}
 				}
 			}
-			//}
-
-		//respawnFireMap
-		//extinguishedRespawnFires
-		//GenerateLevel.init.roomList.get(player.currentRoom).spawners
-
-
-
 
 		if (!heartArrayMap.isEmpty()) {
 			for (OrderedMap.Entry<Body, Heart> heartEntry : heartArrayMap.entries()) {
 				Heart value = heartEntry.value;
-				//render each potion
+				//render each heart
 				heartBatch.begin();
 				if (value.type == 1) {
 					Heart.renderHeart(heartBatch, tx.heartItemSprite, heartEntry.key.getPosition().x, heartEntry.key.getPosition().y, 1);
@@ -576,12 +526,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 				reversedHeartMap = true;
 			}
 
+			//remove hearts collected by the player
 			Iterator<Heart> heartIt = collectedHearts.iterator();
 			if (heartIt.hasNext()) {
 				Heart heart = heartIt.next();
 				if (collectedHearts.contains(heart)) {
 
-					//if (hud.inventory.Size )
 					if (heart.type == 1) {
 						hud.healthBar.gainHealth(1f);
 					} else if (heart.type == 2) {
@@ -659,11 +609,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 		}
-
-			//destructible objects safe removers - Skulls - Arrows - Pots - Potions
-
-			GameObjectDestroyer skullBasher9000 = new GameObjectDestroyer();
-			//skullBasher9000.destroyObject(skullArrayMap,brokenSkulls,skulls,"Skull",);
 
 			if (!skullArrayMap.isEmpty()) {
 
@@ -817,7 +762,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 
-			//THE GREAT POT VS POTION LINE ---------------------------------------------------------------------------------
+
 
 			if (!potionArrayMap.isEmpty()) {
 				if (!reversedPotionMap) {
@@ -897,10 +842,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 		}
 
-			for (Obstacle o : obstacles) {
-
-			}
-
 		for (Candle c : candles) {
 			candleBatch.begin();
 			switch (c.type){
@@ -916,7 +857,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		for (Fire f : fires) {
 			if (f.type == 3) {
-				//TODO: Finish small flame
 				currentFrame = tx.flameAnimation.getKeyFrame(stateTime, f.active);
 
 				fireBatch.begin();
@@ -975,12 +915,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 				playerBatch.draw(tx.shieldSprite, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y - 18f, 16, 8, 16, 8, 1, 1, 270);
 			}
 		}
-		//	playerBatch.draw(tx.playerSprite, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 6f, 16, 16);
+			//render the player sprite on the player body
 			Player.renderPlayer(playerBatch, tx.playerTextureRegion, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 6f);
 
 
 			if (playerMeleeAttacking) {
-				//add the lanceSprite to the corresponding attack playerDirection
+				//add the sword sprite to the corresponding attack playerDirection
 				if (tx.playerTextureRegion.equals(tx.playerAttackUp)) {
 					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 13f, player.playerBody.getPosition().y - 4f, 7, 14, 7, 14, 1, 1, 180);
 				} else if (tx.playerTextureRegion.equals(tx.playerAttackDown)) {
@@ -1006,7 +946,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 
 			if (playerUsingChisel) {
-				//add the lanceSprite to the corresponding attack playerDirection
+				//add the chisel sprite to the corresponding attack playerDirection
 				if (tx.playerTextureRegion.equals(tx.playerAttackUp)) {
 					playerBatch.draw(tx.chiselSprite, player.playerBody.getPosition().x - 13f, player.playerBody.getPosition().y - 4f, 7, 14, 7, 14, 1, 1, 180);
 				} else if (tx.playerTextureRegion.equals(tx.playerAttackDown)) {
@@ -1020,18 +960,17 @@ public class DungeonCrawler extends ApplicationAdapter {
 			playerBatch.end();
 
 
-
 			//render enemy skull sprites
 			for (EnemySkull e : enemySkulls) {
 				if (e.rayCastable) {
 					e.detectPlayer();
 				}
+				//check to see if the player is both in sight and in range
 				if ((e.playerSighted && e.playerInRange) && menuClosed){
-					//System.out.println(Gdx.graphics.getDeltaTime());
+					//after a specified delay once the player has been spotted, shoot a projectile with some offset at the player
 					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 130) ){
 						e.timeSinceAlerted = 0f;
 						e.lostSight = false;
-					//	e.lostSightMessage.showing = false;
 						messages.remove(e.lostSightMessage);
 
 						e.enemyAI.setMaxLinearSpeed(0);
@@ -1039,7 +978,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 						Vector2 vec1 = new Vector2(e.enemyBody.getPosition());
 						Vector2 vec2 = new Vector2(Player.playerBody.getPosition());
 
-						//throw bones directly at the player but add a small random offset
 						float x = MathUtils.atan2(vec2.y - vec1.y, vec2.x - vec1.x);
 						float randomOffset = Random.randomFloat(1.5f,0.5f);
 						randomOffset = randomOffset / 10;
@@ -1053,9 +991,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 							finalX.x = finalX.x - randomOffset;
 							finalX.y = finalX.y - randomOffset;
 						}
-						//float result = (e.enemyAI.getOrientation() / (x * MathUtils.PI));
-						//result = result - MathUtils.PI / 2;
-						//System.out.println(x);
 
 						Bone bone = new Bone(world, e.enemyBody, e.enemyBody.getPosition().x, e.enemyBody.getPosition().y, false,  true, finalX);
 						bone.createBone();
@@ -1069,30 +1004,21 @@ public class DungeonCrawler extends ApplicationAdapter {
 						e.timeSinceAlerted = e.timeSinceAlerted + Gdx.graphics.getDeltaTime();
 					}
 
-					//System.out.println("TIME SINCE ALERTED" + e.timeSinceAlerted);
-					//e.throwBoneAtPlayer();
-
 					if (!e.alerted) {
-
-						//FontController.drawFont(fontBatch,);
 						e.alertMessage.showing = true;
 						e.alertMessage.fade = true;
 						e.alerted = true;
 
-						//System.out.println("LOG");
 						e.alertMessage.textX = e.enemyAI.getBody().getPosition().x - 2f;
 						e.alertMessage.textY = e.enemyAI.getBody().getPosition().y + 8f;
 						messages.add(e.alertMessage);
 					}
 					e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
-					//e.playerSighted = false;
+
 				} else if (!e.playerSighted) {
 					messages.remove(e.alertMessage);
-				//	e.alerted = false;
 					e.timeSinceAlerted = 0f;
 					if (!e.lostSight) {
-
-
 						e.lostSight = true;
 						e.lostSightMessage.showing = true;
 						e.lostSightMessage.fade = true;
@@ -1115,14 +1041,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 				enemySkullBatch.end();
 			}
 
-		//if (!dyingSpiders.isEmpty()) {
 			for (EnemySkull deadSkull : dyingSkulls) {
 				deadSkull.skullLight.setActive(false);
 				deadSkull.getStateMachine().changeState(EnemySkullState.DIE);
 				enemies.remove(deadSkull);
 			}
 			dyingSkulls.clear();
-		//}
 
 
 		//render enemy spider sprites
@@ -1130,40 +1054,27 @@ public class DungeonCrawler extends ApplicationAdapter {
 			if (e2.rayCastable) {
 				e2.detectPlayer();
 			}
+			//check to see if the player is both in sight and in range
 			if ((e2.playerSighted && e2.playerInRange) && menuClosed){
-				//System.out.println(Gdx.graphics.getDeltaTime());
+				//after a specified delay once the player has been spotted, shoot a projectile with some offset at the player
 				if (e2.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 120) ){
 						e2.timeSinceAlerted = 0f;
 						e2.lostSight = false;
 						messages.remove(e2.lostSightMessage);
-					//	e2.lostSightMessage.showing = false;
 
 						e2.enemyAI.setMaxLinearSpeed(0);
 
 						Vector2 vec1 = new Vector2(e2.enemyBody.getPosition());
 						Vector2 vec2 = new Vector2(Player.playerBody.getPosition());
 
-						//throw bones directly at the player but add a small random offset
 						float x = MathUtils.atan2(vec2.y - vec1.y, vec2.x - vec1.x);
 
 						e2.exitAngle = MathUtils.atan2(vec2.y - vec1.y, vec2.x - vec1.x);
-
 
 						float randomOffset = Random.randomFloat(1.3f,0.3f);
 						randomOffset = randomOffset / 10;
 						boolean random = Random.randomBoolean();
 						Vector2 finalX = new Vector2((float)Math.cos(e2.exitAngle),(float)Math.sin(e2.exitAngle));
-
-						if (random) {
-							//finalX.x = finalX.x + randomOffset;
-							//finalX.y = finalX.y + randomOffset;
-						} else {
-							//finalX.x = finalX.x - randomOffset;
-							//finalX.y = finalX.y - randomOffset;
-						}
-						//float result = (e.enemyAI.getOrientation() / (x * MathUtils.PI));
-						//result = result - MathUtils.PI / 2;
-						//System.out.println(x);
 
 						Web web = new Web(world, e2.enemyBody, e2.enemyBody.getPosition().x, e2.enemyBody.getPosition().y, false,  true, finalX);
 						web.exitAngle = e2.exitAngle;
@@ -1172,19 +1083,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 						webArrayMap.put(web.webBody, web);
 						soundController.playSound("SpiderAttack",6f,5f,0.2f);
 
-					//float result = (e.enemyAI.getOrientation() / (x * MathUtils.PI));
-					//result = result - MathUtils.PI / 2;
-					//System.out.println(x);
-
-
-
 				} else {
 					e2.enemyAI.setMaxLinearSpeed(55);
 					e2.timeSinceAlerted = e2.timeSinceAlerted + Gdx.graphics.getDeltaTime();
 				}
-
-				//System.out.println("TIME SINCE ALERTED" + e.timeSinceAlerted);
-				//e.throwBoneAtPlayer();
 
 				if (!e2.alerted) {
 
@@ -1193,21 +1095,16 @@ public class DungeonCrawler extends ApplicationAdapter {
 					e2.alertMessage.fade = true;
 					e2.alerted = true;
 
-					//System.out.println("LOG");
 					e2.alertMessage.textX = e2.enemyAI.getBody().getPosition().x - 2f;
 					e2.alertMessage.textY = e2.enemyAI.getBody().getPosition().y + 8f;
 					messages.add(e2.alertMessage);
 				}
 				e2.getStateMachine().changeState(EnemySpiderState.GO_TO_PLAYER);
-				//e.playerSighted = false;
 			} else if (!e2.playerSighted) {
 
 				e2.timeSinceAlerted = 0f;
-			//	e2.alertMessage.showing = false;
 				messages.remove(e2.alertMessage);
 				if (!e2.lostSight) {
-
-
 					e2.lostSight = true;
 					e2.lostSightMessage.showing = true;
 					e2.lostSightMessage.fade = true;
@@ -1228,7 +1125,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			enemySpiderBatch.end();
 		}
-		//if (!dyingSpiders.isEmpty()) {
+
 		for (EnemySpider deadSpider : dyingSpiders) {
 			deadSpider.getStateMachine().changeState(EnemySpiderState.DIE);
 			enemies.remove(deadSpider);
@@ -1240,40 +1137,31 @@ public class DungeonCrawler extends ApplicationAdapter {
 				e3.detectPlayer();
 			}
 			if ((e3.playerSighted && e3.playerInRange) && menuClosed){
-				//System.out.println(Gdx.graphics.getDeltaTime());
 				if (e3.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 130) ){
 					e3.timeSinceAlerted = 0f;
 					e3.lostSight = false;
 					messages.remove(e3.lostSightMessage);
-				//	e3.lostSightMessage.showing = false;
 
 				} else {
 					e3.timeSinceAlerted = e3.timeSinceAlerted + Gdx.graphics.getDeltaTime();
 				}
 
-				//System.out.println("TIME SINCE ALERTED" + e.timeSinceAlerted);
-				//e.throwBoneAtPlayer();
-
 				if (!e3.alerted) {
 
-					//FontController.drawFont(fontBatch,);
 					e3.alertMessage.showing = true;
 					e3.alertMessage.fade = true;
 					e3.alerted = true;
 
-					//System.out.println("LOG");
 					e3.alertMessage.textX = e3.enemyAI.getBody().getPosition().x - 2f;
 					e3.alertMessage.textY = e3.enemyAI.getBody().getPosition().y + 8f;
 					messages.add(e3.alertMessage);
 				}
 				e3.getStateMachine().changeState(EnemyGhostState.GO_TO_PLAYER);
-				//e.playerSighted = false;
+
 			} else if (!e3.playerSighted) {
-				//e3.alertMessage.showing = false;
+
 				messages.remove(e3.alertMessage);
 				if (!e3.lostSight) {
-
-
 					e3.lostSight = true;
 					e3.lostSightMessage.showing = true;
 					e3.lostSightMessage.fade = true;
@@ -1296,7 +1184,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 					enemyGhostBatch.draw(tx.enemyGhostRightSprite, e3.enemyBody.getPosition().x - 8f, e3.enemyBody.getPosition().y - 7f, 16, 16);
 				}
 			} else {
-				//e2.enemyHitbox.setSensor(true);
 				if (e3.facing == "Up") {
 					enemyGhostBatch.draw(tx.enemyGhostAlertUpSprite, e3.enemyBody.getPosition().x - 8f, e3.enemyBody.getPosition().y - 7f, 16, 16);
 				} else if (e3.facing == "Down") {
@@ -1310,13 +1197,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 			enemyGhostBatch.end();
 		}
 
-		//if (!dyingSpiders.isEmpty()) {
 			for (EnemyGhost deadGhost : dyingGhosts) {
 				deadGhost.getStateMachine().changeState(EnemyGhostState.DIE);
 				enemies.remove(deadGhost);
 			}
 			dyingGhosts.clear();
-		//}
 
 		for (Body body : deadEnemyBodies) {
 			world.destroyBody(body);
@@ -1362,7 +1247,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			for (OrderedMap.Entry<Body, Bone> boneEntry : boneArrayMap.entries()) {
 				Body key = boneEntry.key;
-				//render each bone
+				//render each bone projectile
 				boneBatch.begin();
 				Bone.renderBone(boneBatch, tx.boneSprite, key.getPosition().x, key.getPosition().y, key.getAngle());
 				boneBatch.end();
@@ -1455,7 +1340,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 		}
 
-
 			//check if there are any fired arrows
 			if (!arrowArrayMap.isEmpty()) {
 				for (OrderedMap.Entry<Body, Arrow> arrowEntry : arrowArrayMap.entries()) {
@@ -1464,8 +1348,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 					value.stateTime += Gdx.graphics.getDeltaTime();
 					value.stateTime2 += Gdx.graphics.getDeltaTime();
-
-
 
 					//render each individual arrow
 					arrowBatch.begin();
@@ -1476,12 +1358,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 						Arrow.renderFireArrow(arrowBatch, currentFrame, flameFrame, arrowEntry.value.direction, key.getPosition().x, key.getPosition().y);
 						value.createArrowFlameLight(value);
 					}else {
-						//System.out.println("YESSSSSS");
 						TextureRegion currentFrame = tx.arrowAnimation.getKeyFrame(value.stateTime, true);
 						Arrow.renderArrow(arrowBatch, currentFrame, arrowEntry.value.direction, key.getPosition().x, key.getPosition().y);
 					}
 
-					//arrowBatch.draw(currentFrame, key.getPosition().x, key.getPosition().y);
 					flameBatch.end();
 					arrowBatch.end();
 				}
@@ -1496,8 +1376,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 				//iterate through every collided arrow
 				if (bodyIt.hasNext()) {
 					Body collidedBody = bodyIt.next();
-					//if the array map contains the arrow body that collided, remove that arrow from the game
+					//if the array map contains the arrow body that collided, remove that arrow from the game world
 					if (arrowArrayMap.containsKey(collidedBody)) {
+						//if the arrow is on fire we also need to remove the light before it is removed
 						if (arrowArrayMap.get(collidedBody).onFire) {
 							arrowArrayMap.get(collidedBody).destroyArrowFlameLight(arrowArrayMap.get(collidedBody).flameLight);
 							arrowArrayMap.get(collidedBody).onFire = false;
@@ -1506,7 +1387,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 						//remove the arrow Box2D body
 						world.destroyBody(collidedBody);
-
 						//remove body from arrowBodiesCollided
 						bodyIt.remove();
 						//remove the sprite by removing the Arrow class object
@@ -1515,6 +1395,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 
+		//render columns based on their type - these could also be enums
 		for (Column c : columns) {
 			columnStemBatch.begin();
 			switch (c.type) {
@@ -1555,12 +1436,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		stateTime += Gdx.graphics.getDeltaTime();
 
+		//render fires and their animations based on their type and color
 		for (Fire f : fires) {
 			if (f.smoking) {
 				f.light.setColor(f.light.getColor().r, f.light.getColor().g, f.light.getColor().b, 0.65f);
 				TextureRegion currentFrame = tx.smokeAnimation.getKeyFrame(f.stateTime, false);
 				fireBatch.begin();
-				//fireBatch.draw(currentFrame, f.fireX, f.fireY);
+
 				Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, false);
 				fireBatch.end();
 				f.stateTime += Gdx.graphics.getDeltaTime();
@@ -1594,10 +1476,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 						fireBatch.end();
 					} else if (f.type == 2) {
 
-						//we want blue fire to respawn dead Enemies nearby every X number of frames
-						//e.timeSinceAlerted = e.timeSinceAlerted + Gdx.graphics.getDeltaTime();
-
-
 						currentFrame = tx.blueFireAnimation.getKeyFrame(stateTime, f.active);
 
 						fireBatch.begin();
@@ -1610,12 +1488,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 						}
 					}
 				}
-
-				//stateTime3 += Gdx.graphics.getDeltaTime();
-				//if (tx.smokeAnimation.isAnimationFinished(f.stateTime)) {
-				//}
 			}
 
+		//render corridor roofs - if they are touched by the player make them 66% transparent
 		for (Roof r : roofs) {
 
 			if (r.type == 0) {
@@ -1637,11 +1512,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 				roofBatch.end();
 			}
-
-
-
 		}
 
+		//render roofs - if they are touched by the player make them 66% transparent
 		for (Room room : GenerateLevel.init.roomList) {
 			for (Roof r : room.roofs) {
 					roofBatch.begin();
@@ -1740,10 +1613,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 							break;
 					}
 					roofBatch.end();
-
 			}
 		}
 
+			//TODO change to individual spritebatches - flushing without fading
 			fontBatch.begin();
 			for (Text t : messages) {
 				if (t.showing) {
@@ -1752,14 +1625,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 			fontBatch.end();
 
+			//render the inventory text for shops
 			inventoryBatch.begin();
 			for (Shopkeeper s : shopkeepers) {
 				for (Text t2 : s.inventoryText) {
 					if (t2.showing) {
-
-						//defaultFont.draw(fontBatch,t.message,player.playerBody.getPosition().x, player.playerBody.getPosition().y);
-						//defaultFont.draw(fontBatch,t.message,t.textX, t.textY);
-
 						FontController.drawInventoryFont(inventoryBatch, defaultFont2, t2.textX, t2.textY, t2);
 					}
 				}
@@ -1772,13 +1642,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 					//renders ray cast rays
 					Ray<Vector2>[] rays = enemySkull.rayConfigurations[0].getRays();
 
-
 					enemySkull.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 					enemySkull.shapeRenderer.setProjectionMatrix(camera.combined);
 					enemySkull.shapeRenderer.setColor(1, 0, 0, 1);
-					// shapeRenderer.setColor(Color.RED);
-					//transform.idt();
-					//shapeRenderer.setTransformMatrix(transform);
+
 					for (int i = 0; i < rays.length; i++) {
 						Ray<Vector2> ray = rays[i];
 						enemySkull.tmp.set(ray.start);
@@ -1813,13 +1680,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 					//renders ray cast rays
 					Ray<Vector2>[] rays = enemySpider.rayConfigurations[0].getRays();
 
-
 					enemySpider.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 					enemySpider.shapeRenderer.setProjectionMatrix(camera.combined);
 					enemySpider.shapeRenderer.setColor(1, 0, 0, 1);
-					// shapeRenderer.setColor(Color.RED);
-					//transform.idt();
-					//shapeRenderer.setTransformMatrix(transform);
+
 					for (int i = 0; i < rays.length; i++) {
 						Ray<Vector2> ray = rays[i];
 						enemySpider.tmp.set(ray.start);
@@ -1840,13 +1704,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 					//renders ray cast rays
 					Ray<Vector2>[] rays = enemyGhost.rayConfigurations[0].getRays();
 
-
 					enemyGhost.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 					enemyGhost.shapeRenderer.setProjectionMatrix(camera.combined);
 					enemyGhost.shapeRenderer.setColor(1, 0, 0, 1);
-					// shapeRenderer.setColor(Color.RED);
-					//transform.idt();
-					//shapeRenderer.setTransformMatrix(transform);
+
 					for (int i = 0; i < rays.length; i++) {
 						Ray<Vector2> ray = rays[i];
 						enemyGhost.tmp.set(ray.start);
@@ -1863,17 +1724,17 @@ public class DungeonCrawler extends ApplicationAdapter {
 					enemyGhost.shapeRenderer.end();
 				}
 
-
+				//render all box2d debug collision fixtures
 				b2dr.render(world, camera.combined);
-
-				//TODO Add debug button to Scene
-
 			}
 
+			//update the camera, HUD and render rays for lighting
 			camera.update();
 			hud.update();
 			rayHandler.render();
 			rayHandler.setCombinedMatrix(camera);
+
+			//render all spritebatches in order
 			trapBatch.setProjectionMatrix(camera.combined);
 			obstacleBatch.setProjectionMatrix(camera.combined);
 			candleBatch.setProjectionMatrix(camera.combined);
@@ -1889,7 +1750,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 			enemySpiderBatch.setProjectionMatrix(camera.combined);
 			enemyGhostBatch.setProjectionMatrix(camera.combined);
 			lockBatch.setProjectionMatrix(camera.combined);
-
 			doorBatch.setProjectionMatrix(camera.combined);
 			potBatch.setProjectionMatrix(camera.combined);
 			cobBatch.setProjectionMatrix(camera.combined);
@@ -1899,13 +1759,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 			columnBaseBatch.setProjectionMatrix(camera.combined);
 			columnStemBatch.setProjectionMatrix(camera.combined);
 			columnTopBatch.setProjectionMatrix(camera.combined);
-
 			fireBatch.setProjectionMatrix(camera.combined);
 			flameBatch.setProjectionMatrix(camera.combined);
 			roofBatch.setProjectionMatrix(camera.combined);
 			fontBatch.setProjectionMatrix(camera.combined);
 			inventoryBatch.setProjectionMatrix(camera.combined);
 
+			//render the HUD and menus last in order to display over everything else
 			hudBatch.setProjectionMatrix(hud.stage.getCamera().combined);
 			hud.stage.draw();
 			hudBatch.setProjectionMatrix(hud.subStage.getCamera().combined);
@@ -1917,7 +1777,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	@Override
 	public void resize(int width, int height) {
 		// We multiply the viewport height by the aspect ratio to maintain
-		// correct proportions for objects when drawn.
+		// correct proportions for objects when drawn
 		float aspectRatio = (float) height / width;
 		camera.viewportHeight = DEFAULT_VIEWPORT_WIDTH * aspectRatio;
 		camera.viewportWidth = DEFAULT_VIEWPORT_WIDTH;
@@ -1929,26 +1789,29 @@ public class DungeonCrawler extends ApplicationAdapter {
 	//update method for physics, camera and held down inputs
 	public void update(float delta) {
 
-		//rayHandler.setCombinedMatrix(camera.combined);
+		//update lighting
 		rayHandler.setCombinedMatrix(camera);
 		rayHandler.update();
 
-
 		if (menuClosed) {
-
-			//rayHandler.setAmbientLight(0f, 0f, 0f, 0.010f);
+			//create a subtle fading in and out of light sources for added realism
 			lightController.fadeLight(fires);
+			//update the world
 			world.step(1 / 60f, 6, 2);
+			//allow player inputs
 			allowPlayerInput = true;
 			Gdx.input.setInputProcessor(gip);
+			//make the menu invisible and remove the cursor
 			menuContainer.setVisible(false);
 			Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);
 
+			//move the compass to the correct position on the HUD and set rotation to door
 			if (Compass.moving) {
 				compassArrowImage.act(Gdx.graphics.getDeltaTime());
-				//float radians = compassArrowImage.getRotation();
-
 			}
+
+			//each enemy updates their AI and attempts to detect the player
+			//if in range
 
 			for (EnemySkull e : enemySkulls) {
 				e.enemyAI.update(GdxAI.getTimepiece().getTime());
@@ -1974,8 +1837,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 		} else {
-			//rayHandler.setAmbientLight(0f, 0f, 0f, 0f);
-
+			//render menus with wireframes when in debug mode
 			Gdx.gl.glEnable(GL20.GL_BLEND);
 			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 			menuRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -1995,17 +1857,18 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 		}
 
+		//display messages when player starts a level, clears rooms, and finishes a level
 		if (player.floorCleared){
 			hud.fadeHUD(hud.winWords);
 		} else if (player.roomCleared) {
 			hud.winRoom();
 			hud.fadeHUD(hud.roomWords);
 		}
-
 		if (player.playerInput) {
 			hud.fadeHUD(hud.startWords);
 		}
 
+		//give the player a brighter light when the torch is bought in the shop
 		if (player.hasTorch && !player.torchApplied) {
 			player.playerLight.remove();
 			player.playerLight = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.85f), 95, PLAYER_X, PLAYER_Y);
@@ -2015,6 +1878,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			player.torchApplied = true;
 		}
 
+		//set camera zoom
 		if (!GenerateLevel.init.roomList.get(player.currentRoom).isShop && !debug) {
 			camera.zoom = 0.75f;
 		}
@@ -2025,8 +1889,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		}
 
-		//player.castRay();
-
+		//allow player movement when not paused, for example attacking with a weapon
 		if (!playerPaused) {
 			inputUpdate();
 		}
@@ -2049,7 +1912,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 		potBatch.dispose();
 		potionBatch.dispose();
 		columnTopBatch.dispose();
-		//menuRenderer.dispose();
 		columnStemBatch.dispose();
 		columnBaseBatch.dispose();
 		fireBatch.dispose();
@@ -2059,6 +1921,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	}
 
 	public void inputUpdate() {
+		//manages player movement
 		final CreateAssets tx = CreateAssets.getInstance();
 		leanUp = false;
 		leanDown = false;
@@ -2087,9 +1950,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 		PLAYER_HORIZONTAL_SPEED = 0;
 		PLAYER_VERTICAL_SPEED = 0;
 
-		//slighter slower speed than the fastest human reaction times
-		float movementDelay = 0.013f;
-
 		if (debug) {
 			if (Gdx.input.isKeyPressed(Keys.NUM_8)) {
 				enemySkulls.clear();
@@ -2106,13 +1966,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 
 				if (!Compass.moving && Compass.showing) {
-				//	Compass.fixRotation();
-				//	compassArrowImage.act(Gdx.graphics.getDeltaTime());
+					Compass.fixRotation();
 				}
 
-
-
-
+				//create footstep sounds after set delays
 				player.timeSinceMoved += Gdx.graphics.getDeltaTime();
 
 				float randomFootstepTime = Random.randomFloat(0.14f,0.14f);
@@ -2127,6 +1984,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 			} else {
 				player.timeSinceMoved = 0;
 			}
+
+			//player movement controls and animation walk cycles
 
 			if (Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP)) {
 				PLAYER_VERTICAL_SPEED = 1f;
@@ -2209,8 +2068,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			stateTime3 += Gdx.graphics.getDeltaTime();
 		}
 
-
-		//create a movement vector and normalize it for diagonal movement
+		//create a player movement vector and normalize it for diagonal movement
 		Vector2 vec = new Vector2(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
 		vec.nor();
 
@@ -2220,6 +2078,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
 
+		//start the level by showing the level start message
 		if (!player.playerInput) {
 			hud.startLevel();
 			player.playerInput = true;

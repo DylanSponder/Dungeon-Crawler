@@ -53,14 +53,9 @@ public class HUD {
     table.top();
     table.setFillParent(true);
 
-
-
-    //compassGroup.addActor(compassTable);
-
-
-
     itemGroup = new Group();
     itemTable = new Table();
+    //create the items interface
     itemVerticalGroup = new VerticalGroup();
     itemVerticalGroup.addActor(itemTable);
     itemVerticalGroup.columnLeft();
@@ -72,7 +67,6 @@ public class HUD {
     CreateAssets tx = CreateAssets.getInstance();
 
     //create empty item slot icons of all the items the player can collect
-
     torchSlot = new TextureRegionDrawable(tx.torchSlotSprite);
     torchSlotImage = new Image(torchSlot);
     itemVerticalGroup.addActor(torchSlotImage);
@@ -95,7 +89,6 @@ public class HUD {
 
 
     table.add(itemGroup);
-   // test.padTop(100);
 
     Sprite healthSymbol = new Sprite(tx.heartHUDTexture, 0, 0, 16, 16);
     Sprite healthSymbolHalf = new Sprite(tx.heartHUDTexture, 32, 0, 16, 16);
@@ -105,7 +98,7 @@ public class HUD {
     
     moneyTable = new Table();
     moneyAmount = new Label(totalGoldAsString, new LabelStyle(DungeonCrawler.defaultFont, Color.GOLD));
-    moneyTable.add(moneyAmount).padTop(25);
+    moneyTable.add(moneyAmount).padTop(5);
     moneySymbol = new Image(new Sprite(tx.coinHUDTexture, 10, 10));
     moneyTable.add(moneySymbol).padBottom(0);
 
@@ -120,7 +113,6 @@ public class HUD {
     table.add(moneyTable);
 
     //create the compass that guides players to the exit door for that room
-    //TODO finish implementation
 
     compassGroup = new Group();
     compassContainer = new Container();
@@ -145,14 +137,9 @@ public class HUD {
     compassArrowImage = new Image(compassArrowDrawable);
 
     compassVerticalGroupSpacer.addActor(compassSpacerContainer);
-   // compassVerticalGroupSpacer.addActor(compassImage);
     compassVerticalGroup.addActor(compassContainer);
     compassVerticalGroup.addActor(compassImage);
     compassVerticalGroup.addActor(compassArrowImage);
-
-
-
-    //compassContainer.setRotation();
 
     compassGroup.addActor(compassVerticalGroupSpacer);
     compassGroup.addActor(compassVerticalGroup);
@@ -166,45 +153,20 @@ public class HUD {
     rotateArrow.setAmount(1);
 
     repeatAction = new RepeatAction();
-   // repeatAction.setCount(100000);
-
 
     compassArrowImage.addAction(moveToCompass);
 
-    //compassArrowImage.addAction(rotateArrow);
-    //compassArrowImage.addAction(repeatAction);
     SpriteBatch batch = new SpriteBatch();
 
-   // compassArrowImage.setRotation(60);
-
-
-    //compassVerticalGroupSpacer.align(Align.bottom);
-
-
-    //compassImage.setAlign(Align.bottom);
-    //compassTable.padTop(1000);
-    //table.add(compassImage).align(Align.bottom);
-
-  //  table.add();
-   // compassGroup.addActor(compassImage);
     table.add(compassGroup);
 
-
-
     menuStage.addActor(table);
-  }
-
-  public void rotateCompassArrow() {
-    CreateAssets tx = CreateAssets.getInstance();
-
-
   }
 
   public void addItem(int type) {
 
     CreateAssets tx = CreateAssets.getInstance();
 
-    //this is super hacky but works like a charm
     //we create a new Image with the texture of the item
     //then swap it with its respective slot
     //and finally just delete the slot image
@@ -253,7 +215,7 @@ public class HUD {
     Table startTable = new Table();
     startTable.center();
     startTable.setFillParent(true);
-    startWords = new Label("j CLAY CATACOMBS j", new LabelStyle(DungeonCrawler.defaultFont, Color.WHITE));
+    startWords = new Label("j LEVEL ONE j", new LabelStyle(DungeonCrawler.defaultFont, Color.WHITE));
     startTable.add(startWords);
     subStage.addActor(startTable);
   }
@@ -310,7 +272,7 @@ public class HUD {
 
     totalGoldAsString  = String.valueOf(totalGold);
     moneyAmount = new Label(totalGoldAsString, new LabelStyle(DungeonCrawler.defaultFont, Color.GOLD));
-    moneyTable.add(moneyAmount).padTop(25);
+    moneyTable.add(moneyAmount).padTop(5);
     moneySymbol = new Image(new Sprite(tx.coinHUDTexture, 10, 10));
     moneyTable.add(moneySymbol).padBottom(0);
   }
@@ -318,6 +280,5 @@ public class HUD {
   public void update() {
     healthBar.update();
     inventory.update();
-    //items.update
   }
 }

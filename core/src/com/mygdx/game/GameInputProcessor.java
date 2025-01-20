@@ -12,6 +12,8 @@ import com.mygdx.game.level.objects.Text;
 
 import static com.mygdx.game.DungeonCrawler.*;
 
+
+//the game input processor is used to manage all inputs for the game
 public class GameInputProcessor implements InputProcessor {
 
     public CreateAssets tx;
@@ -290,13 +292,11 @@ public class GameInputProcessor implements InputProcessor {
                             potions.add(potion);
                             potionArrayMap.put(potion.potionBody, potion);
                             break;
-
                         }
                         case "SHIELD": {
                             player.hasShield = true;
                             hud.addItem(2);
                             break;
-
                         }
                         case "GREEK FIRE": {
                             player.hasGreekFire = true;
@@ -363,7 +363,6 @@ public class GameInputProcessor implements InputProcessor {
                             player.hasShield = true;
                             hud.addItem(2);
                             break;
-
                         }
                         case "GREEK FIRE": {
                             player.hasGreekFire = true;
@@ -503,7 +502,6 @@ public class GameInputProcessor implements InputProcessor {
         if ((keycode == 31 && player.hasChisel) && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking && !playerUsingChisel)) {
             float playerChiselUseSpeedInSeconds = 0.85f;
             playerUsingChisel = true;
-            System.out.println("SEXY BANA1NA");
             if (moveDown || player.facing == 3) {
                 tx.playerTextureRegion = tx.playerAttackDown;
                 chiselBody = bf.createChiselBody(world, player.playerBody, -2f, -9.5f);

@@ -35,7 +35,6 @@ public class Web {
         } else {
             if (!multiplied) {
                 this.orientationVector = orientation;
-                //MathUtils.random(-MathUtils.PI, MathUtils.PI);
                 System.out.println(MathUtils.random(-MathUtils.PI, MathUtils.PI));
             }
             else {
@@ -73,20 +72,13 @@ public class Web {
             this.webBody.setLinearVelocity(this.outVector.x*vecMulti,this.outVector.y*vecMulti);
         }
 
-        //this.webHitbox = bodyFactory.createBone(world, webBody, skullBody.getPosition().x, skullBody.getPosition().y);
-
-
-
         this.webCreated = true;
         Body temp = this.webBody;
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
                 if (!webBodiesCollected.contains(temp)) {
-
-                 //   Cobweb web = new Cobweb(world, webBody.getPosition().x - 8, webBody.getPosition().y - 8, false);
-                 //   cobwebs.add(web);
-                //    webBodiesCollected.add(temp);
+                    //destroy web - may need this in future, currently unused
                 }
             }
         },3f);

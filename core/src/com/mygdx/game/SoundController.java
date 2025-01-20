@@ -6,10 +6,8 @@ public class SoundController {
 
     final CreateAssets tx = CreateAssets.getInstance();
 
-    public SoundController() {
-
-
-    }
+    //the Sound Controller is responsible for playing Sounds at the correct pitch and volume
+    //TODO integrate with a menu volume slider
 
     public void playSound(String sound, float pitchMax, float pitchMin, float volume) {
 
