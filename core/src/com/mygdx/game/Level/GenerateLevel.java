@@ -28,25 +28,20 @@ public class GenerateLevel {
     private CreateCorridor cc;
     private float PLAYER_X, PLAYER_Y;
     private TiledMapTileLayer layer;
-    public static int roomX, levelY, testRoomX, testLevelY, corridorOffset;
+    public static int roomX, levelY, testRoomX, testLevelY;
     public int initialTestRoomX, initialTestLevelY;
-    public int longestRow, currentRow, previousLongestRow, rollbackIndex, roomsIndex, tries, repeatRoom, numRooms;
-    public int doorDirection, roomSize, currentRoomSize, previousRoomSize;
+    public int roomsIndex;
+    public int tries;
+    public static int numRooms;
     public int testPreviousLongestRow, testLongestRow, testPreviousRoomSize, testCurrentRoomSize, testPreviousRoomX, testPreviousLevelY, testCurrentRow;
     private int xOffset, yOffset;
-    private boolean intersecting, startingRoom, roomHitboxCreated;
+    private boolean startingRoom, roomHitboxCreated;
     private int doorTop, doorBottom, doorLeft, doorRight, doorResult;
-    private String doorLeftX, doorLeftY, doorRightX, doorRightY;
-    private List layerSizes;
     private ArrayList list, itemIndex;
     public static ArrayList<Integer> path;
     public ArrayList<Integer> directionsAvailableIndexed;
-    public ArrayList<Room> rolledbackRooms;
     public HashMap<String, String> doorMap;
-    private int[] doorDirections;
-    public Fixture roomHitbox;
     public boolean failed;
-    public Room rollbackRoom;
     private HashMap<String, String> doorMapPrevious;
     private String itemKind;
     private int invMin, invMax, amountMin, amountMax, amountIndex, indexMin, indexMax, randomIndex, randomChosenIndex, invRandom, cost;
@@ -54,10 +49,6 @@ public class GenerateLevel {
     private int speechMinX, speechMaxX, randomSpeechXOffset;
 
     public ArrayList generateLevel(float PLAYER_X, float PLAYER_Y) {
-        //int numRooms
-        //int[] indexes
-        //String filePath
-        //int shop
 
         init = new InitLevel();
         init.InitializeLevel();
@@ -72,23 +63,16 @@ public class GenerateLevel {
         roomsIndex = 0;
         roomHitboxCreated = false;
 
-        int min = 10;
-        int max = 10;
+        int min = 14;
+        int max = 14;
         numRooms = (int) (Math.random() * (max - min + 1)) + min;
-        //int numRooms = 7;
 
         path = new ArrayList() {
         };
 
-        for (int i = 0; i < 10; i++) {
-            //path.add(1);
-        }
-
         boolean temp;
         temp = attemptLevelGen(1);
-        while (!temp) {
-            //attemptLevelGen();
-        }
+
         return list;
     }
 
@@ -97,24 +81,6 @@ public class GenerateLevel {
         int currentDoorDirection = 0;
         int previousDoorDirection = 0;
         currentDoorDirection =  pd.pickInitialDirection(currentDoorDirection);
-
-
-        /*
-        path.add(0,0);
-        path.add(1,1);
-        path.add(2,1);
-        path.add(3,1);
-        path.add(4,1);
-        path.add(5,1);
-        path.add(6,1);
-        path.add(7,1);
-        path.add(8,1);
-        path.add(8,1);
-
-         */
-        //path.add(9,1);
-        //path.add(10,1);
-        //path.add(11,1);
 
         for (int i = 0; i<numRooms*2; i++){
             if (i-1 != -1){
@@ -125,16 +91,10 @@ public class GenerateLevel {
             }
             currentDoorDirection =  pd.pickInitialDirection(currentDoorDirection);
 
-
-            //path.add(i,1);
             path.add(i, currentDoorDirection);
             path.add(i+1, currentDoorDirection);
             i++;
         }
-
-        //path.set(5,1);
-
-        System.out.println("PATH BEFORE: " + path);
 
         for (int i = 0; i < numRooms; i++) {
             Room newRoom = new Room();
@@ -148,12 +108,12 @@ public class GenerateLevel {
             }
 
             else {
-                if (i == 4) {
+                if (i == 4 || i == 10) {
                     newRoom.roomNum = 5;
                 }
-                else if (i == 1){
-                    newRoom.roomNum = 4;
-                }
+                //else if (i == 1){
+                //    newRoom.roomNum = 4;
+                //}
 
                 else {
                     int random = Random.randomInt(6, 1);
@@ -161,6 +121,7 @@ public class GenerateLevel {
                         random = Random.randomInt(6, 1);
                     }
                     //assign the room its random index
+                    newRoom.roomNum = random;
                     newRoom.roomNum = random;
                 }
 
@@ -173,10 +134,7 @@ public class GenerateLevel {
                     newRoom.unlockAllDoors(world, newRoom,false);
                 }
             }
-            // init.roomList.get(i).roomNum = random;
         }
-
-        System.out.println("Random number of rooms generated: " + numRooms);
 
         for (int i = 0; i < numRooms; i++) {
             //   roomsIndex++;
@@ -192,7 +150,7 @@ public class GenerateLevel {
                 temp = testGenerateRoom(startingRoom, path.get(i), i);
                 if (!temp) {
                     path.clear();
-                    System.out.println("ERROR ERROR");
+                    System.out.println("ERROR: LEVEL ROOMS INTERSECTED - PLEASE RERUN PROGRAM");
                     list = new ArrayList();
                     return false;
                 }
@@ -316,7 +274,7 @@ public class GenerateLevel {
                     );
                 }
             }
-            //Outputs the X and Y values of every room, for debugging purposes.
+            //outputs the X and Y values of every room, for debugging purposes
             /*
             System.out.println(
                     "ROOM " + (r + 1) +
@@ -331,8 +289,6 @@ public class GenerateLevel {
 
              */
         }
-
-        System.out.println("PATH AFTER: " + path);
 
         for (Room r : init.roomList) {
             r.createLocks(world);
@@ -349,16 +305,9 @@ public class GenerateLevel {
 
     public boolean testGenerateRoom(boolean startingRoom, int currentDoorDirection, int roomIndex) {
         tries = 1;
-        //if (!startingRoom){
-        //    previousDoorDirection = 0;
-
-        //}
-
-                //pd.pickInitialDirection(doorDirection);
 
         try {
             List<List<String>> roomFile = init.lp.read("Rooms/room" + init.roomList.get(roomIndex).roomNum + ".csv");
-            //System.out.println("ROOM " + init.roomList.get(roomIndex).roomNum + " CHOSEN" );
 
             if (startingRoom){
                 testPreviousRoomSize = roomFile.size();
@@ -497,17 +446,6 @@ public class GenerateLevel {
         newRoom.longestRow = testLongestRow;
         Room initialRoom;
         initialRoom = newRoom;
-        //newRoom.roomNum = random;
-
-        // if (!(init.roomList.contains(newRoom))) {
-        //  init.roomList.add(newRoom);
-        //}
-        /*
-        if (roomIndex == 0) {
-
-           init.roomList.get(roomIndex).directionTaken = -1;
-        }
-         */
 
         int doorY = y1;
 
@@ -515,11 +453,6 @@ public class GenerateLevel {
 
         for (Room r : init.roomList) {
 
-           // System.out.println(doorLeft + doorRight);
-
-          //  if (tries >= 4) {
-          //      return failed = false;
-          //  }
             if (!(r.y1 == 0 || r.x1 == 0)) {
                 if (init.roomList.get(roomIndex).index != r.index) { //checks first to see if the current room is NOT evaluating against itself
                     if (!((newRoom.x1 == r.x1) && (newRoom.x2 == r.x2) && (newRoom.y1  == r.y1) && (newRoom.y2 == r.y2))) { //checks to see if rooms are an exact match - rare but possible
@@ -563,15 +496,6 @@ public class GenerateLevel {
                     }
                     else {
                         break;
-                        /*
-                        System.out.println("ROOM DIMENSIONS IDENTICAL - INTERSECTION");
-                        tries++;
-                        newRoom = initialRoom;
-                        testLevelY = initialTestLevelY;
-                        testRoomX = initialTestRoomX;
-                        return failed = true;
-
-                         */
                     }
                 }
             }
@@ -583,15 +507,6 @@ public class GenerateLevel {
         init.roomList.get(roomIndex).y2 = initialRoom.y2;
         newRoom = initialRoom;
 
-        //create a room object with the dimensions of the room to-be generated
-        //  Room newRoom = new Room();
-
-        //   rollbackIndex = init.roomList.size();
-
-        //if (tries == 1) {
-
-       // }
-
         newRoom.x1 = x1;
         newRoom.x2 = x2;
         newRoom.y1 = y1;
@@ -599,12 +514,8 @@ public class GenerateLevel {
         newRoom.directionTaken = doorDirection;
 
         doorResult = 0;
-
-        System.out.println("CURRENT ROOM: "+roomIndex);
-       // System.out.println("DOOR MAP PREVIOUS ROOM INDEX " + (roomIndex-1) + ": " + doorMapPrevious);
         xOffset = 0;
         yOffset = 0;
-
 
         if (startingRoom) {
             doorMapPrevious =  init.roomList.get(roomIndex).doorLocations;
@@ -749,6 +660,7 @@ public class GenerateLevel {
                     testRoomX = testRoomX + xOffset;
                 }
             }
+            //TODO rooms generated to the left still sometimes move too far left - to be fixed
             if (doorDirection==4) {
                 String doorUpperRight = doorMap.get("UpperRight");
                 String[] doorUpperRightXY = doorUpperRight.split(",");
@@ -1241,7 +1153,6 @@ for (int i = 0; i < layerSize; i++) {
             }
             break;
         case "doorLeftUpper":
-            // if((roomIndex - 1 != -1) && (init.roomList.get(roomIndex-1).directionTaken != 2)) {
             if (!startingRoom) {
                 if (doorLeft <= 1 && ((nextDirection == 4 || doorDirection == 2))) {
 
@@ -1250,7 +1161,6 @@ for (int i = 0; i < layerSize; i++) {
                     init.roomList.get(roomIndex).doorArrayMap.put("UpperLeft", newDoorLeftUpper);
                     init.roomList.get(roomIndex).doors.add(newDoorLeftUpper);
 
-                    //System.out.println("DOOR LOCATION: " + (r.doorLocations).get("UpperLeft"));
                     currentCell = init.cr.doorLeftUpper;
                     doorLeft++;
                     break;
@@ -1263,7 +1173,6 @@ for (int i = 0; i < layerSize; i++) {
             }
             break;
         case "doorLeftUpperFence":
-            // if((roomIndex - 1 != -1) && (init.roomList.get(roomIndex-1).directionTaken != 2)) {
             if (!startingRoom) {
                 if (doorLeft <= 1 && ((nextDirection == 4 || doorDirection == 2))) {
 
@@ -1272,7 +1181,6 @@ for (int i = 0; i < layerSize; i++) {
                     init.roomList.get(roomIndex).doorArrayMap.put("UpperLeft", newDoorLeftUpper);
                     init.roomList.get(roomIndex).doors.add(newDoorLeftUpper);
 
-                    //System.out.println("DOOR LOCATION: " + (r.doorLocations).get("UpperLeft"));
                     currentCell = init.cr.doorLeftUpper;
                     doorLeft++;
                     break;
@@ -1294,7 +1202,6 @@ for (int i = 0; i < layerSize; i++) {
                     init.roomList.get(roomIndex).doorArrayMap.put("LowerLeft", newDoorLeftLower);
                     init.roomList.get(roomIndex).doors.add(newDoorLeftLower);
 
-                    //System.out.println("DOOR LOCATION: " + (r.doorLocations).get("LowerLeft"));
                     currentCell = init.cr.doorLeftLower;
                     doorLeft++;
                     break;
@@ -1316,7 +1223,6 @@ for (int i = 0; i < layerSize; i++) {
                     init.roomList.get(roomIndex).doorArrayMap.put("LowerLeft", newDoorLeftLower);
                     init.roomList.get(roomIndex).doors.add(newDoorLeftLower);
 
-                    //System.out.println("DOOR LOCATION: " + (r.doorLocations).get("LowerLeft"));
                     currentCell = init.cr.doorLeftLower;
                     doorLeft++;
                     break;
@@ -1337,7 +1243,6 @@ for (int i = 0; i < layerSize; i++) {
                     init.roomList.get(roomIndex).doorArrayMap.put("UpperRight", newDoorRightUpper);
                     init.roomList.get(roomIndex).doors.add(newDoorRightUpper);
 
-                    //System.out.println("DOOR LOCATION: " + (r.doorLocations).get("UpperRight"));
                     currentCell = init.cr.doorRightUpper;
                     doorRight++;
                     break;
@@ -1358,7 +1263,6 @@ for (int i = 0; i < layerSize; i++) {
                     init.roomList.get(roomIndex).doorArrayMap.put("UpperRight", newDoorRightUpper);
                     init.roomList.get(roomIndex).doors.add(newDoorRightUpper);
 
-                    //System.out.println("DOOR LOCATION: " + (r.doorLocations).get("UpperRight"));
                     currentCell = init.cr.doorRightUpper;
                     doorRight++;
                     break;
@@ -1379,7 +1283,6 @@ for (int i = 0; i < layerSize; i++) {
                     init.roomList.get(roomIndex).doorArrayMap.put("LowerRight", newDoorRightLower);
                     init.roomList.get(roomIndex).doors.add(newDoorRightLower);
 
-                    //System.out.println("DOOR LOCATION: " + (r.doorLocations).get("LowerRight"));
                     currentCell = init.cr.doorRightLower;
                     doorRight++;
                     break;
@@ -1400,7 +1303,6 @@ for (int i = 0; i < layerSize; i++) {
                     init.roomList.get(roomIndex).doorArrayMap.put("LowerRight", newDoorRightLower);
                     init.roomList.get(roomIndex).doors.add(newDoorRightLower);
 
-                    //System.out.println("DOOR LOCATION: " + (r.doorLocations).get("LowerRight"));
                     currentCell = init.cr.doorRightLower;
                     doorRight++;
                     break;
@@ -1421,7 +1323,6 @@ for (int i = 0; i < layerSize; i++) {
                     init.roomList.get(roomIndex).doorArrayMap.put("BottomLeft", newDoorBottomLeft);
                     init.roomList.get(roomIndex).doors.add(newDoorBottomLeft);
 
-                    //System.out.println("DOOR LOCATION: " + (r.doorLocations).get("BottomLeft"));
                     currentCell = init.cr.doorBottomLeft;
                     doorBottom++;
                     break;
@@ -1442,7 +1343,6 @@ for (int i = 0; i < layerSize; i++) {
                     init.roomList.get(roomIndex).doorArrayMap.put("BottomLeft", newDoorBottomLeft);
                     init.roomList.get(roomIndex).doors.add(newDoorBottomLeft);
 
-                    //System.out.println("DOOR LOCATION: " + (r.doorLocations).get("BottomLeft"));
                     currentCell = init.cr.doorBottomLeft;
                     doorBottom++;
                     break;
@@ -1463,7 +1363,6 @@ for (int i = 0; i < layerSize; i++) {
                     init.roomList.get(roomIndex).doorArrayMap.put("BottomRight", newDoorBottomRight);
                     init.roomList.get(roomIndex).doors.add(newDoorBottomRight);
 
-                    //System.out.println("DOOR LOCATION: " + (r.doorLocations).get("BottomRight"));
                     currentCell = init.cr.doorBottomRight;
                     doorBottom++;
                     break;
@@ -1484,7 +1383,6 @@ for (int i = 0; i < layerSize; i++) {
                     init.roomList.get(roomIndex).doorArrayMap.put("BottomRight", newDoorBottomRight);
                     init.roomList.get(roomIndex).doors.add(newDoorBottomRight);
 
-                    //System.out.println("DOOR LOCATION: " + (r.doorLocations).get("BottomRight"));
                     currentCell = init.cr.doorBottomRight;
                     doorBottom++;
                     break;
@@ -1685,8 +1583,6 @@ for (int i = 0; i < layerSize; i++) {
             itemIndex.remove(randomIndex);
 
             indexMax--;
-
-            System.out.println(itemIndex);
 
             amountMin = 1;
             amountMax = 1;

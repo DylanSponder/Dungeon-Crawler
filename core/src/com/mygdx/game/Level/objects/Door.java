@@ -14,7 +14,7 @@ public class Door {
     private World world;
     public Body doorBody;
     public Fixture doorHitbox;
-    public boolean open, locked, upDown, createHitbox;
+    public boolean open, opened, locked, upDown, createHitbox;
     public int roomNum;
 
     public Door(World world, String doorName, String doorLocation, float x, float y, boolean upDown, boolean createHitbox, int roomNum) {
@@ -23,6 +23,7 @@ public class Door {
      this.doorX = x;
      this.doorY = y;
      this.open = false;
+     this.opened = false;
      this.locked = false;
      this.upDown = upDown;
      this.createHitbox = createHitbox;
