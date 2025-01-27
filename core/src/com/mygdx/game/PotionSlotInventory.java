@@ -7,6 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+import static com.mygdx.game.DungeonCrawler.hud;
+import static com.mygdx.game.DungeonCrawler.soundController;
+
 public class PotionSlotInventory extends Table {
   TextureRegionDrawable potion;
   TextureRegionDrawable emptySlot;
@@ -41,6 +44,7 @@ public class PotionSlotInventory extends Table {
   public void addPotion() {
     if (this.Size < Capacity) {
       this.Size++;
+      soundController.playSound("PickupWine", 10, 8, 0.1f);
       actors.get(this.Size-1).setDrawable(potion);
     }
   }
@@ -48,6 +52,8 @@ public class PotionSlotInventory extends Table {
   public void usePotion(int id) {
     if (!WaitingForCooldown) {
       if (this.Size > 0) {
+        hud.healthBar.gainHealth(1.5f);
+        soundController.playSound("WineDrink", 11, 7, 0.1f);
         actors.get(this.Size-1).setDrawable(emptySlot);
         this.Size--;
         WaitingForCooldown = true;

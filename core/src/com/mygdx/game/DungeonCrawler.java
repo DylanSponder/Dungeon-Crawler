@@ -36,6 +36,7 @@ import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.behaviours.fsm.projectiles.Arrow;
 import com.mygdx.game.entity.behaviours.fsm.projectiles.Bone;
 import com.mygdx.game.entity.behaviours.fsm.drops.Skull;
+import com.mygdx.game.entity.behaviours.fsm.projectiles.Eyebeam;
 import com.mygdx.game.entity.behaviours.fsm.projectiles.Web;
 import com.mygdx.game.level.objects.Tutorial;
 import com.mygdx.game.entity.behaviours.fsm.*;
@@ -47,8 +48,8 @@ import com.mygdx.game.level.InitLevel;
 import static com.mygdx.game.HUD.compassArrowImage;
 
 public class DungeonCrawler extends ApplicationAdapter {
-	private SpriteBatch arrowBatch, enemySkullBatch, enemySpiderBatch, enemyGhostBatch, potBatch, hudBatch, tutoBatch, fontBatch, inventoryBatch;
-	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, coinBatch, obstacleBatch, fireBatch, flameBatch, webBatch, cobBatch, candleBatch;
+	private SpriteBatch arrowBatch, enemySkullBatch, enemySpiderBatch, enemyGhostBatch, enemyEyeBatch, potBatch, hudBatch, tutoBatch, fontBatch, inventoryBatch;
+	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, coinBatch, obstacleBatch, fireBatch, flameBatch, webBatch, cobBatch, candleBatch, eyebeamBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch, roofBatch, columnBaseLowerBatch, heartBatch;
 	public static SpriteBatch trapBatch,playerBatch;
 	public static World world;
@@ -67,7 +68,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static Fixture swordHitbox, arrowHitbox, shieldHitbox, chiselHitbox;
 	public static Arrow arrow;
 	public static ArrayList<Arrow> arrows;
-	public static ArrayList<Body> arrowBodiesCollided, boneBodiesCollided, skullBodiesDestroyed, deadEnemyBodies, webBodiesCollected, obstacleBodiesCollected;
+	public static ArrayList<Body> arrowBodiesCollided, boneBodiesCollided, eyebeamBodiesCollected, skullBodiesDestroyed, deadEnemyBodies, webBodiesCollided, obstacleBodiesCollected;
 	public static ArrayMap<Body, Arrow> arrowArrayMap;
 	public static ArrayMap<Trap, Integer> arrowsToBeFired;
 	public static ArrayList<Enemy> enemies;
@@ -75,6 +76,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Trap> traps;
 	public ArrayMap<Body, Skull> skullArrayMap;
 	public static ArrayMap<Body, Bone> boneArrayMap;
+	public static ArrayMap<Body, Eyebeam> eyebeamArrayMap;
 	public static ArrayMap<Body, Web> webArrayMap;
 	public static ArrayMap<Body, Potion> potionArrayMap;
 	public static ArrayMap<Body, Coin> coinArrayMap;
@@ -83,14 +85,16 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayMap<Body, Fire> respawnFireMap;
 	public static ArrayMap<Body, Pot> potArrayMap;
 	public static ArrayMap<Body, Obstacle> obArrayMap;
-	public boolean reversedArrowMap, reversedSkullMap, reversedPotMap, reversedRespawnFireMap, reversedBoneMap, reversedWebMap, reversedObMap;
+	public boolean reversedArrowMap, reversedSkullMap, reversedPotMap, reversedRespawnFireMap, reversedBoneMap, reversedWebMap, reversedObMap, reversedEyebeamMap;
 	public boolean reversedCoinMap, reversedPotionMap, reversedHeartMap;
 	public static ArrayList<EnemySkull> enemySkulls, dyingSkulls;
 	public static ArrayList<EnemySpider> enemySpiders, dyingSpiders;
 	public static ArrayList<EnemyGhost> enemyGhosts, dyingGhosts;
+	public static ArrayList<EnemyCyclops> enemyEyes, dyingEyes;
 	public static ArrayList<Skull> skulls, brokenSkulls;
 	public static ArrayList<Fire> extinguishedRespawnFires;
 	public static ArrayList<Bone> bones;
+	public static ArrayList<Eyebeam> eyebeams;
 	public static ArrayList<Web> webs;
 	public static ArrayList<Shopkeeper> shopkeepers;
 	public static ArrayList<Lock> locks;
@@ -146,9 +150,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 		enemySkullBatch = new SpriteBatch();
 		enemySpiderBatch = new SpriteBatch();
 		enemyGhostBatch = new SpriteBatch();
+		enemyEyeBatch = new SpriteBatch();
 		arrowBatch = new SpriteBatch();
 		skullBatch = new SpriteBatch();
 		boneBatch = new SpriteBatch();
+		eyebeamBatch = new SpriteBatch();
 		webBatch = new SpriteBatch();
 		doorBatch = new SpriteBatch();
 		lockBatch = new SpriteBatch();
@@ -181,13 +187,16 @@ public class DungeonCrawler extends ApplicationAdapter {
 		enemySkulls = new ArrayList<>();
 		enemySpiders = new ArrayList<>();
 		enemyGhosts = new ArrayList<>();
+		enemyEyes = new ArrayList<>();
 		deadEnemyBodies = new ArrayList<>();
 		dyingSkulls = new ArrayList<>();
 		dyingSpiders = new ArrayList<>();
 		dyingGhosts = new ArrayList<>();
+		dyingEyes = new ArrayList<>();
 		skulls = new ArrayList<>();
 		brokenSkulls = new ArrayList<>();
 		bones = new ArrayList<>();
+		eyebeams = new ArrayList<>();
 		webs = new ArrayList<>();
 		cobwebs = new ArrayList<>();
 		burnedCobwebs = new ArrayList<>();
@@ -215,7 +224,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		Vector2 vec = new Vector2();
 		vec.x = PLAYER_X;
 		vec.y = PLAYER_Y;
-		PLAYER_SPEED_MULTI = 45f;
+		PLAYER_SPEED_MULTI = 48f;
 
 		//initialize the Box2D body factory, asset instance
 		//and collision listener
@@ -344,14 +353,16 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//initialize all removable level objects
 		arrowBodiesCollided = new ArrayList<Body>();
-		webBodiesCollected = new ArrayList<Body>();
+		webBodiesCollided = new ArrayList<Body>();
 		obstacleBodiesCollected = new ArrayList<Body>();
 		boneBodiesCollided = new ArrayList<Body>();
+		eyebeamBodiesCollected = new ArrayList<Body>();
 		skullBodiesDestroyed = new ArrayList<Body>();
 		arrowArrayMap = new ArrayMap<Body, Arrow>();
 		arrowsToBeFired = new ArrayMap<Trap, Integer>();
 		skullArrayMap = new ArrayMap<Body, Skull>();
 		boneArrayMap = new ArrayMap<Body, Bone>();
+		eyebeamArrayMap = new ArrayMap<Body, Eyebeam>();
 		webArrayMap = new ArrayMap<Body, Web>();
 		arrows = new ArrayList<Arrow>();
 		potionArrayMap = new ArrayMap<Body, Potion>();
@@ -1203,6 +1214,179 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 			dyingGhosts.clear();
 
+		//render enemy eye sprites
+		for (EnemyCyclops e4 : enemyEyes) {
+			if (e4.rayCastable) {
+				e4.detectPlayer();
+			}
+			//check to see if the player is both in sight and in range
+			if ((e4.playerSighted && e4.playerInRange) && menuClosed){
+				//after a specified delay once the player has been spotted, shoot a projectile with some offset at the player
+				if (e4.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 130) ){
+					e4.timeSinceAlerted = 0f;
+					e4.lostSight = false;
+					messages.remove(e4.lostSightMessage);
+
+					//e4.enemyAI.setMaxLinearSpeed(0);
+
+					e4.getStateMachine().changeState(EnemyCyclopsState.STOP);
+
+					//e4.enemyAI.setMaxAngularSpeed(0);
+					//e4.enemyAI.setMaxAngularAcceleration(0);
+					//e4.enemyAI.
+					//e4.enemyBody.setAngularDamping(10000);
+					//e4.enemyBody.setAngularVelocity(0);
+					//e4.enemyDetectionBody.setAngularDamping(10000);
+
+					e4.firingBeam = true;
+					Timer.schedule(new Timer.Task() {
+						@Override
+						public void run() {
+							if ((e4.playerSighted && e4.playerInRange) && menuClosed) {
+								e4.getStateMachine().changeState(EnemyCyclopsState.GO_TO_PLAYER);
+							} else {
+								e4.getStateMachine().changeState(EnemyCyclopsState.WANDER);
+							}
+
+							e4.enemyAI.setMaxLinearSpeed(35);
+							e4.firingBeam = false;
+						}
+					}, 1.2f);
+
+					switch (e4.facing) {
+						case "Up":
+							Eyebeam eyebeamUp = new Eyebeam(world, e4.enemyBody, e4.enemyAI.getBody().getPosition().x, e4.enemyAI.getBody().getPosition().y, e4.facing, true);
+							eyebeamUp.createEyebeam(e4.enemyBody, eyebeamArrayMap,rayHandler);
+							e4.enemyBody.setFixedRotation(true);
+							e4.enemyBody.setTransform(e4.enemyBody.getPosition(),90);
+							//e4.enemyAI.setOrientation(90);
+							break;
+						case "Down":
+							Eyebeam eyebeamDown = new Eyebeam(world, e4.enemyBody, e4.enemyAI.getBody().getPosition().x, e4.enemyAI.getBody().getPosition().y, e4.facing, true);
+							eyebeamDown.createEyebeam(e4.enemyBody, eyebeamArrayMap,rayHandler);
+							e4.enemyBody.setFixedRotation(true);
+							e4.enemyBody.setTransform(e4.enemyBody.getPosition(),270);
+							//e4.enemyAI.setOrientation(270);
+							break;
+						case "Left":
+							Eyebeam eyebeamLeft = new Eyebeam(world, e4.enemyBody, e4.enemyAI.getBody().getPosition().x, e4.enemyAI.getBody().getPosition().y, e4.facing, false);
+							eyebeamLeft.createEyebeam(e4.enemyBody, eyebeamArrayMap,rayHandler);
+							e4.enemyBody.setFixedRotation(true);
+							e4.enemyBody.setTransform(e4.enemyBody.getPosition(),180);
+							//e4.enemyAI.setOrientation(180);
+							break;
+						case "Right":
+							Eyebeam eyebeamRight = new Eyebeam(world, e4.enemyBody, e4.enemyAI.getBody().getPosition().x, e4.enemyAI.getBody().getPosition().y, e4.facing, false);
+							eyebeamRight.createEyebeam(e4.enemyBody, eyebeamArrayMap,rayHandler);
+							e4.enemyBody.setFixedRotation(true);
+							e4.enemyBody.setTransform(e4.enemyBody.getPosition(),0);
+							//e4.enemyAI.setOrientation(0);
+							break;
+					}
+
+
+					//TextureRegion currentFrame2 = tx.fireOutAnimation.getKeyFrame(f.stateTime, true);
+					//fireBatch.begin();
+					//Fire.renderFire(fireBatch, currentFrame2, f.fireX, f.fireY, f.smoking, false);
+
+				} else {
+
+					if (!e4.firingBeam) {
+						e4.timeSinceAlerted = e4.timeSinceAlerted + Gdx.graphics.getDeltaTime();
+					}
+				}
+
+				if (!e4.alerted) {
+					e4.alertMessage.showing = true;
+					e4.alertMessage.fade = true;
+					e4.alerted = true;
+
+					e4.alertMessage.textX = e4.enemyAI.getBody().getPosition().x - 2f;
+					e4.alertMessage.textY = e4.enemyAI.getBody().getPosition().y + 8f;
+					messages.add(e4.alertMessage);
+				}
+				if (e4.firingBeam) {
+					e4.getStateMachine().changeState(EnemyCyclopsState.STOP);
+				} else {
+					e4.getStateMachine().changeState(EnemyCyclopsState.GO_TO_PLAYER);
+				}
+
+
+
+			} else if (!e4.playerSighted) {
+				messages.remove(e4.alertMessage);
+				e4.timeSinceAlerted = 0f;
+				if (!e4.lostSight) {
+					e4.lostSight = true;
+					e4.lostSightMessage.showing = true;
+					e4.lostSightMessage.fade = true;
+					e4.lostSightMessage.textX = e4.enemyAI.getBody().getPosition().x - 2f;
+					e4.lostSightMessage.textY = e4.enemyAI.getBody().getPosition().y + 8f;
+					messages.add(e4.lostSightMessage);
+				}
+			}
+			enemyEyeBatch.begin();
+			if (e4.facing == "Up") {
+				enemyEyeBatch.draw(tx.enemyEyeUpSprite, e4.enemyBody.getPosition().x - 8f, e4.enemyBody.getPosition().y - 7f, 16, 16);
+			} else if (e4.facing == "Down") {
+				enemyEyeBatch.draw(tx.enemyEyeDownSprite, e4.enemyBody.getPosition().x - 8f, e4.enemyBody.getPosition().y - 7f, 16, 16);
+			} else if (e4.facing == "Left") {
+				enemyEyeBatch.draw(tx.enemyEyeLeftSprite, e4.enemyBody.getPosition().x - 8f, e4.enemyBody.getPosition().y - 7f, 16, 16);
+			} else if (e4.facing == "Right") {
+				enemyEyeBatch.draw(tx.enemyEyeRightSprite, e4.enemyBody.getPosition().x - 8f, e4.enemyBody.getPosition().y - 7f, 16, 16);
+			}
+			enemyEyeBatch.end();
+		}
+
+		for (EnemyCyclops deadEye : dyingEyes) {
+			deadEye.eyeLight.setActive(false);
+			deadEye.getStateMachine().changeState(EnemyCyclopsState.DIE);
+			enemies.remove(deadEye);
+		}
+		dyingEyes.clear();
+
+		if (!eyebeamArrayMap.isEmpty()) {
+
+			if (!reversedEyebeamMap) {
+				eyebeamArrayMap.reverse();
+				reversedEyebeamMap = true;
+			}
+
+			for (OrderedMap.Entry<Body, Eyebeam> beamEntry : eyebeamArrayMap.entries()) {
+				Body key = beamEntry.key;
+				Eyebeam value = beamEntry.value;
+
+				TextureRegion currentFrame = tx.eyebeamAnimation.getKeyFrame(value.stateTime, true);
+				value.stateTime += Gdx.graphics.getDeltaTime();
+
+				eyebeamBatch.begin();
+				Eyebeam.renderEyebeam(eyebeamBatch, currentFrame, value.facing, key.getPosition().x, key.getPosition().y);
+				eyebeamBatch.end();
+
+				if (tx.eyebeamAnimation.isAnimationFinished(value.stateTime)) {
+					eyebeamBodiesCollected.add(value.beamBody);
+				}
+			}
+
+			Iterator<Body> beamIt = eyebeamBodiesCollected.iterator();
+			if (beamIt.hasNext()) {
+				Body beamBody = beamIt.next();
+				if (eyebeamArrayMap.containsKey(beamBody)) {
+					for (Fixture fixture : beamBody.getFixtureList()) {
+						if (fixture.getUserData() == "Eyebeam") {
+							beamBody.destroyFixture(fixture);
+						}
+					}
+					eyebeamArrayMap.removeKey(beamBody);
+
+					//world.destroyBody(beamBody);
+					beamIt.remove();
+					eyebeams.remove(beamBody);
+				}
+			}
+		}
+
+
 		for (Body body : deadEnemyBodies) {
 			world.destroyBody(body);
 		}
@@ -1225,7 +1409,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				webBatch.end();
 			}
 
-			Iterator<Body> webIt = webBodiesCollected.iterator();
+			Iterator<Body> webIt = webBodiesCollided.iterator();
 			if (webIt.hasNext()) {
 				Body webBody = webIt.next();
 				if (webArrayMap.containsKey(webBody)) {
@@ -1262,7 +1446,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 					world.destroyBody(boneBody);
 					boneIt.remove();
 					bones.remove(boneBody);
-
 				}
 			}
 		}
@@ -1383,14 +1566,15 @@ public class DungeonCrawler extends ApplicationAdapter {
 							arrowArrayMap.get(collidedBody).destroyArrowFlameLight(arrowArrayMap.get(collidedBody).flameLight);
 							arrowArrayMap.get(collidedBody).onFire = false;
 						}
+						//remove the sprite by removing the Arrow class object
+						arrows.remove(arrowArrayMap.get(collidedBody));
 						arrowArrayMap.removeKey(collidedBody);
 
 						//remove the arrow Box2D body
 						world.destroyBody(collidedBody);
 						//remove body from arrowBodiesCollided
 						bodyIt.remove();
-						//remove the sprite by removing the Arrow class object
-						arrows.remove(arrowArrayMap.get(collidedBody));
+
 					}
 				}
 			}
@@ -1724,6 +1908,30 @@ public class DungeonCrawler extends ApplicationAdapter {
 					enemyGhost.shapeRenderer.end();
 				}
 
+				for (EnemyCyclops enemyEye : enemyEyes) {
+					//renders ray cast rays
+					Ray<Vector2>[] rays = enemyEye.rayConfigurations[0].getRays();
+
+					enemyEye.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+					enemyEye.shapeRenderer.setProjectionMatrix(camera.combined);
+					enemyEye.shapeRenderer.setColor(1, 0, 0, 1);
+
+					for (int i = 0; i < rays.length; i++) {
+						Ray<Vector2> ray = rays[i];
+						enemyEye.tmp.set(ray.start);
+						enemyEye.tmp2.set(ray.end);
+						enemyEye.shapeRenderer.line(enemyEye.tmp, enemyEye.tmp2);
+					}
+
+					//render player rayCasts to Enemies
+					if (enemyEye.rayCastable) {
+						enemyEye.tmp3.set((Vector2) enemyEye.playerDetectionRay.start);
+						enemyEye.tmp4.set((Vector2) enemyEye.playerDetectionRay.end);
+						enemyEye.shapeRenderer.line(enemyEye.tmp3, enemyEye.tmp4);
+					}
+					enemyEye.shapeRenderer.end();
+				}
+
 				//render all box2d debug collision fixtures
 				b2dr.render(world, camera.combined);
 			}
@@ -1746,9 +1954,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 			tutoBatch.setProjectionMatrix(camera.combined);
 			webBatch.setProjectionMatrix(camera.combined);
 			boneBatch.setProjectionMatrix(camera.combined);
+			eyebeamBatch.setProjectionMatrix(camera.combined);
 			enemySkullBatch.setProjectionMatrix(camera.combined);
 			enemySpiderBatch.setProjectionMatrix(camera.combined);
 			enemyGhostBatch.setProjectionMatrix(camera.combined);
+			enemyEyeBatch.setProjectionMatrix(camera.combined);
 			lockBatch.setProjectionMatrix(camera.combined);
 			doorBatch.setProjectionMatrix(camera.combined);
 			potBatch.setProjectionMatrix(camera.combined);
@@ -1836,6 +2046,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 					e3.detectPlayer();
 				}
 			}
+
+			for (EnemyCyclops e4 : enemyEyes) {
+				e4.enemyAI.update(GdxAI.getTimepiece().getTime());
+				e4.update(GdxAI.getTimepiece().getTime());
+				if (e4.playerInRange){
+					e4.detectPlayer();
+				}
+			}
 		} else {
 			//render menus with wireframes when in debug mode
 			Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -1906,6 +2124,15 @@ public class DungeonCrawler extends ApplicationAdapter {
 		flameBatch.dispose();
 		enemySkullBatch.dispose();
 		enemySpiderBatch.dispose();
+		enemyGhostBatch.dispose();
+		enemyEyeBatch.dispose();
+		heartBatch.dispose();
+		trapBatch.dispose();
+		candleBatch.dispose();
+		tutoBatch.dispose();
+		webBatch.dispose();
+		cobBatch.dispose();
+		coinBatch.dispose();
 		lockBatch.dispose();
 		roofBatch.dispose();
 		doorBatch.dispose();

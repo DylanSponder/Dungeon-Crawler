@@ -4,6 +4,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.mygdx.game.entity.behaviours.fsm.EnemyCyclops;
 import com.mygdx.game.entity.behaviours.fsm.EnemyGhost;
 import com.mygdx.game.entity.behaviours.fsm.EnemySkull;
 import com.mygdx.game.entity.behaviours.fsm.EnemySpider;
@@ -25,6 +26,7 @@ public class Room {
     public ArrayList<EnemySkull> enemySkulls;
     public ArrayList<EnemySpider> enemySpiders;
     public ArrayList<EnemyGhost> enemyGhosts;
+    public ArrayList<EnemyCyclops> enemyEyes;
     public ArrayList<Fire> spawners;
     public ArrayList<Roof> roofs;
 
@@ -40,6 +42,7 @@ public class Room {
         enemySkulls = new ArrayList<EnemySkull>();
         enemySpiders = new ArrayList<EnemySpider>();
         enemyGhosts = new ArrayList<EnemyGhost>();
+        enemyEyes = new ArrayList<EnemyCyclops>();
         spawners = new ArrayList<Fire>();
         roofs = new ArrayList<Roof>();
     }

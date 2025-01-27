@@ -5,13 +5,11 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.CreateAssets;
-import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
-import com.mygdx.game.entity.behaviours.fsm.EnemySkull;
-import com.mygdx.game.entity.behaviours.fsm.projectiles.Arrow;
+
 
 import static com.mygdx.game.DungeonCrawler.*;
-import static com.mygdx.game.DungeonCrawler.arrowBody;
+
 
 public class Trap {
 
@@ -182,8 +180,5 @@ public class Trap {
                 }, trapResetDelay);
                 break;
         }
-
-      //  arrows.add(arrow = new Arrow(arrowBody, "N/A" , 0f, false));
-      //  arrowArrayMap.put(arrowBody, arrow);
     }
 }

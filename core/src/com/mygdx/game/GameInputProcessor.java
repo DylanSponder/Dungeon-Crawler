@@ -133,6 +133,8 @@ public class GameInputProcessor implements InputProcessor {
             float playerRangedAttackSpeedInSeconds = 0.50f;
             playerRangedAttacking = true;
 
+            arrowBody = null;
+
             if (moveDown || player.facing == 3) {
                 playerDirection = "Down";
                 tx.playerTextureRegion = tx.playerAttackDown;
@@ -486,7 +488,6 @@ public class GameInputProcessor implements InputProcessor {
         if (keycode == Input.Keys.E) {
             if (hud.inventory.Size > 0) {
                 hud.inventory.usePotion(1);
-                hud.healthBar.gainHealth(1.5f);
             }
         }
 
@@ -728,6 +729,8 @@ public class GameInputProcessor implements InputProcessor {
             stateTime2 = 0f;
             playerRangedAttacking = true;
 
+            arrowBody = null;
+
             if (moveDown || player.facing == 3) {
                 playerDirection = "Down";
                 tx.playerTextureRegion = tx.playerAttackDown;
@@ -782,8 +785,8 @@ public class GameInputProcessor implements InputProcessor {
 
             arrowBody.setUserData("Arrow");
             if (player.hasGreekFire){
+
                 arrows.add(arrow = new Arrow(arrowBody, playerDirection, 0f, true));
-                player.greekFireUses--;
             } else {
                 arrows.add(arrow = new Arrow(arrowBody, playerDirection, 0f, false));
             }

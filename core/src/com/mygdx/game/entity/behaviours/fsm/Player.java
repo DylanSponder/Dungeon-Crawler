@@ -40,7 +40,7 @@ public class Player {
         hasShield = false;
         hasTorch = false;
         torchApplied = false;
-        hasChisel = false;
+        hasChisel = true;
     }
 
     public Body createPlayer(World world, float PLAYER_X, float PLAYER_Y, RayHandler rayHandler){
@@ -50,7 +50,7 @@ public class Player {
 
         this.playerBody = bf.createPlayerBody(world, PLAYER_X, PLAYER_Y);
 
-        this.playerLight = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.55f), 45, PLAYER_X, PLAYER_Y);
+        this.playerLight = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.55f), 38, PLAYER_X, PLAYER_Y);
         this.playerLight.attachToBody(this.playerBody);
         this.playerLight.setSoftnessLength(65);
 

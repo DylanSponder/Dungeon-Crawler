@@ -7,10 +7,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.*;
 import com.mygdx.game.Random;
 import com.mygdx.game.box2D.BodyFactory;
-import com.mygdx.game.entity.behaviours.fsm.EnemyGhost;
-import com.mygdx.game.entity.behaviours.fsm.EnemySkull;
-import com.mygdx.game.entity.behaviours.fsm.EnemySpider;
-import com.mygdx.game.entity.behaviours.fsm.Shopkeeper;
+import com.mygdx.game.entity.behaviours.fsm.*;
 import com.mygdx.game.level.objects.*;
 import com.mygdx.game.level.objects.Tutorial;
 
@@ -63,8 +60,8 @@ public class GenerateLevel {
         roomsIndex = 0;
         roomHitboxCreated = false;
 
-        int min = 14;
-        int max = 14;
+        int min = 8;
+        int max = 8;
         numRooms = (int) (Math.random() * (max - min + 1)) + min;
 
         path = new ArrayList() {
@@ -172,7 +169,7 @@ public class GenerateLevel {
                         init.roomList.get(r).roomSize, 0,
                         init.roomList.get(r).longestRow, 0
                 );
-                if ((r + 1 < 11)) {
+                if ((r + 1 < numRooms+1)) {
                     if (init.roomList.get(r+1).directionTaken == 1) {
                         HashMap<String, String> doorMap =  init.roomList.get(r).doorLocations;
                         String doorBottomLeft = doorMap.get("TopLeft");
@@ -222,8 +219,8 @@ public class GenerateLevel {
                             init.roomList.get(r).roomSize, init.roomList.get(r - 1).roomSize,
                             init.roomList.get(r).longestRow, init.roomList.get(r - 1).longestRow
                     );
-                    //TODO simplify to one function
-                    if ((r + 1 < 11)) {
+
+                    if ((r + 1 < numRooms+1)) {
                         if (init.roomList.get(r+1).directionTaken == 1) {
                             HashMap<String, String> doorMap =  init.roomList.get(r).doorLocations;
                             String doorBottomLeft = doorMap.get("TopLeft");
@@ -1542,6 +1539,16 @@ for (int i = 0; i < layerSize; i++) {
             enemies.add(enemy3);
             enemy3.room = roomIndex;
             DungeonCrawler.enemyGhosts.add(enemy3);
+            break;
+        case "enemyCyclops":
+            currentCell = init.cr.middleFloorTile;
+            EnemyCyclops enemy4 = new EnemyCyclops(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
+            init.roomList.get(roomIndex).enemyCounter++;
+            init.roomList.get(roomIndex).enemyEyes.add(enemy4);
+            enemy4.createEnemy(4);
+            enemies.add(enemy4);
+            enemy4.room = roomIndex;
+            DungeonCrawler.enemyEyes.add(enemy4);
             break;
         case "shop":
             currentCell = init.cr.middleFloor3Tile;

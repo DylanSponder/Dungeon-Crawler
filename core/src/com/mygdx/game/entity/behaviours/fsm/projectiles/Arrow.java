@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import static com.mygdx.game.DungeonCrawler.rayHandler;
 
 public class Arrow {
-    public static Body arrowBody;
+    public Body arrowBody;
     public String direction;
     static float arrowX;
     static float arrowY;

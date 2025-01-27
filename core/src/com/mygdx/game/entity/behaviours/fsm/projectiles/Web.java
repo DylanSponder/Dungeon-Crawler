@@ -10,25 +10,24 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.box2D.Box2DSteeringUtils;
-import com.mygdx.game.level.objects.Cobweb;
 
 import static com.mygdx.game.DungeonCrawler.*;
 
 public class Web {
     public Body webBody;
     public Fixture webHitbox;
-    public float webX, boneY;
+    public float webX, webY;
     public boolean webCreated;
-    public Body skullBody;
+    public Body spiderBody;
     public Vector2 orientationVector;
     public Vector2 outVector;
     public float vecMulti, orientation, exitAngle;
     public boolean aimed;
 
-    public Web(World world, Body skullBody, float x, float y, boolean multiplied, boolean aimed, Vector2 orientation) {
+    public Web(World world, Body spiderBody, float x, float y, boolean multiplied, boolean aimed, Vector2 orientation) {
         this.webX = x;
-        this.boneY = y;
-        this.skullBody = skullBody;
+        this.webY = y;
+        this.spiderBody = spiderBody;
         this.aimed = aimed;
         if (this.aimed) {
             this.orientationVector = orientation;
@@ -50,7 +49,7 @@ public class Web {
     public Body createWeb(float angle) {
         BodyFactory bodyFactory = new BodyFactory();
 
-        this.webBody = bodyFactory.createWebBody(world, skullBody, webX, boneY, angle);
+        this.webBody = bodyFactory.createWebBody(world, spiderBody, webX, webY, angle);
 
         this.webBody.setUserData("Web");
 
@@ -77,7 +76,7 @@ public class Web {
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-                if (!webBodiesCollected.contains(temp)) {
+                if (!webBodiesCollided.contains(temp)) {
                     //destroy web - may need this in future, currently unused
                 }
             }

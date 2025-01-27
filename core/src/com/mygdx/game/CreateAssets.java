@@ -36,7 +36,6 @@ public class CreateAssets {
 
     Texture coinItemTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/CoinItem.png"));
 
-
     Texture coinHUDTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Coin2Preview.png"));
     Texture playerTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SpriteSheet.png"));
     Texture playerWalkUpAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkUp.png"));
@@ -63,6 +62,7 @@ public class CreateAssets {
     Texture enemyGhostTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemyGhost/SpriteSheet.png"));
     Texture enemyGhostAlertTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemyGhost/SpriteSheetAlerted.png"));
     Texture enemyEyeTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemyCyclops/Eye.png"));
+    Texture eyebeamTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemyCyclops/Eyebeam.png"));
     Texture shopkeeperTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Shopkeeper/SpriteSheet.png"));
     Texture tutorialTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Tuto.png"));
     Texture fireAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Fire.png"));
@@ -94,6 +94,7 @@ public class CreateAssets {
 
     public Sound playerHurt = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/playerhurt.mp3"));
     public Sound arrowHit = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/arrowhit.mp3"));
+    public Sound swordHit = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/swordhit3.mp3"));
     public Sound swordSwing = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/swordswing.mp3"));
     public Sound swordSwing2 = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/swordswing2.mp3"));
     public Sound bowAttack = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/bowattack.mp3"));
@@ -104,6 +105,9 @@ public class CreateAssets {
 
 
     public Sound chiselUsed = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/usechisel.mp3"));
+    public Sound winePickup = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/pickupwine.mp3"));
+    public Sound wineDrink = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/drinkpotion.mp3"));
+    public Sound heartPickup = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/pickupheart.mp3"));
     public Sound doorOpening = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/dooropen.mp3"));
     public Sound doorClosing = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/doorclose.mp3"));
 
@@ -219,11 +223,6 @@ public class CreateAssets {
 
     TextureRegion[] playerWalkRightFrames = new TextureRegion[1 * 4];
 
-    public TextureRegion playerWalkUpRightAnimationTexture = new TextureRegion(playerWalkUpAnimationSheet,0,0,16,16);
-    public TextureRegion playerWalkDownRightAnimationTexture = new TextureRegion(playerWalkDownAnimationSheet,16,0,16,16);
-    public TextureRegion playerWalkDownLeftAnimationTexture = new TextureRegion(playerWalkLeftAnimationSheet,32,0,16,16);
-    public TextureRegion playerWalkUpLeftAnimationTexture = new TextureRegion(playerWalkRightAnimationSheet,48,0,16,16);
-
     public Animation<TextureRegion> playerWalkUpLeftAnimation = new Animation<TextureRegion>(0.20f, playerWalkUpAnimationTexture);
     public Animation<TextureRegion> playerWalkUpRightAnimation = new Animation<TextureRegion>(0.20f, playerWalkDownAnimationTexture);
     public Animation<TextureRegion> playerWalkDownLeftAnimation = new Animation<TextureRegion>(0.20f, playerWalkLeftAnimationTexture);
@@ -252,6 +251,25 @@ public class CreateAssets {
             playerWalkDownRightAnimationSheet.getHeight() / 4);
 
     TextureRegion[] playerWalkDownRightFrames = new TextureRegion[1 * 4];
+
+    public TextureRegion eyebeamAnimation1Texture = new TextureRegion(eyebeamTexture,0,0,64,8);
+    //public TextureRegion eyebeamAnimation2Texture = new TextureRegion(eyebeamTexture,0,8,64,8);
+    //public TextureRegion eyebeamAnimation3Texture = new TextureRegion(eyebeamTexture,0,16,64,8);
+    //public TextureRegion eyebeamAnimation4Texture = new TextureRegion(eyebeamTexture,0,24,64,8);
+
+
+    public Animation<TextureRegion> eyebeamAnimation = new Animation<TextureRegion>(0.20f, eyebeamAnimation1Texture);
+ //   public Animation<TextureRegion> eyebeam2 = new Animation<TextureRegion>(0.20f, eyebeamAnimation2Texture);
+  //  public Animation<TextureRegion> eyebeam3 = new Animation<TextureRegion>(0.20f, eyebeamAnimation3Texture);
+  //  public Animation<TextureRegion> eyebeam4 = new Animation<TextureRegion>(0.20f, eyebeamAnimation4Texture);
+
+  //  public Animation<TextureRegion> eyebeamAnimation = new Animation<TextureRegion>(0.25f, eyebeamAnimation1Texture);
+
+    TextureRegion[][] eyebeamTextureArray = TextureRegion.split(eyebeamTexture,
+            eyebeamTexture.getWidth() / 1,
+            eyebeamTexture.getHeight() / 4);
+
+    TextureRegion[] eyebeamFrames = new TextureRegion[1 * 4];
 
 
     public TextureRegion fireAnimationTexture = new TextureRegion(fireAnimationSheet,0,0,16,16);
@@ -310,7 +328,7 @@ public class CreateAssets {
 
     //TODO: this is lazy - refactor
     int index = 0, index2 = 0, index3 = 0, index4 = 0, index5 = 0, index6 = 0, index7 = 0, index8 = 0, index9 = 0, index10 = 0;
-    int index11 = 0, index12 = 0, index13 = 0, index14 = 0;
+    int index11 = 0, index12 = 0, index13 = 0, index14 = 0, index15 = 0;
 
     //Column textures
 
@@ -459,6 +477,11 @@ public class CreateAssets {
     Sprite enemyGhostAlertUpSprite = new Sprite(enemyGhostAlertTexture,16,0,16,16);
     Sprite enemyGhostAlertLeftSprite = new Sprite(enemyGhostAlertTexture,32,0,16,16);
     Sprite enemyGhostAlertRightSprite = new Sprite(enemyGhostAlertTexture,48,0,16,16);
+
+    Sprite enemyEyeDownSprite = new Sprite(enemyEyeTexture,0,0,16,16);
+    Sprite enemyEyeUpSprite = new Sprite(enemyEyeTexture,16,0,16,16);
+    Sprite enemyEyeLeftSprite = new Sprite(enemyEyeTexture,32,0,16,16);
+    Sprite enemyEyeRightSprite = new Sprite(enemyEyeTexture,48,0,16,16);
 
     Sprite enemyEyeSprite = new Sprite(enemyEyeTexture,0,0,16,16);
 
@@ -625,6 +648,16 @@ public class CreateAssets {
         }
 
         playerWalkUpRightAnimation = new Animation<TextureRegion>(playerWalkSpeed, playerWalkUpRightFrames);
+
+        //enemy eye attack animation
+        for (int g = 0; g < 4; g++) {
+            for (int w = 0; w < 1; w++) {
+                eyebeamFrames[index15++] = eyebeamTextureArray[g][w];
+            }
+        }
+
+        // Initialize the Animation with the frame interval and array of frames
+        eyebeamAnimation = new Animation<TextureRegion>(0.20f, eyebeamFrames);
 
         //fire animation
         for (int p = 0; p < 2; p++) {

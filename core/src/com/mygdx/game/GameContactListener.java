@@ -9,7 +9,6 @@ import com.mygdx.game.entity.behaviours.fsm.drops.Skull;
 import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.objects.*;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 import static com.mygdx.game.DungeonCrawler.*;
@@ -125,6 +124,9 @@ public class GameContactListener implements ContactListener {
                         if (colliderStr.startsWith("Arrow") || collideeStr.startsWith("Arrow")) {
                             soundController.playSound("ArrowHit", 10f,8f,0.1f);
                         }
+                        if (colliderStr.startsWith("Sword") || collideeStr.startsWith("Sword")) {
+                            soundController.playSound("SwordHit", 10f,8f,0.1f);
+                        }
 
 
 
@@ -163,6 +165,15 @@ public class GameContactListener implements ContactListener {
                                             deadEnemyBodies.add(collidee.getBody());
                                             soundController.playSound("GhostDeath",8.5f,7.5f,0.1f);
                                             dyingGhosts.add(ghost);
+                                        }
+                                    }
+                                }
+                                else if (e.enemyID == 4) {
+                                    for (EnemyCyclops eye : enemyEyes) {
+                                        if (eye.enemyBody == collidee.getBody()) {
+                                            deadEnemyBodies.add(collidee.getBody());
+                                            soundController.playSound("SkullDeath",8.5f,7.5f,0.1f);
+                                            dyingEyes.add(eye);
                                         }
                                     }
                                 }
@@ -253,6 +264,9 @@ public class GameContactListener implements ContactListener {
                         if (colliderStr.startsWith("Arrow") || collideeStr.startsWith("Arrow")) {
                             soundController.playSound("ArrowHit", 10f,8f,0.1f);
                         }
+                        if (colliderStr.startsWith("Sword") || collideeStr.startsWith("Sword")) {
+                            soundController.playSound("SwordHit", 10f,8f,0.1f);
+                        }
 
                         if (e.ENEMY_HEALTH < 1) {
                             if (!deadEnemyBodies.contains(e.enemyBody)) {
@@ -291,6 +305,15 @@ public class GameContactListener implements ContactListener {
                                         }
                                     }
                                 }
+                                else if (e.enemyID == 4) {
+                                    for (EnemyCyclops eye : enemyEyes) {
+                                        if (eye.enemyBody == collidee.getBody()) {
+                                            deadEnemyBodies.add(collidee.getBody());
+                                            soundController.playSound("SkullDeath",8.5f,7.5f,0.1f);
+                                            dyingEyes.add(eye);
+                                        }
+                                    }
+                                }
                             }
 
                             //hud.updateGold(1, true);
@@ -298,7 +321,7 @@ public class GameContactListener implements ContactListener {
                             if (init.roomList.get(e.room).enemyCounter < 1) {
                                 init.roomList.get(player.currentRoom).unlockAllDoors(world, init.roomList.get(player.currentRoom), false);
                                 player.roomCleared = true;
-                                if (init.roomList.get(player.currentRoom).index < GenerateLevel.numRooms) {
+                                if (init.roomList.get(player.currentRoom).index < GenerateLevel.numRooms-1) {
                                     Compass.showCompass();
 
                                     switch (GenerateLevel.path.get(player.currentRoom + 1)) {
@@ -434,8 +457,8 @@ public class GameContactListener implements ContactListener {
                             for (Door d : r.doors) {
                                 if (d.doorBody == collidee.getBody()) {
                                     if (!d.open) {
-                                        if (!webBodiesCollected.contains(collider.getBody())) {
-                                            webBodiesCollected.add(collider.getBody());
+                                        if (!webBodiesCollided.contains(collider.getBody())) {
+                                            webBodiesCollided.add(collider.getBody());
                                             break;
                                         }
                                     }
@@ -456,8 +479,8 @@ public class GameContactListener implements ContactListener {
 
                 if (colliderStr == "Wall" || colliderStr == "Shield") {
 
-                    if (!webBodiesCollected.contains(collidee.getBody())) {
-                        webBodiesCollected.add(collidee.getBody());
+                    if (!webBodiesCollided.contains(collidee.getBody())) {
+                        webBodiesCollided.add(collidee.getBody());
                     } else {
 
                     }
@@ -466,8 +489,8 @@ public class GameContactListener implements ContactListener {
                         for (Door d : r.doors) {
                             if (d.doorBody == collider.getBody()) {
                                 if (!d.open) {
-                                    if (!webBodiesCollected.contains(collidee.getBody())) {
-                                        webBodiesCollected.add(collidee.getBody());
+                                    if (!webBodiesCollided.contains(collidee.getBody())) {
+                                        webBodiesCollided.add(collidee.getBody());
                                     }
                                 }
                             }
@@ -498,16 +521,16 @@ public class GameContactListener implements ContactListener {
             else if (collideeStr == "Web" && colliderStr == "Player") {
                // hud.healthBar.LoseHealth(0.5f);
             //        player.playerBody.applyLinearImpulse(collider.getBody().getLinearVelocity().x * 500, collider.getBody().getLinearVelocity().y * 500, 0, 0, true);
-                    if (!webBodiesCollected.contains(collidee.getBody())) {
-                        webBodiesCollected.add(collidee.getBody());
+                    if (!webBodiesCollided.contains(collidee.getBody())) {
+                        webBodiesCollided.add(collidee.getBody());
 
                 }
 
             } else if (colliderStr == "Web" && collideeStr == "Player") {
               //  hud.healthBar.LoseHealth(0.5f);
             //    player.playerBody.applyLinearImpulse(collidee.getBody().getLinearVelocity().x * 500, collidee.getBody().getLinearVelocity().y * 500, 0, 0, true);
-                if (!webBodiesCollected.contains(collider.getBody())) {
-                    webBodiesCollected.add(collider.getBody());
+                if (!webBodiesCollided.contains(collider.getBody())) {
+                    webBodiesCollided.add(collider.getBody());
                 }
             }
         }
@@ -534,6 +557,11 @@ public class GameContactListener implements ContactListener {
                         for (EnemyGhost e3 : enemyGhosts) {
                             if (e3.enemyBody == collider.getBody() || e3.enemyBody == collidee.getBody()) {
                                 e3.playerInRange = true;
+                            }
+                        }
+                        for (EnemyCyclops e4 : enemyEyes) {
+                            if (e4.enemyBody == collider.getBody() || e4.enemyBody == collidee.getBody()) {
+                                e4.playerInRange = true;
                             }
                         }
                     }
@@ -592,6 +620,7 @@ public class GameContactListener implements ContactListener {
                 for (Heart h : hearts) {
                     if (h.heartBody == collidee.getBody() && hud.healthBar.currentHealth < hud.healthBar.maxHealth) {
                         collectedHearts.add(h);
+                        soundController.playSound("PickupHeart", 9f, 8f, 0.08f);
                     }
                 }
             }
@@ -670,22 +699,23 @@ public class GameContactListener implements ContactListener {
                     }
                     break;
                 case "Fire":
-
                     if (collideeStr.startsWith("Arrow")) {
                         for (Fire f : fires) {
                             if (f.fireBody == collider.getBody()) {
-                                if (f.extinguish && f.type == 1) {
-                                    f.smoking = true;
-                                    f.extinguish = false;
+                                if (f.type == 1) {
                                     for (Arrow a : arrows) {
+                                        System.out.println(a);
                                         if (a.arrowBody == collidee.getBody()) {
+                                            System.out.println(a.arrowBody);
+                                            System.out.println(a.onFire);
                                             if (a.onFire) {
-
-                                                if (!f.active) {
-                                                  //  f.showing = true;
-                                                }
-                                            } else {
-                                                a.onFire = true;
+                                                f.active = true;
+                                                f.light.setActive(true);
+                                                f.smoking = false;
+                                                f.extinguish = true;
+                                            }  else if (f.extinguish) {
+                                                f.smoking = true;
+                                                f.extinguish = false;
                                             }
                                         }
                                     }
@@ -754,6 +784,13 @@ public class GameContactListener implements ContactListener {
                                     break;
                                 }
                             }
+                        } else if (collidee.getUserData() == "EnemyCyclops") {
+                            for (EnemyCyclops e4 : enemyEyes) {
+                                if (e4.enemyAI.getBody() == collidee.getBody()) {
+                                    e4.getStateMachine().changeState(EnemyCyclopsState.GO_TO_PLAYER);
+                                    break;
+                                }
+                            }
                         }
 
 
@@ -761,21 +798,18 @@ public class GameContactListener implements ContactListener {
                     } else if (collideeStr == "Fire") {
                         for (Fire f : fires) {
                             if (f.fireBody == collidee.getBody()) {
-                                if (f.extinguish && f.type == 1) {
-                                    f.smoking = true;
-                                    f.extinguish = false;
+                                if (f.type == 1) {
                                     for (Arrow a : arrows) {
                                         if (a.arrowBody == collider.getBody()) {
                                             if (a.onFire) {
-
-                                                if (!f.active) {
-                                                    f.active = true;
-                                                }
-                                            } else {
-                                                a.onFire = true;
+                                                f.active = true;
+                                                f.light.setActive(true);
+                                                f.smoking = false;
+                                                f.extinguish = true;
+                                            } else if (f.extinguish) {
+                                                f.smoking = true;
+                                                f.extinguish = false;
                                             }
-
-
                                         }
                                     }
                                     //
@@ -850,8 +884,8 @@ public class GameContactListener implements ContactListener {
                             cobwebs.add(web);
                             player.touchingCobweb = true;
                         }
-                        if (!webBodiesCollected.contains(collidee.getBody())) {
-                            webBodiesCollected.add(collidee.getBody());
+                        if (!webBodiesCollided.contains(collidee.getBody())) {
+                            webBodiesCollided.add(collidee.getBody());
                         }
 
                         break;
@@ -884,6 +918,15 @@ public class GameContactListener implements ContactListener {
                                 hud.healthBar.loseHealth(0.5f);
                                 e.playerInRange = true;
                             }
+                        }
+                    }
+                    else if (collidee.getBody().getUserData() == "Enemy" && collidee.getUserData() != "Proximity" && (collidee.getUserData() == "EnemyCyclops" || collidee.getBody().getUserData() == "Eyebeam")) {
+                        for (EnemyCyclops e : enemyEyes) {
+                            if ((e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody())) {
+                                e.playerInRange = true;
+                            }
+                            hud.healthBar.loseHealth(0.5f);
+                            System.out.println(collideeStr);
                         }
                     }
 
@@ -997,18 +1040,17 @@ public class GameContactListener implements ContactListener {
                     } else if (colliderStr == "Fire") {
                     for (Fire f : fires) {
                         if (f.fireBody == collider.getBody()) {
-                            if (f.extinguish && f.type == 1) {
-                                f.smoking = true;
-                                f.extinguish = false;
+                            if (f.type == 1) {
                                 for (Arrow a : arrows) {
                                     if (a.arrowBody == collidee.getBody()) {
                                         if (a.onFire) {
-
-                                            if (!f.active) {
-                                                f.active = true;
-                                            }
-                                        } else {
-                                            a.onFire = true;
+                                            f.active = true;
+                                            f.light.setActive(true);
+                                            f.smoking = false;
+                                            f.extinguish = true;
+                                        } else if (f.extinguish) {
+                                            f.smoking = true;
+                                            f.extinguish = false;
                                         }
 
 
@@ -1114,6 +1156,9 @@ public class GameContactListener implements ContactListener {
                     for (EnemyGhost e3 : init.roomList.get(player.currentRoom).enemyGhosts) {
                         e3.rayCastable = true;
                     }
+                    for (EnemyCyclops e4 : init.roomList.get(player.currentRoom).enemyEyes) {
+                        e4.rayCastable = true;
+                    }
 
                     player.touchingRoom = true;
 
@@ -1162,7 +1207,7 @@ public class GameContactListener implements ContactListener {
         switch (colliderAsString) {
             case "Cobweb":
                 if (collider.getUserData() == "PlayerBound") {
-                    DungeonCrawler.PLAYER_SPEED_MULTI = 45f;
+                    DungeonCrawler.PLAYER_SPEED_MULTI = 48f;
                     player.touchingCobweb = false;
                     break;
                 }
@@ -1216,7 +1261,7 @@ public class GameContactListener implements ContactListener {
         switch (collideeAsString) {
             case "Cobweb":
                 if (collider.getUserData() == "PlayerBound") {
-                    DungeonCrawler.PLAYER_SPEED_MULTI = 45f;
+                    DungeonCrawler.PLAYER_SPEED_MULTI = 48f;
                     player.touchingCobweb = false;
                     for (Cobweb cob : cobwebs) {
                         if (cob.cobBody == collidee.getBody()) {
@@ -1248,25 +1293,31 @@ public class GameContactListener implements ContactListener {
             if  (collider.getUserData() == "Proximity"||
                     collidee.getUserData() == "Proximity"){
 
-                    for (EnemySkull e : enemySkulls){
+                    for (EnemySkull e : enemySkulls) {
                         if (e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody()){
                             e.playerInRange = false;
                             e.getStateMachine().changeState(EnemySkullState.WANDER);
                         }
                     }
 
-                    for (EnemySpider e : enemySpiders){
+                    for (EnemySpider e : enemySpiders) {
                         if (e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody()){
                             e.playerInRange = false;
                             e.getStateMachine().changeState(EnemySpiderState.WANDER);
                         }
                     }
-                for (EnemyGhost e : enemyGhosts){
+                for (EnemyGhost e : enemyGhosts) {
                     if (e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody()){
                         e.playerInRange = false;
                         e.getStateMachine().changeState(EnemyGhostState.WANDER);
                     }
                 }
+                for (EnemyCyclops e : enemyEyes) {
+                    if (e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody()){
+                        e.playerInRange = false;
+                        e.getStateMachine().changeState(EnemyCyclopsState.WANDER);
+                        }
+                    }
                 }
             }
 
@@ -1337,6 +1388,31 @@ public class GameContactListener implements ContactListener {
                 }
             }
         }
+
+        if (colliderAsString.startsWith("Arrow")) {
+            if (collideeAsString == "Fire") {
+                for (Arrow a : arrows) {
+                    if (a.arrowBody == collider.getBody()) {
+                        if (!a.onFire) {
+                            a.onFire = true;
+                        }
+                    }
+                }
+            }
+
+        } else if (collideeAsString.startsWith("Arrow")) {
+            if (colliderAsString == "Fire") {
+                for (Arrow a : arrows) {
+                    if (a.arrowBody == collidee.getBody()) {
+                        if (!a.onFire) {
+                            a.onFire = true;
+                        }
+                    }
+                }
+            }
+        }
+
+
     }
 
     @Override

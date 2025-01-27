@@ -189,8 +189,34 @@ public class SoundController {
                 skullDeath.setPitch(id25, randall25/10);
                 skullDeath.setVolume(id25,volume);
                 break;
-
-
+            case "SwordHit":
+                Sound swordHit = tx.swordHit;
+                long id26 = swordHit.play();
+                float randall26 = Random.randomFloat(pitchMax,pitchMin);
+                swordHit.setPitch(id26, randall26/10);
+                swordHit.setVolume(id26,volume);
+                break;
+            case "WineDrink":
+                Sound potionDrink = tx.wineDrink;
+                long id27 = potionDrink.play();
+                float randall27 = Random.randomFloat(pitchMax,pitchMin);
+                potionDrink.setPitch(id27, randall27/10);
+                potionDrink.setVolume(id27,volume);
+                break;
+            case "PickupHeart":
+                Sound heartPickup = tx.heartPickup;
+                long id28 = heartPickup.play();
+                float randall28 = Random.randomFloat(pitchMax,pitchMin);
+                heartPickup.setPitch(id28, randall28/10);
+                heartPickup.setVolume(id28,volume);
+                break;
+            case "PickupWine":
+                Sound winePickup = tx.winePickup;
+                long id29 = winePickup.play();
+                float randall29 = Random.randomFloat(pitchMax,pitchMin);
+                winePickup.setPitch(id29, randall29/10);
+                winePickup.setVolume(id29,volume);
+                break;
         }
     }
 }

@@ -116,6 +116,43 @@ public class BodyFactory {
         return body;
     }
 
+    public Body createEyebeam(World world, float x, float y, String direction, Body eyeBody, boolean upDown) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.fixedRotation = true;
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        PolygonShape shape = new PolygonShape();
+
+        float eyeBodyX = eyeBody.getPosition().x;
+        float eyeBodyY = eyeBody.getPosition().y;
+
+        switch (direction) {
+            case "Up":
+                Vector2 eyeBodyVecUp = new Vector2(36, -18f);//32
+                shape.setAsBox(4f, 32f, eyeBodyVecUp, 1.11f);//45.1
+                break;
+            case "Left":
+                Vector2 eyeBodyVecLeft = new Vector2(20, -28);
+                shape.setAsBox(32f, 4f,eyeBodyVecLeft, 2.21f);
+                break;
+            case "Down":
+                Vector2 eyeBodyVecDown = new Vector2(6f, -32);//-32
+                shape.setAsBox(4f, 32f, eyeBodyVecDown,85);
+                break;
+            case "Right":
+                Vector2 eyeBodyVecRight = new Vector2(32, 1);
+                shape.setAsBox(32f, 4f,eyeBodyVecRight,6.28f);//85//0.24
+                break;
+        }
+      //  eyeBody = world.createBody(bodyDef);
+        Fixture fix = eyeBody.createFixture(shape, 1.0f);
+
+        fix.setSensor(true);
+        fix.setUserData("Eyebeam");
+        shape.dispose();
+        return eyeBody;
+    }
+
     public Body createColumnBase(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
@@ -438,7 +475,7 @@ public class BodyFactory {
     public Body createSkullBody(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x,y);
         body = world.createBody(bodyDef);
         return body;
