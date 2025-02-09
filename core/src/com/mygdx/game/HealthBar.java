@@ -25,7 +25,7 @@ public class HealthBar extends Table {
 
   public void loseHealth(float health) {
 
-    if (vulnerable) {
+    if (vulnerable && !debug) {
       float hurtDelay = 0.35f;
       soundController.playSound("PlayerHurt",10,8,0.1f);
       playerBatch.setColor(1,0,0,0.8f);

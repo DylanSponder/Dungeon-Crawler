@@ -2,6 +2,8 @@ package com.mygdx.game.box2D;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.entity.behaviours.fsm.projectiles.Eyebeam;
 
 import static com.mygdx.game.DungeonCrawler.chiselHitbox;
 
@@ -116,7 +118,7 @@ public class BodyFactory {
         return body;
     }
 
-    public Body createEyebeam(World world, float x, float y, String direction, Body eyeBody, boolean upDown) {
+    public Body createEyebeam(World world, float x, float y, String direction, Body eyeBody, boolean upDown, Eyebeam beam) {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.fixedRotation = true;
@@ -149,6 +151,8 @@ public class BodyFactory {
 
         fix.setSensor(true);
         fix.setUserData("Eyebeam");
+
+
         shape.dispose();
         return eyeBody;
     }

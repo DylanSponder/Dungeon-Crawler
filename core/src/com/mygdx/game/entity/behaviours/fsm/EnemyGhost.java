@@ -26,19 +26,15 @@ import com.mygdx.game.level.objects.Text;
 import static com.mygdx.game.DungeonCrawler.*;
 
 public class EnemyGhost extends Enemy {
-    private StateMachine<EnemyGhost, EnemyGhostState> stateMachine;
+    public StateMachine<EnemyGhost, EnemyGhostState> stateMachine;
     public int enemyID;
     public String facing;
-    public boolean alive;
+    public boolean active;
     public EnemyGhostBox2DSteeringEntity enemyAI;
 
     public EnemyGhost(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
         this.shapeRenderer = new ShapeRenderer();
-
-        this.alive = true;
-
-        //enemyID = 2;
 
         this.alertMessage = new Text(DungeonCrawler.defaultFont,"!", Color.RED,true,1f,0.0045f,false, false, null, 0);
 
@@ -70,7 +66,7 @@ public class EnemyGhost extends Enemy {
         //playerDetectionRay = new EnemyBox2DSteeringEntity(enemyBody,10);
 
         this.stateMachine = new DefaultStateMachine<EnemyGhost, EnemyGhostState>(this, EnemyGhostState.WANDER);
-        this.stateMachine.changeState(EnemyGhostState.WANDER);
+        stateMachine.changeState(EnemyGhostState.STOP);
         this.enemyBody.setUserData("Enemy");
 
         this.enemyHitbox.setUserData("EnemyGhost");

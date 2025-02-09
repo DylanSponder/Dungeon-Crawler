@@ -138,19 +138,21 @@ public enum EnemyCyclopsState implements State<EnemyCyclops> {
             enemy.enemyAI.setMaxAngularSpeed(0);
             enemy.enemyAI.setMaxAngularAcceleration(0);
             enemy.enemyAI.setBehaviour(null);
-            switch (enemy.facing) {
-                case "Up":
-                    enemy.enemyAI.setOrientation(0);
-                    break;
-                case "Down":
-                    enemy.enemyAI.setOrientation(0);
-                    break;
-                case "Left":
-                    enemy.enemyAI.setOrientation(0);
-                    break;
-                case "Right":
-                    enemy.enemyAI.setOrientation(0);
-                    break;
+            if (enemy.active) {
+                switch (enemy.facing) {
+                    case "Up":
+                        enemy.enemyAI.setOrientation(0);
+                        break;
+                    case "Down":
+                        enemy.enemyAI.setOrientation(0);
+                        break;
+                    case "Left":
+                        enemy.enemyAI.setOrientation(0);
+                        break;
+                    case "Right":
+                        enemy.enemyAI.setOrientation(0);
+                        break;
+                }
             }
         }
         @Override

@@ -50,10 +50,12 @@ public class Enemy {
     public Text alertMessage, lostSightMessage;
     public float timeSinceAlerted;
     public SpriteBatch sightBatch;
+    public int defaultSpeed;
 
 
-    public void createEnemy(int enemyID) {
+    public void createEnemy(int enemyID, int defaultSpeed) {
         this.enemyID = enemyID;
+        this.defaultSpeed = defaultSpeed;
     }
 
     public StateMachine<EnemySkull, EnemySkullState> getSkullStateMachine(int id) {

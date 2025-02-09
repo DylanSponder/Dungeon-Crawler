@@ -85,7 +85,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayMap<Body, Fire> respawnFireMap;
 	public static ArrayMap<Body, Pot> potArrayMap;
 	public static ArrayMap<Body, Obstacle> obArrayMap;
-	public boolean reversedArrowMap, reversedSkullMap, reversedPotMap, reversedRespawnFireMap, reversedBoneMap, reversedWebMap, reversedObMap, reversedEyebeamMap;
+	public static boolean reversedArrowMap, reversedSkullMap, reversedPotMap, reversedRespawnFireMap, reversedBoneMap, reversedWebMap, reversedObMap, reversedEyebeamMap;
 	public boolean reversedCoinMap, reversedPotionMap, reversedHeartMap;
 	public static ArrayList<EnemySkull> enemySkulls, dyingSkulls;
 	public static ArrayList<EnemySpider> enemySpiders, dyingSpiders;
@@ -224,7 +224,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		Vector2 vec = new Vector2();
 		vec.x = PLAYER_X;
 		vec.y = PLAYER_Y;
-		PLAYER_SPEED_MULTI = 48f;
+		PLAYER_SPEED_MULTI = 45f;
 
 		//initialize the Box2D body factory, asset instance
 		//and collision listener
@@ -435,25 +435,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 			for (Trap tr : traps) {
 				trapBatch.begin();
 				if (!tr.active) {
-					switch (tr.type) {
-						case 1:
-							Trap.renderTrap(trapBatch, tr.direction, tr.trapBody.getPosition().x, tr.trapBody.getPosition().y);
-							break;
-						case 2:
-							break;
-						case 3:
-							break;
-					}
+					Trap.renderTrap(trapBatch, tr.direction, tr.trapBody.getPosition().x, tr.trapBody.getPosition().y, tr.type);
 				} else {
-					switch (tr.type) {
-						case 1:
-							Trap.renderTrapActive(trapBatch, tr.direction, tr.trapBody.getPosition().x, tr.trapBody.getPosition().y);
-							break;
-						case 2:
-							break;
-						case 3:
-							break;
-					}
+					Trap.renderTrapActive(trapBatch, tr.direction, tr.trapBody.getPosition().x, tr.trapBody.getPosition().y, tr.type);
 				}
 				trapBatch.end();
 			}
@@ -979,7 +963,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				//check to see if the player is both in sight and in range
 				if ((e.playerSighted && e.playerInRange) && menuClosed){
 					//after a specified delay once the player has been spotted, shoot a projectile with some offset at the player
-					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 130) ){
+					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 160) ){
 						e.timeSinceAlerted = 0f;
 						e.lostSight = false;
 						messages.remove(e.lostSightMessage);
@@ -1011,7 +995,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 						soundController.playSound("Whoosh", 7, 6,0.1f);
 
 					} else {
-						e.enemyAI.setMaxLinearSpeed(35);
+						Timer.schedule(new Timer.Task() {
+							@Override
+							public void run() {
+								e.enemyAI.setMaxLinearSpeed(e.defaultSpeed);
+							}
+						}, 0.3f);
 						e.timeSinceAlerted = e.timeSinceAlerted + Gdx.graphics.getDeltaTime();
 					}
 
@@ -1028,7 +1017,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 				} else if (!e.playerSighted) {
 					messages.remove(e.alertMessage);
-					e.timeSinceAlerted = 0f;
+					if (e.timeSinceAlerted > 50) {
+						e.timeSinceAlerted = e.timeSinceAlerted - 50;
+					}
 					if (!e.lostSight) {
 						e.lostSight = true;
 						e.lostSightMessage.showing = true;
@@ -1068,7 +1059,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			//check to see if the player is both in sight and in range
 			if ((e2.playerSighted && e2.playerInRange) && menuClosed){
 				//after a specified delay once the player has been spotted, shoot a projectile with some offset at the player
-				if (e2.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 120) ){
+				if (e2.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 140) ){
 						e2.timeSinceAlerted = 0f;
 						e2.lostSight = false;
 						messages.remove(e2.lostSightMessage);
@@ -1092,10 +1083,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 						web.createWeb(web.exitAngle);
 						webs.add(web);
 						webArrayMap.put(web.webBody, web);
-						soundController.playSound("SpiderAttack",6f,5f,0.2f);
+						soundController.playSound("SpiderAttack",6f,5f,0.1f);
 
 				} else {
-					e2.enemyAI.setMaxLinearSpeed(55);
+					e2.enemyAI.setMaxLinearSpeed(e2.defaultSpeed);
 					e2.timeSinceAlerted = e2.timeSinceAlerted + Gdx.graphics.getDeltaTime();
 				}
 
@@ -1113,7 +1104,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 				e2.getStateMachine().changeState(EnemySpiderState.GO_TO_PLAYER);
 			} else if (!e2.playerSighted) {
 
-				e2.timeSinceAlerted = 0f;
+				if (e2.timeSinceAlerted > 50) {
+					e2.timeSinceAlerted = e2.timeSinceAlerted - 30;
+				}
 				messages.remove(e2.alertMessage);
 				if (!e2.lostSight) {
 					e2.lostSight = true;
@@ -1133,6 +1126,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 					enemySpiderBatch.draw(tx.enemySpiderLeftSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
 				} else if (e2.facing == "Right") {
 					enemySpiderBatch.draw(tx.enemySpiderRightSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
+				} else {
+					enemySpiderBatch.draw(tx.enemySpiderDownSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
 				}
 			enemySpiderBatch.end();
 		}
@@ -1193,6 +1188,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 					enemyGhostBatch.draw(tx.enemyGhostLeftSprite, e3.enemyBody.getPosition().x - 8f, e3.enemyBody.getPosition().y - 7f, 16, 16);
 				} else if (e3.facing == "Right") {
 					enemyGhostBatch.draw(tx.enemyGhostRightSprite, e3.enemyBody.getPosition().x - 8f, e3.enemyBody.getPosition().y - 7f, 16, 16);
+				} else {
+					enemyGhostBatch.draw(tx.enemyGhostDownSprite, e3.enemyBody.getPosition().x - 8f, e3.enemyBody.getPosition().y - 7f, 16, 16);
 				}
 			} else {
 				if (e3.facing == "Up") {
@@ -1203,6 +1200,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 					enemyGhostBatch.draw(tx.enemyGhostAlertLeftSprite, e3.enemyBody.getPosition().x - 8f, e3.enemyBody.getPosition().y - 7f, 16, 16);
 				} else if (e3.facing == "Right") {
 					enemyGhostBatch.draw(tx.enemyGhostAlertRightSprite, e3.enemyBody.getPosition().x - 8f, e3.enemyBody.getPosition().y - 7f, 16, 16);
+				} else {
+					enemyGhostBatch.draw(tx.enemyGhostDownSprite, e3.enemyBody.getPosition().x - 8f, e3.enemyBody.getPosition().y - 7f, 16, 16);
 				}
 			}
 			enemyGhostBatch.end();
@@ -1221,24 +1220,18 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 			//check to see if the player is both in sight and in range
 			if ((e4.playerSighted && e4.playerInRange) && menuClosed){
-				//after a specified delay once the player has been spotted, shoot a projectile with some offset at the player
-				if (e4.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 130) ){
+				//after a specified delay once the player has been spotted, fire a beam in the direction the enemy is facing
+				if (e4.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 110) ){
 					e4.timeSinceAlerted = 0f;
 					e4.lostSight = false;
 					messages.remove(e4.lostSightMessage);
 
-					//e4.enemyAI.setMaxLinearSpeed(0);
-
 					e4.getStateMachine().changeState(EnemyCyclopsState.STOP);
 
-					//e4.enemyAI.setMaxAngularSpeed(0);
-					//e4.enemyAI.setMaxAngularAcceleration(0);
-					//e4.enemyAI.
-					//e4.enemyBody.setAngularDamping(10000);
-					//e4.enemyBody.setAngularVelocity(0);
-					//e4.enemyDetectionBody.setAngularDamping(10000);
-
 					e4.firingBeam = true;
+					e4.turnDelay = 1.2f;
+					e4.canTurn = false;
+					e4.turnOff = true;
 					Timer.schedule(new Timer.Task() {
 						@Override
 						public void run() {
@@ -1248,7 +1241,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 								e4.getStateMachine().changeState(EnemyCyclopsState.WANDER);
 							}
 
-							e4.enemyAI.setMaxLinearSpeed(35);
+							e4.enemyAI.setMaxLinearSpeed(e4.defaultSpeed);
 							e4.firingBeam = false;
 						}
 					}, 1.2f);
@@ -1256,42 +1249,38 @@ public class DungeonCrawler extends ApplicationAdapter {
 					switch (e4.facing) {
 						case "Up":
 							Eyebeam eyebeamUp = new Eyebeam(world, e4.enemyBody, e4.enemyAI.getBody().getPosition().x, e4.enemyAI.getBody().getPosition().y, e4.facing, true);
-							eyebeamUp.createEyebeam(e4.enemyBody, eyebeamArrayMap,rayHandler);
+							eyebeamUp.createEyebeam(e4.enemyBody, e4, eyebeamArrayMap,rayHandler);
 							e4.enemyBody.setFixedRotation(true);
 							e4.enemyBody.setTransform(e4.enemyBody.getPosition(),90);
-							//e4.enemyAI.setOrientation(90);
+							eyebeamUp.beamLight.setActive(true);
 							break;
 						case "Down":
 							Eyebeam eyebeamDown = new Eyebeam(world, e4.enemyBody, e4.enemyAI.getBody().getPosition().x, e4.enemyAI.getBody().getPosition().y, e4.facing, true);
-							eyebeamDown.createEyebeam(e4.enemyBody, eyebeamArrayMap,rayHandler);
+							eyebeamDown.createEyebeam(e4.enemyBody, e4, eyebeamArrayMap,rayHandler);
 							e4.enemyBody.setFixedRotation(true);
 							e4.enemyBody.setTransform(e4.enemyBody.getPosition(),270);
-							//e4.enemyAI.setOrientation(270);
+							eyebeamDown.beamLight.setActive(true);
 							break;
 						case "Left":
 							Eyebeam eyebeamLeft = new Eyebeam(world, e4.enemyBody, e4.enemyAI.getBody().getPosition().x, e4.enemyAI.getBody().getPosition().y, e4.facing, false);
-							eyebeamLeft.createEyebeam(e4.enemyBody, eyebeamArrayMap,rayHandler);
+							eyebeamLeft.createEyebeam(e4.enemyBody, e4, eyebeamArrayMap,rayHandler);
 							e4.enemyBody.setFixedRotation(true);
 							e4.enemyBody.setTransform(e4.enemyBody.getPosition(),180);
-							//e4.enemyAI.setOrientation(180);
+							eyebeamLeft.beamLight.setActive(true);
 							break;
 						case "Right":
 							Eyebeam eyebeamRight = new Eyebeam(world, e4.enemyBody, e4.enemyAI.getBody().getPosition().x, e4.enemyAI.getBody().getPosition().y, e4.facing, false);
-							eyebeamRight.createEyebeam(e4.enemyBody, eyebeamArrayMap,rayHandler);
+							eyebeamRight.createEyebeam(e4.enemyBody, e4, eyebeamArrayMap,rayHandler);
 							e4.enemyBody.setFixedRotation(true);
 							e4.enemyBody.setTransform(e4.enemyBody.getPosition(),0);
-							//e4.enemyAI.setOrientation(0);
+							eyebeamRight.beamLight.setActive(true);
 							break;
 					}
-
-
-					//TextureRegion currentFrame2 = tx.fireOutAnimation.getKeyFrame(f.stateTime, true);
-					//fireBatch.begin();
-					//Fire.renderFire(fireBatch, currentFrame2, f.fireX, f.fireY, f.smoking, false);
-
+					soundController.playSound("EyebeamAttack",10f,8.5f,0.1f);
 				} else {
 
 					if (!e4.firingBeam) {
+						//e4.eyeLight.setActive(false);
 						e4.timeSinceAlerted = e4.timeSinceAlerted + Gdx.graphics.getDeltaTime();
 					}
 				}
@@ -1311,11 +1300,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 					e4.getStateMachine().changeState(EnemyCyclopsState.GO_TO_PLAYER);
 				}
 
-
-
 			} else if (!e4.playerSighted) {
+				e4.turnDelay = 0.1f;
 				messages.remove(e4.alertMessage);
-				e4.timeSinceAlerted = 0f;
+				if (e4.timeSinceAlerted > 50) {
+					e4.timeSinceAlerted = e4.timeSinceAlerted - 20;
+				}
 				if (!e4.lostSight) {
 					e4.lostSight = true;
 					e4.lostSightMessage.showing = true;
@@ -1334,12 +1324,37 @@ public class DungeonCrawler extends ApplicationAdapter {
 				enemyEyeBatch.draw(tx.enemyEyeLeftSprite, e4.enemyBody.getPosition().x - 8f, e4.enemyBody.getPosition().y - 7f, 16, 16);
 			} else if (e4.facing == "Right") {
 				enemyEyeBatch.draw(tx.enemyEyeRightSprite, e4.enemyBody.getPosition().x - 8f, e4.enemyBody.getPosition().y - 7f, 16, 16);
+			} else {
+				enemyEyeBatch.draw(tx.enemyEyeDownSprite, e4.enemyBody.getPosition().x - 8f, e4.enemyBody.getPosition().y - 7f, 16, 16);
 			}
 			enemyEyeBatch.end();
 		}
 
 		for (EnemyCyclops deadEye : dyingEyes) {
-			deadEye.eyeLight.setActive(false);
+			for (Fixture fixture : deadEye.enemyBody.getFixtureList()) {
+
+				if (fixture.getUserData() == "Eyebeam") {
+					//this is all just to delete the eyebeam light if the enemy eye is firing a beam mid-death
+					if (!eyebeamArrayMap.isEmpty()) {
+
+						if (!reversedEyebeamMap) {
+							eyebeamArrayMap.reverse();
+							reversedEyebeamMap = true;
+						}
+
+						for (OrderedMap.Entry<Body, Eyebeam> beamEntry : eyebeamArrayMap.entries()) {
+							Body key = beamEntry.key;
+							Eyebeam value = beamEntry.value;
+
+							if (key == fixture.getBody()) {
+								value.beamLight.setActive(false);
+							}
+						}
+					}
+					eyebeamBodiesCollected.add(fixture.getBody());
+
+				}
+			}
 			deadEye.getStateMachine().changeState(EnemyCyclopsState.DIE);
 			enemies.remove(deadEye);
 		}
@@ -1356,15 +1371,24 @@ public class DungeonCrawler extends ApplicationAdapter {
 				Body key = beamEntry.key;
 				Eyebeam value = beamEntry.value;
 
-				TextureRegion currentFrame = tx.eyebeamAnimation.getKeyFrame(value.stateTime, true);
+				TextureRegion currentFrame = tx.eyebeamAnimation.getKeyFrame(value.stateTime, false);
 				value.stateTime += Gdx.graphics.getDeltaTime();
 
+				value.beamLightDistance += 0.2f;
+				value.beamLightAlpha += 0.01f;
+
+				value.beamLight.setDistance(value.beamLightDistance);
+				value.beamLight.setColor(0.1f,0,1f,value.beamLightAlpha);
+				value.beamLight.attachToBody(key);
+
+				//render each eyebeam
 				eyebeamBatch.begin();
 				Eyebeam.renderEyebeam(eyebeamBatch, currentFrame, value.facing, key.getPosition().x, key.getPosition().y);
 				eyebeamBatch.end();
 
 				if (tx.eyebeamAnimation.isAnimationFinished(value.stateTime)) {
 					eyebeamBodiesCollected.add(value.beamBody);
+					value.beamLight.setActive(false);
 				}
 			}
 
@@ -1378,14 +1402,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 						}
 					}
 					eyebeamArrayMap.removeKey(beamBody);
-
-					//world.destroyBody(beamBody);
 					beamIt.remove();
 					eyebeams.remove(beamBody);
 				}
 			}
 		}
-
 
 		for (Body body : deadEnemyBodies) {
 			world.destroyBody(body);
@@ -1490,6 +1511,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowBody.setUserData("Arrow");
 						arrowBody.setLinearVelocity(0, -250f);
 						arrowDirection = "Down";
+						arrows.add(arrow = new Arrow(arrowBody, arrowDirection , 0f, false));
 						break;
 					case 2:
 						arrowBody = Arrow.createArrowBody(DungeonCrawler.world, key.trapBody.getPosition().x - 7f, key.trapBody.getPosition().y - 8f);
@@ -1498,6 +1520,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowBody.setUserData("Arrow");
 						arrowBody.setLinearVelocity(-250f, 0);
 						arrowDirection = "Left";
+						arrows.add(arrow = new Arrow(arrowBody, arrowDirection , 0f, false));
 						break;
 					case 3:
 						arrowBody = Arrow.createArrowBody(DungeonCrawler.world, key.trapBody.getPosition().x - 8f, key.trapBody.getPosition().y + 23f);
@@ -1506,6 +1529,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowBody.setUserData("Arrow");
 						arrowBody.setLinearVelocity(0, 250f);
 						arrowDirection = "Up";
+						arrows.add(arrow = new Arrow(arrowBody, arrowDirection , 0f, false));
 						break;
 					case 4:
 						arrowBody = Arrow.createArrowBody(world, key.trapBody.getPosition().x + 23f, key.trapBody.getPosition().y + 8f);
@@ -1514,10 +1538,46 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowBody.setUserData("Arrow");
 						arrowBody.setLinearVelocity(250f, 0);
 						arrowDirection = "Right";
+						arrows.add(arrow = new Arrow(arrowBody, arrowDirection , 0f, false));
+						break;
+					case 5:
+						arrowBody = Arrow.createArrowBody(DungeonCrawler.world, key.trapBody.getPosition().x + 8f, key.trapBody.getPosition().y - 7f);
+						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
+						arrowHitbox.setUserData("DownArrow");
+						arrowBody.setUserData("Arrow");
+						arrowBody.setLinearVelocity(0, -250f);
+						arrowDirection = "Down";
+						arrows.add(arrow = new Arrow(arrowBody, arrowDirection , 0f, true));
+						break;
+					case 6:
+						arrowBody = Arrow.createArrowBody(DungeonCrawler.world, key.trapBody.getPosition().x - 7f, key.trapBody.getPosition().y - 8f);
+						arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
+						arrowHitbox.setUserData("LeftArrow");
+						arrowBody.setUserData("Arrow");
+						arrowBody.setLinearVelocity(-250f, 0);
+						arrowDirection = "Left";
+						arrows.add(arrow = new Arrow(arrowBody, arrowDirection , 0f, true));
+						break;
+					case 7:
+						arrowBody = Arrow.createArrowBody(DungeonCrawler.world, key.trapBody.getPosition().x - 8f, key.trapBody.getPosition().y + 23f);
+						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
+						arrowHitbox.setUserData("UpArrow");
+						arrowBody.setUserData("Arrow");
+						arrowBody.setLinearVelocity(0, 250f);
+						arrowDirection = "Up";
+						arrows.add(arrow = new Arrow(arrowBody, arrowDirection , 0f, true));
+						break;
+					case 8:
+						arrowBody = Arrow.createArrowBody(world, key.trapBody.getPosition().x + 23f, key.trapBody.getPosition().y + 8f);
+						arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
+						arrowHitbox.setUserData("RightArrow");
+						arrowBody.setUserData("Arrow");
+						arrowBody.setLinearVelocity(250f, 0);
+						arrowDirection = "Right";
+						arrows.add(arrow = new Arrow(arrowBody, arrowDirection , 0f, true));
 						break;
 				}
 
-				arrows.add(arrow = new Arrow(arrowBody, arrowDirection , 0f, false));
 				arrowArrayMap.put(arrowBody, arrow);
 				arrowsToBeFired.removeKey(key);
 			}
@@ -1822,28 +1882,31 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			//toggle to enable or disable visible collision boxes
 			if (debug) {
+
 				for (EnemySkull enemySkull : enemySkulls) {
 					//renders ray cast rays
-					Ray<Vector2>[] rays = enemySkull.rayConfigurations[0].getRays();
-
-					enemySkull.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-					enemySkull.shapeRenderer.setProjectionMatrix(camera.combined);
-					enemySkull.shapeRenderer.setColor(1, 0, 0, 1);
-
-					for (int i = 0; i < rays.length; i++) {
-						Ray<Vector2> ray = rays[i];
-						enemySkull.tmp.set(ray.start);
-						enemySkull.tmp2.set(ray.end);
-						enemySkull.shapeRenderer.line(enemySkull.tmp, enemySkull.tmp2);
-					}
-
-					//render player rayCasts to Enemies
 					if (enemySkull.rayCastable) {
-						enemySkull.tmp3.set((Vector2) enemySkull.playerDetectionRay.start);
-						enemySkull.tmp4.set((Vector2) enemySkull.playerDetectionRay.end);
-						enemySkull.shapeRenderer.line(enemySkull.tmp3, enemySkull.tmp4);
+						Ray<Vector2>[] rays = enemySkull.rayConfigurations[0].getRays();
+
+						enemySkull.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+						enemySkull.shapeRenderer.setProjectionMatrix(camera.combined);
+						enemySkull.shapeRenderer.setColor(1, 0, 0, 1);
+
+						for (int i = 0; i < rays.length; i++) {
+							Ray<Vector2> ray = rays[i];
+							enemySkull.tmp.set(ray.start);
+							enemySkull.tmp2.set(ray.end);
+							enemySkull.shapeRenderer.line(enemySkull.tmp, enemySkull.tmp2);
+						}
+
+						//render player rayCasts to Enemies
+						if (enemySkull.rayCastable) {
+							enemySkull.tmp3.set((Vector2) enemySkull.playerDetectionRay.start);
+							enemySkull.tmp4.set((Vector2) enemySkull.playerDetectionRay.end);
+							enemySkull.shapeRenderer.line(enemySkull.tmp3, enemySkull.tmp4);
+						}
+						enemySkull.shapeRenderer.end();
 					}
-					enemySkull.shapeRenderer.end();
 				}
 				//raycast skulls within respawner radius
 				for (Skull s : skulls) {
@@ -1861,75 +1924,81 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 
 				for (EnemySpider enemySpider : enemySpiders) {
-					//renders ray cast rays
-					Ray<Vector2>[] rays = enemySpider.rayConfigurations[0].getRays();
-
-					enemySpider.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-					enemySpider.shapeRenderer.setProjectionMatrix(camera.combined);
-					enemySpider.shapeRenderer.setColor(1, 0, 0, 1);
-
-					for (int i = 0; i < rays.length; i++) {
-						Ray<Vector2> ray = rays[i];
-						enemySpider.tmp.set(ray.start);
-						enemySpider.tmp2.set(ray.end);
-						enemySpider.shapeRenderer.line(enemySpider.tmp, enemySpider.tmp2);
-					}
-
-					//render player rayCasts to Enemies
 					if (enemySpider.rayCastable) {
-						enemySpider.tmp3.set((Vector2) enemySpider.playerDetectionRay.start);
-						enemySpider.tmp4.set((Vector2) enemySpider.playerDetectionRay.end);
-						enemySpider.shapeRenderer.line(enemySpider.tmp3, enemySpider.tmp4);
+						//renders ray cast rays
+						Ray<Vector2>[] rays = enemySpider.rayConfigurations[0].getRays();
+
+						enemySpider.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+						enemySpider.shapeRenderer.setProjectionMatrix(camera.combined);
+						enemySpider.shapeRenderer.setColor(1, 0, 0, 1);
+
+						for (int i = 0; i < rays.length; i++) {
+							Ray<Vector2> ray = rays[i];
+							enemySpider.tmp.set(ray.start);
+							enemySpider.tmp2.set(ray.end);
+							enemySpider.shapeRenderer.line(enemySpider.tmp, enemySpider.tmp2);
+						}
+
+						//render player rayCasts to Enemies
+						if (enemySpider.rayCastable) {
+							enemySpider.tmp3.set((Vector2) enemySpider.playerDetectionRay.start);
+							enemySpider.tmp4.set((Vector2) enemySpider.playerDetectionRay.end);
+							enemySpider.shapeRenderer.line(enemySpider.tmp3, enemySpider.tmp4);
+						}
+						enemySpider.shapeRenderer.end();
 					}
-					enemySpider.shapeRenderer.end();
 				}
 
 				for (EnemyGhost enemyGhost : enemyGhosts) {
-					//renders ray cast rays
-					Ray<Vector2>[] rays = enemyGhost.rayConfigurations[0].getRays();
-
-					enemyGhost.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-					enemyGhost.shapeRenderer.setProjectionMatrix(camera.combined);
-					enemyGhost.shapeRenderer.setColor(1, 0, 0, 1);
-
-					for (int i = 0; i < rays.length; i++) {
-						Ray<Vector2> ray = rays[i];
-						enemyGhost.tmp.set(ray.start);
-						enemyGhost.tmp2.set(ray.end);
-						enemyGhost.shapeRenderer.line(enemyGhost.tmp, enemyGhost.tmp2);
-					}
-
-					//render player rayCasts to Enemies
 					if (enemyGhost.rayCastable) {
-						enemyGhost.tmp3.set((Vector2) enemyGhost.playerDetectionRay.start);
-						enemyGhost.tmp4.set((Vector2) enemyGhost.playerDetectionRay.end);
-						enemyGhost.shapeRenderer.line(enemyGhost.tmp3, enemyGhost.tmp4);
+						//renders ray cast rays
+						Ray<Vector2>[] rays = enemyGhost.rayConfigurations[0].getRays();
+
+						enemyGhost.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+						enemyGhost.shapeRenderer.setProjectionMatrix(camera.combined);
+						enemyGhost.shapeRenderer.setColor(1, 0, 0, 1);
+
+						for (int i = 0; i < rays.length; i++) {
+							Ray<Vector2> ray = rays[i];
+							enemyGhost.tmp.set(ray.start);
+							enemyGhost.tmp2.set(ray.end);
+							enemyGhost.shapeRenderer.line(enemyGhost.tmp, enemyGhost.tmp2);
+						}
+
+						//render player rayCasts to Enemies
+						if (enemyGhost.rayCastable) {
+							enemyGhost.tmp3.set((Vector2) enemyGhost.playerDetectionRay.start);
+							enemyGhost.tmp4.set((Vector2) enemyGhost.playerDetectionRay.end);
+							enemyGhost.shapeRenderer.line(enemyGhost.tmp3, enemyGhost.tmp4);
+						}
+						enemyGhost.shapeRenderer.end();
 					}
-					enemyGhost.shapeRenderer.end();
 				}
 
 				for (EnemyCyclops enemyEye : enemyEyes) {
-					//renders ray cast rays
-					Ray<Vector2>[] rays = enemyEye.rayConfigurations[0].getRays();
-
-					enemyEye.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-					enemyEye.shapeRenderer.setProjectionMatrix(camera.combined);
-					enemyEye.shapeRenderer.setColor(1, 0, 0, 1);
-
-					for (int i = 0; i < rays.length; i++) {
-						Ray<Vector2> ray = rays[i];
-						enemyEye.tmp.set(ray.start);
-						enemyEye.tmp2.set(ray.end);
-						enemyEye.shapeRenderer.line(enemyEye.tmp, enemyEye.tmp2);
-					}
-
-					//render player rayCasts to Enemies
 					if (enemyEye.rayCastable) {
-						enemyEye.tmp3.set((Vector2) enemyEye.playerDetectionRay.start);
-						enemyEye.tmp4.set((Vector2) enemyEye.playerDetectionRay.end);
-						enemyEye.shapeRenderer.line(enemyEye.tmp3, enemyEye.tmp4);
+						//renders ray cast rays
+						Ray<Vector2>[] rays = enemyEye.rayConfigurations[0].getRays();
+
+						enemyEye.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+						enemyEye.shapeRenderer.setProjectionMatrix(camera.combined);
+						enemyEye.shapeRenderer.setColor(1, 0, 0, 1);
+
+						for (int i = 0; i < rays.length; i++) {
+							Ray<Vector2> ray = rays[i];
+							enemyEye.tmp.set(ray.start);
+							enemyEye.tmp2.set(ray.end);
+							enemyEye.shapeRenderer.line(enemyEye.tmp, enemyEye.tmp2);
+						}
+
+						//render player rayCasts to Enemies
+						if (enemyEye.rayCastable) {
+							enemyEye.tmp3.set((Vector2) enemyEye.playerDetectionRay.start);
+							enemyEye.tmp4.set((Vector2) enemyEye.playerDetectionRay.end);
+							enemyEye.shapeRenderer.line(enemyEye.tmp3, enemyEye.tmp4);
+						}
+						enemyEye.shapeRenderer.end();
 					}
-					enemyEye.shapeRenderer.end();
 				}
 
 				//render all box2d debug collision fixtures

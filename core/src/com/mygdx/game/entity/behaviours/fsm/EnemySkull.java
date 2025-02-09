@@ -27,10 +27,11 @@ import com.mygdx.game.level.objects.Text;
 import static com.mygdx.game.DungeonCrawler.*;
 
 public class EnemySkull extends Enemy {
-    private StateMachine<EnemySkull, EnemySkullState> stateMachine;
+    public StateMachine<EnemySkull, EnemySkullState> stateMachine;
     public int enemyID;
     public EnemySkullBox2DSteeringEntity enemyAI;
     public PointLight skullLight;
+    public boolean active;
 
     public EnemySkull(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
@@ -69,7 +70,7 @@ public class EnemySkull extends Enemy {
         //playerDetectionRay = new EnemyBox2DSteeringEntity(enemyBody,10);
 
         stateMachine = new DefaultStateMachine<EnemySkull, EnemySkullState>(this, EnemySkullState.WANDER);
-        stateMachine.changeState(EnemySkullState.WANDER);
+        stateMachine.changeState(EnemySkullState.STOP);
         this.enemyBody.setUserData("Enemy");
         this.enemyHitbox.setUserData("EnemySkull");
 

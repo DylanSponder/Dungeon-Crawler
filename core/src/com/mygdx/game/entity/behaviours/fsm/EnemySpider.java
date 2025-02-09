@@ -25,18 +25,16 @@ import com.mygdx.game.level.objects.Text;
 import static com.mygdx.game.DungeonCrawler.*;
 
 public class EnemySpider extends Enemy {
-    private StateMachine<EnemySpider, EnemySpiderState> stateMachine;
+    public StateMachine<EnemySpider, EnemySpiderState> stateMachine;
     public int enemyID;
     public String facing;
-    public boolean alive;
+    public boolean active;
     public EnemySpiderBox2DSteeringEntity enemyAI;
     public float exitAngle;
 
     public EnemySpider(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
         this.shapeRenderer = new ShapeRenderer();
-
-        this.alive = true;
 
         //enemyID = 2;
 
@@ -70,7 +68,7 @@ public class EnemySpider extends Enemy {
         //playerDetectionRay = new EnemyBox2DSteeringEntity(enemyBody,10);
 
         this.stateMachine = new DefaultStateMachine<EnemySpider, EnemySpiderState>(this, EnemySpiderState.WANDER);
-        this.stateMachine.changeState(EnemySpiderState.WANDER);
+        stateMachine.changeState(EnemySpiderState.STOP);
         this.enemyBody.setUserData("Enemy");
         this.enemyHitbox.setUserData("EnemySpider");
 

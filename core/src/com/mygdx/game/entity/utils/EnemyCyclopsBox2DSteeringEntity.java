@@ -23,10 +23,10 @@ public class EnemyCyclopsBox2DSteeringEntity implements Steerable<Vector2> {
         this.body = body;
         this.boundingRadius = boundingRadius;
 
-        this.maxLinearSpeed = 30;
-        this.maxLinearAcceleration = 450;
-        this.maxAngularSpeed = 0;
-        this.maxAngularAcceleration = 0;
+        this.maxLinearSpeed = 0;
+        this.maxLinearAcceleration = 800;
+        this.maxAngularSpeed = 500;
+        this.maxAngularAcceleration = 500;
 
         this.tagged = false;
 

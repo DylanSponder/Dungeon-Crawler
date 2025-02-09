@@ -18,6 +18,7 @@ public class GameInputProcessor implements InputProcessor {
 
     public CreateAssets tx;
     public BodyFactory bf;
+    public float playerRangedAttackSpeedInSeconds = 0.6f,  playerMeleeAttackSpeedInSeconds = 0.5f;
         @Override
         public boolean scrolled(float amountX, float amountY) {
         if (DungeonCrawler.debug) {
@@ -49,7 +50,7 @@ public class GameInputProcessor implements InputProcessor {
 
         if (button == 0 && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking)) {
             //if player presses left mouse attack with the swordBody
-            float playerMeleeAttackSpeedInSeconds = 0.40f;
+
             playerMeleeAttacking = true;
 
             if (moveDown || player.facing == 3) {
@@ -130,7 +131,7 @@ public class GameInputProcessor implements InputProcessor {
 
         //if player presses right mouse attack with a bow
         if (button == 1 && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking)) {
-            float playerRangedAttackSpeedInSeconds = 0.50f;
+
             playerRangedAttacking = true;
 
             arrowBody = null;
@@ -268,7 +269,7 @@ public class GameInputProcessor implements InputProcessor {
 
             menuClosed = false;
 
-            Gdx.graphics.setWindowedMode(1280, 720);
+            Gdx.graphics.setWindowedMode(1800, 1000);
         }
 
 
@@ -639,7 +640,7 @@ public class GameInputProcessor implements InputProcessor {
 
         //if player presses space attack with the swordBody
         if (((keycode == 62)) && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking)) {
-            float playerMeleeAttackSpeedInSeconds = 0.40f;
+
             playerMeleeAttacking = true;
 
             if (moveDown || player.facing == 3) {
@@ -725,7 +726,7 @@ public class GameInputProcessor implements InputProcessor {
 
         //if player presses enter attack with a bow
         if (keycode == 66 && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking)) {
-            float playerRangedAttackSpeedInSeconds = 0.50f;
+
             stateTime2 = 0f;
             playerRangedAttacking = true;
 

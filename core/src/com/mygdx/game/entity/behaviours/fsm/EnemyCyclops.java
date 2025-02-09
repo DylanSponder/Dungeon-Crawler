@@ -1,5 +1,6 @@
 package com.mygdx.game.entity.behaviours.fsm;
 
+import box2dLight.ChainLight;
 import box2dLight.PointLight;
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.StateMachine;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.DungeonCrawler;
@@ -30,12 +32,14 @@ import com.mygdx.game.level.objects.Text;
 import static com.mygdx.game.DungeonCrawler.*;
 
 public class EnemyCyclops extends Enemy {
-    private StateMachine<EnemyCyclops, EnemyCyclopsState> stateMachine;
+    public StateMachine<EnemyCyclops, EnemyCyclopsState> stateMachine;
     public int enemyID;
     public EnemyCyclopsBox2DSteeringEntity enemyAI;
-    public PointLight eyeLight;
+    public ChainLight eyeLight;
     public String facing;
-    public boolean firingBeam;
+    public boolean firingBeam, canTurn, turnOff, active;
+    public float turnDelay;
+    public Body beamBody;
 
     public EnemyCyclops(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
@@ -48,8 +52,6 @@ public class EnemyCyclops extends Enemy {
 
         this.rayCastable = false;
 
-        //enemyID = 1;
-
         this.sightCounter = 0;
 
         this.alerted = false;
@@ -60,13 +62,16 @@ public class EnemyCyclops extends Enemy {
 
         this.playerInRange = false;
 
+        this.turnDelay = 0.1f;
+        this.canTurn = true;
+
         //creates an enemy with a body, hitbox and steering entity
         this.enemyBody = bodyFactory.createSimpleDynamicBody(world, x, y);
         this.enemyDetectionBody = bodyFactory.createSimpleDynamicBody(world, x, y);
 
         this.enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 5.95f);
 
-        this.enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 80f);
+        this.enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 90f);
 
         //enemyDetectionRadius.setSensor(true);
 
@@ -74,56 +79,14 @@ public class EnemyCyclops extends Enemy {
         //playerDetectionRay = new EnemyBox2DSteeringEntity(enemyBody,10);
 
         stateMachine = new DefaultStateMachine<EnemyCyclops, EnemyCyclopsState>(this, EnemyCyclopsState.WANDER);
-        stateMachine.changeState(EnemyCyclopsState.WANDER);
+        stateMachine.changeState(EnemyCyclopsState.STOP);
         this.enemyBody.setUserData("Enemy");
         this.enemyHitbox.setUserData("EnemyCyclops");
 
         this.debug = false;
 
-        this.eyeLight = new PointLight(rayHandler, 60, new Color(0.3f,0,1f,0.5f),50,this.enemyBody.getPosition().x,this.enemyBody.getPosition().y);
-        this.eyeLight.attachToBody(this.enemyBody);
-        this.eyeLight.setSoftnessLength(65);
-        this.eyeLight.setActive(false);
-/*
-        IndexedAStarPathFinder pathFinder;
+        this.eyeLight = new ChainLight(rayHandler, 60, new Color(0.3f,0,1f,0.5f),50,1,new float[]{0,0,0,40,20,40,20,0,0,0});
 
-        FlatTiledNode startNode = worldMap.getNode(enemyAI.getBody().getPosition().x, enemyAI.getBody().getPosition().y);
-        FlatTiledNode endNode = worldMap.getNode(DungeonCrawler.player.playerBody.getPosition().x, DungeonCrawler.player.playerBody.getPosition().y);
-
-        pathFinder.searchNodePath(startNode, endNode, heuristic, path);
-        worldMap = new IndexedGraph() {
-            @Override
-            public Array<Connection> getConnections(Object fromNode) {
-                return null;
-            }
-
-            @Override
-            public int getIndex(Object node) {
-                return 0;
-            }
-
-            @Override
-            public int getNodeCount() {
-                return 0;
-            }
-        };
-        IndexedGraph indexedGraph =  new IndexedGraph() {
-            @Override
-            public int getIndex(Object node) {
-                return 0;
-            }
-
-            @Override
-            public int getNodeCount() {
-                return 0;
-            }
-
-            @Override
-            public Array<Connection> getConnections(Object fromNode) {
-                return null;
-            }
-        };
- */
     }
 
     /*
@@ -218,7 +181,10 @@ public class EnemyCyclops extends Enemy {
                             return 0;
                         } else if (fixture.getBody().getType() == BodyDef.BodyType.DynamicBody && !fixture.isSensor() && fixture.getBody().getUserData() != "Enemy") {
                             playerSighted = false;
-                            this.getStateMachine().changeState(EnemyCyclopsState.WANDER);
+                            if (!firingBeam) {
+                                this.getStateMachine().changeState(EnemyCyclopsState.WANDER);
+                            }
+
                             //this.enemyAI.setBehaviour();
                             if (fixture.getBody().getUserData() != "Player"
                                     && fixture.getUserData() != "Proximity"
@@ -238,7 +204,7 @@ public class EnemyCyclops extends Enemy {
 
                                 sightCounter++;
                                 //number of successful ray hits on the player - more for slower detection
-                                if (sightCounter > 10) {
+                                if (sightCounter > 5) {
                                     //System.out.println(fraction);
 
                                     //enemy has seen the player and will reach appropriate distance
@@ -281,21 +247,32 @@ public class EnemyCyclops extends Enemy {
     }
 
     public void update (float delta) {
-        if (this.enemyAI.getLinearVelocity().y > 0
-                && this.enemyAI.getLinearVelocity().y > this.enemyAI.getLinearVelocity().x) {
-            this.facing = "Up";
-        }
-        else if (this.enemyAI.getLinearVelocity().y < 0
-                && this.enemyAI.getLinearVelocity().y < this.enemyAI.getLinearVelocity().x) {
-            this.facing = "Down";
-        }
-        else if (this.enemyAI.getLinearVelocity().x > 0
-                && this.enemyAI.getLinearVelocity().x > this.enemyAI.getLinearVelocity().y) {
-            this.facing = "Right";
-        }
-        else if (this.enemyAI.getLinearVelocity().x < 0
-                && this.enemyAI.getLinearVelocity().x < this.enemyAI.getLinearVelocity().y) {
-            this.facing = "Left";
+        if (!canTurn && turnOff) {
+            turnOff = false;
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    canTurn = true;
+                }
+            }, turnDelay);
+        } else {
+            if (this.enemyAI.getLinearVelocity().y > 0
+                    && this.enemyAI.getLinearVelocity().y > this.enemyAI.getLinearVelocity().x) {
+                this.facing = "Up";
+            }
+            else if (this.enemyAI.getLinearVelocity().y < 0
+                    && this.enemyAI.getLinearVelocity().y < this.enemyAI.getLinearVelocity().x) {
+                this.facing = "Down";
+            }
+            else if (this.enemyAI.getLinearVelocity().x > 0
+                    && this.enemyAI.getLinearVelocity().x > this.enemyAI.getLinearVelocity().y) {
+                this.facing = "Right";
+            }
+            else if (this.enemyAI.getLinearVelocity().x < 0
+                    && this.enemyAI.getLinearVelocity().x < this.enemyAI.getLinearVelocity().y) {
+                this.facing = "Left";
+            }
+            canTurn = false;
         }
         stateMachine.update();
     }

@@ -217,6 +217,20 @@ public class SoundController {
                 winePickup.setPitch(id29, randall29/10);
                 winePickup.setVolume(id29,volume);
                 break;
+            case "EyebeamAttack":
+                Sound eyebeamAttack = tx.eyebeamAttack;
+                long id30 = eyebeamAttack.play();
+                float randall30 = Random.randomFloat(pitchMax,pitchMin);
+                eyebeamAttack.setPitch(id30, randall30/10);
+                eyebeamAttack.setVolume(id30,volume);
+                break;
+            case "CyclopsDeath":
+                Sound cyclopsDeath = tx.cyclopsDeath;
+                long id31 = cyclopsDeath.play();
+                float randall31 = Random.randomFloat(pitchMax,pitchMin);
+                cyclopsDeath.setPitch(id31, randall31/10);
+                cyclopsDeath.setVolume(id31,volume);
+                break;
         }
     }
 }

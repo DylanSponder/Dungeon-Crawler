@@ -106,6 +106,31 @@ public enum EnemyGhostState implements State<EnemyGhost> {
         }
     },
 
+    STOP() {
+        final CreateAssets tx = CreateAssets.getInstance();
+        @Override
+        public void enter (EnemyGhost enemy){
+            enemy.enemyAI.setMaxLinearSpeed(0);
+            enemy.enemyAI.setMaxAngularSpeed(0);
+            enemy.enemyAI.setMaxAngularAcceleration(0);
+            enemy.enemyAI.setBehaviour(null);
+        }
+        @Override
+        public void update(EnemyGhost enemy) {
+
+        }
+
+        @Override
+        public void exit(EnemyGhost enemy) {
+
+        }
+
+        @Override
+        public boolean onMessage(EnemyGhost enemy, Telegram telegram) {
+            return false;
+        }
+    },
+
     DIE() {
         final CreateAssets tx = CreateAssets.getInstance();
         @Override

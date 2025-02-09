@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.entity.behaviours.fsm.projectiles.Arrow;
 import com.mygdx.game.entity.behaviours.fsm.*;
 import com.mygdx.game.entity.behaviours.fsm.drops.Skull;
+import com.mygdx.game.entity.behaviours.fsm.projectiles.Eyebeam;
 import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.objects.*;
 
@@ -101,19 +102,19 @@ public class GameContactListener implements ContactListener {
                                 break;
                             case "DownArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY - 85);
+                                e.enemyBody.setLinearVelocity(velX, velY - 50);
                                 break;
                             case "UpArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY + 85);
+                                e.enemyBody.setLinearVelocity(velX, velY + 50);
                                 break;
                             case "LeftArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX - 85, velY);
+                                e.enemyBody.setLinearVelocity(velX - 50, velY);
                                 break;
                             case "RightArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX + 85, velY);
+                                e.enemyBody.setLinearVelocity(velX + 50, velY);
                                 break;
                             default:
                                 break;
@@ -243,19 +244,19 @@ public class GameContactListener implements ContactListener {
                                 break;
                             case "DownArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY - 85);
+                                e.enemyBody.setLinearVelocity(velX, velY - 50);
                                 break;
                             case "UpArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY + 85);
+                                e.enemyBody.setLinearVelocity(velX, velY + 50);
                                 break;
                             case "LeftArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX - 85, velY);
+                                e.enemyBody.setLinearVelocity(velX - 50, velY);
                                 break;
                             case "RightArrow":
                                 e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX + 85, velY);
+                                e.enemyBody.setLinearVelocity(velX + 50, velY);
                                 break;
                             default:
                                 break;
@@ -309,7 +310,7 @@ public class GameContactListener implements ContactListener {
                                     for (EnemyCyclops eye : enemyEyes) {
                                         if (eye.enemyBody == collidee.getBody()) {
                                             deadEnemyBodies.add(collidee.getBody());
-                                            soundController.playSound("SkullDeath",8.5f,7.5f,0.1f);
+                                            soundController.playSound("CyclopsDeath",8.5f,7.5f,0.1f);
                                             dyingEyes.add(eye);
                                         }
                                     }
@@ -634,7 +635,7 @@ public class GameContactListener implements ContactListener {
                         for (Trap tr : traps) {
                             if (tr.trapArea == collider.getBody()) {
                                 if (!tr.active) {
-                                    tr.fireArrow(tr.trapX, tr.trapY);
+                                    tr.fireArrow(tr.trapX, tr.trapY, tr.type);
                                 }
                             }
                         }
@@ -704,16 +705,14 @@ public class GameContactListener implements ContactListener {
                             if (f.fireBody == collider.getBody()) {
                                 if (f.type == 1) {
                                     for (Arrow a : arrows) {
-                                        System.out.println(a);
                                         if (a.arrowBody == collidee.getBody()) {
-                                            System.out.println(a.arrowBody);
-                                            System.out.println(a.onFire);
-                                            if (a.onFire) {
+                                            if (a.onFire && !f.smoking) {
                                                 f.active = true;
                                                 f.light.setActive(true);
                                                 f.smoking = false;
                                                 f.extinguish = true;
                                             }  else if (f.extinguish) {
+                                                a.onFire = true;
                                                 f.smoking = true;
                                                 f.extinguish = false;
                                             }
@@ -766,28 +765,28 @@ public class GameContactListener implements ContactListener {
                         if (collidee.getUserData() == "EnemySkull") {
                             for (EnemySkull e : enemySkulls) {
                                 if (e.enemyAI.getBody() == collidee.getBody()) {
-                                    e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
+                                    //e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
                                     break;
                                 }
                             }
                         } else if (collidee.getUserData() == "EnemySpider") {
                             for (EnemySpider e2 : enemySpiders) {
                                 if (e2.enemyAI.getBody() == collidee.getBody()) {
-                                    e2.getStateMachine().changeState(EnemySpiderState.GO_TO_PLAYER);
+                                    //e2.getStateMachine().changeState(EnemySpiderState.GO_TO_PLAYER);
                                     break;
                                 }
                             }
                         } else if (collidee.getUserData() == "EnemyGhost") {
                             for (EnemyGhost e3 : enemyGhosts) {
                                 if (e3.enemyAI.getBody() == collidee.getBody()) {
-                                    e3.getStateMachine().changeState(EnemyGhostState.GO_TO_PLAYER);
+                                    //e3.getStateMachine().changeState(EnemyGhostState.GO_TO_PLAYER);
                                     break;
                                 }
                             }
                         } else if (collidee.getUserData() == "EnemyCyclops") {
                             for (EnemyCyclops e4 : enemyEyes) {
                                 if (e4.enemyAI.getBody() == collidee.getBody()) {
-                                    e4.getStateMachine().changeState(EnemyCyclopsState.GO_TO_PLAYER);
+                                    //e4.getStateMachine().changeState(EnemyCyclopsState.GO_TO_PLAYER);
                                     break;
                                 }
                             }
@@ -801,12 +800,13 @@ public class GameContactListener implements ContactListener {
                                 if (f.type == 1) {
                                     for (Arrow a : arrows) {
                                         if (a.arrowBody == collider.getBody()) {
-                                            if (a.onFire) {
+                                            if (a.onFire && !f.smoking) {
                                                 f.active = true;
                                                 f.light.setActive(true);
                                                 f.smoking = false;
                                                 f.extinguish = true;
                                             } else if (f.extinguish) {
+                                                a.onFire = true;
                                                 f.smoking = true;
                                                 f.extinguish = false;
                                             }
@@ -892,7 +892,7 @@ public class GameContactListener implements ContactListener {
                     }
 
                     if ((collideeStr == "Cobweb")) {
-                        DungeonCrawler.PLAYER_SPEED_MULTI = 15f;
+                        DungeonCrawler.PLAYER_SPEED_MULTI = 20f;
                         player.touchingCobweb = true;
                         break;
                     }
@@ -974,7 +974,7 @@ public class GameContactListener implements ContactListener {
                         for (Trap tr : traps) {
                             if (tr.trapArea == collidee.getBody()) {
                                 if (!tr.active) {
-                                    tr.fireArrow(tr.trapX,tr.trapY);
+                                    tr.fireArrow(tr.trapX,tr.trapY, tr.type);
                                 }
                             }
                         }
@@ -983,7 +983,7 @@ public class GameContactListener implements ContactListener {
 
                 case "Cobweb":
                     if (collider.getUserData() == "PlayerBound") {
-                       DungeonCrawler.PLAYER_SPEED_MULTI = 15f;
+                       DungeonCrawler.PLAYER_SPEED_MULTI = 20f;
                         player.touchingCobweb = true;
                        break;
                     }
@@ -1043,12 +1043,13 @@ public class GameContactListener implements ContactListener {
                             if (f.type == 1) {
                                 for (Arrow a : arrows) {
                                     if (a.arrowBody == collidee.getBody()) {
-                                        if (a.onFire) {
+                                        if (a.onFire && !f.smoking) {
                                             f.active = true;
                                             f.light.setActive(true);
                                             f.smoking = false;
                                             f.extinguish = true;
                                         } else if (f.extinguish) {
+                                            a.onFire = true;
                                             f.smoking = true;
                                             f.extinguish = false;
                                         }
@@ -1149,15 +1150,28 @@ public class GameContactListener implements ContactListener {
 
                     for (EnemySkull e : init.roomList.get(player.currentRoom).enemySkulls) {
                         e.rayCastable = true;
+                        e.enemyAI.setMaxLinearSpeed(e.defaultSpeed);
+                        e.stateMachine.changeState(EnemySkullState.WANDER);
+                        e.active = true;
                     }
                     for (EnemySpider e2 : init.roomList.get(player.currentRoom).enemySpiders) {
                         e2.rayCastable = true;
+                        e2.enemyAI.setMaxLinearSpeed(e2.defaultSpeed);
+                        e2.stateMachine.changeState(EnemySpiderState.WANDER);
+                        e2.active = true;
                     }
                     for (EnemyGhost e3 : init.roomList.get(player.currentRoom).enemyGhosts) {
                         e3.rayCastable = true;
+                        e3.enemyAI.setMaxLinearSpeed(e3.defaultSpeed);
+                        e3.stateMachine.changeState(EnemyGhostState.WANDER);
+                        e3.active = true;
+
                     }
                     for (EnemyCyclops e4 : init.roomList.get(player.currentRoom).enemyEyes) {
                         e4.rayCastable = true;
+                        e4.enemyAI.setMaxLinearSpeed(e4.defaultSpeed);
+                        e4.stateMachine.changeState(EnemyCyclopsState.WANDER);
+                        e4.active = true;
                     }
 
                     player.touchingRoom = true;
@@ -1207,7 +1221,7 @@ public class GameContactListener implements ContactListener {
         switch (colliderAsString) {
             case "Cobweb":
                 if (collider.getUserData() == "PlayerBound") {
-                    DungeonCrawler.PLAYER_SPEED_MULTI = 48f;
+                    DungeonCrawler.PLAYER_SPEED_MULTI = 45f;
                     player.touchingCobweb = false;
                     break;
                 }
@@ -1261,7 +1275,7 @@ public class GameContactListener implements ContactListener {
         switch (collideeAsString) {
             case "Cobweb":
                 if (collider.getUserData() == "PlayerBound") {
-                    DungeonCrawler.PLAYER_SPEED_MULTI = 48f;
+                    DungeonCrawler.PLAYER_SPEED_MULTI = 45f;
                     player.touchingCobweb = false;
                     for (Cobweb cob : cobwebs) {
                         if (cob.cobBody == collidee.getBody()) {
@@ -1315,6 +1329,29 @@ public class GameContactListener implements ContactListener {
                 for (EnemyCyclops e : enemyEyes) {
                     if (e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody()){
                         e.playerInRange = false;
+                        for (Fixture fixture : e.enemyBody.getFixtureList()) {
+
+                            if (fixture.getUserData() == "Eyebeam") {
+
+                                if (!eyebeamArrayMap.isEmpty()) {
+
+                                    if (!reversedEyebeamMap) {
+                                        eyebeamArrayMap.reverse();
+                                        reversedEyebeamMap = true;
+                                    }
+
+                                    for (OrderedMap.Entry<Body, Eyebeam> beamEntry : eyebeamArrayMap.entries()) {
+                                        Body key = beamEntry.key;
+                                        Eyebeam value = beamEntry.value;
+
+                                        if (key == fixture.getBody()) {
+                                            value.beamLight.setActive(false);
+                                        }
+                                    }
+                                }
+                                eyebeamBodiesCollected.add(fixture.getBody());
+                            }
+                        }
                         e.getStateMachine().changeState(EnemyCyclopsState.WANDER);
                         }
                     }
@@ -1393,8 +1430,14 @@ public class GameContactListener implements ContactListener {
             if (collideeAsString == "Fire") {
                 for (Arrow a : arrows) {
                     if (a.arrowBody == collider.getBody()) {
-                        if (!a.onFire) {
-                            a.onFire = true;
+                        for (Fire f : fires) {
+                            if (collidee.getBody() == f.fireBody) {
+                                if (f.active) {
+                                    if (!a.onFire) {
+                                        //a.onFire = true;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -1404,8 +1447,14 @@ public class GameContactListener implements ContactListener {
             if (colliderAsString == "Fire") {
                 for (Arrow a : arrows) {
                     if (a.arrowBody == collidee.getBody()) {
-                        if (!a.onFire) {
-                            a.onFire = true;
+                        for (Fire f : fires) {
+                            if (collider.getBody() == f.fireBody) {
+                                if (f.active) {
+                                    if (!a.onFire) {
+                                        //a.onFire = true;
+                                    }
+                                }
+                            }
                         }
                     }
                 }

@@ -73,8 +73,9 @@ public class CreateAssets {
     Texture arrowAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Bow/ArrowAnimation.png"));
     Texture columnsTextureSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Columns.png"));
     Texture potsSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Pots.png"));
-    Texture webTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySpider/WebSpit.png"));
+    //Texture webTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySpider/WebSpit.png"));
     Texture arrowTrapTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/ArrowTrap.png"));
+    Texture fireArrowTrapTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/FireArrowTrap.png"));
 
     Texture roof3x3 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/3x3.png"));
     Texture roof5x5 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/5x5.png"));
@@ -86,11 +87,13 @@ public class CreateAssets {
 
     public Sound potBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/potbreaking4.mp3"));
     public Sound skullBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/skullbreaking.mp3"));
-    public Sound boneBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/bonebreaking2.mp3"));
+    public Sound boneBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/bonebreaking3.mp3"));
     public Sound skullDeath = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/skulldeath.mp3"));
     public Sound spiderAttack = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/spiderattack.mp3"));
     public Sound spiderDeath = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/spiderdying2.mp3"));
     public Sound ghostDeath = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/ghostdying.mp3"));
+    public Sound cyclopsDeath = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/eyedeath.mp3"));
+    public Sound eyebeamAttack = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/eyebeam3.mp3"));
 
     public Sound playerHurt = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/playerhurt.mp3"));
     public Sound arrowHit = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/arrowhit.mp3"));
@@ -102,7 +105,6 @@ public class CreateAssets {
     public Sound bowAttack3 = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/bowattack3.mp3"));
     public Sound trapOpening = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/trapopens2.mp3"));
     public Sound trapClosing = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/trapcloses2.mp3"));
-
 
     public Sound chiselUsed = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/usechisel.mp3"));
     public Sound winePickup = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/pickupwine.mp3"));
@@ -123,7 +125,6 @@ public class CreateAssets {
 
     //Texture font = new Texture(Gdx.files.internal("HellasDungeon/Font/GreekAlphabet.png"));
     //public TextureRegion fontTexture = new TextureRegion(font,0,0,16,16);
-
 
     //Floor textures
 
@@ -390,7 +391,10 @@ public class CreateAssets {
     public TextureRegion torchDownTexture = new TextureRegion(roomBackground, 0,0,16,16);
 
     public TextureRegion arrowTrap = new TextureRegion(arrowTrapTexture, 0,0,16,16);
-    public TextureRegion arrowTrapActivated = new TextureRegion(arrowTrapTexture, 16,0,16,16);
+    public TextureRegion arrowTrapActivated = new TextureRegion(arrowTrapTexture, 16,0,16,17);
+
+    public TextureRegion fireArrowTrap = new TextureRegion(fireArrowTrapTexture, 0,0,16,21);
+    public TextureRegion fireArrowTrapActivated = new TextureRegion(fireArrowTrapTexture, 16,0,16,22);
 
     public TextureRegion lockUpTexture = new TextureRegion(roomBackground, 160,64,16,16);
     public TextureRegion lockDownTexture = new TextureRegion(roomBackground, 192,32,16,16);

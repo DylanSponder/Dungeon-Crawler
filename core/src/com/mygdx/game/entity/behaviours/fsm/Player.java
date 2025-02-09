@@ -40,7 +40,7 @@ public class Player {
         hasShield = false;
         hasTorch = false;
         torchApplied = false;
-        hasChisel = true;
+        hasChisel = false;
     }
 
     public Body createPlayer(World world, float PLAYER_X, float PLAYER_Y, RayHandler rayHandler){

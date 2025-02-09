@@ -113,13 +113,13 @@ public class GenerateLevel {
                 //}
 
                 else {
-                    int random = Random.randomInt(6, 1);
+                    int random = Random.randomInt(9, 1);
                     while (random == 5) {
-                        random = Random.randomInt(6, 1);
+                        random = Random.randomInt(9, 1);
                     }
                     //assign the room its random index
                     newRoom.roomNum = random;
-                    newRoom.roomNum = random;
+                    //newRoom.roomNum = 8;
                 }
 
                 //determines which pre-gen room is placed next in sequence
@@ -812,6 +812,14 @@ for (int i = 0; i < layerSize; i++) {
             topWallTrap.createTrap();
             traps.add(topWallTrap);
             break;
+        case "topWallFireTrapTile":
+            currentCell = init.cr.topWallTile;
+            Body newTopWallFireTrap = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newTopWallFireTrap.setUserData("Wall");
+            Trap topWallFireTrap = new Trap(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,2, 1);
+            topWallFireTrap.createTrap();
+            traps.add(topWallFireTrap);
+            break;
         case "topRightWallTile":
             currentCell = init.cr.topRightWallTile;
             Body newTopRightWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
@@ -830,6 +838,14 @@ for (int i = 0; i < layerSize; i++) {
             leftWallTrap.createTrap();
             traps.add(leftWallTrap);
             break;
+        case "leftWallFireTrapTile":
+            currentCell = init.cr.leftWallTile;
+            Body newLeftWallFireTrap = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newLeftWallFireTrap.setUserData("Wall");
+            Trap leftWallFireTrap = new Trap(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,2, 4);
+            leftWallFireTrap.createTrap();
+            traps.add(leftWallFireTrap);
+            break;
         case "rightWallTile":
             currentCell = init.cr.rightWallTile;
             Body newRightWall = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
@@ -842,6 +858,14 @@ for (int i = 0; i < layerSize; i++) {
             Trap rightWallTrap = new Trap(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30,1, 2);
             rightWallTrap.createTrap();
             traps.add(rightWallTrap);
+            break;
+        case "rightWallFireTrapTile":
+            currentCell = init.cr.rightWallTile;
+            Body newRightWallFireTrap = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newRightWallFireTrap.setUserData("Wall");
+            Trap rightWallFireTrap = new Trap(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30,2, 2);
+            rightWallFireTrap.createTrap();
+            traps.add(rightWallFireTrap);
             break;
         case "bottomLeftWallTile":
             currentCell = init.cr.bottomLeftWallTile;
@@ -860,6 +884,14 @@ for (int i = 0; i < layerSize; i++) {
             Trap bottomWallTrap = new Trap(world, ((roomX + i) * 16) + 16 * 16 + 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,1, 3);
             bottomWallTrap.createTrap();
             traps.add(bottomWallTrap);
+            break;
+        case "bottomWallFireTrapTile":
+            currentCell = init.cr.bottomWallTile;
+            Body newBottomWallFireTrap = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newBottomWallFireTrap.setUserData("Wall");
+            Trap bottomWallFireTrap = new Trap(world, ((roomX + i) * 16) + 16 * 16 + 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,2, 3);
+            bottomWallFireTrap.createTrap();
+            traps.add(bottomWallFireTrap);
             break;
         case "bottomRightWallTile":
             currentCell = init.cr.bottomRightWallTile;
@@ -1515,7 +1547,7 @@ for (int i = 0; i < layerSize; i++) {
             EnemySkull enemy = new EnemySkull(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
             init.roomList.get(roomIndex).enemyCounter++;
             init.roomList.get(roomIndex).enemySkulls.add(enemy);
-            enemy.createEnemy(1);
+            enemy.createEnemy(1, 25);
             enemies.add(enemy);
             enemy.room = roomIndex;
             DungeonCrawler.enemySkulls.add(enemy);
@@ -1525,7 +1557,7 @@ for (int i = 0; i < layerSize; i++) {
             EnemySpider enemy2 = new EnemySpider(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
             init.roomList.get(roomIndex).enemyCounter++;
             init.roomList.get(roomIndex).enemySpiders.add(enemy2);
-            enemy2.createEnemy(2);
+            enemy2.createEnemy(2, 40);
             enemies.add(enemy2);
             enemy2.room = roomIndex;
             DungeonCrawler.enemySpiders.add(enemy2);
@@ -1535,7 +1567,7 @@ for (int i = 0; i < layerSize; i++) {
             EnemyGhost enemy3 = new EnemyGhost(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
             init.roomList.get(roomIndex).enemyCounter++;
             init.roomList.get(roomIndex).enemyGhosts.add(enemy3);
-            enemy3.createEnemy(3);
+            enemy3.createEnemy(3, 40);
             enemies.add(enemy3);
             enemy3.room = roomIndex;
             DungeonCrawler.enemyGhosts.add(enemy3);
@@ -1545,7 +1577,7 @@ for (int i = 0; i < layerSize; i++) {
             EnemyCyclops enemy4 = new EnemyCyclops(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
             init.roomList.get(roomIndex).enemyCounter++;
             init.roomList.get(roomIndex).enemyEyes.add(enemy4);
-            enemy4.createEnemy(4);
+            enemy4.createEnemy(4, 40);
             enemies.add(enemy4);
             enemy4.room = roomIndex;
             DungeonCrawler.enemyEyes.add(enemy4);

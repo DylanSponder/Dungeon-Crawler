@@ -103,6 +103,31 @@ public enum EnemySpiderState implements State<EnemySpider> {
         }
     },
 
+    STOP() {
+        final CreateAssets tx = CreateAssets.getInstance();
+        @Override
+        public void enter (EnemySpider enemy){
+            enemy.enemyAI.setMaxLinearSpeed(0);
+            enemy.enemyAI.setMaxAngularSpeed(0);
+            enemy.enemyAI.setMaxAngularAcceleration(0);
+            enemy.enemyAI.setBehaviour(null);
+        }
+        @Override
+        public void update(EnemySpider enemy) {
+
+        }
+
+        @Override
+        public void exit(EnemySpider enemy) {
+
+        }
+
+        @Override
+        public boolean onMessage(EnemySpider enemy, Telegram telegram) {
+            return false;
+        }
+    },
+
     DIE() {
         final CreateAssets tx = CreateAssets.getInstance();
         @Override
