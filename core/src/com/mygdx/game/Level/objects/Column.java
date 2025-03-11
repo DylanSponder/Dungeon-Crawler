@@ -96,13 +96,18 @@ public class Column {
         //return this.columnBody;
     }
 
-    public void createColumnBaseLower() {
+    public void createColumnBaseLower(int type) {
 
         BodyFactory bodyFactory = new BodyFactory();
 
         DungeonCrawler.columns.add(this);
+        if (type == 1) {
+            this.columnBody = bodyFactory.createColumnBase(world, columnX, columnY);
+        } else if (type == 2) {
+            this.columnBody = bodyFactory.createColumnBase2(world, columnX, columnY);
+        }
 
-        this.columnBody = bodyFactory.createColumnBase(world, columnX, columnY);
+
 
         //ColumnTop col1 = new ColumnTop(world, columnX, columnY, type, solid);
 

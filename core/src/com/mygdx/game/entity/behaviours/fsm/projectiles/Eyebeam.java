@@ -45,32 +45,32 @@ public class Eyebeam {
         this.beamLightDistance = 10f;
     }
 
-    public Body createEyebeam(Body eyeBody, EnemyCyclops eye, ArrayMap<Body, Eyebeam> eyebeamArrayMap, RayHandler rayHandler) {
+    public Body createEyebeam(Body eyeBody, EnemyCyclops eye, ArrayMap<Body, Eyebeam> eyebeamArrayMap, RayHandler rayHandler) {//
         BodyFactory bodyFactory = new BodyFactory();
         if (facing == "Down"){
-            this.beamBody = bodyFactory.createEyebeam(world, beamX, beamY - 32, facing, eyeBody, upDown, this);
-            this.beamLight = new ChainLight(rayHandler, 60, new Color(0.1f,0,1f,0.7f),10,1,new float[]{3.93923f,0.694593f,-3.93923f,-0.694593f,7.17425f,-63.7223f,15.0527f,-62.3331f,3.93923f,0.694593f});
+            this.beamBody = bodyFactory.createEyebeam(world, beamX, beamY - 32, facing, eyeBody, upDown, this);//3.93923f,0.694593f,-3.93923f,-0.694593f,7.17425f,-63.7223f,15.0527f,-62.3331f,3.93923f,0.694593f
+            this.beamLight = new ChainLight(rayHandler, 60, new Color(0.1f,0,1f,0.7f),10,1,new float[]{0.984808f,0.173648f,-0.984808f,-0.173648f,11.5179f,-71.0798f,13.4875f,-70.7325f,0.984808f,0.173648f});//170?
             //this.beamLight.setSoftnessLength(0);
             this.beamLight.setXray(true);
             this.beamLight.attachToBody(beamBody);
         }
         else if (facing == "Up"){
-            this.beamBody = bodyFactory.createEyebeam(world, beamX, beamY + 32, facing, eyeBody, upDown,this);//5.332f,1.888f,1.888f,-5.332f,59.65f,-32.9f,63.10f,-25.7f,5.332f,1.888f
-            this.beamLight = new ChainLight(rayHandler, 60, new Color(0.1f,0,1f,0f),0,1,new float[]{8.94f,0.17f,63.26f,-34.6f,5.50f,-7.05f,66.71f,-27.4f});//115.50
+            this.beamBody = bodyFactory.createEyebeam(world, beamX, beamY + 32, facing, eyeBody, upDown,this);//0.422618f,0.906308f,-0.422618f,-0.906308f,64.8315f,-31.3348f,65.6768f,-29.5222f,0.422618f,0.906308f
+            this.beamLight = new ChainLight(rayHandler, 60, new Color(0.1f,0,1f,0f),0,1,new float[]{0.469472f,0.882948f,-0.469472f,-0.882948f,63.1028f,-34.6849f,64.0417f,-32.919f,0.469472f,0.882948f});//118?/115
             //this.beamLight.setSoftnessLength(0);
             this.beamLight.setXray(true);
             this.beamLight.attachToBody(beamBody);
         }
         else if (facing == "Left"){
-            this.beamBody = bodyFactory.createEyebeam(world, beamX - 32, beamY, facing, eyeBody, upDown,this);
-            this.beamLight = new ChainLight(rayHandler, 60, new Color(0.1f,0,1f,0.7f),10,1,new float[]{3.27661f,2.29431f,-3.27661f,-2.29431f,38.0209f,-61.2733f,44.5741f,-56.6846f,3.27661f,2.29431f});
+            this.beamBody = bodyFactory.createEyebeam(world, beamX - 32, beamY, facing, eyeBody, upDown,this);//3.27661f,2.29431f,-3.27661f,-2.29431f,38.0209f,-61.2733f,44.5741f,-56.6846f,3.27661f,2.29431f
+            this.beamLight = new ChainLight(rayHandler, 60, new Color(0.1f,0,1f,0.7f),10,1,new float[]{0.819152f,0.573576f,-0.819152f,-0.573576f,40.4784f,-59.5525f,42.1167f,-58.4054f,0.819152f,0.573576f});//145
             //this.beamLight.setSoftnessLength(0);
             this.beamLight.setXray(true);
             this.beamLight.attachToBody(beamBody);
         }
         else if (facing == "Right"){
-            this.beamBody = bodyFactory.createEyebeam(world, beamX + 32, beamY, facing, eyeBody, upDown,this);//-4,0,4,0,4,72,-4,72,-4,0
-            this.beamLight = new ChainLight(rayHandler, 60, new Color(0.1f,0,1f,0.7f),10,1,new float[]{0,4,0,-4,72,-4,72,4,0,4});
+            this.beamBody = bodyFactory.createEyebeam(world, beamX + 32, beamY, facing, eyeBody, upDown,this);//0,4,0,-4,72,-4,72,4,0,4
+            this.beamLight = new ChainLight(rayHandler, 60, new Color(0.1f,0,1f,0.7f),10,1,new float[]{0f,1f,0f,-1f,72f,-1f,72f,1f,0f,1f});//90
             //this.beamLight.setSoftnessLength(0);
             this.beamLight.setXray(true);
             this.beamLight.attachToBody(beamBody);

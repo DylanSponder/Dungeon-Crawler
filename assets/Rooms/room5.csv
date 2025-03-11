@@ -1,11 +1,11 @@
 tlf,tf,tf,twcol1,doorftl,doorftr,twcol1,tf,tf,tf,trf
 lf,fped1fire,f,fcol7,f,f,fcol7,f,f,fped1fire,rf
 lf,fcol1,f21,f,f,f,f,f,f,fcol1,rf
-lf,fcol7,fcands,f,f,fcands,f,f,fcand,fcol7,rf
-lf,f,f,fcoltu,f3,f2,f3,fcoltu,f,f,rf
+lf,fcol7,fcands,fcol10,f,fcands,f,fcol10,fcand,fcol7,rf
+lf,f,f,fcolf,f3,f2,f3,fcolf,f,f,rf
 doorful,f,fcand,f,f2,fshop,f2,f,fcands,f,doorfur
 doorfll,f,f,f,f3,f2,f3,f,f,f,doorflr
-lf,fcol1,fcands,f,f,fcand,f,f,fcands,fcol1,rf
-lf,fcol7,f,fcoltu,f,f,f,fcoltu,f,fcol7,rf
+lf,fcol1,fcands,fcol10,f,fcand,f,fcol10,fcands,fcol1,rf
+lf,fcol7,f,fcolf,f,f,f,fcolf,f,fcol7,rf
 lf,fped1fire,f,f,f,f,f,f,f,fped1fire,rf
 blf,bf,bf,bf,bf,doorfbl,doorfbr,bf,bf,bf,brf

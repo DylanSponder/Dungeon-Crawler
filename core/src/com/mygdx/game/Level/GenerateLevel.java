@@ -1,5 +1,6 @@
 package com.mygdx.game.level;
 
+import box2dLight.ConeLight;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -36,7 +37,7 @@ public class GenerateLevel {
     private int doorTop, doorBottom, doorLeft, doorRight, doorResult;
     private ArrayList list, itemIndex;
     public static ArrayList<Integer> path;
-    public ArrayList<Integer> directionsAvailableIndexed;
+    public ArrayList<Integer> directionsAvailableIndexed, possibleRoomNumbers;
     public HashMap<String, String> doorMap;
     public boolean failed;
     private HashMap<String, String> doorMapPrevious;
@@ -60,9 +61,19 @@ public class GenerateLevel {
         roomsIndex = 0;
         roomHitboxCreated = false;
 
-        int min = 8;
-        int max = 8;
+        int min = 11;
+        int max = 11;
         numRooms = (int) (Math.random() * (max - min + 1)) + min;
+
+        possibleRoomNumbers = new ArrayList<>();
+
+        int roomIDMax = 12;
+
+        for (int i = 0; i < roomIDMax; i++) {
+            //create an arraylist of all possible room IDs
+            possibleRoomNumbers.add(i);
+        }
+
 
         path = new ArrayList() {
         };
@@ -105,7 +116,7 @@ public class GenerateLevel {
             }
 
             else {
-                if (i == 4 || i == 10) {
+                if (i == 5 || i == 10) {
                     newRoom.roomNum = 5;
                 }
                 //else if (i == 1){
@@ -113,13 +124,19 @@ public class GenerateLevel {
                 //}
 
                 else {
-                    int random = Random.randomInt(9, 1);
+                    //pick a random room ID then take it out of the arraylist - no room will appear twice
+                    int random = Random.randomInt(possibleRoomNumbers.size()-1, 0);
+                    int IDchosen = random;
+                    random = possibleRoomNumbers.get(random) + 1;
+                    possibleRoomNumbers.remove(IDchosen);
+
                     while (random == 5) {
-                        random = Random.randomInt(9, 1);
+                        //shop spawns are pre-determined so should not appear randomly
+                        random = Random.randomInt(12, 1);
                     }
                     //assign the room its random index
                     newRoom.roomNum = random;
-                    //newRoom.roomNum = 8;
+                    newRoom.roomNum = 13;
                 }
 
                 //determines which pre-gen room is placed next in sequence
@@ -960,7 +977,26 @@ for (int i = 0; i < layerSize; i++) {
             Body newTopLeftFence = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
             newTopLeftFence.setUserData("Wall");
             break;
-
+        case "bottomRightTurnFenceTile":
+            currentCell = init.cr.bottomRightTurnFenceTile;
+            Body newBottomRightTurnFence = init.bf.createFenceTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 4f, 14f, 2);
+            newBottomRightTurnFence.setUserData("Wall");
+            break;
+        case "bottomLeftTurnFenceTile":
+            currentCell = init.cr.bottomLeftTurnFenceTile;
+            Body newBottomLeftTurnFence = init.bf.createFenceTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 12f, 14f, 2);
+            newBottomLeftTurnFence.setUserData("Wall");
+            break;
+        case "topRightTurnFenceTile":
+            currentCell = init.cr.topRightTurnFenceTile;
+            Body newTopRightTurnFence = init.bf.createFenceTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 1f, 2f, 1);
+            newTopRightTurnFence.setUserData("Wall");
+            break;
+        case "topLeftTurnFenceTile":
+            currentCell = init.cr.topLeftTurnFenceTile;
+            Body newTopLeftTurnFence = init.bf.createFenceTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 15f, 2f, 1);
+            newTopLeftTurnFence.setUserData("Wall");
+            break;
         case "bottomFenceLeftEndTile":
             currentCell = init.cr.bottomFenceLeftEndTile;
             Body newBottomLeftEndFence = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
@@ -1448,9 +1484,9 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.middleFloorTile;
             Candle newCandle = new Candle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 1);
             Body candBody = newCandle.createCandle();
-            Fire fCan = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 5.5f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 3.5f, false,0f, 3, false);
+            Fire fCan = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 5.5f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 3.5f, false,0f, 3, false, 0);
             fires.add(fCan);
-            fCan.createFire(new Color(0.25f,0.20f,0,0.7f),20);
+            fCan.createFire(new Color(0.25f,0.20f,0,0.7f),20, null);
             candles.add(newCandle);
             lights.add(fCan);
             break;
@@ -1458,14 +1494,14 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.middleFloorTile;
             Candle newCandles = new Candle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 2);
             Body candsBody = newCandles.createCandle();
-            Fire fCans = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 4.5f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 2.5f, false,0f, 3, false);
+            Fire fCans = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 4.5f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 2.5f, false,0f, 3, false, 0);
             fires.add(fCans);
             lights.add(fCans);
-            fCans.createFire(new Color(0.25f,0.20f,0,0.5f),20);
-            Fire fCans2 = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 8.5f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 6.5f, false,0f, 3, false);
+            fCans.createFire(new Color(0.25f,0.20f,0,0.5f),20, null);
+            Fire fCans2 = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 8.5f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 6.5f, false,0f, 3, false, 0);
             fires.add(fCans2);
             lights.add(fCans2);
-            fCans2.createFire(new Color(0.25f,0.20f,0,0.5f),20);
+            fCans2.createFire(new Color(0.25f,0.20f,0,0.5f),20, null);
 
             candles.add(newCandles);
             break;
@@ -1480,48 +1516,108 @@ for (int i = 0; i < layerSize; i++) {
             Body newTorchWallLeft = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
             newTorchWallLeft.setUserData("Wall");
             Torch torL = new Torch(rayHandler, world, (((roomX + i) * 16) + 16 * 16) + 6, (levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8);
-            Fire fL = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 4,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 4, false,0f, 3, false);
+            Fire fL = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 4,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 4, true,0f, 3, false, 4);
             fires.add(fL);
             torches.add(torL);
             lights.add(torL);
-            fL.createFire(new Color(0.25f,0.20f,0,0.7f),60);
-            torL.createTorch(4);
+            ConeLight torchLightL = torL.createTorch(4);
+            fL.createFire(new Color(0.25f,0.20f,0,0.7f),60, torchLightL);
+            break;
+        case "torloff":
+            currentCell = init.cr.torchWallLeftTile;
+            Body newTorchWallLeftOff = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newTorchWallLeftOff.setUserData("Wall");
+            Torch torLoff = new Torch(rayHandler, world, (((roomX + i) * 16) + 16 * 16) + 6, (levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8);
+            Fire fLoff = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 4,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 4, true,0f, 3, false, 4);
+            fires.add(fLoff);
+            torches.add(torLoff);
+            lights.add(torLoff);
+            ConeLight torchLightLOff = torLoff.createTorch(4);
+            fLoff.createFire(new Color(0.25f,0.20f,0,0.7f),60, torchLightLOff);
+            fLoff.extinguish = false;
+            fLoff.smoking = true;
+            fLoff.active = false;
             break;
         case "torr":
             currentCell = init.cr.torchWallRightTile;
             Body newTorchWallRight = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
             newTorchWallRight.setUserData("Wall");
             Torch torR = new Torch(rayHandler, world, (((roomX + i) * 16) + 16 * 16) + 10, (levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8);
-            Fire fR = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 7,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 4, false,0f, 3, false);
+            Fire fR = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 7,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 4, true,0f, 3, false, 2);
             fires.add(fR);
             torches.add(torR);
             lights.add(torR);
-            fR.createFire(new Color(0.25f,0.20f,0,0.7f),60);
-            torR.createTorch(2);
+            ConeLight torchLightR = torR.createTorch(2);
+            fR.createFire(new Color(0.25f,0.20f,0,0.7f),60, torchLightR);
+            break;
+        case "torroff":
+            currentCell = init.cr.torchWallRightTile;
+            Body newTorchWallRightOff = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newTorchWallRightOff.setUserData("Wall");
+            Torch torRoff = new Torch(rayHandler, world, (((roomX + i) * 16) + 16 * 16) + 10, (levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8);
+            Fire fRoff = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 7,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 4, true,0f, 3, false, 2);
+            fires.add(fRoff);
+            torches.add(torRoff);
+            lights.add(torRoff);
+            ConeLight torchLightROff = torRoff.createTorch(2);
+            fRoff.createFire(new Color(0.25f,0.20f,0,0.7f),60, torchLightROff);
+            fRoff.extinguish = false;
+            fRoff.smoking = true;
+            fRoff.active = false;
             break;
         case "toru":
             currentCell = init.cr.torchWallUpTile;
             Body newTorchWallUp = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
             newTorchWallUp.setUserData("Wall");
             Torch torU = new Torch(rayHandler, world, (((roomX + i) * 16) + 16 * 16) + 8, (levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 15);
-            Fire fU = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 5,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 5, false,0f, 3, false);
+            Fire fU = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 5,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 5, true,0f, 3, false, 1);
             fires.add(fU);
             torches.add(torU);
             lights.add(torU);
-            fU.createFire(new Color(0.25f,0.20f,0,0.7f),60);
-            torU.createTorch(1);
+            ConeLight torchLightU = torU.createTorch(1);
+            fU.createFire(new Color(0.25f,0.20f,0,0.7f),60,torchLightU);
+            break;
+        case "toruoff":
+            currentCell = init.cr.torchWallUpTile;
+            Body newTorchWallUpOff = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newTorchWallUpOff.setUserData("Wall");
+            Torch torUoff = new Torch(rayHandler, world, (((roomX + i) * 16) + 16 * 16) + 8, (levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 15);
+            Fire fUoff = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 5,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 5, true,0f, 3, false, 1);
+            fires.add(fUoff);
+            torches.add(torUoff);
+            lights.add(torUoff);
+            ConeLight torchLightUOff = torUoff.createTorch(1);
+            fUoff.createFire(new Color(0.25f,0.20f,0,0.7f),60,torchLightUOff);
+            fUoff.extinguish = false;
+            fUoff.smoking = true;
+            fUoff.active = false;
             break;
         case "tord":
             currentCell = init.cr.torchWallDownTile;
             Body newTorchWallDown = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
             newTorchWallDown.setUserData("Wall");
             Torch torD = new Torch(rayHandler, world, (((roomX + i) * 16) + 16 * 16) + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 10);
-            Fire fD = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 + 10,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 + 7, false,0f, 3, true);
+            Fire fD = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 + 10,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 + 7, true,0f, 3, true, 3);
             fires.add(fD);
             torches.add(torD);
             lights.add(torD);
-            fD.createFire(new Color(0.25f,0.20f,0,0.7f),60);
-            torD.createTorch(3);
+            ConeLight torchLightD = torD.createTorch(3);
+            fD.createFire(new Color(0.25f,0.20f,0,0.7f),60, torchLightD);
+            break;
+        case "tordoff":
+            currentCell = init.cr.torchWallDownTile;
+            Body newTorchWallDownOff = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            newTorchWallDownOff.setUserData("Wall");
+            Torch torDoff = new Torch(rayHandler, world, (((roomX + i) * 16) + 16 * 16) + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 10);
+            Fire fDoff = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 + 10,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 + 7, true,0f, 3, true, 3);
+            fires.add(fDoff);
+            torches.add(torDoff);
+            lights.add(torDoff);
+            ConeLight torchLightDOff = torDoff.createTorch(3);
+            fDoff.createFire(new Color(0.25f,0.20f,0,0.7f),60, torchLightDOff);
+            fDoff.extinguish = false;
+            fDoff.smoking = true;
+            fDoff.active = false;
             break;
         case "pot":
             currentCell = init.cr.middleFloorTile;
@@ -1547,7 +1643,7 @@ for (int i = 0; i < layerSize; i++) {
             EnemySkull enemy = new EnemySkull(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
             init.roomList.get(roomIndex).enemyCounter++;
             init.roomList.get(roomIndex).enemySkulls.add(enemy);
-            enemy.createEnemy(1, 25);
+            enemy.createEnemy(1, 150);
             enemies.add(enemy);
             enemy.room = roomIndex;
             DungeonCrawler.enemySkulls.add(enemy);
@@ -1557,7 +1653,7 @@ for (int i = 0; i < layerSize; i++) {
             EnemySpider enemy2 = new EnemySpider(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
             init.roomList.get(roomIndex).enemyCounter++;
             init.roomList.get(roomIndex).enemySpiders.add(enemy2);
-            enemy2.createEnemy(2, 40);
+            enemy2.createEnemy(2, 150);
             enemies.add(enemy2);
             enemy2.room = roomIndex;
             DungeonCrawler.enemySpiders.add(enemy2);
@@ -1581,6 +1677,16 @@ for (int i = 0; i < layerSize; i++) {
             enemies.add(enemy4);
             enemy4.room = roomIndex;
             DungeonCrawler.enemyEyes.add(enemy4);
+            break;
+        case "bossMinotaur":
+            currentCell = init.cr.middleFloorTile;
+            BossMinotaur boss1 = new BossMinotaur(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
+            init.roomList.get(roomIndex).enemyCounter++;
+            init.roomList.get(roomIndex).bossMinotaurs.add(boss1);
+            boss1.createEnemy(5, 60);
+            enemies.add(boss1);
+            boss1.room = roomIndex;
+            DungeonCrawler.bossMinotaurs.add(boss1);
             break;
         case "shop":
             currentCell = init.cr.middleFloor3Tile;
@@ -1634,11 +1740,11 @@ for (int i = 0; i < layerSize; i++) {
                     break;
                 case 2:
                     itemKind = "GREEK FIRE";
-                    cost = 6;
+                    cost = 5;
                     break;
                 case 3:
                     itemKind = "SHIELD";
-                    cost = 8;
+                    cost = 6;
                     break;
                 case 4:
                     itemKind = "TORCH";
@@ -1646,11 +1752,11 @@ for (int i = 0; i < layerSize; i++) {
                     break;
                 case 5:
                     itemKind = "BELT";
-                    cost = 4;
+                    cost = 2;
                     break;
                 case 6:
                     itemKind = "CHISEL";
-                    cost = 4;
+                    cost = 3;
                     break;
                 case 7:
                     itemKind = "LANCE";
@@ -1761,11 +1867,152 @@ for (int i = 0; i < layerSize; i++) {
             newTopWallCol10Fire.setUserData("Wall");
             Column twFireCol10 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,10);
             twFireCol10.createColumnTop(false);
-            Fire twfirecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 3, false, 0f, 1, false);
-            twfirecol10.createFire(new Color(0.25f,0.20f,0,0.75f),60);
+            Fire twfirecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 3, false, 0f, 1, false, 0);
+            twfirecol10.createFire(new Color(0.25f,0.20f,0,0.75f),60, null);
             fires.add(twfirecol10);
             lights.add(twfirecol10);
             break;
+        case "brtColTop1":
+            currentCell = init.cr.bottomRightTurnTile;
+            Body newBottomRightTurnCol1 = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 0.1f, 15.9f);
+            newBottomRightTurnCol1.setUserData("Wall");
+            Column brtCol1 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,1);
+            brtCol1.createColumnTop(false);
+            break;
+        case "brtColTop2":
+            currentCell = init.cr.bottomRightTurnTile;
+            Body newBottomRightTurnCol2 = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 0.1f, 15.9f);
+            newBottomRightTurnCol2.setUserData("Wall");
+            Column brtCol2 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,2);
+            brtCol2.createColumnTop(false);
+            break;
+        case "brtColTop3":
+            currentCell = init.cr.bottomRightTurnTile;
+            Body newBottomRightTurnCol3 = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 0.1f, 15.9f);
+            newBottomRightTurnCol3.setUserData("Wall");
+            Column brtCol3 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,3);
+            brtCol3.createColumnTop(false);
+            break;
+        case "brtColTop4":
+            currentCell = init.cr.bottomRightTurnTile;
+            Body newBottomRightTurnCol4 = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 0.1f, 15.9f);
+            newBottomRightTurnCol4.setUserData("Wall");
+            Column brtCol4 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,10);
+            brtCol4.createColumnTop(false);
+            break;
+        case "brtColTop5":
+            currentCell = init.cr.bottomRightTurnTile;
+            Body newBottomRightTurnCol5 = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 0.1f, 15.9f);
+            newBottomRightTurnCol5.setUserData("Wall");
+            Column brtCol5 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,11);
+            brtCol5.createColumnTop(false);
+            break;
+        case "brtColStem1":
+            currentCell = init.cr.bottomRightTurnTile;
+            Body newBottomRightTurnColStem = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 0.1f, 15.9f);
+            newBottomRightTurnColStem.setUserData("Wall");
+            Column brtColStem = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,4);
+            brtColStem.createColumnStem(false);
+            break;
+        case "brtColStemDamaged1":
+            currentCell = init.cr.bottomRightTurnTile;
+            Body newBottomRightTurnColStemDamaged1 = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 0.1f, 15.9f);
+            newBottomRightTurnColStemDamaged1.setUserData("Wall");
+            Column brtColStemDamaged1 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,5);
+            brtColStemDamaged1.createColumnStem(false);
+            break;
+        case "brtColStemDamaged2":
+            currentCell = init.cr.bottomRightTurnTile;
+            Body newBottomRightTurnColStemDamaged2 = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 0.1f, 15.9f);
+            newBottomRightTurnColStemDamaged2.setUserData("Wall");
+            Column brtColStemDamaged2 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,6);
+            brtColStemDamaged2.createColumnStem(false);
+            break;
+        case "brtColStem2":
+            currentCell = init.cr.bottomRightTurnTile;
+            Body newBottomRightTurnColStem2 = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 0.1f, 15.9f);
+            newBottomRightTurnColStem2.setUserData("Wall");
+            Column brtColStem2 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,12);
+            brtColStem2.createColumnTop(false);
+            break;
+        case "brtColStem3":
+            currentCell = init.cr.bottomRightTurnTile;
+            Body newBottomRightTurnColStem3 = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 0.1f, 15.9f);
+            newBottomRightTurnColStem3.setUserData("Wall");
+            Column brtColStem3 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,13);
+            brtColStem3.createColumnTop(false);
+            break;
+        case "bltColTop1":
+            currentCell = init.cr.bottomLeftTurnTile;
+            Body newBottomLeftTurnCol1 = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 15.9f, 15.9f);
+            newBottomLeftTurnCol1.setUserData("Wall");
+            Column bltCol1 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,1);
+            bltCol1.createColumnTop(false);
+            break;
+        case "bltColTop2":
+            currentCell = init.cr.bottomLeftTurnTile;
+            Body newBottomLeftTurnCol2 = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 15.9f, 15.9f);
+            newBottomLeftTurnCol2.setUserData("Wall");
+            Column bltCol2 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,2);
+            bltCol2.createColumnTop(false);
+            break;
+        case "bltColTop3":
+            currentCell = init.cr.bottomLeftTurnTile;
+            Body newBottomLeftTurnCol3 = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 15.9f, 15.9f);
+            newBottomLeftTurnCol3.setUserData("Wall");
+            Column bltCol3 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,3);
+            bltCol3.createColumnTop(false);
+            break;
+        case "bltColTop4":
+            currentCell = init.cr.bottomLeftTurnTile;
+            Body newBottomLeftTurnCol4 = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 15.9f, 15.9f);
+            newBottomLeftTurnCol4.setUserData("Wall");
+            Column bltCol4 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,10);
+            bltCol4.createColumnTop(false);
+            break;
+        case "bltColTop5":
+            currentCell = init.cr.bottomLeftTurnTile;
+            Body newBottomLeftTurnCol5 = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 15.9f, 15.9f);
+            newBottomLeftTurnCol5.setUserData("Wall");
+            Column bltCol5 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,11);
+            bltCol5.createColumnTop(false);
+            break;
+        case "bltColStem1":
+            currentCell = init.cr.bottomLeftTurnTile;
+            Body newBottomLeftTurnColStem = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 15.9f, 15.9f);
+            newBottomLeftTurnColStem.setUserData("Wall");
+            Column bltColStem = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,4);
+            bltColStem.createColumnStem(false);
+            break;
+        case "bltColStemDamaged1":
+            currentCell = init.cr.bottomLeftTurnTile;
+            Body newBottomLeftTurnColStemDamaged1 = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 15.9f, 15.9f);
+            newBottomLeftTurnColStemDamaged1.setUserData("Wall");
+            Column bltColStemDamaged1 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,5);
+            bltColStemDamaged1.createColumnStem(false);
+            break;
+        case "bltColStemDamaged2":
+            currentCell = init.cr.bottomLeftTurnTile;
+            Body newBottomLeftTurnColStemDamaged2 = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 15.9f, 15.9f);
+            newBottomLeftTurnColStemDamaged2.setUserData("Wall");
+            Column bltColStemDamaged2 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,6);
+            bltColStemDamaged2.createColumnStem(false);
+            break;
+        case "bltColStem2":
+            currentCell = init.cr.bottomLeftTurnTile;
+            Body newBottomLeftTurnColStem2 = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 15.9f, 15.9f);
+            newBottomLeftTurnColStem2.setUserData("Wall");
+            Column bltColStem2 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,12);
+            bltColStem2.createColumnTop(false);
+            break;
+        case "bltColStem3":
+            currentCell = init.cr.bottomLeftTurnTile;
+            Body newBottomLeftTurnColStem3 = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 15.9f, 15.9f);
+            newBottomLeftTurnColStem3.setUserData("Wall");
+            Column bltColStem3 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,13);
+            bltColStem3.createColumnTop(false);
+            break;
+
         case "fcolIo":
             currentCell = init.cr.middleFloorTile;
             Column colIo = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16,1);
@@ -1773,7 +2020,7 @@ for (int i = 0; i < layerSize; i++) {
             Column colIoBase = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,7);
             colIoBase.createColumnBase();
             Column colIoBaseLower = new Column(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 70);
-            colIoBaseLower.createColumnBaseLower();
+            colIoBaseLower.createColumnBaseLower(1);
             break;
         case "fcolDo":
             currentCell = init.cr.middleFloorTile;
@@ -1782,7 +2029,7 @@ for (int i = 0; i < layerSize; i++) {
             Column colDoBase = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,7);
             colDoBase.createColumnBase();
             Column colDoBaseLower = new Column(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 70);
-            colDoBaseLower.createColumnBaseLower();
+            colDoBaseLower.createColumnBaseLower(1);
             break;
         case "fcolTu":
             currentCell = init.cr.middleFloorTile;
@@ -1791,7 +2038,7 @@ for (int i = 0; i < layerSize; i++) {
             Column colTuBase = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,7);
             colTuBase.createColumnBase();
             Column colTuBaseLower = new Column(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 70);
-            colTuBaseLower.createColumnBaseLower();
+            colTuBaseLower.createColumnBaseLower(1);
             break;
 
         case "fcol1":
@@ -1829,7 +2076,14 @@ for (int i = 0; i < layerSize; i++) {
             Column col7 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,7);
             col7.createColumnBase();
             Column colLower = new Column(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 70);
-            colLower.createColumnBaseLower();
+            colLower.createColumnBaseLower(1);
+            break;
+        case "fcolf":
+            currentCell = init.cr.middleFloorTile;
+            Column col72 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,18);
+            col72.createColumnBase();
+            Column colLower2 = new Column(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 71);
+            colLower2.createColumnBaseLower(2);
             break;
         case "fcol8":
             currentCell = init.cr.middleFloorTile;
@@ -1850,8 +2104,8 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.middleFloorTile;
             Column fireCol10 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,10);
             fireCol10.createColumnTop(false);
-            Fire firecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 3, false, 0f, 1, false);
-            firecol10.createFire(new Color(0.25f,0.20f,0,0.75f),60);
+            Fire firecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 3, false, 0f, 1, false, 0);
+            firecol10.createFire(new Color(0.25f,0.20f,0,0.75f),60, null);
             fires.add(firecol10);
             lights.add(firecol10);
             break;
@@ -1899,18 +2153,30 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.middleFloorTile;
             Column ped1fire = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
             ped1fire.createPedestal();
-            Fire fireped1 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, true, 0f, 1, false);
-            fireped1.createFire(new Color(0.25f,0.20f,0,0.75f), 60);
+            Fire fireped1 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, true, 0f, 1, false, 0);
+            fireped1.createFire(new Color(0.25f,0.20f,0,0.75f), 60, null);
             fires.add(fireped1);
             lights.add(fireped1);
+            break;
+        case "fped1fireoff":
+            currentCell = init.cr.middleFloorTile;
+            Column ped1fireoff = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
+            ped1fireoff.createPedestal();
+            Fire fireped1off = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, true, 0f, 1, false, 0);
+            fireped1off.createFire(new Color(0.25f,0.20f,0,0.75f), 60, null);
+            fires.add(fireped1off);
+            lights.add(fireped1off);
+            fireped1off.extinguish = false;
+            fireped1off.smoking = true;
+            fireped1off.active = false;
             break;
         case "fped1fireB":
             currentCell = init.cr.middleFloorTile;
             Column ped1fireb = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
             ped1fireb.createPedestal();
-            Fire fireped1b = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, true, 0f, 2, false);
+            Fire fireped1b = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, true, 0f, 2, false, 0);
             Color colorb = new Color(0.3f,0,1f,0.7f);
-            fireped1b.createFire(colorb, 10);
+            fireped1b.createFire(colorb, 10, null);
             fires.add(fireped1b);
             lights.add(fireped1b);
             init.roomList.get(roomIndex).spawners.add(fireped1b);
@@ -1931,6 +2197,25 @@ for (int i = 0; i < layerSize; i++) {
                 currentCell = init.cr.topLeftWallTile;
                 Body newTopLeftWall2 = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                 newTopLeftWall2.setUserData("Wall");
+                Roof roof = new Roof(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,false,false, Integer.parseInt(roofType), Integer.parseInt(strRoofExt));
+                roofs.add(roof);
+                init.roomList.get(roomIndex).roofs.add(roof);
+            }
+            else if (levelTextures.get(i).matches("TFroof.+")) {
+                String roofStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(roofStr);
+                sb.delete(0, 6);
+                String strRoof = sb.toString();
+
+                String roofType = String.valueOf(strRoof.charAt(0));
+
+                StringBuffer sb2 = new StringBuffer(strRoof);
+                sb2.delete(0, 1);
+                String strRoofExt = sb2.toString();
+
+                currentCell = init.cr.topFenceTile;
+                Body newTopLeftFenceRoof = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                newTopLeftFenceRoof.setUserData("Wall");
                 Roof roof = new Roof(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,false,false, Integer.parseInt(roofType), Integer.parseInt(strRoofExt));
                 roofs.add(roof);
                 init.roomList.get(roomIndex).roofs.add(roof);

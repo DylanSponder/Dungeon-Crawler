@@ -63,13 +63,23 @@ public class CreateAssets {
     Texture enemyGhostAlertTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemyGhost/SpriteSheetAlerted.png"));
     Texture enemyEyeTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemyCyclops/Eye.png"));
     Texture eyebeamTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemyCyclops/Eyebeam.png"));
+
+    Texture bossMinotaurTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/BossMinotaur/Minotaur.png"));
+
+    Texture minotaurWalkUpAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/BossMinotaur/MinotaurWalkUp.png"));
+    Texture minotaurWalkDownAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/BossMinotaur/MinotaurWalkDown.png"));
+    Texture minotaurWalkLeftAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/BossMinotaur/MinotaurWalkLeft.png"));
+    Texture minotaurWalkRightAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/BossMinotaur/MinotaurWalkRight.png"));
+
     Texture shopkeeperTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Shopkeeper/SpriteSheet.png"));
     Texture tutorialTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Tuto.png"));
     Texture fireAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Fire.png"));
     Texture flameAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Flame.png"));
     Texture blueFireAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/FireBlu.png"));
     Texture smokeAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Smoke.png"));
+    Texture flameSmokeAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/FlameSmoke.png"));
     Texture fireOutAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/FireOut.png"));
+    Texture flameOutAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/FlameOut.png"));
     Texture arrowAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Bow/ArrowAnimation.png"));
     Texture columnsTextureSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Columns.png"));
     Texture potsSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Pots.png"));
@@ -170,6 +180,11 @@ public class CreateAssets {
     public TextureRegion roomBottomLeftCornerFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomBottomRightCornerFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
 
+    public TextureRegion roomTopLeftTurnFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomTopRightTurnFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomBottomLeftTurnFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomBottomRightTurnFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
+
     public TextureRegion roomTopLeftEndFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomTopRightEndFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomBottomLeftEndFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
@@ -190,10 +205,46 @@ public class CreateAssets {
     public TextureRegion cobwebTexture = new TextureRegion(roomBackground,0,0,16,16);
 
     //animations
+    public TextureRegion minotaurWalkUpAnimationTexture = new TextureRegion(minotaurWalkUpAnimationSheet,0,0,32,64);
+    public TextureRegion minotaurWalkDownAnimationTexture = new TextureRegion(minotaurWalkDownAnimationSheet,0,0,32,64);
+    public TextureRegion minotaurWalkLeftAnimationTexture = new TextureRegion(minotaurWalkLeftAnimationSheet,0,0,32,64);
+    public TextureRegion minotaurWalkRightAnimationTexture = new TextureRegion(minotaurWalkRightAnimationSheet,0,0,32,64);
+
+    public Animation<TextureRegion> minotaurWalkUpAnimation = new Animation<TextureRegion>(0.40f, minotaurWalkUpAnimationTexture);
+    public Animation<TextureRegion> minotaurWalkDownAnimation = new Animation<TextureRegion>(0.40f, minotaurWalkDownAnimationTexture);
+    public Animation<TextureRegion> minotaurWalkLeftAnimation = new Animation<TextureRegion>(0.40f, minotaurWalkLeftAnimationTexture);
+    public Animation<TextureRegion> minotaurWalkRightAnimation = new Animation<TextureRegion>(0.40f, minotaurWalkRightAnimationTexture);
+
+    TextureRegion[][] minotaurWalkUpTextureArray = TextureRegion.split(minotaurWalkUpAnimationSheet,
+            minotaurWalkUpAnimationSheet.getWidth() / 4,
+            minotaurWalkUpAnimationSheet.getHeight() / 1);
+
+    TextureRegion[] minotaurWalkUpFrames = new TextureRegion[4 * 1];
+
+    TextureRegion[][] minotaurWalkDownTextureArray = TextureRegion.split(minotaurWalkDownAnimationSheet,
+            minotaurWalkDownAnimationSheet.getWidth() / 4,
+            minotaurWalkDownAnimationSheet.getHeight() / 1);
+
+    TextureRegion[] minotaurWalkDownFrames = new TextureRegion[4 * 1];
+
+    TextureRegion[][] minotaurWalkLeftTextureArray = TextureRegion.split(minotaurWalkLeftAnimationSheet,
+            minotaurWalkLeftAnimationSheet.getWidth() / 4,
+            minotaurWalkLeftAnimationSheet.getHeight() / 1);
+
+    TextureRegion[] minotaurWalkLeftFrames = new TextureRegion[4 * 1];
+
+    TextureRegion[][] minotaurWalkRightTextureArray = TextureRegion.split(minotaurWalkRightAnimationSheet,
+            minotaurWalkRightAnimationSheet.getWidth() / 4,
+            minotaurWalkRightAnimationSheet.getHeight() / 1);
+
+    TextureRegion[] minotaurWalkRightFrames = new TextureRegion[4 * 1];
+
+
+
     public TextureRegion playerWalkUpAnimationTexture = new TextureRegion(playerWalkUpAnimationSheet,0,0,16,16);
-    public TextureRegion playerWalkDownAnimationTexture = new TextureRegion(playerWalkDownAnimationSheet,16,0,16,16);
-    public TextureRegion playerWalkLeftAnimationTexture = new TextureRegion(playerWalkLeftAnimationSheet,32,0,16,16);
-    public TextureRegion playerWalkRightAnimationTexture = new TextureRegion(playerWalkRightAnimationSheet,48,0,16,16);
+    public TextureRegion playerWalkDownAnimationTexture = new TextureRegion(playerWalkDownAnimationSheet,0,0,16,16);
+    public TextureRegion playerWalkLeftAnimationTexture = new TextureRegion(playerWalkLeftAnimationSheet,0,0,16,16);
+    public TextureRegion playerWalkRightAnimationTexture = new TextureRegion(playerWalkRightAnimationSheet,0,0,16,16);
 
     public Animation<TextureRegion> playerWalkUpAnimation = new Animation<TextureRegion>(0.20f, playerWalkUpAnimationTexture);
     public Animation<TextureRegion> playerWalkDownAnimation = new Animation<TextureRegion>(0.20f, playerWalkDownAnimationTexture);
@@ -277,12 +328,17 @@ public class CreateAssets {
     public TextureRegion flameAnimationTexture = new TextureRegion(flameAnimationSheet,0,0,16,16);
     public TextureRegion blueFireAnimationTexture = new TextureRegion(blueFireAnimationSheet,0,0,16,16);
     public TextureRegion smokeAnimationTexture = new TextureRegion(smokeAnimationSheet,0,0,16,16);
+    public TextureRegion flameSmokeAnimationTexture = new TextureRegion(flameSmokeAnimationSheet,0,0,16,16);
     public TextureRegion arrowAnimationTexture = new TextureRegion(fireAnimationSheet,0,0,16,16);
     public TextureRegion fireOutAnimationTexture = new TextureRegion(fireOutAnimationSheet,0,0,16,16);
+    public TextureRegion flameOutAnimationTexture = new TextureRegion(flameOutAnimationSheet,0,0,16,16);
 
     public Animation<TextureRegion> fireAnimation = new Animation<TextureRegion>(0.25f, fireAnimationTexture);
     public Animation<TextureRegion> flameAnimation = new Animation<TextureRegion>(0.20f, flameAnimationTexture);
     public Animation<TextureRegion> blueFireAnimation = new Animation<TextureRegion>(0.25f, fireAnimationTexture);
+
+    public Animation<TextureRegion> flameSmokeAnimation = new Animation<TextureRegion>(0.25f, flameSmokeAnimationTexture);
+    public Animation<TextureRegion> flameOutAnimation = new Animation<TextureRegion>(0.10f, flameOutAnimationTexture);
 
     public Animation<TextureRegion> smokeAnimation = new Animation<TextureRegion>(0.25f, smokeAnimationTexture);
     public Animation<TextureRegion> fireOutAnimation = new Animation<TextureRegion>(0.10f, fireOutAnimationTexture);
@@ -326,10 +382,22 @@ public class CreateAssets {
 
     TextureRegion[] fireOutFrames = new TextureRegion[5 * 4];
 
+    TextureRegion[][] flameSmokeTextureArray = TextureRegion.split(flameSmokeAnimationSheet,
+            flameSmokeAnimationSheet.getWidth() / 5,
+            flameSmokeAnimationSheet.getHeight() / 2);
+
+    TextureRegion[] flameSmokeFrames = new TextureRegion[5 * 2];
+
+    TextureRegion[][] flameOutTextureArray = TextureRegion.split(flameOutAnimationSheet,
+            flameOutAnimationSheet.getWidth() / 3,
+            flameOutAnimationSheet.getHeight() / 4);
+
+    TextureRegion[] flameOutFrames = new TextureRegion[3 * 4];
+
 
     //TODO: this is lazy - refactor
     int index = 0, index2 = 0, index3 = 0, index4 = 0, index5 = 0, index6 = 0, index7 = 0, index8 = 0, index9 = 0, index10 = 0;
-    int index11 = 0, index12 = 0, index13 = 0, index14 = 0, index15 = 0;
+    int index11 = 0, index12 = 0, index13 = 0, index14 = 0, index15 = 0, index16 = 0, index17 = 0, index18 = 0, index19 = 0, index20 = 0, index21 = 0;
 
     //Column textures
 
@@ -347,6 +415,7 @@ public class CreateAssets {
     public TextureRegion colBase = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colBase2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colBaseLower = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion colBase2Lower = new TextureRegion(columnsTextureSheet, 0,0,16,16);
 
     public TextureRegion pedestal1 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion pedestal2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
@@ -488,6 +557,8 @@ public class CreateAssets {
     Sprite enemyEyeRightSprite = new Sprite(enemyEyeTexture,48,0,16,16);
 
     Sprite enemyEyeSprite = new Sprite(enemyEyeTexture,0,0,16,16);
+
+    public TextureRegion minotaurTextureRegion = new TextureRegion(bossMinotaurTexture, 0, 0, 64, 32);
 
     //HUD sprites
 
@@ -660,6 +731,39 @@ public class CreateAssets {
             }
         }
 
+        //initialize minotaur Animations
+        for (int g = 0; g < 1; g++) {
+            for (int w = 0; w < 4; w++) {
+                minotaurWalkUpFrames[index18++] = minotaurWalkUpTextureArray[g][w];
+            }
+        }
+
+        minotaurWalkUpAnimation = new Animation<TextureRegion>(playerWalkSpeed, minotaurWalkUpFrames);
+
+        for (int g = 0; g < 1; g++) {
+            for (int w = 0; w < 4; w++) {
+                    minotaurWalkDownFrames[index19++] = minotaurWalkDownTextureArray[g][w];
+            }
+        }
+
+        minotaurWalkDownAnimation = new Animation<TextureRegion>(playerWalkSpeed, minotaurWalkDownFrames);
+
+        for (int g = 0; g < 1; g++) {
+            for (int w = 0; w < 4; w++) {
+                minotaurWalkLeftFrames[index20++] = minotaurWalkLeftTextureArray[g][w];
+            }
+        }
+
+        minotaurWalkLeftAnimation = new Animation<TextureRegion>(playerWalkSpeed, minotaurWalkLeftFrames);
+
+        for (int g = 0; g < 1; g++) {
+            for (int w = 0; w < 4; w++) {
+                minotaurWalkRightFrames[index21++] = minotaurWalkRightTextureArray[g][w];
+            }
+        }
+
+        minotaurWalkRightAnimation = new Animation<TextureRegion>(playerWalkSpeed, minotaurWalkRightFrames);
+
         // Initialize the Animation with the frame interval and array of frames
         eyebeamAnimation = new Animation<TextureRegion>(0.20f, eyebeamFrames);
 
@@ -723,6 +827,26 @@ public class CreateAssets {
         // Initialize the Animation with the frame interval and array of frames
         arrowAnimation = new Animation<TextureRegion>(0.03f, arrowFrames);
 
+        for (int p = 0; p < 2; p++) {
+            for (int j = 0; j < 5; j++) {
+                flameSmokeFrames[index17++] = flameSmokeTextureArray[p][j];
+            }
+        }
+
+        flameSmokeAnimation = new Animation<TextureRegion>(0.3f, flameSmokeFrames);
+
+        for (int g = 0; g < 4; g++) {
+            for (int t = 0; t < 3; t++) {
+                flameOutFrames[index16++] = flameOutTextureArray[g][t];
+            }
+        }
+
+        // Initialize the Animation with the frame interval and array of frames
+        flameOutAnimation = new Animation<TextureRegion>(0.3f, flameOutFrames);
+
+
+
+
         //0.0651f
 
         //level1Track.play();
@@ -767,6 +891,11 @@ public class CreateAssets {
         roomBottomLeftCornerFence.setRegion(432, 64, 16, 16);
         roomBottomRightCornerFence.setRegion(448, 64, 16, 16);
 
+        roomTopLeftTurnFence.setRegion(432, 80, 16, 16);
+        roomTopRightTurnFence.setRegion(448, 80, 16, 16);
+        roomBottomLeftTurnFence.setRegion(432, 96, 16, 16);
+        roomBottomRightTurnFence.setRegion(448, 96, 16, 16);
+
         roomTopLeftEndFence.setRegion(384, 16, 16, 16);
         roomTopRightEndFence.setRegion(384, 0, 16, 16);
         roomBottomLeftEndFence.setRegion(400, 32, 16, 16);
@@ -790,6 +919,7 @@ public class CreateAssets {
         colBase.setRegion(0, 32, 16, 16);
         colBase2.setRegion(16, 32, 16, 16);
         colBaseLower.setRegion(0,48,16,11);
+        colBase2Lower.setRegion(16,48,16,11);
         pedestal1.setRegion(32, 32, 16, 16);
         pedestal2.setRegion(48, 32, 16, 16);
         pedestal3.setRegion(64, 32, 16, 16);

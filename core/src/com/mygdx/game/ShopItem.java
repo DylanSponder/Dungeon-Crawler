@@ -21,5 +21,7 @@ public class ShopItem {
         this.kind = itemKind;
         this.purchased = purchased;
         this.desc = desc;
+        //whether or not this item should only appear once in shopkeeper inventories
+        //this.replace = replace;
     }
 }

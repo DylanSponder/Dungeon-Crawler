@@ -1,0 +1,12 @@
+tlw,twtr2,tw,twcol1,dtl,doortl,doortr,dtr,twcol1,tw,twtr2,trw
+lwtr2,fped1fireoff,f,fcol4,fpot,f,f,fpot,fcol4,f,fped1fireoff,rwtr2
+lw,f,fenemy,fcol7,f,f,f,f,fcol7,fenemy,f,rw
+lw,f,f,tlt,bw,bw,bw,bw,trt,f,f,rw
+dlu,fpot,f,rw,tlw,tw,tw,trw,lw,f,fpot,dru
+doorul,f,f,rw,lw,tlt,trt,rw,lw,f,f,doorur
+doorll,f,f,rw,lw,blt,brt,rw,lw,f,f,doorlr
+dll,fpot,f,rw,blw,bw,bw,brw,lw,f,fpot,drl
+lw,f,f,bltcol1,tw,tw,tw,tw,brtcol1,f,f,rw
+lw,f,fenemy,fcol4,f,f,f,f,fcol4,fenemy,f,rw
+lwtr2,fped1fireoff,f,fcol7,fpot,f,f,fpot,fcol7,f,fped1fireoff,rwtr2
+blw,bwtr2,bw,bw,dbl,doorbl,doorbr,dbr,bw,bw,bwtr2,brw

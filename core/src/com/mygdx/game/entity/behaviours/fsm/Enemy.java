@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.HUD;
 import com.mygdx.game.entity.behaviours.fsm.drops.Skull;
 import com.mygdx.game.entity.utils.EnemySkullBox2DSteeringEntity;
@@ -44,7 +45,7 @@ public class Enemy {
     public HUD hud;
     public Skull skull;
     public int room;
-    public boolean playerSighted, alerted, playerInRange, rayCastable, inRespawnRange, lostSight;
+    public boolean playerSighted, alerted, playerInRange, rayCastable, inRespawnRange, lostSight, vulnerable;
     public Ray playerDetectionRay;
     public int sightCounter;
     public Text alertMessage, lostSightMessage;
@@ -56,6 +57,20 @@ public class Enemy {
     public void createEnemy(int enemyID, int defaultSpeed) {
         this.enemyID = enemyID;
         this.defaultSpeed = defaultSpeed;
+        this.vulnerable = true;
+    }
+
+    public void loseHealth(int amount) {
+        if (vulnerable) {
+            this.ENEMY_HEALTH = this.ENEMY_HEALTH - amount;
+            this.vulnerable = false;
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    vulnerable = true;
+                }
+            }, 0.2f);
+        }
     }
 
     public StateMachine<EnemySkull, EnemySkullState> getSkullStateMachine(int id) {

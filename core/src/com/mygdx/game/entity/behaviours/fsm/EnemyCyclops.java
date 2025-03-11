@@ -71,7 +71,7 @@ public class EnemyCyclops extends Enemy {
 
         this.enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 5.95f);
 
-        this.enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 90f);
+        this.enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 100f);
 
         //enemyDetectionRadius.setSensor(true);
 

@@ -50,6 +50,7 @@ import static com.mygdx.game.HUD.compassArrowImage;
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch arrowBatch, enemySkullBatch, enemySpiderBatch, enemyGhostBatch, enemyEyeBatch, potBatch, hudBatch, tutoBatch, fontBatch, inventoryBatch;
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, coinBatch, obstacleBatch, fireBatch, flameBatch, webBatch, cobBatch, candleBatch, eyebeamBatch;
+	private SpriteBatch bossMinotaurBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch, roofBatch, columnBaseLowerBatch, heartBatch;
 	public static SpriteBatch trapBatch,playerBatch;
 	public static World world;
@@ -91,6 +92,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<EnemySpider> enemySpiders, dyingSpiders;
 	public static ArrayList<EnemyGhost> enemyGhosts, dyingGhosts;
 	public static ArrayList<EnemyCyclops> enemyEyes, dyingEyes;
+	public static ArrayList<BossMinotaur> bossMinotaurs, dyingMinotaurs;
 	public static ArrayList<Skull> skulls, brokenSkulls;
 	public static ArrayList<Fire> extinguishedRespawnFires;
 	public static ArrayList<Bone> bones;
@@ -125,7 +127,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static BitmapFont defaultFont, defaultFont2;
 	public static ArrayList<Text> messages;
 	public AssetManager assetManager;
-	public static float stateTime, stateTime2, stateTime3;
+	public static float stateTime, stateTime2, stateTime3, stateTime4;
 	public TextureRegion currentFrame;
 
 	public static boolean leanDown = false, leanUp = false, leanLeft = false, leanRight = false, leanUpLeft = false, leanUpRight = false;
@@ -154,6 +156,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		arrowBatch = new SpriteBatch();
 		skullBatch = new SpriteBatch();
 		boneBatch = new SpriteBatch();
+		bossMinotaurBatch = new SpriteBatch();
 		eyebeamBatch = new SpriteBatch();
 		webBatch = new SpriteBatch();
 		doorBatch = new SpriteBatch();
@@ -188,11 +191,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 		enemySpiders = new ArrayList<>();
 		enemyGhosts = new ArrayList<>();
 		enemyEyes = new ArrayList<>();
+		bossMinotaurs = new ArrayList<>();
 		deadEnemyBodies = new ArrayList<>();
 		dyingSkulls = new ArrayList<>();
 		dyingSpiders = new ArrayList<>();
 		dyingGhosts = new ArrayList<>();
 		dyingEyes = new ArrayList<>();
+		dyingMinotaurs = new ArrayList<>();
 		skulls = new ArrayList<>();
 		brokenSkulls = new ArrayList<>();
 		bones = new ArrayList<>();
@@ -265,7 +270,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//create the Box2D ray handler
 		rayHandler = new RayHandler(world);
-		rayHandler.setAmbientLight(0f, 0f, 0f, 0.015f);
+		rayHandler.setAmbientLight(0f, 0f, 0f, 0.013f);
 		//fullbright if in debug mode
 		if (debug) {
 			rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
@@ -479,8 +484,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 						if (s.skullCreated) {
 							boolean rayResult = s.rayCastSkull(GenerateLevel.init.roomList.get(player.currentRoom), f);
 							if (rayResult && !s.resurrecting && f.active) {
-								Fire respawnFire = new Fire(world, rayHandler, s.skullX - 4, s.skullY - 8, false, 0f, 2, false);
-								respawnFire.createFire(new Color(0.3f,0,1f,0.6f), 15);
+								Fire respawnFire = new Fire(world, rayHandler, s.skullX - 4, s.skullY - 8, false, 0f, 2, false, 0);
+								respawnFire.createFire(new Color(0.3f,0,1f,0.6f), 15, null);
 								fires.add(respawnFire);
 								s.resurrecting = true;
 								Timer.schedule(new Timer.Task() {
@@ -854,14 +859,41 @@ public class DungeonCrawler extends ApplicationAdapter {
 			if (f.type == 3) {
 				currentFrame = tx.flameAnimation.getKeyFrame(stateTime, f.active);
 
-				fireBatch.begin();
-				if (f.upDown) {
-					Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, true);
-				} else {
+				if (f.smoking) {
+					f.torchLight.setColor(f.light.getColor().r, f.light.getColor().g, f.light.getColor().b, 0.40f);
+					TextureRegion currentFrame = tx.flameSmokeAnimation.getKeyFrame(f.stateTime, false);
+					fireBatch.begin();
 					Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, false);
-				}
+					fireBatch.end();
+					f.stateTime += Gdx.graphics.getDeltaTime();
 
-				fireBatch.end();
+					if (tx.flameSmokeAnimation.isAnimationFinished(f.stateTime)) {
+						f.stateTime = 0;
+						f.active = false;
+						f.torchLight.setActive(false);
+						f.light.setActive(false);
+						//f.light.setColor(f.light.getColor().r, f.light.getColor().g, f.light.getColor().b, 0f);
+						f.smoking = false;
+					}
+				} else {
+					if (!f.active) {
+
+						TextureRegion currentFrame2 = tx.flameOutAnimation.getKeyFrame(f.stateTime, true);
+						fireBatch.begin();
+						Fire.renderFire(fireBatch, currentFrame2, f.fireX, f.fireY, f.smoking, false);
+						fireBatch.end();
+						f.stateTime += Gdx.graphics.getDeltaTime();
+					}
+					else {
+						fireBatch.begin();
+						if (f.upDown) {
+							Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, true);
+						} else {
+							Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, false);
+						}
+						fireBatch.end();
+					}
+				}
 			}
 
 
@@ -891,7 +923,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 			columnBaseLowerBatch.begin();
 			if (c.type == 70) {
 				columnBaseLowerBatch.draw(tx.colBaseLower,c.columnX,c.columnY);
-
+			} else if (c.type == 71) {
+				columnBaseLowerBatch.draw(tx.colBase2Lower,c.columnX,c.columnY);
 			}
 			columnBaseLowerBatch.end();
 		}
@@ -1000,7 +1033,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 							public void run() {
 								e.enemyAI.setMaxLinearSpeed(e.defaultSpeed);
 							}
-						}, 0.3f);
+						}, 0.5f);
 						e.timeSinceAlerted = e.timeSinceAlerted + Gdx.graphics.getDeltaTime();
 					}
 
@@ -1059,12 +1092,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 			//check to see if the player is both in sight and in range
 			if ((e2.playerSighted && e2.playerInRange) && menuClosed){
 				//after a specified delay once the player has been spotted, shoot a projectile with some offset at the player
-				if (e2.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 140) ){
+				if (e2.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 130) ){
 						e2.timeSinceAlerted = 0f;
 						e2.lostSight = false;
 						messages.remove(e2.lostSightMessage);
 
-						e2.enemyAI.setMaxLinearSpeed(0);
+						e2.enemyAI.setMaxLinearSpeed(25);
 
 						Vector2 vec1 = new Vector2(e2.enemyBody.getPosition());
 						Vector2 vec2 = new Vector2(Player.playerBody.getPosition());
@@ -1105,7 +1138,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			} else if (!e2.playerSighted) {
 
 				if (e2.timeSinceAlerted > 50) {
-					e2.timeSinceAlerted = e2.timeSinceAlerted - 30;
+					e2.timeSinceAlerted = e2.timeSinceAlerted - 20;
 				}
 				messages.remove(e2.alertMessage);
 				if (!e2.lostSight) {
@@ -1374,7 +1407,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				TextureRegion currentFrame = tx.eyebeamAnimation.getKeyFrame(value.stateTime, false);
 				value.stateTime += Gdx.graphics.getDeltaTime();
 
-				value.beamLightDistance += 0.2f;
+				value.beamLightDistance += 0.15f;
 				value.beamLightAlpha += 0.01f;
 
 				value.beamLight.setDistance(value.beamLightDistance);
@@ -1407,6 +1440,48 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 		}
+
+		for (BossMinotaur b1 : bossMinotaurs) {
+			//if (b1.enteredBossRoom) {
+			//	b1.detectPlayer();
+			//}
+			if (menuClosed){
+
+				b1.getStateMachine().changeState(BossMinotaurState.GO_TO_PLAYER);
+
+			}
+			bossMinotaurBatch.begin();
+
+				if (b1.facing == "Up") {
+					currentFrame = tx.minotaurWalkUpAnimation.getKeyFrame(stateTime4, true);
+					tx.minotaurTextureRegion = currentFrame;
+
+				} else if (b1.facing == "Down") {
+					currentFrame = tx.minotaurWalkDownAnimation.getKeyFrame(stateTime4, true);
+					tx.minotaurTextureRegion = currentFrame;
+
+				} else if (b1.facing == "Left") {
+					currentFrame = tx.minotaurWalkLeftAnimation.getKeyFrame(stateTime4, true);
+					tx.minotaurTextureRegion = currentFrame;
+
+				} else if (b1.facing == "Right") {
+					currentFrame = tx.minotaurWalkRightAnimation.getKeyFrame(stateTime4, true);
+					tx.minotaurTextureRegion = currentFrame;
+
+				} else {
+
+				}
+
+			BossMinotaur.renderMinotaur(bossMinotaurBatch, tx.minotaurTextureRegion, b1.enemyBody.getPosition().x - 8f, b1.enemyBody.getPosition().y - 6f);
+			stateTime4 += Gdx.graphics.getDeltaTime();
+			bossMinotaurBatch.end();
+		}
+
+		for (EnemyGhost deadGhost : dyingGhosts) {
+			deadGhost.getStateMachine().changeState(EnemyGhostState.DIE);
+			enemies.remove(deadGhost);
+		}
+		dyingGhosts.clear();
 
 		for (Body body : deadEnemyBodies) {
 			world.destroyBody(body);
@@ -1682,7 +1757,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//render fires and their animations based on their type and color
 		for (Fire f : fires) {
-			if (f.smoking) {
+			if (f.smoking && f.type == 1) {
 				f.light.setColor(f.light.getColor().r, f.light.getColor().g, f.light.getColor().b, 0.65f);
 				TextureRegion currentFrame = tx.smokeAnimation.getKeyFrame(f.stateTime, false);
 				fireBatch.begin();
@@ -1697,7 +1772,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						f.stateTime = 0;
 						f.smoking = false;
 				}
-			} else {
+			} else if (f.type == 1){
 				if (!f.active) {
 
 					TextureRegion currentFrame2 = tx.fireOutAnimation.getKeyFrame(f.stateTime, true);
@@ -2028,6 +2103,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			enemySpiderBatch.setProjectionMatrix(camera.combined);
 			enemyGhostBatch.setProjectionMatrix(camera.combined);
 			enemyEyeBatch.setProjectionMatrix(camera.combined);
+			bossMinotaurBatch.setProjectionMatrix(camera.combined);
 			lockBatch.setProjectionMatrix(camera.combined);
 			doorBatch.setProjectionMatrix(camera.combined);
 			potBatch.setProjectionMatrix(camera.combined);
@@ -2123,6 +2199,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 					e4.detectPlayer();
 				}
 			}
+
+			for (BossMinotaur b1 : bossMinotaurs) {
+				b1.enemyAI.update(GdxAI.getTimepiece().getTime());
+				b1.update(GdxAI.getTimepiece().getTime());
+			}
 		} else {
 			//render menus with wireframes when in debug mode
 			Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -2158,16 +2239,16 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//give the player a brighter light when the torch is bought in the shop
 		if (player.hasTorch && !player.torchApplied) {
 			player.playerLight.remove();
-			player.playerLight = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.85f), 95, PLAYER_X, PLAYER_Y);
+			player.playerLight = new PointLight(rayHandler, 1000, new Color(0.25f, 0.20f, 0, 0.85f), 80, PLAYER_X, PLAYER_Y);
 			player.playerLight.attachToBody(player.playerBody);
 			player.playerLight.setIgnoreAttachedBody(true);
-			player.playerLight.setSoftnessLength(100f);
+			player.playerLight.setSoftnessLength(105f);
 			player.torchApplied = true;
 		}
 
 		//set camera zoom
 		if (!GenerateLevel.init.roomList.get(player.currentRoom).isShop && !debug) {
-			camera.zoom = 0.75f;
+			camera.zoom = 0.80f;
 		}
 		else if (!debug){
 			//camera.zoom = 0.8f;
@@ -2195,6 +2276,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		enemySpiderBatch.dispose();
 		enemyGhostBatch.dispose();
 		enemyEyeBatch.dispose();
+		bossMinotaurBatch.dispose();
 		heartBatch.dispose();
 		trapBatch.dispose();
 		candleBatch.dispose();

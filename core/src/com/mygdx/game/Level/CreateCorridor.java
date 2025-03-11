@@ -1,5 +1,6 @@
 package com.mygdx.game.level;
 
+import box2dLight.ConeLight;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.utils.Ray;
 import com.badlogic.gdx.graphics.Color;
@@ -70,12 +71,12 @@ public class CreateCorridor {
                             Candle c = new Candle(world, ((doorX + 3) * 16) + 15 * 16 - 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i * 16, 2);
                             c.createCandle();
                             candles.add(c);
-                            Fire fCans = new Fire(world,rayHandler,(((doorX + i) * 16) + 16 * 16) + 6 - 4.5f - 16,(doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 2.5f - 32, false,0f, 3, false);
+                            Fire fCans = new Fire(world,rayHandler,(((doorX + i) * 16) + 16 * 16) + 6 - 4.5f - 16,(doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 2.5f - 32, false,0f, 3, false, 0);
                             fires.add(fCans);
-                            fCans.createFire(new Color(0.25f,0.20f,0,0.5f),20);
-                            Fire fCans2 = new Fire(world,rayHandler,(((doorX + i) * 16) + 16 * 16) + 6 - 8.5f - 16,(doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 6.5f - 32, false,0f, 3, false);
+                            fCans.createFire(new Color(0.25f,0.20f,0,0.5f),20, null);
+                            Fire fCans2 = new Fire(world,rayHandler,(((doorX + i) * 16) + 16 * 16) + 6 - 8.5f - 16,(doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 6.5f - 32, false,0f, 3, false, 0);
                             fires.add(fCans2);
-                            fCans2.createFire(new Color(0.25f,0.20f,0,0.5f),20);
+                            fCans2.createFire(new Color(0.25f,0.20f,0,0.5f),20, null);
                        // }
 
                         TiledMapTileLayer.Cell newRightCorridorFloorCell;
@@ -159,9 +160,9 @@ public class CreateCorridor {
                         int rand = Random.randomInt(2, 1);
 
                         if (rand == 2) {
-                            Fire fL = new Fire(world, rayHandler, (((doorX) * 16) + 16 * 16) + 6 - 4 - 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 4, false, 0f, 3, false);
+                            Fire fL = new Fire(world, rayHandler, (((doorX) * 16) + 16 * 16) + 6 - 4 - 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 4, true, 0f, 3, false, 4);
                             fires.add(fL);
-                            fL.createFire(new Color(0.25f, 0.20f, 0, 0.7f), 60);
+                            fL.createFire(new Color(0.25f, 0.20f, 0, 0.7f), 60, null);
                         }
 
                         TiledMapTileLayer.Cell newLeftCorridorWallCell;
@@ -183,9 +184,9 @@ public class CreateCorridor {
                         Body newRightCorridorWall = GenerateLevel.init.bf.createWall(world, ((doorX + 3) * 16) + 15 * 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i2 * 16);
 
                         if (rand == 2) {
-                            Fire fR = new Fire(world, rayHandler, (((doorX) * 16) + 16 * 16) + 6 - 4 - 16 + 45, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 4, false, 0f, 3, false);
+                            Fire fR = new Fire(world, rayHandler, (((doorX) * 16) + 16 * 16) + 6 - 4 - 16 + 45, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 4, true, 0f, 3, false, 2);
                             fires.add(fR);
-                            fR.createFire(new Color(0.25f, 0.20f, 0, 0.7f), 60);
+                            fR.createFire(new Color(0.25f, 0.20f, 0, 0.7f), 60, null);
                         }
 
                         layer.setCell(doorXasInt + 18, doorYAsInt - i2, newRightCorridorWallCell);
@@ -221,12 +222,12 @@ public class CreateCorridor {
                         Candle c = new Candle(world, ((doorX + 3) * 16) + 15 * 16 - 16, (doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - i2 * 16, 2);
                         c.createCandle();
                         candles.add(c);
-                        Fire fCans = new Fire(world,rayHandler,(((doorX + i2) * 16) + 16 * 16) + 6 - 4.5f - 16,(doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 2.5f - 32, false,0f, 3, false);
+                        Fire fCans = new Fire(world,rayHandler,(((doorX + i2) * 16) + 16 * 16) + 6 - 4.5f - 16,(doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 2.5f - 32, false,0f, 3, false, 0);
                         fires.add(fCans);
-                        fCans.createFire(new Color(0.25f,0.20f,0,0.5f),20);
-                        Fire fCans2 = new Fire(world,rayHandler,(((doorX + i2) * 16) + 16 * 16) + 6 - 8.5f - 16,(doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 6.5f - 32, false,0f, 3, false);
+                        fCans.createFire(new Color(0.25f,0.20f,0,0.5f),20, null);
+                        Fire fCans2 = new Fire(world,rayHandler,(((doorX + i2) * 16) + 16 * 16) + 6 - 8.5f - 16,(doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 6.5f - 32, false,0f, 3, false, 0);
                         fires.add(fCans2);
-                        fCans2.createFire(new Color(0.25f,0.20f,0,0.5f),20);
+                        fCans2.createFire(new Color(0.25f,0.20f,0,0.5f),20, null);
 
                         TiledMapTileLayer.Cell newRightCorridorFloorCell;
                         newRightCorridorFloorCell = GenerateLevel.init.cr.middleFloorTile;
@@ -284,10 +285,10 @@ public class CreateCorridor {
                                 if (rand2 == 2) {
                                     Torch torU = new Torch(rayHandler, world,  ((doorX + iTop) * 16) + 15*16 + 8,  ((doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - (i-1)*16) + 8);
                                     torches.add(torU);
-                                    torU.createTorch(1);
-                                    Fire fU = new Fire(world,rayHandler,(((doorX + iTop) * 16) + 16 * 16) + 6 - 4 - 17,(doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 5, false,0f, 3, false);
+                                    ConeLight torchLight = torU.createTorch(1);
+                                    Fire fU = new Fire(world,rayHandler,(((doorX + iTop) * 16) + 16 * 16) + 6 - 4 - 17,(doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 5, true,0f, 3, false, 1);
                                     fires.add(fU);
-                                    fU.createFire(new Color(0.25f,0.20f,0,0.7f),60);
+                                    fU.createFire(new Color(0.25f,0.20f,0,0.7f),60, torchLight);
                                 }
 
                                 Body newTopCorridorWall = GenerateLevel.init.bf.createWall(world, ((doorX + iTop) * 16) + 15*16, ((doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - (i-1)*16));
@@ -344,10 +345,10 @@ public class CreateCorridor {
                                 if (rand2 == 2) {
                                     Torch torD = new Torch(rayHandler, world,  ((doorX + iBottom) * 16) + 15*16 + 8,  ((doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - (i-1)*16) + 8);
                                     torches.add(torD);
-                                    torD.createTorch(1);
-                                    Fire fD = new Fire(world,rayHandler, ((doorX + iBottom) * 16) + 15*16 + 16,((doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - (i-1)*16) + 15, false,0f, 3, true);
+                                    ConeLight torchLight = torD.createTorch(1);
+                                    Fire fD = new Fire(world,rayHandler, ((doorX + iBottom) * 16) + 15*16 + 16,((doorY * 16 + Gdx.graphics.getHeight() / 30 - 16) - (i-1)*16) + 15, true,0f, 3, true, 3);
                                     fires.add(fD);
-                                    fD.createFire(new Color(0.25f,0.20f,0,0.7f),60);
+                                    fD.createFire(new Color(0.25f,0.20f,0,0.7f),60, torchLight);
                                 }
 
                                 TiledMapTileLayer.Cell newBottomCorridorWallCell;

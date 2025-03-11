@@ -69,12 +69,12 @@ public class GameContactListener implements ContactListener {
             }
         }
 
-        if ((colliderStr.startsWith("Arrow") && collideeStr == "Enemy")
-                || (colliderStr == "Enemy" && collideeStr.startsWith("Arrow"))
+        if (((colliderStr.startsWith("Arrow") && (collideeStr == "Enemy" && collidee.getUserData()!="Eyebeam"))
+                || ((colliderStr == "Enemy"&& collidee.getUserData()!="Eyebeam") && collideeStr.startsWith("Arrow")))
                 ||
-                ((colliderStr == "Sword" && collideeStr == "Enemy")
-                        || (colliderStr == "Enemy" && collideeStr == "Sword"))
-        ) {
+                ((colliderStr == "Sword" && (collideeStr == "Enemy" && collidee.getUserData()!="Eyebeam")
+                        || ((colliderStr == "Enemy"&& collider.getUserData()!="Eyebeam") && collideeStr == "Sword"))
+        )) {
             if (collider.getUserData() != "Proximity" &&
                     collidee.getUserData() != "Proximity") {
                 for (Enemy e : enemies) {
@@ -83,42 +83,46 @@ public class GameContactListener implements ContactListener {
                         String fbData = collidee.getUserData().toString();
                         float velX = e.enemyBody.getLinearVelocity().x;
                         float velY = e.enemyBody.getLinearVelocity().y;
-                        switch (fbData) {
-                            case "DownSword":
-                                e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
-                                e.enemyBody.setLinearVelocity(velX, velY - 50);
-                                break;
-                            case "UpSword":
-                                e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
-                                e.enemyBody.setLinearVelocity(velX, velY + 50);
-                                break;
-                            case "LeftSword":
-                                e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
-                                e.enemyBody.setLinearVelocity(velX - 50, velY);
-                                break;
-                            case "RightSword":
-                                e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
-                                e.enemyBody.setLinearVelocity(velX + 50, velY);
-                                break;
-                            case "DownArrow":
-                                e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY - 50);
-                                break;
-                            case "UpArrow":
-                                e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX, velY + 50);
-                                break;
-                            case "LeftArrow":
-                                e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX - 50, velY);
-                                break;
-                            case "RightArrow":
-                                e.ENEMY_HEALTH--;
-                                e.enemyBody.setLinearVelocity(velX + 50, velY);
-                                break;
-                            default:
-                                break;
+                        if (e.vulnerable) {
+                            switch (fbData) {
+                                case "DownSword":
+                                   // e.loseHealth(2);
+                                    e.loseHealth(2);
+                                    e.enemyBody.setLinearVelocity(velX, velY - 50);
+                                    break;
+                                case "UpSword":
+                                    e.loseHealth(2);
+                                    e.enemyBody.setLinearVelocity(velX, velY + 50);
+                                    break;
+                                case "LeftSword":
+                                    e.loseHealth(2);
+                                    e.enemyBody.setLinearVelocity(velX - 50, velY);
+                                    break;
+                                case "RightSword":
+                                    e.loseHealth(2);
+                                    e.enemyBody.setLinearVelocity(velX + 50, velY);
+                                    break;
+                                case "DownArrow":
+                                    e.loseHealth(1);
+                                    e.enemyBody.setLinearVelocity(velX, velY - 50);
+                                    break;
+                                case "UpArrow":
+                                    e.loseHealth(1);
+                                    e.enemyBody.setLinearVelocity(velX, velY + 50);
+                                    break;
+                                case "LeftArrow":
+                                    e.loseHealth(1);
+                                    e.enemyBody.setLinearVelocity(velX - 50, velY);
+                                    break;
+                                case "RightArrow":
+                                    e.loseHealth(1);
+                                    e.enemyBody.setLinearVelocity(velX + 50, velY);
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
+
                         //e.enemyBody.applyForceToCenter(0,0, true);
                         e.enemyBody.setLinearVelocity(0, 0);
 
@@ -227,35 +231,35 @@ public class GameContactListener implements ContactListener {
                         float velY = e.enemyBody.getLinearVelocity().y;
                         switch (faData) {
                             case "DownSword":
-                                e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
+                                e.loseHealth(2);
                                 e.enemyBody.setLinearVelocity(velX, velY - 50);
                                 break;
                             case "UpSword":
-                                e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
+                                e.loseHealth(2);
                                 e.enemyBody.setLinearVelocity(velX, velY + 50);
                                 break;
                             case "LeftSword":
-                                e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
+                                e.loseHealth(2);
                                 e.enemyBody.setLinearVelocity(velX - 50, velY);
                                 break;
                             case "RightSword":
-                                e.ENEMY_HEALTH = e.ENEMY_HEALTH - 2;
+                                e.loseHealth(2);
                                 e.enemyBody.setLinearVelocity(velX + 50, velY);
                                 break;
                             case "DownArrow":
-                                e.ENEMY_HEALTH--;
+                                e.loseHealth(1);
                                 e.enemyBody.setLinearVelocity(velX, velY - 50);
                                 break;
                             case "UpArrow":
-                                e.ENEMY_HEALTH--;
+                                e.loseHealth(1);
                                 e.enemyBody.setLinearVelocity(velX, velY + 50);
                                 break;
                             case "LeftArrow":
-                                e.ENEMY_HEALTH--;
+                                e.loseHealth(1);
                                 e.enemyBody.setLinearVelocity(velX - 50, velY);
                                 break;
                             case "RightArrow":
-                                e.ENEMY_HEALTH--;
+                                e.loseHealth(1);
                                 e.enemyBody.setLinearVelocity(velX + 50, velY);
                                 break;
                             default:
@@ -703,7 +707,7 @@ public class GameContactListener implements ContactListener {
                     if (collideeStr.startsWith("Arrow")) {
                         for (Fire f : fires) {
                             if (f.fireBody == collider.getBody()) {
-                                if (f.type == 1) {
+                                if (f.type == 1 || f.type == 3) {
                                     for (Arrow a : arrows) {
                                         if (a.arrowBody == collidee.getBody()) {
                                             if (a.onFire && !f.smoking) {
@@ -711,6 +715,9 @@ public class GameContactListener implements ContactListener {
                                                 f.light.setActive(true);
                                                 f.smoking = false;
                                                 f.extinguish = true;
+                                                if (f.type == 3) {
+                                                    f.torchLight.setActive(true);
+                                                }
                                             }  else if (f.extinguish) {
                                                 a.onFire = true;
                                                 f.smoking = true;
@@ -729,7 +736,7 @@ public class GameContactListener implements ContactListener {
                     else if (collideeStr == "Sword" || collideeStr == "Lance") {
                         for (Fire f : fires) {
                             if (f.fireBody == collider.getBody()) {
-                                if (f.extinguish && f.type == 1) {
+                                if (f.extinguish && (f.type == 1 || f.type == 3)) {
                                     f.smoking = true;
                                     f.extinguish = false;
                                 }
@@ -757,7 +764,7 @@ public class GameContactListener implements ContactListener {
                         hud.healthBar.loseHealth(0.5f);
                     }
 
-                    if ((((collideeStr == "Enemy" && collidee.getUserData() != "Proximity") && collideeStr != "Cobweb")
+                    if (((((collideeStr == "Enemy" && collidee.getUserData()!= "EnemyGhost") && collidee.getUserData() != "Proximity") && collideeStr != "Cobweb")
                             || collideeStr == "Wall")) {
                         if (!arrowBodiesCollided.contains(collider.getBody())) {
                             arrowBodiesCollided.add(collider.getBody());
@@ -797,7 +804,7 @@ public class GameContactListener implements ContactListener {
                     } else if (collideeStr == "Fire") {
                         for (Fire f : fires) {
                             if (f.fireBody == collidee.getBody()) {
-                                if (f.type == 1) {
+                                if (f.type == 1 || f.type == 3) {
                                     for (Arrow a : arrows) {
                                         if (a.arrowBody == collider.getBody()) {
                                             if (a.onFire && !f.smoking) {
@@ -805,6 +812,9 @@ public class GameContactListener implements ContactListener {
                                                 f.light.setActive(true);
                                                 f.smoking = false;
                                                 f.extinguish = true;
+                                                if (f.type == 3) {
+                                                    f.torchLight.setActive(true);
+                                                }
                                             } else if (f.extinguish) {
                                                 a.onFire = true;
                                                 f.smoking = true;
@@ -856,7 +866,7 @@ public class GameContactListener implements ContactListener {
                     if (collideeStr == "Fire" && collidee.getUserData() != "Spawner"){
                         for (Fire f : fires) {
                             if (f.fireBody == collidee.getBody()) {
-                                if (f.extinguish && f.type == 1) {
+                                if (f.extinguish && f.type == 1 || f.type == 3) {
                                     f.smoking = true;
                                     f.extinguish = false;
                                 }
@@ -892,7 +902,7 @@ public class GameContactListener implements ContactListener {
                     }
 
                     if ((collideeStr == "Cobweb")) {
-                        DungeonCrawler.PLAYER_SPEED_MULTI = 20f;
+                        DungeonCrawler.PLAYER_SPEED_MULTI = 15f;
                         player.touchingCobweb = true;
                         break;
                     }
@@ -983,7 +993,7 @@ public class GameContactListener implements ContactListener {
 
                 case "Cobweb":
                     if (collider.getUserData() == "PlayerBound") {
-                       DungeonCrawler.PLAYER_SPEED_MULTI = 20f;
+                       DungeonCrawler.PLAYER_SPEED_MULTI = 15f;
                         player.touchingCobweb = true;
                        break;
                     }
@@ -1040,7 +1050,7 @@ public class GameContactListener implements ContactListener {
                     } else if (colliderStr == "Fire") {
                     for (Fire f : fires) {
                         if (f.fireBody == collider.getBody()) {
-                            if (f.type == 1) {
+                            if (f.type == 1 || f.type == 3) {
                                 for (Arrow a : arrows) {
                                     if (a.arrowBody == collidee.getBody()) {
                                         if (a.onFire && !f.smoking) {
@@ -1048,13 +1058,14 @@ public class GameContactListener implements ContactListener {
                                             f.light.setActive(true);
                                             f.smoking = false;
                                             f.extinguish = true;
+                                            if (f.type == 3) {
+                                                f.torchLight.setActive(true);
+                                            }
                                         } else if (f.extinguish) {
                                             a.onFire = true;
                                             f.smoking = true;
                                             f.extinguish = false;
                                         }
-
-
                                     }
                                 }
                             } else if (f.extinguish && f.type == 2) {

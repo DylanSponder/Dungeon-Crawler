@@ -80,6 +80,10 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "topWallTrapTile");
                         index++;
                         break;
+                    case "twtr2":
+                        drawableLevelLayer.add(index, "topWallFireTrapTile");
+                        index++;
+                        break;
                     case "trw":
                         drawableLevelLayer.add(index, "topRightWallTile");
                         index++;
@@ -92,12 +96,20 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "leftWallTrapTile");
                         index++;
                         break;
+                    case "lwtr2":
+                        drawableLevelLayer.add(index, "leftWallFireTrapTile");
+                        index++;
+                        break;
                     case "rw":
                         drawableLevelLayer.add(index, "rightWallTile");
                         index++;
                         break;
                     case "rwtr":
                         drawableLevelLayer.add(index, "rightWallTrapTile");
+                        index++;
+                        break;
+                    case "rwtr2":
+                        drawableLevelLayer.add(index, "rightWallFireTrapTile");
                         index++;
                         break;
                     case "blw":
@@ -110,6 +122,10 @@ public class RenderRules {
                         break;
                     case "bwtr":
                         drawableLevelLayer.add(index, "bottomWallTrapTile");
+                        index++;
+                        break;
+                    case "bwtr2":
+                        drawableLevelLayer.add(index, "bottomWallFireTrapTile");
                         index++;
                         break;
                     case "brw":
@@ -132,7 +148,6 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "bottomRightTurnTile");
                         index++;
                         break;
-
                     case "tf":
                         drawableLevelLayer.add(index, "topFenceTile");
                         index++;
@@ -149,7 +164,6 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "rightFenceTile");
                         index++;
                         break;
-
                     case "trf":
                         drawableLevelLayer.add(index, "topRightFenceTile");
                         index++;
@@ -166,7 +180,22 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "bottomRightFenceTile");
                         index++;
                         break;
-
+                    case "trft":
+                        drawableLevelLayer.add(index, "topRightTurnFenceTile");
+                        index++;
+                        break;
+                    case "tlft":
+                        drawableLevelLayer.add(index, "topLeftTurnFenceTile");
+                        index++;
+                        break;
+                    case "blft":
+                        drawableLevelLayer.add(index, "bottomLeftTurnFenceTile");
+                        index++;
+                        break;
+                    case "brft":
+                        drawableLevelLayer.add(index, "bottomRightTurnFenceTile");
+                        index++;
+                        break;
                     case "bfle":
                         drawableLevelLayer.add(index, "bottomFenceLeftEndTile");
                         index++;
@@ -299,16 +328,32 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "torl");
                         index++;
                         break;
+                    case "torloff":
+                        drawableLevelLayer.add(index, "torloff");
+                        index++;
+                        break;
                     case "torr":
                         drawableLevelLayer.add(index, "torr");
+                        index++;
+                        break;
+                    case "torroff":
+                        drawableLevelLayer.add(index, "torroff");
                         index++;
                         break;
                     case "toru":
                         drawableLevelLayer.add(index, "toru");
                         index++;
                         break;
+                    case "toruoff":
+                        drawableLevelLayer.add(index, "toruoff");
+                        index++;
+                        break;
                     case "tord":
                         drawableLevelLayer.add(index, "tord");
+                        index++;
+                        break;
+                    case "tordoff":
+                        drawableLevelLayer.add(index, "tordoff");
                         index++;
                         break;
                     case "col1":
@@ -451,6 +496,10 @@ public class RenderRules {
                                     drawableLevelLayer.add(index, "enemyCyclops");
                                     index++;
                                     break;
+                                case "boss1":
+                                    drawableLevelLayer.add(index, "bossMinotaur");
+                                    index++;
+                                    break;
                                     //shopkeeper entity
                                 case "shop":
                                     drawableLevelLayer.add(index, "shop");
@@ -517,6 +566,10 @@ public class RenderRules {
                                     drawableLevelLayer.add(index, "fcol7");
                                     index++;
                                     break;
+                                case "colf":
+                                    drawableLevelLayer.add(index, "fcolf");
+                                    index++;
+                                    break;
                                 case "col8":
                                     drawableLevelLayer.add(index, "fcol8");
                                     index++;
@@ -552,6 +605,10 @@ public class RenderRules {
                                     break;
                                 case "ped1fire":
                                     drawableLevelLayer.add(index, "fped1fire");
+                                    index++;
+                                    break;
+                                case "ped1fireoff":
+                                    drawableLevelLayer.add(index, "fped1fireoff");
                                     index++;
                                     break;
                                 case "ped1fireb":
@@ -827,7 +884,6 @@ public class RenderRules {
                             StringBuffer sb2 = new StringBuffer(i);
                             sb2.delete(0, 4);
                             String str = sb2.toString();
-                            System.out.println(str);
                             switch (str) {
                                 case "col1":
                                     drawableLevelLayer.add(index, "toruColTop1");
@@ -867,6 +923,102 @@ public class RenderRules {
                                     break;
                                 case "col13":
                                     drawableLevelLayer.add(index, "toruColStem3");
+                                    index++;
+                                    break;
+                            }
+                        }
+                        else if (levelLayer.get(index).matches("b+l+t+.+")) {
+                            StringBuffer sb2 = new StringBuffer(i);
+                            sb2.delete(0, 3);
+                            String str = sb2.toString();
+                            System.out.println(str);
+                            switch (str) {
+                                case "col1":
+                                    drawableLevelLayer.add(index, "bltColTop1");
+                                    index++;
+                                    break;
+                                case "col2":
+                                    drawableLevelLayer.add(index, "bltColTop2");
+                                    index++;
+                                    break;
+                                case "col3":
+                                    drawableLevelLayer.add(index, "bltColTop3");
+                                    index++;
+                                    break;
+                                case "col10":
+                                    drawableLevelLayer.add(index, "bltColTop4");
+                                    index++;
+                                    break;
+                                case "col11":
+                                    drawableLevelLayer.add(index, "bltColTop5");
+                                    index++;
+                                    break;
+                                case "col4":
+                                    drawableLevelLayer.add(index, "bltColStem1");
+                                    index++;
+                                    break;
+                                case "col5":
+                                    drawableLevelLayer.add(index, "bltColStemDamaged1");
+                                    index++;
+                                    break;
+                                case "col6":
+                                    drawableLevelLayer.add(index, "bltColStemStemDamaged1");
+                                    index++;
+                                    break;
+                                case "col12":
+                                    drawableLevelLayer.add(index, "bltColStem2");
+                                    index++;
+                                    break;
+                                case "col13":
+                                    drawableLevelLayer.add(index, "bltColStem3");
+                                    index++;
+                                    break;
+                            }
+                        }
+                        else if (levelLayer.get(index).matches("b+r+t+.+")) {
+                            StringBuffer sb2 = new StringBuffer(i);
+                            sb2.delete(0, 3);
+                            String str = sb2.toString();
+                            System.out.println(str);
+                            switch (str) {
+                                case "col1":
+                                    drawableLevelLayer.add(index, "brtColTop1");
+                                    index++;
+                                    break;
+                                case "col2":
+                                    drawableLevelLayer.add(index, "brtColTop2");
+                                    index++;
+                                    break;
+                                case "col3":
+                                    drawableLevelLayer.add(index, "brtColTop3");
+                                    index++;
+                                    break;
+                                case "col10":
+                                    drawableLevelLayer.add(index, "brtColTop4");
+                                    index++;
+                                    break;
+                                case "col11":
+                                    drawableLevelLayer.add(index, "brtColTop5");
+                                    index++;
+                                    break;
+                                case "col4":
+                                    drawableLevelLayer.add(index, "brtColStem1");
+                                    index++;
+                                    break;
+                                case "col5":
+                                    drawableLevelLayer.add(index, "brtColStemDamaged1");
+                                    index++;
+                                    break;
+                                case "col6":
+                                    drawableLevelLayer.add(index, "brtColStemStemDamaged1");
+                                    index++;
+                                    break;
+                                case "col12":
+                                    drawableLevelLayer.add(index, "brtColStem2");
+                                    index++;
+                                    break;
+                                case "col13":
+                                    drawableLevelLayer.add(index, "brtColStem3");
                                     index++;
                                     break;
                             }
@@ -971,6 +1123,56 @@ public class RenderRules {
 
 
                         }
+                        else if (levelLayer.get(index).matches("t+f+.+")) {
+                        StringBuffer sb2 = new StringBuffer(i);
+                        sb2.delete(0, 2);
+                        String str = sb2.toString();
+
+                        //    drawableLevelLayer.add(index, "topLeftWallTile");
+
+
+                        if (str.matches("([0-9])+")) {
+
+                            String roof = str;
+                            String strRoofExt = "0";
+
+                            StringBuffer sb3 = new StringBuffer(roof);
+                            sb3.delete(1, 2);
+                            String strRoofType = sb3.toString();
+
+                            StringBuffer sb4 = new StringBuffer(str);
+                            sb4.delete(0, 1);
+                            if (!sb4.toString().isEmpty()) {
+                                strRoofExt = sb4.toString();
+                            }
+
+                            switch (strRoofType) {
+                                case "1":
+                                    String roofFinal1;
+                                    roofFinal1 = "TFroof1" + strRoofExt;
+                                    drawableLevelLayer.add(index, roofFinal1);
+                                    break;
+                                case "2":
+                                    String roofFinal2;
+                                    roofFinal2 = "TFroof2" + strRoofExt;
+                                    drawableLevelLayer.add(index, roofFinal2);
+                                    break;
+                                case "3":
+                                    String roofFinal3;
+                                    roofFinal3 = "TFroof3" + strRoofExt;
+                                    drawableLevelLayer.add(index, roofFinal3);
+                                    break;
+                                case "4":
+                                    String roofFinal4;
+                                    roofFinal4 = "TFroof4" + strRoofExt;
+                                    drawableLevelLayer.add(index, roofFinal4);
+                                    break;
+                            }
+                            index++;
+                        }
+
+
+                    }
                         else {
                             if (!i.equals("")){
                                 System.out.println("UNKNOWN TILE: " + "'" + i + "'");

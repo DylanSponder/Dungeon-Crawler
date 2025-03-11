@@ -29,8 +29,10 @@ public class Fire extends Light{
     public int type;
     public boolean upDown;
     public Sound fireAmbient;
+    public ConeLight torchLight;
+    public int direction;
 
-    public Fire(World world, RayHandler rayHandler, float x, float y, boolean extinguish, float stateTime, int type, boolean upDown) {
+    public Fire(World world, RayHandler rayHandler, float x, float y, boolean extinguish, float stateTime, int type, boolean upDown, int direction) {
         this.world = world;
         this.rayHandler = rayHandler;
         this.fireX = x;
@@ -42,11 +44,19 @@ public class Fire extends Light{
         final CreateAssets tx = CreateAssets.getInstance();
         this.fireAmbient = tx.fireAmbient;
         this.lightType = 2;
+        this.direction = direction;
     }
 
-    public void createFire(Color color, int distance) {
+    public void createFire(Color color, int distance, ConeLight torchLight) {
+
+        if (torchLight != null) {
+            this.torchLight = torchLight;
+        }
+
         this.light = new PointLight(rayHandler,400, color,60, fireX + 8, fireY + 8);
         this.light.setXray(true);
+
+
 
         this.smoking = false;
         this.active = true;
@@ -58,21 +68,16 @@ public class Fire extends Light{
 
             BodyFactory bodyFactory = new BodyFactory();
 
-            fireBody = bodyFactory.createFireBody(world, fireX, fireY);
-
-            fireBody.setUserData("Fire");
-            if (type == 2){
-
-                BodyFactory bf = new BodyFactory();
-
-                fireSpawnerBody = bf.createSpawnerDetectionRadius(fireBody, 70f);
+            if (this.type == 1) {
+                fireBody = bodyFactory.createFireBody(world, fireX, fireY);
+                fireBody.setUserData("Fire");
+            } else if (this.type == 2){
+                fireSpawnerBody = bodyFactory.createSpawnerDetectionRadius(fireBody, 70f);
                 fireSpawnerBody.setUserData("Spawner");
-
+            } else if (this.type == 3){
+                fireBody = bodyFactory.createTorchBody(world, fireX, fireY, direction);
+                fireBody.setUserData("Fire");
             }
-        }   else if (type == 3) {
-
-            //DO TORCH SMALL FLAME
-
         }
         //ConeLight fireLight2 = new ConeLight(rayHandler, 400, new Color(0.25f,0.20f,0,0.85f),70,fireX+8,fireY+16,270,70);
     }

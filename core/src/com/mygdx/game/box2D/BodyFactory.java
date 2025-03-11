@@ -23,6 +23,27 @@ public class BodyFactory {
         return body;
     }
 
+    public static Body createFenceTurn(World world, float x, float y, float offsetX, float offsetY, int type) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + offsetX, y + offsetY);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        if (type == 1) {
+            CircleShape shape = new CircleShape();
+            shape.setRadius(8f);
+            body.createFixture(shape, 1.0f);
+            shape.dispose();
+        } else if (type == 2) {
+            PolygonShape shape = new PolygonShape();
+            shape.setAsBox(4, 2);
+            body.createFixture(shape, 1.0f);
+            shape.dispose();
+        }
+        return body;
+    }
+
     public Body createRoofHitbox(World world, float x, float y, int type, int ext, boolean upDown) {
         PolygonShape shape = new PolygonShape();
         Body body;
@@ -76,11 +97,42 @@ public class BodyFactory {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(x + 8, y + 10.5f);
+        bodyDef.position.set(x + 8, y + 10f);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(4.5f, 5.5f);
+        shape.setAsBox(4.5f, 6f);
+        Fixture fix = body.createFixture(shape, 1.0f);
+        shape.dispose();
+        fix.setSensor(true);
+        return body;
+    }
+
+    public Body createTorchBody(World world, float x, float y, int direction) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        PolygonShape shape = new PolygonShape();
+        if (direction == 1) {
+            shape.setAsBox(4.5f, 8f);
+            bodyDef.position.set(x + 8, y + 4f);
+        } else if (direction == 2) {
+            shape.setAsBox(8f, 4.5f);
+            bodyDef.position.set(x + 8, y + 4.5f);
+        }
+            else if (direction == 3) {
+            shape.setAsBox(4.5f, 8f);
+            bodyDef.position.set(x - 7.5f, y - 6);
+        }
+            else if (direction == 4) {
+            shape.setAsBox(8f, 4.5f);
+            bodyDef.position.set(x + 7, y + 4.5f);
+        }
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+
+
         Fixture fix = body.createFixture(shape, 1.0f);
         shape.dispose();
         fix.setSensor(true);
@@ -152,7 +204,6 @@ public class BodyFactory {
         fix.setSensor(true);
         fix.setUserData("Eyebeam");
 
-
         shape.dispose();
         return eyeBody;
     }
@@ -166,6 +217,20 @@ public class BodyFactory {
         body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(8, 1.96f);
+        body.createFixture(shape, 1.0f);
+        shape.dispose();
+        return body;
+    }
+
+    public Body createColumnBase2(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 8, y + 5.5f);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(8, 5.5f);
         body.createFixture(shape, 1.0f);
         shape.dispose();
         return body;

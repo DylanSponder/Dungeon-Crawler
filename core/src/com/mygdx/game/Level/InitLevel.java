@@ -78,6 +78,11 @@ public class InitLevel {
         cr.bottomLeftFenceTile.setTile(new StaticTiledMapTile(tx.roomBottomLeftCornerFence));
         cr.bottomRightFenceTile.setTile(new StaticTiledMapTile(tx.roomBottomRightCornerFence));
 
+        cr.topLeftTurnFenceTile.setTile(new StaticTiledMapTile(tx.roomTopLeftTurnFence));
+        cr.topRightTurnFenceTile.setTile(new StaticTiledMapTile(tx.roomTopRightTurnFence));
+        cr.bottomLeftTurnFenceTile.setTile(new StaticTiledMapTile(tx.roomBottomLeftTurnFence));
+        cr.bottomRightTurnFenceTile.setTile(new StaticTiledMapTile(tx.roomBottomRightTurnFence));
+
         cr.leftFenceTopEndTile.setTile(new StaticTiledMapTile(tx.roomLeftUpEndFence));
         cr.leftFenceBottomEndTile.setTile(new StaticTiledMapTile(tx.roomLeftDownEndFence));
         cr.rightFenceTopEndTile.setTile(new StaticTiledMapTile(tx.roomRightUpEndFence));

@@ -69,6 +69,11 @@ public class CreateCell {
     public TiledMapTileLayer.Cell bottomLeftFenceTile;
     public TiledMapTileLayer.Cell bottomRightFenceTile;
 
+    public TiledMapTileLayer.Cell topLeftTurnFenceTile;
+    public TiledMapTileLayer.Cell topRightTurnFenceTile;
+    public TiledMapTileLayer.Cell bottomLeftTurnFenceTile;
+    public TiledMapTileLayer.Cell bottomRightTurnFenceTile;
+
     public TiledMapTileLayer.Cell topFenceTile;
     public TiledMapTileLayer.Cell bottomFenceTile;
     public TiledMapTileLayer.Cell leftFenceTile;
@@ -123,6 +128,11 @@ public class CreateCell {
         topRightFenceTile = new TiledMapTileLayer.Cell();
         bottomLeftFenceTile = new TiledMapTileLayer.Cell();
         bottomRightFenceTile = new TiledMapTileLayer.Cell();
+
+        topLeftTurnFenceTile = new TiledMapTileLayer.Cell();
+        topRightTurnFenceTile = new TiledMapTileLayer.Cell();
+        bottomLeftTurnFenceTile = new TiledMapTileLayer.Cell();
+        bottomRightTurnFenceTile = new TiledMapTileLayer.Cell();
 
         topFenceLeftEndTile = new TiledMapTileLayer.Cell();
         topFenceRightEndTile = new TiledMapTileLayer.Cell();

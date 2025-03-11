@@ -1,0 +1,163 @@
+package com.mygdx.game.entity.behaviours.fsm;
+
+import com.badlogic.gdx.ai.fsm.State;
+import com.badlogic.gdx.ai.msg.Telegram;
+import com.badlogic.gdx.ai.steer.behaviors.Arrive;
+import com.badlogic.gdx.ai.steer.behaviors.BlendedSteering;
+import com.badlogic.gdx.ai.steer.behaviors.Wander;
+import com.badlogic.gdx.math.MathUtils;
+import com.mygdx.game.CreateAssets;
+
+import java.util.Iterator;
+
+import static com.mygdx.game.DungeonCrawler.bossMinotaurs;
+import static com.mygdx.game.DungeonCrawler.enemyEyes;
+
+public enum BossMinotaurState implements State<BossMinotaur> {
+
+    GO_TO_PLAYER() {
+        @Override
+        public void enter(BossMinotaur enemy) {
+            enemy.enemyAI.setBehaviour(null);
+            enemy.alerted = true;
+
+            Arrive seekPlayer = enemy.arriveAtPlayer();
+
+            //  BlendedSteering blendedAttackSteering = enemy.blendSteering(attack, 3, 6);
+            enemy.enemyAI.setBehaviour(seekPlayer);
+        }
+
+        @Override
+        public void update(final BossMinotaur enemy) {
+            //System.out.println(enemy.enemyAI.getLinearVelocity());
+            if (enemy.enemyAI.getLinearVelocity().x < 0.5 && enemy.enemyAI.getLinearVelocity().y < 0.5){
+                //System.out.println("Ack! I'm stuck!");
+                /*
+                final float stuckTimer = 2f;
+                float ori = enemy.enemyAI.getOrientation();
+
+                fleeSB = new Flee<Vector2>(enemy.enemyAI).setTarget(DungeonCrawler.player.playerB2D);
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        if (enemy.enemyAI.getLinearVelocity().x < 0.5 && enemy.enemyAI.getLinearVelocity().y < 0.5){
+                            System.out.println("Darn, I'm still stuck!");
+                            enemy.enemyAI.setBehaviour(null);
+                            enemy.enemyAI.setBehaviour(fleeSB);
+                        }
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                            enemy.enemyAI.setBehaviour(null);
+                            enemy.enemyAI.setBehaviour(blendedAttackSteering);
+                           }
+                       }, stuckTimer);
+                    }
+                }, stuckTimer);
+                 */
+            }
+        }
+
+        @Override
+        public void exit(BossMinotaur enemy) {
+            //System.out.println("No longer attacking the player");
+        }
+
+        @Override
+        public boolean onMessage(BossMinotaur entity, Telegram telegram) {
+            return false;
+        }
+    },
+
+    CHARGE_ATTACK() {
+        @Override
+        public void enter(BossMinotaur bossMinotaur) {
+
+        }
+
+        @Override
+        public void update(BossMinotaur bossMinotaur) {
+
+        }
+
+        @Override
+        public void exit(BossMinotaur bossMinotaur) {
+
+        }
+
+        @Override
+        public boolean onMessage(BossMinotaur bossMinotaur, Telegram telegram) {
+            return false;
+        }
+    },
+
+
+    STOP() {
+        final CreateAssets tx = CreateAssets.getInstance();
+        @Override
+        public void enter (BossMinotaur enemy){
+            enemy.enemyAI.setMaxLinearSpeed(0);
+            enemy.enemyAI.setMaxAngularSpeed(0);
+            enemy.enemyAI.setMaxAngularAcceleration(0);
+            enemy.enemyAI.setBehaviour(null);
+            if (enemy.active) {
+                switch (enemy.facing) {
+                    case "Up":
+                        enemy.enemyAI.setOrientation(0);
+                        break;
+                    case "Down":
+                        enemy.enemyAI.setOrientation(0);
+                        break;
+                    case "Left":
+                        enemy.enemyAI.setOrientation(0);
+                        break;
+                    case "Right":
+                        enemy.enemyAI.setOrientation(0);
+                        break;
+                }
+            }
+        }
+        @Override
+        public void update(BossMinotaur enemy) {
+
+        }
+
+        @Override
+        public void exit(BossMinotaur enemy) {
+
+        }
+
+        @Override
+        public boolean onMessage(BossMinotaur enemy, Telegram telegram) {
+            return false;
+        }
+    },
+
+    DIE() {
+        final CreateAssets tx = CreateAssets.getInstance();
+        @Override
+        public void enter (BossMinotaur enemy){
+
+            Iterator<BossMinotaur> enemyIt = bossMinotaurs.iterator();
+
+            if (enemyIt.hasNext()) {
+                bossMinotaurs.remove(enemy);
+            }
+
+        }
+        @Override
+        public void update(BossMinotaur enemy) {
+
+        }
+
+        @Override
+        public void exit(BossMinotaur enemy) {
+
+        }
+
+        @Override
+        public boolean onMessage(BossMinotaur enemy, Telegram telegram) {
+            return false;
+        }
+    };
+}

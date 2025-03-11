@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.box2D.BodyFactory;
+import com.mygdx.game.entity.behaviours.fsm.EnemyCyclopsState;
 import com.mygdx.game.entity.behaviours.fsm.projectiles.Arrow;
 import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.objects.Potion;
@@ -19,6 +20,8 @@ public class GameInputProcessor implements InputProcessor {
     public CreateAssets tx;
     public BodyFactory bf;
     public float playerRangedAttackSpeedInSeconds = 0.6f,  playerMeleeAttackSpeedInSeconds = 0.5f;
+    public float attackCooldown = 0.7f;
+    public boolean canAttack = true;
         @Override
         public boolean scrolled(float amountX, float amountY) {
         if (DungeonCrawler.debug) {
@@ -48,7 +51,7 @@ public class GameInputProcessor implements InputProcessor {
             tx = CreateAssets.getInstance();
             bf = new BodyFactory();
 
-        if (button == 0 && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking)) {
+        if (button == 0 && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking) && canAttack) {
             //if player presses left mouse attack with the swordBody
 
             playerMeleeAttacking = true;
@@ -127,10 +130,11 @@ public class GameInputProcessor implements InputProcessor {
                     playerMeleeAttacking = false;
                 }
             }, playerMeleeAttackSpeedInSeconds);
+            attackCooldown();
         }
 
         //if player presses right mouse attack with a bow
-        if (button == 1 && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking)) {
+        if (button == 1 && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking) && canAttack) {
 
             playerRangedAttacking = true;
 
@@ -214,6 +218,7 @@ public class GameInputProcessor implements InputProcessor {
                     playerRangedAttacking = false;
                 }
             }, playerRangedAttackSpeedInSeconds);
+            attackCooldown();
         }
         return true;
     }
@@ -639,7 +644,7 @@ public class GameInputProcessor implements InputProcessor {
         }
 
         //if player presses space attack with the swordBody
-        if (((keycode == 62)) && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking)) {
+        if (((keycode == 62)) && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking) && canAttack) {
 
             playerMeleeAttacking = true;
 
@@ -722,10 +727,11 @@ public class GameInputProcessor implements InputProcessor {
                     playerMeleeAttacking = false;
                 }
             }, playerMeleeAttackSpeedInSeconds);
+            attackCooldown();
         }
 
         //if player presses enter attack with a bow
-        if (keycode == 66 && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking)) {
+        if (keycode == 66 && (!playerMeleeAttacking && !playerRangedAttacking && !playerShieldAttacking) && canAttack) {
 
             stateTime2 = 0f;
             playerRangedAttacking = true;
@@ -819,6 +825,7 @@ public class GameInputProcessor implements InputProcessor {
                     playerRangedAttacking = false;
                 }
             }, playerRangedAttackSpeedInSeconds);
+            attackCooldown();
         }
         return false;
     }
@@ -832,4 +839,16 @@ public class GameInputProcessor implements InputProcessor {
     public boolean keyTyped(char c) {
         return false;
     }
+
+
+    public void attackCooldown() {
+            canAttack = false;
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                canAttack = true;
+            }
+        }, attackCooldown);
+    }
 }
+

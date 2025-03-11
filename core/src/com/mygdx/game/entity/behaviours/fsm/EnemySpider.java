@@ -60,7 +60,7 @@ public class EnemySpider extends Enemy {
 
         this.enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 5.95f);
 
-        this.enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 80f);
+        this.enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 100f);
 
         //enemyDetectionRadius.setSensor(true);
 
