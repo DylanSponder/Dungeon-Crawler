@@ -20,7 +20,7 @@ public class GameInputProcessor implements InputProcessor {
     public CreateAssets tx;
     public BodyFactory bf;
     public float playerRangedAttackSpeedInSeconds = 0.6f,  playerMeleeAttackSpeedInSeconds = 0.5f;
-    public float attackCooldown = 0.7f;
+    public float attackCooldown = 0.6f;
     public boolean canAttack = true;
         @Override
         public boolean scrolled(float amountX, float amountY) {
@@ -108,13 +108,19 @@ public class GameInputProcessor implements InputProcessor {
             } else {
                 soundController.playSound("SwordSwing2", 8,6,0.2f);
             }
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    //resume player movement after a short delay and remove swordBody hitbox
+                    swordBody.destroyFixture(swordHitbox);
 
+                }
+            }, 0.2f);
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
                     //resume player movement after a short delay and remove swordBody hitbox
                     playerPaused = false;
-                    swordBody.destroyFixture(swordHitbox);
 
                     //reset playerSprite to before the attack input
                     if (tx.playerTextureRegion.equals(tx.playerAttackDown)) {
@@ -705,13 +711,19 @@ public class GameInputProcessor implements InputProcessor {
             } else {
                 soundController.playSound("SwordSwing2", 8,6,0.2f);
             }
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    //resume player movement after a short delay and remove swordBody hitbox
+                    swordBody.destroyFixture(swordHitbox);
 
+                }
+            }, 0.2f);
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
                     //resume player movement after a short delay and remove swordBody hitbox
                     playerPaused = false;
-                    swordBody.destroyFixture(swordHitbox);
 
                     //reset playerSprite to before the attack input
                     if (tx.playerTextureRegion.equals(tx.playerAttackDown)) {

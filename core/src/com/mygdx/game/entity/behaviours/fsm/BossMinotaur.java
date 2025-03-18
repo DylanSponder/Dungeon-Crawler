@@ -4,6 +4,7 @@ import box2dLight.ChainLight;
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.badlogic.gdx.ai.steer.behaviors.Arrive;
+import com.badlogic.gdx.ai.steer.behaviors.Face;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -16,7 +17,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
-import com.mygdx.game.entity.utils.EnemyCyclopsBox2DSteeringEntity;
+import com.mygdx.game.entity.utils.BossMinotaurBox2DSteeringEntity;
 import com.mygdx.game.level.objects.Text;
 
 import static com.mygdx.game.DungeonCrawler.camera;
@@ -26,10 +27,11 @@ public class BossMinotaur extends Enemy {
 
     public StateMachine<BossMinotaur, BossMinotaurState> stateMachine;
     public int enemyID;
-    public EnemyCyclopsBox2DSteeringEntity enemyAI;
+    public BossMinotaurBox2DSteeringEntity enemyAI;
     public String facing;
-    public boolean active;
-
+    public boolean active, enraged;
+    public float stateTime, enrageTime;
+    public int enragedSpeed;
 
     public BossMinotaur(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
@@ -48,28 +50,31 @@ public class BossMinotaur extends Enemy {
 
         Viewport vp = new ExtendViewport(camera.viewportWidth, camera.viewportHeight);
 
-        this.ENEMY_HEALTH = 3;
+        this.ENEMY_HEALTH = 20;
 
         this.playerInRange = false;
 
+        this.enragedSpeed = 35;
+
+        this.enrageTime = 2.2f;
 
         //creates an enemy with a body, hitbox and steering entity
         this.enemyBody = bodyFactory.createSimpleDynamicBody(world, x, y);
         this.enemyDetectionBody = bodyFactory.createSimpleDynamicBody(world, x, y);
 
-        this.enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 5.95f);
+        this.enemyHitbox = bodyFactory.createMinotaurHitbox(enemyBody, 5.95f);
 
-        this.enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 100f);
+        //this.enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 100f);
 
         //enemyDetectionRadius.setSensor(true);
 
-        this.enemyAI = new EnemyCyclopsBox2DSteeringEntity(enemyBody, 10);
+        this.enemyAI = new BossMinotaurBox2DSteeringEntity(enemyBody, 10);
         //playerDetectionRay = new EnemyBox2DSteeringEntity(enemyBody,10);
 
         stateMachine = new DefaultStateMachine<BossMinotaur, BossMinotaurState>(this, BossMinotaurState.STOP);
         stateMachine.changeState(BossMinotaurState.STOP);
         this.enemyBody.setUserData("Enemy");
-        this.enemyHitbox.setUserData("EnemyCyclops");
+        this.enemyHitbox.setUserData("Enemy");
 
         this.debug = false;
 
@@ -85,24 +90,27 @@ public class BossMinotaur extends Enemy {
         return arriveSB;
     }
 
+    public Face<Vector2> facePlayer() {
+        faceSB = new Face<Vector2>(enemyAI, DungeonCrawler.player.playerB2D)
+                .setTimeToTarget(0.03f);
+        return faceSB;
+    }
+
     public void update (float delta) {
 
-            if (this.enemyAI.getLinearVelocity().y > 0
-                    && this.enemyAI.getLinearVelocity().y > this.enemyAI.getLinearVelocity().x) {
+            if (this.enemyAI.getLinearVelocity().y > 0 && (this.enemyAI.getLinearVelocity().y > this.enemyAI.getLinearVelocity().x)) {
                 this.facing = "Up";
             }
-            else if (this.enemyAI.getLinearVelocity().y < 0
-                    && this.enemyAI.getLinearVelocity().y < this.enemyAI.getLinearVelocity().x) {
-                this.facing = "Down";
-            }
-            else if (this.enemyAI.getLinearVelocity().x > 0
-                    && this.enemyAI.getLinearVelocity().x > this.enemyAI.getLinearVelocity().y) {
-                this.facing = "Right";
-            }
-            else if (this.enemyAI.getLinearVelocity().x < 0
-                    && this.enemyAI.getLinearVelocity().x < this.enemyAI.getLinearVelocity().y) {
+            if (this.enemyAI.getLinearVelocity().x < 0 && (this.enemyAI.getLinearVelocity().x < this.enemyAI.getLinearVelocity().y)) {
                 this.facing = "Left";
             }
+            if (this.enemyAI.getLinearVelocity().y < 0 && (this.enemyAI.getLinearVelocity().y < this.enemyAI.getLinearVelocity().x)) {
+                this.facing = "Down";
+            }
+            if (this.enemyAI.getLinearVelocity().x > 0 && (this.enemyAI.getLinearVelocity().x > this.enemyAI.getLinearVelocity().y)) {
+                this.facing = "Right";
+            }
+
         stateMachine.update();
     }
 

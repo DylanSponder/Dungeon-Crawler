@@ -1441,47 +1441,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 		}
 
-		for (BossMinotaur b1 : bossMinotaurs) {
-			//if (b1.enteredBossRoom) {
-			//	b1.detectPlayer();
-			//}
-			if (menuClosed){
 
-				b1.getStateMachine().changeState(BossMinotaurState.GO_TO_PLAYER);
-
-			}
-			bossMinotaurBatch.begin();
-
-				if (b1.facing == "Up") {
-					currentFrame = tx.minotaurWalkUpAnimation.getKeyFrame(stateTime4, true);
-					tx.minotaurTextureRegion = currentFrame;
-
-				} else if (b1.facing == "Down") {
-					currentFrame = tx.minotaurWalkDownAnimation.getKeyFrame(stateTime4, true);
-					tx.minotaurTextureRegion = currentFrame;
-
-				} else if (b1.facing == "Left") {
-					currentFrame = tx.minotaurWalkLeftAnimation.getKeyFrame(stateTime4, true);
-					tx.minotaurTextureRegion = currentFrame;
-
-				} else if (b1.facing == "Right") {
-					currentFrame = tx.minotaurWalkRightAnimation.getKeyFrame(stateTime4, true);
-					tx.minotaurTextureRegion = currentFrame;
-
-				} else {
-
-				}
-
-			BossMinotaur.renderMinotaur(bossMinotaurBatch, tx.minotaurTextureRegion, b1.enemyBody.getPosition().x - 8f, b1.enemyBody.getPosition().y - 6f);
-			stateTime4 += Gdx.graphics.getDeltaTime();
-			bossMinotaurBatch.end();
-		}
-
-		for (EnemyGhost deadGhost : dyingGhosts) {
-			deadGhost.getStateMachine().changeState(EnemyGhostState.DIE);
-			enemies.remove(deadGhost);
-		}
-		dyingGhosts.clear();
 
 		for (Body body : deadEnemyBodies) {
 			world.destroyBody(body);
@@ -1809,6 +1769,89 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 
+		for (BossMinotaur b1 : bossMinotaurs) {
+			//if (b1.enteredBossRoom) {
+			//	b1.detectPlayer();
+			//}
+			if (b1.facing == "Up") {
+				currentFrame = tx.minotaurWalkUpAnimation.getKeyFrame(b1.stateTime, true);
+				tx.minotaurTextureRegion = currentFrame;
+
+			} else if (b1.facing == "Down") {
+				currentFrame = tx.minotaurWalkDownAnimation.getKeyFrame(b1.stateTime, true);
+				tx.minotaurTextureRegion = currentFrame;
+
+			} else if (b1.facing == "Left") {
+				currentFrame = tx.minotaurWalkLeftAnimation.getKeyFrame(b1.stateTime, true);
+				tx.minotaurTextureRegion = currentFrame;
+
+			} else if (b1.facing == "Right") {
+				currentFrame = tx.minotaurWalkRightAnimation.getKeyFrame(b1.stateTime, true);
+				tx.minotaurTextureRegion = currentFrame;
+
+			} else if (!b1.active){
+				currentFrame = tx.minotaurWalkDownAnimation.getKeyFrame(b1.stateTime, true);
+				tx.minotaurTextureRegion = currentFrame;
+			}
+			if (menuClosed){
+
+				bossMinotaurBatch.begin();
+
+				BossMinotaur.renderMinotaur(bossMinotaurBatch, tx.minotaurTextureRegion, b1.enemyBody.getPosition().x - 16f, b1.enemyBody.getPosition().y - 8f);
+				if (b1.stateTime < 1 && b1.active) {
+
+					b1.getStateMachine().changeState(BossMinotaurState.GO_TO_PLAYER);
+
+					int random = Random.randomInt(50,1);
+
+					if (random == 50) {
+						b1.getStateMachine().changeState(BossMinotaurState.STOP);
+						b1.getStateMachine().changeState(BossMinotaurState.FACE_PLAYER);
+						b1.getStateMachine().changeState(BossMinotaurState.CHARGE_ATTACK);
+						Timer.schedule(new Timer.Task() {
+							@Override
+							public void run() {
+								b1.getStateMachine().changeState(BossMinotaurState.GO_TO_PLAYER);
+							}
+						}, 2f);
+
+					}
+
+					//get the minotaur's percentage of their total speed
+					float tempX = b1.enemyAI.getLinearVelocity().x;
+					tempX = tempX / b1.defaultSpeed * 100;
+					tempX = Math.abs(tempX);
+					//System.out.println(tempX);
+					//System.out.println((tempX /100) * 2);
+
+					float tempY = b1.enemyAI.getLinearVelocity().y;
+					tempY = tempY / b1.defaultSpeed * 100;
+					tempY = Math.abs(tempY);
+
+					if (b1.facing == "Left" || b1.facing == "Right") {
+						b1.stateTime += Gdx.graphics.getDeltaTime() * ((tempX / 150));
+					} else {
+						b1.stateTime += Gdx.graphics.getDeltaTime() * ((tempY / 150));
+					}
+
+				} else {
+					b1.stateTime = 0;
+				}
+
+				bossMinotaurBatch.end();
+			} else {
+				bossMinotaurBatch.begin();
+				BossMinotaur.renderMinotaur(bossMinotaurBatch, tx.minotaurTextureRegion, b1.enemyBody.getPosition().x - 8f, b1.enemyBody.getPosition().y - 6f);
+				bossMinotaurBatch.end();
+			}
+		}
+
+		for (BossMinotaur deadMinotaur : dyingMinotaurs) {
+			deadMinotaur.getStateMachine().changeState(BossMinotaurState.DIE);
+			enemies.remove(deadMinotaur);
+		}
+		dyingMinotaurs.clear();
+
 		//render corridor roofs - if they are touched by the player make them 66% transparent
 		for (Roof r : roofs) {
 
@@ -2103,7 +2146,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			enemySpiderBatch.setProjectionMatrix(camera.combined);
 			enemyGhostBatch.setProjectionMatrix(camera.combined);
 			enemyEyeBatch.setProjectionMatrix(camera.combined);
-			bossMinotaurBatch.setProjectionMatrix(camera.combined);
+
 			lockBatch.setProjectionMatrix(camera.combined);
 			doorBatch.setProjectionMatrix(camera.combined);
 			potBatch.setProjectionMatrix(camera.combined);
@@ -2116,6 +2159,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			columnTopBatch.setProjectionMatrix(camera.combined);
 			fireBatch.setProjectionMatrix(camera.combined);
 			flameBatch.setProjectionMatrix(camera.combined);
+			bossMinotaurBatch.setProjectionMatrix(camera.combined);
 			roofBatch.setProjectionMatrix(camera.combined);
 			fontBatch.setProjectionMatrix(camera.combined);
 			inventoryBatch.setProjectionMatrix(camera.combined);

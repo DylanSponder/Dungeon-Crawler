@@ -210,10 +210,10 @@ public class CreateAssets {
     public TextureRegion minotaurWalkLeftAnimationTexture = new TextureRegion(minotaurWalkLeftAnimationSheet,0,0,32,64);
     public TextureRegion minotaurWalkRightAnimationTexture = new TextureRegion(minotaurWalkRightAnimationSheet,0,0,32,64);
 
-    public Animation<TextureRegion> minotaurWalkUpAnimation = new Animation<TextureRegion>(0.40f, minotaurWalkUpAnimationTexture);
-    public Animation<TextureRegion> minotaurWalkDownAnimation = new Animation<TextureRegion>(0.40f, minotaurWalkDownAnimationTexture);
-    public Animation<TextureRegion> minotaurWalkLeftAnimation = new Animation<TextureRegion>(0.40f, minotaurWalkLeftAnimationTexture);
-    public Animation<TextureRegion> minotaurWalkRightAnimation = new Animation<TextureRegion>(0.40f, minotaurWalkRightAnimationTexture);
+    public Animation<TextureRegion> minotaurWalkUpAnimation = new Animation<TextureRegion>(1.5f, minotaurWalkUpAnimationTexture);
+    public Animation<TextureRegion> minotaurWalkDownAnimation = new Animation<TextureRegion>(1.5f, minotaurWalkDownAnimationTexture);
+    public Animation<TextureRegion> minotaurWalkLeftAnimation = new Animation<TextureRegion>(1.5f, minotaurWalkLeftAnimationTexture);
+    public Animation<TextureRegion> minotaurWalkRightAnimation = new Animation<TextureRegion>(1.5f, minotaurWalkRightAnimationTexture);
 
     TextureRegion[][] minotaurWalkUpTextureArray = TextureRegion.split(minotaurWalkUpAnimationSheet,
             minotaurWalkUpAnimationSheet.getWidth() / 4,

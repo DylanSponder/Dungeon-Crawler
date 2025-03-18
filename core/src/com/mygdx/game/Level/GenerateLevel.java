@@ -1683,7 +1683,7 @@ for (int i = 0; i < layerSize; i++) {
             BossMinotaur boss1 = new BossMinotaur(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
             init.roomList.get(roomIndex).enemyCounter++;
             init.roomList.get(roomIndex).bossMinotaurs.add(boss1);
-            boss1.createEnemy(5, 60);
+            boss1.createEnemy(5, 20);
             enemies.add(boss1);
             boss1.room = roomIndex;
             DungeonCrawler.bossMinotaurs.add(boss1);

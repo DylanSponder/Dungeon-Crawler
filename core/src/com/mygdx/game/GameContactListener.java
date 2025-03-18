@@ -121,6 +121,32 @@ public class GameContactListener implements ContactListener {
                                 default:
                                     break;
                             }
+                            System.out.println(e.ENEMY_HEALTH);
+                            if (e.enemyID == 5) {
+                                for (BossMinotaur boss1 : bossMinotaurs) {
+                                    if (boss1.enemyBody == collider.getBody()) {
+                                        //the minotaur speeds up after getting hit for a brief period
+                                        if (!boss1.enraged) {
+                                            Timer.schedule(new Timer.Task() {
+                                                @Override
+                                                public void run() {
+                                                    boss1.enemyAI.setMaxLinearSpeed(boss1.enragedSpeed);
+                                                    System.out.println(boss1.enemyAI.getMaxLinearSpeed());
+                                                    boss1.enraged = true;
+
+                                                    Timer.schedule(new Timer.Task() {
+                                                        @Override
+                                                        public void run() {
+                                                            boss1.enraged = false;
+                                                            boss1.enemyAI.setMaxLinearSpeed(20);
+                                                        }
+                                                    }, boss1.enrageTime);
+                                                }
+                                            }, 0.5f);
+                                        }
+                                    }
+                                }
+                            }
                         }
 
                         //e.enemyBody.applyForceToCenter(0,0, true);
@@ -128,6 +154,9 @@ public class GameContactListener implements ContactListener {
 
                         if (colliderStr.startsWith("Arrow") || collideeStr.startsWith("Arrow")) {
                             soundController.playSound("ArrowHit", 10f,8f,0.1f);
+                            if (!arrowBodiesCollided.contains(collidee.getBody())) {
+                                arrowBodiesCollided.add(collidee.getBody());
+                            }
                         }
                         if (colliderStr.startsWith("Sword") || collideeStr.startsWith("Sword")) {
                             soundController.playSound("SwordHit", 10f,8f,0.1f);
@@ -182,6 +211,15 @@ public class GameContactListener implements ContactListener {
                                         }
                                     }
                                 }
+                                else if (e.enemyID == 5) {
+                                    for (BossMinotaur boss1 : bossMinotaurs) {
+                                        if (boss1.enemyBody == collidee.getBody()) {
+                                            deadEnemyBodies.add(collidee.getBody());
+                                            //soundController.playSound("SkullDeath",8.5f,7.5f,0.1f);
+                                            dyingMinotaurs.add(boss1);
+                                        }
+                                    }
+                                }
                             }
 
                             //skullArrayMap.put();
@@ -229,45 +267,78 @@ public class GameContactListener implements ContactListener {
                         String faData = collider.getUserData().toString();
                         float velX = e.enemyBody.getLinearVelocity().x;
                         float velY = e.enemyBody.getLinearVelocity().y;
-                        switch (faData) {
-                            case "DownSword":
-                                e.loseHealth(2);
-                                e.enemyBody.setLinearVelocity(velX, velY - 50);
-                                break;
-                            case "UpSword":
-                                e.loseHealth(2);
-                                e.enemyBody.setLinearVelocity(velX, velY + 50);
-                                break;
-                            case "LeftSword":
-                                e.loseHealth(2);
-                                e.enemyBody.setLinearVelocity(velX - 50, velY);
-                                break;
-                            case "RightSword":
-                                e.loseHealth(2);
-                                e.enemyBody.setLinearVelocity(velX + 50, velY);
-                                break;
-                            case "DownArrow":
-                                e.loseHealth(1);
-                                e.enemyBody.setLinearVelocity(velX, velY - 50);
-                                break;
-                            case "UpArrow":
-                                e.loseHealth(1);
-                                e.enemyBody.setLinearVelocity(velX, velY + 50);
-                                break;
-                            case "LeftArrow":
-                                e.loseHealth(1);
-                                e.enemyBody.setLinearVelocity(velX - 50, velY);
-                                break;
-                            case "RightArrow":
-                                e.loseHealth(1);
-                                e.enemyBody.setLinearVelocity(velX + 50, velY);
-                                break;
-                            default:
-                                break;
+                        if (e.vulnerable) {
+                            switch (faData) {
+                                case "DownSword":
+                                    e.loseHealth(2);
+                                    e.enemyBody.setLinearVelocity(velX, velY - 50);
+                                    break;
+                                case "UpSword":
+                                    e.loseHealth(2);
+                                    e.enemyBody.setLinearVelocity(velX, velY + 50);
+                                    break;
+                                case "LeftSword":
+                                    e.loseHealth(2);
+                                    e.enemyBody.setLinearVelocity(velX - 50, velY);
+                                    break;
+                                case "RightSword":
+                                    e.loseHealth(2);
+                                    e.enemyBody.setLinearVelocity(velX + 50, velY);
+                                    break;
+                                case "DownArrow":
+                                    e.loseHealth(1);
+                                    e.enemyBody.setLinearVelocity(velX, velY - 50);
+                                    break;
+                                case "UpArrow":
+                                    e.loseHealth(1);
+                                    e.enemyBody.setLinearVelocity(velX, velY + 50);
+                                    break;
+                                case "LeftArrow":
+                                    e.loseHealth(1);
+                                    e.enemyBody.setLinearVelocity(velX - 50, velY);
+                                    break;
+                                case "RightArrow":
+                                    e.loseHealth(1);
+                                    e.enemyBody.setLinearVelocity(velX + 50, velY);
+                                    break;
+                                default:
+                                    break;
+                            }
+                            System.out.println(e.ENEMY_HEALTH);
+                            if (e.enemyID == 5) {
+                                for (BossMinotaur boss1 : bossMinotaurs) {
+                                    if (boss1.enemyBody == collidee.getBody()) {
+                                        //the minotaur speeds up after getting hit for a brief period
+                                        if (!boss1.enraged) {
+                                            Timer.schedule(new Timer.Task() {
+                                                @Override
+                                                public void run() {
+                                                    boss1.enemyAI.setMaxLinearSpeed(boss1.enragedSpeed);
+                                                    System.out.println(boss1.enemyAI.getMaxLinearSpeed());
+                                                    boss1.enraged = true;
+
+                                                    Timer.schedule(new Timer.Task() {
+                                                        @Override
+                                                        public void run() {
+                                                            boss1.enraged = false;
+                                                            boss1.enemyAI.setMaxLinearSpeed(20);
+                                                        }
+                                                    }, boss1.enrageTime);
+                                                }
+                                            }, 0.5f);
+
+                                        }
+                                    }
+                                }
+                            }
                         }
+
 
                         if (colliderStr.startsWith("Arrow") || collideeStr.startsWith("Arrow")) {
                             soundController.playSound("ArrowHit", 10f,8f,0.1f);
+                            if (!arrowBodiesCollided.contains(collider.getBody())) {
+                                arrowBodiesCollided.add(collider.getBody());
+                            }
                         }
                         if (colliderStr.startsWith("Sword") || collideeStr.startsWith("Sword")) {
                             soundController.playSound("SwordHit", 10f,8f,0.1f);
@@ -316,6 +387,15 @@ public class GameContactListener implements ContactListener {
                                             deadEnemyBodies.add(collidee.getBody());
                                             soundController.playSound("CyclopsDeath",8.5f,7.5f,0.1f);
                                             dyingEyes.add(eye);
+                                        }
+                                    }
+                                }
+                                else if (e.enemyID == 5) {
+                                    for (BossMinotaur boss1 : bossMinotaurs) {
+                                        if (boss1.enemyBody == collidee.getBody()) {
+                                            deadEnemyBodies.add(collidee.getBody());
+                                            //soundController.playSound("SkullDeath",8.5f,7.5f,0.1f);
+                                            dyingMinotaurs.add(boss1);
                                         }
                                     }
                                 }
@@ -936,7 +1016,14 @@ public class GameContactListener implements ContactListener {
                                 e.playerInRange = true;
                             }
                             hud.healthBar.loseHealth(0.5f);
-                            System.out.println(collideeStr);
+                        }
+                    }
+                    else if (collidee.getBody().getUserData() == "Enemy" && collidee.getUserData() != "Proximity" && collidee.getUserData() == "BossMinotaur") {
+                        for (BossMinotaur b : bossMinotaurs) {
+                            if ((b.enemyBody == collider.getBody() || b.enemyBody == collidee.getBody())) {
+                                hud.healthBar.loseHealth(0.5f);
+                                b.playerInRange = true;
+                            }
                         }
                     }
 
@@ -1176,13 +1263,18 @@ public class GameContactListener implements ContactListener {
                         e3.enemyAI.setMaxLinearSpeed(e3.defaultSpeed);
                         e3.stateMachine.changeState(EnemyGhostState.WANDER);
                         e3.active = true;
-
                     }
                     for (EnemyCyclops e4 : init.roomList.get(player.currentRoom).enemyEyes) {
                         e4.rayCastable = true;
                         e4.enemyAI.setMaxLinearSpeed(e4.defaultSpeed);
                         e4.stateMachine.changeState(EnemyCyclopsState.WANDER);
                         e4.active = true;
+                    }
+                    for (BossMinotaur b1 : init.roomList.get(player.currentRoom).bossMinotaurs) {
+                        b1.rayCastable = true;
+                        b1.enemyAI.setMaxLinearSpeed(b1.defaultSpeed);
+                        b1.stateMachine.changeState(BossMinotaurState.GO_TO_PLAYER);
+                        b1.active = true;
                     }
 
                     player.touchingRoom = true;

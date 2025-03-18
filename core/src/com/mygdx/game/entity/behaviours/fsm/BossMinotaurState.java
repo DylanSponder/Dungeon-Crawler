@@ -31,30 +31,7 @@ public enum BossMinotaurState implements State<BossMinotaur> {
         public void update(final BossMinotaur enemy) {
             //System.out.println(enemy.enemyAI.getLinearVelocity());
             if (enemy.enemyAI.getLinearVelocity().x < 0.5 && enemy.enemyAI.getLinearVelocity().y < 0.5){
-                //System.out.println("Ack! I'm stuck!");
-                /*
-                final float stuckTimer = 2f;
-                float ori = enemy.enemyAI.getOrientation();
 
-                fleeSB = new Flee<Vector2>(enemy.enemyAI).setTarget(DungeonCrawler.player.playerB2D);
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        if (enemy.enemyAI.getLinearVelocity().x < 0.5 && enemy.enemyAI.getLinearVelocity().y < 0.5){
-                            System.out.println("Darn, I'm still stuck!");
-                            enemy.enemyAI.setBehaviour(null);
-                            enemy.enemyAI.setBehaviour(fleeSB);
-                        }
-                        Timer.schedule(new Timer.Task() {
-                            @Override
-                            public void run() {
-                            enemy.enemyAI.setBehaviour(null);
-                            enemy.enemyAI.setBehaviour(blendedAttackSteering);
-                           }
-                       }, stuckTimer);
-                    }
-                }, stuckTimer);
-                 */
             }
         }
 
@@ -65,6 +42,59 @@ public enum BossMinotaurState implements State<BossMinotaur> {
 
         @Override
         public boolean onMessage(BossMinotaur entity, Telegram telegram) {
+            return false;
+        }
+    },
+
+    STOP() {
+        final CreateAssets tx = CreateAssets.getInstance();
+        @Override
+        public void enter (BossMinotaur enemy){
+            enemy.enemyAI.setMaxLinearSpeed(0);
+            enemy.enemyAI.setMaxAngularSpeed(0);
+            enemy.enemyAI.setMaxAngularAcceleration(0);
+            enemy.enemyAI.setBehaviour(null);
+        }
+        @Override
+        public void update(BossMinotaur enemy) {
+
+        }
+
+        @Override
+        public void exit(BossMinotaur enemy) {
+            if (!enemy.enraged) {
+                enemy.enemyAI.setMaxLinearSpeed(enemy.defaultSpeed);
+            } else {
+                enemy.enemyAI.setMaxLinearSpeed(enemy.enragedSpeed);
+            }
+            enemy.enemyAI.setMaxAngularSpeed(10000);
+            enemy.enemyAI.setMaxAngularAcceleration(10000);
+        }
+
+        @Override
+        public boolean onMessage(BossMinotaur enemy, Telegram telegram) {
+            return false;
+        }
+    },
+
+    FACE_PLAYER() {
+        @Override
+        public void enter(BossMinotaur bossMinotaur) {
+
+        }
+
+        @Override
+        public void update(BossMinotaur bossMinotaur) {
+
+        }
+
+        @Override
+        public void exit(BossMinotaur bossMinotaur) {
+
+        }
+
+        @Override
+        public boolean onMessage(BossMinotaur bossMinotaur, Telegram telegram) {
             return false;
         }
     },
@@ -87,48 +117,6 @@ public enum BossMinotaurState implements State<BossMinotaur> {
 
         @Override
         public boolean onMessage(BossMinotaur bossMinotaur, Telegram telegram) {
-            return false;
-        }
-    },
-
-
-    STOP() {
-        final CreateAssets tx = CreateAssets.getInstance();
-        @Override
-        public void enter (BossMinotaur enemy){
-            enemy.enemyAI.setMaxLinearSpeed(0);
-            enemy.enemyAI.setMaxAngularSpeed(0);
-            enemy.enemyAI.setMaxAngularAcceleration(0);
-            enemy.enemyAI.setBehaviour(null);
-            if (enemy.active) {
-                switch (enemy.facing) {
-                    case "Up":
-                        enemy.enemyAI.setOrientation(0);
-                        break;
-                    case "Down":
-                        enemy.enemyAI.setOrientation(0);
-                        break;
-                    case "Left":
-                        enemy.enemyAI.setOrientation(0);
-                        break;
-                    case "Right":
-                        enemy.enemyAI.setOrientation(0);
-                        break;
-                }
-            }
-        }
-        @Override
-        public void update(BossMinotaur enemy) {
-
-        }
-
-        @Override
-        public void exit(BossMinotaur enemy) {
-
-        }
-
-        @Override
-        public boolean onMessage(BossMinotaur enemy, Telegram telegram) {
             return false;
         }
     },

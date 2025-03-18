@@ -257,19 +257,19 @@ public class EnemyCyclops extends Enemy {
             }, turnDelay);
         } else {
             if (this.enemyAI.getLinearVelocity().y > 0
-                    && this.enemyAI.getLinearVelocity().y > this.enemyAI.getLinearVelocity().x) {
+                    && (this.enemyAI.getLinearVelocity().y > this.enemyAI.getLinearVelocity().x)) {
                 this.facing = "Up";
             }
             else if (this.enemyAI.getLinearVelocity().y < 0
-                    && this.enemyAI.getLinearVelocity().y < this.enemyAI.getLinearVelocity().x) {
+                    && (this.enemyAI.getLinearVelocity().y < this.enemyAI.getLinearVelocity().x)) {
                 this.facing = "Down";
             }
             else if (this.enemyAI.getLinearVelocity().x > 0
-                    && this.enemyAI.getLinearVelocity().x > this.enemyAI.getLinearVelocity().y) {
+                    && (this.enemyAI.getLinearVelocity().x > this.enemyAI.getLinearVelocity().y)) {
                 this.facing = "Right";
             }
             else if (this.enemyAI.getLinearVelocity().x < 0
-                    && this.enemyAI.getLinearVelocity().x < this.enemyAI.getLinearVelocity().y) {
+                    && (this.enemyAI.getLinearVelocity().x < this.enemyAI.getLinearVelocity().y)) {
                 this.facing = "Left";
             }
             canTurn = false;

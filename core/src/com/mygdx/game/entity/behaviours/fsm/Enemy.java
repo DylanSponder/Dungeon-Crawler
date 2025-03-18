@@ -36,6 +36,7 @@ public class Enemy {
     public RaycastObstacleAvoidance<Vector2> raycastObstacleAvoidanceSB, raycastPlayerDetectionSB;
     public Seek seekSB;
     public Arrive arriveSB;
+    public Face faceSB;
     public BlendedSteering blendedSteeringSB;
     public Vector2 wanderCenter;
     public int ENEMY_HEALTH;
