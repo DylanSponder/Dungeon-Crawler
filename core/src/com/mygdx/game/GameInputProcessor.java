@@ -25,6 +25,7 @@ public class GameInputProcessor implements InputProcessor {
         @Override
         public boolean scrolled(float amountX, float amountY) {
         if (DungeonCrawler.debug) {
+            System.out.println(camera.zoom);
             //camera zoom should be between 0.3 and 1.3 - may be changed during testing
             if ((camera.zoom >= 0.3f && camera.zoom <= 24f)) {
                 if (camera.zoom == 24f) {

@@ -27,6 +27,7 @@ public class Room {
     public ArrayList<BossMinotaur> bossMinotaurs;
     public ArrayList<Fire> spawners;
     public ArrayList<Roof> roofs;
+    public ArrayList<Fire> fires;
 
     public boolean isShop, isEntered;
 
@@ -44,6 +45,7 @@ public class Room {
         spawners = new ArrayList<Fire>();
         bossMinotaurs = new ArrayList<BossMinotaur>();
         roofs = new ArrayList<Roof>();
+        fires = new ArrayList<Fire>();
     }
 
     public void createLocks(World world) {
@@ -119,6 +121,14 @@ public class Room {
                     }
                 }
             }
+        }
+    }
+
+    public void snuffTorches() {
+        for (Fire f : fires) {
+            f.extinguish = false;
+            f.smoking = true;
+            f.active = false;
         }
     }
 

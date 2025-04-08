@@ -23,7 +23,7 @@ public class Fire extends Light{
     public Body fireBody;
     public Fixture fireSpawnerBody;
     public RayHandler rayHandler;
-    public boolean extinguish, smoking, active;
+    public boolean extinguish, smoking, active, blue;
     public PointLight fireLight;
     public float stateTime;
     public int type;

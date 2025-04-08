@@ -570,6 +570,7 @@ public class BodyFactory {
         PolygonShape minoShape1 = new PolygonShape();
         PolygonShape minoShape2 = new PolygonShape();
         PolygonShape minoShape3 = new PolygonShape();
+        PolygonShape minoHitboxShape = new PolygonShape();
         CircleShape minoCornerShape1 = new CircleShape();
         CircleShape minoCornerShape2 = new CircleShape();
         CircleShape minoCornerShape3 = new CircleShape();
@@ -578,33 +579,44 @@ public class BodyFactory {
         minoCornerShape2.setRadius(3);
         minoCornerShape3.setRadius(3);
         minoCornerShape4.setRadius(3);
-        Vector2 vec1 = new Vector2(minoCornerShape1.getPosition().x+8,minoCornerShape1.getPosition().y+3);
-        Vector2 vec2 = new Vector2(minoCornerShape1.getPosition().x-8,minoCornerShape1.getPosition().y-3);
-        Vector2 vec3 = new Vector2(minoCornerShape1.getPosition().x-8,minoCornerShape1.getPosition().y+3);
-        Vector2 vec4 = new Vector2(minoCornerShape1.getPosition().x+8,minoCornerShape1.getPosition().y-3);
+        Vector2 vec1 = new Vector2(minoCornerShape1.getPosition().x+7,minoCornerShape1.getPosition().y+3);
+        Vector2 vec2 = new Vector2(minoCornerShape1.getPosition().x-7,minoCornerShape1.getPosition().y-3);
+        Vector2 vec3 = new Vector2(minoCornerShape1.getPosition().x-7,minoCornerShape1.getPosition().y+3);
+        Vector2 vec4 = new Vector2(minoCornerShape1.getPosition().x+7,minoCornerShape1.getPosition().y-3);
         minoCornerShape1.setPosition(vec1);
         minoCornerShape2.setPosition(vec2);
         minoCornerShape3.setPosition(vec3);
         minoCornerShape4.setPosition(vec4);
-
-        minoShape1.setAsBox(8f, 5.98f);
-        minoShape2.setAsBox(11f, 4f);
-
-        //player bounds for room door locking
-        minoShape3.setAsBox(4f, 4f);
-
-        Fixture minoHitbox = body.createFixture(minoShape1, 1.0f);
-        Fixture minoHitbox2 = body.createFixture(minoShape2, 1.0f);
-
-        Fixture minoBoundHitbox = body.createFixture(minoShape3, 1.0f);
-        //minoBoundHitbox.setSensor(true);
-
         Fixture minoCornerHitbox1 = body.createFixture(minoCornerShape1,1.0f);
         Fixture minoCornerHitbox2 = body.createFixture(minoCornerShape2,1.0f);
         Fixture minoCornerHitbox3 = body.createFixture(minoCornerShape3,1.0f);
         Fixture minoCornerHitbox4 = body.createFixture(minoCornerShape4,1.0f);
 
+        minoShape1.setAsBox(8f, 5.98f);
+        minoShape2.setAsBox(10f, 4f);
+        minoShape3.setAsBox(4f, 4f);
+
+        Vector2 vec5 = new Vector2(minoCornerShape1.getPosition().x-7,minoCornerShape1.getPosition().y+2);
+        minoHitboxShape.setAsBox(12f, 12f,vec5,0);
+
+
+        Fixture minoHitbox = body.createFixture(minoShape1, 1.0f);
+        Fixture minoHitbox2 = body.createFixture(minoShape2, 1.0f);
+        Fixture minoBoundHitbox = body.createFixture(minoShape3, 1.0f);
+
+        Fixture minoDamageHitbox = body.createFixture(minoHitboxShape, 1.0f);
+
+        minoDamageHitbox.setSensor(true);
+
+        //minoBoundHitbox.setSensor(true);
+
+        //PolygonShape minoBottomSlope = new PolygonShape();
+        //minoBottomSlope.set(new float[]{-9,-6,0,-9,9,-6,-9,-6});
+        //Fixture minoB = body.createFixture(minoBottomSlope, 1.0f);
+        //minoB.setUserData("BossMinotaur");
+
         body.setUserData("Enemy");
+        minoDamageHitbox.setUserData("BossMinotaur");
         minoCornerHitbox1.setUserData("BossMinotaur");
         minoCornerHitbox2.setUserData("BossMinotaur");
         minoCornerHitbox3.setUserData("BossMinotaur");
@@ -612,6 +624,7 @@ public class BodyFactory {
         minoHitbox.setUserData("BossMinotaur");
         minoHitbox2.setUserData("BossMinotaur");
         minoBoundHitbox.setUserData("Enemy");
+        minoHitboxShape.dispose();
         minoCornerShape1.dispose();
         minoCornerShape2.dispose();
         minoCornerShape3.dispose();

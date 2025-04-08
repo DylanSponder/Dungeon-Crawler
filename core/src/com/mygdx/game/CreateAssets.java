@@ -71,11 +71,14 @@ public class CreateAssets {
     Texture minotaurWalkLeftAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/BossMinotaur/MinotaurWalkLeft.png"));
     Texture minotaurWalkRightAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/BossMinotaur/MinotaurWalkRight.png"));
 
+    Texture stunAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/HUD/Stun.png"));
+
     Texture shopkeeperTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Shopkeeper/SpriteSheet.png"));
     Texture tutorialTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Tuto.png"));
     Texture fireAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Fire.png"));
     Texture flameAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Flame.png"));
     Texture blueFireAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/FireBlu.png"));
+    Texture blueFlameAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/FlameBlu.png"));
     Texture smokeAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Smoke.png"));
     Texture flameSmokeAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/FlameSmoke.png"));
     Texture fireOutAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/FireOut.png"));
@@ -324,8 +327,22 @@ public class CreateAssets {
     TextureRegion[] eyebeamFrames = new TextureRegion[1 * 4];
 
 
+
+    public TextureRegion stunAnimationTexture = new TextureRegion(stunAnimationSheet,0,0,15,15);
+
+
+    public Animation<TextureRegion> stunAnimation = new Animation<TextureRegion>(0.25f, stunAnimationTexture);
+
+    TextureRegion[][] stunTextureArray = TextureRegion.split(stunAnimationSheet,
+            stunAnimationSheet.getWidth() / 2,
+            stunAnimationSheet.getHeight() / 1);
+
+    TextureRegion[] stunFrames = new TextureRegion[2 * 1];
+
+
     public TextureRegion fireAnimationTexture = new TextureRegion(fireAnimationSheet,0,0,16,16);
     public TextureRegion flameAnimationTexture = new TextureRegion(flameAnimationSheet,0,0,16,16);
+    public TextureRegion blueFlameAnimationTexture = new TextureRegion(blueFlameAnimationSheet,0,0,16,16);
     public TextureRegion blueFireAnimationTexture = new TextureRegion(blueFireAnimationSheet,0,0,16,16);
     public TextureRegion smokeAnimationTexture = new TextureRegion(smokeAnimationSheet,0,0,16,16);
     public TextureRegion flameSmokeAnimationTexture = new TextureRegion(flameSmokeAnimationSheet,0,0,16,16);
@@ -336,6 +353,7 @@ public class CreateAssets {
     public Animation<TextureRegion> fireAnimation = new Animation<TextureRegion>(0.25f, fireAnimationTexture);
     public Animation<TextureRegion> flameAnimation = new Animation<TextureRegion>(0.20f, flameAnimationTexture);
     public Animation<TextureRegion> blueFireAnimation = new Animation<TextureRegion>(0.25f, fireAnimationTexture);
+    public Animation<TextureRegion> blueFlameAnimation = new Animation<TextureRegion>(0.20f, blueFlameAnimationTexture);
 
     public Animation<TextureRegion> flameSmokeAnimation = new Animation<TextureRegion>(0.25f, flameSmokeAnimationTexture);
     public Animation<TextureRegion> flameOutAnimation = new Animation<TextureRegion>(0.10f, flameOutAnimationTexture);
@@ -361,6 +379,12 @@ public class CreateAssets {
             blueFireAnimationSheet.getHeight() / 2);
 
     TextureRegion[] blueFireFrames = new TextureRegion[5 * 2];
+
+    TextureRegion[][] blueFlameTextureArray = TextureRegion.split(blueFlameAnimationSheet,
+            blueFlameAnimationSheet.getWidth() / 3,
+            blueFlameAnimationSheet.getHeight() / 2);
+
+    TextureRegion[] blueFlameFrames = new TextureRegion[3 * 2];
 
     public Animation<TextureRegion> arrowAnimation = new Animation<TextureRegion>(1f,arrowAnimationTexture);
 
@@ -396,8 +420,10 @@ public class CreateAssets {
 
 
     //TODO: this is lazy - refactor
+    //edit: my depravity knows no bounds
     int index = 0, index2 = 0, index3 = 0, index4 = 0, index5 = 0, index6 = 0, index7 = 0, index8 = 0, index9 = 0, index10 = 0;
     int index11 = 0, index12 = 0, index13 = 0, index14 = 0, index15 = 0, index16 = 0, index17 = 0, index18 = 0, index19 = 0, index20 = 0, index21 = 0;
+    int index22 = 0, index23 = 0;
 
     //Column textures
 
@@ -731,6 +757,16 @@ public class CreateAssets {
             }
         }
 
+        //stun animation
+        for (int p = 0; p < 1; p++) {
+            for (int j = 0; j < 2; j++) {
+                stunFrames[index23++] = stunTextureArray[p][j];
+            }
+        }
+
+        // Initialize the Animation with the frame interval and array of frames
+        stunAnimation = new Animation<TextureRegion>(0.25f, stunFrames);
+
         //initialize minotaur Animations
         for (int g = 0; g < 1; g++) {
             for (int w = 0; w < 4; w++) {
@@ -796,6 +832,19 @@ public class CreateAssets {
         }
 
         blueFireAnimation = new Animation<TextureRegion>(0.07f, blueFireFrames);
+
+        //small blue flame animation
+
+        for (int g = 0; g < 2; g++) {
+            for (int w = 0; w < 3; w++) {
+                blueFlameFrames[index22++] = blueFlameTextureArray[g][w];
+            }
+        }
+
+        // Initialize the Animation with the frame interval and array of frames
+        blueFlameAnimation = new Animation<TextureRegion>(0.14f, blueFlameFrames);
+
+        //smoke animation
 
         for (int p = 0; p < 2; p++) {
             for (int j = 0; j < 5; j++) {

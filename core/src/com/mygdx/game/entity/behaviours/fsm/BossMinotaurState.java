@@ -10,8 +10,7 @@ import com.mygdx.game.CreateAssets;
 
 import java.util.Iterator;
 
-import static com.mygdx.game.DungeonCrawler.bossMinotaurs;
-import static com.mygdx.game.DungeonCrawler.enemyEyes;
+import static com.mygdx.game.DungeonCrawler.*;
 
 public enum BossMinotaurState implements State<BossMinotaur> {
 
@@ -101,8 +100,15 @@ public enum BossMinotaurState implements State<BossMinotaur> {
 
     CHARGE_ATTACK() {
         @Override
-        public void enter(BossMinotaur bossMinotaur) {
+        public void enter(BossMinotaur enemy) {
+            enemy.enemyAI.setBehaviour(null);
+            Arrive charge = enemy.chargeAtWall(world);
 
+            //  BlendedSteering blendedAttackSteering = enemy.blendSteering(attack, 3, 6);
+            enemy.enemyAI.setBehaviour(charge);
+            enemy.locked = true;
+            enemy.charging = true;
+            System.out.println("ENTER CHARGE");
         }
 
         @Override
@@ -111,8 +117,10 @@ public enum BossMinotaurState implements State<BossMinotaur> {
         }
 
         @Override
-        public void exit(BossMinotaur bossMinotaur) {
-
+        public void exit(BossMinotaur enemy) {
+            enemy.enemyAI.setMaxLinearSpeed(enemy.defaultSpeed);
+            enemy.charging = false;
+            System.out.println("EXIT CHARGE");
         }
 
         @Override

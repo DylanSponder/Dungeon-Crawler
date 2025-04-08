@@ -270,7 +270,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//create the Box2D ray handler
 		rayHandler = new RayHandler(world);
-		rayHandler.setAmbientLight(0f, 0f, 0f, 0.013f);
+		rayHandler.setAmbientLight(0f, 0f, 0f, 0f);
+		//0.013
 		//fullbright if in debug mode
 		if (debug) {
 			rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
@@ -857,13 +858,23 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		for (Fire f : fires) {
 			if (f.type == 3) {
-				currentFrame = tx.flameAnimation.getKeyFrame(stateTime, f.active);
+				if (!f.blue) {
+					currentFrame = tx.flameAnimation.getKeyFrame(stateTime, f.active);
+				} else {
+					currentFrame = tx.blueFlameAnimation.getKeyFrame(stateTime, f.active);
+				}
+
 
 				if (f.smoking) {
 					f.torchLight.setColor(f.light.getColor().r, f.light.getColor().g, f.light.getColor().b, 0.40f);
 					TextureRegion currentFrame = tx.flameSmokeAnimation.getKeyFrame(f.stateTime, false);
 					fireBatch.begin();
-					Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, false);
+					if (f.upDown) {
+						Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, true);
+					} else {
+						Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, false);
+					}
+
 					fireBatch.end();
 					f.stateTime += Gdx.graphics.getDeltaTime();
 
@@ -880,7 +891,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 						TextureRegion currentFrame2 = tx.flameOutAnimation.getKeyFrame(f.stateTime, true);
 						fireBatch.begin();
-						Fire.renderFire(fireBatch, currentFrame2, f.fireX, f.fireY, f.smoking, false);
+						if (f.upDown) {
+							Fire.renderFire(fireBatch, currentFrame2, f.fireX, f.fireY, f.smoking, true);
+						} else {
+							Fire.renderFire(fireBatch, currentFrame2, f.fireX, f.fireY, f.smoking, false);
+						}
+
 						fireBatch.end();
 						f.stateTime += Gdx.graphics.getDeltaTime();
 					}
@@ -996,7 +1012,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				//check to see if the player is both in sight and in range
 				if ((e.playerSighted && e.playerInRange) && menuClosed){
 					//after a specified delay once the player has been spotted, shoot a projectile with some offset at the player
-					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 160) ){
+					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 240) ){
 						e.timeSinceAlerted = 0f;
 						e.lostSight = false;
 						messages.remove(e.lostSightMessage);
@@ -1800,45 +1816,50 @@ public class DungeonCrawler extends ApplicationAdapter {
 				BossMinotaur.renderMinotaur(bossMinotaurBatch, tx.minotaurTextureRegion, b1.enemyBody.getPosition().x - 16f, b1.enemyBody.getPosition().y - 8f);
 				if (b1.stateTime < 1 && b1.active) {
 
-					b1.getStateMachine().changeState(BossMinotaurState.GO_TO_PLAYER);
-
-					int random = Random.randomInt(50,1);
-
-					if (random == 50) {
-						b1.getStateMachine().changeState(BossMinotaurState.STOP);
-						b1.getStateMachine().changeState(BossMinotaurState.FACE_PLAYER);
-						b1.getStateMachine().changeState(BossMinotaurState.CHARGE_ATTACK);
-						Timer.schedule(new Timer.Task() {
-							@Override
-							public void run() {
-								b1.getStateMachine().changeState(BossMinotaurState.GO_TO_PLAYER);
-							}
-						}, 2f);
-
-					}
-
 					//get the minotaur's percentage of their total speed
 					float tempX = b1.enemyAI.getLinearVelocity().x;
 					tempX = tempX / b1.defaultSpeed * 100;
 					tempX = Math.abs(tempX);
-					//System.out.println(tempX);
-					//System.out.println((tempX /100) * 2);
 
 					float tempY = b1.enemyAI.getLinearVelocity().y;
 					tempY = tempY / b1.defaultSpeed * 100;
 					tempY = Math.abs(tempY);
 
 					if (b1.facing == "Left" || b1.facing == "Right") {
-						b1.stateTime += Gdx.graphics.getDeltaTime() * ((tempX / 150));
+						b1.stateTime += Gdx.graphics.getDeltaTime() * ((tempX / 175));
 					} else {
-						b1.stateTime += Gdx.graphics.getDeltaTime() * ((tempY / 150));
+						b1.stateTime += Gdx.graphics.getDeltaTime() * ((tempY / 175));
+					}
+
+					if (b1.stunned) {
+
+						currentFrame = tx.stunAnimation.getKeyFrame(stateTime4, true);
+
+						Enemy.renderStatusEffect(bossMinotaurBatch, currentFrame, b1.enemyBody.getPosition().x - 7.5f, b1.enemyBody.getPosition().y + 45);
+
+						stateTime4 += Gdx.graphics.getDeltaTime();
+
+					} else {
+						stateTime4 = 0;
 					}
 
 				} else {
 					b1.stateTime = 0;
 				}
 
+				if (b1.active && !b1.charging) {
+					if (!(b1.chargeTime > b1.chargeThreshold)) {
+						b1.chargeTime += Gdx.graphics.getDeltaTime();
+
+					} else {
+						b1.getStateMachine().changeState(BossMinotaurState.CHARGE_ATTACK);
+						b1.chargeTime = 0;
+					}
+				}
+
+
 				bossMinotaurBatch.end();
+
 			} else {
 				bossMinotaurBatch.begin();
 				BossMinotaur.renderMinotaur(bossMinotaurBatch, tx.minotaurTextureRegion, b1.enemyBody.getPosition().x - 8f, b1.enemyBody.getPosition().y - 6f);
@@ -2292,11 +2313,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//set camera zoom
 		if (!GenerateLevel.init.roomList.get(player.currentRoom).isShop && !debug) {
-			camera.zoom = 0.80f;
+			//0.80f
+			camera.zoom = 0.5f;
 		}
 		else if (!debug){
 			//camera.zoom = 0.8f;
-			camera.zoom = 0.9f;
+			//0.9
+			camera.zoom = 0.7f;
 		} else {
 
 		}

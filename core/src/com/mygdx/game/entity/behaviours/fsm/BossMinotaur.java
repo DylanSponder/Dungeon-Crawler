@@ -5,6 +5,7 @@ import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.badlogic.gdx.ai.steer.behaviors.Arrive;
 import com.badlogic.gdx.ai.steer.behaviors.Face;
+import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.utils.BossMinotaurBox2DSteeringEntity;
+import com.mygdx.game.entity.utils.ChargeBox2DSteeringEntity;
 import com.mygdx.game.level.objects.Text;
 
 import static com.mygdx.game.DungeonCrawler.camera;
@@ -29,9 +31,11 @@ public class BossMinotaur extends Enemy {
     public int enemyID;
     public BossMinotaurBox2DSteeringEntity enemyAI;
     public String facing;
-    public boolean active, enraged;
-    public float stateTime, enrageTime;
-    public int enragedSpeed;
+    public boolean active, enraged, charging, locked;
+    public float stateTime, enrageTime, chargeTime;
+    public int enragedSpeed, chargingSpeed, MAX_HEALTH, chargeThreshold;
+    public Body chargeBody;
+    public ChargeBox2DSteeringEntity chargeEntity;
 
     public BossMinotaur(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
@@ -50,11 +54,19 @@ public class BossMinotaur extends Enemy {
 
         Viewport vp = new ExtendViewport(camera.viewportWidth, camera.viewportHeight);
 
-        this.ENEMY_HEALTH = 20;
+        this.ENEMY_HEALTH = 40;
+
+        this.MAX_HEALTH = this.ENEMY_HEALTH;
 
         this.playerInRange = false;
 
-        this.enragedSpeed = 35;
+        this.defaultSpeed = 24;
+
+        this.enragedSpeed = 30;
+
+        this.chargingSpeed = 65;
+
+        this.chargeThreshold = 6;
 
         this.enrageTime = 2.2f;
 
@@ -90,6 +102,59 @@ public class BossMinotaur extends Enemy {
         return arriveSB;
     }
 
+    public Arrive<Vector2> chargeAtWall(World world) {
+        BodyFactory bodyFactory = new BodyFactory();
+
+        if (this.ENEMY_HEALTH < this.MAX_HEALTH / 2 ) {
+            this.enemyAI.setMaxLinearSpeed(this.chargingSpeed + 30);
+        } else {
+            this.enemyAI.setMaxLinearSpeed(this.chargingSpeed);
+        }
+
+
+        if (this.facing == "Up") {
+            chargeBody = bodyFactory.createSimpleStaticBody(world,enemyBody.getPosition().x,enemyBody.getPosition().y + 10000);
+
+            this.chargeEntity = new ChargeBox2DSteeringEntity(chargeBody, 1);
+
+            arriveSB = new Arrive<Vector2>(enemyAI,chargeEntity)
+                    .setTimeToTarget(0.03f)
+                    .setArrivalTolerance(16f)
+                    .setDecelerationRadius(8f);
+        }
+        if (this.facing == "Down") {
+            chargeBody = bodyFactory.createSimpleStaticBody(world,enemyBody.getPosition().x,enemyBody.getPosition().y - 10000);
+
+            this.chargeEntity = new ChargeBox2DSteeringEntity(chargeBody, 1);
+
+            arriveSB = new Arrive<Vector2>(enemyAI,chargeEntity)
+                    .setTimeToTarget(0.03f)
+                    .setArrivalTolerance(16f)
+                    .setDecelerationRadius(8f);
+        }
+        if (this.facing == "Left") {
+            chargeBody = bodyFactory.createSimpleStaticBody(world,enemyBody.getPosition().x - 10000,enemyBody.getPosition().y);
+
+            this.chargeEntity = new ChargeBox2DSteeringEntity(chargeBody, 1);
+
+            arriveSB = new Arrive<Vector2>(enemyAI,chargeEntity)
+                    .setTimeToTarget(0.03f)
+                    .setArrivalTolerance(16f)
+                    .setDecelerationRadius(8f);
+        }
+        if (this.facing == "Right") {
+            chargeBody = bodyFactory.createSimpleStaticBody(world,enemyBody.getPosition().x + 10000,enemyBody.getPosition().y);
+
+            this.chargeEntity = new ChargeBox2DSteeringEntity(chargeBody, 1);
+
+            arriveSB = new Arrive<Vector2>(enemyAI,chargeEntity)
+                    .setTimeToTarget(0.03f)
+                    .setArrivalTolerance(16f)
+                    .setDecelerationRadius(8f);
+        }
+        return arriveSB;
+    }
+
     public Face<Vector2> facePlayer() {
         faceSB = new Face<Vector2>(enemyAI, DungeonCrawler.player.playerB2D)
                 .setTimeToTarget(0.03f);
@@ -98,18 +163,30 @@ public class BossMinotaur extends Enemy {
 
     public void update (float delta) {
 
-            if (this.enemyAI.getLinearVelocity().y > 0 && (this.enemyAI.getLinearVelocity().y > this.enemyAI.getLinearVelocity().x)) {
-                this.facing = "Up";
+
+        float x = this.enemyAI.getLinearVelocity().x;
+        float y = this.enemyAI.getLinearVelocity().y;
+
+        float xA = Math.abs(x);
+        float yA = Math.abs(y);
+
+        if (!this.locked) {
+            if (xA > yA) {
+                if (x < 0) {
+                    this.facing = "Left";
+                } else {
+                    this.facing = "Right";
+                }
+            } else {
+                if (y < 0) {
+                    this.facing = "Down";
+                } else {
+                    this.facing = "Up";
+                }
             }
-            if (this.enemyAI.getLinearVelocity().x < 0 && (this.enemyAI.getLinearVelocity().x < this.enemyAI.getLinearVelocity().y)) {
-                this.facing = "Left";
-            }
-            if (this.enemyAI.getLinearVelocity().y < 0 && (this.enemyAI.getLinearVelocity().y < this.enemyAI.getLinearVelocity().x)) {
-                this.facing = "Down";
-            }
-            if (this.enemyAI.getLinearVelocity().x > 0 && (this.enemyAI.getLinearVelocity().x > this.enemyAI.getLinearVelocity().y)) {
-                this.facing = "Right";
-            }
+        }
+
+
 
         stateMachine.update();
     }

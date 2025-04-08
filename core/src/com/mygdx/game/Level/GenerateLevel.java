@@ -131,12 +131,19 @@ public class GenerateLevel {
                     possibleRoomNumbers.remove(IDchosen);
 
                     while (random == 5) {
-                        //shop spawns are pre-determined so should not appear randomly
+                        //shop spawns are pre-determined so are reassigned before being generated randomly
                         random = Random.randomInt(12, 1);
                     }
                     //assign the room its random index
-                    newRoom.roomNum = random;
-                    newRoom.roomNum = 13;
+                    int temp = numRooms + 1;
+                    if (roomsIndex == numRooms - 1) {
+                        newRoom.roomNum = 13;
+                    } else {
+                        newRoom.roomNum = random;
+                    }
+
+
+                    //newRoom.roomNum = 13;
                 }
 
                 //determines which pre-gen room is placed next in sequence
@@ -1521,7 +1528,17 @@ for (int i = 0; i < layerSize; i++) {
             torches.add(torL);
             lights.add(torL);
             ConeLight torchLightL = torL.createTorch(4);
-            fL.createFire(new Color(0.25f,0.20f,0,0.7f),60, torchLightL);
+            Color colorFL = new Color(0.25f,0.20f,0,0.7f);
+            Color colorBL = new Color(0f,0,1f,0.7f);
+
+            if (roomNum == 13) {
+                fL.blue = true;
+                fL.createFire(colorBL,60,torchLightL);
+                init.roomList.get(roomIndex).fires.add(fL);
+            } else {
+                fL.blue = false;
+                fL.createFire(colorFL,60,torchLightL);
+            }
             break;
         case "torloff":
             currentCell = init.cr.torchWallLeftTile;
@@ -1548,7 +1565,18 @@ for (int i = 0; i < layerSize; i++) {
             torches.add(torR);
             lights.add(torR);
             ConeLight torchLightR = torR.createTorch(2);
-            fR.createFire(new Color(0.25f,0.20f,0,0.7f),60, torchLightR);
+
+            Color colorFR = new Color(0.25f,0.20f,0,0.7f);
+            Color colorBR = new Color(0f,0,1f,0.7f);
+
+            if (roomNum == 13) {
+                fR.blue = true;
+                fR.createFire(colorBR,60,torchLightR);
+                init.roomList.get(roomIndex).fires.add(fR);
+            } else {
+                fR.blue = false;
+                fR.createFire(colorFR,60,torchLightR);
+            }
             break;
         case "torroff":
             currentCell = init.cr.torchWallRightTile;
@@ -1575,7 +1603,17 @@ for (int i = 0; i < layerSize; i++) {
             torches.add(torU);
             lights.add(torU);
             ConeLight torchLightU = torU.createTorch(1);
-            fU.createFire(new Color(0.25f,0.20f,0,0.7f),60,torchLightU);
+            Color colorFU = new Color(0.25f,0.20f,0,0.7f);
+            Color colorBU = new Color(0f,0,1f,0.7f);
+
+            if (roomNum == 13) {
+                fU.blue = true;
+                fU.createFire(colorBU,60,torchLightU);
+                init.roomList.get(roomIndex).fires.add(fU);
+            } else {
+                fU.blue = false;
+                fU.createFire(colorFU,60,torchLightU);
+            }
             break;
         case "toruoff":
             currentCell = init.cr.torchWallUpTile;
@@ -1602,7 +1640,17 @@ for (int i = 0; i < layerSize; i++) {
             torches.add(torD);
             lights.add(torD);
             ConeLight torchLightD = torD.createTorch(3);
-            fD.createFire(new Color(0.25f,0.20f,0,0.7f),60, torchLightD);
+            Color colorFD = new Color(0.25f,0.20f,0,0.7f);
+            Color colorBD = new Color(0f,0,1f,0.7f);
+
+            if (roomNum == 13) {
+                fD.blue = true;
+                fD.createFire(colorBD,60,torchLightD);
+                init.roomList.get(roomIndex).fires.add(fD);
+            } else {
+                fD.blue = false;
+                fD.createFire(colorFD,60,torchLightD);
+            }
             break;
         case "tordoff":
             currentCell = init.cr.torchWallDownTile;
@@ -1683,7 +1731,7 @@ for (int i = 0; i < layerSize; i++) {
             BossMinotaur boss1 = new BossMinotaur(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
             init.roomList.get(roomIndex).enemyCounter++;
             init.roomList.get(roomIndex).bossMinotaurs.add(boss1);
-            boss1.createEnemy(5, 20);
+            boss1.createEnemy(5, boss1.defaultSpeed);
             enemies.add(boss1);
             boss1.room = roomIndex;
             DungeonCrawler.bossMinotaurs.add(boss1);
@@ -2175,7 +2223,7 @@ for (int i = 0; i < layerSize; i++) {
             Column ped1fireb = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
             ped1fireb.createPedestal();
             Fire fireped1b = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, true, 0f, 2, false, 0);
-            Color colorb = new Color(0.3f,0,1f,0.7f);
+            Color colorb = new Color(0f,0,1f,0.7f);
             fireped1b.createFire(colorb, 10, null);
             fires.add(fireped1b);
             lights.add(fireped1b);
