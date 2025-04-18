@@ -36,9 +36,9 @@ public class EnemyGhost extends Enemy {
         BodyFactory bodyFactory = new BodyFactory();
         this.shapeRenderer = new ShapeRenderer();
 
-        this.alertMessage = new Text(DungeonCrawler.defaultFont,"!", Color.RED,true,1f,0.0045f,false, false, null, 0);
+        this.alertMessage = new Text(DungeonCrawler.defaultFont3,"!", Color.RED,true,1f,0.0045f,false, false, null, 0);
 
-        this.lostSightMessage = new Text(DungeonCrawler.defaultFont,"?", Color.YELLOW,true,1f,0.0045f,false, false, null, 0);
+        this.lostSightMessage = new Text(DungeonCrawler.defaultFont4,"?", Color.YELLOW,true,1f,0.0045f,false, false, null, 0);
 
         this.rayCastable = false;
 

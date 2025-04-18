@@ -1749,7 +1749,7 @@ for (int i = 0; i < layerSize; i++) {
             randomSpeechYOffset = (int) (Math.random() * (speechMaxY - speechMinY + 1)) + speechMinY;
             shopMessage.textX = ((roomX + i) * 16) + 16 * 16 - 16 + randomSpeechXOffset;
             shopMessage.textY = levelY * 16 + Gdx.graphics.getHeight() / 30 - 1 + randomSpeechYOffset;
-            messages.add(shopMessage);
+            susMessages.add(shopMessage);
             Shopkeeper shopkeeper = new Shopkeeper(DungeonCrawler.world, ((roomX + i) * 16) + 16.5f * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 4, shopMessage);
 
             invMin = 2;
@@ -1829,6 +1829,13 @@ for (int i = 0; i < layerSize; i++) {
         shopkeeper.messages.add(shopMessage);
         DungeonCrawler.shopkeepers.add(shopkeeper);
         break;
+
+
+
+
+
+
+
         case "twColTop1":
         case "toruColTop1":
             currentCell = init.cr.topWallTile;
@@ -2201,7 +2208,7 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.middleFloorTile;
             Column ped1fire = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
             ped1fire.createPedestal();
-            Fire fireped1 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, true, 0f, 1, false, 0);
+            Fire fireped1 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6 + 2, true, 0f, 1, false, 0);
             fireped1.createFire(new Color(0.25f,0.20f,0,0.75f), 60, null);
             fires.add(fireped1);
             lights.add(fireped1);
@@ -2210,7 +2217,7 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.middleFloorTile;
             Column ped1fireoff = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
             ped1fireoff.createPedestal();
-            Fire fireped1off = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, true, 0f, 1, false, 0);
+            Fire fireped1off = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6 + 2, true, 0f, 1, false, 0);
             fireped1off.createFire(new Color(0.25f,0.20f,0,0.75f), 60, null);
             fires.add(fireped1off);
             lights.add(fireped1off);
@@ -2231,11 +2238,11 @@ for (int i = 0; i < layerSize; i++) {
             break;
         default: {
             if (levelTextures.get(i).matches("roof.+")) {
+
                 String roofStr = levelTextures.get(i);
                 StringBuffer sb = new StringBuffer(roofStr);
-                sb.delete(0, 5);
+                sb.delete(0, 4);
                 String strRoof = sb.toString();
-
                 String roofType = String.valueOf(strRoof.charAt(0));
 
                 StringBuffer sb2 = new StringBuffer(strRoof);
@@ -2312,12 +2319,20 @@ for (int i = 0; i < layerSize; i++) {
 
                 String roofType = String.valueOf(strRoof.charAt(0));
 
+                float temp1 = ((roomX + i) * 16 + 16 * 16);
+                String temp = String.valueOf(temp1);
+
+               // if (roofType.matches("x")) {
+               //     temp = temp + String.valueOf(strRoof.charAt(1));
+                   // float xtofloat =
+               // }
+
                 StringBuffer sb2 = new StringBuffer(strRoof);
                 sb2.delete(0, 1);
                 String strRoofExt = sb2.toString();
 
                 currentCell = init.cr.topWallTile;
-                Body newTopWallRoof = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+                Body newTopWallRoof = init.bf.createWall(world, ((roomX + i) * 16 + 16 * 16), levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                 newTopWallRoof.setUserData("Wall");
                 Roof roof = new Roof(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,false,false, Integer.parseInt(roofType), Integer.parseInt(strRoofExt));
                 roofs.add(roof);
@@ -2395,11 +2410,11 @@ for (int i = 0; i < layerSize; i++) {
         double doorUpperLeftXAsDouble = Float.parseFloat(doorUpperLeftX) * 1.65;
         String test = String.valueOf(doorUpperLeftXAsDouble);
         float doorUpperLeftXAsFloat = Float.parseFloat(test);
-        PLAYER_X = (doorUpperLeftXAsFloat * 10) + 16;
+        PLAYER_X = (doorUpperLeftXAsFloat * 10) + 20;
 
         String doorUpperLeftY = doorUpperLeftXY[1].toString();
         float doorUpperLeftYAsFloat = Float.parseFloat(doorUpperLeftY);
-        PLAYER_Y = doorUpperLeftYAsFloat * 16 - (1 * 16);
+        PLAYER_Y = doorUpperLeftYAsFloat * 16 - (3 * 20);
 
         startingRoom = false;
         }

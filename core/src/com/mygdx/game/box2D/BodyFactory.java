@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entity.behaviours.fsm.projectiles.Eyebeam;
 
+import static com.mygdx.game.DungeonCrawler.arrowBody;
 import static com.mygdx.game.DungeonCrawler.chiselHitbox;
 
 public class BodyFactory {
@@ -240,11 +241,11 @@ public class BodyFactory {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(x + 8, y + 8.02f);
+        bodyDef.position.set(x + 8, y + 6.50f);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(8, 7.95f);
+        shape.setAsBox(8, 6.5f);
         body.createFixture(shape, 1.0f);
         shape.dispose();
         return body;
@@ -457,14 +458,28 @@ public class BodyFactory {
 
     public Fixture createSwordHitbox(Body sword, boolean r){
         PolygonShape swordShape = new PolygonShape();
+        PolygonShape tipShape = new PolygonShape();
+        PolygonShape bladeShape = new PolygonShape();
         if (r){
             swordShape.setAsBox(5.5f, 2.5f);
+
         }
         else {
             swordShape.setAsBox(2.5f, 5.5f);
         }
-        Fixture swordHitbox = sword.createFixture(swordShape, 0.8f);
-        swordShape.dispose();
+
+        bladeShape.set(new float[]{-2.5f,-5,-2.5f,5,0,7,2.5f,5,2.5f,-5,-2.5f,-5});
+
+        //PolygonShape minoBottomSlope = new PolygonShape();
+       // tipShape.set(new float[]{-9,-6,0,-9,9,-6,-9,-6});
+        //tipShape.set(new float[]{-9,-6,0,-9,9,-6,-9,-6});
+        //Fixture tipB = sword.createFixture(tipShape,1f);
+        //Fixture minoB = body.createFixture(minoBottomSlope, 1.0f);
+        //minoB.setUserData("BossMinotaur");
+
+        Fixture swordHitbox = sword.createFixture(bladeShape, 0.8f);
+
+        bladeShape.dispose();
         swordHitbox.setSensor(true);
         swordHitbox.setUserData("Sword");
         return swordHitbox;

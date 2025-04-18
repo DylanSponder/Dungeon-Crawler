@@ -1247,7 +1247,7 @@ public class GameContactListener implements ContactListener {
                     } else if (collidee.getUserData() == "ShopSell") {
                         for (Shopkeeper shop : shopkeepers) {
                             if (collidee.getBody() == shop.shopBody) {
-                                //shop.message = shop.messages.get(1);
+                                //shop.message = shop.susMessages.get(1);
                                 //shop.message.showing = true;
                                // soundController.playSound("Shop",11,11,0.1f);
                                 shop.ListStock();

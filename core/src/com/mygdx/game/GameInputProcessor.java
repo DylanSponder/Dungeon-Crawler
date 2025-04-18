@@ -281,7 +281,7 @@ public class GameInputProcessor implements InputProcessor {
 
             menuClosed = false;
 
-            Gdx.graphics.setWindowedMode(1800, 1000);
+           // Gdx.graphics.setWindowedMode(1800, 1000);
         }
 
 

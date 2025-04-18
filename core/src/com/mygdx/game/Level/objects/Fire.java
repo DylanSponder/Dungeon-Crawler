@@ -78,6 +78,10 @@ public class Fire extends Light{
                 fireBody = bodyFactory.createTorchBody(world, fireX, fireY, direction);
                 fireBody.setUserData("Fire");
             }
+            else if (this.type == 4){
+                fireBody = bodyFactory.createFireBody(world, fireX, fireY+2);
+                fireBody.setUserData("Fire");
+            }
         }
         //ConeLight fireLight2 = new ConeLight(rayHandler, 400, new Color(0.25f,0.20f,0,0.85f),70,fireX+8,fireY+16,270,70);
     }

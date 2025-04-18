@@ -1,10 +1,10 @@
-tlw,tw,tw,tw,toru,dtl,doortl,doortr,dtr,toru,tw,tw,tw,trw
+tlw,tw,tw,tw21,toru,dtl,doortl,doortr,dtr,toru,tw,tw,tw,trw
 lw,fcol11,fped1fire,f,fcol10,fcoldo,f,f,fcoldo,fcol10,f,fped1fire,fcol11,rw
 torl,fcol4,f,f,fcol4,f,f,f,f,fcol4,f,f,fcol4,torr
-dlu,fcolf,f,f,fcolf,dftl,dfu,dfu,dftr,fcolf,f,f,fcolf,dru
-doorul,f,f,f,f,dfl,f,f,dfr,f,f,f,f,doorur
-doorll,f,f,f,f,dfl,f,f,dfr,f,f,f,f,doorlr
+dlu,fcolf,f,f,fcolf,dftl,dfu,dfu,dftr,fcolf,fcoltu1,f,fcolf,dru
+doorul,f,f,fped1,f,dfl,f2,f2,dfr,f,f,f,f,doorur
+doorll,f,f,f,f,dfl,f2,f2,dfr,f,f,f,f,doorlr
 dll,fcol11,f,f,fcol10,dfbl,dfd,dfd,dfbr,fcol10,f,f,fcol11,drl
-lwtr2,fcol4,f,f,fcol4,f,f,f,f,fcol4,f,f,fcol4,torroff
-lw,fcolf,fped1fireoff,f,fcolf,fped1fireoff,f,f,fped1fireoff,fcolf,f,fped1fire,fcolf,rw
+torl,fcol4,f,f,fcol4,f,f,f,f,fcol4,f,f,fcol4,torr
+lw,fcolf,fped1fire,f,fcolf,f,f,f,f,fcolf,f,fped1fire,fcolf,rw
 blw,bw,bw,tord,bw,dbl,doorbl,doorbr,dbr,bw,tord,bw,bw,brw

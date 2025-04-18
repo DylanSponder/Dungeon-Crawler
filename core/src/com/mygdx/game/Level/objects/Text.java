@@ -23,11 +23,14 @@ public class Text {
         this.fadeTiming = fadeTiming;
         this.fadeOutSpeed = fadeOutSpeed;
         this.showing = showing;
+
         if (hasSprite) {
             this.hasSprite = hasSprite;
             this.sprite = sprite;
             this.offset = spriteOffset;
         }
+
+
     }
 
     public void createText(SpriteBatch fontBatch) {

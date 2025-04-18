@@ -40,19 +40,24 @@ public class FontController {
 
             font2.setColor(text.color);
 
-            font2.draw(fontBatch, text.message, x, y);
+
             if (text.hasSprite){
           //      fontBatch.draw(text.sprite,text.textX-16,text.textY);
             }
-            if (text.fade) {
+         //   if (text.fade) {
+
                     if (text.fadeTiming >= 0 ){
-                        font2.setColor(1,1,1, text.fadeTiming);
+                        System.out.println(text.fadeTiming);
+                        font2.setColor(text.color);
+                        text.color.a = text.fadeTiming;
+                        //font2.setColor(1,1,1, text.fadeTiming);
                         text.fadeTiming = text.fadeTiming - 0.0045f;
                 } else {
                         text.fadeTiming = text.fadeTime;
                         text.showing = false;
                     }
-            }
+           // }
+        font2.draw(fontBatch, text.message, x, y);
 
     }
 

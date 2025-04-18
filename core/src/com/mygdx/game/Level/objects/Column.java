@@ -125,7 +125,7 @@ public class Column {
 
         DungeonCrawler.columns.add(this);
 
-        this.columnBody = bodyFactory.createPedestal(world, columnX, columnY);
+        this.columnBody = bodyFactory.createPedestal(world, columnX, columnY+2);
 
         //ColumnTop col1 = new ColumnTop(world, columnX, columnY, type, solid);
 

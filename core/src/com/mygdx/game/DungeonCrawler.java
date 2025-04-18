@@ -46,18 +46,19 @@ import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.InitLevel;
 
 import static com.mygdx.game.HUD.compassArrowImage;
+import static com.mygdx.game.PauseMenu.menuContainer;
 
 public class DungeonCrawler extends ApplicationAdapter {
-	private SpriteBatch arrowBatch, enemySkullBatch, enemySpiderBatch, enemyGhostBatch, enemyEyeBatch, potBatch, hudBatch, tutoBatch, fontBatch, inventoryBatch;
+	private SpriteBatch arrowBatch, enemySkullBatch, enemySpiderBatch, enemyGhostBatch, enemyEyeBatch, potBatch, hudBatch, tutoBatch, alertFontBatch, inventoryBatch, sightFontBatch;
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, coinBatch, obstacleBatch, fireBatch, flameBatch, webBatch, cobBatch, candleBatch, eyebeamBatch;
 	private SpriteBatch bossMinotaurBatch;
-	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch, roofBatch, columnBaseLowerBatch, heartBatch;
-	public static SpriteBatch trapBatch,playerBatch;
+	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch, roofBatch, columnBaseLowerBatch, heartBatch, pedestalUpperBatch;
+	public static SpriteBatch trapBatch, playerBatch, weaponBatch;
 	public static World world;
-	public Viewport vp;
+	public static Viewport vp;
+	public static Skin skin;
+	public PauseMenu pauseMenu;
 	public static Stage menuStage;
-	public static Table menuContainer;
-	public static VerticalGroup menuGroup;
 	public ShapeRenderer menuRenderer;
 	public static boolean debug, menuClosed, allowPlayerInput;
 	public GameInputProcessor gip;
@@ -124,11 +125,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static SoundController soundController;
 	public static RayHandler rayHandler;
 	public static LightController lightController;
-	public static BitmapFont defaultFont, defaultFont2;
-	public static ArrayList<Text> messages;
+	public static BitmapFont defaultFont, defaultFont2, defaultFont3, defaultFont4;
+	public static ArrayList<Text> susMessages, alertMessages;
 	public AssetManager assetManager;
 	public static float stateTime, stateTime2, stateTime3, stateTime4;
 	public TextureRegion currentFrame;
+
 
 	public static boolean leanDown = false, leanUp = false, leanLeft = false, leanRight = false, leanUpLeft = false, leanUpRight = false;
 	public static boolean moveUp = false, moveDown = false, moveLeft = false, moveRight = false;
@@ -147,6 +149,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		lightController = new LightController();
 		menuRenderer = new ShapeRenderer();
 		playerBatch = new SpriteBatch();
+		weaponBatch = new SpriteBatch();
 		hudBatch = new SpriteBatch();
 		tutoBatch = new SpriteBatch();
 		enemySkullBatch = new SpriteBatch();
@@ -175,7 +178,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		pedestalBatch = new SpriteBatch();
 		fireBatch = new SpriteBatch();
 		flameBatch = new SpriteBatch();
-		fontBatch = new SpriteBatch();
+		alertFontBatch = new SpriteBatch();
+		sightFontBatch = new SpriteBatch();
 		roofBatch = new SpriteBatch();
 		roofs = new ArrayList<>();
 		inventoryBatch = new SpriteBatch();
@@ -223,7 +227,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		collectedHearts = new ArrayList<Heart>();
 		obstacles = new ArrayList<Obstacle>();
 		candles = new ArrayList<Candle>();
-		messages = new ArrayList<Text>();
+		susMessages = new ArrayList<Text>();
+		alertMessages = new ArrayList<Text>();
 
 		//set player speed multiplier
 		Vector2 vec = new Vector2();
@@ -246,6 +251,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 		defaultFont2 = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.fnt"),
 				Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.png"), false);
 
+		defaultFont3 = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.fnt"),
+				Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.png"), false);
+
+		defaultFont4 = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.fnt"),
+				Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.png"), false);
+
 		//get width and height of the game window
 		int h = Gdx.graphics.getHeight();
 		int w = Gdx.graphics.getWidth();
@@ -255,6 +266,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 		camera.setToOrtho(false, w / 3, h / 3);
 
 		vp = new ExtendViewport(camera.viewportWidth, camera.viewportHeight);
+
+		//create a menu stage which uses the same viewport as the camera
+		menuStage = new Stage(DungeonCrawler.vp);
 
 		//initialize map
 		TiledMap map = new TiledMap();
@@ -277,62 +291,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 			rayHandler.setAmbientLight(0f, 0f, 0f, 1f);
 		}
 
-		//create a menu stage which uses the same viewport as the camera
-		menuStage = new Stage(vp);
-
 		//menu code
-		Skin skin = new Skin();
+		skin = new Skin();
 		skin.add("default-font",defaultFont, BitmapFont.class);
 		FileHandle fileHandle = Gdx.files.internal("HellasDungeon/HUD");
 		FileHandle atlasFile = fileHandle.sibling("HUD/uiskin.atlas");
 		skin.addRegions(new TextureAtlas(atlasFile));
 		skin.load(Gdx.files.internal("HellasDungeon/HUD/uiskin.json"));
 
-		// https://libgdx.com/wiki/graphics/2d/scene2d/skin
-		//uiskin.atlas, uiskin.json, uiskin.png, default.png and default.fnt all required
-
-		menuContainer = new Table();
-		menuGroup = new VerticalGroup();
-		menuContainer.setFillParent(true);
-
-		TextButton playButton = new TextButton("RESUME", skin, "default");
-		playButton.addListener(new ClickListener() {
-			@Override
-			public void clicked (InputEvent event, float x, float y) {
-				menuClosed = true;
-				// Called when player clicks on Play button
-			}
-		});
-		playButton.getLabelCell().align(Align.right);
-		playButton.padLeft(6.5f);
-
-		TextButton settingsButton = new TextButton("OPTIONS", skin, "default");
-		settingsButton.addListener(new ClickListener() {
-			@Override
-			public void clicked (InputEvent event, float x, float y) {
-				menuClosed = true;
-				// Called when player clicks on Options button
-			}
-		});
-		settingsButton.padLeft(6.5f);
-
-		TextButton exitButton = new TextButton("QUIT", skin);
-		exitButton.addListener(new ClickListener() {
-			@Override
-			public void clicked (InputEvent event, float x, float y) {
-				Gdx.app.exit();
-				// Called when player clicks on Exit button
-			}
-		});
-		exitButton.padLeft(6.5f);
-
-		//add all menu buttons to the menu group
-		menuGroup.addActor(playButton);
-		menuGroup.addActor(settingsButton);
-		menuGroup.addActor(exitButton);
-
-		menuContainer.add(menuGroup);
-		menuStage.addActor(menuContainer);
 		menuClosed = true;
 
 		//initialize HUD and hide the compass
@@ -381,6 +347,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//create an input processor to handle single input events - see inputUpdate() for held down inputs
 		gip = new GameInputProcessor();
 
+		pauseMenu = new PauseMenu();
+
 		//allow button presses on the menu
 		Gdx.input.setInputProcessor(menuStage);
 		//enable the collision listener to listen to world collision events
@@ -389,7 +357,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		if (!debug) {
 			//set the window mode to fullscreen and hide the cursor when in the game window
 			//Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-			Gdx.graphics.setWindowedMode(Gdx.graphics.getWidth()*2,Gdx.graphics.getHeight()*2);
+			//Gdx.graphics.setWindowedMode(Gdx.graphics.getWidth()*2,Gdx.graphics.getHeight()*2);
+			Gdx.graphics.setWindowedMode(600,900);
 			Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);
 		}
 	}
@@ -919,16 +888,16 @@ public class DungeonCrawler extends ApplicationAdapter {
 			pedestalBatch.begin();
 			switch (c.type) {
 				case 14:
-					pedestalBatch.draw(tx.pedestal1,c.columnX,c.columnY);
+					pedestalBatch.draw(tx.pedestal1,c.columnX,c.columnY+2);
 					break;
 				case 15:
-					pedestalBatch.draw(tx.pedestal2,c.columnX,c.columnY);
+					pedestalBatch.draw(tx.pedestal2,c.columnX,c.columnY+2);
 					break;
 				case 16:
-					pedestalBatch.draw(tx.pedestal3,c.columnX,c.columnY);
+					pedestalBatch.draw(tx.pedestal3,c.columnX,c.columnY+2);
 					break;
 				case 17:
-					pedestalBatch.draw(tx.pedestal4,c.columnX,c.columnY);
+					pedestalBatch.draw(tx.pedestal4,c.columnX,c.columnY+2);
 					break;
 			}
 			pedestalBatch.end();
@@ -944,6 +913,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 			columnBaseLowerBatch.end();
 		}
+
 
 
 			playerBatch.begin();
@@ -963,45 +933,100 @@ public class DungeonCrawler extends ApplicationAdapter {
 			Player.renderPlayer(playerBatch, tx.playerTextureRegion, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 6f);
 
 
-			if (playerMeleeAttacking) {
-				//add the sword sprite to the corresponding attack playerDirection
-				if (tx.playerTextureRegion.equals(tx.playerAttackUp)) {
-					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 13f, player.playerBody.getPosition().y - 4f, 7, 14, 7, 14, 1, 1, 180);
-				} else if (tx.playerTextureRegion.equals(tx.playerAttackDown)) {
-					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 6f, player.playerBody.getPosition().y - 20f, 7, 14, 7, 14, 1, 1, 0);
-				} else if (tx.playerTextureRegion.equals(tx.playerAttackLeft)) {
-					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 15f, player.playerBody.getPosition().y - 19f, 7, 14, 7, 14, 1, 1, 270);
-				} else if (tx.playerTextureRegion.equals(tx.playerAttackRight)) {
-					playerBatch.draw(tx.swordSprite, player.playerBody.getPosition().x + 1f, player.playerBody.getPosition().y - 12f, 7, 14, 7, 14, 1, 1, 90);
-				}
-			}
 
-			if (playerRangedAttacking) {
-				//add the bowSprite and arrowSprite to the corresponding attack playerDirection
-				if (tx.playerTextureRegion.equals(tx.playerAttackUp)) {
-					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 2f, 8, 10, 18, 8, 1, 1, 180);
-				} else if (tx.playerTextureRegion.equals(tx.playerAttackDown)) {
-					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 10f, player.playerBody.getPosition().y - 14f, 7, 12, 18, 8, 1, 1, 0);
-				} else if (tx.playerTextureRegion.equals(tx.playerAttackLeft)) {
-					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 11f, player.playerBody.getPosition().y - 9f, 7, 12, 18, 8, 1, 1, 270);
-				} else if (tx.playerTextureRegion.equals(tx.playerAttackRight)) {
-					playerBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 3f, player.playerBody.getPosition().y - 13f, 7, 12, 18, 8, 1, 1, 90);
-				}
-			}
-
-			if (playerUsingChisel) {
-				//add the chisel sprite to the corresponding attack playerDirection
-				if (tx.playerTextureRegion.equals(tx.playerAttackUp)) {
-					playerBatch.draw(tx.chiselSprite, player.playerBody.getPosition().x - 13f, player.playerBody.getPosition().y - 4f, 7, 14, 7, 14, 1, 1, 180);
-				} else if (tx.playerTextureRegion.equals(tx.playerAttackDown)) {
-					playerBatch.draw(tx.chiselSprite, player.playerBody.getPosition().x - 6f, player.playerBody.getPosition().y - 20f, 7, 14, 7, 14, 1, 1, 0);
-				} else if (tx.playerTextureRegion.equals(tx.playerAttackLeft)) {
-					playerBatch.draw(tx.chiselSprite, player.playerBody.getPosition().x - 15f, player.playerBody.getPosition().y - 19f, 7, 14, 7, 14, 1, 1, 270);
-				} else if (tx.playerTextureRegion.equals(tx.playerAttackRight)) {
-					playerBatch.draw(tx.chiselSprite, player.playerBody.getPosition().x + 1f, player.playerBody.getPosition().y - 12f, 7, 14, 7, 14, 1, 1, 90);
-				}
-			}
 			playerBatch.end();
+
+
+		for (Column c : columns) {
+			pedestalBatch.begin();
+			switch (c.type) {
+				case 14:
+					pedestalBatch.draw(tx.pedestal1upper,c.columnX,c.columnY+14);
+					break;
+				case 15:
+					pedestalBatch.draw(tx.pedestal2,c.columnX,c.columnY+2);
+					break;
+				case 16:
+					pedestalBatch.draw(tx.pedestal3,c.columnX,c.columnY+2);
+					break;
+				case 17:
+					pedestalBatch.draw(tx.pedestal4,c.columnX,c.columnY+2);
+					break;
+			}
+			pedestalBatch.end();
+		}
+
+		for (Fire f : fires) {
+			if (f.smoking && f.type == 1) {
+				f.light.setColor(f.light.getColor().r, f.light.getColor().g, f.light.getColor().b, 0.65f);
+				TextureRegion currentFrame = tx.smokeAnimation.getKeyFrame(f.stateTime, false);
+				fireBatch.begin();
+
+				Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, false);
+				fireBatch.end();
+				f.stateTime += Gdx.graphics.getDeltaTime();
+
+				if (tx.smokeAnimation.isAnimationFinished(f.stateTime)) {
+					f.active = false;
+					f.light.setActive(false);
+					f.stateTime = 0;
+					f.smoking = false;
+				}
+			} else if (f.type == 1) {
+				if (!f.active) {
+
+					TextureRegion currentFrame2 = tx.fireOutAnimation.getKeyFrame(f.stateTime, true);
+					fireBatch.begin();
+					Fire.renderFire(fireBatch, currentFrame2, f.fireX, f.fireY, f.smoking, false);
+					fireBatch.end();
+					f.stateTime += Gdx.graphics.getDeltaTime();
+
+				}
+			}
+		}
+
+			weaponBatch.begin();
+		if (playerMeleeAttacking) {
+			//add the sword sprite to the corresponding attack playerDirection
+			if (tx.playerTextureRegion.equals(tx.playerAttackUp)) {
+				weaponBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 13f, player.playerBody.getPosition().y - 4f, 7, 14, 7, 14, 1, 1, 180);
+			} else if (tx.playerTextureRegion.equals(tx.playerAttackDown)) {
+				weaponBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 6f, player.playerBody.getPosition().y - 20f, 7, 14, 7, 14, 1, 1, 0);
+			} else if (tx.playerTextureRegion.equals(tx.playerAttackLeft)) {
+				weaponBatch.draw(tx.swordSprite, player.playerBody.getPosition().x - 15f, player.playerBody.getPosition().y - 19f, 7, 14, 7, 14, 1, 1, 270);
+			} else if (tx.playerTextureRegion.equals(tx.playerAttackRight)) {
+				weaponBatch.draw(tx.swordSprite, player.playerBody.getPosition().x + 1f, player.playerBody.getPosition().y - 12f, 7, 14, 7, 14, 1, 1, 90);
+			}
+		}
+
+		if (playerRangedAttacking) {
+			//add the bowSprite and arrowSprite to the corresponding attack playerDirection
+			if (tx.playerTextureRegion.equals(tx.playerAttackUp)) {
+				weaponBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 2f, 8, 10, 18, 8, 1, 1, 180);
+			} else if (tx.playerTextureRegion.equals(tx.playerAttackDown)) {
+				weaponBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 10f, player.playerBody.getPosition().y - 14f, 7, 12, 18, 8, 1, 1, 0);
+			} else if (tx.playerTextureRegion.equals(tx.playerAttackLeft)) {
+				weaponBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 11f, player.playerBody.getPosition().y - 9f, 7, 12, 18, 8, 1, 1, 270);
+			} else if (tx.playerTextureRegion.equals(tx.playerAttackRight)) {
+				weaponBatch.draw(tx.bowSprite, player.playerBody.getPosition().x - 3f, player.playerBody.getPosition().y - 13f, 7, 12, 18, 8, 1, 1, 90);
+			}
+		}
+
+		if (playerUsingChisel) {
+			//add the chisel sprite to the corresponding attack playerDirection
+			if (tx.playerTextureRegion.equals(tx.playerAttackUp)) {
+				weaponBatch.draw(tx.chiselSprite, player.playerBody.getPosition().x - 13f, player.playerBody.getPosition().y - 4f, 7, 14, 7, 14, 1, 1, 180);
+			} else if (tx.playerTextureRegion.equals(tx.playerAttackDown)) {
+				weaponBatch.draw(tx.chiselSprite, player.playerBody.getPosition().x - 6f, player.playerBody.getPosition().y - 20f, 7, 14, 7, 14, 1, 1, 0);
+			} else if (tx.playerTextureRegion.equals(tx.playerAttackLeft)) {
+				weaponBatch.draw(tx.chiselSprite, player.playerBody.getPosition().x - 15f, player.playerBody.getPosition().y - 19f, 7, 14, 7, 14, 1, 1, 270);
+			} else if (tx.playerTextureRegion.equals(tx.playerAttackRight)) {
+				weaponBatch.draw(tx.chiselSprite, player.playerBody.getPosition().x + 1f, player.playerBody.getPosition().y - 12f, 7, 14, 7, 14, 1, 1, 90);
+			}
+		}
+			weaponBatch.end();
+
+
 
 
 			//render enemy skull sprites
@@ -1015,7 +1040,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 					if (e.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 240) ){
 						e.timeSinceAlerted = 0f;
 						e.lostSight = false;
-						messages.remove(e.lostSightMessage);
+
+						//susMessages.remove(e.lostSightMessage);
 
 						e.enemyAI.setMaxLinearSpeed(0);
 
@@ -1051,32 +1077,40 @@ public class DungeonCrawler extends ApplicationAdapter {
 							}
 						}, 0.5f);
 						e.timeSinceAlerted = e.timeSinceAlerted + Gdx.graphics.getDeltaTime();
+
+						if (!e.alerted) {
+							e.alertMessage.fadeTiming = 1f;
+							e.alertMessage.showing = true;
+							e.alertMessage.fade = true;
+
+
+							e.alertMessage.textX = e.enemyAI.getBody().getPosition().x - 2f;
+							e.alertMessage.textY = e.enemyAI.getBody().getPosition().y + 8f;
+							alertMessages.add(e.alertMessage);
+							e.alerted = true;
+						}
 					}
 
-					if (!e.alerted) {
-						e.alertMessage.showing = true;
-						e.alertMessage.fade = true;
-						e.alerted = true;
 
-						e.alertMessage.textX = e.enemyAI.getBody().getPosition().x - 2f;
-						e.alertMessage.textY = e.enemyAI.getBody().getPosition().y + 8f;
-						messages.add(e.alertMessage);
-					}
 					e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
 
 				} else if (!e.playerSighted) {
-					messages.remove(e.alertMessage);
+
+					e.alerted = false;
+					susMessages.remove(e.alertMessage);
+					if (!e.lostSight) {
+						e.lostSightMessage.fadeTiming = 1f;
+						e.lostSight = true;
+						e.lostSightMessage.showing = true;
+						//e.lostSightMessage.fade = true;
+						e.lostSightMessage.textX = e.enemyAI.getBody().getPosition().x - 2f;
+						e.lostSightMessage.textY = e.enemyAI.getBody().getPosition().y + 8f;
+						susMessages.add(e.lostSightMessage);
+					}
 					if (e.timeSinceAlerted > 50) {
 						e.timeSinceAlerted = e.timeSinceAlerted - 50;
 					}
-					if (!e.lostSight) {
-						e.lostSight = true;
-						e.lostSightMessage.showing = true;
-						e.lostSightMessage.fade = true;
-						e.lostSightMessage.textX = e.enemyAI.getBody().getPosition().x - 2f;
-						e.lostSightMessage.textY = e.enemyAI.getBody().getPosition().y + 8f;
-						messages.add(e.lostSightMessage);
-					}
+
 				}
 				enemySkullBatch.begin();
 				if (!e.alerted) {
@@ -1111,7 +1145,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				if (e2.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 130) ){
 						e2.timeSinceAlerted = 0f;
 						e2.lostSight = false;
-						messages.remove(e2.lostSightMessage);
+						susMessages.remove(e2.lostSightMessage);
 
 						e2.enemyAI.setMaxLinearSpeed(25);
 
@@ -1141,14 +1175,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 				if (!e2.alerted) {
 
-					//FontController.drawFont(fontBatch,);
+					//FontController.drawFont(alertFontBatch,);
 					e2.alertMessage.showing = true;
 					e2.alertMessage.fade = true;
 					e2.alerted = true;
 
 					e2.alertMessage.textX = e2.enemyAI.getBody().getPosition().x - 2f;
 					e2.alertMessage.textY = e2.enemyAI.getBody().getPosition().y + 8f;
-					messages.add(e2.alertMessage);
+					susMessages.add(e2.alertMessage);
 				}
 				e2.getStateMachine().changeState(EnemySpiderState.GO_TO_PLAYER);
 			} else if (!e2.playerSighted) {
@@ -1156,14 +1190,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 				if (e2.timeSinceAlerted > 50) {
 					e2.timeSinceAlerted = e2.timeSinceAlerted - 20;
 				}
-				messages.remove(e2.alertMessage);
+				susMessages.remove(e2.alertMessage);
 				if (!e2.lostSight) {
 					e2.lostSight = true;
 					e2.lostSightMessage.showing = true;
 					e2.lostSightMessage.fade = true;
 					e2.lostSightMessage.textX = e2.enemyAI.getBody().getPosition().x - 2f;
 					e2.lostSightMessage.textY = e2.enemyAI.getBody().getPosition().y + 8f;
-					messages.add(e2.lostSightMessage);
+					susMessages.add(e2.lostSightMessage);
 				}
 			}
 			enemySpiderBatch.begin();
@@ -1195,7 +1229,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				if (e3.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 130) ){
 					e3.timeSinceAlerted = 0f;
 					e3.lostSight = false;
-					messages.remove(e3.lostSightMessage);
+					susMessages.remove(e3.lostSightMessage);
 
 				} else {
 					e3.timeSinceAlerted = e3.timeSinceAlerted + Gdx.graphics.getDeltaTime();
@@ -1209,20 +1243,20 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 					e3.alertMessage.textX = e3.enemyAI.getBody().getPosition().x - 2f;
 					e3.alertMessage.textY = e3.enemyAI.getBody().getPosition().y + 8f;
-					messages.add(e3.alertMessage);
+					susMessages.add(e3.alertMessage);
 				}
 				e3.getStateMachine().changeState(EnemyGhostState.GO_TO_PLAYER);
 
 			} else if (!e3.playerSighted) {
 
-				messages.remove(e3.alertMessage);
+				susMessages.remove(e3.alertMessage);
 				if (!e3.lostSight) {
 					e3.lostSight = true;
 					e3.lostSightMessage.showing = true;
 					e3.lostSightMessage.fade = true;
 					e3.lostSightMessage.textX = e3.enemyAI.getBody().getPosition().x - 2f;
 					e3.lostSightMessage.textY = e3.enemyAI.getBody().getPosition().y + 8f;
-					messages.add(e3.lostSightMessage);
+					susMessages.add(e3.lostSightMessage);
 				}
 
 			}
@@ -1273,7 +1307,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				if (e4.timeSinceAlerted > (Gdx.graphics.getDeltaTime() * 110) ){
 					e4.timeSinceAlerted = 0f;
 					e4.lostSight = false;
-					messages.remove(e4.lostSightMessage);
+					susMessages.remove(e4.lostSightMessage);
 
 					e4.getStateMachine().changeState(EnemyCyclopsState.STOP);
 
@@ -1341,7 +1375,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 					e4.alertMessage.textX = e4.enemyAI.getBody().getPosition().x - 2f;
 					e4.alertMessage.textY = e4.enemyAI.getBody().getPosition().y + 8f;
-					messages.add(e4.alertMessage);
+					susMessages.add(e4.alertMessage);
 				}
 				if (e4.firingBeam) {
 					e4.getStateMachine().changeState(EnemyCyclopsState.STOP);
@@ -1351,7 +1385,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			} else if (!e4.playerSighted) {
 				e4.turnDelay = 0.1f;
-				messages.remove(e4.alertMessage);
+				susMessages.remove(e4.alertMessage);
 				if (e4.timeSinceAlerted > 50) {
 					e4.timeSinceAlerted = e4.timeSinceAlerted - 20;
 				}
@@ -1361,7 +1395,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					e4.lostSightMessage.fade = true;
 					e4.lostSightMessage.textX = e4.enemyAI.getBody().getPosition().x - 2f;
 					e4.lostSightMessage.textY = e4.enemyAI.getBody().getPosition().y + 8f;
-					messages.add(e4.lostSightMessage);
+					susMessages.add(e4.lostSightMessage);
 				}
 			}
 			enemyEyeBatch.begin();
@@ -1527,6 +1561,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 				playerBatch.draw(tx.shopkeeperSprite, s.shopBody.getPosition().x - 8f, s.shopBody.getPosition().y - 7f, 16, 16);
 				playerBatch.end();
 			}
+
+
+
+
 
 		for (Column c : columns) {
 			columnBaseBatch.begin();
@@ -1733,32 +1771,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//render fires and their animations based on their type and color
 		for (Fire f : fires) {
-			if (f.smoking && f.type == 1) {
-				f.light.setColor(f.light.getColor().r, f.light.getColor().g, f.light.getColor().b, 0.65f);
-				TextureRegion currentFrame = tx.smokeAnimation.getKeyFrame(f.stateTime, false);
-				fireBatch.begin();
-
-				Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, false);
-				fireBatch.end();
-				f.stateTime += Gdx.graphics.getDeltaTime();
-
-				if (tx.smokeAnimation.isAnimationFinished(f.stateTime)) {
-						f.active = false;
-						f.light.setActive(false);
-						f.stateTime = 0;
-						f.smoking = false;
-				}
-			} else if (f.type == 1){
-				if (!f.active) {
-
-					TextureRegion currentFrame2 = tx.fireOutAnimation.getKeyFrame(f.stateTime, true);
-					fireBatch.begin();
-					Fire.renderFire(fireBatch, currentFrame2, f.fireX, f.fireY, f.smoking, false);
-					fireBatch.end();
-					f.stateTime += Gdx.graphics.getDeltaTime();
-
-					} else {
-					if (f.type == 1) {
+					if (f.type == 1 && (!f.smoking && f.active)) {
 						currentFrame = tx.fireAnimation.getKeyFrame(stateTime, f.active);
 
 						fireBatch.begin();
@@ -1767,9 +1780,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 						} else {
 							Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, false);
 						}
-
 						fireBatch.end();
-					} else if (f.type == 2) {
+					} else if (f.type == 2 && (!f.smoking && f.active)) {
 
 						currentFrame = tx.blueFireAnimation.getKeyFrame(stateTime, f.active);
 
@@ -1781,8 +1793,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						}
 						fireBatch.end();
 						}
-					}
-				}
+
 			}
 
 		for (BossMinotaur b1 : bossMinotaurs) {
@@ -1886,7 +1897,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						roofBatch.draw(tx.corridorRoofTexture, r.roofBody.getPosition().x + 48, r.roofBody.getPosition().y - 32, 0, 0, 64, 96, 1, 1, 90);
 					}
 				} else {
-					roofBatch.setColor(1,1,1,0.33f);
+					roofBatch.setColor(1,1,1,0.30f);
 					if (r.upDown) {
 						roofBatch.draw(tx.corridorRoofTexture, r.roofBody.getPosition().x - 32, r.roofBody.getPosition().y - 48, 64, 96);
 					} else {
@@ -1916,7 +1927,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 									roofBatch.draw(tx.roof3x3LowerTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - (32 + (r.ext * 8)), 80, 32);
 								}
 							} else {
-								roofBatch.setColor(1,1,1,0.33f);
+								roofBatch.setColor(1,1,1,0.30f);
 								roofBatch.draw(tx.roof3x3UpperTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y + (r.ext * 8), 80, 32);
 								if (r.ext != 0) {
 									for (int i = 0; i < r.ext; i++) {
@@ -1942,7 +1953,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 									roofBatch.draw(tx.roof5x5LowerTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y - 64 + 24 + (r.ext * 8), 112, 48);
 								}
 							} else {
-								roofBatch.setColor(1,1,1,0.33f);
+								roofBatch.setColor(1,1,1,0.30f);
 								roofBatch.draw(tx.roof5x5UpperTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y + (r.ext * 8) + 8, 112, 32);
 								if (r.ext != 0) {
 									for (int i = 0; i < r.ext; i++) {
@@ -1999,14 +2010,21 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 		}
 
-			//TODO change to individual spritebatches - flushing without fading
-			fontBatch.begin();
-			for (Text t : messages) {
-				if (t.showing) {
-					FontController.drawFadingFont(fontBatch, defaultFont, t.textX, t.textY, t, 1f);
+			sightFontBatch.begin();
+			for (Text t : susMessages) {
+				if (t.showing && t.fade) {
+					FontController.drawFadingFont(sightFontBatch, defaultFont3, t.textX, t.textY, t, 1f);
 				}
 			}
-			fontBatch.end();
+			sightFontBatch.end();
+
+			alertFontBatch.begin();
+			for (Text t2 : alertMessages) {
+				if (t2.showing && t2.fade) {
+					FontController.drawFadingFont(alertFontBatch, defaultFont4, t2.textX, t2.textY, t2, 1f);
+				}
+			}
+			alertFontBatch.end();
 
 			//render the inventory text for shops
 			inventoryBatch.begin();
@@ -2156,6 +2174,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			candleBatch.setProjectionMatrix(camera.combined);
 			columnBaseLowerBatch.setProjectionMatrix(camera.combined);
 			pedestalBatch.setProjectionMatrix(camera.combined);
+			weaponBatch.setProjectionMatrix(camera.combined);
 			playerBatch.setProjectionMatrix(camera.combined);
 			arrowBatch.setProjectionMatrix(camera.combined);
 			skullBatch.setProjectionMatrix(camera.combined);
@@ -2182,7 +2201,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 			flameBatch.setProjectionMatrix(camera.combined);
 			bossMinotaurBatch.setProjectionMatrix(camera.combined);
 			roofBatch.setProjectionMatrix(camera.combined);
-			fontBatch.setProjectionMatrix(camera.combined);
+			sightFontBatch.setProjectionMatrix(camera.combined);
+			alertFontBatch.setProjectionMatrix(camera.combined);
 			inventoryBatch.setProjectionMatrix(camera.combined);
 
 			//render the HUD and menus last in order to display over everything else
@@ -2290,7 +2310,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 		}
 
-		//display messages when player starts a level, clears rooms, and finishes a level
+		//display susMessages when player starts a level, clears rooms, and finishes a level
 		if (player.floorCleared){
 			hud.fadeHUD(hud.winWords);
 		} else if (player.roomCleared) {
@@ -2314,12 +2334,12 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//set camera zoom
 		if (!GenerateLevel.init.roomList.get(player.currentRoom).isShop && !debug) {
 			//0.80f
-			camera.zoom = 0.5f;
+			camera.zoom = 0.6f;
 		}
 		else if (!debug){
 			//camera.zoom = 0.8f;
 			//0.9
-			camera.zoom = 0.7f;
+			camera.zoom = 0.8f;
 		} else {
 
 		}
@@ -2397,7 +2417,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		if (debug) {
 			if (Gdx.input.isKeyPressed(Keys.NUM_8)) {
-				enemySkulls.clear();
+				//enemySkulls.clear();
 			}
 		}
 
