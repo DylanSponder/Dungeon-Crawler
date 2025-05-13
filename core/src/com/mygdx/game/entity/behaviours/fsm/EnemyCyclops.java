@@ -37,7 +37,7 @@ public class EnemyCyclops extends Enemy {
     public EnemyCyclopsBox2DSteeringEntity enemyAI;
     public ChainLight eyeLight;
     public String facing;
-    public boolean firingBeam, canTurn, turnOff, active;
+    public boolean firingBeam, canTurn, turnOff, active, locked;
     public float turnDelay;
     public Body beamBody;
 
@@ -247,6 +247,7 @@ public class EnemyCyclops extends Enemy {
     }
 
     public void update (float delta) {
+        /*
         if (!canTurn && turnOff) {
             turnOff = false;
             Timer.schedule(new Timer.Task() {
@@ -273,6 +274,29 @@ public class EnemyCyclops extends Enemy {
                 this.facing = "Left";
             }
             canTurn = false;
+        }
+
+         */
+        float x = this.enemyAI.getLinearVelocity().x;
+        float y = this.enemyAI.getLinearVelocity().y;
+
+        float xA = Math.abs(x);
+        float yA = Math.abs(y);
+
+        if (!this.locked) {
+            if (xA > yA) {
+                if (x < 0) {
+                    this.facing = "Left";
+                } else {
+                    this.facing = "Right";
+                }
+            } else {
+                if (y < 0) {
+                    this.facing = "Down";
+                } else {
+                    this.facing = "Up";
+                }
+            }
         }
         stateMachine.update();
     }

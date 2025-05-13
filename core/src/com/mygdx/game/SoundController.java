@@ -231,6 +231,34 @@ public class SoundController {
                 cyclopsDeath.setPitch(id31, randall31/10);
                 cyclopsDeath.setVolume(id31,volume);
                 break;
+            case "MinoHurt":
+                Sound minoHurt = tx.minoHurt;
+                long id32 = minoHurt.play();
+                float randall32 = Random.randomFloat(pitchMax,pitchMin);
+                minoHurt.setPitch(id32, randall32/10);
+                minoHurt.setVolume(id32,volume);
+                break;
+            case "MinoHurt2":
+                Sound minoHurt2 = tx.minoHurt2;
+                long id33 = minoHurt2.play();
+                float randall33 = Random.randomFloat(pitchMax,pitchMin);
+                minoHurt2.setPitch(id33, randall33/10);
+                minoHurt2.setVolume(id33,volume);
+                break;
+            case "MinoCharge":
+                Sound minoCharge = tx.minoCharge;
+                long id34 = minoCharge.play();
+                float randall34 = Random.randomFloat(pitchMax,pitchMin);
+                minoCharge.setPitch(id34, randall34/10);
+                minoCharge.setVolume(id34,volume);
+                break;
+            case "MinoCharge2":
+                Sound minoCharge2 = tx.minoCharge2;
+                long id35 = minoCharge2.play();
+                float randall35 = Random.randomFloat(pitchMax,pitchMin);
+                minoCharge2.setPitch(id35, randall35/10);
+                minoCharge2.setVolume(id35,volume);
+                break;
         }
     }
 }

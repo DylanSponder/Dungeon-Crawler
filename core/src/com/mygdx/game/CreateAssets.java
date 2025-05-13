@@ -134,6 +134,12 @@ public class CreateAssets {
     public Sound buy = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/buy.mp3"));
     public Sound shop = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/shop2.mp3"));
 
+    public Sound minoHurt = Gdx.audio.newSound((Gdx.files.internal("HellasDungeon/Sounds/minohurt2.mp3")));
+    public Sound minoHurt2 = Gdx.audio.newSound((Gdx.files.internal("HellasDungeon/Sounds/minohurt3.mp3")));
+
+    public Sound minoCharge = Gdx.audio.newSound((Gdx.files.internal("HellasDungeon/Sounds/minocharge.mp3")));
+    public Sound minoCharge2 = Gdx.audio.newSound((Gdx.files.internal("HellasDungeon/Sounds/minocharge3.mp3")));
+
     public Sound fireAmbient = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/Fire.mp3"));
 
     //Texture font = new Texture(Gdx.files.internal("HellasDungeon/Font/GreekAlphabet.png"));
@@ -448,6 +454,8 @@ public class CreateAssets {
     public TextureRegion pedestal2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion pedestal3 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion pedestal4 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+
+    public TextureRegion statue1 = new TextureRegion(columnsTextureSheet, 0,0,15,19);
 
     //Roof textures
 
@@ -975,7 +983,7 @@ public class CreateAssets {
         pedestal2.setRegion(48, 32, 16, 16);
         pedestal3.setRegion(64, 32, 16, 16);
         pedestal4.setRegion(80, 32, 16, 16);
-
+        statue1.setRegion(0, 59, 15, 19);
 
 
         corridorRoofTexture.setRegion(464, 0, 64, 96);

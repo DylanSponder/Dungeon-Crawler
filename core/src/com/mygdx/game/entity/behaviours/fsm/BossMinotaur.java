@@ -54,19 +54,21 @@ public class BossMinotaur extends Enemy {
 
         Viewport vp = new ExtendViewport(camera.viewportWidth, camera.viewportHeight);
 
-        this.ENEMY_HEALTH = 40;
+        this.ENEMY_HEALTH = 30;
+        //40
 
         this.MAX_HEALTH = this.ENEMY_HEALTH;
 
         this.playerInRange = false;
 
-        this.defaultSpeed = 24;
+        this.defaultSpeed = 22;
+        //24
 
         this.enragedSpeed = 30;
 
-        this.chargingSpeed = 65;
+        this.chargingSpeed = 80;
 
-        this.chargeThreshold = 6;
+        this.chargeThreshold = 5;
 
         this.enrageTime = 2.2f;
 
@@ -104,12 +106,6 @@ public class BossMinotaur extends Enemy {
 
     public Arrive<Vector2> chargeAtWall(World world) {
         BodyFactory bodyFactory = new BodyFactory();
-
-        if (this.ENEMY_HEALTH < this.MAX_HEALTH / 2 ) {
-            this.enemyAI.setMaxLinearSpeed(this.chargingSpeed + 30);
-        } else {
-            this.enemyAI.setMaxLinearSpeed(this.chargingSpeed);
-        }
 
 
         if (this.facing == "Up") {

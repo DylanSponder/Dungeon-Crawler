@@ -49,14 +49,7 @@ public enum EnemyCyclopsState implements State<EnemyCyclops> {
         public void enter(EnemyCyclops enemy) {
             //set a random orientation for the enemy
             float orientation = MathUtils.random(-MathUtils.PI, MathUtils.PI);
-            //enemy.playerDetectionRay.setBehaviour(null);
             Wander wander = enemy.wander(enemy.enemyAI, orientation);
-            //BlendedSteering blendedWanderSteering = enemy.blendSteering(wander, enemy.avoidObstacle(), 2.5f, 2);
-            //enemy.enemyAI.setBehaviour(blendedWanderSteering);
-            //BlendedSteering blendedWanderSteering = enemy.blendTripleSteering(wander, enemy.avoidObstacle(), enemy.detectPlayer(), 2.5f, 2.5f, 0.5f);
-            //enemy.enemyAI.setBehaviour(blendedWanderSteering);
-            //BlendedSteering blendedSightSteering = enemy.blendSteering(wander, enemy.detectPlayer(), 2.5f, 2);
-            //enemy.playerDetectionRay.setBehaviour(blendedSightSteering);
         }
 
         @Override
@@ -80,6 +73,7 @@ public enum EnemyCyclopsState implements State<EnemyCyclops> {
         public void enter(EnemyCyclops enemy) {
             enemy.enemyAI.setBehaviour(null);
             enemy.alerted = true;
+            enemy.enemyAI.setMaxLinearSpeed(800);
 
             Arrive seekPlayer = enemy.arriveAtPlayer();
 
@@ -121,6 +115,7 @@ public enum EnemyCyclopsState implements State<EnemyCyclops> {
         @Override
         public void exit(EnemyCyclops enemy) {
             //System.out.println("No longer attacking the player");
+            enemy.enemyAI.setMaxLinearSpeed(100);
         }
 
         @Override
@@ -162,7 +157,10 @@ public enum EnemyCyclopsState implements State<EnemyCyclops> {
 
         @Override
         public void exit(EnemyCyclops enemy) {
-
+            enemy.enemyAI.setMaxLinearSpeed(enemy.defaultSpeed);
+            enemy.enemyAI.setMaxLinearAcceleration(400);
+            enemy.enemyAI.setMaxAngularAcceleration(1000);
+            enemy.enemyAI.setMaxAngularSpeed(1000);
         }
 
         @Override

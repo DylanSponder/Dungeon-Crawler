@@ -80,6 +80,7 @@ public enum EnemySkullState implements State<EnemySkull> {
         public void enter(EnemySkull enemy) {
             enemy.enemyAI.setBehaviour(null);
             enemy.alerted = true;
+            enemy.enemyAI.setMaxLinearAcceleration(200);
 
             Arrive seekPlayer = enemy.arriveAtPlayer();
 
@@ -121,6 +122,7 @@ public enum EnemySkullState implements State<EnemySkull> {
         @Override
         public void exit(EnemySkull enemy) {
             //System.out.println("No longer attacking the player");
+            enemy.enemyAI.setMaxLinearAcceleration(60);
         }
 
         @Override

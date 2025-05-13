@@ -31,6 +31,7 @@ public class Fire extends Light{
     public Sound fireAmbient;
     public ConeLight torchLight;
     public int direction;
+    public Color fireColor;
 
     public Fire(World world, RayHandler rayHandler, float x, float y, boolean extinguish, float stateTime, int type, boolean upDown, int direction) {
         this.world = world;
@@ -45,6 +46,17 @@ public class Fire extends Light{
         this.fireAmbient = tx.fireAmbient;
         this.lightType = 2;
         this.direction = direction;
+        if (type == 1) {
+            this.fireColor = new Color(0.30f,0.12f,0,0.70f);
+            //0.25f,0.20f,0,0.7f
+            //0.30f,0.12f,0,0.70f
+        }
+        else if (type == 2) {
+            this.fireColor = new Color(0f,0,1f,0.7f);
+        }
+        else {
+            this.fireColor = new Color(0.30f,0.12f,0,0.70f);
+        }
     }
 
     public void createFire(Color color, int distance, ConeLight torchLight) {
@@ -53,7 +65,7 @@ public class Fire extends Light{
             this.torchLight = torchLight;
         }
 
-        this.light = new PointLight(rayHandler,400, color,60, fireX + 8, fireY + 8);
+        this.light = new PointLight(rayHandler,400, this.fireColor,80, fireX + 8, fireY + 8);
         this.light.setXray(true);
 
 

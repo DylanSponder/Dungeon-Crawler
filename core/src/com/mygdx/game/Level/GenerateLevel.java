@@ -118,10 +118,9 @@ public class GenerateLevel {
             else {
                 if (i == 5 || i == 10) {
                     newRoom.roomNum = 5;
+                } else if ( i == 1) {
+                    newRoom.roomNum = 5;
                 }
-                //else if (i == 1){
-                //    newRoom.roomNum = 4;
-                //}
 
                 else {
                     //pick a random room ID then take it out of the arraylist - no room will appear twice
@@ -141,7 +140,7 @@ public class GenerateLevel {
                     } else {
                         newRoom.roomNum = random;
                     }
-
+                    //random room picker
 
                     //newRoom.roomNum = 13;
                 }
@@ -1493,7 +1492,7 @@ for (int i = 0; i < layerSize; i++) {
             Body candBody = newCandle.createCandle();
             Fire fCan = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 5.5f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 3.5f, false,0f, 3, false, 0);
             fires.add(fCan);
-            fCan.createFire(new Color(0.25f,0.20f,0,0.7f),20, null);
+            fCan.createFire(new Color(0.30f,0.12f,0,0.7f),30, null);
             candles.add(newCandle);
             lights.add(fCan);
             break;
@@ -1504,13 +1503,36 @@ for (int i = 0; i < layerSize; i++) {
             Fire fCans = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 4.5f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 2.5f, false,0f, 3, false, 0);
             fires.add(fCans);
             lights.add(fCans);
-            fCans.createFire(new Color(0.25f,0.20f,0,0.5f),20, null);
+            fCans.createFire(new Color(0.30f,0.12f,0,0.5f),20, null);
             Fire fCans2 = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 8.5f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 6.5f, false,0f, 3, false, 0);
             fires.add(fCans2);
             lights.add(fCans2);
-            fCans2.createFire(new Color(0.25f,0.20f,0,0.5f),20, null);
-
+            fCans2.createFire(new Color(0.30f,0.12f,0,0.5f),30, null);
             candles.add(newCandles);
+            break;
+        case "2cand":
+            currentCell = init.cr.middleFloor2Tile;
+            Candle newCandle2 = new Candle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 1);
+            Body candBody2 = newCandle2.createCandle();
+            Fire fCan2 = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 5.5f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 3.5f, false,0f, 3, false, 0);
+            fires.add(fCan2);
+            fCan2.createFire(new Color(0.30f,0.12f,0,0.7f),30, null);
+            candles.add(newCandle2);
+            lights.add(fCan2);
+            break;
+        case "2cands":
+            currentCell = init.cr.middleFloor2Tile;
+            Candle newCandles2 = new Candle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 2);
+            Body candsBody2 = newCandles2.createCandle();
+            Fire fCans22 = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 4.5f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 2.5f, false,0f, 3, false, 0);
+            fires.add(fCans22);
+            lights.add(fCans22);
+            fCans22.createFire(new Color(0.30f,0.12f,0,0.5f),20, null);
+            Fire fCans222 = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 8.5f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 6.5f, false,0f, 3, false, 0);
+            fires.add(fCans222);
+            lights.add(fCans222);
+            fCans222.createFire(new Color(0.30f,0.12f,0,0.5f),30, null);
+            candles.add(newCandles2);
             break;
         //tutorial in starting room
         case "tuto":
@@ -1528,7 +1550,7 @@ for (int i = 0; i < layerSize; i++) {
             torches.add(torL);
             lights.add(torL);
             ConeLight torchLightL = torL.createTorch(4);
-            Color colorFL = new Color(0.25f,0.20f,0,0.7f);
+            Color colorFL = new Color(0.30f,0.12f,0,0.7f);
             Color colorBL = new Color(0f,0,1f,0.7f);
 
             if (roomNum == 13) {
@@ -1550,7 +1572,7 @@ for (int i = 0; i < layerSize; i++) {
             torches.add(torLoff);
             lights.add(torLoff);
             ConeLight torchLightLOff = torLoff.createTorch(4);
-            fLoff.createFire(new Color(0.25f,0.20f,0,0.7f),60, torchLightLOff);
+            fLoff.createFire(new Color(0.30f,0.12f,0,0.7f),60, torchLightLOff);
             fLoff.extinguish = false;
             fLoff.smoking = true;
             fLoff.active = false;
@@ -1566,7 +1588,7 @@ for (int i = 0; i < layerSize; i++) {
             lights.add(torR);
             ConeLight torchLightR = torR.createTorch(2);
 
-            Color colorFR = new Color(0.25f,0.20f,0,0.7f);
+            Color colorFR = new Color(0.30f,0.12f,0,0.7f);
             Color colorBR = new Color(0f,0,1f,0.7f);
 
             if (roomNum == 13) {
@@ -1588,7 +1610,7 @@ for (int i = 0; i < layerSize; i++) {
             torches.add(torRoff);
             lights.add(torRoff);
             ConeLight torchLightROff = torRoff.createTorch(2);
-            fRoff.createFire(new Color(0.25f,0.20f,0,0.7f),60, torchLightROff);
+            fRoff.createFire(new Color(0.30f,0.12f,0,0.7f),60, torchLightROff);
             fRoff.extinguish = false;
             fRoff.smoking = true;
             fRoff.active = false;
@@ -1603,7 +1625,7 @@ for (int i = 0; i < layerSize; i++) {
             torches.add(torU);
             lights.add(torU);
             ConeLight torchLightU = torU.createTorch(1);
-            Color colorFU = new Color(0.25f,0.20f,0,0.7f);
+            Color colorFU = new Color(0.30f,0.12f,0,0.7f);
             Color colorBU = new Color(0f,0,1f,0.7f);
 
             if (roomNum == 13) {
@@ -1625,7 +1647,7 @@ for (int i = 0; i < layerSize; i++) {
             torches.add(torUoff);
             lights.add(torUoff);
             ConeLight torchLightUOff = torUoff.createTorch(1);
-            fUoff.createFire(new Color(0.25f,0.20f,0,0.7f),60,torchLightUOff);
+            fUoff.createFire(new Color(0.30f,0.12f,0,0.7f),60,torchLightUOff);
             fUoff.extinguish = false;
             fUoff.smoking = true;
             fUoff.active = false;
@@ -1640,7 +1662,7 @@ for (int i = 0; i < layerSize; i++) {
             torches.add(torD);
             lights.add(torD);
             ConeLight torchLightD = torD.createTorch(3);
-            Color colorFD = new Color(0.25f,0.20f,0,0.7f);
+            Color colorFD = new Color(0.30f,0.12f,0,0.7f);
             Color colorBD = new Color(0f,0,1f,0.7f);
 
             if (roomNum == 13) {
@@ -1662,7 +1684,7 @@ for (int i = 0; i < layerSize; i++) {
             torches.add(torDoff);
             lights.add(torDoff);
             ConeLight torchLightDOff = torDoff.createTorch(3);
-            fDoff.createFire(new Color(0.25f,0.20f,0,0.7f),60, torchLightDOff);
+            fDoff.createFire(new Color(0.30f,0.12f,0,0.7f),60, torchLightDOff);
             fDoff.extinguish = false;
             fDoff.smoking = true;
             fDoff.active = false;
@@ -1674,8 +1696,9 @@ for (int i = 0; i < layerSize; i++) {
             pots.add(p);
             break;
         case "pot2":
-            currentCell = init.cr.middleFloorTile;
-            Pot p2 = new Pot(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 2);
+            currentCell = init.cr.middleFloor2Tile;
+            int randOb2 = Random.randomInt(9,1);
+            Pot p2 = new Pot(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, randOb2);
             pots.add(p2);
             break;
 
@@ -1721,10 +1744,50 @@ for (int i = 0; i < layerSize; i++) {
             EnemyCyclops enemy4 = new EnemyCyclops(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
             init.roomList.get(roomIndex).enemyCounter++;
             init.roomList.get(roomIndex).enemyEyes.add(enemy4);
-            enemy4.createEnemy(4, 40);
+            enemy4.createEnemy(4, 500);
             enemies.add(enemy4);
             enemy4.room = roomIndex;
             DungeonCrawler.enemyEyes.add(enemy4);
+            break;
+        case "enemySkull2":
+            currentCell = init.cr.middleFloor2Tile;
+            EnemySkull enemy12 = new EnemySkull(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
+            init.roomList.get(roomIndex).enemyCounter++;
+            init.roomList.get(roomIndex).enemySkulls.add(enemy12);
+            enemy12.createEnemy(1, 150);
+            enemies.add(enemy12);
+            enemy12.room = roomIndex;
+            DungeonCrawler.enemySkulls.add(enemy12);
+            break;
+        case "enemySpider2":
+            currentCell = init.cr.middleFloor2Tile;
+            EnemySpider enemy22 = new EnemySpider(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
+            init.roomList.get(roomIndex).enemyCounter++;
+            init.roomList.get(roomIndex).enemySpiders.add(enemy22);
+            enemy22.createEnemy(2, 150);
+            enemies.add(enemy22);
+            enemy22.room = roomIndex;
+            DungeonCrawler.enemySpiders.add(enemy22);
+            break;
+        case "enemyGhost2":
+            currentCell = init.cr.middleFloor2Tile;
+            EnemyGhost enemy32 = new EnemyGhost(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
+            init.roomList.get(roomIndex).enemyCounter++;
+            init.roomList.get(roomIndex).enemyGhosts.add(enemy32);
+            enemy32.createEnemy(3, 40);
+            enemies.add(enemy32);
+            enemy32.room = roomIndex;
+            DungeonCrawler.enemyGhosts.add(enemy32);
+            break;
+        case "enemyCyclops2":
+            currentCell = init.cr.middleFloor2Tile;
+            EnemyCyclops enemy42 = new EnemyCyclops(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
+            init.roomList.get(roomIndex).enemyCounter++;
+            init.roomList.get(roomIndex).enemyEyes.add(enemy42);
+            enemy42.createEnemy(4, 500);
+            enemies.add(enemy42);
+            enemy42.room = roomIndex;
+            DungeonCrawler.enemyEyes.add(enemy42);
             break;
         case "bossMinotaur":
             currentCell = init.cr.middleFloorTile;
@@ -1835,7 +1898,7 @@ for (int i = 0; i < layerSize; i++) {
 
 
 
-
+/*
         case "twColTop1":
         case "toruColTop1":
             currentCell = init.cr.topWallTile;
@@ -1923,7 +1986,7 @@ for (int i = 0; i < layerSize; i++) {
             Column twFireCol10 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,10);
             twFireCol10.createColumnTop(false);
             Fire twfirecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 3, false, 0f, 1, false, 0);
-            twfirecol10.createFire(new Color(0.25f,0.20f,0,0.75f),60, null);
+            twfirecol10.createFire(new Color(0.25f,0.12f,0,0.75f),60, null);
             fires.add(twfirecol10);
             lights.add(twfirecol10);
             break;
@@ -2160,10 +2223,11 @@ for (int i = 0; i < layerSize; i++) {
             Column fireCol10 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,10);
             fireCol10.createColumnTop(false);
             Fire firecol10 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 3, false, 0f, 1, false, 0);
-            firecol10.createFire(new Color(0.25f,0.20f,0,0.75f),60, null);
+            firecol10.createFire(new Color(0.25f,0.12f,0,0.75f),60, null);
             fires.add(firecol10);
             lights.add(firecol10);
             break;
+
         case "fcol11":
             currentCell = init.cr.middleFloorTile;
             Column col11 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,11);
@@ -2184,41 +2248,51 @@ for (int i = 0; i < layerSize; i++) {
             Column col14 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,18);
             col14.createColumnBase();
             break;
+             */
         case "fped1":
             currentCell = init.cr.middleFloorTile;
-            Column ped1 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
+            ColumnPiece ped1 = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
             ped1.createPedestal();
             break;
         case "fped2":
             currentCell = init.cr.middleFloorTile;
-            Column ped2 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,15);
+            ColumnPiece ped2 = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,15);
             ped2.createPedestal();
             break;
         case "fped3":
             currentCell = init.cr.middleFloorTile;
-            Column ped3 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,16);
+            ColumnPiece ped3 = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,16);
             ped3.createPedestal();
             break;
         case "fped4":
             currentCell = init.cr.middleFloorTile;
-            Column ped4 = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,17);
+            ColumnPiece ped4 = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,17);
             ped4.createPedestal();
+            break;
+        case "fped1heal":
+            currentCell = init.cr.middleFloorTile;
+            ColumnPiece ped1heal = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
+            ped1heal.createPedestal();
+            Potion potion = new Potion(world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 20, 1);
+            potion.createPotion(potionArrayMap, rayHandler);
+            potions.add(potion);
+            potionArrayMap.put(potion.potionBody, potion);
             break;
         case "fped1fire":
             currentCell = init.cr.middleFloorTile;
-            Column ped1fire = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
+            ColumnPiece ped1fire = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
             ped1fire.createPedestal();
             Fire fireped1 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6 + 2, true, 0f, 1, false, 0);
-            fireped1.createFire(new Color(0.25f,0.20f,0,0.75f), 60, null);
+            fireped1.createFire(new Color(0.30f,0.12f,0,0.75f), 60, null);
             fires.add(fireped1);
             lights.add(fireped1);
             break;
         case "fped1fireoff":
             currentCell = init.cr.middleFloorTile;
-            Column ped1fireoff = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
+            ColumnPiece ped1fireoff = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
             ped1fireoff.createPedestal();
             Fire fireped1off = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6 + 2, true, 0f, 1, false, 0);
-            fireped1off.createFire(new Color(0.25f,0.20f,0,0.75f), 60, null);
+            fireped1off.createFire(new Color(0.30f,0.12f,0,0.75f), 60, null);
             fires.add(fireped1off);
             lights.add(fireped1off);
             fireped1off.extinguish = false;
@@ -2227,7 +2301,7 @@ for (int i = 0; i < layerSize; i++) {
             break;
         case "fped1fireB":
             currentCell = init.cr.middleFloorTile;
-            Column ped1fireb = new Column(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
+            ColumnPiece ped1fireb = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
             ped1fireb.createPedestal();
             Fire fireped1b = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6, true, 0f, 2, false, 0);
             Color colorb = new Color(0f,0,1f,0.7f);
@@ -2237,7 +2311,719 @@ for (int i = 0; i < layerSize; i++) {
             init.roomList.get(roomIndex).spawners.add(fireped1b);
             break;
         default: {
-            if (levelTextures.get(i).matches("roof.+")) {
+            if (levelTextures.get(i).matches("coltu.+")) {//tuscan
+
+                Column coltu = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+
+                for (int e = 0; e < colExt2; e++) {
+                    ColumnPiece colTuStem = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (e * 16),4);
+                    colTuStem.createColumnStem(false);
+                    colTuStem.stem = true;
+                    coltu.addPiece(colTuStem);
+                }
+
+                if (colExt2 == 0) {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16,2);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                } else {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (colExt2 * 16),2);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                }
+
+                columns.add(coltu);
+
+                ColumnPiece colTuBase = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,7);
+                colTuBase.createColumnBase();
+                colTuBase.base = true;
+                coltu.addPiece(colTuBase);
+                ColumnPiece colTuBaseLower = new ColumnPiece(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 70);
+                colTuBaseLower.createColumnBaseLower(1);
+
+                coltu.createColumnHitbox(colExt2, false, colTuBase.columnX, colTuBase.columnY,world);
+
+            }
+            if (levelTextures.get(i).matches("coldo.+")) {//doric
+                Column coltu = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+
+                for (int e = 0; e < colExt2; e++) {
+                    ColumnPiece colTuStem = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (e * 16),4);
+                    colTuStem.createColumnStem(false);
+                    colTuStem.stem = true;
+                    coltu.addPiece(colTuStem);
+                }
+
+                if (colExt2 == 0) {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16,3);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                } else {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (colExt2 * 16),3);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                }
+                columns.add(coltu);
+
+                ColumnPiece colTuBase = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,7);
+                colTuBase.createColumnBase();
+                colTuBase.base = true;
+                coltu.addPiece(colTuBase);
+                ColumnPiece colTuBaseLower = new ColumnPiece(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 70);
+                colTuBaseLower.createColumnBaseLower(1);
+
+                coltu.createColumnHitbox(colExt2, false, colTuBase.columnX, colTuBase.columnY,world);
+
+            }
+            if (levelTextures.get(i).matches("colio.+")) {//ionic
+                Column coltu = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+
+                for (int e = 0; e < colExt2; e++) {
+                    ColumnPiece colTuStem = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (e * 16),4);
+                    colTuStem.createColumnStem(false);
+                    colTuStem.stem = true;
+                    coltu.addPiece(colTuStem);
+                }
+
+                if (colExt2 == 0) {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16,1);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                } else {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (colExt2 * 16),1);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                }
+                columns.add(coltu);
+
+                ColumnPiece colTuBase = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,7);
+                colTuBase.createColumnBase();
+                colTuBase.base = true;
+                coltu.addPiece(colTuBase);
+                ColumnPiece colTuBaseLower = new ColumnPiece(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 70);
+                colTuBaseLower.createColumnBaseLower(1);
+
+                coltu.createColumnHitbox(colExt2, false, colTuBase.columnX, colTuBase.columnY,world);
+            }
+
+
+            if (levelTextures.get(i).matches("coltb.+")) {//tuscan with full base
+                Column coltu = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+
+                for (int e = 0; e < colExt2; e++) {
+                    ColumnPiece colTuStem = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (e * 16),4);
+                    colTuStem.createColumnStem(false);
+                    colTuStem.stem = true;
+                    coltu.addPiece(colTuStem);
+                }
+
+                if (colExt2 == 0) {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16,2);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                } else {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (colExt2 * 16),2);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                }
+                columns.add(coltu);
+
+                ColumnPiece colTuBase = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,18);
+                colTuBase.createColumnBase();
+                colTuBase.base = true;
+                coltu.addPiece(colTuBase);
+                ColumnPiece colTuBaseLower = new ColumnPiece(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 71);
+                colTuBaseLower.createColumnBaseLower(2);
+
+                coltu.createColumnHitbox(colExt2, true, colTuBase.columnX, colTuBase.columnY,world);
+
+            }
+            if (levelTextures.get(i).matches("coldb.+")) {//doric with full base
+                Column coltu = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+
+                for (int e = 0; e < colExt2; e++) {
+                    ColumnPiece colTuStem = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (e * 16),4);
+                    colTuStem.createColumnStem(false);
+                    colTuStem.stem = true;
+                    coltu.addPiece(colTuStem);
+                }
+
+                if (colExt2 == 0) {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16,3);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                } else {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (colExt2 * 16),3);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                }
+                columns.add(coltu);
+
+                ColumnPiece colTuBase = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,18);
+                colTuBase.createColumnBase();
+                colTuBase.base = true;
+                coltu.addPiece(colTuBase);
+                ColumnPiece colTuBaseLower = new ColumnPiece(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 71);
+                colTuBaseLower.createColumnBaseLower(2);
+
+                coltu.createColumnHitbox(colExt2, true, colTuBase.columnX, colTuBase.columnY,world);
+
+            }
+            if (levelTextures.get(i).matches("colib.+")) {//ionic with full base
+                Column coltu = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+
+                for (int e = 0; e < colExt2; e++) {
+                    ColumnPiece colTuStem = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (e * 16),4);
+                    colTuStem.createColumnStem(false);
+                    colTuStem.stem = true;
+                    coltu.addPiece(colTuStem);
+                }
+
+                if (colExt2 == 0) {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16,1);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                } else {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (colExt2 * 16),1);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                }
+                columns.add(coltu);
+
+                ColumnPiece colTuBase = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,18);
+                colTuBase.createColumnBase();
+                colTuBase.base = true;
+                coltu.addPiece(colTuBase);
+                ColumnPiece colTuBaseLower = new ColumnPiece(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 71);
+                colTuBaseLower.createColumnBaseLower(2);
+
+                coltu.createColumnHitbox(colExt2, true, colTuBase.columnX, colTuBase.columnY,world);
+
+            }
+            if (levelTextures.get(i).matches("cfltu.+")) {//tuscan with fire
+                Column coltu = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+
+                for (int e = 0; e < colExt2; e++) {
+                    ColumnPiece colTuStem = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (e * 16),4);
+                    colTuStem.createColumnStem(false);
+                    colTuStem.stem = true;
+                    coltu.addPiece(colTuStem);
+                }
+
+                if (colExt2 == 0) {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16,2);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                    Fire firecfl = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 + 2, false, 0f, 1, false, 0);
+                    firecfl.createFire(new Color(0.30f,0.12f,0,0.75f),60, null);
+                    fires.add(firecfl);
+                    lights.add(firecfl);
+                } else {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (colExt2 * 16),2);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top= true;
+                    coltu.addPiece(colTuTop);
+                    Fire firecfl = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 + 2 + (colExt2 * 16), false, 0f, 1, false, 0);
+                    firecfl.createFire(new Color(0.30f,0.12f,0,0.75f),60, null);
+                    fires.add(firecfl);
+                    lights.add(firecfl);
+                }
+                columns.add(coltu);
+
+                ColumnPiece colTuBase = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,7);
+                colTuBase.createColumnBase();
+                colTuBase.base = true;
+                coltu.addPiece(colTuBase);
+                ColumnPiece colTuBaseLower = new ColumnPiece(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 70);
+                colTuBaseLower.createColumnBaseLower(1);
+
+                coltu.createColumnHitbox(colExt2, false, colTuBase.columnX, colTuBase.columnY,world);
+
+            }
+            if (levelTextures.get(i).matches("cfldo.+")) {//doric with fire
+                Column coltu = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+
+                for (int e = 0; e < colExt2; e++) {
+                    ColumnPiece colTuStem = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (e * 16),4);
+                    colTuStem.createColumnStem(false);
+                    colTuStem.stem = true;
+                    coltu.addPiece(colTuStem);
+                }
+
+                if (colExt2 == 0) {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16,3);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                    Fire firecfl = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 + 2, false, 0f, 1, false, 0);
+                    firecfl.createFire(new Color(0.30f,0.12f,0,0.75f),60, null);
+                    fires.add(firecfl);
+                    lights.add(firecfl);
+                } else {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (colExt2 * 16),3);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                    Fire firecfl = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 + 2 + (colExt2 * 16), false, 0f, 1, false, 0);
+                    firecfl.createFire(new Color(0.30f,0.12f,0,0.75f),60, null);
+                    fires.add(firecfl);
+                    lights.add(firecfl);
+                }
+                columns.add(coltu);
+
+                ColumnPiece colTuBase = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,7);
+                colTuBase.createColumnBase();
+                colTuBase.base = true;
+                coltu.addPiece(colTuBase);
+                ColumnPiece colTuBaseLower = new ColumnPiece(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 70);
+                colTuBaseLower.createColumnBaseLower(1);
+
+                coltu.createColumnHitbox(colExt2, false, colTuBase.columnX, colTuBase.columnY,world);
+
+            }
+            if (levelTextures.get(i).matches("cflio.+")) {//ionic with fire
+                Column coltu = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+
+                for (int e = 0; e < colExt2; e++) {
+                    ColumnPiece colTuStem = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (e * 16),4);
+                    colTuStem.createColumnStem(false);
+                    colTuStem.stem = true;
+                    coltu.addPiece(colTuStem);
+                }
+
+                if (colExt2 == 0) {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16,1);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                    Fire firecfl = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 + 2, false, 0f, 1, false, 0);
+                    firecfl.createFire(new Color(0.30f,0.12f,0,0.75f),60, null);
+                    fires.add(firecfl);
+                    lights.add(firecfl);
+                } else {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (colExt2 * 16),1);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                    Fire firecfl = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 + 2 + (colExt2 * 16), false, 0f, 1, false, 0);
+                    firecfl.createFire(new Color(0.30f,0.12f,0,0.75f),60, null);
+                    fires.add(firecfl);
+                    lights.add(firecfl);
+                }
+                columns.add(coltu);
+
+                ColumnPiece colTuBase = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,7);
+                colTuBase.createColumnBase();
+                colTuBase.base = true;
+                coltu.addPiece(colTuBase);
+                ColumnPiece colTuBaseLower = new ColumnPiece(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 70);
+                colTuBaseLower.createColumnBaseLower(1);
+
+                coltu.createColumnHitbox(colExt2, false, colTuBase.columnX, colTuBase.columnY,world);
+            }
+            if (levelTextures.get(i).matches("cfltb.+")) {//tuscan with fire and full base
+                Column coltu = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+
+                for (int e = 0; e < colExt2; e++) {
+                    ColumnPiece colTuStem = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (e * 16),4);
+                    colTuStem.createColumnStem(false);
+                    colTuStem.stem = true;
+                    coltu.addPiece(colTuStem);
+                }
+
+                if (colExt2 == 0) {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16,2);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                    Fire firecfl = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 + 2, false, 0f, 1, false, 0);
+                    firecfl.createFire(new Color(0.30f,0.12f,0,0.75f),60, null);
+                    fires.add(firecfl);
+                    lights.add(firecfl);
+                } else {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (colExt2 * 16),2);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                    Fire firecfl = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 + 2 + (colExt2 * 16), false, 0f, 1, false, 0);
+                    firecfl.createFire(new Color(0.30f,0.12f,0,0.75f),60, null);
+                    fires.add(firecfl);
+                    lights.add(firecfl);
+                }
+                columns.add(coltu);
+
+                ColumnPiece colTuBase = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,18);
+                colTuBase.createColumnBase();
+                colTuBase.base = true;
+                coltu.addPiece(colTuBase);
+                ColumnPiece colTuBaseLower = new ColumnPiece(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 71);
+                colTuBaseLower.createColumnBaseLower(2);
+
+                coltu.createColumnHitbox(colExt2, true, colTuBase.columnX, colTuBase.columnY,world);
+
+            }
+            if (levelTextures.get(i).matches("cfldb.+")) {//doric with fire and full base
+                Column coltu = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+
+                for (int e = 0; e < colExt2; e++) {
+                    ColumnPiece colTuStem = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (e * 16),4);
+                    colTuStem.createColumnStem(false);
+                    colTuStem.stem = true;
+                    coltu.addPiece(colTuStem);
+                }
+
+                if (colExt2 == 0) {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16,3);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                    Fire firecfl = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 + 2, false, 0f, 1, false, 0);
+                    firecfl.createFire(new Color(0.30f,0.12f,0,0.75f),60, null);
+                    fires.add(firecfl);
+                    lights.add(firecfl);
+                } else {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (colExt2 * 16),3);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                    Fire firecfl = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 + 2 + (colExt2 * 16), false, 0f, 1, false, 0);
+                    firecfl.createFire(new Color(0.30f,0.12f,0,0.75f),60, null);
+                    fires.add(firecfl);
+                    lights.add(firecfl);
+                }
+                columns.add(coltu);
+
+                ColumnPiece colTuBase = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,18);
+                colTuBase.createColumnBase();
+                colTuBase.base = true;
+                coltu.addPiece(colTuBase);
+                ColumnPiece colTuBaseLower = new ColumnPiece(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 71);
+                colTuBaseLower.createColumnBaseLower(2);
+
+                coltu.createColumnHitbox(colExt2, true, colTuBase.columnX, colTuBase.columnY,world);
+
+            }
+            if (levelTextures.get(i).matches("cflib.+")) {//ionic with fire and full base
+                Column coltu = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+
+                for (int e = 0; e < colExt2; e++) {
+                    ColumnPiece colTuStem = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (e * 16),4);
+                    colTuStem.createColumnStem(false);
+                    colTuStem.stem = true;
+                    coltu.addPiece(colTuStem);
+                }
+
+                if (colExt2 == 0) {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16,1);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                    Fire firecfl = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 + 2, false, 0f, 1, false, 0);
+                    firecfl.createFire(new Color(0.30f,0.12f,0,0.75f),60, null);
+                    fires.add(firecfl);
+                    lights.add(firecfl);
+                } else {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (colExt2 * 16),1);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                    Fire firecfl = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 + 2 + (colExt2 * 16), false, 0f, 1, false, 0);
+                    firecfl.createFire(new Color(0.30f,0.12f,0,0.75f),60, null);
+                    fires.add(firecfl);
+                    lights.add(firecfl);
+                }
+                columns.add(coltu);
+
+                ColumnPiece colTuBase = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,18);
+                colTuBase.createColumnBase();
+                colTuBase.base = true;
+                coltu.addPiece(colTuBase);
+                ColumnPiece colTuBaseLower = new ColumnPiece(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 71);
+                colTuBaseLower.createColumnBaseLower(2);
+
+                coltu.createColumnHitbox(colExt2, true, colTuBase.columnX, colTuBase.columnY,world);
+            }
+
+            if (levelTextures.get(i).matches("csltb.+")) {//tuscan with statue and full base
+                Column coltu = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+
+                for (int e = 0; e < colExt2; e++) {
+                    ColumnPiece colTuStem = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (e * 16),4);
+                    colTuStem.createColumnStem(false);
+                    colTuStem.stem = true;
+                    coltu.addPiece(colTuStem);
+                }
+
+                if (colExt2 == 0) {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16,2);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+
+                    Statue statTu = new Statue(world, ((roomX + i) * 16) + 16 * 16 + 1, levelY * 16 + Gdx.graphics.getHeight() / 30 + 10,1);
+                    statues.add(statTu);
+                } else {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (colExt2 * 16),2);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+
+                    Statue statTu = new Statue(world, ((roomX + i) * 16) + 16 * 16 + 1, levelY * 16 + Gdx.graphics.getHeight() / 30 + 10 + (colExt2 * 16),1);
+                    statues.add(statTu);
+                }
+                columns.add(coltu);
+
+                ColumnPiece colTuBase = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,18);
+                colTuBase.createColumnBase();
+                colTuBase.base = true;
+                coltu.addPiece(colTuBase);
+                ColumnPiece colTuBaseLower = new ColumnPiece(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 71);
+                colTuBaseLower.createColumnBaseLower(2);
+
+                coltu.createColumnHitbox(colExt2, true, colTuBase.columnX, colTuBase.columnY,world);
+
+            }
+            if (levelTextures.get(i).matches("csldb.+")) {//doric with statue and full base
+                Column coltu = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+
+                for (int e = 0; e < colExt2; e++) {
+                    ColumnPiece colTuStem = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (e * 16),4);
+                    colTuStem.createColumnStem(false);
+                    colTuStem.stem = true;
+                    coltu.addPiece(colTuStem);
+                }
+
+                if (colExt2 == 0) {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16,3);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+
+                } else {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (colExt2 * 16),3);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+
+                }
+                columns.add(coltu);
+
+                ColumnPiece colTuBase = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,18);
+                colTuBase.createColumnBase();
+                colTuBase.base = true;
+                coltu.addPiece(colTuBase);
+                ColumnPiece colTuBaseLower = new ColumnPiece(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 71);
+                colTuBaseLower.createColumnBaseLower(2);
+
+                coltu.createColumnHitbox(colExt2, true, colTuBase.columnX, colTuBase.columnY,world);
+
+            }
+            if (levelTextures.get(i).matches("cslib.+")) {//ionic with statue and full base
+                Column coltu = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+
+                for (int e = 0; e < colExt2; e++) {
+                    ColumnPiece colTuStem = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (e * 16),4);
+                    colTuStem.createColumnStem(false);
+                    colTuStem.stem = true;
+                    coltu.addPiece(colTuStem);
+                }
+
+                if (colExt2 == 0) {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16,1);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                    Fire firecfl = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 + 2, false, 0f, 1, false, 0);
+                    firecfl.createFire(new Color(0.30f,0.20f,0,0.75f),60, null);
+                    fires.add(firecfl);
+                    lights.add(firecfl);
+                } else {
+                    ColumnPiece colTuTop = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16 + (colExt2 * 16),1);
+                    colTuTop.createColumnTop(false);
+                    colTuTop.top = true;
+                    coltu.addPiece(colTuTop);
+                    Fire firecfl = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 + 2 + (colExt2 * 16), false, 0f, 1, false, 0);
+                    firecfl.createFire(new Color(0.30f,0.12f,0,0.75f),60, null);
+                    fires.add(firecfl);
+                    lights.add(firecfl);
+                }
+                columns.add(coltu);
+
+                ColumnPiece colTuBase = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,18);
+                colTuBase.createColumnBase();
+                colTuBase.base = true;
+                coltu.addPiece(colTuBase);
+                ColumnPiece colTuBaseLower = new ColumnPiece(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 71);
+                colTuBaseLower.createColumnBaseLower(2);
+
+                coltu.createColumnHitbox(colExt2, true, colTuBase.columnX, colTuBase.columnY,world);
+            }
+
+            //ROOFS---------------------------------------------------------
+            else if (levelTextures.get(i).matches("roof.+")) {
 
                 String roofStr = levelTextures.get(i);
                 StringBuffer sb = new StringBuffer(roofStr);
@@ -2317,26 +3103,27 @@ for (int i = 0; i < layerSize; i++) {
                 sb.delete(0, 6);
                 String strRoof = sb.toString();
 
+                //String roofXtend = String.valueOf(strRoof.charAt(0));
+
                 String roofType = String.valueOf(strRoof.charAt(0));
-
-                float temp1 = ((roomX + i) * 16 + 16 * 16);
-                String temp = String.valueOf(temp1);
-
-               // if (roofType.matches("x")) {
-               //     temp = temp + String.valueOf(strRoof.charAt(1));
-                   // float xtofloat =
-               // }
-
                 StringBuffer sb2 = new StringBuffer(strRoof);
                 sb2.delete(0, 1);
                 String strRoofExt = sb2.toString();
-
                 currentCell = init.cr.topWallTile;
-                Body newTopWallRoof = init.bf.createWall(world, ((roomX + i) * 16 + 16 * 16), levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+
+                Body newTopWallRoof = init.bf.createWall(world, ((roomX + i) * 16 + 16 * 16) , levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
                 newTopWallRoof.setUserData("Wall");
-                Roof roof = new Roof(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,false,false, Integer.parseInt(roofType), Integer.parseInt(strRoofExt));
-                roofs.add(roof);
-                init.roomList.get(roomIndex).roofs.add(roof);
+
+                if (roofType.matches("[7]")) {
+                    Roof roof = new Roof(world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 14,false,false, Integer.parseInt(roofType), Integer.parseInt(strRoofExt));
+                    roofs.add(roof);
+                    init.roomList.get(roomIndex).roofs.add(roof);
+                }
+                else {
+                    Roof roof = new Roof(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,false,false, Integer.parseInt(roofType), Integer.parseInt(strRoofExt));
+                    roofs.add(roof);
+                    init.roomList.get(roomIndex).roofs.add(roof);
+                }
             }
             else if (levelTextures.get(i).matches("LWroof.+")) {
                 String roofStr = levelTextures.get(i);

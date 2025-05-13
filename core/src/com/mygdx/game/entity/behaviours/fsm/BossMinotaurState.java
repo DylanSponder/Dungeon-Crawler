@@ -6,7 +6,9 @@ import com.badlogic.gdx.ai.steer.behaviors.Arrive;
 import com.badlogic.gdx.ai.steer.behaviors.BlendedSteering;
 import com.badlogic.gdx.ai.steer.behaviors.Wander;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.CreateAssets;
+import com.mygdx.game.DungeonCrawler;
 
 import java.util.Iterator;
 
@@ -102,13 +104,29 @@ public enum BossMinotaurState implements State<BossMinotaur> {
         @Override
         public void enter(BossMinotaur enemy) {
             enemy.enemyAI.setBehaviour(null);
-            Arrive charge = enemy.chargeAtWall(world);
-
-            //  BlendedSteering blendedAttackSteering = enemy.blendSteering(attack, 3, 6);
-            enemy.enemyAI.setBehaviour(charge);
             enemy.locked = true;
-            enemy.charging = true;
-            System.out.println("ENTER CHARGE");
+            enemy.enemyAI.setMaxLinearSpeed(0);
+            System.out.println("SPEED 0");
+
+            if (!enemy.charging) {
+                Arrive charge = enemy.chargeAtWall(world);
+
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        if (enemy.ENEMY_HEALTH < enemy.MAX_HEALTH / 2 ) {
+                            enemy.enemyAI.setMaxLinearSpeed(enemy.chargingSpeed + 30);
+                        } else {
+                            enemy.enemyAI.setMaxLinearSpeed(enemy.chargingSpeed);
+                        }
+                    }
+                }, 1.1f);
+
+                //  BlendedSteering blendedAttackSteering = enemy.blendSteering(attack, 3, 6);
+                enemy.enemyAI.setBehaviour(charge);
+                enemy.charging = true;
+                System.out.println("ENTER CHARGE");
+            }
         }
 
         @Override

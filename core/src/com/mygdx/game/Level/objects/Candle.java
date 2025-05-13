@@ -31,9 +31,6 @@ public class Candle extends Light{
 
         this.candBody.setUserData("Candle");
 
-        //this.obHitbox.setUserData("Obstacle");
-
-        //potArrayMap.put(obBody, this);
 
         return this.candBody;
     }

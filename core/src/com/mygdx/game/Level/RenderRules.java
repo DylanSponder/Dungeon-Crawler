@@ -466,6 +466,78 @@ public class RenderRules {
                                         break;
 
                             }
+                            if (str.matches("(coldo[0-9]+)")) {
+                                drawableLevelLayer.add(index, str);
+                                index++;
+                                }
+                                if (str.matches("(coltu[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                }
+                                if (str.matches("(colio[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                }
+                                if (str.matches("(coldb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                }
+                                if (str.matches("(coltb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                }
+                                if (str.matches("(colib[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                }
+                                if (str.matches("(cfldo[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                }
+                                if (str.matches("(cfltu[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                }
+                                if (str.matches("(cflio[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                }
+                                if (str.matches("(cfldb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                }
+                                if (str.matches("(cfltb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                }
+                                if (str.matches("(cflib[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                }
+                                if (str.matches("(csldo[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                }
+                                if (str.matches("(csltu[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                }
+                                if (str.matches("(cslio[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                }
+                                if (str.matches("(csldb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                }
+                                if (str.matches("(csltb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                }
+                                if (str.matches("(cslib[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                }
                             switch (str) {
                                 case "cand":
                                     drawableLevelLayer.add(index,"cand");
@@ -473,6 +545,14 @@ public class RenderRules {
                                     break;
                                 case "cands":
                                     drawableLevelLayer.add(index,"cands");
+                                    index++;
+                                    break;
+                                case "2cand":
+                                    drawableLevelLayer.add(index,"2cand");
+                                    index++;
+                                    break;
+                                case "2cands":
+                                    drawableLevelLayer.add(index,"2cands");
                                     index++;
                                     break;
                                 case "cob":
@@ -494,6 +574,22 @@ public class RenderRules {
                                     break;
                                 case "enemy4":
                                     drawableLevelLayer.add(index, "enemyCyclops");
+                                    index++;
+                                    break;
+                                case "2enemy":
+                                    drawableLevelLayer.add(index, "enemySkull2");
+                                    index++;
+                                    break;
+                                case "2enemy2":
+                                    drawableLevelLayer.add(index, "enemySpider2");
+                                    index++;
+                                    break;
+                                case "2enemy3":
+                                    drawableLevelLayer.add(index, "enemyGhost2");
+                                    index++;
+                                    break;
+                                case "2enemy4":
+                                    drawableLevelLayer.add(index, "enemyCyclops2");
                                     index++;
                                     break;
                                 case "boss1":
@@ -519,88 +615,9 @@ public class RenderRules {
                                     drawableLevelLayer.add(index, "pot2");
                                     index++;
                                     break;
-                                    //potion - unused - never placed in natural generation
-                                case "heal":
-                                    drawableLevelLayer.add(index, "middleFloorTile");
-                                    index++;
-                                    break;
-                                    //columns
-                                //preset columns
-                                case "coldo":
-                                    drawableLevelLayer.add(index, "fcolDo");
-                                    index++;
-                                    break;
-                                case "colio":
-                                    drawableLevelLayer.add(index, "fcolIo");
-                                    index++;
-                                    break;
-                                case "coltu":
-                                    drawableLevelLayer.add(index, "fcolTu");
-                                    index++;
-                                    break;
-                                case "col1":
-                                    drawableLevelLayer.add(index, "fcol1");
-                                    index++;
-                                    break;
-                                case "col2":
-                                    drawableLevelLayer.add(index, "fcol2");
-                                    index++;
-                                    break;
-                                case "col3":
-                                    drawableLevelLayer.add(index, "fcol3");
-                                    index++;
-                                    break;
-                                case "col4":
-                                    drawableLevelLayer.add(index, "fcol4");
-                                    index++;
-                                    break;
-                                case "col5":
-                                    drawableLevelLayer.add(index, "fcol5");
-                                    index++;
-                                    break;
-                                case "col6":
-                                    drawableLevelLayer.add(index, "fcol6");
-                                    index++;
-                                    break;
-                                case "col7":
-                                    drawableLevelLayer.add(index, "fcol7");
-                                    index++;
-                                    break;
-                                case "colf":
-                                    drawableLevelLayer.add(index, "fcolf");
-                                    index++;
-                                    break;
-                                case "col8":
-                                    drawableLevelLayer.add(index, "fcol8");
-                                    index++;
-                                    break;
-                                case "col9":
-                                    drawableLevelLayer.add(index, "fcol9");
-                                    index++;
-                                    break;
-                                case "col10":
-                                    drawableLevelLayer.add(index, "fcol10");
-                                    index++;
-                                    break;
-                                case "col11":
-                                    drawableLevelLayer.add(index, "fcol11");
-                                    index++;
-                                    break;
-                                case "col12":
-                                    drawableLevelLayer.add(index, "fcol12");
-                                    index++;
-                                    break;
-                                case "col13":
-                                    drawableLevelLayer.add(index, "fcol13");
-                                    index++;
-                                    break;
                                     //pedestals
                                 case "ped1":
                                     drawableLevelLayer.add(index, "fped1");
-                                    index++;
-                                    break;
-                                case "col14":
-                                    drawableLevelLayer.add(index, "fcol14");
                                     index++;
                                     break;
                                 case "ped1fire":
@@ -613,6 +630,10 @@ public class RenderRules {
                                     break;
                                 case "ped1fireb":
                                     drawableLevelLayer.add(index, "fped1fireB");
+                                    index++;
+                                    break;
+                                case "ped1heal":
+                                    drawableLevelLayer.add(index, "fped1heal");
                                     index++;
                                     break;
                                 case "ped2":
@@ -826,6 +847,11 @@ public class RenderRules {
                                         String roofFinal4;
                                         roofFinal4 = "TWroof4" + strRoofExt;
                                         drawableLevelLayer.add(index, roofFinal4);
+                                        break;
+                                    case "7":
+                                        String roofFinal7;
+                                        roofFinal7 = "TWroof7" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal7);
                                         break;
                                 }
                                 index++;

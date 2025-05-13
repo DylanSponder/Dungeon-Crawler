@@ -24,6 +24,23 @@ public class BodyFactory {
         return body;
     }
 
+    public Body createColumnHitbox(World world, float x, float y, int size, boolean bigbase) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 8, y + 11 + ((size + 1)*8));
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        int hy = 8 * (size + 1);
+        shape.setAsBox(5, hy);
+        Fixture temp = body.createFixture(shape, 1.0f);
+        temp.setSensor(true);
+        temp.setUserData("Stem");
+        shape.dispose();
+        return body;
+    }
+
     public static Body createFenceTurn(World world, float x, float y, float offsetX, float offsetY, int type) {
         Body body;
         BodyDef bodyDef = new BodyDef();
@@ -82,6 +99,11 @@ public class BodyFactory {
             case 5:
                 shape.setAsBox(16, 8 + (ext * 8));
                 bodyDef.position.set(x,y);
+
+                break;
+            case 7:
+                shape.setAsBox(43, 32 + (ext * 8));
+                bodyDef.position.set(x + 56,y - (24 + (ext * 8)));
 
                 break;
         }
@@ -456,19 +478,25 @@ public class BodyFactory {
         return body;
     }
 
-    public Fixture createSwordHitbox(Body sword, boolean r){
+    public Fixture createSwordHitbox(Body sword, int d){
         PolygonShape swordShape = new PolygonShape();
         PolygonShape tipShape = new PolygonShape();
         PolygonShape bladeShape = new PolygonShape();
-        if (r){
-            swordShape.setAsBox(5.5f, 2.5f);
-
+        switch (d) {
+            case 1:
+                bladeShape.set(new float[]{-2.5f, -5, -2.5f, 5, 0, 7, 2.5f, 5, 2.5f, -5, -2.5f, -5});
+                break;
+            case 2:
+                bladeShape.set(new float[]{-5, 2.5f, 5, 2.5f, 7, 0, 5, -2.5f, -5, -2.5f, -5, 2.5f});
+                break;
+            case 3:
+                bladeShape.set(new float[]{2.5f, 5, 2.5f, -5, 0, -7, -2.5f, -5, -2.5f, 5, 2.5f, 5});
+                break;
+            case 4:
+                bladeShape.set(new float[]{5, -4f, -5,-4f, -7, -1.5f, -5, 1f, 5, 1f, 5, -4f});
+                break;
         }
-        else {
-            swordShape.setAsBox(2.5f, 5.5f);
-        }
 
-        bladeShape.set(new float[]{-2.5f,-5,-2.5f,5,0,7,2.5f,5,2.5f,-5,-2.5f,-5});
 
         //PolygonShape minoBottomSlope = new PolygonShape();
        // tipShape.set(new float[]{-9,-6,0,-9,9,-6,-9,-6});

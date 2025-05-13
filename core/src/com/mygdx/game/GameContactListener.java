@@ -1,7 +1,6 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.badlogic.gdx.utils.Timer;
@@ -12,8 +11,6 @@ import com.mygdx.game.entity.behaviours.fsm.projectiles.Eyebeam;
 import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.objects.*;
 
-import java.sql.SQLSyntaxErrorException;
-import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.mygdx.game.DungeonCrawler.*;
@@ -145,6 +142,15 @@ public class GameContactListener implements ContactListener {
                             if (e.enemyID == 5) {
                                 for (BossMinotaur boss1 : bossMinotaurs) {
                                     if (boss1.enemyBody == collider.getBody()) {
+
+                                        boolean hurt = Random.randomBoolean();
+
+                                        if (hurt) {
+                                            soundController.playSound("MinoHurt",10f,8f,0.04f);
+                                        } else {
+                                            soundController.playSound("MinoHurt2",10f,8f,0.04f);
+                                        }
+
                                         if (boss1.ENEMY_HEALTH < boss1.MAX_HEALTH / 2) {
                                             init.roomList.get(player.currentRoom).snuffTorches();
                                             boss1.chargeThreshold = 3;
@@ -356,6 +362,15 @@ public class GameContactListener implements ContactListener {
                             if (e.enemyID == 5) {
                                 for (BossMinotaur boss1 : bossMinotaurs) {
                                     if (boss1.enemyBody == collidee.getBody()) {
+
+                                        boolean hurt = Random.randomBoolean();
+
+                                        if (hurt) {
+                                            soundController.playSound("MinoHurt",10f,8f,0.04f);
+                                        } else {
+                                            soundController.playSound("MinoHurt2",10f,8f,0.04f);
+                                        }
+
                                         if (boss1.ENEMY_HEALTH < boss1.MAX_HEALTH / 2) {
                                             init.roomList.get(player.currentRoom).snuffTorches();
                                             boss1.chargeThreshold = 3;
@@ -840,6 +855,10 @@ public class GameContactListener implements ContactListener {
                             arrowBodiesCollided.add(collidee.getBody());
                             break;
                         }
+                    } else if (collideeStr == "Bone") {
+                        if (!boneBodiesCollided.contains(collidee.getBody())) {
+                            boneBodiesCollided.add(collidee.getBody());
+                        }
                     }
                     break;
                 case "Fire":
@@ -893,6 +912,7 @@ public class GameContactListener implements ContactListener {
                         for (BossMinotaur b : bossMinotaurs) {
                             if (b.enemyBody == collidee.getBody()) {
                                 //maybe make the minotaur stop before chasing the player again if too sudden
+
                                 if (b.stateMachine.getCurrentState() == BossMinotaurState.CHARGE_ATTACK)
                                     b.stunned = true;
                                     Timer.schedule(new Timer.Task() {
@@ -903,7 +923,7 @@ public class GameContactListener implements ContactListener {
                                             b.stunned = false;
 
                                         }
-                                    }, 2f);
+                                    }, 2.2f);
                             }
                         }
                     }
@@ -1009,6 +1029,7 @@ public class GameContactListener implements ContactListener {
                         for (BossMinotaur b : bossMinotaurs) {
                             if (b.enemyBody == collidee.getBody()) {
                                 //maybe make the minotaur stop before chasing the player again if too sudden
+
                                 if (b.stateMachine.getCurrentState() == BossMinotaurState.CHARGE_ATTACK)
                                     b.stunned = true;
                                     Timer.schedule(new Timer.Task() {
@@ -1018,7 +1039,7 @@ public class GameContactListener implements ContactListener {
                                             b.stunned = false;
                                             b.stateMachine.changeState(BossMinotaurState.GO_TO_PLAYER);
                                         }
-                                    }, 2f);
+                                    }, 2.2f);
 
                             }
                         }
@@ -1062,6 +1083,8 @@ public class GameContactListener implements ContactListener {
                     }
                     break;
                 case "Player":
+
+
 
                     if ((collideeStr == "Web")) {
                         if (!player.touchingCobweb) {
@@ -1311,6 +1334,16 @@ public class GameContactListener implements ContactListener {
                     }
                     break;
                 case "Player":
+
+                    if (colliderStr == "Stem") {
+                        for (Column C : columns) {
+                            if (C.stemBody == collider.getBody()) {
+                                C.visible = false;
+                            }
+                        }
+                    }
+
+
                     //TODO: revise - unused
                     if (colliderStr == "Enemy" && collider.getUserData() != "Proximity") {
                         for (EnemySkull e : enemySkulls) {
@@ -1476,16 +1509,8 @@ public class GameContactListener implements ContactListener {
                         e4.stateMachine.changeState(EnemyCyclopsState.WANDER);
                         e4.active = true;
                     }
-                    for (BossMinotaur b1 : init.roomList.get(player.currentRoom).bossMinotaurs) {
-                        b1.rayCastable = true;
-                        b1.enemyAI.setMaxLinearSpeed(b1.defaultSpeed);
-                        b1.stateMachine.changeState(BossMinotaurState.GO_TO_PLAYER);
-                        b1.active = true;
-                    }
 
                     player.touchingRoom = true;
-
-
 
 
                     for (Roof r : init.roomList.get(player.currentRoom).roofs) {
@@ -1499,21 +1524,6 @@ public class GameContactListener implements ContactListener {
                     init.roomList.get(player.currentRoom).enemyCounter = 0;
                     init.roomList.get(player.currentRoom).unlockAllDoors(world, init.roomList.get(player.currentRoom), false);
                 }
-            /*
-        } else if (fb.getBody().getUserData().toString().startsWith("Room")) {
-            // && (fb.getUserData() != "Wall" || fb.getUserData() !="Enemy" || fb.getUserData() != "Player"))
-            String[] roomIndexAsString = fb.getBody().getUserData().toString().split("-");
-            player.currentRoom = Integer.parseInt(roomIndexAsString[1]);
-
-            if (fa.getBody().getUserData() == "Player") {
-                player.touchingRoom = true;
-            }
-            if (init.roomList.get(player.currentRoom).isShop) {
-                init.roomList.get(player.currentRoom).enemyCounter = 0;
-                init.roomList.get(player.currentRoom).unlockAllDoors(world, init.roomList.get(player.currentRoom), false);
-            }
-
-             */
             }
 
         }
@@ -1528,6 +1538,18 @@ public class GameContactListener implements ContactListener {
         String collideeAsString = collidee.getBody().getUserData().toString();
 
         switch (colliderAsString) {
+            case "Stem":
+                if (collidee.getUserData() == "PlayerBound") {
+
+                    for (Column C : columns) {
+                        if (C.stemBody == collider.getBody()) {
+                            C.visible = true;
+                        }
+                    }
+
+                    break;
+                }
+
             case "Cobweb":
                 if (collider.getUserData() == "PlayerBound") {
                     DungeonCrawler.PLAYER_SPEED_MULTI = 45f;
@@ -1732,6 +1754,13 @@ public class GameContactListener implements ContactListener {
                         init.roomList.get(player.currentRoom).lockAllDoors(world, init.roomList.get(player.currentRoom), true);
                     }
                 }
+            }
+
+            for (BossMinotaur b1 : init.roomList.get(player.currentRoom).bossMinotaurs) {
+                b1.rayCastable = true;
+                b1.enemyAI.setMaxLinearSpeed(b1.defaultSpeed);
+                b1.stateMachine.changeState(BossMinotaurState.GO_TO_PLAYER);
+                b1.active = true;
             }
         }
 

@@ -26,7 +26,7 @@ public class GameInputProcessor implements InputProcessor {
         public boolean scrolled(float amountX, float amountY) {
         if (DungeonCrawler.debug) {
             System.out.println(camera.zoom);
-            //camera zoom should be between 0.3 and 1.3 - may be changed during testing
+
             if ((camera.zoom >= 0.3f && camera.zoom <= 24f)) {
                 if (camera.zoom == 24f) {
                     if (amountY < 0f) {
@@ -60,35 +60,36 @@ public class GameInputProcessor implements InputProcessor {
             if (moveDown || player.facing == 3) {
                 tx.playerTextureRegion = tx.playerAttackDown;
                 swordBody = bf.createSwordBody(world, player.playerBody, -2.5f, -11.5f);
-                swordHitbox = bf.createSwordHitbox(swordBody, false);
+                swordHitbox = bf.createSwordHitbox(swordBody, player.facing);
                 swordHitbox.setUserData("DownSword");
                 swordHitbox.setSensor(true);
                 player.playerBody.applyForce(0,-100000,0,0,true);
             } else if (moveUp || player.facing == 1) {
                 tx.playerTextureRegion = tx.playerAttackUp;
                 swordBody = bf.createSwordBody(world, player.playerBody, -2.5f, 17.5f);
-                swordHitbox = bf.createSwordHitbox(swordBody, false);
+                swordHitbox = bf.createSwordHitbox(swordBody, player.facing);
                 swordHitbox.setUserData("UpSword");
                 swordHitbox.setSensor(true);
                 player.playerBody.applyForce(0,100000,0,0,true);
             } else if (moveLeft || player.facing == 4) {
                 tx.playerTextureRegion = tx.playerAttackLeft;
                 swordBody = bf.createSwordBody(world, player.playerBody, -15.5f, -1.5f);
-                swordHitbox = bf.createSwordHitbox(swordBody, true);
+                swordHitbox = bf.createSwordHitbox(swordBody, player.facing);
                 swordHitbox.setUserData("LeftSword");
                 swordHitbox.setSensor(true);
                 player.playerBody.applyForce(-100000,0,0,0,true);
             } else if (moveRight || player.facing == 2) {
                 tx.playerTextureRegion = tx.playerAttackRight;
                 swordBody = bf.createSwordBody(world, player.playerBody, 15.5f, -1.5f);
-                swordHitbox = bf.createSwordHitbox(swordBody, true);
+                swordHitbox = bf.createSwordHitbox(swordBody, player.facing);
                 swordHitbox.setUserData("RightSword");
                 swordHitbox.setSensor(true);
                 player.playerBody.applyForce(100000,0,0,0,true);
             } else {
-                tx.playerSprite = tx.playerAttackDown;
+                player.facing = 3;
+                tx.playerTextureRegion = tx.playerAttackDown;
                 swordBody = bf.createSwordBody(world, player.playerBody, -2.5f, -11.5f);
-                swordHitbox = bf.createSwordHitbox(swordBody, false);
+                swordHitbox = bf.createSwordHitbox(swordBody, player.facing);
                 swordHitbox.setUserData("DownSword");
                 swordHitbox.setSensor(true);
                 player.playerBody.applyForce(0,-100000,0,0,true);
@@ -658,7 +659,7 @@ public class GameInputProcessor implements InputProcessor {
             if (moveDown || player.facing == 3) {
                 tx.playerTextureRegion = tx.playerAttackDown;
                 swordBody = bf.createSwordBody(world, player.playerBody, -2.5f, -11.5f);
-                swordHitbox = bf.createSwordHitbox(swordBody, false);
+                swordHitbox = bf.createSwordHitbox(swordBody, player.facing);
                 swordHitbox.setUserData("DownSword");
                 swordHitbox.setSensor(true);
 
@@ -666,7 +667,7 @@ public class GameInputProcessor implements InputProcessor {
             } else if (moveUp || player.facing == 1) {
                 tx.playerTextureRegion = tx.playerAttackUp;
                 swordBody = bf.createSwordBody(world, player.playerBody, -2.5f, 17.5f);
-                swordHitbox = bf.createSwordHitbox(swordBody, false);
+                swordHitbox = bf.createSwordHitbox(swordBody, player.facing);
                 swordHitbox.setUserData("UpSword");
                 swordHitbox.setSensor(true);
 
@@ -674,7 +675,7 @@ public class GameInputProcessor implements InputProcessor {
             } else if (moveLeft || player.facing == 4) {
                 tx.playerTextureRegion = tx.playerAttackLeft;
                 swordBody = bf.createSwordBody(world, player.playerBody, -15.5f, -1.5f);
-                swordHitbox = bf.createSwordHitbox(swordBody, true);
+                swordHitbox = bf.createSwordHitbox(swordBody, player.facing);
                 swordHitbox.setUserData("LeftSword");
                 swordHitbox.setSensor(true);
 
@@ -682,15 +683,16 @@ public class GameInputProcessor implements InputProcessor {
             } else if (moveRight || player.facing == 2) {
                 tx.playerTextureRegion = tx.playerAttackRight;
                 swordBody = bf.createSwordBody(world, player.playerBody, 15.5f, -1.5f);
-                swordHitbox = bf.createSwordHitbox(swordBody, true);
+                swordHitbox = bf.createSwordHitbox(swordBody, player.facing);
                 swordHitbox.setUserData("RightSword");
                 swordHitbox.setSensor(true);
 
                 player.playerBody.applyForce(100000,0,0,0,true);
             } else {
-                tx.playerSprite = tx.playerAttackDown;
+                player.facing = 3;
+                tx.playerTextureRegion = tx.playerAttackDown;
                 swordBody = bf.createSwordBody(world, player.playerBody, -2.5f, -11.5f);
-                swordHitbox = bf.createSwordHitbox(swordBody, false);
+                swordHitbox = bf.createSwordHitbox(swordBody, player.facing);
                 swordHitbox.setUserData("DownSword");
                 swordHitbox.setSensor(true);
 
