@@ -916,7 +916,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					pedestalBatch.draw(tx.pedestal1upper,c.columnX,c.columnY+14);
 					break;
 				case 15:
-					pedestalBatch.draw(tx.pedestal2,c.columnX,c.columnY+2);
+					pedestalBatch.draw(tx.pedestal2upper,c.columnX,c.columnY+14);
 					break;
 				case 16:
 					pedestalBatch.draw(tx.pedestal3,c.columnX,c.columnY+2);
@@ -1612,7 +1612,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 									if (!C.visible) {
 										if (c.alpha > 50) {
 											c.loweredAlpha = false;
-										} else {
+										} else if (!C.visible){
 											c.loweredAlpha = true;
 										}
 										c.alpha--;
@@ -1622,6 +1622,18 @@ public class DungeonCrawler extends ApplicationAdapter {
 								}
 							}, 0.001f);
 
+
+						}else {
+							if (c.alpha < 100) {
+									c.loweredAlpha = false;
+									System.out.println(c.alpha);
+									c.alpha++;
+									c.alpha++;
+									c.alpha++;
+								} else {
+									c.alpha = 100;
+									c.loweredAlpha = true;
+								}
 
 						}
 						switch (c.type) {
@@ -1852,7 +1864,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 									if (!C.visible) {
 										if (c.alpha > 25) {
 											c.loweredAlpha = false;
-										} else {
+										} else if (!C.visible) {
 											c.loweredAlpha = true;
 										}
 										c.alpha--;
@@ -1861,12 +1873,22 @@ public class DungeonCrawler extends ApplicationAdapter {
 									}
 								}
 							}, 0.001f);
-
-
+						} else {
+							if (c.alpha < 100) {
+									c.loweredAlpha = false;
+									System.out.println(c.alpha);
+									c.alpha++;
+									c.alpha++;
+									c.alpha++;
+								} else {
+									c.alpha = 100;
+									c.loweredAlpha = true;
+								}
 						}
 						switch (c.type) {
 
 							case 4:
+
 								Column.renderPiece(columnStemBatch,tx.colStem, c.columnX, c.columnY, C.visible, c.alpha, C);
 
 								break;
@@ -1891,28 +1913,33 @@ public class DungeonCrawler extends ApplicationAdapter {
 					if (C.visible) {
 						switch (c.type) {
 							case 1:
-								c.alpha = 100;
+								//c.alpha = 100;
 								c.loweredAlpha = false;
+								c.alpha = 100;
 								Column.renderPiece(columnTopBatch,tx.colTop1, c.columnX, c.columnY, C.visible, c.alpha, C);
 								break;
 							case 2:
-								c.alpha = 100;
+								//c.alpha = 100;
 								c.loweredAlpha = false;
+								c.alpha = 100;
 								Column.renderPiece(columnTopBatch,tx.colTop2, c.columnX, c.columnY, C.visible, c.alpha, C);
 								break;
 							case 3:
-								c.alpha = 100;
+								//c.alpha = 100;
 								c.loweredAlpha = false;
+								c.alpha = 100;
 								Column.renderPiece(columnTopBatch,tx.colTop3, c.columnX, c.columnY, C.visible, c.alpha, C);
 								break;
 							case 10:
-								c.alpha = 100;
+								//c.alpha = 100;
 								c.loweredAlpha = false;
+								c.alpha = 100;
 								Column.renderPiece(columnTopBatch,tx.colTop4, c.columnX, c.columnY, C.visible, c.alpha, C);
 								break;
 							case 11:
-								c.alpha = 100;
+								//c.alpha = 100;
 								c.loweredAlpha = false;
+								c.alpha = 100;
 								Column.renderPiece(columnTopBatch,tx.colTop5, c.columnX, c.columnY, C.visible, c.alpha, C);
 								break;
 						}
@@ -1925,7 +1952,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 									if (!C.visible) {
 										if (c.alpha > 50) {
 											c.loweredAlpha = false;
-										} else {
+										} else if (!C.visible){
 											c.loweredAlpha = true;
 										}
 										c.alpha--;
@@ -1934,34 +1961,45 @@ public class DungeonCrawler extends ApplicationAdapter {
 									}
 								}
 							}, 0.001f);
-
+						}else {
+							if (c.alpha < 100) {
+									c.loweredAlpha = false;
+									System.out.println(c.alpha);
+									c.alpha++;
+									c.alpha++;
+									c.alpha++;
+								} else {
+									c.alpha = 100;
+									c.loweredAlpha = true;
+							}
 
 						}
+
 						switch (c.type) {
 							case 1:
+								c.loweredAlpha = false;
 								Column.renderPiece(columnTopBatch,tx.colTop1, c.columnX, c.columnY, C.visible, c.alpha, C);
 								break;
 							case 2:
+								c.loweredAlpha = false;
 								Column.renderPiece(columnTopBatch,tx.colTop2, c.columnX, c.columnY, C.visible, c.alpha, C);
 								break;
 							case 3:
+								c.loweredAlpha = false;
 								Column.renderPiece(columnTopBatch,tx.colTop3, c.columnX, c.columnY, C.visible, c.alpha, C);
 								break;
 							case 10:
+								c.loweredAlpha = false;
 								Column.renderPiece(columnTopBatch,tx.colTop4, c.columnX, c.columnY, C.visible, c.alpha, C);
 								break;
 							case 11:
+								c.loweredAlpha = false;
 								Column.renderPiece(columnTopBatch,tx.colTop5, c.columnX, c.columnY, C.visible, c.alpha, C);
 								break;
 						}
-
-
 					}
-
 					columnTopBatch.end();
-				}
-
-
+					}
 				}
 			}
 
@@ -2099,14 +2137,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 			if (r.type == 0) {
 				roofBatch.begin();
 				if (r.visible) {
-					roofBatch.setColor(1,1,1,1);
+					//roofBatch.setColor(1,1,1,1);
 					if (r.upDown) {
 						roofBatch.draw(tx.corridorRoofTexture, r.roofBody.getPosition().x - 32, r.roofBody.getPosition().y - 48, 64, 96);
 					} else {
 						roofBatch.draw(tx.corridorRoofTexture, r.roofBody.getPosition().x + 48, r.roofBody.getPosition().y - 32, 0, 0, 64, 96, 1, 1, 90);
 					}
 				} else {
-					roofBatch.setColor(1,1,1,0.30f);
+					//roofBatch.setColor(1,1,1,0.30f);
 					if (r.upDown) {
 						roofBatch.draw(tx.corridorRoofTexture, r.roofBody.getPosition().x - 32, r.roofBody.getPosition().y - 48, 64, 96);
 					} else {
@@ -2121,87 +2159,145 @@ public class DungeonCrawler extends ApplicationAdapter {
 		for (Room room : GenerateLevel.init.roomList) {
 			for (Roof r : room.roofs) {
 					roofBatch.begin();
+				if (!r.loweredAlpha) {
+					r.loweredAlpha = true;
+					Timer.schedule(new Timer.Task() {
+						@Override
+						public void run() {
+							if (!r.visible) {
+								if (r.alpha > 50) {
+									r.loweredAlpha = false;
+								}
+									//r.loweredAlpha = true;
 
+								if (r.alpha >= 0)
+								r.alpha--;
+								r.alpha--;
+							} else {
+								if (r.alpha < 100 && r.alpha > 0) {
+										r.loweredAlpha = false;
+										r.alpha++;
+										r.alpha++;
+									} else if (r.alpha < 0) {
+									System.out.println("DDDDDDDDDDDD");
+										r.alpha = 15;
+										r.loweredAlpha = true;
+									} else {
+									//r.alpha--;
+									//r.alpha--;
+									//r.alpha--;
+								}
+								}
+						}
+					}, 0.001f);
+				}
+				/*
+				if (r.visible) {
+					Timer.schedule(new Timer.Task() {
+						@Override
+						public void run() {
+								if (r.alpha < 100) {
+									r.alpha++;
+									r.alpha++;
+									r.alpha++;
+								} else {
+								}
+						}
+					}, 0.001f);
+
+				}
+
+				 */
 					switch (r.type) {
 						case 1:
 							if (r.visible) {
-								roofBatch.setColor(1,1,1,1);
-								roofBatch.draw(tx.roof3x3UpperTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y + (r.ext * 8), 80, 32);
+								//r.alpha = 100;
+
+								r.renderRoof(roofBatch, tx.roof3x3UpperTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y + (r.ext * 8), 80, 32, r.visible, r.alpha, r);
 								if (r.ext != 0) {
 									for (int i = 0; i < r.ext; i++) {
-										roofBatch.draw(tx.roof3x3MiddleTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - 16 - (i * 16) + (r.ext * 8), 80, 16);
+										r.renderRoof(roofBatch, tx.roof3x3MiddleTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - 16 - (i * 16) + (r.ext * 8), 80, 32, r.visible, r.alpha, r);
 									}
-									roofBatch.draw(tx.roof3x3LowerTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - (32 + (r.ext * 16)) + (r.ext * 8), 80, 32);
+									r.renderRoof(roofBatch, tx.roof3x3LowerTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - (32 + (r.ext * 16)) + (r.ext * 8), 80, 32, r.visible, r.alpha, r);
 								} else {
-									roofBatch.draw(tx.roof3x3LowerTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - (32 + (r.ext * 8)), 80, 32);
+									r.renderRoof(roofBatch, tx.roof3x3LowerTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - (32 + (r.ext * 8)), 80, 32, r.visible, r.alpha, r);
 								}
 							} else {
-								roofBatch.setColor(1,1,1,0.30f);
-								roofBatch.draw(tx.roof3x3UpperTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y + (r.ext * 8), 80, 32);
+								r.renderRoof(roofBatch, tx.roof3x3UpperTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y + (r.ext * 8), 80, 32, r.visible, r.alpha, r);
 								if (r.ext != 0) {
 									for (int i = 0; i < r.ext; i++) {
-										roofBatch.draw(tx.roof3x3MiddleTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - 16 - (i * 16) + (r.ext * 8), 80, 16);
+										r.renderRoof(roofBatch, tx.roof3x3MiddleTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - 16 - (i * 16) + (r.ext * 8), 80, 32, r.visible, r.alpha, r);
 									}
-									roofBatch.draw(tx.roof3x3LowerTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - (32 + (r.ext * 16)) + (r.ext * 8), 80, 32);
+									r.renderRoof(roofBatch, tx.roof3x3LowerTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - (32 + (r.ext * 16)) + (r.ext * 8), 80, 32, r.visible, r.alpha, r);
 								} else {
-									roofBatch.draw(tx.roof3x3LowerTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - (32 + (r.ext * 8)), 80, 32);
+									r.renderRoof(roofBatch, tx.roof3x3LowerTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - (32 + (r.ext * 8)), 80, 32, r.visible, r.alpha, r);
 								}
 							}
+
+
 							break;
 						case 2:
 							if (r.visible) {
-								roofBatch.setColor(1,1,1,1);
-								roofBatch.draw(tx.roof5x5UpperTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y + (r.ext * 8) + 8, 112, 32);
+								//r.alpha = 100;
+								r.loweredAlpha = false;
+								//roofBatch.setColor(1,1,1,1);
+								r.renderRoof(roofBatch, tx.roof5x5UpperTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y + (r.ext * 8) + 8, 112, 32, r.visible, r.alpha, r);
 								if (r.ext != 0) {
 									for (int i = 0; i < r.ext; i++) {
-										roofBatch.draw(tx.roof5x5MiddleTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y - (32 + (i * 16)) + 24 + (r.ext * 8), 112, 16);
+										r.renderRoof(roofBatch, tx.roof5x5MiddleTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y - (32 + (i * 16)) + 24 + (r.ext * 8), 112, 16, r.visible, r.alpha, r);
 									}
-									roofBatch.draw(tx.roof5x5LowerTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y - (64 + (r.ext * 16)) + 24 + (r.ext * 8), 112, 48);
+									r.renderRoof(roofBatch, tx.roof5x5LowerTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y - (64 + (r.ext * 16)) + 24 + (r.ext * 8), 112, 48, r.visible, r.alpha, r);
 								} else {
-									roofBatch.draw(tx.roof5x5LowerTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y - 64 + 24 + (r.ext * 8), 112, 48);
+									r.renderRoof(roofBatch, tx.roof5x5LowerTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y - (64 + (r.ext * 16)) + 24 + (r.ext * 8), 112, 48, r.visible, r.alpha, r);
 								}
 							} else {
-								roofBatch.setColor(1,1,1,0.30f);
-								roofBatch.draw(tx.roof5x5UpperTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y + (r.ext * 8) + 8, 112, 32);
+
+								r.renderRoof(roofBatch, tx.roof5x5UpperTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y + (r.ext * 8) + 8, 112, 32, r.visible, r.alpha, r);
 								if (r.ext != 0) {
 									for (int i = 0; i < r.ext; i++) {
-										roofBatch.draw(tx.roof5x5MiddleTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y - (32 + (i * 16)) + 24 + (r.ext * 8), 112, 16);
+										r.renderRoof(roofBatch, tx.roof5x5MiddleTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y - (32 + (i * 16)) + 24 + (r.ext * 8), 112, 16, r.visible, r.alpha, r);
 									}
-									roofBatch.draw(tx.roof5x5LowerTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y - (64 + (r.ext * 16)) + 24 + (r.ext * 8), 112, 48);
+									r.renderRoof(roofBatch, tx.roof5x5LowerTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y - (64 + (r.ext * 16)) + 24 + (r.ext * 8), 112, 48, r.visible, r.alpha, r);
+
 								} else {
-									roofBatch.draw(tx.roof5x5LowerTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y - 64 + 24 + (r.ext * 8), 112, 48);
+									r.renderRoof(roofBatch, tx.roof5x5LowerTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y - 64 + 24 + (r.ext * 8), 112, 48, r.visible, r.alpha, r);
 								}
 							}
 
 							break;
 						case 3:
 							if (r.visible) {
-								roofBatch.setColor(1,1,1,1);
-								roofBatch.draw(tx.roof7x7UpperTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y + (r.ext * 8) + 8, 144, 48);
+								//r.alpha = 100;
+								r.loweredAlpha = false;
+
+								r.renderRoof(roofBatch, tx.roof7x7UpperTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y + (r.ext * 8) + 8, 144, 48, r.visible, r.alpha, r);
 								if (r.ext != 0) {
 									for (int i = 0; i < r.ext; i++) {
-										roofBatch.draw(tx.roof7x7MiddleTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y - (72 + (i * 16)) + 64 + (r.ext * 8), 144, 16);
+
+										r.renderRoof(roofBatch, tx.roof7x7MiddleTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y - (72 + (i * 16)) + 64 + (r.ext * 8), 144,48, r.visible, r.alpha, r);
 									}
-									roofBatch.draw(tx.roof7x7LowerTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y - (80 + 40 + (r.ext * 16)) + 48 + 16 + (r.ext * 8), 144, 64);
+									r.renderRoof(roofBatch, tx.roof7x7LowerTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y - (80 + 40 + (r.ext * 16)) + 48 + 16 + (r.ext * 8), 144,64, r.visible, r.alpha, r);
+
 								} else {
-									roofBatch.draw(tx.roof7x7LowerTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y - 96 + 40 + (r.ext * 8), 144, 64);
+									r.renderRoof(roofBatch, tx.roof7x7LowerTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y - 96 + 40 + (r.ext * 8), 144,64, r.visible, r.alpha, r);
 								}
 							} else {
-									roofBatch.setColor(1,1,1,0.25f);
-									roofBatch.draw(tx.roof7x7UpperTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y + (r.ext * 8) + 8, 144, 48);
-									if (r.ext != 0) {
-										for (int i = 0; i < r.ext; i++) {
-											roofBatch.draw(tx.roof7x7MiddleTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y - (72 + (i * 16)) + 64 + (r.ext * 8), 144, 16);
-										}
-										roofBatch.draw(tx.roof7x7LowerTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y - (80 + 40 + (r.ext * 16)) + 48 + 16 + (r.ext * 8), 144, 64);
-									} else {
-										roofBatch.draw(tx.roof7x7LowerTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y - 96 + 40 + (r.ext * 8), 144, 64);
-									}
+								r.renderRoof(roofBatch, tx.roof7x7UpperTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y + (r.ext * 8) + 8, 144, 48, r.visible, r.alpha, r);
+								if (r.ext != 0) {
+									for (int i = 0; i < r.ext; i++) {
 
+										r.renderRoof(roofBatch, tx.roof7x7MiddleTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y - (72 + (i * 16)) + 64 + (r.ext * 8), 144,48, r.visible, r.alpha, r);
+									}
+									r.renderRoof(roofBatch, tx.roof7x7LowerTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y - (80 + 40 + (r.ext * 16)) + 48 + 16 + (r.ext * 8), 144,64, r.visible, r.alpha, r);
+								} else {
+										r.renderRoof(roofBatch, tx.roof7x7LowerTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y - 96 + 40 + (r.ext * 8), 144,64, r.visible, r.alpha, r);
+									}
 							}
 							break;
 						case 4:
 							if (r.visible) {
+								//r.alpha = 100;
+								r.loweredAlpha = false;
 								roofBatch.draw(tx.roof11x11UpperTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - 48, 208, 64);
 								if (r.ext != 0) {
 									for (int i = 0; i < r.ext; i++) {
@@ -2215,6 +2311,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 							break;
 						case 5:
 							if (r.visible) {
+								//r.alpha = 100;
+								r.loweredAlpha = false;
 								roofBatch.draw(tx.roof15x15UpperTexture, r.roofBody.getPosition().x, r.roofBody.getPosition().y - 64, 272, 80);
 								if (r.ext != 0) {
 									for (int i = 0; i < r.ext; i++) {
@@ -2228,7 +2326,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 							break;
 						case 7:
 							if (r.visible) {
-								roofBatch.setColor(1,1,1,1);
+								//r.alpha = 100;
+								r.loweredAlpha = false;
+								//roofBatch.setColor(1,1,1,1);
 								roofBatch.draw(tx.roof5x5UpperTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y + (r.ext * 8) + 8, 112, 32);
 								if (r.ext != 0) {
 									for (int i = 0; i < r.ext; i++) {
@@ -2239,7 +2339,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 									roofBatch.draw(tx.roof5x5LowerTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y - 64 + 24 + (r.ext * 8), 112, 48);
 								}
 							} else {
-								roofBatch.setColor(1,1,1,0.30f);
+								//roofBatch.setColor(1,1,1,0.30f);
 								roofBatch.draw(tx.roof5x5UpperTexture, r.roofBody.getPosition().x - 56, r.roofBody.getPosition().y + (r.ext * 8) + 8, 112, 32);
 								if (r.ext != 0) {
 									for (int i = 0; i < r.ext; i++) {

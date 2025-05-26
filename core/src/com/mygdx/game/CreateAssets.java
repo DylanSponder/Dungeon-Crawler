@@ -452,6 +452,7 @@ public class CreateAssets {
     public TextureRegion pedestal1 = new TextureRegion(columnsTextureSheet, 0,0,16,12);
     public TextureRegion pedestal1upper = new TextureRegion(columnsTextureSheet, 0,0,16,4);
     public TextureRegion pedestal2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion pedestal2upper = new TextureRegion(columnsTextureSheet, 0,0,16,4);
     public TextureRegion pedestal3 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion pedestal4 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
 
@@ -980,6 +981,7 @@ public class CreateAssets {
         colBase2Lower.setRegion(16,48,16,11);
         pedestal1.setRegion(32, 36, 16, 12);
         pedestal1upper.setRegion(32, 32, 16, 4);
+        pedestal2upper.setRegion(48, 32, 16, 4);
         pedestal2.setRegion(48, 32, 16, 16);
         pedestal3.setRegion(64, 32, 16, 16);
         pedestal4.setRegion(80, 32, 16, 16);
