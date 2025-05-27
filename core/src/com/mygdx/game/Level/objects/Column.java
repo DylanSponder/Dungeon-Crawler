@@ -19,6 +19,7 @@ public class Column {
 
     public Column() {
         this.visible = true;
+        this.alpha = 100;
         this.columnPieces = new ArrayList<>();
 
     }
@@ -40,9 +41,6 @@ public class Column {
 
     public static void renderPiece(SpriteBatch batch, TextureRegion tex, float x, float y, boolean visible, float alpha, Column c) {// int alpha
 
-        if (visible) {
-            c.alpha = 100;
-        }
 
         batch.setColor(1, 1, 1, alpha/100);
         batch.draw(tex, x, y);

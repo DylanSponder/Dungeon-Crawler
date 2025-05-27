@@ -640,6 +640,10 @@ public class RenderRules {
                                     drawableLevelLayer.add(index, "fped2");
                                     index++;
                                     break;
+                                case "ped2heal":
+                                    drawableLevelLayer.add(index, "fped2heal");
+                                    index++;
+                                    break;
                                 case "ped3":
                                     drawableLevelLayer.add(index, "fped3");
                                     index++;

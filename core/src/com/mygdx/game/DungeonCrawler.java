@@ -1575,35 +1575,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 			for (ColumnPiece c : C.columnPieces) {
 				//for each BASE instead - revise - columnpieces is too broad
 
-				if (c.base) {
 					columnBaseBatch.begin();
-					if (C.visible) {
-						switch (c.type) {
-							case 7:
-								c.alpha = 100;
-								c.loweredAlpha = false;
-								Column.renderPiece(columnBaseBatch,tx.colBase, c.columnX, c.columnY, C.visible, c.alpha, C);
 
-								//columnBaseBatch.draw(tx.colBase, c.columnX, c.columnY);
-								if (!c.lowerCreated) {
-									c.lowerCreated = true;
-								}
-								break;
-							case 8:
-								columnBaseBatch.draw(tx.pedestal1, c.columnX, c.columnY);
-								break;
-							case 9:
-								columnBaseBatch.draw(tx.pedestal2, c.columnX, c.columnY);
-								break;
-							case 18:
-								c.alpha = 100;
-								c.loweredAlpha = false;
-								Column.renderPiece(columnBaseBatch,tx.colBase2, c.columnX, c.columnY, C.visible, c.alpha, C);
-								//columnBaseBatch.draw(tx.colBase2, c.columnX, c.columnY);
-								break;
-						}
 
-					} else {
 						if (!c.loweredAlpha) {
 							c.loweredAlpha = true;
 							Timer.schedule(new Timer.Task() {
@@ -1612,55 +1586,67 @@ public class DungeonCrawler extends ApplicationAdapter {
 									if (!C.visible) {
 										if (c.alpha > 50) {
 											c.loweredAlpha = false;
-										} else if (!C.visible){
+										}
+										//r.loweredAlpha = true;
+
+										if (c.alpha >= 0)
+											c.alpha--;
+										c.alpha--;
+									} else {
+										if (c.alpha < 100 && c.alpha > 0) {
+											c.loweredAlpha = false;
+											c.alpha++;
+											c.alpha++;
+										} else if (c.alpha < 0) {
+
+											c.alpha = 15;
 											c.loweredAlpha = true;
 										}
-										c.alpha--;
-										c.alpha--;
-										c.alpha--;
 									}
 								}
 							}, 0.001f);
+						} else {
+							if (c.alpha < 100 && c.alpha > 0) {
+								c.loweredAlpha = false;
+								System.out.println(c.alpha);
+								c.alpha++;
+								c.alpha++;
+								c.alpha++;
+							} else if (c.alpha < 0) {
+								//c.alpha = 100;
+								c.alpha = 0;
+								//c.loweredAlpha = true;
+							}
+						}
 
+							switch (c.type) {
+								case 7:
 
-						}else {
-							if (c.alpha < 100) {
 									c.loweredAlpha = false;
-									System.out.println(c.alpha);
-									c.alpha++;
-									c.alpha++;
-									c.alpha++;
-								} else {
-									c.alpha = 100;
-									c.loweredAlpha = true;
-								}
+									Column.renderPiece(columnBaseBatch,tx.colBase, c.columnX, c.columnY, C.visible, c.alpha, C);
 
-						}
-						switch (c.type) {
-							case 7:
-								Column.renderPiece(columnBaseBatch,tx.colBase, c.columnX, c.columnY, C.visible, c.alpha, C);
+									//columnBaseBatch.draw(tx.colBase, c.columnX, c.columnY);
+									if (!c.lowerCreated) {
+										c.lowerCreated = true;
+									}
+									break;
+								case 8:
+									columnBaseBatch.draw(tx.pedestal1, c.columnX, c.columnY);
+									break;
+								case 9:
+									columnBaseBatch.draw(tx.pedestal2, c.columnX, c.columnY);
+									break;
+								case 18:
 
-								//columnBaseBatch.draw(tx.colBase, c.columnX, c.columnY);
-								if (!c.lowerCreated) {
-									c.lowerCreated = true;
-								}
-								break;
-							case 8:
-								columnBaseBatch.draw(tx.pedestal1, c.columnX, c.columnY);
-								break;
-							case 9:
-								columnBaseBatch.draw(tx.pedestal2, c.columnX, c.columnY);
-								break;
-							case 18:
-								Column.renderPiece(columnBaseBatch,tx.colBase2, c.columnX, c.columnY, C.visible, c.alpha, C);
-								//columnBaseBatch.draw(tx.colBase2, c.columnX, c.columnY);
-								break;
-						}
-					}
+									c.loweredAlpha = false;
+									Column.renderPiece(columnBaseBatch,tx.colBase2, c.columnX, c.columnY, C.visible, c.alpha, C);
+									//columnBaseBatch.draw(tx.colBase2, c.columnX, c.columnY);
+									break;
+							}
+
+
 
 					columnBaseBatch.end();
-				}
-
 
 			}
 		}
@@ -1835,172 +1821,136 @@ public class DungeonCrawler extends ApplicationAdapter {
 		for (Column C : columns) {
 			for (ColumnPiece c : C.columnPieces) {
 
-				if (c.stem) {
 					columnStemBatch.begin();
-					if (C.visible) {
-						switch (c.type) {
-							case 4:
-								c.alpha = 100;
-								c.loweredAlpha = false;
-								Column.renderPiece(columnStemBatch,tx.colStem, c.columnX, c.columnY, C.visible, C.alpha, C);
-								break;
-							case 5:
-								c.alpha = 100;
-								c.loweredAlpha = false;
-								columnStemBatch.draw(tx.colStemDamaged1, c.columnX, c.columnY);
-								break;
-							case 6:
-								c.alpha = 100;
-								c.loweredAlpha = false;
-								columnStemBatch.draw(tx.colStemDamaged2, c.columnX, c.columnY);
-								break;
+				switch (c.type) {
+					case 4:
+
+						//if (C.visible) {
+							c.loweredAlpha = false;
+						//}
+						Column.renderPiece(columnStemBatch,tx.colStem, c.columnX, c.columnY, C.visible, c.alpha, C);
+						break;
+					case 5:
+						if (C.visible) {
+							c.loweredAlpha = false;
 						}
-					} else {
-						if (!c.loweredAlpha) {
-							c.loweredAlpha = true;
-							Timer.schedule(new Timer.Task() {
-								@Override
-								public void run() {
-									if (!C.visible) {
-										if (c.alpha > 25) {
-											c.loweredAlpha = false;
-										} else if (!C.visible) {
-											c.loweredAlpha = true;
-										}
-										c.alpha--;
-										c.alpha--;
-										c.alpha--;
-									}
-								}
-							}, 0.001f);
-						} else {
-							if (c.alpha < 100) {
+						//columnStemBatch.draw(tx.colStemDamaged1, c.columnX, c.columnY);
+						break;
+					case 6:
+						if (C.visible) {
+							c.loweredAlpha = false;
+						}
+						//columnStemBatch.draw(tx.colStemDamaged2, c.columnX, c.columnY);
+						break;
+				}
+				if (!c.loweredAlpha) {
+					c.loweredAlpha = true;
+					Timer.schedule(new Timer.Task() {
+						@Override
+						public void run() {
+							if (!C.visible) {
+								if (c.alpha > 50) {
 									c.loweredAlpha = false;
-									System.out.println(c.alpha);
+								}
+								//r.loweredAlpha = true;
+
+								if (c.alpha >= 0)
+									c.alpha--;
+									c.alpha--;
+							} else {
+								if (c.alpha < 100 && c.alpha > 0) {
+									c.loweredAlpha = false;
 									c.alpha++;
 									c.alpha++;
-									c.alpha++;
-								} else {
-									c.alpha = 100;
+								} else if (c.alpha < 0) {
+
+									c.alpha = 15;
 									c.loweredAlpha = true;
 								}
+							}
 						}
-						switch (c.type) {
+					}, 0.001f);
+				}
 
-							case 4:
 
-								Column.renderPiece(columnStemBatch,tx.colStem, c.columnX, c.columnY, C.visible, c.alpha, C);
-
-								break;
-							case 5:
-								columnStemBatch.draw(tx.colStemDamaged1, c.columnX, c.columnY);
-								break;
-							case 6:
-								columnStemBatch.draw(tx.colStemDamaged2, c.columnX, c.columnY);
-								break;
-						}
-					}
 
 					columnStemBatch.end();
 				}
-			}
+
 		}
 		for (Column C : columns) {
 			for (ColumnPiece c : C.columnPieces) {
-
-				if (c.top) {
 					columnTopBatch.begin();
-					if (C.visible) {
-						switch (c.type) {
-							case 1:
-								//c.alpha = 100;
-								c.loweredAlpha = false;
-								c.alpha = 100;
-								Column.renderPiece(columnTopBatch,tx.colTop1, c.columnX, c.columnY, C.visible, c.alpha, C);
-								break;
-							case 2:
-								//c.alpha = 100;
-								c.loweredAlpha = false;
-								c.alpha = 100;
-								Column.renderPiece(columnTopBatch,tx.colTop2, c.columnX, c.columnY, C.visible, c.alpha, C);
-								break;
-							case 3:
-								//c.alpha = 100;
-								c.loweredAlpha = false;
-								c.alpha = 100;
-								Column.renderPiece(columnTopBatch,tx.colTop3, c.columnX, c.columnY, C.visible, c.alpha, C);
-								break;
-							case 10:
-								//c.alpha = 100;
-								c.loweredAlpha = false;
-								c.alpha = 100;
-								Column.renderPiece(columnTopBatch,tx.colTop4, c.columnX, c.columnY, C.visible, c.alpha, C);
-								break;
-							case 11:
-								//c.alpha = 100;
-								c.loweredAlpha = false;
-								c.alpha = 100;
-								Column.renderPiece(columnTopBatch,tx.colTop5, c.columnX, c.columnY, C.visible, c.alpha, C);
-								break;
-						}
-					} else {
-						if (!c.loweredAlpha) {
-							c.loweredAlpha = true;
-							Timer.schedule(new Timer.Task() {
-								@Override
-								public void run() {
-									if (!C.visible) {
-										if (c.alpha > 50) {
-											c.loweredAlpha = false;
-										} else if (!C.visible){
-											c.loweredAlpha = true;
-										}
+					if (!c.loweredAlpha) {
+						c.loweredAlpha = true;
+						Timer.schedule(new Timer.Task() {
+							@Override
+							public void run() {
+								if (!C.visible) {
+									if (c.alpha > 50) {
+										c.loweredAlpha = false;
+									}
+									//r.loweredAlpha = true;
+
+									if (c.alpha >= 0)
 										c.alpha--;
 										c.alpha--;
 										c.alpha--;
+								} else {
+									if (c.alpha < 100 && c.alpha > 0) {
+										c.loweredAlpha = false;
+										c.alpha++;
+										c.alpha++;
+									} else if (c.alpha < 0) {
+
+										c.alpha = 15;
+										c.loweredAlpha = true;
 									}
 								}
-							}, 0.001f);
-						}else {
-							if (c.alpha < 100) {
-									c.loweredAlpha = false;
-									System.out.println(c.alpha);
-									c.alpha++;
-									c.alpha++;
-									c.alpha++;
-								} else {
-									c.alpha = 100;
-									c.loweredAlpha = true;
 							}
-
-						}
+						}, 0.001f);
+					}
 
 						switch (c.type) {
 							case 1:
-								c.loweredAlpha = false;
+								if (C.visible) {
+									c.loweredAlpha = false;
+								}
 								Column.renderPiece(columnTopBatch,tx.colTop1, c.columnX, c.columnY, C.visible, c.alpha, C);
 								break;
 							case 2:
-								c.loweredAlpha = false;
+								if (C.visible) {
+									c.loweredAlpha = false;
+								}
+
 								Column.renderPiece(columnTopBatch,tx.colTop2, c.columnX, c.columnY, C.visible, c.alpha, C);
 								break;
 							case 3:
-								c.loweredAlpha = false;
+								if (C.visible) {
+									c.loweredAlpha = false;
+								}
+
 								Column.renderPiece(columnTopBatch,tx.colTop3, c.columnX, c.columnY, C.visible, c.alpha, C);
 								break;
 							case 10:
-								c.loweredAlpha = false;
+								if (C.visible) {
+									c.loweredAlpha = false;
+								}
+
 								Column.renderPiece(columnTopBatch,tx.colTop4, c.columnX, c.columnY, C.visible, c.alpha, C);
 								break;
 							case 11:
-								c.loweredAlpha = false;
+								if (C.visible) {
+									c.loweredAlpha = false;
+								}
+
 								Column.renderPiece(columnTopBatch,tx.colTop5, c.columnX, c.columnY, C.visible, c.alpha, C);
 								break;
 						}
-					}
+
 					columnTopBatch.end();
 					}
-				}
+
 			}
 
 		for (Statue s : statues) {
@@ -2168,7 +2118,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 								if (r.alpha > 50) {
 									r.loweredAlpha = false;
 								}
-									//r.loweredAlpha = true;
 
 								if (r.alpha >= 0)
 								r.alpha--;
@@ -2179,14 +2128,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 										r.alpha++;
 										r.alpha++;
 									} else if (r.alpha < 0) {
-									System.out.println("DDDDDDDDDDDD");
+
 										r.alpha = 15;
 										r.loweredAlpha = true;
-									} else {
-									//r.alpha--;
-									//r.alpha--;
-									//r.alpha--;
-								}
+									}
 								}
 						}
 					}, 0.001f);
@@ -2212,6 +2157,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						case 1:
 							if (r.visible) {
 								//r.alpha = 100;
+								r.loweredAlpha = false;
 
 								r.renderRoof(roofBatch, tx.roof3x3UpperTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y + (r.ext * 8), 80, 32, r.visible, r.alpha, r);
 								if (r.ext != 0) {
