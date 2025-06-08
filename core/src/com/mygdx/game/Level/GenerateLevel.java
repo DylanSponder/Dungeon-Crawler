@@ -138,7 +138,7 @@ public class GenerateLevel {
                     if (roomsIndex == numRooms - 1) {
                         newRoom.roomNum = 13;
                     } else {
-                        newRoom.roomNum = 13;
+                        newRoom.roomNum = random;
                     }
                     //random room picker
 
@@ -1964,6 +1964,18 @@ for (int i = 0; i < layerSize; i++) {
             init.roomList.get(roomIndex).spawners.add(fireped1b);
             break;
         default: {
+            //coltu, coldo, colio,
+            // coltb, coldb, colib,
+            // cfltu, cfldo, cflio,
+            // cfltb, cfldb, cflib,
+            // csltb, csldb, cslib
+            //TODO: missing:
+            //costu, cosdo, cosio //columns with squared bases
+            //costb, cosb, cosib //columns with full squared bases
+            //csstb, cssdb, cssib //columns with statues and full squared bases
+            //cfstb, cfsdb, cfsib //columns with fire and full squared bases
+            //cfstu, cfsdo, cfsio //columns with fire and suquared bases
+
             if (levelTextures.get(i).matches("coltu.+")) {//tuscan
 
                 Column coltu = new Column();

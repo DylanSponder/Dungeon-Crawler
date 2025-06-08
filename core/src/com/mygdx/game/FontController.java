@@ -12,25 +12,25 @@ public class FontController {
         font.draw(inventoryBatch, text2.message, x, y);
 
         if (text2.hasSprite && text2.sprite == CreateAssets.getInstance().potionItemSprite){
-            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-8f,9,11,9,11,0.6f,0.6f,0);
+            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-10f,9,11,9,11,0.6f,0.6f,0);
         }
         else if((text2.hasSprite && text2.sprite == CreateAssets.getInstance().torchItemSprite)) {
-            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-9.5f,10,15,10,15,0.6f,0.6f,0);
+            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-11.5f,10,15,10,15,0.6f,0.6f,0);
         }
         else if((text2.hasSprite && text2.sprite == CreateAssets.getInstance().shieldItemSprite)) {
-            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-8f,11,11,11,11,0.6f,0.6f,0);
+            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-10f,11,11,11,11,0.6f,0.6f,0);
         }
         else if((text2.hasSprite && text2.sprite == CreateAssets.getInstance().beltItemSprite)) {
-            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-8f,13,12,13,12,0.6f,0.6f,0);
+            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-10f,13,12,13,12,0.6f,0.6f,0);
         }
         else if((text2.hasSprite && text2.sprite == CreateAssets.getInstance().chiselItemSprite)) {
-            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-8f,13,13,13,13,0.6f,0.6f,0);
+            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-10f,13,13,13,13,0.6f,0.6f,0);
         }
         else if((text2.hasSprite && text2.sprite == CreateAssets.getInstance().greekfireItemSprite)) {
-            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-8f,14,15,14,15,0.6f,0.6f,0);
+            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-13f,14,15,14,15,0.6f,0.6f,0);
         }
         else if (text2.hasSprite && text2.sprite == CreateAssets.getInstance().coinHUDSprite) {
-            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-7f,10,10,9,9,0.6f,0.6f,0);
+            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-9.3f,10,10,9,9,0.6f,0.6f,0);
         }
 
     }

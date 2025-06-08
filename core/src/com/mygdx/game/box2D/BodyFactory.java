@@ -11,6 +11,7 @@ import static com.mygdx.game.DungeonCrawler.chiselHitbox;
 public class BodyFactory {
 
     public Body createWall(World world, float x, float y) {
+        //needs to acommodate larger walls
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -23,6 +24,22 @@ public class BodyFactory {
         shape.dispose();
         return body;
     }
+    /*
+        public Body createSmallWall(World world, float x, float y) {
+        //needs to acommodate larger walls
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 8, y + 8);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(8, 8);
+        body.createFixture(shape, 1.0f);
+        shape.dispose();
+        return body;
+    }
+     */
 
     public Body createColumnHitbox(World world, float x, float y, int size, boolean bigbase) {
         Body body;

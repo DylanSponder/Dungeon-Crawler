@@ -23,15 +23,15 @@ public class LightController {
                 light.lightTimeElapsed = 0;
                 if (light.type == 1) {
                     //fires
-                    light.randLightLevel = Random.randomInt(800,700);
+                    light.randLightLevel = Random.randomInt(800,650);
                 }
                 if (light.type == 2) {
                     //spawner flames
-                    light.randLightLevel = Random.randomInt(700,600);
+                    light.randLightLevel = Random.randomInt(700,550);
                 }
                 if (light.type == 3) {
                     //small flames - candles, torches and fire arrows
-                    light.randLightLevel = Random.randomInt(500,400);
+                    light.randLightLevel = Random.randomInt(550,450);
                 }
 
                 //convert to float proper

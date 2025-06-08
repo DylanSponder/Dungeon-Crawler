@@ -1552,7 +1552,7 @@ public class GameContactListener implements ContactListener {
 
             case "Cobweb":
                 if (collider.getUserData() == "PlayerBound") {
-                    DungeonCrawler.PLAYER_SPEED_MULTI = 45f;
+                    DungeonCrawler.PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED;
                     player.touchingCobweb = false;
                     break;
                 }
@@ -1606,7 +1606,7 @@ public class GameContactListener implements ContactListener {
         switch (collideeAsString) {
             case "Cobweb":
                 if (collider.getUserData() == "PlayerBound") {
-                    DungeonCrawler.PLAYER_SPEED_MULTI = 45f;
+                    DungeonCrawler.PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED;
                     player.touchingCobweb = false;
                     for (Cobweb cob : cobwebs) {
                         if (cob.cobBody == collidee.getBody()) {

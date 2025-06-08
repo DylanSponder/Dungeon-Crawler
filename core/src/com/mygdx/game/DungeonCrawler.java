@@ -115,6 +115,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static float PLAYER_X = 0f;
 	public static float PLAYER_Y = 0f;
 	public static float PLAYER_SPEED_MULTI;
+	public static float PLAYER_DEFAULT_SPEED;
 	private TiledMapRenderer renderer;
 	public static OrthographicCamera camera;
 	public static final float DEFAULT_VIEWPORT_WIDTH = 300f;
@@ -256,7 +257,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		Vector2 vec = new Vector2();
 		vec.x = PLAYER_X;
 		vec.y = PLAYER_Y;
-		PLAYER_SPEED_MULTI = 45f;
+		PLAYER_DEFAULT_SPEED = 38f;
+		PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED;
 
 		//initialize the Box2D body factory, asset instance
 		//and collision listener
@@ -2220,7 +2222,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 								if (r.ext != 0) {
 									for (int i = 0; i < r.ext; i++) {
 
-										r.renderRoof(roofBatch, tx.roof7x7MiddleTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y - (72 + (i * 16)) + 64 + (r.ext * 8), 144,48, r.visible, r.alpha, r);
+										r.renderRoof(roofBatch, tx.roof7x7MiddleTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y - (72 + (i * 16)) + 64 + (r.ext * 8), 144,16, r.visible, r.alpha, r);
 									}
 									r.renderRoof(roofBatch, tx.roof7x7LowerTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y - (80 + 40 + (r.ext * 16)) + 48 + 16 + (r.ext * 8), 144,64, r.visible, r.alpha, r);
 
@@ -2232,7 +2234,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 								if (r.ext != 0) {
 									for (int i = 0; i < r.ext; i++) {
 
-										r.renderRoof(roofBatch, tx.roof7x7MiddleTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y - (72 + (i * 16)) + 64 + (r.ext * 8), 144,48, r.visible, r.alpha, r);
+										r.renderRoof(roofBatch, tx.roof7x7MiddleTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y - (72 + (i * 16)) + 64 + (r.ext * 8), 144,16, r.visible, r.alpha, r);
 									}
 									r.renderRoof(roofBatch, tx.roof7x7LowerTexture, r.roofBody.getPosition().x - 72, r.roofBody.getPosition().y - (80 + 40 + (r.ext * 16)) + 48 + 16 + (r.ext * 8), 144,64, r.visible, r.alpha, r);
 								} else {
