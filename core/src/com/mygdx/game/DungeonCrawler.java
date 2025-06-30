@@ -11,6 +11,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -46,7 +47,7 @@ import static com.mygdx.game.PauseMenu.menuContainer;
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch arrowBatch, enemySkullBatch, enemySpiderBatch, enemyGhostBatch, enemyEyeBatch, potBatch, hudBatch, tutoBatch, alertFontBatch, inventoryBatch, sightFontBatch;
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, coinBatch, obstacleBatch, fireBatch, flameBatch, webBatch, cobBatch, candleBatch, eyebeamBatch;
-	private SpriteBatch bossMinotaurBatch, statueBatch;
+	private SpriteBatch bossMinotaurBatch, statueBatch, flagBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch, roofBatch, columnBaseLowerBatch, heartBatch, pedestalUpperBatch;
 	public static SpriteBatch trapBatch, playerBatch, weaponBatch;
 	public static World world;
@@ -108,6 +109,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Fire> fires;
 	public static ArrayList<ColumnPiece> columnPieces;
 	public static ArrayList<Column> columns;
+	public static ArrayList<Flag> flags;
 	public static ArrayList<Statue> statues;
 	public static ArrayList<Roof> roofs;
 	public static float PLAYER_HORIZONTAL_SPEED = 0f;
@@ -128,6 +130,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public AssetManager assetManager;
 	public static float stateTime, stateTime2, stateTime3, stateTime4;
 	public TextureRegion currentFrame;
+	public ShaderProgram flagShader;
+	public float flag_time;
 
 
 	public static boolean leanDown = false, leanUp = false, leanLeft = false, leanRight = false, leanUpLeft = false, leanUpRight = false;
@@ -145,6 +149,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 		assetManager = new AssetManager();
 		soundController = new SoundController();
 		lightController = new LightController();
+
+
+
+
 		menuRenderer = new ShapeRenderer();
 		playerBatch = new SpriteBatch();
 		weaponBatch = new SpriteBatch();
@@ -159,6 +167,32 @@ public class DungeonCrawler extends ApplicationAdapter {
 		boneBatch = new SpriteBatch();
 		bossMinotaurBatch = new SpriteBatch();
 		statueBatch = new SpriteBatch();
+		flagBatch = new SpriteBatch();
+
+		flag_time = 0;
+
+		flagShader = new ShaderProgram(flagBatch.getShader().getVertexShaderSource(), Gdx.files.internal("HellasDungeon/Level/Shaders/flag.frag").readString());
+		if (!flagShader.isCompiled()) {
+
+			System.out.println(flagShader.getLog());
+
+		}
+		//flagShader.setUniform("v_texCoords", );
+		flagShader.setUniformf("u_fixedBasePosY", 0.0f);
+
+
+
+
+		//flagShader.setUniformf("u_texture", );
+		//flagShader.setUniformf("u_offsetX", 1.0f);
+		//flagShader.setUniformf("uv", 0f);
+
+
+
+
+
+		flagShader.pedantic = false;
+
 		eyebeamBatch = new SpriteBatch();
 		webBatch = new SpriteBatch();
 		doorBatch = new SpriteBatch();
@@ -222,6 +256,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		columnPieces = new ArrayList<>();
 		statues = new ArrayList<>();
 		fires = new ArrayList<>();
+		flags = new ArrayList<>();
 		extinguishedRespawnFires = new ArrayList<>();
 		collectedPotions = new ArrayList<Potion>();
 		collectedCoins = new ArrayList<Coin>();
@@ -1955,6 +1990,61 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			}
 
+				for (Flag f : flags) {
+					flag_time += Gdx.graphics.getDeltaTime();
+					flagShader.setUniformf("u_swayIntensity", 0.2f);
+
+					flagShader.setUniformf("u_verticalDensity", 1.0f);
+					flagShader.setUniformf("u_time", flag_time);
+					flagShader.setUniformf("u_speed", 1.5f);
+					flagBatch.setShader(flagShader);
+					flagBatch.begin();
+					/*
+				if (!f.loweredAlpha) {
+					f.loweredAlpha = true;
+					Timer.schedule(new Timer.Task() {
+						@Override
+						public void run() {
+							if (!f.visible) {
+								if (f.alpha > 50) {
+									f.loweredAlpha = false;
+								}
+
+								if (f.alpha >= 0)
+								f.alpha--;
+								f.alpha--;
+							} else {
+								if (f.alpha < 100 && f.alpha > 0) {
+										f.loweredAlpha = false;
+										f.alpha++;
+										f.alpha++;
+									} else if (f.alpha < 0) {
+
+										f.alpha = 15;
+										f.loweredAlpha = true;
+									}
+								}
+						}
+					}, 0.001f);
+				}
+
+					 */
+					//if (f.visible) {
+
+						//f.loweredAlpha = false;
+
+						f.renderFlag(flagBatch, tx.flag1, f.flagBody.getPosition().x, f.flagBody.getPosition().y, 9, 16, f.visible, f.alpha, f);
+
+					//} else {
+						//f.renderFlag(flagBatch, tx.flag1, f.flagBody.getPosition().x, f.flagBody.getPosition().y, 9, 16, f.visible, f.alpha, f);
+				//	}
+
+					flagBatch.end();
+				}
+
+
+
+
 		for (Statue s : statues) {
 			statueBatch.begin();
 			statueBatch.draw(tx.statue1,s.statueX,s.statueY);
@@ -2477,6 +2567,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			webBatch.setProjectionMatrix(camera.combined);
 			boneBatch.setProjectionMatrix(camera.combined);
 			statueBatch.setProjectionMatrix(camera.combined);
+			flagBatch.setProjectionMatrix(camera.combined);
 			eyebeamBatch.setProjectionMatrix(camera.combined);
 			enemySkullBatch.setProjectionMatrix(camera.combined);
 			enemySpiderBatch.setProjectionMatrix(camera.combined);
@@ -2530,7 +2621,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		rayHandler.update();
 
 		if (menuClosed) {
-			//create a subtle fading in and out of light sources for added realism
+			//subtle fading in and out of light sources for added realism
 			lightController.fadeLight(fires);
 			//update the world
 			world.step(1 / 60f, 6, 2);

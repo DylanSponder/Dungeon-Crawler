@@ -90,6 +90,8 @@ public class CreateAssets {
     Texture arrowTrapTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/ArrowTrap.png"));
     Texture fireArrowTrapTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/FireArrowTrap.png"));
 
+    Texture flagTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Flag.png"));
+
     Texture roof3x3 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/3x3.png"));
     Texture roof5x5 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/5x5.png"));
     Texture roof7x7 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/7x7.png"));
@@ -458,6 +460,8 @@ public class CreateAssets {
 
     public TextureRegion statue1 = new TextureRegion(columnsTextureSheet, 0,0,15,19);
 
+    public TextureRegion flag1 = new TextureRegion(flagTexture, 0,0,9,16);
+
     //Roof textures
 
     public TextureRegion corridorRoofTexture = new TextureRegion(roomBackground,0,0,64,96);
@@ -621,6 +625,9 @@ public class CreateAssets {
 
     public Sprite greekfireItemSprite = new Sprite(greekfireItemTexture, 14, 15);
     public Sprite greekfireSlotSprite = new Sprite(greekfireSlotTexture, 13, 13);
+
+    public Sprite capeSprite = new Sprite(flagTexture, 9, 15);
+    public Sprite capeSlotSprite = new Sprite(flagTexture, 9, 15);
 
     public Sprite compassSprite = new Sprite(compassTexture, 27,27);
     public Sprite compassArrowSprite = new Sprite(compassArrowTexture, 13,22);

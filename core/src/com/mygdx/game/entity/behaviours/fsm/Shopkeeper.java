@@ -93,6 +93,12 @@ public class Shopkeeper {
                 this.inventoryText.add(t);
                 break;
             }
+            case "CAPE": {
+                String msg = (index + 1) + ".   CAPE";
+                Text t = new Text(DungeonCrawler.defaultFont2, msg, Color.WHITE, false,100, 0.1f, false, true,  tx.capeSprite, 3.25f);
+                this.inventoryText.add(t);
+                break;
+            }
             case "LANCE": {
                 String msg = (index + 1) + ".   LANCE";
                 Text t = new Text(DungeonCrawler.defaultFont2, msg, Color.WHITE, false,100, 0.1f, false, false,  tx.coinHUDSprite, 6f);
