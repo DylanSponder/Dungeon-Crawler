@@ -45,4 +45,12 @@ public class Column {
         batch.setColor(1, 1, 1, alpha/100);
         batch.draw(tex, x, y);
     }
+/*
+    public generateColumn() {
+
+
+
+    }
+
+ */
 }
