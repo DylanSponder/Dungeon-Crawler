@@ -151,8 +151,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 		lightController = new LightController();
 
 
-
-
 		menuRenderer = new ShapeRenderer();
 		playerBatch = new SpriteBatch();
 		weaponBatch = new SpriteBatch();
@@ -168,27 +166,18 @@ public class DungeonCrawler extends ApplicationAdapter {
 		bossMinotaurBatch = new SpriteBatch();
 		statueBatch = new SpriteBatch();
 		flagBatch = new SpriteBatch();
+		//flagBatch.enableBlending();
 
 		flag_time = 0;
 
 		flagShader = new ShaderProgram(flagBatch.getShader().getVertexShaderSource(), Gdx.files.internal("HellasDungeon/Level/Shaders/flag.frag").readString());
-		if (!flagShader.isCompiled()) {
 
-			System.out.println(flagShader.getLog());
-
-		}
 		//flagShader.setUniform("v_texCoords", );
 		flagShader.setUniformf("u_fixedBasePosY", 0.0f);
-
-
-
 
 		//flagShader.setUniformf("u_texture", );
 		//flagShader.setUniformf("u_offsetX", 1.0f);
 		//flagShader.setUniformf("uv", 0f);
-
-
-
 
 
 		flagShader.pedantic = false;
@@ -292,7 +281,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		Vector2 vec = new Vector2();
 		vec.x = PLAYER_X;
 		vec.y = PLAYER_Y;
-		PLAYER_DEFAULT_SPEED = 38f;
+		PLAYER_DEFAULT_SPEED = 40f;//38
 		PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED;
 
 		//initialize the Box2D body factory, asset instance
@@ -363,6 +352,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//initialize HUD and hide the compass
 		hud = new HUD(vp, hudBatch);
 		Compass.hideCompass();
+
+		//for whatever reason, the first sprite in a batch with a shader can't become transparent so we create one far out of sight
+		Flag flag = new Flag(world, 0,0);
+		flag.createFlagHitbox(0,0, world);
+		flags.add(flag);
 
 		//generate the level
 		GenerateLevel level = new GenerateLevel();
@@ -916,12 +910,16 @@ public class DungeonCrawler extends ApplicationAdapter {
 		for (ColumnPiece c : columnPieces) {
 			columnBaseLowerBatch.begin();
 			if (c.type == 70) {
-				columnBaseLowerBatch.draw(tx.colBaseLower,c.columnX,c.columnY);
+				columnBaseLowerBatch.draw(tx.colBaseLower, c.columnX, c.columnY);
 			} else if (c.type == 71) {
-				columnBaseLowerBatch.draw(tx.colBase2Lower,c.columnX,c.columnY);
+				columnBaseLowerBatch.draw(tx.colBase2Lower, c.columnX, c.columnY);
+			} else if (c.type == 730) {
+				columnBaseLowerBatch.draw(tx.colBase3Lower, c.columnX, c.columnY);
+			} else if (c.type == 740) {
+				columnBaseLowerBatch.draw(tx.colBase4Lower, c.columnX, c.columnY);
+				}
+				columnBaseLowerBatch.end();
 			}
-			columnBaseLowerBatch.end();
-		}
 
 
 
@@ -1614,7 +1612,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 					columnBaseBatch.begin();
 
-
 						if (!c.loweredAlpha) {
 							c.loweredAlpha = true;
 							Timer.schedule(new Timer.Task() {
@@ -1645,7 +1642,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 						} else {
 							if (c.alpha < 100 && c.alpha > 0) {
 								c.loweredAlpha = false;
-								System.out.println(c.alpha);
 								c.alpha++;
 								c.alpha++;
 								c.alpha++;
@@ -1657,6 +1653,20 @@ public class DungeonCrawler extends ApplicationAdapter {
 						}
 
 							switch (c.type) {
+								case 30:
+									c.loweredAlpha = false;
+									Column.renderPiece(columnBaseBatch,tx.colBase3, c.columnX, c.columnY, C.visible, c.alpha, C);
+
+									//columnBaseBatch.draw(tx.colBase, c.columnX, c.columnY);
+								case 40:
+									c.loweredAlpha = false;
+									Column.renderPiece(columnBaseBatch,tx.colBase4, c.columnX, c.columnY, C.visible, c.alpha, C);
+
+									//columnBaseBatch.draw(tx.colBase, c.columnX, c.columnY);
+									if (!c.lowerCreated) {
+										c.lowerCreated = true;
+									}
+									break;
 								case 7:
 
 									c.loweredAlpha = false;
@@ -1989,56 +1999,57 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 
 			}
-
+				flag_time += Gdx.graphics.getDeltaTime();
 				for (Flag f : flags) {
-					flag_time += Gdx.graphics.getDeltaTime();
-					flagShader.setUniformf("u_swayIntensity", 0.2f);
 
-					flagShader.setUniformf("u_verticalDensity", 1.0f);
-					flagShader.setUniformf("u_time", flag_time);
-					flagShader.setUniformf("u_speed", 1.5f);
+					//shader variables passed into flag fragment shader
 					flagBatch.setShader(flagShader);
-					flagBatch.begin();
-					/*
-				if (!f.loweredAlpha) {
-					f.loweredAlpha = true;
-					Timer.schedule(new Timer.Task() {
-						@Override
-						public void run() {
-							if (!f.visible) {
-								if (f.alpha > 50) {
-									f.loweredAlpha = false;
-								}
+					flagShader.setUniformf("u_swayIntensity", 0.05f);//0.03
+					flagShader.setUniformf("u_verticalDensity", 1f);
+					flagShader.setUniformf("u_time", flag_time + f.time);
+					flagShader.setUniformf("u_speed", 1.6f);
+					flagShader.setUniformf("u_alpha", f.alpha / 90);
 
-								if (f.alpha >= 0)
-								f.alpha--;
-								f.alpha--;
-							} else {
-								if (f.alpha < 100 && f.alpha > 0) {
+					flagBatch.begin();
+
+
+
+					if (!f.loweredAlpha) {
+						f.loweredAlpha = true;
+						Timer.schedule(new Timer.Task() {
+							@Override
+							public void run() {
+								if (!f.visible) {
+									if (f.alpha > 50) {
+										f.loweredAlpha = false;
+									}
+									//r.loweredAlpha = true;
+
+									if (f.alpha >= 0)
+										f.alpha--;
+										f.alpha--;
+										f.alpha--;
+								} else {
+									if (f.alpha < 100 && f.alpha > 0) {
 										f.loweredAlpha = false;
 										f.alpha++;
 										f.alpha++;
 									} else if (f.alpha < 0) {
-
 										f.alpha = 15;
 										f.loweredAlpha = true;
 									}
 								}
-						}
-					}, 0.001f);
-				}
+							}
+						}, 0.001f);
+					}
 
-					 */
-					//if (f.visible) {
+					if (f.visible) {
+						f.loweredAlpha = false;
+					}
 
-						//f.loweredAlpha = false;
 
-						f.renderFlag(flagBatch, tx.flag1, f.flagBody.getPosition().x, f.flagBody.getPosition().y, 9, 16, f.visible, f.alpha, f);
 
-					//} else {
-						//f.renderFlag(flagBatch, tx.flag1, f.flagBody.getPosition().x, f.flagBody.getPosition().y, 9, 16, f.visible, f.alpha, f);
-				//	}
-
+					Flag.renderFlag(flagBatch, tx.flag1, f.flagBody.getPosition().x - 4.5f, f.flagBody.getPosition().y - 8, 9, 16, f.visible, f);
 					flagBatch.end();
 				}
 
@@ -2839,64 +2850,122 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			//player movement controls and animation walk cycles
 
-			if (Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP)) {
+			if ((Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP))) {
 				PLAYER_VERTICAL_SPEED = 1f;
 				leanUp = true;
 				moveUp = true;
 				player.facing = 1;
-				if (leanLeft){
-					PLAYER_HORIZONTAL_SPEED = -1f;
-					currentFrame = tx.playerWalkUpLeftAnimation.getKeyFrame(stateTime3, true);
-					tx.playerTextureRegion = currentFrame;
-					//tx.playerSprite = tx.playerUpLeftLean;
-				} else if (leanRight) {
-					PLAYER_HORIZONTAL_SPEED = 1f;
-					currentFrame = tx.playerWalkUpRightAnimation.getKeyFrame(stateTime3, true);
-					tx.playerTextureRegion = currentFrame;
-					//tx.playerSprite = tx.playerUpRightLean;
+				if (player.playerBody.getLinearVelocity().x > 0.01 ||
+						player.playerBody.getLinearVelocity().y > 0.01
+						|| player.playerBody.getLinearVelocity().x < -0.01
+						|| player.playerBody.getLinearVelocity().y < -0.01) {
+					if (leanLeft){
+						PLAYER_HORIZONTAL_SPEED = -1f;
+						currentFrame = tx.playerWalkUpLeftAnimation.getKeyFrame(stateTime3, true);
+						tx.playerTextureRegion = currentFrame;
+						//tx.playerSprite = tx.playerUpLeftLean;
+					} else if (leanRight) {
+						PLAYER_HORIZONTAL_SPEED = 1f;
+						currentFrame = tx.playerWalkUpRightAnimation.getKeyFrame(stateTime3, true);
+						tx.playerTextureRegion = currentFrame;
+						//tx.playerSprite = tx.playerUpRightLean;
 
-				}
-				else {
-					currentFrame = tx.playerWalkUpAnimation.getKeyFrame(stateTime3, true);
-					tx.playerTextureRegion = currentFrame;
+					}
+					else {
+						currentFrame = tx.playerWalkUpAnimation.getKeyFrame(stateTime3, true);
+						tx.playerTextureRegion = currentFrame;
+					}
+
+				} else {
+					if (leanLeft){
+						PLAYER_HORIZONTAL_SPEED = -1f;
+						currentFrame = tx.playerUpLeftLean;
+						tx.playerTextureRegion = currentFrame;
+						//tx.playerSprite = tx.playerUpLeftLean;
+					} else if (leanRight) {
+						PLAYER_HORIZONTAL_SPEED = 1f;
+						currentFrame = tx.playerUpRightLean;
+						tx.playerTextureRegion = currentFrame;
+						//tx.playerSprite = tx.playerUpRightLean;
+					}
+					else {
+						currentFrame = tx.playerUp;
+						tx.playerTextureRegion = currentFrame;
+					}
 				}
 			}
 
-			if (Gdx.input.isKeyPressed(Keys.A)||Gdx.input.isKeyPressed(Keys.LEFT)) {
+			if ((Gdx.input.isKeyPressed(Keys.A)||Gdx.input.isKeyPressed(Keys.LEFT))) {
 				PLAYER_HORIZONTAL_SPEED = -1f;
 				leanLeft = true;
 				moveLeft = true;
 				player.facing = 4;
-				if (leanDown) {
-					PLAYER_VERTICAL_SPEED = -1f;
-					currentFrame = tx.playerWalkDownLeftAnimation.getKeyFrame(stateTime3, true);
-					tx.playerTextureRegion = currentFrame;
-				} else if (leanUp) {
-					PLAYER_VERTICAL_SPEED = 1f;
-					currentFrame = tx.playerWalkUpLeftAnimation.getKeyFrame(stateTime3, true);
-					tx.playerTextureRegion = currentFrame;
+				if (player.playerBody.getLinearVelocity().x > 0.01 ||
+						player.playerBody.getLinearVelocity().y > 0.01
+						|| player.playerBody.getLinearVelocity().x < -0.01
+						|| player.playerBody.getLinearVelocity().y < -0.01) {
+					if (leanDown) {
+						PLAYER_VERTICAL_SPEED = -1f;
+						currentFrame = tx.playerWalkDownLeftAnimation.getKeyFrame(stateTime3, true);
+						tx.playerTextureRegion = currentFrame;
+					} else if (leanUp) {
+						PLAYER_VERTICAL_SPEED = 1f;
+						currentFrame = tx.playerWalkUpLeftAnimation.getKeyFrame(stateTime3, true);
+						tx.playerTextureRegion = currentFrame;
+					} else {
+						currentFrame = tx.playerWalkLeftAnimation.getKeyFrame(stateTime3, true);
+						tx.playerTextureRegion = currentFrame;
+					}
 				} else {
-					currentFrame = tx.playerWalkLeftAnimation.getKeyFrame(stateTime3, true);
-					tx.playerTextureRegion = currentFrame;
+					if (leanDown) {
+						PLAYER_VERTICAL_SPEED = -1f;
+						currentFrame = tx.playerDownLeftLean;
+						tx.playerTextureRegion = currentFrame;
+					} else if (leanUp) {
+						PLAYER_VERTICAL_SPEED = 1f;
+						currentFrame = tx.playerUpLeftLean;
+						tx.playerTextureRegion = currentFrame;
+					} else {
+						currentFrame = tx.playerLeft;
+						tx.playerTextureRegion = currentFrame;
+					}
 				}
 			}
 
-			if (Gdx.input.isKeyPressed(Keys.S)||Gdx.input.isKeyPressed(Keys.DOWN)) {
+			if ((Gdx.input.isKeyPressed(Keys.S)||Gdx.input.isKeyPressed(Keys.DOWN))) {
 				PLAYER_VERTICAL_SPEED = -1f;
 				leanDown = true;
 				moveDown = true;
 				player.facing = 3;
-				if (leanLeft) {
-					PLAYER_HORIZONTAL_SPEED = -1f;
-					currentFrame = tx.playerWalkDownLeftAnimation.getKeyFrame(stateTime3, true);
-					tx.playerTextureRegion = currentFrame;
-				} else if (leanRight) {
-					PLAYER_HORIZONTAL_SPEED = 1f;
-					currentFrame = tx.playerWalkDownRightAnimation.getKeyFrame(stateTime3, true);
-					tx.playerTextureRegion = currentFrame;
+				if (player.playerBody.getLinearVelocity().x > 0.01 ||
+						player.playerBody.getLinearVelocity().y > 0.01
+						|| player.playerBody.getLinearVelocity().x < -0.01
+						|| player.playerBody.getLinearVelocity().y < -0.01) {
+					if (leanLeft) {
+						PLAYER_HORIZONTAL_SPEED = -1f;
+						currentFrame = tx.playerWalkDownLeftAnimation.getKeyFrame(stateTime3, true);
+						tx.playerTextureRegion = currentFrame;
+					} else if (leanRight) {
+						PLAYER_HORIZONTAL_SPEED = 1f;
+						currentFrame = tx.playerWalkDownRightAnimation.getKeyFrame(stateTime3, true);
+						tx.playerTextureRegion = currentFrame;
+					} else {
+						currentFrame = tx.playerWalkDownAnimation.getKeyFrame(stateTime3, true);
+						tx.playerTextureRegion = currentFrame;
+					}
 				} else {
-					currentFrame = tx.playerWalkDownAnimation.getKeyFrame(stateTime3, true);
-					tx.playerTextureRegion = currentFrame;
+					if (leanLeft) {
+						PLAYER_HORIZONTAL_SPEED = -1f;
+						currentFrame = tx.playerDownLeftLean;
+						tx.playerTextureRegion = currentFrame;
+					} else if (leanRight) {
+						PLAYER_HORIZONTAL_SPEED = 1f;
+						currentFrame = tx.playerDownRightLean;
+						tx.playerTextureRegion = currentFrame;
+					} else {
+						currentFrame = tx.playerDown;
+						tx.playerTextureRegion = currentFrame;
+					}
 				}
 			}
 			if (Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.RIGHT)) {
@@ -2904,18 +2973,37 @@ public class DungeonCrawler extends ApplicationAdapter {
 				leanRight = true;
 				moveRight = true;
 				player.facing = 2;
-				if (leanDown) {
-					PLAYER_VERTICAL_SPEED = -1f;
-					currentFrame = tx.playerWalkDownRightAnimation.getKeyFrame(stateTime3, true);
-					tx.playerTextureRegion = currentFrame;
-				} else if (leanUp) {
-					PLAYER_VERTICAL_SPEED = 1f;
-					currentFrame = tx.playerWalkUpRightAnimation.getKeyFrame(stateTime3, true);
-					tx.playerTextureRegion = currentFrame;
+				if (player.playerBody.getLinearVelocity().x > 0.01 ||
+						player.playerBody.getLinearVelocity().y > 0.01
+						|| player.playerBody.getLinearVelocity().x < -0.01
+						|| player.playerBody.getLinearVelocity().y < -0.01) {
+					if (leanDown) {
+						PLAYER_VERTICAL_SPEED = -1f;
+						currentFrame = tx.playerWalkDownRightAnimation.getKeyFrame(stateTime3, true);
+						tx.playerTextureRegion = currentFrame;
+					} else if (leanUp) {
+						PLAYER_VERTICAL_SPEED = 1f;
+						currentFrame = tx.playerWalkUpRightAnimation.getKeyFrame(stateTime3, true);
+						tx.playerTextureRegion = currentFrame;
+					} else {
+						currentFrame = tx.playerWalkRightAnimation.getKeyFrame(stateTime3, true);
+						tx.playerTextureRegion = currentFrame;
+					}
 				} else {
-					currentFrame = tx.playerWalkRightAnimation.getKeyFrame(stateTime3, true);
-					tx.playerTextureRegion = currentFrame;
+					if (leanDown) {
+						PLAYER_VERTICAL_SPEED = -1f;
+						currentFrame = tx.playerDownRightLean;
+						tx.playerTextureRegion = currentFrame;
+					} else if (leanUp) {
+						PLAYER_VERTICAL_SPEED = 1f;
+						currentFrame = tx.playerUpRightLean;
+						tx.playerTextureRegion = currentFrame;
+					} else {
+						currentFrame = tx.playerRight;
+						tx.playerTextureRegion = currentFrame;
+					}
 				}
+
 			}
 			stateTime3 += Gdx.graphics.getDeltaTime();
 		}

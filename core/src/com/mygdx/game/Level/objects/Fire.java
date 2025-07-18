@@ -65,7 +65,7 @@ public class Fire extends Light{
             this.torchLight = torchLight;
         }
 
-        this.light = new PointLight(rayHandler,400, this.fireColor,80, fireX + 8, fireY + 8);
+        this.light = new PointLight(rayHandler,400, this.fireColor,65, fireX + 8, fireY + 8);
         this.light.setXray(true);
 
 

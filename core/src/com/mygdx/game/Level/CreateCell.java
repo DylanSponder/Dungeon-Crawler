@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class CreateCell {
     public TiledMapTileLayer.Cell middleFloorTile;
+    public TiledMapTileLayer.Cell middleFloorTile2;
     public TiledMapTileLayer.Cell middleFloor2Tile;
     public TiledMapTileLayer.Cell middleFloor3Tile;
     public TiledMapTileLayer.Cell decorFloorUpTile;
@@ -64,6 +65,15 @@ public class CreateCell {
     public TiledMapTileLayer.Cell torchWallUpTile;
     public TiledMapTileLayer.Cell torchWallDownTile;
 
+    public TiledMapTileLayer.Cell blockTile;
+    public TiledMapTileLayer.Cell blockOmegaTile;
+    public TiledMapTileLayer.Cell blockPhiTile;
+    public TiledMapTileLayer.Cell blockDeltaTile;
+    public TiledMapTileLayer.Cell blockSigmaTile;
+    public TiledMapTileLayer.Cell blockLambdaTile;
+    public TiledMapTileLayer.Cell blockGabenTile;
+    public TiledMapTileLayer.Cell blockPiTile;
+
     public TiledMapTileLayer.Cell topLeftFenceTile;
     public TiledMapTileLayer.Cell topRightFenceTile;
     public TiledMapTileLayer.Cell bottomLeftFenceTile;
@@ -92,6 +102,7 @@ public class CreateCell {
 
     public void InitializeCells() {
         middleFloorTile = new TiledMapTileLayer.Cell();
+        middleFloorTile2 = new TiledMapTileLayer.Cell();
         middleFloor2Tile = new TiledMapTileLayer.Cell();
         middleFloor3Tile = new TiledMapTileLayer.Cell();
         decorFloorUpTile = new TiledMapTileLayer.Cell();
@@ -148,6 +159,15 @@ public class CreateCell {
         torchWallRightTile = new TiledMapTileLayer.Cell();
         torchWallUpTile = new TiledMapTileLayer.Cell();
         torchWallDownTile = new TiledMapTileLayer.Cell();
+
+        blockTile = new TiledMapTileLayer.Cell();
+        blockOmegaTile = new TiledMapTileLayer.Cell();
+        blockPhiTile = new TiledMapTileLayer.Cell();
+        blockDeltaTile = new TiledMapTileLayer.Cell();
+        blockSigmaTile = new TiledMapTileLayer.Cell();
+        blockLambdaTile = new TiledMapTileLayer.Cell();
+        blockGabenTile = new TiledMapTileLayer.Cell();
+        blockPiTile = new TiledMapTileLayer.Cell();
 
         doorTopLeftWall = new TiledMapTileLayer.Cell();
         doorTopRightWall = new TiledMapTileLayer.Cell();

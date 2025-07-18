@@ -267,6 +267,12 @@ public class GameInputProcessor implements InputProcessor {
             if (keycode == Input.Keys.NUM_3) {
                 hud.updateGold(20,true);
             }
+            if (keycode == Input.Keys.NUM_4) {
+                DungeonCrawler.PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED + 100;
+            }
+            if (keycode == Input.Keys.NUM_5) {
+                DungeonCrawler.PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED;
+            }
             if (keycode == Input.Keys.NUM_9) {
                 hud.inventory.addPotion();
             }

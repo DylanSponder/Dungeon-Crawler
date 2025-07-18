@@ -41,6 +41,7 @@ public class InitLevel {
 
         //sets tiles to their appropriate texture
         cr.middleFloorTile.setTile(new StaticTiledMapTile(tx.roomFloorTexture));
+        cr.middleFloorTile2.setTile(new StaticTiledMapTile(tx.roomFloorTexture2));
         cr.middleFloor2Tile.setTile(new StaticTiledMapTile(tx.roomFloor2Texture));
         cr.middleFloor3Tile.setTile(new StaticTiledMapTile(tx.roomFloor3Texture));
         cr.decorFloorUpTile.setTile(new StaticTiledMapTile(tx.roomDecorativeFloorUpTexture));
@@ -93,8 +94,14 @@ public class InitLevel {
         cr.bottomFenceLeftEndTile.setTile(new StaticTiledMapTile(tx.roomBottomLeftEndFence));
         cr.bottomFenceRightEndTile.setTile(new StaticTiledMapTile(tx.roomBottomRightEndFence));
 
-
-
+        cr.blockTile.setTile(new StaticTiledMapTile(tx.block));
+        cr.blockOmegaTile.setTile(new StaticTiledMapTile(tx.blockOmega));
+        cr.blockPhiTile.setTile(new StaticTiledMapTile(tx.blockPhi));
+        cr.blockDeltaTile.setTile(new StaticTiledMapTile(tx.blockDelta));
+        cr.blockSigmaTile.setTile(new StaticTiledMapTile(tx.blockSigma));
+        cr.blockLambdaTile.setTile(new StaticTiledMapTile(tx.blockLambda));
+        cr.blockGabenTile.setTile(new StaticTiledMapTile(tx.blockGaben));
+        cr.blockPiTile.setTile(new StaticTiledMapTile(tx.blockPi));
 
         cr.doorTopLeftWall.setTile(new StaticTiledMapTile(tx.doorTopLeftWallTexture));
         cr.doorTopRightWall.setTile(new StaticTiledMapTile(tx.doorTopRightWallTexture));

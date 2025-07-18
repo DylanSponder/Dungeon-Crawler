@@ -259,6 +259,13 @@ public class SoundController {
                 minoCharge2.setPitch(id35, randall35/10);
                 minoCharge2.setVolume(id35,volume);
                 break;
+            case "FireWhoosh":
+                Sound fireWhoosh = tx.fireWhoosh;
+                long id36 = fireWhoosh.play();
+                float randall36 = Random.randomFloat(pitchMax,pitchMin);
+                fireWhoosh.setPitch(id36, randall36/10);
+                fireWhoosh.setVolume(id36,volume);
+                break;
         }
     }
 }

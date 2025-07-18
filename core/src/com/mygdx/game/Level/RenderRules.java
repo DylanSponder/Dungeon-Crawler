@@ -112,6 +112,38 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "rightWallFireTrapTile");
                         index++;
                         break;
+                    case "bl":
+                        drawableLevelLayer.add(index, "block");
+                        index++;
+                        break;
+                    case "blomega":
+                        drawableLevelLayer.add(index, "blockomega");
+                        index++;
+                        break;
+                    case "blphi":
+                        drawableLevelLayer.add(index, "blockphi");
+                        index++;
+                        break;
+                    case "bldelta":
+                        drawableLevelLayer.add(index, "blockdelta");
+                        index++;
+                        break;
+                    case "blsigma":
+                        drawableLevelLayer.add(index, "blocksigma");
+                        index++;
+                        break;
+                    case "bllambda":
+                        drawableLevelLayer.add(index, "blocklambda");
+                        index++;
+                        break;
+                    case "blhl":
+                        drawableLevelLayer.add(index, "blockgaben");
+                        index++;
+                        break;
+                    case "blpi":
+                        drawableLevelLayer.add(index, "blockpi");
+                        index++;
+                        break;
                     case "blw":
                         drawableLevelLayer.add(index, "bottomLeftWallTile");
                         index++;
@@ -466,77 +498,215 @@ public class RenderRules {
                                         break;
 
                             }
-                            if (str.matches("(coldo[0-9]+)")) {
-                                drawableLevelLayer.add(index, str);
-                                index++;
+                                if (str.matches("(coldo[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
                                 }
                                 if (str.matches("(coltu[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
+                                    break;
                                 }
                                 if (str.matches("(colio[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
+                                    break;
                                 }
                                 if (str.matches("(coldb[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
+                                    break;
                                 }
                                 if (str.matches("(coltb[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
+                                    break;
                                 }
                                 if (str.matches("(colib[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
+                                    break;
                                 }
                                 if (str.matches("(cfldo[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
+                                    break;
                                 }
                                 if (str.matches("(cfltu[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
+                                    break;
                                 }
                                 if (str.matches("(cflio[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
+                                    break;
                                 }
                                 if (str.matches("(cfldb[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
+                                    break;
                                 }
                                 if (str.matches("(cfltb[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
+                                    break;
                                 }
                                 if (str.matches("(cflib[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
+                                    break;
                                 }
                                 if (str.matches("(csldo[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
+                                    break;
                                 }
                                 if (str.matches("(csltu[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
+                                    break;
                                 }
                                 if (str.matches("(cslio[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
+                                    break;
                                 }
                                 if (str.matches("(csldb[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
+                                    break;
                                 }
                                 if (str.matches("(csltb[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
+                                    break;
                                 }
                                 if (str.matches("(cslib[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
+                                    break;
+                                }
+                                if (str.matches("(coldd[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coltd[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(colid[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coltB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coliB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coldB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csldB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csltB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csliB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coftb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cofdb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cofib[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coftu[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cofdo[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cofio[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coftB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cofdB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cofiB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cfftB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cffdB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cffiB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cfftb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cffdb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cffib[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
                                 }
                             switch (str) {
                                 case "cand":

@@ -1,4 +1,4 @@
-,,,,,,,,,,tlw,tw28,tw,doortl,doortr,tw,tw,tw,trw
+,,,,,,,,,,tlw,tw38,tw,doortl,doortr,tw,tw,tw,trw
 ,,,,,,,,,,lw,dfu,dfu,dfu,dfu,dfu,dfu,dftr,rw
 ,,,,,,,,,,lw,dfl,f,f,f,f,f,dfr,doorur
 ,,,,,,,,,,lw,dfl,f,f2,f2,f2,f,dfr,doorlr
@@ -12,10 +12,10 @@
 ,,,,,,,,,,lw,dfl,f,f2,f2,f2,f,dfr,rw
 tlw,tw,toruoff,tw,tw,tw,tw,tw,toruoff,tw,brt,dfl,f,f2,f2,f2,f,dfr,rw
 lwtr2,dftl,dfu,dfu,dfu,dfu,dfu,dfu,dfu,dfu,dfu,dfbr,bwtr2,f2,f2,f2,bwtr2,dfr,rw
-lw,dfl,fped1fire,f,f,f,f,f,fped1fire,f,f,f,fcolib1,f2,f2,f2,fcolib1,dfr,rw
+lw,dfl,fped1fire,f,f,fped1fire,f,fcoftb1,fcofdb1,fcofib1,f,f,fcolib1,f2,f2,f2,fcolib1,dfr,rw
 lw,dfl,f,f2,f2,f2,f2,f2,f2,f2,f2,f2,f2,f2,f2,f2,f,dfr,rw
-lw,dfl,f,f2,f2,f2,f2,f2,f2,f2,f2,f2,f2,f2,fcfftb2,f2,f,dfr,rw
-doorul,dfl,f,f2,f2,f2,f2,f2,f2,f2,f2,f2,f2,f2,f2,f2,f,dfr,rwtr2
-doorll,dfl,fped1fire,f,f,f,f,f,fped1fire,f,fcfftb2,f,f,f,f,f,fped1fire,dfr,rw
+lw,dfl,f,f2,f2,fcoltB0,f2,f2,f2,bl,f2,f2,f2,f2,f2,f2,f,dfr,rw
+doorul,dfl,f,f2,f2,bl,fcoltB1,f2,f2,f2,fcoltB1,f2,fcoliB1,fcoldB1,f2,f2,f,dfr,rwtr2
+doorll,dfl,fped1fire,f,f,fped1fire,f,fcofio1,fped1fire,f,bl,f,fcfftb1,f,fcfftb0,f,fped1fire,dfr,rw
 lw,dfbl,dfd,dfd,dfd,dfd,dfd,dfd,dfd,dfd,dfd,dfd,dfd,dfd,dfd,dfd,dfd,dfbr,rw
 blw,bw,tordoff,bw,bw,bw,bw,bw,tordoff,bw,bw,bw,bwtr2,bw,bw,doorbl,doorbr,bw,brw

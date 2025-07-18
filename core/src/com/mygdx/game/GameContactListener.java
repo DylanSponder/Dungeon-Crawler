@@ -869,10 +869,14 @@ public class GameContactListener implements ContactListener {
                                     for (Arrow a : arrows) {
                                         if (a.arrowBody == collidee.getBody()) {
                                             if (a.onFire && !f.smoking) {
-                                                f.active = true;
+                                                if (!f.active) {
+                                                    soundController.playSound("FireWhoosh",10,7,0.04f);
+                                                    f.active = true;
+                                                }
                                                 f.light.setActive(true);
                                                 f.smoking = false;
                                                 f.extinguish = true;
+
                                                 if (f.type == 3) {
                                                     f.torchLight.setActive(true);
                                                 }
@@ -985,7 +989,10 @@ public class GameContactListener implements ContactListener {
                                     for (Arrow a : arrows) {
                                         if (a.arrowBody == collider.getBody()) {
                                             if (a.onFire && !f.smoking) {
-                                                f.active = true;
+                                                if (!f.active) {
+                                                    soundController.playSound("FireWhoosh",10,7,0.04f);
+                                                    f.active = true;
+                                                }
                                                 f.light.setActive(true);
                                                 f.smoking = false;
                                                 f.extinguish = true;
@@ -1338,7 +1345,16 @@ public class GameContactListener implements ContactListener {
                     if (colliderStr == "Stem") {
                         for (Column C : columns) {
                             if (C.stemBody == collider.getBody()) {
+
                                 C.visible = false;
+                            }
+                        }
+                    }
+
+                    if (colliderStr == "Flag") {
+                        for (Flag F : flags) {
+                            if (F.flagBody == collider.getBody()) {
+                                F.visible = false;
                             }
                         }
                     }
@@ -1380,7 +1396,10 @@ public class GameContactListener implements ContactListener {
                                 for (Arrow a : arrows) {
                                     if (a.arrowBody == collidee.getBody()) {
                                         if (a.onFire && !f.smoking) {
-                                            f.active = true;
+                                            if (!f.active) {
+                                                soundController.playSound("FireWhoosh",10,7,0.04f);
+                                                f.active = true;
+                                            }
                                             f.light.setActive(true);
                                             f.smoking = false;
                                             f.extinguish = true;
@@ -1544,6 +1563,17 @@ public class GameContactListener implements ContactListener {
                     for (Column C : columns) {
                         if (C.stemBody == collider.getBody()) {
                             C.visible = true;
+                        }
+                    }
+
+                    break;
+                }
+            case "Flag":
+                if (collidee.getUserData() == "PlayerBound") {
+
+                    for (Flag F : flags) {
+                        if (F.flagBody == collider.getBody()) {
+                            F.visible = true;
                         }
                     }
 

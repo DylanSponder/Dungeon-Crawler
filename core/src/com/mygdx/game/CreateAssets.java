@@ -91,10 +91,11 @@ public class CreateAssets {
     Texture fireArrowTrapTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/FireArrowTrap.png"));
 
     Texture flagTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Flag.png"));
+    Texture blocksTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Blocks.png"));
 
     Texture roof3x3 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/3x3.png"));
     Texture roof5x5 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/5x5.png"));
-    Texture roof7x7 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/7x7.png"));
+    Texture roof7x7 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/7x7-6.png"));
     Texture roof11x11 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/11x11.png"));
     Texture roof15x15 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/15x15.png"));
 
@@ -144,12 +145,16 @@ public class CreateAssets {
 
     public Sound fireAmbient = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/Fire.mp3"));
 
+    public Sound fireWhoosh = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/lightfire6.mp3"));
+
+
     //Texture font = new Texture(Gdx.files.internal("HellasDungeon/Font/GreekAlphabet.png"));
     //public TextureRegion fontTexture = new TextureRegion(font,0,0,16,16);
 
     //Floor textures
 
     public TextureRegion roomFloorTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+    public TextureRegion roomFloorTexture2 = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomFloor2Texture = new TextureRegion(roomBackground, 256, 32, 16, 16);
     public TextureRegion roomFloor3Texture = new TextureRegion(roomBackground, 272, 32, 16, 16);
     public TextureRegion roomDecorativeFloorUpTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
@@ -204,6 +209,18 @@ public class CreateAssets {
     public TextureRegion roomLeftDownEndFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomRightUpEndFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomRightDownEndFence = new TextureRegion(roomBackground, 0, 0, 16, 16);
+
+
+    //blocks textures
+    public TextureRegion block = new TextureRegion(blocksTexture, 0, 0, 16, 16);
+    public TextureRegion blockOmega = new TextureRegion(blocksTexture, 0, 0, 16, 16);
+    public TextureRegion blockPhi = new TextureRegion(blocksTexture, 0, 0, 16, 16);
+    public TextureRegion blockDelta = new TextureRegion(blocksTexture, 0, 0, 16, 16);
+    public TextureRegion blockSigma = new TextureRegion(blocksTexture, 0, 0, 16, 16);
+    public TextureRegion blockLambda = new TextureRegion(blocksTexture, 0, 0, 16, 16);
+    public TextureRegion blockGaben = new TextureRegion(blocksTexture, 0, 0, 16, 16);
+    public TextureRegion blockPi = new TextureRegion(blocksTexture, 0, 0, 16, 16);
+
 
 
     public TextureRegion amphoraeTexture = new TextureRegion(potsSheet, 0,0,16,16);
@@ -448,8 +465,14 @@ public class CreateAssets {
     public TextureRegion colStemDamaged2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colBase = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colBase2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion colBase3 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion colBase4 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion colBase5 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colBaseLower = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colBase2Lower = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion colBase3Lower = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion colBase4Lower = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion colBase5Lower = new TextureRegion(columnsTextureSheet, 0,0,16,16);
 
     public TextureRegion pedestal1 = new TextureRegion(columnsTextureSheet, 0,0,16,12);
     public TextureRegion pedestal1upper = new TextureRegion(columnsTextureSheet, 0,0,16,4);
@@ -460,7 +483,7 @@ public class CreateAssets {
 
     public TextureRegion statue1 = new TextureRegion(columnsTextureSheet, 0,0,15,19);
 
-    public TextureRegion flag1 = new TextureRegion(flagTexture, 0,0,9,16);
+    public TextureRegion flag1 = new TextureRegion(flagTexture, 0,0,11,16);
 
     //Roof textures
 
@@ -626,8 +649,8 @@ public class CreateAssets {
     public Sprite greekfireItemSprite = new Sprite(greekfireItemTexture, 14, 15);
     public Sprite greekfireSlotSprite = new Sprite(greekfireSlotTexture, 13, 13);
 
-    public Sprite capeSprite = new Sprite(flagTexture, 9, 15);
-    public Sprite capeSlotSprite = new Sprite(flagTexture, 9, 15);
+    public Sprite capeSprite = new Sprite(flagTexture, 11, 15);
+    public Sprite capeSlotSprite = new Sprite(flagTexture, 11, 15);
 
     public Sprite compassSprite = new Sprite(compassTexture, 27,27);
     public Sprite compassArrowSprite = new Sprite(compassArrowTexture, 13,22);
@@ -921,7 +944,8 @@ public class CreateAssets {
         //potBreaking.setPitch(0,0.1f);
 
 
-        roomFloorTexture.setRegion(96, 16, 16, 16);
+        roomFloorTexture.setRegion(2, 94, 16, 16);
+        roomFloorTexture2.setRegion(22, 94, 16, 16);
         roomFloor2Texture.setRegion(256, 32, 16, 16);
         roomFloor3Texture.setRegion(272, 32, 16, 16);
         roomDecorativeFloorRightTexture.setRegion(240, 48, 16, 16);
@@ -982,10 +1006,18 @@ public class CreateAssets {
         colStemDamaged2.setRegion(32, 16, 16, 16);
         colStem2.setRegion(48, 16, 16, 16);
         colStem3.setRegion(64, 16, 16, 16);
+
         colBase.setRegion(0, 32, 16, 16);
         colBase2.setRegion(16, 32, 16, 16);
+        colBase3.setRegion(112, 32, 16, 16);
+        colBase4.setRegion(128, 32, 16, 16);
         colBaseLower.setRegion(0,48,16,11);
         colBase2Lower.setRegion(16,48,16,11);
+        colBase3Lower.setRegion(112,48,16,11);
+        colBase4Lower.setRegion(128,55,16,4);
+        colBase5.setRegion(128, 32, 16, 16);
+        colBase5Lower.setRegion(128,55,16,4);
+
         pedestal1.setRegion(32, 36, 16, 12);
         pedestal1upper.setRegion(32, 32, 16, 4);
         pedestal2upper.setRegion(48, 32, 16, 4);

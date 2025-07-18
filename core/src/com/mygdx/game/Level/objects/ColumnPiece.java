@@ -75,6 +75,13 @@ public class ColumnPiece {
         } else if (type == 2) {
             this.columnBody = bodyFactory.createColumnBase2(world, columnX, columnY);
         }
+        else if (type == 3) {
+            this.columnBody = bodyFactory.createColumnBase2(world, columnX, columnY);
+
+        }
+        else if (type == 4) {
+            this.columnBody = bodyFactory.createColumnBase(world, columnX, columnY);
+        }
 
         this.columnBody.setUserData("Wall");
 
