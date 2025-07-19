@@ -52,6 +52,9 @@ public class CreateAssets {
     //Main texture sheet
     Texture roomBackground = new Texture(Gdx.files.internal("HellasDungeon/Level/Level 1/CustomTileset.png"));
 
+    Texture waveTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Water/Wave.png"));
+    Texture waveDarkTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Water/WaveDark.png"));
+
     Texture swordTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Sword/SpriteInHand.png"));
     Texture bowTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Bow/Sprite.png"));
     Texture arrowTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Bow/Arrow.png"));
@@ -165,6 +168,10 @@ public class CreateAssets {
     public TextureRegion roomDecorativeFloorTopRightTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomDecorativeFloorBottomLeftTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomDecorativeFloorBottomRightTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
+
+    //Water textures
+    public TextureRegion wave = new TextureRegion(waveTexture, 0, 0, 16, 16);
+
 
     //Wall textures
 

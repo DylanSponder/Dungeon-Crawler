@@ -1358,6 +1358,13 @@ public class GameContactListener implements ContactListener {
                             }
                         }
                     }
+                    if (colliderStr == "Statue") {
+                        for (Statue S : statues) {
+                            if (S.statueBody == collider.getBody()) {
+                                S.visible = false;
+                            }
+                        }
+                    }
 
 
                     //TODO: revise - unused
@@ -1579,7 +1586,17 @@ public class GameContactListener implements ContactListener {
 
                     break;
                 }
+            case "Statue":
+                if (collidee.getUserData() == "PlayerBound") {
 
+                    for (Statue S : statues) {
+                        if (S.statueBody == collider.getBody()) {
+                            S.visible = true;
+                        }
+                    }
+
+                    break;
+                }
             case "Cobweb":
                 if (collider.getUserData() == "PlayerBound") {
                     DungeonCrawler.PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED;

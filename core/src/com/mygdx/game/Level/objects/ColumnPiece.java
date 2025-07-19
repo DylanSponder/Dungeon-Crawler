@@ -65,22 +65,15 @@ public class ColumnPiece {
 
     }
 
-    public void createColumnBaseLower(int type) {
+    public void createColumnBaseLower(boolean full) {
 
         BodyFactory bodyFactory = new BodyFactory();
 
         DungeonCrawler.columnPieces.add(this);
-        if (type == 1) {
+        if (!full) {
             this.columnBody = bodyFactory.createColumnBase(world, columnX, columnY);
-        } else if (type == 2) {
+        } else {
             this.columnBody = bodyFactory.createColumnBase2(world, columnX, columnY);
-        }
-        else if (type == 3) {
-            this.columnBody = bodyFactory.createColumnBase2(world, columnX, columnY);
-
-        }
-        else if (type == 4) {
-            this.columnBody = bodyFactory.createColumnBase(world, columnX, columnY);
         }
 
         this.columnBody.setUserData("Wall");

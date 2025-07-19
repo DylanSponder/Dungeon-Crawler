@@ -2058,7 +2058,44 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		for (Statue s : statues) {
 			statueBatch.begin();
-			statueBatch.draw(tx.statue1,s.statueX,s.statueY);
+
+			if (!s.loweredAlpha) {
+				s.loweredAlpha = true;
+				Timer.schedule(new Timer.Task() {
+					@Override
+					public void run() {
+						if (!s.visible) {
+							if (s.alpha > 50) {
+								s.loweredAlpha = false;
+							}
+							//r.loweredAlpha = true;
+
+							if (s.alpha >= 0)
+								s.alpha--;
+							s.alpha--;
+							s.alpha--;
+						} else {
+							if (s.alpha < 100 && s.alpha > 0) {
+								s.loweredAlpha = false;
+								s.alpha++;
+								s.alpha++;
+							} else if (s.alpha < 0) {
+								s.alpha = 15;
+								s.loweredAlpha = true;
+							}
+						}
+					}
+				}, 0.001f);
+			}
+
+			if (s.visible) {
+				s.loweredAlpha = false;
+			}
+
+
+
+			Statue.renderStatue(statueBatch, tx.statue1, s.statueBody.getPosition().x - 7.5f, s.statueBody.getPosition().y - 9.5f, 15, 19, s.visible, s, s.alpha);
+			//statueBatch.draw(tx.statue1,s.statueX,s.statueY);
 			statueBatch.end();
 
 

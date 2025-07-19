@@ -57,8 +57,8 @@ public class BodyFactory {
         return body;
     }
 
-    /*
-        public Body createFlagHitbox(World world, float x, float y) {
+
+        public Body createStatueHitbox(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -66,14 +66,14 @@ public class BodyFactory {
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(5, 8);
+        shape.setAsBox(7.5f, 9.5f);
         Fixture temp = body.createFixture(shape, 1.0f);
         temp.setSensor(true);
-        temp.setUserData("Flag");
+        temp.setUserData("Statue");
         shape.dispose();
         return body;
     }
-     */
+
 
     public Body createColumnHitbox(World world, float x, float y, int size, boolean bigbase) {
         Body body;

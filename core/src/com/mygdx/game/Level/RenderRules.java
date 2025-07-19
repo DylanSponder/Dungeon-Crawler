@@ -588,6 +588,21 @@ public class RenderRules {
                                     index++;
                                     break;
                                 }
+                                if (str.matches("(csfdb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csftb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csfib[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
                                 if (str.matches("(coldd[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
