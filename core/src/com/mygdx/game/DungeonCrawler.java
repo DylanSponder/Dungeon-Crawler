@@ -47,7 +47,7 @@ import static com.mygdx.game.PauseMenu.menuContainer;
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch arrowBatch, enemySkullBatch, enemySpiderBatch, enemyGhostBatch, enemyEyeBatch, potBatch, hudBatch, tutoBatch, alertFontBatch, inventoryBatch, sightFontBatch;
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, coinBatch, obstacleBatch, fireBatch, flameBatch, webBatch, cobBatch, candleBatch, eyebeamBatch;
-	private SpriteBatch bossMinotaurBatch, statueBatch, flagBatch;
+	private SpriteBatch bossMinotaurBatch, statueBatch, flagBatch, waveBatch, waterBatch, waterfallBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch, roofBatch, columnBaseLowerBatch, heartBatch, pedestalUpperBatch;
 	public static SpriteBatch trapBatch, playerBatch, weaponBatch;
 	public static World world;
@@ -110,6 +110,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<ColumnPiece> columnPieces;
 	public static ArrayList<Column> columns;
 	public static ArrayList<Flag> flags;
+	public static ArrayList<Wave> waves;
+	public static ArrayList<Water> ocean;
 	public static ArrayList<Statue> statues;
 	public static ArrayList<Roof> roofs;
 	public static float PLAYER_HORIZONTAL_SPEED = 0f;
@@ -128,10 +130,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static BitmapFont defaultFont, defaultFont2, defaultFont3, defaultFont4;
 	public static ArrayList<Text> susMessages, alertMessages;
 	public AssetManager assetManager;
-	public static float stateTime, stateTime2, stateTime3, stateTime4;
+	public static float stateTime, stateTime2, stateTime3, stateTime4, stateTime5;
 	public TextureRegion currentFrame;
-	public ShaderProgram flagShader;
-	public float flag_time;
+	public ShaderProgram flagShader, waveShader;
+	public float flag_time, ocean_time, ocean2_time;
 
 
 	public static boolean leanDown = false, leanUp = false, leanLeft = false, leanRight = false, leanUpLeft = false, leanUpRight = false;
@@ -166,11 +168,17 @@ public class DungeonCrawler extends ApplicationAdapter {
 		bossMinotaurBatch = new SpriteBatch();
 		statueBatch = new SpriteBatch();
 		flagBatch = new SpriteBatch();
+		waterBatch = new SpriteBatch();
+		waveBatch = new SpriteBatch();
 		//flagBatch.enableBlending();
 
 		flag_time = 0;
+		ocean_time = 0;
+		ocean2_time = 0;
 
 		flagShader = new ShaderProgram(flagBatch.getShader().getVertexShaderSource(), Gdx.files.internal("HellasDungeon/Level/Shaders/flag.frag").readString());
+
+		waveShader = new ShaderProgram(flagBatch.getShader().getVertexShaderSource(), Gdx.files.internal("HellasDungeon/Level/Shaders/waveright.frag").readString());
 
 		//flagShader.setUniform("v_texCoords", );
 		flagShader.setUniformf("u_fixedBasePosY", 0.0f);
@@ -181,7 +189,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 
 		flagShader.pedantic = false;
+		waveShader.pedantic = false;
 
+		ocean = new ArrayList<>();
+		waves = new ArrayList<>();
 		eyebeamBatch = new SpriteBatch();
 		webBatch = new SpriteBatch();
 		doorBatch = new SpriteBatch();
@@ -281,7 +292,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		Vector2 vec = new Vector2();
 		vec.x = PLAYER_X;
 		vec.y = PLAYER_Y;
-		PLAYER_DEFAULT_SPEED = 40f;//38
+		PLAYER_DEFAULT_SPEED = 45f;//38 //40
 		PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED;
 
 		//initialize the Box2D body factory, asset instance
@@ -290,6 +301,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		final CreateAssets tx = CreateAssets.getInstance();
 		GameContactListener lc = new GameContactListener();
 		tx.textureRegionBuilder();
+
+		//TODO: Merge Upper and Lower cases and use proper Greek letters instead of lower case for Greek alphabet glyphs
 
 		//instantiate the font used in the game
 		defaultFont = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.fnt"),
@@ -353,7 +366,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		hud = new HUD(vp, hudBatch);
 		Compass.hideCompass();
 
-		//for whatever reason, the first sprite in a batch with a shader can't become transparent so we create one far out of sight
+		//for whatever reason, the first sprite in a batch with a shader can't become transparent, so we create one instance of any that change alpha at (0,0) far out of sight
 		Flag flag = new Flag(world, 0,0);
 		flag.createFlagHitbox(0,0, world);
 		flags.add(flag);
@@ -398,7 +411,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 	@Override
 	public void render() {
 
-			// kill game when player health is 0
+			// exit game when player health is 0
+			//TODO Add death screen
+			//Columns crash from the ceiling with some column dust particles coming down first
+			//Water then slowly fills the background until it's full
 			if (hud.healthBar.currentHealth == 0) {
 				System.out.println("YOU DIED IN ROOM " + player.currentRoom);
 				Gdx.app.exit();
@@ -424,6 +440,47 @@ public class DungeonCrawler extends ApplicationAdapter {
 			Gdx.gl.glClearColor(0.15f, 0.1f, 0.40f, 1f);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+		for (Water w : ocean) {
+
+			//GenerateLevel.init.roomList.get(r.index).roomHitbox.getBody().getPosition().x;
+
+			//shader variables passed into flag fragment shader
+			/*
+			waveBatch.setShader(waveShader);
+			waveShader.setUniformf("u_swayIntensity", 0.05f);//0.03
+			waveShader.setUniformf("u_verticalDensity", 1f);
+			waveShader.setUniformf("u_time", flag_time + w.time);
+			waveShader.setUniformf("u_speed", 1.6f);
+			 */
+			waterBatch.begin();
+			Water.renderWater(waterBatch, tx.water, w.waterX, w.waterY, 16, 16);
+			waterBatch.end();
+		}
+
+		ocean_time += Gdx.graphics.getDeltaTime();
+		ocean2_time += Gdx.graphics.getDeltaTime();
+		for (Wave w : waves) {
+
+			currentFrame = tx.waveAnimation.getKeyFrame(w.stateTime, true);
+			w.stateTime += Gdx.graphics.getDeltaTime();
+
+			//GenerateLevel.init.roomList.get(r.index).roomHitbox.getBody().getPosition().x;
+
+			//shader variables passed into flag fragment shader
+			/*
+			waveBatch.setShader(waveShader);
+			waveShader.setUniformf("u_swayIntensity", 0.05f);//0.03
+			waveShader.setUniformf("u_verticalDensity", 1f);
+			waveShader.setUniformf("u_time", flag_time + w.time);
+			waveShader.setUniformf("u_speed", 1.6f);
+
+										Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, true);
+			 */
+			waveBatch.begin();
+			Wave.renderWave(waveBatch, currentFrame, w.waveX, w.waveY, 16, 9);
+			waveBatch.end();
+		}
+
 			//set the view of the map to the camera and then render the map
 			renderer.setView(camera);
 			renderer.render();
@@ -431,7 +488,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 			//set camera position to always be centred on the player body
 			camera.position.set(player.playerBody.getPosition().x + tx.playerSprite.getWidth() / 2 - 8, player.playerBody.getPosition().y + tx.playerSprite.getHeight() / 2 - 8, 0);
 
-			//tutorial texture in the starting room
+
+
+
+		//tutorial texture in the starting room
 			for (Tutorial t : tutorial) {
 				tutoBatch.begin();
 				tutoBatch.draw(tx.tutorialTexture, t.tutorialBody.getPosition().x - 16f, t.tutorialBody.getPosition().y + 7f, 96, 64);
@@ -2602,6 +2662,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 			rayHandler.setCombinedMatrix(camera);
 
 			//render all spritebatches in order
+			waterBatch.setProjectionMatrix(camera.combined);
+			waveBatch.setProjectionMatrix(camera.combined);
 			trapBatch.setProjectionMatrix(camera.combined);
 			obstacleBatch.setProjectionMatrix(camera.combined);
 			candleBatch.setProjectionMatrix(camera.combined);
@@ -2807,6 +2869,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		cobBatch.dispose();
 		coinBatch.dispose();
 		lockBatch.dispose();
+		waveBatch.dispose();
+		flagBatch.dispose();
 		roofBatch.dispose();
 		doorBatch.dispose();
 		potBatch.dispose();

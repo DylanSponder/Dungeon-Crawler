@@ -140,7 +140,8 @@ public class GenerateLevel {
                     if (roomsIndex == numRooms - 1) {
                         newRoom.roomNum = 13;
                     } else {
-                        newRoom.roomNum = random;
+                        newRoom.roomNum = 7;
+                        //newRoom.roomNum = random;
                     }
                     //random room picker
 
@@ -784,6 +785,37 @@ int layerSize = levelTextures.size();
 init.layerSizes.add(layerSize);
 
 for (int i = 0; i < layerSize; i++) {
+
+    //create the background ocean
+    if (!r.oceanCreated) {
+        //T0DO Fix - water should generate EVERYWHERE - with just waves generating on top (maybe lower opacity get the same look as currently?)
+            for (int rowNumOc = 0; rowNumOc < currentRoomSize + 4; rowNumOc++) {
+                for (int iOc = -4; iOc < layerSize; iOc++) {
+                    Water water = new Water(world, ((roomX + iOc) * 16) + 16 * 16 + 32,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + (16 * rowNumOc) - (16 * currentRoomSize) - 16);
+                    ocean.add(water);
+                    Wave wave = new Wave(world, ((roomX + iOc) * 16) + 16 * 16 + 32,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + (16 * rowNumOc) - (16 * currentRoomSize) - 16 + 3);
+                    waves.add(wave);
+                }
+            }
+            r.oceanCreated = true;
+    }
+/*
+    if (i % 4 == 0) {
+        Wave wave = new Wave(world, ((roomX + i) * 16) + 16 * 16 - (longestRow * 16),levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + rowNum);
+        waves.add(wave);
+
+        Wave wave2 = new Wave(world, ((roomX + i) * 16) + 16 * 16 - (longestRow * 16) + 16 ,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + rowNum);
+        waves.add(wave2);
+
+        Wave wave3 = new Wave(world, ((roomX + i) * 16) + 16 * 16 - (longestRow * 16) + 32,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + rowNum);
+        waves.add(wave3);
+
+        Wave wave4 = new Wave(world, ((roomX + i) * 16) + 16 * 16 - (longestRow * 16) + 48,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + rowNum);
+        waves.add(wave4);
+    }
+
+ */
+
     TiledMapTileLayer.Cell currentCell = new TiledMapTileLayer.Cell();
     switch (levelTextures.get(i)) {
         case "middleFloorTile":
@@ -2338,7 +2370,7 @@ for (int i = 0; i < layerSize; i++) {
                 Integer colExt2 = Integer.parseInt(colExt);
 
                 currentCell = init.cr.middleFloorTile;
-                generateColumn(colExt2, strRoof, i,world, roomX, levelY, 2,4,18,71,true,false,0,false,0, false,0);
+                generateColumn(colExt2, strRoof, i,world, roomX, levelY, 2,4,18,71,true,false,0,true,1, false,0);
             }
             if (levelTextures.get(i).matches("cofdb.+")) {//doric with full base and flag
                 Column coltu = new Column();
@@ -2352,7 +2384,7 @@ for (int i = 0; i < layerSize; i++) {
                 Integer colExt2 = Integer.parseInt(colExt);
 
                 currentCell = init.cr.middleFloorTile;
-                generateColumn(colExt2, strRoof, i,world, roomX, levelY, 3,4,18,71,true,false,0,false,0, false,0);
+                generateColumn(colExt2, strRoof, i,world, roomX, levelY, 3,4,18,71,true,false,0,true,1, false,0);
             }
             if (levelTextures.get(i).matches("cofib.+")) {//ionic with full base and flag
                 Column coltu = new Column();
@@ -2366,7 +2398,7 @@ for (int i = 0; i < layerSize; i++) {
                 Integer colExt2 = Integer.parseInt(colExt);
 
                 currentCell = init.cr.middleFloorTile;
-                generateColumn(colExt2, strRoof, i,world, roomX, levelY, 1,4,18,71,true,false,0,false,0, false,0);
+                generateColumn(colExt2, strRoof, i,world, roomX, levelY, 1,4,18,71,true,false,0,true,1, false,0);
             }
             if (levelTextures.get(i).matches("cfftb.+")) {//tuscan with fire and full base and flag
                 Column coltu = new Column();
@@ -2688,7 +2720,8 @@ for (int i = 0; i < layerSize; i++) {
                 flags.add(flag2);
             }
             if (statue) {
-                Statue statTu = new Statue(world, ((roomX + i) * 16) + 16 * 16 + 1, levelY * 16 + Gdx.graphics.getHeight() / 30 + 10,1);
+                Statue statTu = new Statue(world, ((roomX + i) * 16) + 16 * 16 + 1, levelY * 16 + Gdx.graphics.getHeight() / 30 + 10,statueType);
+                statTu.createStatueHitbox(((roomX + i) * 16) + 16 * 16 + 4f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 26.5f, world);
                 statues.add(statTu);
             }
         } else {
@@ -2709,7 +2742,8 @@ for (int i = 0; i < layerSize; i++) {
                 flags.add(flag2);
             }
             if (statue) {
-                Statue statTu = new Statue(world, ((roomX + i) * 16) + 16 * 16 + 1, levelY * 16 + Gdx.graphics.getHeight() / 30 + 10 + (colExte * 16),1);
+                Statue statTu = new Statue(world, ((roomX + i) * 16) + 16 * 16 + 1, levelY * 16 + Gdx.graphics.getHeight() / 30 + 10 + (colExte * 16),statueType);
+                statTu.createStatueHitbox(((roomX + i) * 16) + 16 * 16 + 4f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 26.5f + (colExte * 16), world);
                 statues.add(statTu);
             }
         }

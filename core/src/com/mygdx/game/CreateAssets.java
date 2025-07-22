@@ -52,8 +52,12 @@ public class CreateAssets {
     //Main texture sheet
     Texture roomBackground = new Texture(Gdx.files.internal("HellasDungeon/Level/Level 1/CustomTileset.png"));
 
+
+    Texture waterTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Water/OceanWater.png"));
     Texture waveTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Water/Wave.png"));
     Texture waveDarkTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Water/WaveDark.png"));
+
+    Texture waveAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Water/WaveAnimation.png"));
 
     Texture swordTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Sword/SpriteInHand.png"));
     Texture bowTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Bow/Sprite.png"));
@@ -170,7 +174,8 @@ public class CreateAssets {
     public TextureRegion roomDecorativeFloorBottomRightTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
 
     //Water textures
-    public TextureRegion wave = new TextureRegion(waveTexture, 0, 0, 16, 16);
+    public TextureRegion water = new TextureRegion(waterTexture, 0, 0, 16, 16);
+    public TextureRegion wave = new TextureRegion(waveTexture, 0, 0, 16, 9);
 
 
     //Wall textures
@@ -340,17 +345,9 @@ public class CreateAssets {
     TextureRegion[] playerWalkDownRightFrames = new TextureRegion[1 * 4];
 
     public TextureRegion eyebeamAnimation1Texture = new TextureRegion(eyebeamTexture,0,0,64,8);
-    //public TextureRegion eyebeamAnimation2Texture = new TextureRegion(eyebeamTexture,0,8,64,8);
-    //public TextureRegion eyebeamAnimation3Texture = new TextureRegion(eyebeamTexture,0,16,64,8);
-    //public TextureRegion eyebeamAnimation4Texture = new TextureRegion(eyebeamTexture,0,24,64,8);
 
 
     public Animation<TextureRegion> eyebeamAnimation = new Animation<TextureRegion>(0.20f, eyebeamAnimation1Texture);
- //   public Animation<TextureRegion> eyebeam2 = new Animation<TextureRegion>(0.20f, eyebeamAnimation2Texture);
-  //  public Animation<TextureRegion> eyebeam3 = new Animation<TextureRegion>(0.20f, eyebeamAnimation3Texture);
-  //  public Animation<TextureRegion> eyebeam4 = new Animation<TextureRegion>(0.20f, eyebeamAnimation4Texture);
-
-  //  public Animation<TextureRegion> eyebeamAnimation = new Animation<TextureRegion>(0.25f, eyebeamAnimation1Texture);
 
     TextureRegion[][] eyebeamTextureArray = TextureRegion.split(eyebeamTexture,
             eyebeamTexture.getWidth() / 1,
@@ -371,6 +368,14 @@ public class CreateAssets {
 
     TextureRegion[] stunFrames = new TextureRegion[2 * 1];
 
+    public TextureRegion waveAnimationTexture = new TextureRegion(waveAnimationSheet,0,0,16,9);
+    public Animation<TextureRegion> waveAnimation = new Animation<TextureRegion>(0.25f, waveAnimationTexture);
+
+    TextureRegion[][] waveTextureArray = TextureRegion.split(waveAnimationSheet,
+            waveAnimationSheet.getWidth() / 14,
+            waveAnimationSheet.getHeight() / 1);
+
+    TextureRegion[] waveFrames = new TextureRegion[14 * 1];
 
     public TextureRegion fireAnimationTexture = new TextureRegion(fireAnimationSheet,0,0,16,16);
     public TextureRegion flameAnimationTexture = new TextureRegion(flameAnimationSheet,0,0,16,16);
@@ -451,11 +456,11 @@ public class CreateAssets {
     TextureRegion[] flameOutFrames = new TextureRegion[3 * 4];
 
 
-    //TODO: this is lazy - refactor
+    //TODO: this is lazy - find some way to refactor
     //edit: my depravity knows no bounds
     int index = 0, index2 = 0, index3 = 0, index4 = 0, index5 = 0, index6 = 0, index7 = 0, index8 = 0, index9 = 0, index10 = 0;
     int index11 = 0, index12 = 0, index13 = 0, index14 = 0, index15 = 0, index16 = 0, index17 = 0, index18 = 0, index19 = 0, index20 = 0, index21 = 0;
-    int index22 = 0, index23 = 0;
+    int index22 = 0, index23 = 0, index24 = 0;
 
     //Column textures
 
@@ -803,6 +808,16 @@ public class CreateAssets {
                 eyebeamFrames[index15++] = eyebeamTextureArray[g][w];
             }
         }
+
+        //wave animation
+        for (int p = 0; p < 1; p++) {
+            for (int j = 0; j < 14; j++) {
+                waveFrames[index24++] = waveTextureArray[p][j];
+            }
+        }
+
+        // Initialize the Animation with the frame interval and array of frames
+        waveAnimation = new Animation<TextureRegion>(0.25f, waveFrames);
 
         //stun animation
         for (int p = 0; p < 1; p++) {

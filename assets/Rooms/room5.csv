@@ -1,11 +1,11 @@
 tlf,tf,tf,tw,doorftl,doorftr,tw,tf,tf,tf,trf
-lf,f,f21,fcolib0,f,f,fcolib0,f,f,f,rf
-lf,fcflib1,f,f,f,f,f,f,f,fcflib1,rf
+lf,fcands,f21,fcolib0,f,f,fcolib0,f,f,fcands,rf
+lf,f,f,f,f,f,f,f,f,f,rf
 lf,f,f,f,f,fcands,f,f,f,f,rf
 lf,f,f,fcoltb1,f2,f2,f2,fcoltb1,f,f,rf
 doorful,f,fcands,f,f2,fshop,f2,f,fcands,f,doorfur
 doorfll,f,f,f,f2,f2,f2,f,f,f,doorflr
 lf,f,f,f,f,fcands,f,f,f,f,rf
 lf,f,f,fcoltb1,f,f,f,fcoltb1,f,f,rf
-lf,fcflib1,f,f,f,f,f,f,f,fcflib1,rf
+lf,fcands,f,f,f,f,f,f,f,fcands,rf
 blf,bf,bf,bf,bf,doorfbl,doorfbr,bf,bf,bf,brf
