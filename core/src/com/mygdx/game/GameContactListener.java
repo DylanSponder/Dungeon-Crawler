@@ -540,6 +540,12 @@ public class GameContactListener implements ContactListener {
                                 brokenSkulls.add(s);
                                 soundController.playSound("Skull",8.5f,7.5f,0.1f);
                             }
+                            if (colliderStr.startsWith("Arrow")) {
+                                if (!arrowBodiesCollided.contains(collider.getBody())) {
+                                    arrowBodiesCollided.add(collider.getBody());
+                                    break;
+                                }
+                            }
                         }
                     }
                 }

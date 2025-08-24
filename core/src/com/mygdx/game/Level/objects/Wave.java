@@ -25,8 +25,8 @@ public class Wave {
     public int type;
     public float alpha;
 
-    public Wave(World world, float x, float y) {
-        this.stateTime = 0;
+    public Wave(World world, float x, float y, float stateTime) {
+        this.stateTime = stateTime;
         this.world = world;
         this.waveX = x;
         this.waveY = y;

@@ -59,6 +59,9 @@ public class CreateAssets {
 
     Texture waveAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Water/WaveAnimation.png"));
 
+    Texture waterfallAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Water/Waterfall.png"));
+    Texture waterfallUpAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Water/WaterfallUp.png"));
+
     Texture swordTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Sword/SpriteInHand.png"));
     Texture bowTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Bow/Sprite.png"));
     Texture arrowTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Bow/Arrow.png"));
@@ -99,6 +102,8 @@ public class CreateAssets {
 
     Texture flagTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Flag.png"));
     Texture blocksTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Blocks.png"));
+
+    Texture raisedFloorMask = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/RaisedFloorMask.png"));
 
     Texture roof3x3 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/3x3.png"));
     Texture roof5x5 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/5x5.png"));
@@ -178,6 +183,8 @@ public class CreateAssets {
     public TextureRegion wave = new TextureRegion(waveTexture, 0, 0, 16, 9);
 
 
+
+
     //Wall textures
 
     public TextureRegion roomLeftWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
@@ -195,6 +202,8 @@ public class CreateAssets {
     public TextureRegion obstacle1Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion obstacle2Texture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion obstacle3Texture = new TextureRegion(roomBackground, 0,0,16,16);
+
+    //Stair textures
 
     //Fence textures
 
@@ -377,6 +386,32 @@ public class CreateAssets {
 
     TextureRegion[] waveFrames = new TextureRegion[14 * 1];
 
+
+
+    public TextureRegion waterfallAnimationTexture = new TextureRegion(waterfallAnimationSheet,0,0,16,16);
+    public Animation<TextureRegion> waterfallAnimation = new Animation<TextureRegion>(0.25f, waterfallAnimationTexture);
+
+    TextureRegion[][] waterfallTextureArray = TextureRegion.split(waterfallAnimationSheet,
+            waterfallAnimationSheet.getWidth() / 3,
+            waterfallAnimationSheet.getHeight() / 1);
+
+    TextureRegion[] waterfallFrames = new TextureRegion[3 * 1];
+
+
+
+
+    public TextureRegion waterfallUpAnimationTexture = new TextureRegion(waterfallUpAnimationSheet,0,0,16,16);
+    public Animation<TextureRegion> waterfallUpAnimation = new Animation<TextureRegion>(0.25f, waterfallUpAnimationTexture);
+
+    TextureRegion[][] waterfallUpTextureArray = TextureRegion.split(waterfallUpAnimationSheet,
+            waterfallUpAnimationSheet.getWidth() / 3,
+            waterfallUpAnimationSheet.getHeight() / 1);
+
+    TextureRegion[] waterfallUpFrames = new TextureRegion[3 * 1];
+
+
+
+
     public TextureRegion fireAnimationTexture = new TextureRegion(fireAnimationSheet,0,0,16,16);
     public TextureRegion flameAnimationTexture = new TextureRegion(flameAnimationSheet,0,0,16,16);
     public TextureRegion blueFlameAnimationTexture = new TextureRegion(blueFlameAnimationSheet,0,0,16,16);
@@ -460,7 +495,7 @@ public class CreateAssets {
     //edit: my depravity knows no bounds
     int index = 0, index2 = 0, index3 = 0, index4 = 0, index5 = 0, index6 = 0, index7 = 0, index8 = 0, index9 = 0, index10 = 0;
     int index11 = 0, index12 = 0, index13 = 0, index14 = 0, index15 = 0, index16 = 0, index17 = 0, index18 = 0, index19 = 0, index20 = 0, index21 = 0;
-    int index22 = 0, index23 = 0, index24 = 0;
+    int index22 = 0, index23 = 0, index24 = 0, index25 = 0, index26 = 0;
 
     //Column textures
 
@@ -683,6 +718,9 @@ public class CreateAssets {
     Sprite candleSprite = new Sprite(candleTexture,384,64,16,16);
     Sprite candlesSprite = new Sprite(candlesTexture,400,64,16,16);
 
+    public Sprite raisedFloorSprite = new Sprite(roomBackground,82,94,16,16);
+    public Sprite raisedFloorMaskSprite = new Sprite(raisedFloorMask,82,94,16,8);
+
     //Pot sprites
 
     Sprite pot1Sprite = new Sprite(amphoraeTexture, 16,16, 16, 16);
@@ -818,6 +856,26 @@ public class CreateAssets {
 
         // Initialize the Animation with the frame interval and array of frames
         waveAnimation = new Animation<TextureRegion>(0.25f, waveFrames);
+
+        //waterfall animation
+        for (int p = 0; p < 1; p++) {
+            for (int j = 0; j < 3; j++) {
+                waterfallFrames[index25++] = waterfallTextureArray[p][j];
+            }
+        }
+
+        // Initialize the Animation with the frame interval and array of frames
+        waterfallAnimation = new Animation<TextureRegion>(0.25f, waterfallFrames);
+
+
+        for (int p = 0; p < 1; p++) {
+            for (int j = 0; j < 3; j++) {
+                waterfallUpFrames[index26++] = waterfallUpTextureArray[p][j];
+            }
+        }
+
+        // Initialize the Animation with the frame interval and array of frames
+        waterfallAnimation = new Animation<TextureRegion>(0.25f, waterfallFrames);
 
         //stun animation
         for (int p = 0; p < 1; p++) {
@@ -979,6 +1037,8 @@ public class CreateAssets {
         roomDecorativeFloorTopRightTexture.setRegion(224, 64, 16, 16);
         roomDecorativeFloorBottomLeftTexture.setRegion(208, 80, 16, 16);
         roomDecorativeFloorBottomRightTexture.setRegion(224, 80, 16, 16);
+
+        //raisedFloor.setRegion(82, 94, 16, 16);
 
         roomTopLeftWallTexture.setRegion(0, 0, 16, 16);
         roomTopWallTexture.setRegion(48, 0, 16, 16);

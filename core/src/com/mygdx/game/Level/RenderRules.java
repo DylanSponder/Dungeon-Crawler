@@ -32,6 +32,10 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "middleFloor2Tile");
                         index++;
                         break;
+                    case "raf":
+                        drawableLevelLayer.add(index, "raisedFloorTile");
+                        index++;
+                        break;
                     case "f3":
                         drawableLevelLayer.add(index, "middleFloor3Tile");
                         index++;

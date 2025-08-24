@@ -74,6 +74,27 @@ public class BodyFactory {
         return body;
     }
 
+    public Body createRaisedFloorBody(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 8, y + 8);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        //body.setUserData("Wall");
+        return body;
+    }
+
+    public Fixture createRaisedFloorHitbox(World world, Body body, float x, float y) {
+        PolygonShape shape = new PolygonShape();
+
+        shape.setAsBox(8, 4.5f);
+
+        Fixture fixture = body.createFixture(shape, 1.0f);
+        shape.dispose();
+        fixture.setSensor(true);
+        return fixture;
+    }
 
     public Body createColumnHitbox(World world, float x, float y, int size, boolean bigbase) {
         Body body;

@@ -63,8 +63,8 @@ public class GenerateLevel {
         roomHitboxCreated = false;
         floor2Chance = 8;
 
-        int min = 11;
-        int max = 11;
+        int min = 9;
+        int max = 9;
         numRooms = (int) (Math.random() * (max - min + 1)) + min;
 
         possibleRoomNumbers = new ArrayList<>();
@@ -80,6 +80,18 @@ public class GenerateLevel {
         path = new ArrayList() {
         };
 
+        path.add(1);
+        path.add(1);
+        path.add(2);
+        path.add(2);
+        path.add(1);
+        path.add(1);
+        path.add(2);
+        path.add(2);
+        path.add(1);
+        path.add(1);
+
+
         boolean temp;
         temp = attemptLevelGen(1);
 
@@ -88,6 +100,7 @@ public class GenerateLevel {
 
     public boolean attemptLevelGen(int level) {
 
+        /* old code for picking a random new direction - this was fine temporarily but was holding the game back
         int currentDoorDirection = 0;
         int previousDoorDirection = 0;
         currentDoorDirection =  pd.pickInitialDirection(currentDoorDirection);
@@ -99,12 +112,13 @@ public class GenerateLevel {
             else {
                 previousDoorDirection = 0;
             }
-            currentDoorDirection =  pd.pickInitialDirection(currentDoorDirection);
 
+            currentDoorDirection =  pd.pickInitialDirection(currentDoorDirection);
             path.add(i, currentDoorDirection);
             path.add(i+1, currentDoorDirection);
             i++;
         }
+         */
 
         for (int i = 0; i < numRooms; i++) {
             Room newRoom = new Room();
@@ -117,11 +131,12 @@ public class GenerateLevel {
                 newRoom.roomNum = 0;
             }
 
-            else {
-                if (i == 5 || i == 10) {
+            else {//shop placements
+                //if path.get(i) == 5
+                if (i == 5) {
                     newRoom.roomNum = 5;
                 } else if ( i == 1) {
-                    newRoom.roomNum = 5;
+                    //newRoom.roomNum = 5;
                 }
 
                 else {
@@ -140,8 +155,8 @@ public class GenerateLevel {
                     if (roomsIndex == numRooms - 1) {
                         newRoom.roomNum = 13;
                     } else {
-                        newRoom.roomNum = 7;
-                        //newRoom.roomNum = random;
+                        //newRoom.roomNum = 3;
+                        newRoom.roomNum = random;
                     }
                     //random room picker
 
@@ -793,8 +808,13 @@ for (int i = 0; i < layerSize; i++) {
                 for (int iOc = -4; iOc < layerSize; iOc++) {
                     Water water = new Water(world, ((roomX + iOc) * 16) + 16 * 16 + 32,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + (16 * rowNumOc) - (16 * currentRoomSize) - 16);
                     ocean.add(water);
-                    Wave wave = new Wave(world, ((roomX + iOc) * 16) + 16 * 16 + 32,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + (16 * rowNumOc) - (16 * currentRoomSize) - 16 + 3);
-                    waves.add(wave);
+                    if (rowNumOc % 2 == 0) {
+                        Wave wave = new Wave(world, ((roomX + iOc) * 16) + 16 * 16 + 32,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + (16 * rowNumOc) - (16 * currentRoomSize) - 16 + 3, 0);
+                        waves.add(wave);
+                    } else {
+                        Wave wave = new Wave(world, ((roomX + iOc) * 16) + 16 * 16 + 32,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + (16 * rowNumOc) - (16 * currentRoomSize) - 16 + 3, 415);//4.95 4.885  375 4.92
+                        waves.add(wave);
+                    }
                 }
             }
             r.oceanCreated = true;
@@ -855,6 +875,12 @@ for (int i = 0; i < layerSize; i++) {
             break;
         case "decorFloorBottomRightTile":
             currentCell = init.cr.decorFloorBottomRightTile;
+            break;
+        case "raisedFloorTile":
+            currentCell = init.cr.middleFloorTile2;
+            RaisedFloor raf = new RaisedFloor(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            raf.createRaisedFloor();
+            raisedFloors.add(raf);
             break;
         case "block":
             currentCell = init.cr.blockTile;
@@ -2440,7 +2466,7 @@ for (int i = 0; i < layerSize; i++) {
                 Integer colExt2 = Integer.parseInt(colExt);
 
                 currentCell = init.cr.middleFloorTile;
-                generateColumn(colExt2, strRoof, i,world, roomX, levelY, 1,4,17,71,true,true,0,false,0, false,0);
+                generateColumn(colExt2, strRoof, i,world, roomX, levelY, 1,4,18,71,true,true,0,false,0, false,0);
             }
             if (levelTextures.get(i).matches("csftb.+")) {//tuscan with statue and full base and flag
                 Column coltu = new Column();

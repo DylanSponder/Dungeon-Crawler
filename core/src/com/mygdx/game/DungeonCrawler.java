@@ -18,10 +18,12 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -47,7 +49,7 @@ import static com.mygdx.game.PauseMenu.menuContainer;
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch arrowBatch, enemySkullBatch, enemySpiderBatch, enemyGhostBatch, enemyEyeBatch, potBatch, hudBatch, tutoBatch, alertFontBatch, inventoryBatch, sightFontBatch;
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, coinBatch, obstacleBatch, fireBatch, flameBatch, webBatch, cobBatch, candleBatch, eyebeamBatch;
-	private SpriteBatch bossMinotaurBatch, statueBatch, flagBatch, waveBatch, waterBatch, waterfallBatch;
+	private SpriteBatch bossMinotaurBatch, statueBatch, flagBatch, waveBatch, waterBatch, waterfallBatch, raisedFloorBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch, roofBatch, columnBaseLowerBatch, heartBatch, pedestalUpperBatch;
 	public static SpriteBatch trapBatch, playerBatch, weaponBatch;
 	public static World world;
@@ -56,6 +58,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public PauseMenu pauseMenu;
 	public static Stage menuStage;
 	public ShapeRenderer menuRenderer;
+	public static ShapeRenderer maskRenderer;
 	public static boolean debug, menuClosed, allowPlayerInput;
 	public GameInputProcessor gip;
 	private Box2DDebugRenderer b2dr;
@@ -109,6 +112,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Fire> fires;
 	public static ArrayList<ColumnPiece> columnPieces;
 	public static ArrayList<Column> columns;
+	public static ArrayList<RaisedFloor> raisedFloors;
 	public static ArrayList<Flag> flags;
 	public static ArrayList<Wave> waves;
 	public static ArrayList<Water> ocean;
@@ -153,6 +157,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 		lightController = new LightController();
 
 
+		maskRenderer = new ShapeRenderer();
+		maskRenderer.setAutoShapeType(true);
+
+
 		menuRenderer = new ShapeRenderer();
 		playerBatch = new SpriteBatch();
 		weaponBatch = new SpriteBatch();
@@ -167,6 +175,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		boneBatch = new SpriteBatch();
 		bossMinotaurBatch = new SpriteBatch();
 		statueBatch = new SpriteBatch();
+		raisedFloorBatch = new SpriteBatch();
 		flagBatch = new SpriteBatch();
 		waterBatch = new SpriteBatch();
 		waveBatch = new SpriteBatch();
@@ -255,6 +264,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		columns = new ArrayList<>();
 		columnPieces = new ArrayList<>();
 		statues = new ArrayList<>();
+		raisedFloors = new ArrayList<>();
 		fires = new ArrayList<>();
 		flags = new ArrayList<>();
 		extinguishedRespawnFires = new ArrayList<>();
@@ -490,7 +500,6 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 
 
-
 		//tutorial texture in the starting room
 			for (Tutorial t : tutorial) {
 				tutoBatch.begin();
@@ -569,6 +578,44 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 				}
 			}
+
+		for (RaisedFloor raf : raisedFloors) {
+
+			raisedFloorBatch.begin();
+
+			if (raf.time < raf.raiseTime) {
+				raf.time = raf.time + Gdx.graphics.getDeltaTime();
+				System.out.println(raf.time);
+
+			} else if (raf.raising) {
+
+				if (!(raf.topY >= raf.rafBody.getPosition().y)) {
+					raf.topY += Gdx.graphics.getDeltaTime() * 8;
+				} else {
+					raf.raising = false;
+					raf.lowering = true;
+				}
+			} else if (raf.lowering) {
+				if (!(raf.topY <= raf.rafBody.getPosition().y - 8)) {
+					raf.topY -= Gdx.graphics.getDeltaTime() * 8;
+				} else {
+
+					Timer.schedule(new Timer.Task() {
+						@Override
+						public void run() {
+							raf.lowering = false;
+							raf.raising = true;
+						}
+					}, 0.5f);
+
+				}
+			}
+
+			Rectangle clipBounds = new Rectangle(raf.rafX, raf.rafY, 16, 16);
+			RaisedFloor.renderRaisedFloor(raisedFloorBatch, clipBounds, tx.raisedFloorSprite, raf.rafBody.getPosition().x - 8, raf.topY - 8);
+
+			raisedFloorBatch.end();
+		}
 
 		if (!heartArrayMap.isEmpty()) {
 			for (OrderedMap.Entry<Body, Heart> heartEntry : heartArrayMap.entries()) {
@@ -1678,7 +1725,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 								@Override
 								public void run() {
 									if (!C.visible) {
-										if (c.alpha > 50) {
+										if (c.alpha > 35) {
 											c.loweredAlpha = false;
 										}
 										//r.loweredAlpha = true;
@@ -1956,7 +2003,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						@Override
 						public void run() {
 							if (!C.visible) {
-								if (c.alpha > 50) {
+								if (c.alpha > 35) {
 									c.loweredAlpha = false;
 								}
 								//r.loweredAlpha = true;
@@ -1994,7 +2041,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 							@Override
 							public void run() {
 								if (!C.visible) {
-									if (c.alpha > 50) {
+									if (c.alpha > 35) {
 										c.loweredAlpha = false;
 									}
 									//r.loweredAlpha = true;
@@ -2315,7 +2362,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						@Override
 						public void run() {
 							if (!r.visible) {
-								if (r.alpha > 50) {
+								if (r.alpha > 35) {
 									r.loweredAlpha = false;
 								}
 
@@ -2665,6 +2712,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 			waterBatch.setProjectionMatrix(camera.combined);
 			waveBatch.setProjectionMatrix(camera.combined);
 			trapBatch.setProjectionMatrix(camera.combined);
+			raisedFloorBatch.setProjectionMatrix(camera.combined);
+			maskRenderer.setProjectionMatrix(camera.combined);
 			obstacleBatch.setProjectionMatrix(camera.combined);
 			candleBatch.setProjectionMatrix(camera.combined);
 			columnBaseLowerBatch.setProjectionMatrix(camera.combined);
@@ -2830,7 +2879,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//set camera zoom
 		if (!GenerateLevel.init.roomList.get(player.currentRoom).isShop && !debug) {
-			//0.80f
+			//0.60
 			camera.zoom = 0.60f;
 		}
 		else if (!debug){
