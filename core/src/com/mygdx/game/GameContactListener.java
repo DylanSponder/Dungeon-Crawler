@@ -13,6 +13,7 @@ import com.mygdx.game.level.objects.*;
 
 import java.util.Objects;
 
+import static com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody;
 import static com.mygdx.game.DungeonCrawler.*;
 import static com.mygdx.game.level.GenerateLevel.init;
 
@@ -37,6 +38,7 @@ public class GameContactListener implements ContactListener {
 
 
         }
+
         //System.out.println(colliderStr + " " + collideeStr);
 
         if(((colliderStr == "Pot" && collideeStr == "Sword")
@@ -912,6 +914,35 @@ public class GameContactListener implements ContactListener {
                         }
                     }
                     break;
+
+                case "RafWall":
+                    if (collideeStr == "Arrow") {
+                        for (RaisedFloor raf : raisedFloors) {
+                            if (collider.getBody() == raf.rafBody) {
+                                if (!raf.lowered) {
+                                    if (!arrowBodiesCollided.contains(collidee.getBody())) {
+                                        arrowBodiesCollided.add(collidee.getBody());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (collideeStr == "RafBottom") {
+                        collider.setSensor(true);
+                    }
+                    if ((collidee.getBody().getType() == DynamicBody
+                            && (!collidee.isSensor() && collidee.getUserData() != "Player")
+                    )|| collidee.getUserData() == "PlayerBound")
+                    {
+                        if (collider.getUserData() == "Raf") {
+                            for (RaisedFloor raf : raisedFloors) {
+                                if (raf.rafBody == collider.getBody() && raf.lowered) {
+                                    raf.entityColliding = true;
+                                }
+                            }
+                        }
+                    }
+                    break;
                 case "Wall":
                     if (collideeStr == "Arrow") {
                         if (!arrowBodiesCollided.contains(collidee.getBody())) {
@@ -1307,7 +1338,33 @@ public class GameContactListener implements ContactListener {
             }
 
             switch (collideeStr) {
-
+                case "RafWall":
+                    if (collideeStr == "Arrow") {
+                        for (RaisedFloor raf : raisedFloors) {
+                            if (collider.getBody() == raf.rafBody) {
+                                if (!raf.lowered) {
+                                    if (!arrowBodiesCollided.contains(collidee.getBody())) {
+                                        arrowBodiesCollided.add(collidee.getBody());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (colliderStr == "RafBottom") {
+                        collidee.setSensor(true);
+                    }
+                    if ((collider.getBody().getType() == DynamicBody
+                            && (!collider.isSensor() && collider.getUserData() != "Player")) || collider.getUserData() == "PlayerBound")
+                    {
+                        if (collider.getUserData() == "Raf") {
+                            for (RaisedFloor raf : raisedFloors) {
+                                if (raf.rafBody == collider.getBody() && raf.lowered) {
+                                    raf.entityColliding = true;
+                                }
+                            }
+                        }
+                    }
+                    break;
                 case "TrapArea":
                     if (collider.getUserData() == "PlayerBound") {
                         for (Trap tr : traps) {
@@ -1570,6 +1627,25 @@ public class GameContactListener implements ContactListener {
         String collideeAsString = collidee.getBody().getUserData().toString();
 
         switch (colliderAsString) {
+            case "RafWall":
+                if (collideeAsString == "RafBottom") {
+                    collider.setSensor(false);
+                }
+                if ((collidee.getBody().getType() == DynamicBody
+                    && (!collidee.isSensor() && collidee.getUserData() != "Player")
+                  )|| collidee.getUserData() == "PlayerBound") {
+                    if (collider.getUserData() == "Raf") {
+                        for (RaisedFloor raf : raisedFloors) {
+                            if (raf.rafBody == collider.getBody()) {
+                                raf.entityColliding = false;
+                                if (!raf.lowering) {
+                                    raf.raiseFloorAfterEntityMoves();
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
             case "Stem":
                 if (collidee.getUserData() == "PlayerBound") {
 
@@ -1657,6 +1733,24 @@ public class GameContactListener implements ContactListener {
         }
 
         switch (collideeAsString) {
+            case "RafWall":
+                if (colliderAsString == "RafBottom") {
+                    collidee.setSensor(false);
+                }
+                if ((collider.getBody().getType() == DynamicBody
+                && (!collider.isSensor() && collider.getUserData() != "Player")) || collider.getUserData() == "PlayerBound") {
+                    if (collidee.getUserData() == "Raf") {
+                        for (RaisedFloor raf : raisedFloors) {
+                            if (raf.rafBody == collidee.getBody()) {
+                                raf.entityColliding = false;
+                                if (!raf.lowering) {
+                                    raf.raiseFloorAfterEntityMoves();
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
             case "Cobweb":
                 if (collider.getUserData() == "PlayerBound") {
                     DungeonCrawler.PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED;

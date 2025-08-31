@@ -23,7 +23,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -116,6 +115,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Flag> flags;
 	public static ArrayList<Wave> waves;
 	public static ArrayList<Water> ocean;
+	public static ArrayList<Water> water;
 	public static ArrayList<Statue> statues;
 	public static ArrayList<Roof> roofs;
 	public static float PLAYER_HORIZONTAL_SPEED = 0f;
@@ -202,6 +202,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		ocean = new ArrayList<>();
 		waves = new ArrayList<>();
+		water = new ArrayList<>();
 		eyebeamBatch = new SpriteBatch();
 		webBatch = new SpriteBatch();
 		doorBatch = new SpriteBatch();
@@ -463,7 +464,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			waveShader.setUniformf("u_speed", 1.6f);
 			 */
 			waterBatch.begin();
-			Water.renderWater(waterBatch, tx.water, w.waterX, w.waterY, 16, 16);
+			Water.renderWater(waterBatch, tx.oceanWater, w.waterX, w.waterY, 16, 16);
 			waterBatch.end();
 		}
 
@@ -490,6 +491,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 			Wave.renderWave(waveBatch, currentFrame, w.waveX, w.waveY, 16, 9);
 			waveBatch.end();
 		}
+
+
 
 			//set the view of the map to the camera and then render the map
 			renderer.setView(camera);
@@ -579,11 +582,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 
-		for (RaisedFloor raf : raisedFloors) {
-
-			raisedFloorBatch.begin();
-
-			if (raf.time < raf.raiseTime) {
+			/*
+						if (raf.time < raf.raiseTime) {
 				raf.time = raf.time + Gdx.graphics.getDeltaTime();
 				System.out.println(raf.time);
 
@@ -609,10 +609,56 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}, 0.5f);
 
 				}
+			 */
+
+		for (RaisedFloor raf : raisedFloors) {
+
+			raisedFloorBatch.begin();
+
+			if (raf.time < raf.raiseTime) {
+				raf.time = raf.time + Gdx.graphics.getDeltaTime();
+				//System.out.println(raf.time);
+
+			} else if (raf.raising) {
+
+				if (!(raf.rafBody.getPosition().y >= raf.rafY + 12)) {
+					//raf.topY += Gdx.graphics.getDeltaTime() * 8;
+					raf.rafBody.setLinearVelocity(0, 10);
+				} else {
+					raf.rafBody.setLinearVelocity(0, 0);
+					raf.lowering = false;
+					Timer.schedule(new Timer.Task() {
+						@Override
+						public void run() {
+								raf.lowering = true;
+								raf.raising = false;
+
+						}
+					}, 0.5f);
+				}
+			} else if (raf.lowering) {
+				if (!(raf.rafBody.getPosition().y <= raf.rafY + 4)) {
+					//raf.topY -= Gdx.graphics.getDeltaTime() * 8;
+					raf.rafBody.setLinearVelocity(0, -10);
+				} else {
+					raf.rafBody.setLinearVelocity(0, 0);
+					raf.lowered = true;
+					raf.lowering = false;
+					Timer.schedule(new Timer.Task() {
+						@Override
+						public void run() {
+							if (!raf.entityColliding) {
+								raf.lowered = false;
+								raf.raising = true;
+							}
+						}
+					}, 1f);
+
+				}
 			}
 
 			Rectangle clipBounds = new Rectangle(raf.rafX, raf.rafY, 16, 16);
-			RaisedFloor.renderRaisedFloor(raisedFloorBatch, clipBounds, tx.raisedFloorSprite, raf.rafBody.getPosition().x - 8, raf.topY - 8);
+			RaisedFloor.renderRaisedFloor(raisedFloorBatch, clipBounds, tx.raisedFloorSprite, raf.rafBody.getPosition().x - 8, raf.rafBody.getPosition().y - 12);
 
 			raisedFloorBatch.end();
 		}
@@ -1046,9 +1092,35 @@ public class DungeonCrawler extends ApplicationAdapter {
 			//render the player sprite on the player body
 			Player.renderPlayer(playerBatch, tx.playerTextureRegion, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 6f);
 
-
-
 			playerBatch.end();
+
+
+		for (Water w : water) {
+
+			currentFrame = tx.waterAnimation.getKeyFrame(w.stateTime, true);
+			w.stateTime += Gdx.graphics.getDeltaTime();
+
+			//GenerateLevel.init.roomList.get(r.index).roomHitbox.getBody().getPosition().x;
+
+			//shader variables passed into flag fragment shader
+			/*
+			waveBatch.setShader(waveShader);
+			waveShader.setUniformf("u_swayIntensity", 0.05f);//0.03
+			waveShader.setUniformf("u_verticalDensity", 1f);
+			waveShader.setUniformf("u_time", flag_time + w.time);
+			waveShader.setUniformf("u_speed", 1.6f);
+
+										Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, true);
+			 */
+			waterBatch.begin();
+			Water.renderWater(waterBatch, currentFrame, w.waterX, w.waterY, 16, 16);
+			waterBatch.end();
+		}
+
+		//headBatch.begin();
+
+
+		//headBatch.end();
 
 
 		for (ColumnPiece c : columnPieces) {

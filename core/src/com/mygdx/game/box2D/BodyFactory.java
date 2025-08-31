@@ -74,25 +74,63 @@ public class BodyFactory {
         return body;
     }
 
-    public Body createRaisedFloorBody(World world, float x, float y) {
+    public Body createRaisedFloorTopLimit(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(x + 8, y + 8);
+        bodyDef.position.set(x + 0.25f, y);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
-        //body.setUserData("Wall");
+        body.setUserData("RafTop");
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(7.5f, 1f);
+        Fixture fixture = body.createFixture(shape, 1.0f);
+        fixture.setUserData("RafTop");
+        shape.dispose();
+        fixture.setSensor(true);
         return body;
     }
 
-    public Fixture createRaisedFloorHitbox(World world, Body body, float x, float y) {
+    public Body createRaisedFloorBottomLimit(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(x + 0.25f, y);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        body.setUserData("RafBottom");
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(7.5f, 1f);
+        Fixture fixture = body.createFixture(shape, 1.0f);
+        fixture.setUserData("RafBottom");
+        shape.dispose();
+        fixture.setSensor(true);
+        return body;
+    }
+
+    public Body createRaisedFloorBody(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.KinematicBody;
+
+        bodyDef.position.set(x + 8, y + 8);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        body.setUserData("RafWall");
+        return body;
+    }
+
+    public Fixture createRaisedFloorHitbox(World world, Body body) {
         PolygonShape shape = new PolygonShape();
 
-        shape.setAsBox(8, 4.5f);
+        shape.setAsBox(8, 4f);
 
         Fixture fixture = body.createFixture(shape, 1.0f);
         shape.dispose();
-        fixture.setSensor(true);
+        fixture.setSensor(false);
+        fixture.setUserData("Raf");
         return fixture;
     }
 
@@ -884,14 +922,21 @@ public class BodyFactory {
         Fixture playerCornerHitbox3 = body.createFixture(playerCornerShape3,1.0f);
         Fixture playerCornerHitbox4 = body.createFixture(playerCornerShape4,1.0f);
 
+        //the whole body
         body.setUserData("Player");
+
+        //the spheres that make up the corners
         playerCornerHitbox1.setUserData("Player");
         playerCornerHitbox2.setUserData("Player");
         playerCornerHitbox3.setUserData("Player");
         playerCornerHitbox4.setUserData("Player");
+        //the inner horizontal and vertical hitboxes
         playerHitbox.setUserData("Player");
         playerHitbox2.setUserData("Player");
+
+        //just the outer box
         playerBoundHitbox.setUserData("PlayerBound");
+
         playerCornerShape1.dispose();
         playerCornerShape2.dispose();
         playerCornerShape3.dispose();

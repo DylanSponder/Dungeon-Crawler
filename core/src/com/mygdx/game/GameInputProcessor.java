@@ -25,14 +25,14 @@ public class GameInputProcessor implements InputProcessor {
         @Override
         public boolean scrolled(float amountX, float amountY) {
         if (DungeonCrawler.debug) {
-            System.out.println(camera.zoom);
+            //System.out.println(camera.zoom);
 
-            if ((camera.zoom >= 0.3f && camera.zoom <= 24f)) {
+            if ((camera.zoom >= 0.1f && camera.zoom <= 24f)) {
                 if (camera.zoom == 24f) {
                     if (amountY < 0f) {
                         camera.zoom += amountY * 0.1f;
                     }
-                } else if (camera.zoom == 0.3f) {
+                } else if (camera.zoom == 0.1f) {
                     if (amountY > 0f) {
                         camera.zoom += amountY * 0.1f;
                     }
@@ -41,8 +41,8 @@ public class GameInputProcessor implements InputProcessor {
                 }
             } else if (camera.zoom > 24f) {
                 camera.zoom = 24f;
-            } else if (camera.zoom < 0.3f) {
-                camera.zoom = 0.3f;
+            } else if (camera.zoom < 0.1f) {
+                camera.zoom = 0.1f;
             }
         }
         return true;

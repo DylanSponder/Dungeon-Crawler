@@ -38,6 +38,7 @@ public class CreateAssets {
 
     Texture coinHUDTexture = new Texture(Gdx.files.internal("HellasDungeon/HUD/Coin2Preview.png"));
     Texture playerTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SpriteSheet.png"));
+    Texture playerHeadTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/Head.png"));
     Texture playerWalkUpAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkUp.png"));
     Texture playerWalkDownAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkDown.png"));
     Texture playerWalkLeftAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkLeft.png"));
@@ -47,17 +48,21 @@ public class CreateAssets {
     Texture playerWalkUpLeftAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkUpLeft.png"));
     Texture playerWalkUpRightAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkUpRight.png"));
 
+
     Texture playerAttackTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/Attack.png"));
 
     //Main texture sheet
     Texture roomBackground = new Texture(Gdx.files.internal("HellasDungeon/Level/Level 1/CustomTileset.png"));
 
 
-    Texture waterTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Water/OceanWater.png"));
+    Texture oceanWaterTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Water/OceanWater.png"));
+    //Texture waterTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Water/Water.png"));
     Texture waveTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Water/Wave.png"));
     Texture waveDarkTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Water/WaveDark.png"));
 
     Texture waveAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Water/WaveAnimation.png"));
+
+    Texture waterAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Water/WaterAnimation.png"));
 
     Texture waterfallAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Water/Waterfall.png"));
     Texture waterfallUpAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Water/WaterfallUp.png"));
@@ -179,7 +184,8 @@ public class CreateAssets {
     public TextureRegion roomDecorativeFloorBottomRightTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
 
     //Water textures
-    public TextureRegion water = new TextureRegion(waterTexture, 0, 0, 16, 16);
+    public TextureRegion oceanWater = new TextureRegion(oceanWaterTexture, 0, 0, 16, 16);
+    public TextureRegion water = new TextureRegion(oceanWaterTexture, 0, 0, 16, 16);
     public TextureRegion wave = new TextureRegion(waveTexture, 0, 0, 16, 9);
 
 
@@ -409,8 +415,16 @@ public class CreateAssets {
 
     TextureRegion[] waterfallUpFrames = new TextureRegion[3 * 1];
 
+    //water inside rooms
 
+    public TextureRegion waterAnimationTexture = new TextureRegion(waterAnimationSheet,0,0,16,16);
+    public Animation<TextureRegion> waterAnimation = new Animation<TextureRegion>(0.25f, waterAnimationTexture);
 
+    TextureRegion[][] waterTextureArray = TextureRegion.split(waterAnimationSheet,
+            waterAnimationSheet.getWidth() / 5,
+            waterAnimationSheet.getHeight() / 1);
+
+    TextureRegion[] waterFrames = new TextureRegion[5 * 1];
 
     public TextureRegion fireAnimationTexture = new TextureRegion(fireAnimationSheet,0,0,16,16);
     public TextureRegion flameAnimationTexture = new TextureRegion(flameAnimationSheet,0,0,16,16);
@@ -495,7 +509,7 @@ public class CreateAssets {
     //edit: my depravity knows no bounds
     int index = 0, index2 = 0, index3 = 0, index4 = 0, index5 = 0, index6 = 0, index7 = 0, index8 = 0, index9 = 0, index10 = 0;
     int index11 = 0, index12 = 0, index13 = 0, index14 = 0, index15 = 0, index16 = 0, index17 = 0, index18 = 0, index19 = 0, index20 = 0, index21 = 0;
-    int index22 = 0, index23 = 0, index24 = 0, index25 = 0, index26 = 0;
+    int index22 = 0, index23 = 0, index24 = 0, index25 = 0, index26 = 0, index27 = 0;
 
     //Column textures
 
@@ -866,6 +880,17 @@ public class CreateAssets {
 
         // Initialize the Animation with the frame interval and array of frames
         waterfallAnimation = new Animation<TextureRegion>(0.25f, waterfallFrames);
+
+        //water animation
+        for (int p = 0; p < 1; p++) {
+            for (int j = 0; j < 5; j++) {
+                waterFrames[index27++] = waterTextureArray[p][j];
+            }
+        }
+
+        // Initialize the Animation with the frame interval and array of frames
+        waterAnimation = new Animation<TextureRegion>(0.25f, waterFrames);
+
 
 
         for (int p = 0; p < 1; p++) {
