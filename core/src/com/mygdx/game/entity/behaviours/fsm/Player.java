@@ -22,7 +22,7 @@ public class Player {
     public Shopkeeper shopkeeper;
     public int currentRoom;
     public int facing;
-    public boolean touchingRoom, touchingDoor, touchingCobweb;
+    public boolean touchingRoom, touchingDoor, touchingCobweb, swimming;
     public boolean midAnimationFrame;
     public boolean hasGreekFire, hasShield, hasTorch, torchApplied, hasChisel;
     public int greekFireUses;

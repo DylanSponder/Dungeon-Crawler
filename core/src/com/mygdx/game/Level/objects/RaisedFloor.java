@@ -1,18 +1,13 @@
 package com.mygdx.game.level.objects;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.mygdx.game.box2D.BodyFactory;
-import org.w3c.dom.css.Rect;
 
 import static com.mygdx.game.DungeonCrawler.*;
 
@@ -24,11 +19,11 @@ public class RaisedFloor {
     public float time;
     public float raiseTime;
     public float offset;
-    public Body rafBody, maskBody;
+    public Body rafBody, maskBody, rafTop, rafBottom, rafTopBody;
     public Fixture rafHitbox;
     public static Rectangle scissors1;
     public Rectangle scissors2;
-    public boolean raising, lowering;
+    public boolean raising, lowering, entityColliding, lowered;
     public Rectangle clipBounds;
 
     public RaisedFloor(World world, float x, float y) {
@@ -42,12 +37,23 @@ public class RaisedFloor {
         scissors1 = new Rectangle();
     }
 
+    public void raiseFloorAfterEntityMoves() {
+        this.lowering = false;
+        this.raising = true;
+    }
+
     public void createRaisedFloor() {
         BodyFactory bodyFactory = new BodyFactory();
 
-        rafBody = bodyFactory.createRaisedFloorBody(world, rafX, rafY);
-        maskBody = bodyFactory.createRaisedFloorBody(world, rafX, rafY);
-        topY = rafBody.getPosition().y;
+        this.rafBody = bodyFactory.createRaisedFloorBody(world, rafX, rafY + 4);
+        this.rafTop = bodyFactory.createRaisedFloorTopLimit(world, rafX + 8, rafY + 17);
+        this.rafBottom = bodyFactory.createRaisedFloorBottomLimit(world, rafX + 8, rafY - 1f);
+        //this.rafTopBody = bodyFactory.createRaisedFloorBody(world, rafX, rafY + 4);
+
+        this.rafHitbox = bodyFactory.createRaisedFloorHitbox(world, rafBody);
+
+       // maskBody = bodyFactory.createRaisedFloorBody(world, rafX, rafY);
+        this.topY = rafBody.getPosition().y;
         //rafBody.setUserData("Wall");
     }
 

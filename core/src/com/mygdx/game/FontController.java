@@ -47,7 +47,6 @@ public class FontController {
          //   if (text.fade) {
 
                     if (text.fadeTiming >= 0 ){
-                        System.out.println(text.fadeTiming);
                         font2.setColor(text.color);
                         text.color.a = text.fadeTiming;
                         //font2.setColor(1,1,1, text.fadeTiming);

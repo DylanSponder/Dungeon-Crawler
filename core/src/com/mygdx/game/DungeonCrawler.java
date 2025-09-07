@@ -303,7 +303,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		Vector2 vec = new Vector2();
 		vec.x = PLAYER_X;
 		vec.y = PLAYER_Y;
-		PLAYER_DEFAULT_SPEED = 45f;//38 //40
+		PLAYER_DEFAULT_SPEED = 55f;//38 //40 //45
 		PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED;
 
 		//initialize the Box2D body factory, asset instance
@@ -313,7 +313,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		GameContactListener lc = new GameContactListener();
 		tx.textureRegionBuilder();
 
-		//TODO: Merge Upper and Lower cases and use proper Greek letters instead of lower case for Greek alphabet glyphs
+		//TODO: Merge Upper and Lower cases and use proper Greek letters instead of lower case  as placeholder for Greek alphabet glyphs
 
 		//instantiate the font used in the game
 		defaultFont = new BitmapFont(Gdx.files.internal("HellasDungeon/Font/HellasFontStylizedFinal.fnt"),
@@ -1119,6 +1119,21 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//headBatch.begin();
 
+			//System.out.println("SDFGBNBFDFGBFDFGBFGBGBNBGFB");
+			playerBatch.begin();
+
+			if (!player.swimming) {
+				Player.renderPlayer(playerBatch, tx.playerTextureRegion, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 6f);
+			}
+
+
+			if (player.facing == 3 && (playerMeleeAttacking || playerUsingChisel || playerRangedAttacking || playerShieldAttacking)) {
+				Player.renderPlayer(playerBatch, tx.playerHead, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 8f);
+			} else {
+				Player.renderPlayer(playerBatch, tx.playerHead, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 6f);
+			}
+
+			playerBatch.end();
 
 		//headBatch.end();
 
@@ -3018,12 +3033,16 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//revert to standing sprite when input is released
 		if (player.facing == 1) {
 			tx.playerTextureRegion = tx.playerUp;
+			tx.playerHead = tx.playerHeadUp;
 		} else if (player.facing == 3) {
 			tx.playerTextureRegion = tx.playerDown;
+			tx.playerHead = tx.playerHeadDown;
 		} else if (player.facing == 4) {
 			tx.playerTextureRegion = tx.playerLeft;
+			tx.playerHead = tx.playerHeadLeft;
 		} else if (player.facing == 2) {
 			tx.playerTextureRegion = tx.playerRight;
+			tx.playerHead = tx.playerHeadRight;
 		}
 
 		moveUp = false;
@@ -3085,17 +3104,18 @@ public class DungeonCrawler extends ApplicationAdapter {
 						PLAYER_HORIZONTAL_SPEED = -1f;
 						currentFrame = tx.playerWalkUpLeftAnimation.getKeyFrame(stateTime3, true);
 						tx.playerTextureRegion = currentFrame;
-						//tx.playerSprite = tx.playerUpLeftLean;
+						tx.playerHead = tx.playerHeadUpLeft;
 					} else if (leanRight) {
 						PLAYER_HORIZONTAL_SPEED = 1f;
 						currentFrame = tx.playerWalkUpRightAnimation.getKeyFrame(stateTime3, true);
 						tx.playerTextureRegion = currentFrame;
-						//tx.playerSprite = tx.playerUpRightLean;
+						tx.playerHead = tx.playerHeadUpRight;
 
 					}
 					else {
 						currentFrame = tx.playerWalkUpAnimation.getKeyFrame(stateTime3, true);
 						tx.playerTextureRegion = currentFrame;
+						tx.playerHead = tx.playerHeadUp;
 					}
 
 				} else {
@@ -3103,16 +3123,18 @@ public class DungeonCrawler extends ApplicationAdapter {
 						PLAYER_HORIZONTAL_SPEED = -1f;
 						currentFrame = tx.playerUpLeftLean;
 						tx.playerTextureRegion = currentFrame;
-						//tx.playerSprite = tx.playerUpLeftLean;
+						tx.playerHead = tx.playerHeadUpLeft;
+
 					} else if (leanRight) {
 						PLAYER_HORIZONTAL_SPEED = 1f;
 						currentFrame = tx.playerUpRightLean;
 						tx.playerTextureRegion = currentFrame;
-						//tx.playerSprite = tx.playerUpRightLean;
+						tx.playerHead = tx.playerHeadUpRight;
 					}
 					else {
 						currentFrame = tx.playerUp;
 						tx.playerTextureRegion = currentFrame;
+						tx.playerHead = tx.playerHeadUp;
 					}
 				}
 			}
@@ -3130,26 +3152,32 @@ public class DungeonCrawler extends ApplicationAdapter {
 						PLAYER_VERTICAL_SPEED = -1f;
 						currentFrame = tx.playerWalkDownLeftAnimation.getKeyFrame(stateTime3, true);
 						tx.playerTextureRegion = currentFrame;
+						tx.playerHead = tx.playerHeadDownLeft;
 					} else if (leanUp) {
 						PLAYER_VERTICAL_SPEED = 1f;
 						currentFrame = tx.playerWalkUpLeftAnimation.getKeyFrame(stateTime3, true);
 						tx.playerTextureRegion = currentFrame;
+						tx.playerHead = tx.playerHeadUpLeft;
 					} else {
 						currentFrame = tx.playerWalkLeftAnimation.getKeyFrame(stateTime3, true);
 						tx.playerTextureRegion = currentFrame;
+						tx.playerHead = tx.playerHeadLeft;
 					}
 				} else {
 					if (leanDown) {
 						PLAYER_VERTICAL_SPEED = -1f;
 						currentFrame = tx.playerDownLeftLean;
 						tx.playerTextureRegion = currentFrame;
+						tx.playerHead = tx.playerHeadDownLeft;
 					} else if (leanUp) {
 						PLAYER_VERTICAL_SPEED = 1f;
 						currentFrame = tx.playerUpLeftLean;
 						tx.playerTextureRegion = currentFrame;
+						tx.playerHead = tx.playerHeadUpLeft;
 					} else {
 						currentFrame = tx.playerLeft;
 						tx.playerTextureRegion = currentFrame;
+						tx.playerHead = tx.playerHeadLeft;
 					}
 				}
 			}
@@ -3167,26 +3195,32 @@ public class DungeonCrawler extends ApplicationAdapter {
 						PLAYER_HORIZONTAL_SPEED = -1f;
 						currentFrame = tx.playerWalkDownLeftAnimation.getKeyFrame(stateTime3, true);
 						tx.playerTextureRegion = currentFrame;
+						tx.playerHead = tx.playerHeadDownLeft;
 					} else if (leanRight) {
 						PLAYER_HORIZONTAL_SPEED = 1f;
 						currentFrame = tx.playerWalkDownRightAnimation.getKeyFrame(stateTime3, true);
 						tx.playerTextureRegion = currentFrame;
+						tx.playerHead = tx.playerHeadDownRight;
 					} else {
 						currentFrame = tx.playerWalkDownAnimation.getKeyFrame(stateTime3, true);
 						tx.playerTextureRegion = currentFrame;
+						tx.playerHead = tx.playerHeadDown;
 					}
 				} else {
 					if (leanLeft) {
 						PLAYER_HORIZONTAL_SPEED = -1f;
 						currentFrame = tx.playerDownLeftLean;
 						tx.playerTextureRegion = currentFrame;
+						tx.playerHead = tx.playerHeadDownLeft;
 					} else if (leanRight) {
 						PLAYER_HORIZONTAL_SPEED = 1f;
 						currentFrame = tx.playerDownRightLean;
 						tx.playerTextureRegion = currentFrame;
+						tx.playerHead = tx.playerHeadDownRight;
 					} else {
 						currentFrame = tx.playerDown;
 						tx.playerTextureRegion = currentFrame;
+						tx.playerHead = tx.playerHeadDown;
 					}
 				}
 			}
@@ -3203,26 +3237,32 @@ public class DungeonCrawler extends ApplicationAdapter {
 						PLAYER_VERTICAL_SPEED = -1f;
 						currentFrame = tx.playerWalkDownRightAnimation.getKeyFrame(stateTime3, true);
 						tx.playerTextureRegion = currentFrame;
+						tx.playerHead = tx.playerHeadDownRight;
 					} else if (leanUp) {
 						PLAYER_VERTICAL_SPEED = 1f;
 						currentFrame = tx.playerWalkUpRightAnimation.getKeyFrame(stateTime3, true);
 						tx.playerTextureRegion = currentFrame;
+						tx.playerHead = tx.playerHeadUpRight;
 					} else {
 						currentFrame = tx.playerWalkRightAnimation.getKeyFrame(stateTime3, true);
 						tx.playerTextureRegion = currentFrame;
+						tx.playerHead = tx.playerHeadRight;
 					}
 				} else {
 					if (leanDown) {
 						PLAYER_VERTICAL_SPEED = -1f;
 						currentFrame = tx.playerDownRightLean;
 						tx.playerTextureRegion = currentFrame;
+						tx.playerHead = tx.playerHeadDownRight;
 					} else if (leanUp) {
 						PLAYER_VERTICAL_SPEED = 1f;
 						currentFrame = tx.playerUpRightLean;
 						tx.playerTextureRegion = currentFrame;
+						tx.playerHead = tx.playerHeadUpRight;
 					} else {
 						currentFrame = tx.playerRight;
 						tx.playerTextureRegion = currentFrame;
+						tx.playerHead = tx.playerHeadRight;
 					}
 				}
 

@@ -54,6 +54,7 @@ public class CreateAssets {
     //Main texture sheet
     Texture roomBackground = new Texture(Gdx.files.internal("HellasDungeon/Level/Level 1/CustomTileset.png"));
 
+    Texture stairsTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Stairs/Stairs.png"));
 
     Texture oceanWaterTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Water/OceanWater.png"));
     //Texture waterTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Water/Water.png"));
@@ -210,6 +211,17 @@ public class CreateAssets {
     public TextureRegion obstacle3Texture = new TextureRegion(roomBackground, 0,0,16,16);
 
     //Stair textures
+
+    public TextureRegion stairTopLeft = new TextureRegion(stairsTexture, 0,0,16,16);
+    public TextureRegion stairTopRight = new TextureRegion(stairsTexture, 0,0,16,16);
+    public TextureRegion stairTop = new TextureRegion(stairsTexture, 0,0,16,16);
+    public TextureRegion stairLeftCorner = new TextureRegion(stairsTexture, 0,0,16,16);
+    public TextureRegion stairRightCorner = new TextureRegion(stairsTexture, 0,0,16,16);
+    public TextureRegion stairLeft = new TextureRegion(stairsTexture, 0,0,16,16);
+    public TextureRegion stairRight = new TextureRegion(stairsTexture, 0,0,16,16);
+    public TextureRegion stairDown = new TextureRegion(stairsTexture, 0,0,16,16);
+    public TextureRegion stairDownLeft = new TextureRegion(stairsTexture, 0,0,16,16);
+    public TextureRegion stairDownRight = new TextureRegion(stairsTexture, 0,0,16,16);
 
     //Fence textures
 
@@ -632,6 +644,17 @@ public class CreateAssets {
     //outline player sprites
     Sprite playerSprite = new Sprite(playerTexture, 0, 0, 16, 16);
     public TextureRegion playerTextureRegion = new TextureRegion(playerTexture, 0, 0, 16, 16);
+    public TextureRegion playerHead = new TextureRegion(playerHeadTexture, 0, 0, 16, 16);
+
+    Sprite playerHeadUp = new Sprite(playerHeadTexture, 24, 0, 16, 16);
+    Sprite playerHeadDown = new Sprite(playerHeadTexture, 24, 32, 16, 16);
+    Sprite playerHeadLeft = new Sprite(playerHeadTexture, 0, 16, 16, 16);
+    Sprite playerHeadRight = new Sprite(playerHeadTexture, 48, 16, 16, 16);
+    Sprite playerHeadUpLeft = new Sprite(playerHeadTexture, 0, 0, 16, 16);
+    Sprite playerHeadUpRight = new Sprite(playerHeadTexture, 48, 0, 16, 16);
+    Sprite playerHeadDownLeft = new Sprite(playerHeadTexture, 0, 32, 16, 16);
+    Sprite playerHeadDownRight = new Sprite(playerHeadTexture, 48, 32, 16, 16);
+
     Sprite playerUp = new Sprite(playerTexture, 16, 0, 16, 16);
     Sprite playerDown = new Sprite(playerTexture, 0, 0, 16, 16);
     Sprite playerLeft = new Sprite(playerTexture, 32, 0, 16, 16);
@@ -1101,6 +1124,17 @@ public class CreateAssets {
         roomLeftDownEndFence.setRegion(400, 0, 16, 16);
         roomRightUpEndFence.setRegion(400, 16, 16, 16);
         roomRightDownEndFence.setRegion(416, 0, 16, 16);
+
+        stairTopLeft.setRegion(0,0,16,16);
+        stairTopRight.setRegion(32,0,16,16);
+        stairTop.setRegion(16,0,16,16);
+        stairLeftCorner.setRegion(0,48,16,16);
+        stairRightCorner.setRegion(32,48,16,16);
+        stairLeft.setRegion(0,16,16,16);
+        stairRight.setRegion(32,16,16,16);
+        stairDown.setRegion(16,64,16,16);
+        stairDownLeft.setRegion(0,64,16,16);
+        stairDownRight.setRegion(32,64,16,16);
 
 
         colTop1.setRegion(0, 0, 16, 16);

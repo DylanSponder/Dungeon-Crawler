@@ -40,6 +40,9 @@ public class GameContactListener implements ContactListener {
         }
 
         //System.out.println(colliderStr + " " + collideeStr);
+        if (colliderStr == "Water" && collidee.getUserData() == "PlayerBound") {
+            player.swimming = true;
+        }
 
         if(((colliderStr == "Pot" && collideeStr == "Sword")
                 || (colliderStr == "Sword" && collideeStr == "Pot"))
@@ -982,7 +985,7 @@ public class GameContactListener implements ContactListener {
                         hud.healthBar.loseHealth(0.5f);
                     }
 
-                    if (((((collideeStr == "Enemy" && collidee.getUserData()!= "EnemyGhost") && collidee.getUserData() != "Proximity") && collideeStr != "Cobweb")
+                    if (((((collideeStr == "Enemy" && collidee.getUserData()!= "EnemyGhost") && collidee.getUserData() != "Proximity") && (collideeStr != "Cobweb" || collideeStr != "Water"))
                             || collideeStr == "Wall")) {
                         if (!arrowBodiesCollided.contains(collider.getBody())) {
                             arrowBodiesCollided.add(collider.getBody());
@@ -1128,8 +1131,6 @@ public class GameContactListener implements ContactListener {
                     break;
                 case "Player":
 
-
-
                     if ((collideeStr == "Web")) {
                         if (!player.touchingCobweb) {
                             Cobweb web = new Cobweb(world, collider.getBody().getPosition().x - 8,collider.getBody().getPosition().y - 8, false);
@@ -1139,13 +1140,19 @@ public class GameContactListener implements ContactListener {
                         if (!webBodiesCollided.contains(collidee.getBody())) {
                             webBodiesCollided.add(collidee.getBody());
                         }
-
                         break;
                     }
 
                     if ((collideeStr == "Cobweb")) {
                         DungeonCrawler.PLAYER_SPEED_MULTI = 15f;
                         player.touchingCobweb = true;
+                        break;
+                    }
+
+                    if ((collideeStr == "Water")) {
+                        System.out.println("SEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXQQQQ");
+                        //DungeonCrawler.PLAYER_SPEED_MULTI = 25f;
+                        player.swimming = true;
                         break;
                     }
 
@@ -1374,6 +1381,13 @@ public class GameContactListener implements ContactListener {
                                 }
                             }
                         }
+                    }
+                    break;
+                case "Water":
+                    if (collider.getUserData() == "PlayerBound") {
+                        System.out.println("SEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXQQQQ");
+                        player.swimming = true;
+                        break;
                     }
                     break;
 
@@ -1626,6 +1640,10 @@ public class GameContactListener implements ContactListener {
         String colliderAsString = collider.getBody().getUserData().toString();
         String collideeAsString = collidee.getBody().getUserData().toString();
 
+        if (colliderAsString == "Water" && collidee.getUserData() == "PlayerBound") {
+            player.swimming = false;
+        }
+
         switch (colliderAsString) {
             case "RafWall":
                 if (collideeAsString == "RafBottom") {
@@ -1685,7 +1703,12 @@ public class GameContactListener implements ContactListener {
                     player.touchingCobweb = false;
                     break;
                 }
-            break;
+                break;
+            case "Water":
+                if (collider.getUserData() == "PlayerBound") {
+                    player.swimming = false;
+                }
+                break;
             case "Player":
                 if (collidee.getUserData() == "ShopSell") {
                     for (Shopkeeper s : shopkeepers) {
@@ -1764,6 +1787,11 @@ public class GameContactListener implements ContactListener {
                     }
                     break;
                 }
+            case "Water":
+                if (collider.getUserData() == "PlayerBound") {
+                    player.swimming = false;
+                }
+                break;
             case "Roof":
                 if (collider.getUserData() == "PlayerBound") {
                     for (Roof r : roofs) {

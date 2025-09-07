@@ -36,6 +36,50 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "raisedFloorTile");
                         index++;
                         break;
+                    case "waf":
+                        drawableLevelLayer.add(index, "waterFloorTile");
+                        index++;
+                        break;
+                    case "stlt":
+                        drawableLevelLayer.add(index, "topLeftStairTile");
+                        index++;
+                        break;
+                    case "strt":
+                        drawableLevelLayer.add(index, "topRightStairTile");
+                        index++;
+                        break;
+                    case "stlc":
+                        drawableLevelLayer.add(index, "leftCornerStairTile");
+                        index++;
+                        break;
+                    case "strc":
+                        drawableLevelLayer.add(index, "rightCornerStairTile");
+                        index++;
+                        break;
+                    case "stl":
+                        drawableLevelLayer.add(index, "leftStairTile");
+                        index++;
+                        break;
+                    case "str":
+                        drawableLevelLayer.add(index, "rightStairTile");
+                        index++;
+                        break;
+                    case "stu":
+                        drawableLevelLayer.add(index, "topStairTile");
+                        index++;
+                        break;
+                    case "std":
+                        drawableLevelLayer.add(index, "bottomStairTile");
+                        index++;
+                        break;
+                    case "stdl":
+                        drawableLevelLayer.add(index, "bottomLeftStairTile");
+                        index++;
+                        break;
+                    case "stdr":
+                        drawableLevelLayer.add(index, "bottomRightStairTile");
+                        index++;
+                        break;
                     case "f3":
                         drawableLevelLayer.add(index, "middleFloor3Tile");
                         index++;
@@ -450,6 +494,63 @@ public class RenderRules {
                             index++;
                             break;
                         }
+                        else if (levelLayer.get(index).matches("(wf1[0-9]+)")) {
+                            StringBuffer sbw = new StringBuffer(i);
+                            sbw.delete(0, 3);
+                            String strw = sbw.toString();
+
+                            String water = strw;
+                            StringBuffer sb3 = new StringBuffer(water);
+
+                            strw = "wf1" + strw;
+
+                            //sb3.delete(1, 3);
+                            //String strRoofType = sb3.toString();
+
+                            drawableLevelLayer.add(index, strw);
+                            index++;
+                            break;
+                        }
+                        /*
+                        else if (levelLayer.get(index).matches("(w[a-z]{2}[0-9]+)")) {
+                            StringBuffer sbw = new StringBuffer(i);
+                            sbw.delete(0, 3);
+                            String strw = sbw.toString();
+
+                            String water = strw;
+                            StringBuffer sb3 = new StringBuffer(water);
+
+                            //sb3.delete(1, 3);
+                            //String strRoofType = sb3.toString();
+
+
+
+                            drawableLevelLayer.add(index, strw);
+                            index++;
+                            break;
+                        }
+
+
+
+
+                        else if (levelLayer.get(index).matches("(w[a-z]{2}[0-9]+)")) {
+                            StringBuffer sbw = new StringBuffer(i);
+                            sbw.delete(0, 3);
+                            String strw = sbw.toString();
+
+                            String water = strw;
+                            StringBuffer sb3 = new StringBuffer(water);
+
+                            //sb3.delete(1, 3);
+                            //String strRoofType = sb3.toString();
+
+
+
+                            drawableLevelLayer.add(index, strw);
+                            index++;
+                            break;
+                        }
+                         */
                         else if (levelLayer.get(index).matches("[f].+")) {
                             StringBuffer sb = new StringBuffer(i);
                             sb.delete(0, 1);
@@ -495,6 +596,9 @@ public class RenderRules {
                                 }
                                 index++;
                             } else {
+
+
+
                             switch (str) {
                                     case "col10fire":
                                         drawableLevelLayer.add(index, "fcol10fire");
@@ -1150,7 +1254,6 @@ public class RenderRules {
                             StringBuffer sb2 = new StringBuffer(i);
                             sb2.delete(0, 3);
                             String str = sb2.toString();
-                            System.out.println(str);
                             switch (str) {
                                 case "col1":
                                     drawableLevelLayer.add(index, "bltColTop1");
@@ -1198,7 +1301,6 @@ public class RenderRules {
                             StringBuffer sb2 = new StringBuffer(i);
                             sb2.delete(0, 3);
                             String str = sb2.toString();
-                            System.out.println(str);
                             switch (str) {
                                 case "col1":
                                     drawableLevelLayer.add(index, "brtColTop1");

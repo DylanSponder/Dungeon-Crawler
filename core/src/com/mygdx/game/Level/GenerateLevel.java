@@ -128,7 +128,7 @@ public class GenerateLevel {
             newRoom.index = i;
             //room number randomizer
             if (i == 0){
-                newRoom.roomNum = 0;
+                newRoom.roomNum = 0;//0
             }
 
             else {//shop placements
@@ -156,7 +156,7 @@ public class GenerateLevel {
                         newRoom.roomNum = 13;
                     } else {
                         //newRoom.roomNum = 3;
-                        newRoom.roomNum = random;
+                        newRoom.roomNum = 14;
                     }
                     //random room picker
 
@@ -803,10 +803,10 @@ for (int i = 0; i < layerSize; i++) {
 
     //create the background ocean
     if (!r.oceanCreated) {
-        //T0DO Fix - water should generate EVERYWHERE - with just waves generating on top (maybe lower opacity get the same look as currently?)
+        //T0DO Fix - oceanWater should generate EVERYWHERE - with just waves generating on top (maybe lower opacity get the same look as currently?)
             for (int rowNumOc = 0; rowNumOc < currentRoomSize + 4; rowNumOc++) {
                 for (int iOc = -4; iOc < layerSize; iOc++) {
-                    Water water = new Water(world, ((roomX + iOc) * 16) + 16 * 16 + 32,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + (16 * rowNumOc) - (16 * currentRoomSize) - 16);
+                    Water water = new Water(world, ((roomX + iOc) * 16) + 16 * 16 + 32,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + (16 * rowNumOc) - (16 * currentRoomSize) - 16, 1);
                     ocean.add(water);
                     if (rowNumOc % 2 == 0) {
                         Wave wave = new Wave(world, ((roomX + iOc) * 16) + 16 * 16 + 32,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + (16 * rowNumOc) - (16 * currentRoomSize) - 16 + 3, 0);
@@ -846,6 +846,7 @@ for (int i = 0; i < layerSize; i++) {
                 currentCell = init.cr.middleFloorTile2;
             }
             break;
+
         case "middleFloor2Tile":
             currentCell = init.cr.middleFloor2Tile;
             break;
@@ -876,11 +877,47 @@ for (int i = 0; i < layerSize; i++) {
         case "decorFloorBottomRightTile":
             currentCell = init.cr.decorFloorBottomRightTile;
             break;
+        case "topLeftStairTile":
+            currentCell = init.cr.topLeftStairTile;
+            break;
+        case "topRightStairTile":
+            currentCell = init.cr.topRightStairTile;
+            break;
+        case "topStairTile":
+            currentCell = init.cr.topStairTile;
+            break;
+        case "bottomStairTile":
+            currentCell = init.cr.bottomStairTile;
+            break;
+        case "leftStairTile":
+            currentCell = init.cr.leftStairTile;
+            break;
+        case "rightStairTile":
+            currentCell = init.cr.rightStairTile;
+            break;
+        case "bottomRightStairTile":
+            currentCell = init.cr.bottomRightStairTile;
+            break;
+        case "bottomLeftStairTile":
+            currentCell = init.cr.bottomLeftStairTile;
+            break;
+        case "leftCornerStairTile":
+            currentCell = init.cr.leftCornerStairTile;
+            break;
+        case "rightCornerStairTile":
+            currentCell = init.cr.rightCornerStairTile;
+            break;
         case "raisedFloorTile":
             currentCell = init.cr.middleFloorTile2;
             RaisedFloor raf = new RaisedFloor(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
             raf.createRaisedFloor();
             raisedFloors.add(raf);
+            break;
+        case "waterFloorTile":
+            currentCell = init.cr.middleFloorTile;
+            Water waf = new Water(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 2);
+            water.add(waf);
+            waf.createWaterBody();
             break;
         case "block":
             currentCell = init.cr.blockTile;
@@ -2016,7 +2053,7 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.middleFloorTile;
             ColumnPiece ped2heal = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,15);
             ped2heal.createPedestal();
-            Potion potion2 = new Potion(world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 18, 1);
+            Potion potion2 = new Potion(world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 20, 1);
             potion2.createPotion(potionArrayMap, rayHandler);
             potions.add(potion2);
             potionArrayMap.put(potion2.potionBody, potion2);
@@ -2510,6 +2547,37 @@ for (int i = 0; i < layerSize; i++) {
                 currentCell = init.cr.middleFloorTile;
 
                 generateColumn(colExt2, strRoof, i,world, roomX, levelY, 1,4,18,71,true,false,0,true,1, true,1);
+            }
+
+            //WATER
+            else if (levelTextures.get(i).matches("wf1.+")) {
+
+                String roofStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(roofStr);
+                sb.delete(0, 3);
+                String strRoof = sb.toString();
+                int width = Integer.parseInt(String.valueOf(strRoof.charAt(0)));
+                int height = Integer.parseInt(String.valueOf(strRoof.charAt(1)));
+
+                boolean waterCreated = false;
+
+                for (int iW = 0; iW < width; iW++) {
+                    for (int iH = 0; iH < height ; iH++) {
+                        Water wf1 = new Water(world, ((roomX + i) * 16) + 16 * 16 + (iW * 16), levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 - (iH * 16), 2);
+                        water.add(wf1);
+                        if (!waterCreated) {
+                            waterCreated = true;
+
+                            Body newBody = init.bf.createModularWaterBody(world, ((roomX + i) * 16) + 16 * 16 + (iW * 16), levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 - (iH * 16), width, height);
+                            newBody.setUserData("Water");
+
+                            Fixture newFixture = init.bf.createModularWaterFixture(newBody, width, height);
+                            Water.setUserData(newBody, newFixture);
+                            newFixture.setUserData("Water");
+                        }
+                    }
+                }
+                currentCell = init.cr.middleFloorTile;
             }
 
             //ROOFS---------------------------------------------------------

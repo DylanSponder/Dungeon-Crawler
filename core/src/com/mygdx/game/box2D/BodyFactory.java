@@ -58,7 +58,7 @@ public class BodyFactory {
     }
 
 
-        public Body createStatueHitbox(World world, float x, float y) {
+    public Body createStatueHitbox(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -480,6 +480,44 @@ public class BodyFactory {
         shape.dispose();
         cobFixture.setSensor(true);
         return body;
+    }
+
+    public static Body createWater(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 8f, y + 8f);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        CircleShape shape = new CircleShape();
+        shape.setRadius(5f);
+      //  PolygonShape shape = new PolygonShape();
+      //  shape.setAsBox(4f,4f);
+        Fixture waterFixture = body.createFixture(shape, 0.8f);
+        shape.dispose();
+        waterFixture.setSensor(true);
+        return body;
+    }
+
+    public Body createModularWaterBody(World world, float x, float y, int height, int width) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + (8 * height), y + 16 - (8 * width) + 5f);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        body.setUserData("Water");
+        return body;
+    }
+
+    public Fixture createModularWaterFixture(Body body, int height, int width) {
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(8 * height - 11, 8 * width - 8);
+        Fixture waterFixture = body.createFixture(shape, 1.0f);
+        waterFixture.setUserData("Water");
+        waterFixture.setSensor(true);
+        shape.dispose();
+        return waterFixture;
     }
 
     public static Body createImpassableCobweb(World world, float x, float y) {
