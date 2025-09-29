@@ -94,7 +94,19 @@ public class InitLevel {
         cr.bottomFenceLeftEndTile.setTile(new StaticTiledMapTile(tx.roomBottomLeftEndFence));
         cr.bottomFenceRightEndTile.setTile(new StaticTiledMapTile(tx.roomBottomRightEndFence));
 
+        cr.topLeftStairTile.setTile(new StaticTiledMapTile(tx.stairTopLeft));
+        cr.topRightStairTile.setTile(new StaticTiledMapTile(tx.stairTopRight));
+        cr.topStairTile.setTile(new StaticTiledMapTile(tx.stairTop));
+        cr.bottomStairTile.setTile(new StaticTiledMapTile(tx.stairDown));
+        cr.leftCornerStairTile.setTile(new StaticTiledMapTile(tx.stairLeftCorner));
+        cr.rightCornerStairTile.setTile(new StaticTiledMapTile(tx.stairRightCorner));
+        cr.bottomLeftStairTile.setTile(new StaticTiledMapTile(tx.stairDownLeft));
+        cr.bottomRightStairTile.setTile(new StaticTiledMapTile(tx.stairDownRight));
+        cr.leftStairTile.setTile(new StaticTiledMapTile(tx.stairLeft));
+        cr.rightStairTile.setTile(new StaticTiledMapTile(tx.stairRight));
+
         cr.blockTile.setTile(new StaticTiledMapTile(tx.block));
+        cr.blockWallUpTile.setTile(new StaticTiledMapTile(tx.blockWallUp));
         cr.blockOmegaTile.setTile(new StaticTiledMapTile(tx.blockOmega));
         cr.blockPhiTile.setTile(new StaticTiledMapTile(tx.blockPhi));
         cr.blockDeltaTile.setTile(new StaticTiledMapTile(tx.blockDelta));

@@ -59,6 +59,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public ShapeRenderer menuRenderer;
 	public static ShapeRenderer maskRenderer;
 	public static boolean debug, menuClosed, allowPlayerInput;
+	public FPSLogger fpsLogger;
 	public GameInputProcessor gip;
 	private Box2DDebugRenderer b2dr;
 	public static Player player;
@@ -148,6 +149,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//the game is not in debug mode by default
 		debug = false;
+		fpsLogger = new FPSLogger();
 
 		//instantiate the game world, all sprite batches, world objects,
 		//collectible items and light sources
@@ -303,7 +305,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		Vector2 vec = new Vector2();
 		vec.x = PLAYER_X;
 		vec.y = PLAYER_Y;
-		PLAYER_DEFAULT_SPEED = 55f;//38 //40 //45
+		PLAYER_DEFAULT_SPEED = 50f;//38 //40 //45
 		PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED;
 
 		//initialize the Box2D body factory, asset instance
@@ -422,10 +424,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 	@Override
 	public void render() {
 
+			fpsLogger.log();
+
 			// exit game when player health is 0
 			//TODO Add death screen
-			//Columns crash from the ceiling with some column dust particles coming down first
-			//Water then slowly fills the background until it's full
 			if (hud.healthBar.currentHealth == 0) {
 				System.out.println("YOU DIED IN ROOM " + player.currentRoom);
 				Gdx.app.exit();
@@ -1119,7 +1121,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//headBatch.begin();
 
-			//System.out.println("SDFGBNBFDFGBFDFGBFGBGBNBGFB");
+
 			playerBatch.begin();
 
 			if (!player.swimming) {
@@ -1148,7 +1150,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					pedestalBatch.draw(tx.pedestal2upper,c.columnX,c.columnY+14);
 					break;
 				case 16:
-					pedestalBatch.draw(tx.pedestal3,c.columnX,c.columnY+2);
+					pedestalBatch.draw(tx.pedestal3upper,c.columnX,c.columnY+14);
 					break;
 				case 17:
 					pedestalBatch.draw(tx.pedestal4,c.columnX,c.columnY+2);
@@ -1277,7 +1279,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 						//susMessages.remove(e.lostSightMessage);
 
-						e.enemyAI.setMaxLinearSpeed(0);
+						e.enemyAI.setMaxLinearSpeed(10);
 
 						Vector2 vec1 = new Vector2(e.enemyBody.getPosition());
 						Vector2 vec2 = new Vector2(Player.playerBody.getPosition());
@@ -1992,6 +1994,25 @@ public class DungeonCrawler extends ApplicationAdapter {
 						arrowDirection = "Right";
 						arrows.add(arrow = new Arrow(arrowBody, arrowDirection , 0f, true));
 						break;
+					case 9:
+						arrowBody = Arrow.createArrowBody(DungeonCrawler.world, key.trapBody.getPosition().x + 8f, key.trapBody.getPosition().y - 10.75f);
+						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
+						arrowHitbox.setUserData("DownArrow");
+						arrowBody.setUserData("Arrow");
+						arrowBody.setLinearVelocity(0, -250f);
+						arrowDirection = "Down";
+						arrows.add(arrow = new Arrow(arrowBody, arrowDirection , 0f, false));
+						break;
+					case 10:
+						arrowBody = Arrow.createArrowBody(DungeonCrawler.world, key.trapBody.getPosition().x + 8f, key.trapBody.getPosition().y - 10.75f);
+						arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
+						arrowHitbox.setUserData("DownArrow");
+						arrowBody.setUserData("Arrow");
+						arrowBody.setLinearVelocity(0, -250f);
+						arrowDirection = "Down";
+						arrows.add(arrow = new Arrow(arrowBody, arrowDirection , 0f, true));
+						break;
+
 				}
 
 				arrowArrayMap.put(arrowBody, arrow);
@@ -2193,6 +2214,22 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 
 			}
+
+		//wall arrow traps
+		for (Trap tr : traps) {
+			trapBatch.begin();
+			if (!tr.active && tr.type == 3) {
+				Trap.renderTrap(trapBatch, tr.direction, tr.trapBody.getPosition().x, tr.trapBody.getPosition().y, tr.type);
+			} else if (tr.type == 3) {
+				Trap.renderTrapActive(trapBatch, tr.direction, tr.trapBody.getPosition().x, tr.trapBody.getPosition().y, tr.type);
+			} else if (!tr.active && tr.type == 4) {
+				Trap.renderTrap(trapBatch, tr.direction, tr.trapBody.getPosition().x, tr.trapBody.getPosition().y -1, tr.type);
+			} else if (tr.type == 4) {
+				Trap.renderTrapActive(trapBatch, tr.direction, tr.trapBody.getPosition().x, tr.trapBody.getPosition().y-1, tr.type);
+			}
+			trapBatch.end();
+		}
+
 				flag_time += Gdx.graphics.getDeltaTime();
 				for (Flag f : flags) {
 
@@ -2286,10 +2323,17 @@ public class DungeonCrawler extends ApplicationAdapter {
 				s.loweredAlpha = false;
 			}
 
+			switch  (s.type) {
+				case 1:
+					Statue.renderStatue(statueBatch, tx.statue1, s.statueBody.getPosition().x - 7.5f, s.statueBody.getPosition().y - 9.5f, 15, 19, s.visible, s, s.alpha);
+					break;
+				case 2:
+					Statue.renderStatue(statueBatch, tx.statue2, s.statueBody.getPosition().x - 7.5f, s.statueBody.getPosition().y - 9.5f, 15, 19, s.visible, s, s.alpha);
+					break;
+			}
 
 
-			Statue.renderStatue(statueBatch, tx.statue1, s.statueBody.getPosition().x - 7.5f, s.statueBody.getPosition().y - 9.5f, 15, 19, s.visible, s, s.alpha);
-			//statueBatch.draw(tx.statue1,s.statueX,s.statueY);
+//statueBatch.draw(tx.statue1,s.statueX,s.statueY);
 			statueBatch.end();
 
 
@@ -2300,7 +2344,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//render fires and their animations based on their type and color
 		for (Fire f : fires) {
-					if (f.type == 1 && (!f.smoking && f.active)) {
+					if ((f.type == 1 || f.type == 4) && (!f.smoking && f.active)) {
 						currentFrame = tx.fireAnimation.getKeyFrame(stateTime, f.active);
 
 						fireBatch.begin();
@@ -2496,7 +2540,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 								r.renderRoof(roofBatch, tx.roof3x3UpperTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y + (r.ext * 8), 80, 32, r.visible, r.alpha, r);
 								if (r.ext != 0) {
 									for (int i = 0; i < r.ext; i++) {
-										r.renderRoof(roofBatch, tx.roof3x3MiddleTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - 16 - (i * 16) + (r.ext * 8), 80, 32, r.visible, r.alpha, r);
+										r.renderRoof(roofBatch, tx.roof3x3MiddleTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - 16 - (i * 16) + (r.ext * 8), 80, 16, r.visible, r.alpha, r);
 									}
 									r.renderRoof(roofBatch, tx.roof3x3LowerTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - (32 + (r.ext * 16)) + (r.ext * 8), 80, 32, r.visible, r.alpha, r);
 								} else {
@@ -2506,7 +2550,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 								r.renderRoof(roofBatch, tx.roof3x3UpperTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y + (r.ext * 8), 80, 32, r.visible, r.alpha, r);
 								if (r.ext != 0) {
 									for (int i = 0; i < r.ext; i++) {
-										r.renderRoof(roofBatch, tx.roof3x3MiddleTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - 16 - (i * 16) + (r.ext * 8), 80, 32, r.visible, r.alpha, r);
+										r.renderRoof(roofBatch, tx.roof3x3MiddleTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - 16 - (i * 16) + (r.ext * 8), 80, 16, r.visible, r.alpha, r);
 									}
 									r.renderRoof(roofBatch, tx.roof3x3LowerTexture, r.roofBody.getPosition().x - 40, r.roofBody.getPosition().y - (32 + (r.ext * 16)) + (r.ext * 8), 80, 32, r.visible, r.alpha, r);
 								} else {
@@ -2887,32 +2931,40 @@ public class DungeonCrawler extends ApplicationAdapter {
 			//if in range
 
 			for (EnemySkull e : enemySkulls) {
-				e.enemyAI.update(GdxAI.getTimepiece().getTime());
-				e.update(GdxAI.getTimepiece().getTime());
+				if (e.active){
+					e.enemyAI.update(GdxAI.getTimepiece().getTime());
+					e.update(GdxAI.getTimepiece().getTime());
+				}
 				if (e.playerInRange){
 					e.detectPlayer();
 				}
 			}
 
 			for (EnemySpider e2 : enemySpiders) {
-				e2.enemyAI.update(GdxAI.getTimepiece().getTime());
-				e2.update(GdxAI.getTimepiece().getTime());
+				if (e2.active) {
+					e2.enemyAI.update(GdxAI.getTimepiece().getTime());
+					e2.update(GdxAI.getTimepiece().getTime());
+				}
 				if (e2.playerInRange){
 					e2.detectPlayer();
 				}
 			}
 
 			for (EnemyGhost e3 : enemyGhosts) {
-				e3.enemyAI.update(GdxAI.getTimepiece().getTime());
-				e3.update(GdxAI.getTimepiece().getTime());
+				if (e3.active) {
+					e3.enemyAI.update(GdxAI.getTimepiece().getTime());
+					e3.update(GdxAI.getTimepiece().getTime());
+				}
 				if (e3.playerInRange){
 					e3.detectPlayer();
 				}
 			}
 
 			for (EnemyCyclops e4 : enemyEyes) {
-				e4.enemyAI.update(GdxAI.getTimepiece().getTime());
-				e4.update(GdxAI.getTimepiece().getTime());
+				if (e4.active) {
+					e4.enemyAI.update(GdxAI.getTimepiece().getTime());
+					e4.update(GdxAI.getTimepiece().getTime());
+				}
 				if (e4.playerInRange){
 					e4.detectPlayer();
 				}
@@ -2967,7 +3019,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//set camera zoom
 		if (!GenerateLevel.init.roomList.get(player.currentRoom).isShop && !debug) {
 			//0.60
-			camera.zoom = 0.60f;
+			camera.zoom = 0.65f;//0.60f
 		}
 		else if (!debug){
 			//camera.zoom = 0.8f;

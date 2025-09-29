@@ -281,7 +281,7 @@ public class BodyFactory {
         switch (direction) {
             case 1:
                 shape.setAsBox(4f, 12f);
-                bodyDef.position.set(x + 8, y - 12);
+                bodyDef.position.set(x + 8, y - 12.25f);
                 break;
             case 2:
                 shape.setAsBox(12f, 4f);
@@ -839,7 +839,7 @@ public class BodyFactory {
     public Fixture createEnemyDetectionRadius(Body body, float r){
         CircleShape enemyShape = new CircleShape();
         enemyShape.setRadius(r);
-        Fixture enemyDetectionHitbox = body.createFixture(enemyShape, 0.8f);
+        Fixture enemyDetectionHitbox = body.createFixture(enemyShape, 0.15f);
         enemyShape.dispose();
         enemyDetectionHitbox.setUserData("Proximity");
         enemyDetectionHitbox.setSensor(true);

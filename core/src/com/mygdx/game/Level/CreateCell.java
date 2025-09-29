@@ -66,6 +66,7 @@ public class CreateCell {
     public TiledMapTileLayer.Cell torchWallDownTile;
 
     public TiledMapTileLayer.Cell blockTile;
+    public TiledMapTileLayer.Cell blockWallUpTile;
     public TiledMapTileLayer.Cell blockOmegaTile;
     public TiledMapTileLayer.Cell blockPhiTile;
     public TiledMapTileLayer.Cell blockDeltaTile;
@@ -98,6 +99,17 @@ public class CreateCell {
     public TiledMapTileLayer.Cell leftFenceBottomEndTile;
     public TiledMapTileLayer.Cell rightFenceTopEndTile;
     public TiledMapTileLayer.Cell rightFenceBottomEndTile;
+
+    public TiledMapTileLayer.Cell topLeftStairTile;
+    public TiledMapTileLayer.Cell topRightStairTile;
+    public TiledMapTileLayer.Cell topStairTile;
+    public TiledMapTileLayer.Cell bottomStairTile;
+    public TiledMapTileLayer.Cell leftCornerStairTile;
+    public TiledMapTileLayer.Cell rightCornerStairTile;
+    public TiledMapTileLayer.Cell bottomLeftStairTile;
+    public TiledMapTileLayer.Cell bottomRightStairTile;
+    public TiledMapTileLayer.Cell leftStairTile;
+    public TiledMapTileLayer.Cell rightStairTile;
 
 
     public void InitializeCells() {
@@ -155,12 +167,24 @@ public class CreateCell {
         rightFenceTopEndTile = new TiledMapTileLayer.Cell();
         rightFenceBottomEndTile = new TiledMapTileLayer.Cell();
 
+        topLeftStairTile = new TiledMapTileLayer.Cell();
+        topRightStairTile = new TiledMapTileLayer.Cell();
+        topStairTile = new TiledMapTileLayer.Cell();
+        bottomStairTile = new TiledMapTileLayer.Cell();
+        leftCornerStairTile = new TiledMapTileLayer.Cell();
+        rightCornerStairTile = new TiledMapTileLayer.Cell();
+        bottomLeftStairTile = new TiledMapTileLayer.Cell();
+        bottomRightStairTile = new TiledMapTileLayer.Cell();
+        leftStairTile = new TiledMapTileLayer.Cell();
+        rightStairTile = new TiledMapTileLayer.Cell();
+
         torchWallLeftTile = new TiledMapTileLayer.Cell();
         torchWallRightTile = new TiledMapTileLayer.Cell();
         torchWallUpTile = new TiledMapTileLayer.Cell();
         torchWallDownTile = new TiledMapTileLayer.Cell();
 
         blockTile = new TiledMapTileLayer.Cell();
+        blockWallUpTile = new TiledMapTileLayer.Cell();
         blockOmegaTile = new TiledMapTileLayer.Cell();
         blockPhiTile = new TiledMapTileLayer.Cell();
         blockDeltaTile = new TiledMapTileLayer.Cell();

@@ -208,13 +208,16 @@ public class EnemySkull extends Enemy {
                                 && fixture.getBody().getUserData() != "Candle"
                                 && fixture.getBody().getUserData() != "Cobweb"
                                 && fixture.getBody().getUserData() != "Roof"
-                                && fixture.getBody().getUserData() != "TrapArea") {
+                                && fixture.getBody().getUserData() != "TrapArea"
+                                && fixture.getBody().getUserData() != "Water"
+                                && fixture.getBody().getUserData() != "Stem"
+                                && fixture.getBody().getUserData() != "Statue") {
                             //sighted = true;
                             //System.out.println(fixture.getBody().getUserData());
                             sightCounter = 0;
                             playerSighted = false;
                             return 0;
-                        } else if (fixture.getBody().getType() == BodyDef.BodyType.DynamicBody && !fixture.isSensor() && fixture.getBody().getUserData() != "Enemy") {
+                        } else if (fixture.getBody().getType() == BodyDef.BodyType.DynamicBody && !fixture.isSensor()) {// && fixture.getBody().getUserData() != "Enemy"
                             playerSighted = false;
                             this.getStateMachine().changeState(EnemySkullState.WANDER);
                             //this.enemyAI.setBehaviour();
@@ -222,9 +225,6 @@ public class EnemySkull extends Enemy {
                                     && fixture.getUserData() != "Proximity"
                                     && fixture.getUserData() != "EnemyHitbox"
                                     && fixture.getUserData() != "Bone"
-                                    && fixture.getUserData() != "Candle"
-                                    && fixture.getUserData() != "Roof"
-                                    && fixture.getUserData() != "TrapArea"
                                     //&& !fixture.isSensor()
                             ) {
                                 //System.out.println("NOT A PLAYER BUT DYNAMIC");

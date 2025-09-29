@@ -1,11 +1,11 @@
 tlw,tw,tw,tw,twtr,dtl,doortl,doortr,dtr,twtr,tw,tw,tw,trw
 lw,fob1,f14,f,fpot,f,f,f14,f,fpot,f,f,fob1,rw
-lw,f,f,fcol1,f,fcol1,tlt,trt,fcol1,f,fcol1,f,f,rw
-lw,f,f,fcol7,fenemy3,fcol7,blt,brt,fcol7,fenemy3,fcol7,f,f,dru
+lw,f,f,f,f,f,tlt,trt,f,f,f,f,f,rw
+lw,f,f,fcolio0,fenemy3,fcolio0,blt,brt,fcolio0,fenemy3,fcolio0,f,f,dru
 doorul,f,f,f2,f2,f2,f,f,f2,f2,f2,f,f,doorur
 doorll,f,f,f2,f2,f2,fenemy,f,f2,f2,f2,f,f,doorlr
 lw,f,f,f2,fped1fire,f2,f,f,f2,fped1fire,f2,f,f,drl
 lw,f,f,f2,f2,f2,tlt,trt,f2,f2,f2,f,f,rw
-lw,f,f,fcol1,fenemy3,fcol1,blt,brt,fcol1,fenemy3,fcol1,f,f,rw
-lw,fob1,f,fcol7,fpot,fcol7,f,f,fcol7,fpot,fcol7,f,fob1,rw
+lw,f,f,f,fenemy3,f,blt,brt,f,fenemy3,f,f,f,rw
+lw,fob1,f,fcolio0,fpot,fcolio0,f,f,fcolio0,fpot,fcolio0,f,fob1,rw
 blw,bw,bw,bw,bwtr,dbl,doorbl,doorbr,dbr,bwtr,bw,bw,bw,brw

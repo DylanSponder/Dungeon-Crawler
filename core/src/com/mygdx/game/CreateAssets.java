@@ -109,6 +109,8 @@ public class CreateAssets {
     Texture flagTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Flag.png"));
     Texture blocksTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Blocks.png"));
 
+    Texture wallsTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Walls.png"));
+
     Texture raisedFloorMask = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/RaisedFloorMask.png"));
 
     Texture roof3x3 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/3x3.png"));
@@ -251,6 +253,7 @@ public class CreateAssets {
 
 
     //blocks textures
+    public TextureRegion blockWallUp = new TextureRegion(wallsTexture, 0, 0, 16, 16);
     public TextureRegion block = new TextureRegion(blocksTexture, 0, 0, 16, 16);
     public TextureRegion blockOmega = new TextureRegion(blocksTexture, 0, 0, 16, 16);
     public TextureRegion blockPhi = new TextureRegion(blocksTexture, 0, 0, 16, 16);
@@ -552,9 +555,11 @@ public class CreateAssets {
     public TextureRegion pedestal2 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion pedestal2upper = new TextureRegion(columnsTextureSheet, 0,0,16,4);
     public TextureRegion pedestal3 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion pedestal3upper = new TextureRegion(columnsTextureSheet, 0,0,16,4);
     public TextureRegion pedestal4 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
 
     public TextureRegion statue1 = new TextureRegion(columnsTextureSheet, 0,0,15,19);
+    public TextureRegion statue2 = new TextureRegion(columnsTextureSheet, 0,0,15,19);
 
     public TextureRegion flag1 = new TextureRegion(flagTexture, 0,0,11,16);
 
@@ -1164,9 +1169,12 @@ public class CreateAssets {
         pedestal2upper.setRegion(48, 32, 16, 4);
         pedestal2.setRegion(48, 32, 16, 16);
         pedestal3.setRegion(64, 32, 16, 16);
+        pedestal3upper.setRegion(64, 32, 16, 4);
         pedestal4.setRegion(80, 32, 16, 16);
         statue1.setRegion(0, 59, 15, 19);
+        statue2.setRegion(17, 59, 15, 19);
 
+        blockWallUp.setRegion(2,34,16,16);
 
         corridorRoofTexture.setRegion(464, 0, 64, 96);
         //ruinedCorridorRoofTexture.setRegion(528, 0, 64, 96);

@@ -73,9 +73,7 @@ public class Skull {
     public static void renderSkull(SpriteBatch batch, Sprite skullSprite, float x, float y) {
 
         batch.draw(skullSprite, x - 8f, y - 7f, 176,64, 16, 16, 1,1 ,0);
-
     }
-
 
     public boolean rayCastSkull(Room room, Fire fire) {
 

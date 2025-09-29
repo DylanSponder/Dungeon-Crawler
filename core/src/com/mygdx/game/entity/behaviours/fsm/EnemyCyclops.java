@@ -173,7 +173,10 @@ public class EnemyCyclops extends Enemy {
                                 && fixture.getBody().getUserData() != "Candle"
                                 && fixture.getBody().getUserData() != "Cobweb"
                                 && fixture.getBody().getUserData() != "Roof"
-                                && fixture.getBody().getUserData() != "TrapArea") {
+                                && fixture.getBody().getUserData() != "TrapArea"
+                                && fixture.getBody().getUserData() != "Water"
+                                && fixture.getBody().getUserData() != "Stem"
+                                && fixture.getBody().getUserData() != "Statue") {
                             //sighted = true;
                             //System.out.println(fixture.getBody().getUserData());
                             sightCounter = 0;
@@ -190,9 +193,6 @@ public class EnemyCyclops extends Enemy {
                                     && fixture.getUserData() != "Proximity"
                                     && fixture.getUserData() != "EnemyHitbox"
                                     && fixture.getUserData() != "Bone"
-                                    && fixture.getUserData() != "Candle"
-                                    && fixture.getUserData() != "Roof"
-                                    && fixture.getUserData() != "TrapArea"
                                 //&& !fixture.isSensor()
                             ) {
                                 //System.out.println("NOT A PLAYER BUT DYNAMIC");

@@ -23,6 +23,7 @@ public class Statue {
         this.statueY = y;
         this.visible = true;
         this.alpha = 100;
+        this.type = type;
     }
 
     public void createStatueHitbox(float statueX, float statueY, World world) {

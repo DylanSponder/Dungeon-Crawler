@@ -42,6 +42,7 @@ public class GameContactListener implements ContactListener {
         //System.out.println(colliderStr + " " + collideeStr);
         if (colliderStr == "Water" && collidee.getUserData() == "PlayerBound") {
             player.swimming = true;
+            DungeonCrawler.PLAYER_SPEED_MULTI = 35f;
         }
 
         if(((colliderStr == "Pot" && collideeStr == "Sword")
@@ -196,7 +197,7 @@ public class GameContactListener implements ContactListener {
 
                         if (colliderStr.startsWith("Arrow") || collideeStr.startsWith("Arrow")) {
                             soundController.playSound("ArrowHit", 10f,8f,0.1f);
-                            if (!arrowBodiesCollided.contains(collidee.getBody())) {
+                            if (!arrowBodiesCollided.contains(collidee.getBody()) && e.enemyID != 3) {
                                 arrowBodiesCollided.add(collidee.getBody());
                             }
                         }
@@ -412,7 +413,7 @@ public class GameContactListener implements ContactListener {
 
                         if (colliderStr.startsWith("Arrow") || collideeStr.startsWith("Arrow")) {
                             soundController.playSound("ArrowHit", 10f,8f,0.1f);
-                            if (!arrowBodiesCollided.contains(collider.getBody())) {
+                            if (!arrowBodiesCollided.contains(collider.getBody())&& e.enemyID != 3) {
                                 arrowBodiesCollided.add(collider.getBody());
                             }
                         }
@@ -1150,7 +1151,6 @@ public class GameContactListener implements ContactListener {
                     }
 
                     if ((collideeStr == "Water")) {
-                        System.out.println("SEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXQQQQ");
                         //DungeonCrawler.PLAYER_SPEED_MULTI = 25f;
                         player.swimming = true;
                         break;
@@ -1642,6 +1642,7 @@ public class GameContactListener implements ContactListener {
 
         if (colliderAsString == "Water" && collidee.getUserData() == "PlayerBound") {
             player.swimming = false;
+            DungeonCrawler.PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED;
         }
 
         switch (colliderAsString) {

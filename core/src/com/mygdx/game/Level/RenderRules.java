@@ -2,6 +2,7 @@ package com.mygdx.game.level;
 
 import com.badlogic.gdx.Gdx;
 import com.mygdx.game.DungeonCrawler;
+import com.mygdx.game.level.objects.Coin;
 import com.mygdx.game.level.objects.Roof;
 
 import javax.rmi.ssl.SslRMIClientSocketFactory;
@@ -162,6 +163,26 @@ public class RenderRules {
                         break;
                     case "bl":
                         drawableLevelLayer.add(index, "block");
+                        index++;
+                        break;
+                    case "blwu":
+                        drawableLevelLayer.add(index, "blockWallUp");
+                        index++;
+                        break;
+                    case "bltrd":
+                        drawableLevelLayer.add(index, "blockTrapDown");
+                        index++;
+                        break;
+                    case "bltrl":
+                        drawableLevelLayer.add(index, "blockTrapLeft");
+                        index++;
+                        break;
+                    case "bltrr":
+                        drawableLevelLayer.add(index, "blockTrapRight");
+                        index++;
+                        break;
+                    case "bltru":
+                        drawableLevelLayer.add(index, "blockTrapUp");
                         index++;
                         break;
                     case "blomega":
@@ -696,6 +717,21 @@ public class RenderRules {
                                     index++;
                                     break;
                                 }
+                                if (str.matches("(cSldb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cSltb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cSlib[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
                                 if (str.matches("(csfdb[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
@@ -707,6 +743,51 @@ public class RenderRules {
                                     break;
                                 }
                                 if (str.matches("(csfib[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cSfdb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cSftb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cSfib[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csfdo[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csftu[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csfio[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cSfdo[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cSftu[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cSfio[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
                                     break;
@@ -786,6 +867,66 @@ public class RenderRules {
                                     index++;
                                     break;
                                 }
+                                if (str.matches("(cottu[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cotdo[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cotio[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cottb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cotdb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cotib[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coTtb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coTdb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coTib[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coTtu[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coTdo[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coTio[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
                                 if (str.matches("(coftB[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
@@ -802,6 +943,21 @@ public class RenderRules {
                                     break;
                                 }
                                 if (str.matches("(cfftB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cfftu[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cffdo[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cffio[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
                                     break;
@@ -908,6 +1064,14 @@ public class RenderRules {
                                     drawableLevelLayer.add(index, "pot2");
                                     index++;
                                     break;
+                                case "coin":
+                                    drawableLevelLayer.add(index, "coin");
+                                    index++;
+                                    break;
+                                case "skull":
+                                    drawableLevelLayer.add(index, "skull");
+                                    index++;
+                                    break;
                                     //pedestals
                                 case "ped1":
                                     drawableLevelLayer.add(index, "fped1");
@@ -937,8 +1101,20 @@ public class RenderRules {
                                     drawableLevelLayer.add(index, "fped2heal");
                                     index++;
                                     break;
+                                case "ped2fire":
+                                    drawableLevelLayer.add(index, "fped2fire");
+                                    index++;
+                                    break;
+                                case "ped2fireoff":
+                                    drawableLevelLayer.add(index, "fped2fireoff");
+                                    index++;
+                                    break;
                                 case "ped3":
                                     drawableLevelLayer.add(index, "fped3");
+                                    index++;
+                                    break;
+                                case "ped3fire":
+                                    drawableLevelLayer.add(index, "fped3fire");
                                     index++;
                                     break;
                                 case "ped4":
@@ -1494,6 +1670,54 @@ public class RenderRules {
 
 
                     }
+                        else if (levelLayer.get(index).matches("b+f+.+")) {
+                            StringBuffer sb2 = new StringBuffer(i);
+                            sb2.delete(0, 2);
+                            String str = sb2.toString();
+
+                            //    drawableLevelLayer.add(index, "topLeftWallTile");
+
+
+                            if (str.matches("([0-9])+")) {
+
+                                String roof = str;
+                                String strRoofExt = "0";
+
+                                StringBuffer sb3 = new StringBuffer(roof);
+                                sb3.delete(1, 2);
+                                String strRoofType = sb3.toString();
+
+                                StringBuffer sb4 = new StringBuffer(str);
+                                sb4.delete(0, 1);
+                                if (!sb4.toString().isEmpty()) {
+                                    strRoofExt = sb4.toString();
+                                }
+
+                                switch (strRoofType) {
+                                    case "1":
+                                        String roofFinal1;
+                                        roofFinal1 = "BFroof1" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal1);
+                                        break;
+                                    case "2":
+                                        String roofFinal2;
+                                        roofFinal2 = "BFroof2" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal2);
+                                        break;
+                                    case "3":
+                                        String roofFinal3;
+                                        roofFinal3 = "BFroof3" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal3);
+                                        break;
+                                    case "4":
+                                        String roofFinal4;
+                                        roofFinal4 = "BFroof4" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal4);
+                                        break;
+                                }
+                                index++;
+                            }
+                        }
                         else {
                             if (!i.equals("")){
                                 System.out.println("UNKNOWN TILE: " + "'" + i + "'");
