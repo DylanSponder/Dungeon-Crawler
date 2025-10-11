@@ -120,25 +120,25 @@ public class GameContactListener implements ContactListener {
                                 case "DownArrow":
                                     e.loseHealth(1);
                                     if (e.enemyID != 5) {
-                                        e.enemyBody.setLinearVelocity(velX, velY - 50);
+                                        e.enemyBody.setLinearVelocity(velX, velY - 40);
                                     }
                                     break;
                                 case "UpArrow":
                                     e.loseHealth(1);
                                     if (e.enemyID != 5) {
-                                        e.enemyBody.setLinearVelocity(velX, velY + 50);
+                                        e.enemyBody.setLinearVelocity(velX, velY + 40);
                                     }
                                     break;
                                 case "LeftArrow":
                                     e.loseHealth(1);
                                     if (e.enemyID != 5) {
-                                        e.enemyBody.setLinearVelocity(velX - 50, velY);
+                                        e.enemyBody.setLinearVelocity(velX - 40, velY);
                                     }
                                     break;
                                 case "RightArrow":
                                     e.loseHealth(1);
                                     if (e.enemyID != 5) {
-                                        e.enemyBody.setLinearVelocity(velX + 50, velY);
+                                        e.enemyBody.setLinearVelocity(velX + 40, velY);
                                     }
                                     break;
                                 default:
@@ -340,25 +340,25 @@ public class GameContactListener implements ContactListener {
                                 case "DownArrow":
                                     e.loseHealth(1);
                                     if (e.enemyID != 5) {
-                                        e.enemyBody.setLinearVelocity(velX, velY - 50);
+                                        e.enemyBody.setLinearVelocity(velX, velY - 40);
                                     }
                                     break;
                                 case "UpArrow":
                                     e.loseHealth(1);
                                     if (e.enemyID != 5) {
-                                        e.enemyBody.setLinearVelocity(velX, velY + 50);
+                                        e.enemyBody.setLinearVelocity(velX, velY + 40);
                                     }
                                     break;
                                 case "LeftArrow":
                                     e.loseHealth(1);
                                     if (e.enemyID != 5) {
-                                        e.enemyBody.setLinearVelocity(velX - 50, velY);
+                                        e.enemyBody.setLinearVelocity(velX - 40, velY);
                                     }
                                     break;
                                 case "RightArrow":
                                     e.loseHealth(1);
                                     if (e.enemyID != 5) {
-                                        e.enemyBody.setLinearVelocity(velX + 50, velY);
+                                        e.enemyBody.setLinearVelocity(velX + 40, velY);
                                     }
                                     break;
                                 default:

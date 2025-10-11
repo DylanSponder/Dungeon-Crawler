@@ -117,6 +117,153 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "decorFloorBottomRightTile");
                         index++;
                         break;
+
+                    case "p":
+                        drawableLevelLayer.add(index, "pit");
+                        index++;
+                        break;
+                    case "pu1":
+                        drawableLevelLayer.add(index, "pitFloor1");
+                        index++;
+                        break;
+                    case "pu2":
+                        drawableLevelLayer.add(index, "pitFloor2");
+                        index++;
+                        break;
+                    case "pst":
+                        drawableLevelLayer.add(index, "pitStairs");
+                        index++;
+                        break;
+                    case "pd":
+                        drawableLevelLayer.add(index, "pitDown");
+                        index++;
+                        break;
+                    case "pl":
+                        drawableLevelLayer.add(index, "pitLeft");
+                        index++;
+                        break;
+                    case "pr":
+                        drawableLevelLayer.add(index, "pitRight");
+                        index++;
+                        break;
+
+                    case "prub":
+                        drawableLevelLayer.add(index, "pitRubble");
+                        index++;
+                        break;
+                    case "prub1":
+                        drawableLevelLayer.add(index, "pitRubble1");
+                        index++;
+                        break;
+                    case "prub2":
+                        drawableLevelLayer.add(index, "pitRubble2");
+                        index++;
+                        break;
+                    case "prub3":
+                        drawableLevelLayer.add(index, "pitRubble3");
+                        index++;
+                        break;
+                    case "prub3r":
+                        drawableLevelLayer.add(index, "pitRubble3Random");
+                        index++;
+                        break;
+                    case "pdrub":
+                        drawableLevelLayer.add(index, "pitDownRubble");
+                        index++;
+                        break;
+                    case "plrub":
+                        drawableLevelLayer.add(index, "pitLeftRubble");
+                        index++;
+                        break;
+                    case "prrub":
+                        drawableLevelLayer.add(index, "pitRightRubble");
+                        index++;
+                        break;
+
+                    case "iwu":
+                        drawableLevelLayer.add(index, "innerWallUp");
+                        index++;
+                        break;
+                    case "iwd":
+                        drawableLevelLayer.add(index, "innerWallDown");
+                        index++;
+                        break;
+                    case "iwl":
+                        drawableLevelLayer.add(index, "innerWallLeft");
+                        index++;
+                        break;
+                    case "iwr":
+                        drawableLevelLayer.add(index, "innerWallRight");
+                        index++;
+                        break;
+                    case "iwtlt":
+                        drawableLevelLayer.add(index, "innerWallTLTurn");
+                        index++;
+                        break;
+                    case "iwtrt":
+                        drawableLevelLayer.add(index, "innerWallTRTurn");
+                        index++;
+                        break;
+                    case "iwblt":
+                        drawableLevelLayer.add(index, "innerWallBLTurn");
+                        index++;
+                        break;
+                    case "iwbrt":
+                        drawableLevelLayer.add(index, "innerWallBRTurn");
+                        index++;
+                        break;
+
+                    case "iwtlt2":
+                        drawableLevelLayer.add(index, "innerWallTLTurn2");
+                        index++;
+                        break;
+                    case "iwtrt2":
+                        drawableLevelLayer.add(index, "innerWallTRTurn2");
+                        index++;
+                        break;
+                    case "iwblt2":
+                        drawableLevelLayer.add(index, "innerWallBLTurn2");
+                        index++;
+                        break;
+                    case "iwbrt2":
+                        drawableLevelLayer.add(index, "innerWallBRTurn2");
+                        index++;
+                        break;
+
+                    case "iwtl":
+                        drawableLevelLayer.add(index, "innerWallTLCorner");
+                        index++;
+                        break;
+                    case "iwtr":
+                        drawableLevelLayer.add(index, "innerWallTRCorner");
+                        index++;
+                        break;
+                    case "iwbl":
+                        drawableLevelLayer.add(index, "innerWallBLCorner");
+                        index++;
+                        break;
+                    case "iwbr":
+                        drawableLevelLayer.add(index, "innerWallBRCorner");
+                        index++;
+                        break;
+
+                    case "iwutr":
+                        drawableLevelLayer.add(index, "innerWallUpTrap");
+                        index++;
+                        break;
+                    case "iwdtr":
+                        drawableLevelLayer.add(index, "innerWallDownTrap");
+                        index++;
+                        break;
+                    case "iwltr":
+                        drawableLevelLayer.add(index, "innerWallLeftTrap");
+                        index++;
+                        break;
+                    case "iwrtr":
+                        drawableLevelLayer.add(index, "innerWallRightTrap");
+                        index++;
+                        break;
+
                     case "tlw":
                         drawableLevelLayer.add(index, "topLeftWallTile");
                         index++;
@@ -1081,6 +1228,14 @@ public class RenderRules {
                                     drawableLevelLayer.add(index, "fped1fire");
                                     index++;
                                     break;
+                                case "ped1statue1":
+                                    drawableLevelLayer.add(index, "fped1statue1");
+                                    index++;
+                                    break;
+                                case "ped1statue2":
+                                    drawableLevelLayer.add(index, "fped1statue2");
+                                    index++;
+                                    break;
                                 case "ped1fireoff":
                                     drawableLevelLayer.add(index, "fped1fireoff");
                                     index++;
@@ -1099,6 +1254,14 @@ public class RenderRules {
                                     break;
                                 case "ped2heal":
                                     drawableLevelLayer.add(index, "fped2heal");
+                                    index++;
+                                    break;
+                                case "ped2statue1":
+                                    drawableLevelLayer.add(index, "fped2statue1");
+                                    index++;
+                                    break;
+                                case "ped2statue2":
+                                    drawableLevelLayer.add(index, "fped2statue2");
                                     index++;
                                     break;
                                 case "ped2fire":
@@ -1141,6 +1304,577 @@ public class RenderRules {
                                 case "trap":
                                     index++;
                                     break;
+                                }
+                            }
+                        } else if (levelLayer.get(index).matches("2+f+.+")) {
+                            StringBuffer sb = new StringBuffer(i);
+                            sb.delete(0, 2);
+                            String str = sb.toString();
+                            //floor + columntop4 + fire
+
+                            if (str.matches("([0-9])+")) {
+
+                                String roof = str;
+                                String strRoofExt = "0";
+
+                                StringBuffer sb3 = new StringBuffer(roof);
+                                sb3.delete(1, 3);
+                                String strRoofType = sb3.toString();
+
+                                StringBuffer sb4 = new StringBuffer(str);
+                                sb4.delete(0, 1);
+                                if (!sb4.toString().isEmpty()) {
+                                    strRoofExt = sb4.toString();
+                                }
+
+                                switch (strRoofType) {
+                                    case "1":
+                                        String roofFinal1;
+                                        roofFinal1 = "froof1" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal1);
+                                        break;
+                                    case "2":
+                                        String roofFinal2;
+                                        roofFinal2 = "froof2" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal2);
+                                        break;
+                                    case "3":
+                                        String roofFinal3;
+                                        roofFinal3 = "froof3" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal3);
+                                        break;
+                                    case "4":
+                                        String roofFinal4;
+                                        roofFinal4 = "froof4" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal4);
+                                        break;
+                                }
+                                index++;
+                            } else {
+
+
+
+                                switch (str) {
+                                    case "col10fire":
+                                        drawableLevelLayer.add(index, "fcol10fire");
+                                        index++;
+                                        break;
+
+                                }
+                                if (str.matches("(coldo[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coltu[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(colio[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coldb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coltb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(colib[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cfldo[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cfltu[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cflio[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cfldb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cfltb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cflib[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csldo[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csltu[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cslio[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csldb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csltb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cslib[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cSldb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cSltb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cSlib[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csfdb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csftb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csfib[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cSfdb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cSftb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cSfib[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csfdo[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csftu[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csfio[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cSfdo[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cSftu[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cSfio[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coldd[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coltd[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(colid[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coltB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coliB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coldB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csldB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csltB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csliB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coftb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cofdb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cofib[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coftu[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cofdo[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cofio[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cottu[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cotdo[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cotio[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cottb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cotdb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cotib[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coTtb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coTdb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coTib[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coTtu[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coTdo[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coTio[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coftB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cofdB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cofiB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cfftB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cfftu[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cffdo[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cffio[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cffdB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cffiB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cfftb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cffdb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cffib[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                switch (str) {
+                                    case "cand":
+                                        drawableLevelLayer.add(index,"cand");
+                                        index++;
+                                        break;
+                                    case "cands":
+                                        drawableLevelLayer.add(index,"cands");
+                                        index++;
+                                        break;
+                                    case "2cand":
+                                        drawableLevelLayer.add(index,"2cand");
+                                        index++;
+                                        break;
+                                    case "2cands":
+                                        drawableLevelLayer.add(index,"2cands");
+                                        index++;
+                                        break;
+                                    case "cob":
+                                        drawableLevelLayer.add(index,"cobweb");
+                                        index++;
+                                        break;
+                                    //enemy
+                                    case "enemy":
+                                        drawableLevelLayer.add(index, "enemySkull");
+                                        index++;
+                                        break;
+                                    case "enemy2":
+                                        drawableLevelLayer.add(index, "enemySpider");
+                                        index++;
+                                        break;
+                                    case "enemy3":
+                                        drawableLevelLayer.add(index, "enemyGhost");
+                                        index++;
+                                        break;
+                                    case "enemy4":
+                                        drawableLevelLayer.add(index, "enemyCyclops");
+                                        index++;
+                                        break;
+                                    case "2enemy":
+                                        drawableLevelLayer.add(index, "enemySkull2");
+                                        index++;
+                                        break;
+                                    case "2enemy2":
+                                        drawableLevelLayer.add(index, "enemySpider2");
+                                        index++;
+                                        break;
+                                    case "2enemy3":
+                                        drawableLevelLayer.add(index, "enemyGhost2");
+                                        index++;
+                                        break;
+                                    case "2enemy4":
+                                        drawableLevelLayer.add(index, "enemyCyclops2");
+                                        index++;
+                                        break;
+                                    case "boss1":
+                                        drawableLevelLayer.add(index, "bossMinotaur");
+                                        index++;
+                                        break;
+                                    //shopkeeper entity
+                                    case "shop":
+                                        drawableLevelLayer.add(index, "shop");
+                                        index++;
+                                        break;
+                                    //tutorial text in starting room
+                                    case "tuto":
+                                        drawableLevelLayer.add(index, "tuto");
+                                        index++;
+                                        break;
+                                    //pots
+                                    case "pot":
+                                        drawableLevelLayer.add(index, "pot");
+                                        index++;
+                                        break;
+                                    case "pot2":
+                                        drawableLevelLayer.add(index, "pot2");
+                                        index++;
+                                        break;
+                                    case "coin":
+                                        drawableLevelLayer.add(index, "coin");
+                                        index++;
+                                        break;
+                                    case "skull":
+                                        drawableLevelLayer.add(index, "skull");
+                                        index++;
+                                        break;
+                                    //pedestals
+                                    case "ped1":
+                                        drawableLevelLayer.add(index, "fped1");
+                                        index++;
+                                        break;
+                                    case "ped1fire":
+                                        drawableLevelLayer.add(index, "fped1fire");
+                                        index++;
+                                        break;
+                                    case "ped1fireoff":
+                                        drawableLevelLayer.add(index, "fped1fireoff");
+                                        index++;
+                                        break;
+                                    case "ped1fireb":
+                                        drawableLevelLayer.add(index, "fped1fireB");
+                                        index++;
+                                        break;
+                                    case "ped1heal":
+                                        drawableLevelLayer.add(index, "fped1heal");
+                                        index++;
+                                        break;
+                                    case "ped2":
+                                        drawableLevelLayer.add(index, "fped2");
+                                        index++;
+                                        break;
+                                    case "ped2heal":
+                                        drawableLevelLayer.add(index, "fped2heal");
+                                        index++;
+                                        break;
+                                    case "ped2fire":
+                                        drawableLevelLayer.add(index, "fped2fire");
+                                        index++;
+                                        break;
+                                    case "ped2fireoff":
+                                        drawableLevelLayer.add(index, "fped2fireoff");
+                                        index++;
+                                        break;
+                                    case "ped3":
+                                        drawableLevelLayer.add(index, "fped3");
+                                        index++;
+                                        break;
+                                    case "ped3fire":
+                                        drawableLevelLayer.add(index, "fped3fire");
+                                        index++;
+                                        break;
+                                    case "ped4":
+                                        drawableLevelLayer.add(index, "fped4");
+                                        index++;
+                                        break;
+                                    //obstacles
+                                    case "ob":
+                                        drawableLevelLayer.add(index, "obstacle");
+                                        index++;
+                                        break;
+                                    case "ob1":
+                                        drawableLevelLayer.add(index, "obstacle1");
+                                        index++;
+                                        break;
+                                    case "ob2":
+                                        drawableLevelLayer.add(index, "obstacle2");
+                                        index++;
+                                        break;
+                                    case "ob3":
+                                        drawableLevelLayer.add(index, "obstacle3");
+                                        index++;
+                                        break;
+                                    case "trap":
+                                        index++;
+                                        break;
                                 }
                             }
                         } else if (levelLayer.get(index).matches("l+w+.+")) {
@@ -1746,75 +2480,7 @@ public class RenderRules {
         for (String i : levelLayer) {
             // (int i = 0; i < layerSize; i++)
             switch (levelLayer.get(index)) {
-                case "f":
-                    index++;
-                    break;
-                case "f2":
-                    index++;
-                    break;
-                case "f3":
-                    index++;
-                    break;
-                case "tlw":
-                    index++;
-                    break;
-                case "tw":
-                    index++;
-                    break;
-                case "trw":
-                    index++;
-                    break;
-                case "lw":
-                    index++;
-                    break;
-                case "rw":
-                    index++;
-                    break;
-                case "blw":
-                    index++;
-                    break;
-                case "bw":
-                    index++;
-                    break;
-                case "brw":
-                    index++;
-                    break;
-                case "tlt":
-                    index++;
-                    break;
-                case "trt":
-                    index++;
-                    break;
-                case "blt":
-                    index++;
-                    break;
-                case "brt":
-                    index++;
-                    break;
-                case "dtl":
-                    index++;
-                    break;
-                case "dtr":
-                    index++;
-                    break;
-                case "dlu":
-                    index++;
-                    break;
-                case "dll":
-                    index++;
-                    break;
-                case "dru":
-                    index++;
-                    break;
-                case "drl":
-                    index++;
-                    break;
-                case "dbl":
-                    index++;
-                    break;
-                case "dbr":
-                    index++;
-                    break;
+
                 case "doortl":
                 case "doorftl":
                     //TODO: Make function in AlignDoors that takes roomX levelY, current and previous direction

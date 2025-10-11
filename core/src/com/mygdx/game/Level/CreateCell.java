@@ -16,6 +16,34 @@ public class CreateCell {
     public TiledMapTileLayer.Cell decorFloorTopRightTile;
     public TiledMapTileLayer.Cell decorFloorBottomLeftTile;
     public TiledMapTileLayer.Cell decorFloorBottomRightTile;
+    public TiledMapTileLayer.Cell innerWallUpTile;
+    public TiledMapTileLayer.Cell innerWallDownTile;
+    public TiledMapTileLayer.Cell innerWallLeftTile;
+    public TiledMapTileLayer.Cell innerWallRightTile;
+
+    public TiledMapTileLayer.Cell pitTile;
+    public TiledMapTileLayer.Cell pitFloorTile;
+    public TiledMapTileLayer.Cell pitFloor2Tile;
+    public TiledMapTileLayer.Cell pitStairsTile;
+    public TiledMapTileLayer.Cell pitLeftTile;
+    public TiledMapTileLayer.Cell pitRightTile;
+    public TiledMapTileLayer.Cell pitBottomTile;
+
+    public TiledMapTileLayer.Cell innerWallTLCornerTile;
+    public TiledMapTileLayer.Cell innerWallTRCornerTile;
+    public TiledMapTileLayer.Cell innerWallBLCornerTile;
+    public TiledMapTileLayer.Cell innerWallBRCornerTile;
+
+    public TiledMapTileLayer.Cell innerWallTLTurnTile;
+    public TiledMapTileLayer.Cell innerWallTRTurnTile;
+    public TiledMapTileLayer.Cell innerWallBLTurnTile;
+    public TiledMapTileLayer.Cell innerWallBRTurnTile;
+
+    public TiledMapTileLayer.Cell innerWallTLTurn2Tile;
+    public TiledMapTileLayer.Cell innerWallTRTurn2Tile;
+    public TiledMapTileLayer.Cell innerWallBLTurn2Tile;
+    public TiledMapTileLayer.Cell innerWallBRTurn2Tile;
+
     public TiledMapTileLayer.Cell topLeftWallTile;
     public TiledMapTileLayer.Cell topWallTile;
     public TiledMapTileLayer.Cell topRightWallTile;
@@ -125,6 +153,40 @@ public class CreateCell {
         decorFloorTopRightTile = new TiledMapTileLayer.Cell();
         decorFloorBottomLeftTile = new TiledMapTileLayer.Cell();
         decorFloorBottomRightTile = new TiledMapTileLayer.Cell();
+
+        pitTile = new TiledMapTileLayer.Cell();
+        pitFloorTile = new TiledMapTileLayer.Cell();
+        pitFloor2Tile = new TiledMapTileLayer.Cell();
+        pitStairsTile = new TiledMapTileLayer.Cell();
+        pitLeftTile = new TiledMapTileLayer.Cell();
+        pitRightTile = new TiledMapTileLayer.Cell();
+        pitBottomTile = new TiledMapTileLayer.Cell();
+
+        innerWallUpTile = new TiledMapTileLayer.Cell();
+        innerWallDownTile = new TiledMapTileLayer.Cell();
+        innerWallLeftTile = new TiledMapTileLayer.Cell();
+        innerWallRightTile = new TiledMapTileLayer.Cell();
+
+        innerWallTLCornerTile = new TiledMapTileLayer.Cell();
+        innerWallTRCornerTile = new TiledMapTileLayer.Cell();
+        innerWallBLCornerTile = new TiledMapTileLayer.Cell();
+        innerWallBRCornerTile = new TiledMapTileLayer.Cell();
+
+        innerWallTLTurnTile = new TiledMapTileLayer.Cell();
+        innerWallTRTurnTile = new TiledMapTileLayer.Cell();
+        innerWallBLTurnTile = new TiledMapTileLayer.Cell();
+        innerWallBRTurnTile = new TiledMapTileLayer.Cell();
+
+        innerWallTLTurn2Tile = new TiledMapTileLayer.Cell();
+        innerWallTRTurn2Tile = new TiledMapTileLayer.Cell();
+        innerWallBLTurn2Tile = new TiledMapTileLayer.Cell();
+        innerWallBRTurn2Tile = new TiledMapTileLayer.Cell();
+
+        innerWallUpTile = new TiledMapTileLayer.Cell();
+        innerWallDownTile = new TiledMapTileLayer.Cell();
+        innerWallLeftTile = new TiledMapTileLayer.Cell();
+        innerWallRightTile = new TiledMapTileLayer.Cell();
+
         topLeftWallTile = new TiledMapTileLayer.Cell();
         topWallTile = new TiledMapTileLayer.Cell();
         topRightWallTile = new TiledMapTileLayer.Cell();

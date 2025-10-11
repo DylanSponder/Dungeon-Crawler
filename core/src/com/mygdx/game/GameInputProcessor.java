@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.box2D.BodyFactory;
-import com.mygdx.game.entity.behaviours.fsm.EnemyCyclopsState;
 import com.mygdx.game.entity.behaviours.fsm.projectiles.Arrow;
 import com.mygdx.game.level.GenerateLevel;
 import com.mygdx.game.level.objects.Potion;
@@ -298,10 +297,9 @@ public class GameInputProcessor implements InputProcessor {
         }
 
 
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-
-            menuClosed = false;
-
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE) && optionsMenuClosed) {
+            pauseMenuClosed = false;
+            Gdx.input.setInputProcessor(pauseMenuStage);
            // Gdx.graphics.setWindowedMode(1800, 1000);
         }
 

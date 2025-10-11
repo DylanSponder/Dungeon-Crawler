@@ -176,7 +176,8 @@ public class EnemyCyclops extends Enemy {
                                 && fixture.getBody().getUserData() != "TrapArea"
                                 && fixture.getBody().getUserData() != "Water"
                                 && fixture.getBody().getUserData() != "Stem"
-                                && fixture.getBody().getUserData() != "Statue") {
+                                && fixture.getBody().getUserData() != "Statue"
+                                && fixture.getBody().getUserData() != "Pit") {
                             //sighted = true;
                             //System.out.println(fixture.getBody().getUserData());
                             sightCounter = 0;

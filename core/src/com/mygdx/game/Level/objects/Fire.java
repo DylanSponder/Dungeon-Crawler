@@ -91,7 +91,7 @@ public class Fire extends Light{
                 fireBody.setUserData("Fire");
             }
             else if (this.type == 4){
-                fireBody = bodyFactory.createFireBody(world, fireX, fireY+2);
+                fireBody = bodyFactory.createFireBody(world, fireX, fireY-1f);
                 fireBody.setUserData("Fire");
             }
         }

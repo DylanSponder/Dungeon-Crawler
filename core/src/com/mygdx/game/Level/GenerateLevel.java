@@ -66,13 +66,13 @@ public class GenerateLevel {
         roomHitboxCreated = false;
         floor2Chance = 8;
 
-        int min = 8;
-        int max = 8;
+        int min = 10;
+        int max = 10;
         numRooms = (int) (Math.random() * (max - min + 1)) + min;
 
         possibleRoomNumbers = new ArrayList<>();
 
-        int roomIDMax = 12;
+        int roomIDMax = 18;
 
         for (int i = 0; i < roomIDMax; i++) {
             //create an arraylist of all possible room IDs
@@ -83,17 +83,18 @@ public class GenerateLevel {
         path = new ArrayList() {
         };
 
-        path.add(1);
-        path.add(1);
         path.add(2);
-        path.add(2);
-        path.add(1);
-        path.add(1);
         path.add(2);
         path.add(2);
         path.add(1);
         path.add(1);
-
+        path.add(2);
+        path.add(2);
+        path.add(2);
+        path.add(1);
+        path.add(1);
+        path.add(2);
+        path.add(2);
 
         boolean temp;
         temp = attemptLevelGen(1);
@@ -137,26 +138,26 @@ public class GenerateLevel {
 
                     //pick a random room ID then take it out of the arraylist - no room will appear twice
                     int random = Random.randomInt(possibleRoomNumbers.size()-1, 1);
-                    System.out.println("SEX " + random);
+
                     int IDchosen = random;
                     random = possibleRoomNumbers.get(random) + 1;
                     possibleRoomNumbers.remove(IDchosen);
 
-                    while (random == 5) {
+                    while (random == 5 || random == 13) {
                         //shop spawns are pre-determined so are reassigned before being generated randomly
-                        random = Random.randomInt(12, 1);//12, 1
+                        random = Random.randomInt(18, 1);//12, 1
                     }
                     //assign the room its random index
                     int temp = numRooms + 1;
                      if (roomsIndex == numRooms - 1) {
                         newRoom.roomNum = 13;
                     } else {
-                        newRoom.roomNum = random;//random
+                        newRoom.roomNum = 4;//random
                         System.out.println("ROOM NUMBER: " + random);
                     }
-                    //random room picker
-
-                    //newRoom.roomNum = 13;
+                }
+                if (roomsIndex == 6){
+                    newRoom.roomNum = 5;
                 }
 
                 //determines which pre-gen room is placed next in sequence
@@ -558,6 +559,7 @@ public class GenerateLevel {
         else {
             doorMapPrevious =  init.roomList.get(roomIndex-1).doorLocations;
         }
+        System.out.println("ROOM BEING CREATED");
 
             if (doorDirection==1) {
                 String doorTopLeft = doorMapPrevious.get("TopLeft");
@@ -579,9 +581,9 @@ public class GenerateLevel {
 
                     System.out.println("1 AND TOP LEFT IS LARGER");
 
-                    yOffset = doorTopLeftYAsInt - doorBottomLeftYAsInt + 4;
+                    //yOffset = doorTopLeftYAsInt - doorBottomLeftYAsInt + 4;
                    // System.out.println("YOFFSET----> "+ yOffset);
-
+                    yOffset = 0;
                     xOffset = doorResult;
 
                    // System.out.println("XOFFSET---->: " + xOffset);
@@ -590,12 +592,14 @@ public class GenerateLevel {
                     init.roomList.get(roomIndex).x2 = init.roomList.get(roomIndex).x2 + xOffset;
 
                     if ((path.get(roomIndex+1) == 2)) {
-                        locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
+                        //locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
                     }
                     else if ((path.get(roomIndex+1) == 4)) {
                         locateDoors(roomIndex, init.roomList.get(roomIndex).x1 + xOffset, init.roomList.get(roomIndex).y1);
                     }
-                    else {
+                    else if ((path.get(roomIndex-1) == 1)) {
+                        locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
+                    } else {
                         locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
                     }
 
@@ -610,14 +614,15 @@ public class GenerateLevel {
                     init.roomList.get(roomIndex).x1 = init.roomList.get(roomIndex).x1 + xOffset;
                     init.roomList.get(roomIndex).x2 = init.roomList.get(roomIndex).x2 + xOffset;
 
-                    if (path.get(roomIndex+1) == 2 || path.get(roomIndex+1) == 4) {
-                        locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
+                    //if (path.get(roomIndex+1) == 2 || path.get(roomIndex+1) == 4) {
+                       // System.out.println("YOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+                        //locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
 
-                        testRoomX = testRoomX + xOffset;
-                    }
-                    else {
+                        //testRoomX = testRoomX + xOffset;
+                    //}
+                    //else {
                         locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
-                    }
+                    //}
                 }
                 else {
                     init.roomList.get(roomIndex).x1 = init.roomList.get(roomIndex).x1 + xOffset;
@@ -628,6 +633,7 @@ public class GenerateLevel {
 
             }
             else if (doorDirection==2) {
+                System.out.println("----DIRECTION 2----");
 
                 String doorUpperRight = doorMapPrevious.get("UpperRight");
                 String[] doorUpperRightXY = doorUpperRight.split(",");
@@ -652,33 +658,54 @@ public class GenerateLevel {
 
                    // System.out.println("TEST1 +" + init.roomList.get(roomIndex).index);
                     doorResult = doorUpperLeftYAsInt - doorUpperRightYAsInt;
-                    System.out.println("DOORRESULTY" + doorResult);
-                    doorResult = doorResult * -1;
+                    System.out.println("DOORRESULT Y " + doorResult);
+                    doorResult = doorResult;
                     yOffset = doorResult;
 
                     init.roomList.get(roomIndex).y1 = init.roomList.get(roomIndex).y1 + yOffset;
                     init.roomList.get(roomIndex).y2 = init.roomList.get(roomIndex).y2 + yOffset;
 
-                    if (doorUpperLeftXAsInt > doorUpperRightXAsInt) {
-                        System.out.println("A3");
-                        //System.out.println("DOORRESULTY" + doorResult);
-                        doorResult = doorUpperLeftXAsInt - doorUpperRightXAsInt;
-                        System.out.println("DOORRESULTX" + doorResult);
-                        xOffset = doorResult;
-                        init.roomList.get(roomIndex).x1 = init.roomList.get(roomIndex).x1 + xOffset;
-                        init.roomList.get(roomIndex).x2 = init.roomList.get(roomIndex).x2 + xOffset;
-
-                        locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
-                    } else {
+                    if (doorUpperRightXAsInt > doorUpperLeftXAsInt) {
                         System.out.println("A4");
                         //System.out.println("DOORRESULTY" + doorResult);
                         doorResult = doorUpperRightXAsInt - doorUpperLeftXAsInt;
-                        System.out.println("DOORRESULTX" + doorResult);
+                        System.out.println("DOORRESULT X " + doorResult);
                         xOffset = doorResult;
                         init.roomList.get(roomIndex).x1 = init.roomList.get(roomIndex).x1 + xOffset;
                         init.roomList.get(roomIndex).x2 = init.roomList.get(roomIndex).x2 + xOffset;
 
                         locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
+                    }
+                    else if (doorUpperLeftXAsInt > doorUpperRightXAsInt) {
+                        init.roomList.get(roomIndex).y1 = init.roomList.get(roomIndex).y1 - yOffset;
+                        init.roomList.get(roomIndex).y2 = init.roomList.get(roomIndex).y2 - yOffset;
+
+                        System.out.println("A10");
+                        System.out.println("DOORRESULT X " + doorResult);
+                        doorResult = doorUpperLeftXAsInt - doorUpperRightXAsInt;
+                        xOffset = doorResult * -1;
+                        init.roomList.get(roomIndex).x1 = init.roomList.get(roomIndex).x1 + xOffset;
+                        init.roomList.get(roomIndex).x2 = init.roomList.get(roomIndex).x2 + xOffset;
+                        locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
+                    }
+                    else if (!(doorUpperLeftXAsInt > doorUpperRightXAsInt + 4)) {
+                        System.out.println("A6");
+                        System.out.println("DOORRESULT X " + doorResult);
+                        doorResult = doorUpperLeftXAsInt - doorUpperRightXAsInt - 1;
+                        xOffset = doorResult;
+                        init.roomList.get(roomIndex).x1 = init.roomList.get(roomIndex).x1 + xOffset;
+                        init.roomList.get(roomIndex).x2 = init.roomList.get(roomIndex).x2 + xOffset;
+                        locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
+                    }
+                    else {
+                        System.out.println("A8");
+                        System.out.println("DOORRESULT X " + doorResult);
+                        //doorResult = doorUpperLeftXAsInt - doorUpperRightXAsInt;
+                        //xOffset = doorResult;
+                        //init.roomList.get(roomIndex).x1 = init.roomList.get(roomIndex).x1 + xOffset;
+                        //init.roomList.get(roomIndex).x2 = init.roomList.get(roomIndex).x2 + xOffset;
+                        locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
+
                     }
 
                     //locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
@@ -689,42 +716,51 @@ public class GenerateLevel {
                    // System.out.println("TEST2 +" + (doorUpperLeftYAsInt));
                     doorResult = doorUpperRightYAsInt - doorUpperLeftYAsInt;
                     yOffset = doorResult;
-                    doorResult = doorResult * -1;
+                    //doorResult = doorResult * -1;
 
                     init.roomList.get(roomIndex).y1 = init.roomList.get(roomIndex).y1 + yOffset;
                     init.roomList.get(roomIndex).y2 = init.roomList.get(roomIndex).y2 + yOffset;
                     //doorResult = doorResult * -1;
                     //System.out.println(doorResult);
-                    if (doorUpperLeftXAsInt > doorUpperRightXAsInt) {
+                    /*
+                                        if (doorUpperLeftXAsInt > doorUpperRightXAsInt) {
                         System.out.println("A1");
                         System.out.println("DOORRESULTY" + doorResult);
                         doorResult = doorUpperLeftXAsInt - doorUpperRightXAsInt;
-                        System.out.println("DOORRESULTX" + doorResult);
-                        xOffset = doorResult;
-                        //init.roomList.get(roomIndex).x1 = init.roomList.get(roomIndex).x1 + xOffset;
-                        //init.roomList.get(roomIndex).x2 = init.roomList.get(roomIndex).x2 + xOffset;
-
-                        locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
-                    } else if (doorUpperRightXAsInt > doorUpperLeftXAsInt) {
-                        System.out.println("A2");
-                        System.out.println("DOORRESULTY" + doorResult);
-                        doorResult = doorUpperRightXAsInt - doorUpperLeftXAsInt;
-                        doorResult = doorResult * -1;
                         System.out.println("DOORRESULTX" + doorResult);
                         xOffset = doorResult;
                         init.roomList.get(roomIndex).x1 = init.roomList.get(roomIndex).x1 + xOffset;
                         init.roomList.get(roomIndex).x2 = init.roomList.get(roomIndex).x2 + xOffset;
 
                         locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
-                    } else {
-                        System.out.println("A5");
-                        System.out.println("DOORRESULTY" + doorResult);
+                    } else
+                     */
+                    if (doorUpperRightXAsInt > doorUpperLeftXAsInt) {
+                        System.out.println("A2");
+                        System.out.println("DOORRESULT Y " + doorResult);
+                        doorResult = doorUpperRightXAsInt - doorUpperLeftXAsInt;
+                        doorResult = doorResult * -1;
+                        System.out.println("DOORRESULT X " + doorResult);
+                        xOffset = doorResult;
+                        init.roomList.get(roomIndex).x1 = init.roomList.get(roomIndex).x1 + xOffset;
+                        init.roomList.get(roomIndex).x2 = init.roomList.get(roomIndex).x2 + xOffset;
 
-                        init.roomList.get(roomIndex).x1 = init.roomList.get(roomIndex).x1 + 4;
-                        init.roomList.get(roomIndex).x2 = init.roomList.get(roomIndex).x2 + 4;
+                        locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
+                    } else if (doorUpperRightXAsInt == doorUpperLeftXAsInt) {
+                        System.out.println("A5");
+                        System.out.println("DOORRESULT Y " + doorResult);
+
+                        //init.roomList.get(roomIndex).x1 = init.roomList.get(roomIndex).x1 + 4;
+                        //init.roomList.get(roomIndex).x2 = init.roomList.get(roomIndex).x2 + 4;
 
                         locateDoors(roomIndex, init.roomList.get(roomIndex).x1, init.roomList.get(roomIndex).y1);
                     }
+                } else if (doorUpperRightXAsInt == doorUpperLeftXAsInt) {
+                    System.out.println("NUHHHH");
+
+                } else {
+                    System.out.println("HUH? " + "UP RIGHT X: " + doorUpperRightXAsInt + ", UP LEFT X: " + doorUpperLeftXAsInt);
+                    System.out.println("DOORRESULT Y " + doorResult);
                 }
                 testLevelY = testLevelY + yOffset;
 
@@ -803,6 +839,7 @@ public class GenerateLevel {
 
 
             }
+        System.out.println("ROOM FINISHED BEING CREATED");
         return failed = false;
     }
 
@@ -982,11 +1019,186 @@ for (int i = 0; i < layerSize; i++) {
             raf.createRaisedFloor();
             raisedFloors.add(raf);
             break;
+
+        case "pit":
+            currentCell = init.cr.pitTile;
+            Body pit = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            pit.setUserData("Pit");
+            break;
+        case "pitRubble":
+            currentCell = init.cr.pitTile;
+           // Body rubbleBody = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+           // rubbleBody.setUserData("PitRubble");
+            int randRubble = Random.randomInt(3,1);
+            int randRub = Random.randomInt(3,1);
+            if (randRub == 3) {
+                Rubble pitRubble = new Rubble(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, randRubble);
+                pitRubble.createRubble();
+                rubble.add(pitRubble);
+            }
+            break;
+        case "pitRubble1":
+            currentCell = init.cr.pitTile;
+            Rubble pitRubble1 = new Rubble(world, ((roomX + i) * 16) + 16 * 16 + 0.5f, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 1);
+            pitRubble1.createRubble();
+            rubble.add(pitRubble1);
+            break;
+        case "pitRubble2":
+            currentCell = init.cr.pitTile;
+            Rubble pitRubble2 = new Rubble(world, ((roomX + i) * 16) + 16 * 16 + 0.5f, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 2);
+            pitRubble2.createRubble();
+            rubble.add(pitRubble2);
+            break;
+        case "pitRubble3":
+            currentCell = init.cr.pitTile;
+            Rubble pitRubble3 = new Rubble(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 3);
+            pitRubble3.createRubble();
+            rubble.add(pitRubble3);
+            break;
+        case "pitRubble3Random":
+            currentCell = init.cr.pitTile;
+            int randRub3R = Random.randomInt(5,1);
+            if (randRub3R == 5) {
+                Rubble pitRubble = new Rubble(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 3);
+                pitRubble.createRubble();
+                rubble.add(pitRubble);
+            }
+            Body pit3r = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            pit3r.setUserData("Pit");
+            break;
+        case "pitFloor1":
+            currentCell = init.cr.pitFloorTile;
+            Body pitF1 = init.bf.createHalfWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            pitF1.setUserData("Pit");
+            break;
+        case "pitFloor2":
+            currentCell = init.cr.pitFloor2Tile;
+            Body pitF2 = init.bf.createHalfWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            pitF2.setUserData("Pit");
+            break;
+        case "pitStairs":
+            currentCell = init.cr.pitStairsTile;
+            Body pitSt = init.bf.createHalfWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            pitSt.setUserData("Pit");
+            break;
+        case "pitDown":
+            currentCell = init.cr.pitBottomTile;
+            Body pitD = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            pitD.setUserData("Pit");
+            break;
+        case "pitLeft":
+            currentCell = init.cr.pitLeftTile;
+            Body pitL = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            pitL.setUserData("Pit");
+            break;
+        case "pitRight":
+            currentCell = init.cr.pitRightTile;
+            Body pitR = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            pitR.setUserData("Pit");
+            break;
+
         case "waterFloorTile":
             currentCell = init.cr.middleFloorTile;
             Water waf = new Water(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 2);
             water.add(waf);
             waf.createWaterBody();
+            break;
+        case "innerWallUpTrap":
+            currentCell = init.cr.innerWallUpTile;
+            Body innerWallUpTrap = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            innerWallUpTrap.setUserData("Wall");
+            Trap innerUpTrap = new Trap(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,1, 1);
+            innerUpTrap.createTrap();
+            traps.add(innerUpTrap);
+            break;
+        case "innerWallDownTrap":
+            currentCell = init.cr.innerWallDownTile;
+            Body innerWallDownTrap = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            innerWallDownTrap.setUserData("Wall");
+            Trap innerDownTrap = new Trap(world, ((roomX + i) * 16) + 16 * 16 + 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,1, 3);
+            innerDownTrap.createTrap();
+            traps.add(innerDownTrap);
+            break;
+        case "innerWallLeftTrap":
+            currentCell = init.cr.innerWallLeftTile;
+            Body innerWallLeftTrap = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            innerWallLeftTrap.setUserData("Wall");
+            Trap innerLeftTrap = new Trap(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,1, 4);
+            innerLeftTrap.createTrap();
+            traps.add(innerLeftTrap);
+            break;
+        case "innerWallRightTrap":
+            currentCell = init.cr.innerWallRightTile;
+            Body innerWallRightTrap = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            innerWallRightTrap.setUserData("Wall");
+            Trap innerRightTrap = new Trap(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30,1, 2);
+            innerRightTrap.createTrap();
+            traps.add(innerRightTrap);
+            break;
+
+
+        case "innerWallTLCorner":
+            currentCell = init.cr.innerWallTLCornerTile;
+            Body newTLCorner = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 15.9f, 0.1f);
+            newTLCorner.setUserData("Wall");
+            break;
+        case "innerWallTRCorner":
+            currentCell = init.cr.innerWallTRCornerTile;
+            Body newTRCorner = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 0.1f, 0.1f);
+            newTRCorner.setUserData("Wall");
+            break;
+        case "innerWallBLCorner":
+            currentCell = init.cr.innerWallBLCornerTile;
+            Body newBLCorner = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 15.9f, 15.9f);
+            newBLCorner.setUserData("Wall");
+            break;
+        case "innerWallBRCorner":
+            currentCell = init.cr.innerWallBRCornerTile;
+            Body newBRCorner = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 0.1f, 15.9f);
+            newBRCorner.setUserData("Wall");
+            break;
+
+        case "innerWallTLTurn":
+            currentCell = init.cr.innerWallTLTurnTile;
+            Body newTLTurn = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 15.9f, 0.1f);
+            newTLTurn.setUserData("Wall");
+            break;
+        case "innerWallTRTurn":
+            currentCell = init.cr.innerWallTRTurnTile;
+            Body newTRTurn = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 0.1f, 0.1f);
+            newTRTurn.setUserData("Wall");
+            break;
+        case "innerWallBLTurn":
+            currentCell = init.cr.innerWallBLTurnTile;
+            Body newBLTurn = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 15.9f, 15.9f);
+            newBLTurn.setUserData("Wall");
+            break;
+        case "innerWallBRTurn":
+            currentCell = init.cr.innerWallBRTurnTile;
+            Body newBRTurn = init.bf.createWallTurn(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 0.1f, 15.9f);
+            newBRTurn.setUserData("Wall");
+            break;
+
+
+        case "innerWallUp":
+            currentCell = init.cr.innerWallUpTile;
+            Body innerWallUp = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            innerWallUp.setUserData("Wall");
+            break;
+        case "innerWallDown":
+            currentCell = init.cr.innerWallDownTile;
+            Body innerWallDown = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            innerWallDown.setUserData("Wall");
+            break;
+        case "innerWallLeft":
+            currentCell = init.cr.innerWallLeftTile;
+            Body innerWallLeft = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            innerWallLeft.setUserData("Wall");
+            break;
+        case "innerWallRight":
+            currentCell = init.cr.innerWallRightTile;
+            Body innerWallRight = init.bf.createWall(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
+            innerWallRight.setUserData("Wall");
             break;
         case "block":
             currentCell = init.cr.blockTile;
@@ -1988,7 +2200,7 @@ for (int i = 0; i < layerSize; i++) {
             EnemyCyclops enemy4 = new EnemyCyclops(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
             init.roomList.get(roomIndex).enemyCounter++;
             init.roomList.get(roomIndex).enemyEyes.add(enemy4);
-            enemy4.createEnemy(4, 15);
+            enemy4.createEnemy(4, 10);
             enemies.add(enemy4);
             enemy4.room = roomIndex;
             DungeonCrawler.enemyEyes.add(enemy4);
@@ -2028,7 +2240,7 @@ for (int i = 0; i < layerSize; i++) {
             EnemyCyclops enemy42 = new EnemyCyclops(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
             init.roomList.get(roomIndex).enemyCounter++;
             init.roomList.get(roomIndex).enemyEyes.add(enemy42);
-            enemy42.createEnemy(4, 15);
+            enemy42.createEnemy(4, 10);
             enemies.add(enemy42);
             enemy42.room = roomIndex;
             DungeonCrawler.enemyEyes.add(enemy42);
@@ -2174,6 +2386,46 @@ for (int i = 0; i < layerSize; i++) {
             potion.createPotion(potionArrayMap, rayHandler);
             potions.add(potion);
             potionArrayMap.put(potion.potionBody, potion);
+            break;
+        case "fped1statue1":
+            currentCell = init.cr.middleFloorTile;
+            ColumnPiece ped1statue = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
+            ped1statue.createPedestal();
+            Statue ped1Stat1 = new Statue(world, ((roomX + i) * 16) + 16 * 16 + 3, levelY * 16 + Gdx.graphics.getHeight() / 30 + 2,1);
+            ped1Stat1.createStatueHitbox(((roomX + i) * 16) + 16 * 16 + 4f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16.5f, world);
+            ped1Stat1.createStatuePedestalHitbox(((roomX + i) * 16) + 16 * 16 + 4f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 14f, world);
+            statues.add(ped1Stat1);
+            //Body ped1st1 = init.bf.createStatuePedestalHitbox(world, ((roomX + i) * 16) + 16 * 16 + 4f, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16.5f);
+            break;
+        case "fped1statue2":
+            currentCell = init.cr.middleFloorTile;
+            ColumnPiece ped1statue2 = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,14);
+            ped1statue2.createPedestal();
+            Statue ped1Stat2 = new Statue(world, ((roomX + i) * 16) + 16 * 16 + 1, levelY * 16 + Gdx.graphics.getHeight() / 30 + 1,2);
+            ped1Stat2.createStatueHitbox(((roomX + i) * 16) + 16 * 16 + 3f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 16.5f, world);
+            ped1Stat2.createStatuePedestalHitbox(((roomX + i) * 16) + 16 * 16 + 3f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 14f, world);
+            statues.add(ped1Stat2);
+
+            break;
+        case "fped2statue1":
+            currentCell = init.cr.middleFloorTile;
+            ColumnPiece ped2statue1 = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,15);
+            ped2statue1.createPedestal();
+            Statue ped2Stat1 = new Statue(world, ((roomX + i) * 16) + 16 * 16 + 3, levelY * 16 + Gdx.graphics.getHeight() / 30 + 2,1);
+            ped2Stat1.createStatueHitbox(((roomX + i) * 16) + 16 * 16 + 4f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 14.5f, world);
+            ped2Stat1.createStatuePedestalHitbox(((roomX + i) * 16) + 16 * 16 + 4f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 12f, world);
+            statues.add(ped2Stat1);
+
+            break;
+        case "fped2statue2":
+            currentCell = init.cr.middleFloorTile;
+            ColumnPiece ped2statue2 = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,15);
+            ped2statue2.createPedestal();
+            Statue ped2Stat2 = new Statue(world, ((roomX + i) * 16) + 16 * 16 + 1, levelY * 16 + Gdx.graphics.getHeight() / 30 + 1,2);
+            ped2Stat2.createStatueHitbox(((roomX + i) * 16) + 16 * 16 + 3f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 14.5f, world);
+            ped2Stat2.createStatuePedestalHitbox(((roomX + i) * 16) + 16 * 16 + 3f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 12f, world);
+            statues.add(ped2Stat2);
+
             break;
         case "fped2heal":
             currentCell = init.cr.middleFloorTile;

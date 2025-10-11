@@ -13,7 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import static com.mygdx.game.DungeonCrawler.menuStage;
+import static com.mygdx.game.DungeonCrawler.optionsMenuStage;
+import static com.mygdx.game.DungeonCrawler.pauseMenuStage;
 
 public class HUD {
   public Stage stage;
@@ -160,7 +161,8 @@ public class HUD {
 
     table.add(compassGroup);
 
-    menuStage.addActor(table);
+    pauseMenuStage.addActor(table);
+    optionsMenuStage.addActor(table);
   }
 
   public void addItem(int type) {

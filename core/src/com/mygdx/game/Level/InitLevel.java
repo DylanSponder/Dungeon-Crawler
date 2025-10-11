@@ -52,6 +52,30 @@ public class InitLevel {
         cr.decorFloorTopRightTile.setTile(new StaticTiledMapTile(tx.roomDecorativeFloorTopRightTexture));
         cr.decorFloorBottomLeftTile.setTile(new StaticTiledMapTile(tx.roomDecorativeFloorBottomLeftTexture));
         cr.decorFloorBottomRightTile.setTile(new StaticTiledMapTile(tx.roomDecorativeFloorBottomRightTexture));
+
+        cr.pitTile.setTile(new StaticTiledMapTile(tx.pit));
+        cr.pitFloorTile.setTile(new StaticTiledMapTile(tx.pitFloor1));
+        cr.pitFloor2Tile.setTile(new StaticTiledMapTile(tx.pitFloor2));
+        cr.pitStairsTile.setTile(new StaticTiledMapTile(tx.pitStairs));
+        cr.pitLeftTile.setTile(new StaticTiledMapTile(tx.pitLeft));
+        cr.pitRightTile.setTile(new StaticTiledMapTile(tx.pitRight));
+        cr.pitBottomTile.setTile(new StaticTiledMapTile(tx.pitBottom));
+
+        cr.innerWallUpTile.setTile(new StaticTiledMapTile(tx.innerWallUp));
+        cr.innerWallDownTile.setTile(new StaticTiledMapTile(tx.innerWallDown));
+        cr.innerWallLeftTile.setTile(new StaticTiledMapTile(tx.innerWallLeft));
+        cr.innerWallRightTile.setTile(new StaticTiledMapTile(tx.innerWallRight));
+
+        cr.innerWallTLTurnTile.setTile(new StaticTiledMapTile(tx.innerWallTLTurn));
+        cr.innerWallTRTurnTile.setTile(new StaticTiledMapTile(tx.innerWallTRTurn));
+        cr.innerWallBLTurnTile.setTile(new StaticTiledMapTile(tx.innerWallBLTurn));
+        cr.innerWallBRTurnTile.setTile(new StaticTiledMapTile(tx.innerWallBRTurn));
+
+        cr.innerWallTLTurn2Tile.setTile(new StaticTiledMapTile(tx.innerWallTLTurn2));
+        cr.innerWallTRTurn2Tile.setTile(new StaticTiledMapTile(tx.innerWallTRTurn2));
+        cr.innerWallBLTurn2Tile.setTile(new StaticTiledMapTile(tx.innerWallBLTurn2));
+        cr.innerWallBRTurn2Tile.setTile(new StaticTiledMapTile(tx.innerWallBRTurn2));
+
         cr.topLeftWallTile.setTile(new StaticTiledMapTile(tx.roomTopLeftWallTexture));
         cr.topWallTile.setTile(new StaticTiledMapTile(tx.roomTopWallTexture));
         cr.topRightWallTile.setTile(new StaticTiledMapTile(tx.roomTopRightWallTexture));

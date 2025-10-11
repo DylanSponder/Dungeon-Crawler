@@ -1,10 +1,10 @@
 tlw,tw,tw,tw,twtr,dtl,doortl,doortr,dtr,twtr,tw,tw,tw,trw
 lw,fob1,f14,f,fpot,f,f,f14,f,fpot,f,f,fob1,rw
 lw,f,f,f,f,f,tlt,trt,f,f,f,f,f,rw
-lw,f,f,fcolio0,fenemy3,fcolio0,blt,brt,fcolio0,fenemy3,fcolio0,f,f,dru
+dlu,f,f,fcolio0,fenemy3,fcolio0,blt,brt,fcolio0,fenemy3,fcolio0,f,f,dru
 doorul,f,f,f2,f2,f2,f,f,f2,f2,f2,f,f,doorur
 doorll,f,f,f2,f2,f2,fenemy,f,f2,f2,f2,f,f,doorlr
-lw,f,f,f2,fped1fire,f2,f,f,f2,fped1fire,f2,f,f,drl
+dll,f,f,f2,fped1fire,f2,f,f,f2,fped1fire,f2,f,f,drl
 lw,f,f,f2,f2,f2,tlt,trt,f2,f2,f2,f,f,rw
 lw,f,f,f,fenemy3,f,blt,brt,f,fenemy3,f,f,f,rw
 lw,fob1,f,fcolio0,fpot,fcolio0,f,f,fcolio0,fpot,fcolio0,f,fob1,rw

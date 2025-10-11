@@ -24,6 +24,21 @@ public class BodyFactory {
         shape.dispose();
         return body;
     }
+
+    public Body createHalfWall(World world, float x, float y) {
+        //needs to acommodate larger walls
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 8, y + 4);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(8, 4);
+        body.createFixture(shape, 1.0f);
+        shape.dispose();
+        return body;
+    }
     /*
         public Body createSmallWall(World world, float x, float y) {
         //needs to acommodate larger walls
@@ -56,6 +71,22 @@ public class BodyFactory {
         shape.dispose();
         return body;
     }
+    public Body createRubbleHitbox(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 8, y + 8);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(3f, 3f);
+        Fixture temp = body.createFixture(shape, 1.0f);
+        temp.setSensor(true);
+        temp.setUserData("Rubble");
+        shape.dispose();
+        return body;
+    }
+
 
 
     public Body createStatueHitbox(World world, float x, float y) {
@@ -70,6 +101,22 @@ public class BodyFactory {
         Fixture temp = body.createFixture(shape, 1.0f);
         temp.setSensor(true);
         temp.setUserData("Statue");
+        shape.dispose();
+        return body;
+    }
+
+    public Body createStatuePedestalHitbox(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 4.5f, y + 4);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(7.5f, 3f);
+        Fixture temp = body.createFixture(shape, 1.0f);
+        temp.setSensor(true);
+        temp.setUserData("Wall");
         shape.dispose();
         return body;
     }

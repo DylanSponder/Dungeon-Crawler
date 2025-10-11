@@ -54,6 +54,8 @@ public class CreateAssets {
     //Main texture sheet
     Texture roomBackground = new Texture(Gdx.files.internal("HellasDungeon/Level/Level 1/CustomTileset.png"));
 
+    Texture skullTextureSheet = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Skull.png"));
+
     Texture stairsTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Stairs/Stairs.png"));
 
     Texture oceanWaterTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Water/OceanWater.png"));
@@ -110,6 +112,10 @@ public class CreateAssets {
     Texture blocksTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Blocks.png"));
 
     Texture wallsTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Walls.png"));
+
+    Texture pitsTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Pits.png"));
+
+    Texture pitRubbleTexture = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/PitRubble.png"));
 
     Texture raisedFloorMask = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/RaisedFloorMask.png"));
 
@@ -191,9 +197,43 @@ public class CreateAssets {
     public TextureRegion water = new TextureRegion(oceanWaterTexture, 0, 0, 16, 16);
     public TextureRegion wave = new TextureRegion(waveTexture, 0, 0, 16, 9);
 
+    //Pit textures
+    public TextureRegion pit = new TextureRegion(pitsTexture, 0, 0, 16, 16);
+    public TextureRegion pitFloor1 = new TextureRegion(pitsTexture, 0, 0, 16, 16);
+    public TextureRegion pitFloor2 = new TextureRegion(pitsTexture, 0, 0, 16, 16);
+    public TextureRegion pitStairs = new TextureRegion(pitsTexture, 0, 0, 16, 16);
 
+    public TextureRegion pitLeft = new TextureRegion(pitsTexture, 0, 0, 16, 16);
+    public TextureRegion pitRight = new TextureRegion(pitsTexture, 0, 0, 16, 16);
+    public TextureRegion pitBottom = new TextureRegion(pitsTexture, 0, 0, 16, 16);
 
+    //Inner wall textures
+    public TextureRegion innerWallUp = new TextureRegion(wallsTexture, 0, 0, 16, 16);
+    public TextureRegion innerWallDown = new TextureRegion(wallsTexture, 0, 0, 16, 16);
+    public TextureRegion innerWallLeft = new TextureRegion(wallsTexture, 0, 0, 16, 16);
+    public TextureRegion innerWallRight = new TextureRegion(wallsTexture, 0, 0, 16, 16);
 
+    public TextureRegion innerWallTLCorner = new TextureRegion(wallsTexture, 0, 0, 16, 16);
+    public TextureRegion innerWallTRCorner = new TextureRegion(wallsTexture, 0, 0, 16, 16);
+    public TextureRegion innerWallBLCorner = new TextureRegion(wallsTexture, 0, 0, 16, 16);
+    public TextureRegion innerWallBRCorner = new TextureRegion(wallsTexture, 0, 0, 16, 16);
+
+    public TextureRegion innerWallTLTurn = new TextureRegion(wallsTexture, 0, 0, 16, 16);
+    public TextureRegion innerWallTRTurn = new TextureRegion(wallsTexture, 0, 0, 16, 16);
+    public TextureRegion innerWallBLTurn = new TextureRegion(wallsTexture, 0, 0, 16, 16);
+    public TextureRegion innerWallBRTurn = new TextureRegion(wallsTexture, 0, 0, 16, 16);
+
+    public TextureRegion innerWallTLTurn2 = new TextureRegion(wallsTexture, 0, 0, 16, 16);
+    public TextureRegion innerWallTRTurn2 = new TextureRegion(wallsTexture, 0, 0, 16, 16);
+    public TextureRegion innerWallBLTurn2 = new TextureRegion(wallsTexture, 0, 0, 16, 16);
+    public TextureRegion innerWallBRTurn2 = new TextureRegion(wallsTexture, 0, 0, 16, 16);
+
+    /*
+    public TextureRegion innerWallUp = new TextureRegion(wallsTexture, 0, 0, 16, 16);
+    public TextureRegion innerWallDown = new TextureRegion(wallsTexture, 0, 0, 16, 16);
+    public TextureRegion innerWallLeft = new TextureRegion(wallsTexture, 0, 0, 16, 16);
+    public TextureRegion innerWallRight = new TextureRegion(wallsTexture, 0, 0, 16, 16);
+     */
     //Wall textures
 
     public TextureRegion roomLeftWallTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
@@ -590,7 +630,7 @@ public class CreateAssets {
 
     //Level object textures
 
-    public TextureRegion skullTexture = new TextureRegion(roomBackground, 0,0,16,16);
+    public TextureRegion skullTexture = new TextureRegion(skullTextureSheet, 0,0,16,16);
 
     public TextureRegion boneTexture = new TextureRegion(roomBackground, 0,0,16,16);
     public TextureRegion tutoTexture = new TextureRegion(tutorialTexture, 0,0,87,57);
@@ -746,9 +786,9 @@ public class CreateAssets {
    // public Sprite emptyCompass = new Sprite()
 
     Sprite shopkeeperSprite = new Sprite(shopkeeperTexture, 0,0, 16, 16);
-    Sprite skullSprite = new Sprite(skullTexture, 176,64, 16, 16);
-    Sprite damagedSkullSprite = new Sprite(skullTexture, 192,48, 16, 16);
-    Sprite boneSprite = new Sprite(boneTexture, 192,64, 16, 16);
+    Sprite skullSprite = new Sprite(skullTexture, 0,0, 16, 16);
+    Sprite damagedSkullSprite = new Sprite(skullTexture, 0,16, 16, 16);
+    Sprite boneSprite = new Sprite(skullTexture, 16,0, 16, 16);
 
     public Sprite cobwebSprite = new Sprite(cobwebTexture,352,0,16,16);
     public Sprite webSprite = new Sprite(roomBackground,368,0,16,16);
@@ -762,6 +802,10 @@ public class CreateAssets {
 
     public Sprite raisedFloorSprite = new Sprite(roomBackground,82,94,16,16);
     public Sprite raisedFloorMaskSprite = new Sprite(raisedFloorMask,82,94,16,8);
+
+    public Sprite pitPot = new Sprite(pitRubbleTexture, 0, 0, 16, 16);
+    public Sprite pitColumn = new Sprite(pitRubbleTexture, 0, 0, 16, 16);
+    public Sprite pitSkull = new Sprite(pitRubbleTexture, 0, 0, 16, 16);
 
     //Pot sprites
 
@@ -1092,6 +1136,39 @@ public class CreateAssets {
         roomDecorativeFloorBottomRightTexture.setRegion(224, 80, 16, 16);
 
         //raisedFloor.setRegion(82, 94, 16, 16);
+
+        pit.setRegion(53, 0, 16, 16);
+        pitFloor1.setRegion(0, 0, 16, 16);
+        pitFloor2.setRegion(16, 0, 16, 16);
+        pitStairs.setRegion(32, 0, 16, 16);
+
+        pitLeft.setRegion(48, 0, 16, 16);
+        pitRight.setRegion(64, 0, 16, 16);
+        pitBottom.setRegion(0, 16, 16, 16);
+
+        pitPot.setRegion(0, 0, 11, 11);
+        pitColumn.setRegion(11, 0, 9, 11);
+        pitSkull.setRegion(20, 0, 10, 11);
+
+        innerWallUp.setRegion(16, 0, 16, 16);
+        innerWallDown.setRegion(32, 0, 16, 16);
+        innerWallLeft.setRegion(16,16,16,16);
+        innerWallRight.setRegion(32,16,16,16);
+
+        innerWallTLCorner.setRegion(16, 0, 16, 16);
+        innerWallTRCorner.setRegion(32, 0, 16, 16);
+        innerWallBLCorner.setRegion(16,16,16,16);
+        innerWallBRCorner.setRegion(32,16,16,16);
+
+        innerWallTLTurn.setRegion(33, 52, 16, 16);
+        innerWallTRTurn.setRegion(49, 52, 16, 16);
+        innerWallBLTurn.setRegion(33,68,16,16);
+        innerWallBRTurn.setRegion(49,68,16,16);
+
+        innerWallTLTurn2.setRegion(66, 52, 16, 16);
+        innerWallTRTurn2.setRegion(82, 52, 16, 16);
+        innerWallBLTurn2.setRegion(66,68,16,16);
+        innerWallBRTurn2.setRegion(82,68,16,16);
 
         roomTopLeftWallTexture.setRegion(0, 0, 16, 16);
         roomTopWallTexture.setRegion(48, 0, 16, 16);

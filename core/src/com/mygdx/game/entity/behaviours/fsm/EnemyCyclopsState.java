@@ -73,7 +73,7 @@ public enum EnemyCyclopsState implements State<EnemyCyclops> {
         public void enter(EnemyCyclops enemy) {
             enemy.enemyAI.setBehaviour(null);
             enemy.alerted = true;
-            enemy.enemyAI.setMaxLinearSpeed(800);
+            enemy.enemyAI.setMaxLinearSpeed(15);
 
             Arrive seekPlayer = enemy.arriveAtPlayer();
 
@@ -115,7 +115,7 @@ public enum EnemyCyclopsState implements State<EnemyCyclops> {
         @Override
         public void exit(EnemyCyclops enemy) {
             //System.out.println("No longer attacking the player");
-            enemy.enemyAI.setMaxLinearSpeed(100);
+            enemy.enemyAI.setMaxLinearSpeed(15);
         }
 
         @Override
@@ -158,7 +158,7 @@ public enum EnemyCyclopsState implements State<EnemyCyclops> {
         @Override
         public void exit(EnemyCyclops enemy) {
             enemy.enemyAI.setMaxLinearSpeed(enemy.defaultSpeed);
-            enemy.enemyAI.setMaxLinearAcceleration(400);
+            enemy.enemyAI.setMaxLinearAcceleration(150);
             enemy.enemyAI.setMaxAngularAcceleration(1000);
             enemy.enemyAI.setMaxAngularSpeed(1000);
         }
