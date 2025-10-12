@@ -1,7 +1,9 @@
 package com.mygdx.game;
 
         import com.badlogic.gdx.Gdx;
+        import com.badlogic.gdx.Input;
         import com.badlogic.gdx.scenes.scene2d.InputEvent;
+        import com.badlogic.gdx.scenes.scene2d.InputListener;
         import com.badlogic.gdx.scenes.scene2d.ui.*;
         import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
@@ -12,15 +14,16 @@ public class OptionsMenu {
     public static Table optionsMenuContainer;
     public static VerticalGroup optionsMenuGroup;
     public TextButton fullscreenOffButton, fullscreenOnButton, backButton;
-    public boolean fullscreen;
+    public boolean fullscreen, volumeSliding;
     public float volume;
     public Slider slider;
+    public Label fullscreenLabel, difficultyLabel, volumeLabel;
 
     public OptionsMenu (){
 
         volume = 100;
 
-        slider = new Slider(0, 100, 1, false, skin);
+
 
         // https://libgdx.com/wiki/graphics/2d/scene2d/skin
         //uiskin.atlas, uiskin.json, uiskin.png, default.png and default.fnt all required
@@ -40,41 +43,96 @@ public class OptionsMenu {
         playButton.getLabelCell().align(Align.right);
         playButton.padLeft(6.5f);
  */
-            slider.setValue(100);
-            slider.setVisible(true);
 
 
-            //optionsMenuClosed = true;
-            Label off = new Label("FULLSCREEN: OFF", skin);
-            Label on = new Label("FULLSCREEN: ON", skin);
-            TextButton fullscreenOffButton = new TextButton("", skin, "default");
-            fullscreenOffButton.setLabel(off);
+        slider = new Slider(0, 100, 2, false, skin);
+        slider.setValue(100);
+        slider.setVisible(true);
 
-            fullscreenOffButton.addListener(new ClickListener() {
-                @Override
-                public void clicked (InputEvent event, float x, float y) {
-                    if (fullscreen) {
-                        fullscreen = false;
-                        fullscreenOffButton.setLabel(off);
-                        Gdx.graphics.setWindowedMode(600,900);
-                    } else {
-                        fullscreen = true;
-                        fullscreenOffButton.setLabel(on);
-                        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-                    }
+        Label volume = new Label("VOLUME:", skin);
+        TextButton volumeButton = new TextButton("", skin, "default");
+        volumeButton.setLabel(volume);
+        slider.moveBy(90,9);
+        //slider.setFillParent(true);
+        slider.setSize(100,10);
 
-                    //Difficulty
-                    //Fullscreen
-                    //Shaders
-                    //Sound
-                    // Called when player clicks on Options button
+        volumeButton.addActor(slider);
+
+        slider.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                // This method is called when a touch/mouse button is pressed down on the slider.
+                // Return true to indicate that the event was handled and subsequent touchDragged/touchUp events should be received.
+                System.out.println("Slider touchDown!");
+                volumeSliding = true;
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                // This method is called when a touch/mouse button is released on the slider.
+                System.out.println("Slider touchUp!");
+                volumeSliding = false;
+            }
+
+            @Override
+            public void touchDragged(InputEvent event, float x, float y, int pointer) {
+                // This method is called when a touch/mouse is dragged over the slider.
+                System.out.println("Slider touchDragged!");
+            }
+        });
+
+       //
+
+        volumeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked (InputEvent event, float x, float y) {
+                System.out.println(event.getButton() + "CCCCCCCCCCCCCCCCCCCCCCCCCC");
+                /*
+                bad and cursed don't use
+                if (slider.getValue() != 100 && !volumeSliding) {
+                    slider.setValue(100);
+                }  else if (slider.getValue() == 100) {
+                    slider.setValue(0);
                 }
-            });
-            fullscreenOffButton.padLeft(6.5f);
-            optionsMenuGroup.addActor(fullscreenOffButton);
 
-        optionsMenuStage.addActor(slider);
-        slider.moveBy(40,50);
+                 */
+            }
+        });
+        volumeButton.padRight(112f);
+        volumeButton.padLeft(6.5f);
+        optionsMenuGroup.addActor(volumeButton);
+
+        //optionsMenuClosed = true;
+        Label off = new Label("FULLSCREEN: OFF", skin);
+        Label on = new Label("FULLSCREEN: ON", skin);
+        TextButton fullscreenOffButton = new TextButton("", skin, "default");
+        fullscreenOffButton.setLabel(off);
+
+        fullscreenOffButton.addListener(new ClickListener() {
+            @Override
+            public void clicked (InputEvent event, float x, float y) {
+                if (fullscreen) {
+                    fullscreen = false;
+                    fullscreenOffButton.setLabel(off);
+                    Gdx.graphics.setWindowedMode(600,900);
+                } else {
+                    fullscreen = true;
+                    fullscreenOffButton.setLabel(on);
+                    Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+                }
+
+                //Difficulty
+                //Fullscreen
+                //Shaders
+                //Sound
+                // Called when player clicks on Options button
+            }
+        });
+        fullscreenOffButton.padLeft(6.5f);
+        optionsMenuGroup.addActor(fullscreenOffButton);
+
+
 
 
         Label easy = new Label("DIFFICULTY: EASY", skin);

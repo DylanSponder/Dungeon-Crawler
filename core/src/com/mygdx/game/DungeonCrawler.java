@@ -1011,7 +1011,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		}
 
 		for (Fire f : fires) {
-			if (f.type == 3) {
+			if (f.type == 3 || f.type == 5) {
 				if (!f.blue) {
 					currentFrame = tx.flameAnimation.getKeyFrame(stateTime, f.active);
 				} else {

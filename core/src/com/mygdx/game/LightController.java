@@ -33,7 +33,10 @@ public class LightController {
                     //small flames - candles, torches and fire arrows
                     light.randLightLevel = Random.randomInt(600,450);//550
                 }
-
+                if (light.type == 5) {
+                    //small flames - candles, torches and fire arrows
+                    light.randLightLevel = Random.randomInt(500,400);//550
+                }
                 //convert to float proper
                 light.randLightLevel = light.randLightLevel/1000;
 

@@ -197,6 +197,8 @@ public class CreateAssets {
     public TextureRegion water = new TextureRegion(oceanWaterTexture, 0, 0, 16, 16);
     public TextureRegion wave = new TextureRegion(waveTexture, 0, 0, 16, 9);
 
+    public TextureRegion air = new TextureRegion(roomBackground, 0, 0, 16, 16);
+
     //Pit textures
     public TextureRegion pit = new TextureRegion(pitsTexture, 0, 0, 16, 16);
     public TextureRegion pitFloor1 = new TextureRegion(pitsTexture, 0, 0, 16, 16);
@@ -1120,6 +1122,7 @@ public class CreateAssets {
         level1Track.setVolume(0.2f);
         //potBreaking.setPitch(0,0.1f);
 
+        air.setRegion(80, 64, 16, 16);
 
         roomFloorTexture.setRegion(2, 94, 16, 16);
         roomFloorTexture2.setRegion(22, 94, 16, 16);

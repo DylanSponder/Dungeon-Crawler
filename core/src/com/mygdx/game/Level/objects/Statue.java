@@ -11,7 +11,7 @@ public class Statue {
 
     public World world;
     public float statueX, statueY;
-    public Body statueBody;
+    public Body statueBody, statuePedBody;
     public Fixture statueHitbox;
     public boolean visible, loweredAlpha;
     public int type;
@@ -31,6 +31,13 @@ public class Statue {
 
         statueBody = bodyFactory.createStatueHitbox(world, statueX, statueY);
         statueBody.setUserData("Statue");
+    }
+
+    public void createStatuePedestalHitbox(float statueX, float statueY, World world) {
+        BodyFactory bodyFactory = new BodyFactory();
+
+        statuePedBody = bodyFactory.createStatuePedestalHitbox(world, statueX, statueY);
+        statuePedBody.setUserData("Wall");
     }
 
     public static void renderStatue(SpriteBatch batch, TextureRegion tex, float x, float y, int width, int height, boolean visible, Statue s, float alpha) {// int alpha
