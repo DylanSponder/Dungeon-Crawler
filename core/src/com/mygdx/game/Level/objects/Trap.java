@@ -70,13 +70,13 @@ public class Trap {
                     batch.draw(tx.fireArrowTrap,x,y,0,0,16,21,1,1,0);
                     break;
                 case 2:
-                    batch.draw(tx.fireArrowTrap,x,y,0,0,16,21,1,1,270);
+                    batch.draw(tx.fireArrowTrap,x,y - 0.5f,0,0,16,21,1,1,270);
                     break;
                 case 3:
                     batch.draw(tx.fireArrowTrap,x,y + 16,0,0,16,21,1,1,180);
                     break;
                 case 4:
-                    batch.draw(tx.fireArrowTrap,x + 16,y,0,0,16,21,1,1,90);
+                    batch.draw(tx.fireArrowTrap,x + 16,y - 1.5f,0,0,16,21,1,1,90);
                     break;
             }
         }
@@ -138,13 +138,13 @@ public class Trap {
                     batch.draw(tx.fireArrowTrapActivated,x-1,y-1,0,0,16,22,1,1,0);
                     break;
                 case 2:
-                    batch.draw(tx.fireArrowTrapActivated,x-1,y + 1,0,0,16,22,1,1,270);
+                    batch.draw(tx.fireArrowTrapActivated,x-1,y + 0.5f,0,0,16,22,1,1,270);
                     break;
                 case 3:
                     batch.draw(tx.fireArrowTrapActivated,x + 1,y + 17,0,0,16,22,1,1,180);
                     break;
                 case 4:
-                    batch.draw(tx.fireArrowTrapActivated,x + 17,y - 1,0,0,16,22,1,1,90);
+                    batch.draw(tx.fireArrowTrapActivated,x + 17,y - 2.5f,0,0,16,22,1,1,90);
                     break;
             }
         } else if (type == 3) {
@@ -182,8 +182,8 @@ public class Trap {
     }
 
     public void fireArrow(float x, float y, int type) {
-        trapSoundDelay = 1f;
-        trapDelay = 1.6f;
+        trapSoundDelay = 1.1f;
+        trapDelay = 1.8f;
         trapResetDelay = 3.3f;
         soundController.playSound("TrapOpens", 9, 9,0.1f);
         if (type == 1) {

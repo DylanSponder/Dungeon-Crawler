@@ -269,6 +269,20 @@ public class SoundController {
                 fireWhoosh.setPitch(id36, randall36/10);
                 fireWhoosh.setVolume(id36,finalVolume);
                 break;
+            case "WaterSplash":
+                Sound waterSplash = tx.waterSplash;
+                long id37 = waterSplash.play();
+                float randall37 = Random.randomFloat(pitchMax,pitchMin);
+                waterSplash.setPitch(id37, randall37/10);
+                waterSplash.setVolume(id37,finalVolume);
+                break;
+            case "WaterSplosh":
+                Sound waterSplosh = tx.waterSplosh;
+                long id38 = waterSplosh.play();
+                float randall38 = Random.randomFloat(pitchMax,pitchMin);
+                waterSplosh.setPitch(id38, randall38/10);
+                waterSplosh.setVolume(id38,finalVolume);
+                break;
         }
     }
 }

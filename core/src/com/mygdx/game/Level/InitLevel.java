@@ -1,5 +1,8 @@
 package com.mygdx.game.level;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
@@ -9,6 +12,8 @@ import com.mygdx.game.level.objects.Room;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.mygdx.game.DungeonCrawler.camera;
 
 public class InitLevel {
     public LevelParser lp;
@@ -40,6 +45,10 @@ public class InitLevel {
         xy = new SetRoomXandY();
 
         //sets tiles to their appropriate texture
+        cr.airTile.setTile(new StaticTiledMapTile(tx.air));
+
+
+        //load cells
         cr.middleFloorTile.setTile(new StaticTiledMapTile(tx.roomFloorTexture));
         cr.middleFloorTile2.setTile(new StaticTiledMapTile(tx.roomFloorTexture2));
         cr.middleFloor2Tile.setTile(new StaticTiledMapTile(tx.roomFloor2Texture));

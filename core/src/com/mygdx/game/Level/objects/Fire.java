@@ -54,8 +54,10 @@ public class Fire extends Light{
         else if (type == 2) {
             this.fireColor = new Color(0f,0,1f,0.7f);
         }
-        else {
+        else if (type == 3 || type == 6){
             this.fireColor = new Color(0.30f,0.12f,0,0.70f);
+        } else if (type == 5){
+
         }
     }
 
@@ -65,7 +67,7 @@ public class Fire extends Light{
             this.torchLight = torchLight;
         }
 
-        this.light = new PointLight(rayHandler,400, this.fireColor,65, fireX + 8, fireY + 8);
+        this.light = new PointLight(rayHandler,400, color,65, fireX + 8, fireY + 8);
         this.light.setXray(true);
 
 
@@ -94,6 +96,15 @@ public class Fire extends Light{
                 fireBody = bodyFactory.createFireBody(world, fireX, fireY-1f);
                 fireBody.setUserData("Fire");
             }
+            else if (this.type == 5){
+                fireBody.setUserData("Fire");
+            }
+            else if (this.type == 6){
+                fireBody = bodyFactory.createCandleFlameBody(world, fireX + 5, fireY + 10.5f);
+                fireBody.setUserData("Fire");
+            }
+
+
         }
         //ConeLight fireLight2 = new ConeLight(rayHandler, 400, new Color(0.25f,0.20f,0,0.85f),70,fireX+8,fireY+16,270,70);
     }

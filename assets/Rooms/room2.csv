@@ -1,4 +1,4 @@
-﻿,,,,,,,tlw,tw,doortl,doortr,tw,trw,,,,,,,
+﻿,,,,,,,tlw,dtl,doortl,doortr,dtr,trw,,,,,,,a
 ,,,,,,,lw,fcoltu0,f,f,fcoltu0,rw,,,,,,,
 ,,,,,,,lw,fob1,fpot,fpot,fob1,rw,,,,,,,
 ,,,,,,,lw,fped2,f,fenemy,fped2,rw,,,,,,,
@@ -9,7 +9,7 @@ tlw,tw,tw,tw,tw,tw,tw,brt,f,f,f,f,blt,tw,tw,tw,tw,tw,tw,trw
 lw,fpot,f,fenemy,f,f,f,fped2,fob2,fpot,fpot,fob3,fped2,f,f,f,fenemy,f,fpot,rw
 dlu,f,fob2,f3,f2,fcob,f,fob1,f,f,f,f,fob3,f,fcob,f3,f2,fob2,f,dru
 doorul,f,f2,tlt,trt,f3,fenemy,fpot,f,fenemy4,f,f,fpot,fenemy,f2,tlt,trt,f3,f,doorur
-doorll,f,f3,blt,brt,f2,f,fpot,f,fenemy4,f,f,fpot,f,f3,blt,brt,f2,f,doorlr
+doorll,f,f3,blt,brt,f2,f,fpot,f,f,fenemy4,f,fpot,f,f3,blt,brt,f2,f,doorlr
 dll,f,fob3,f2,f3,fcob,f,fob2,f,f,f,f,fob3,f,fcob,f2,f3,fob3,f,drl
 lw,fpot,f,f,f,f,f,fped2,fob1,fpot,fpot,fob2,fped2,f,f,f,f,f,fpot,rw
 blw,bw,bw,bw,bw,bw,bw,trt,fped2,f,f,f,tlt,bw,bw,bw,bw,bw,bw,brw

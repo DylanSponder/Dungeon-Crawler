@@ -21,6 +21,8 @@ public class CreateCell {
     public TiledMapTileLayer.Cell innerWallLeftTile;
     public TiledMapTileLayer.Cell innerWallRightTile;
 
+    public TiledMapTileLayer.Cell airTile;
+
     public TiledMapTileLayer.Cell pitTile;
     public TiledMapTileLayer.Cell pitFloorTile;
     public TiledMapTileLayer.Cell pitFloor2Tile;
@@ -141,6 +143,8 @@ public class CreateCell {
 
 
     public void InitializeCells() {
+        airTile = new TiledMapTileLayer.Cell();
+
         middleFloorTile = new TiledMapTileLayer.Cell();
         middleFloorTile2 = new TiledMapTileLayer.Cell();
         middleFloor2Tile = new TiledMapTileLayer.Cell();

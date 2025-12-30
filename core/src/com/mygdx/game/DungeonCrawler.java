@@ -52,6 +52,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch bossMinotaurBatch, statueBatch, flagBatch, waveBatch, waterBatch, waterfallBatch, raisedFloorBatch, rubbleBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch, roofBatch, columnBaseLowerBatch, heartBatch, pedestalUpperBatch;
 	public static SpriteBatch trapBatch, playerBatch, weaponBatch;
+	public SpriteBatch potParticlesBatch;
+	public static ParticleEffect potParticleEffect;
 	public static World world;
 	public static Viewport vp;
 	public static Skin skin;
@@ -138,7 +140,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static BitmapFont defaultFont, defaultFont2, defaultFont3, defaultFont4;
 	public static ArrayList<Text> susMessages, alertMessages;
 	public AssetManager assetManager;
-	public static float stateTime, stateTime2, stateTime3, stateTime4, stateTime5;
+	public static float stateTime, stateTime2, stateTime3, stateTime4, stateTime5, potTime;
 	public TextureRegion currentFrame;
 	public ShaderProgram flagShader, waveShader;
 	public float flag_time, ocean_time, ocean2_time;
@@ -147,8 +149,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static boolean leanDown = false, leanUp = false, leanLeft = false, leanRight = false, leanUpLeft = false, leanUpRight = false;
 	public static boolean moveUp = false, moveDown = false, moveLeft = false, moveRight = false;
 
+	public boolean potReset, potTimeUpdate;
+
 	@Override
 	public void create() {
+
+		potReset = false;
+		potTimeUpdate = false;
 
 		//the game is not in debug mode by default
 		debug = false;
@@ -263,6 +270,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		tutorial = new ArrayList<>();
 		locks = new ArrayList<>();
 		pots = new ArrayList<>();
+		potParticlesBatch = new SpriteBatch();
+		potParticleEffect = new ParticleEffect();
 		brokenPots = new ArrayList<>();
 		potArrayMap = new ArrayMap<>();
 		torches = new ArrayList<>();
@@ -423,6 +432,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//enable the collision listener to listen to world collision events
 		world.setContactListener(lc);
 
+		potParticleEffect.load(Gdx.files.internal("HellasDungeon/Particles/Pot/Pot.p"),Gdx.files.internal("HellasDungeon/Particles/Pot/"));
+
+		potParticleEffect.start();
+
+
 		if (!debug) {
 			//set the window mode to fullscreen and hide the cursor when in the game window
 			//Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
@@ -437,7 +451,16 @@ public class DungeonCrawler extends ApplicationAdapter {
 	@Override
 	public void render() {
 
+		//
+
 			fpsLogger.log();
+
+			Rectangle cameraBounds = new Rectangle(
+				camera.position.x - camera.viewportWidth * camera.zoom / 2,
+				camera.position.y - camera.viewportHeight * camera.zoom / 2,
+				camera.viewportWidth * camera.zoom,
+				camera.viewportHeight * camera.zoom
+			);
 
 			if (!optionsMenuClosed) {
 				optionsMenu.volume = optionsMenu.slider.getValue();
@@ -471,6 +494,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 			Gdx.gl.glClearColor(0.15f, 0.1f, 0.40f, 1f);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+		Rectangle objectBounds = new Rectangle();
+
 		for (Water w : ocean) {
 
 			//GenerateLevel.init.roomList.get(r.index).roomHitbox.getBody().getPosition().x;
@@ -483,9 +508,18 @@ public class DungeonCrawler extends ApplicationAdapter {
 			waveShader.setUniformf("u_time", flag_time + w.time);
 			waveShader.setUniformf("u_speed", 1.6f);
 			 */
-			waterBatch.begin();
-			Water.renderWater(waterBatch, tx.oceanWater, w.waterX, w.waterY, 16, 16);
-			waterBatch.end();
+			objectBounds.set(
+				w.waterX,
+				w.waterY,
+				16,
+				16
+			);
+
+			if (cameraBounds.overlaps(objectBounds)) {
+				waterBatch.begin();
+				Water.renderWater(waterBatch, tx.oceanWater, w.waterX, w.waterY, 16, 16);
+				waterBatch.end();
+			}
 		}
 
 		ocean_time += Gdx.graphics.getDeltaTime();
@@ -494,6 +528,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			currentFrame = tx.waveAnimation.getKeyFrame(w.stateTime, true);
 			w.stateTime += Gdx.graphics.getDeltaTime();
+
+			objectBounds.set(
+					w.waveX,
+					w.waveY,
+					16,
+					16
+			);
 
 			//GenerateLevel.init.roomList.get(r.index).roomHitbox.getBody().getPosition().x;
 
@@ -507,9 +548,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 										Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, true);
 			 */
-			waveBatch.begin();
-			Wave.renderWave(waveBatch, currentFrame, w.waveX, w.waveY, 16, 9);
-			waveBatch.end();
+			if (cameraBounds.overlaps(objectBounds)) {
+				waveBatch.begin();
+				Wave.renderWave(waveBatch, currentFrame, w.waveX, w.waveY, 16, 9);
+				waveBatch.end();
+			}
 		}
 
 
@@ -543,13 +586,21 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			//wall arrow traps
 			for (Trap tr : traps) {
-				trapBatch.begin();
-				if (!tr.active) {
-					Trap.renderTrap(trapBatch, tr.direction, tr.trapBody.getPosition().x, tr.trapBody.getPosition().y, tr.type);
-				} else {
-					Trap.renderTrapActive(trapBatch, tr.direction, tr.trapBody.getPosition().x, tr.trapBody.getPosition().y, tr.type);
+				objectBounds.set(
+						tr.trapX,
+						tr.trapY,
+						16,
+						16
+				);
+				if (cameraBounds.overlaps(objectBounds)) {
+					trapBatch.begin();
+					if (!tr.active) {
+						Trap.renderTrap(trapBatch, tr.direction, tr.trapBody.getPosition().x, tr.trapBody.getPosition().y, tr.type);
+					} else {
+						Trap.renderTrapActive(trapBatch, tr.direction, tr.trapBody.getPosition().x, tr.trapBody.getPosition().y, tr.type);
+					}
+					trapBatch.end();
 				}
-				trapBatch.end();
 			}
 
 			//render open doors
@@ -854,8 +905,43 @@ public class DungeonCrawler extends ApplicationAdapter {
 					reversedPotMap = true;
 				}
 
+				for (Pot p : pots) {
+					//p.particleEffect.setPosition(p.potBody.getPosition().x, p.potBody.getPosition().y);
+				}
+
 				for (OrderedMap.Entry<Body, Pot> potEntry : potArrayMap.entries()) {
 					Pot value = potEntry.value;
+
+/*
+					//value.particleEffect.start();
+					potParticlesBatch.begin();
+					value.particleEffect.draw(potParticlesBatch, value.particleTime);
+					//value.renderParticles(potParticlesBatch, potEntry.key.getPosition().x, potEntry.key.getPosition().y,value.particleEffect, value.particleTime);
+					potParticlesBatch.end();
+						value.particleEffect.update(value.particleTime);
+						value.particleTime += Gdx.graphics.getDeltaTime();
+						value.particleEffect.setPosition(potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+						//p.particleEffect.draw(potParticlesBatch, p.particleTime);
+
+
+
+						//
+
+						if (value.particleEffect.isComplete()){
+							System.out.println("VBDSDFGF");
+							value.particleEffect.reset();
+							//
+							value.particleTime = 0;
+						} else {
+							System.out.println("DSASDFDSDF");
+
+						}
+
+ */
+
+
+
+
 					//render each pot
 					potBatch.begin();
 					if (value.POT_HEALTH < 1.5f) {
@@ -1011,7 +1097,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		}
 
 		for (Fire f : fires) {
-			if (f.type == 3 || f.type == 5) {
+			if (f.type == 3 || f.type == 5 || f.type == 6) {
 				if (!f.blue) {
 					currentFrame = tx.flameAnimation.getKeyFrame(stateTime, f.active);
 				} else {
@@ -1070,40 +1156,62 @@ public class DungeonCrawler extends ApplicationAdapter {
 		}
 
 		for (ColumnPiece c : columnPieces) {
-			pedestalBatch.begin();
-			switch (c.type) {
-				case 14:
-					pedestalBatch.draw(tx.pedestal1,c.columnX,c.columnY+2);
-					break;
-				case 15:
-					pedestalBatch.draw(tx.pedestal2,c.columnX,c.columnY+2);
-					break;
-				case 16:
-					pedestalBatch.draw(tx.pedestal3,c.columnX,c.columnY+2);
-					break;
-				case 17:
-					pedestalBatch.draw(tx.pedestal4,c.columnX,c.columnY+2);
-					break;
+			objectBounds.set(
+					c.columnX,
+					c.columnY,
+					16,
+					16
+			);
+			if (cameraBounds.overlaps(objectBounds)) {
+				pedestalBatch.begin();
+				switch (c.type) {
+					case 14:
+						pedestalBatch.draw(tx.pedestal1, c.columnX, c.columnY + 2);
+						break;
+					case 15:
+						pedestalBatch.draw(tx.pedestal2, c.columnX, c.columnY + 2);
+						break;
+					case 16:
+						pedestalBatch.draw(tx.pedestal3, c.columnX, c.columnY + 2);
+						break;
+					case 17:
+						pedestalBatch.draw(tx.pedestal4, c.columnX, c.columnY + 2);
+						break;
+				}
+				pedestalBatch.end();
 			}
-			pedestalBatch.end();
 		}
 
 
 
 
 		for (ColumnPiece c : columnPieces) {
-			columnBaseLowerBatch.begin();
-			if (c.type == 70) {
-				columnBaseLowerBatch.draw(tx.colBaseLower, c.columnX, c.columnY);
-			} else if (c.type == 71) {
-				columnBaseLowerBatch.draw(tx.colBase2Lower, c.columnX, c.columnY);
-			} else if (c.type == 730) {
-				columnBaseLowerBatch.draw(tx.colBase3Lower, c.columnX, c.columnY);
-			} else if (c.type == 740) {
-				columnBaseLowerBatch.draw(tx.colBase4Lower, c.columnX, c.columnY);
+			objectBounds.set(
+					c.columnX,
+					c.columnY,
+					16,
+					16
+			);
+			if (cameraBounds.overlaps(objectBounds)) {
+				columnBaseLowerBatch.begin();
+				if (c.type == 70) {
+					columnBaseLowerBatch.draw(tx.colBaseLower, c.columnX, c.columnY);
+				} else if (c.type == 71) {
+					columnBaseLowerBatch.draw(tx.colBase2Lower, c.columnX, c.columnY);
+				} else if (c.type == 730) {
+					columnBaseLowerBatch.draw(tx.colBase3Lower, c.columnX, c.columnY);
+				} else if (c.type == 740) {
+					columnBaseLowerBatch.draw(tx.colBase4Lower, c.columnX, c.columnY);
+				} else if (c.type == 750) {
+					columnBaseLowerBatch.draw(tx.colBase5Lower, c.columnX, c.columnY);
+				} else if (c.type == 760) {
+					columnBaseLowerBatch.draw(tx.colBase6Lower, c.columnX, c.columnY);
+				} else if (c.type == 770) {
+					columnBaseLowerBatch.draw(tx.colBase7Lower, c.columnX, c.columnY);
 				}
 				columnBaseLowerBatch.end();
 			}
+		}
 
 
 
@@ -1170,22 +1278,30 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 
 		for (ColumnPiece c : columnPieces) {
-			pedestalBatch.begin();
-			switch (c.type) {
-				case 14:
-					pedestalBatch.draw(tx.pedestal1upper,c.columnX,c.columnY+14);
-					break;
-				case 15:
-					pedestalBatch.draw(tx.pedestal2upper,c.columnX,c.columnY+14);
-					break;
-				case 16:
-					pedestalBatch.draw(tx.pedestal3upper,c.columnX,c.columnY+14);
-					break;
-				case 17:
-					pedestalBatch.draw(tx.pedestal4,c.columnX,c.columnY+2);
-					break;
+			objectBounds.set(
+					c.columnX,
+					c.columnY,
+					16,
+					16
+			);
+			if (cameraBounds.overlaps(objectBounds)) {
+				pedestalBatch.begin();
+				switch (c.type) {
+					case 14:
+						pedestalBatch.draw(tx.pedestal1upper, c.columnX, c.columnY + 14);
+						break;
+					case 15:
+						pedestalBatch.draw(tx.pedestal2upper, c.columnX, c.columnY + 14);
+						break;
+					case 16:
+						pedestalBatch.draw(tx.pedestal3upper, c.columnX, c.columnY + 14);
+						break;
+					case 17:
+						pedestalBatch.draw(tx.pedestal4, c.columnX, c.columnY + 2);
+						break;
+				}
+				pedestalBatch.end();
 			}
-			pedestalBatch.end();
 		}
 
 		if (!potionArrayMap.isEmpty()) {
@@ -1892,6 +2008,33 @@ public class DungeonCrawler extends ApplicationAdapter {
 										c.lowerCreated = true;
 									}
 									break;
+								case 50:
+									c.loweredAlpha = false;
+									Column.renderPiece(columnBaseBatch,tx.colBase5, c.columnX, c.columnY, C.visible, c.alpha, C);
+
+									//columnBaseBatch.draw(tx.colBase, c.columnX, c.columnY);
+									if (!c.lowerCreated) {
+										c.lowerCreated = true;
+									}
+									break;
+								case 60:
+									c.loweredAlpha = false;
+									Column.renderPiece(columnBaseBatch,tx.colBase6, c.columnX, c.columnY, C.visible, c.alpha, C);
+
+									//columnBaseBatch.draw(tx.colBase, c.columnX, c.columnY);
+									if (!c.lowerCreated) {
+										c.lowerCreated = true;
+									}
+									break;
+								case 70:
+									c.loweredAlpha = false;
+									Column.renderPiece(columnBaseBatch,tx.colBase7, c.columnX, c.columnY, C.visible, c.alpha, C);
+
+									//columnBaseBatch.draw(tx.colBase, c.columnX, c.columnY);
+									if (!c.lowerCreated) {
+										c.lowerCreated = true;
+									}
+									break;
 								case 7:
 
 									c.loweredAlpha = false;
@@ -2105,73 +2248,105 @@ public class DungeonCrawler extends ApplicationAdapter {
 				}
 			}
 
-		//render columnPieces based on their type - these could also be enums
+
+		potParticleEffect.setPosition(camera.position.x, camera.position.y - 20);
+		//potParticleEffect.update(potTime);
+
+
+		potParticlesBatch.begin();
+		potParticleEffect.draw(potParticlesBatch, potTime);
 
 
 
-		for (Column C : columns) {
-			for (ColumnPiece c : C.columnPieces) {
+		potParticlesBatch.end();
 
-					columnStemBatch.begin();
-				switch (c.type) {
-					case 4:
+		System.out.println(potParticleEffect.isComplete());
 
-						//if (C.visible) {
-							c.loweredAlpha = false;
-						//}
-						Column.renderPiece(columnStemBatch,tx.colStem, c.columnX, c.columnY, C.visible, c.alpha, C);
-						break;
-					case 5:
-						if (C.visible) {
-							c.loweredAlpha = false;
-						}
-						//columnStemBatch.draw(tx.colStemDamaged1, c.columnX, c.columnY);
-						break;
-					case 6:
-						if (C.visible) {
-							c.loweredAlpha = false;
-						}
-						//columnStemBatch.draw(tx.colStemDamaged2, c.columnX, c.columnY);
-						break;
+		//potParticleEffect.reset();
+
+		if (!potTimeUpdate) {
+			potTimeUpdate = true;
+			Timer.schedule(new Timer.Task() {
+				@Override
+				public void run() {
+					//potTime += Gdx.graphics.getDeltaTime();
+					potTime = Gdx.graphics.getDeltaTime();
+					//potParticleEffect.update(potTime);
+					potTimeUpdate = false;
+
 				}
-				if (!c.loweredAlpha) {
-					c.loweredAlpha = true;
-					Timer.schedule(new Timer.Task() {
-						@Override
-						public void run() {
-							if (!C.visible) {
-								if (c.alpha > 35) {
-									c.loweredAlpha = false;
-								}
-								//r.loweredAlpha = true;
+			}, 0.1f);
+		}
 
-								if (c.alpha >= 0)
-									c.alpha--;
-									c.alpha--;
-							} else {
-								if (c.alpha < 100 && c.alpha > 0) {
-									c.loweredAlpha = false;
-									c.alpha++;
-									c.alpha++;
-								} else if (c.alpha < 0) {
-
-									c.alpha = 15;
-									c.loweredAlpha = true;
-								}
-							}
-						}
-					}, 0.001f);
-				}
+			if (!potReset && potParticleEffect.isComplete()) {
+				potReset = true;
+				Timer.schedule(new Timer.Task() {
+					@Override
+					public void run() {
+						potTime = 0;
+						potReset = false;
+						potParticleEffect.reset();
+						potParticleEffect.scaleEffect(0.16f);
+					}
+				}, 0.4f);
+			}
 
 
 
-					columnStemBatch.end();
-				}
+
+		Timer.schedule(new Timer.Task() {
+			@Override
+			public void run() {
+
+			}
+		}, 0.5f);
+
+		/*
+		if (potTime > Gdx.graphics.getDeltaTime() + 2f) {
+			//potParticleEffect.allowCompletion();
+			potTime = 0;
 
 		}
+
+		 */
+
+
+
+
+
+		//render columnPieces based on their type - these could also be enums
+
 		for (Column C : columns) {
 			for (ColumnPiece c : C.columnPieces) {
-					columnTopBatch.begin();
+				objectBounds.set(
+						c.columnX,
+						c.columnY,
+						16,
+						16
+				);
+				if (cameraBounds.overlaps(objectBounds)) {
+					columnStemBatch.begin();
+					switch (c.type) {
+						case 4:
+
+							//if (C.visible) {
+							c.loweredAlpha = false;
+							//}
+							Column.renderPiece(columnStemBatch, tx.colStem, c.columnX, c.columnY, C.visible, c.alpha, C);
+							break;
+						case 5:
+							if (C.visible) {
+								c.loweredAlpha = false;
+							}
+							//columnStemBatch.draw(tx.colStemDamaged1, c.columnX, c.columnY);
+							break;
+						case 6:
+							if (C.visible) {
+								c.loweredAlpha = false;
+							}
+							//columnStemBatch.draw(tx.colStemDamaged2, c.columnX, c.columnY);
+							break;
+					}
 					if (!c.loweredAlpha) {
 						c.loweredAlpha = true;
 						Timer.schedule(new Timer.Task() {
@@ -2185,8 +2360,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 									if (c.alpha >= 0)
 										c.alpha--;
-										c.alpha--;
-										c.alpha--;
+									c.alpha--;
 								} else {
 									if (c.alpha < 100 && c.alpha > 0) {
 										c.loweredAlpha = false;
@@ -2202,44 +2376,91 @@ public class DungeonCrawler extends ApplicationAdapter {
 						}, 0.001f);
 					}
 
-						switch (c.type) {
-							case 1:
-								if (C.visible) {
-									c.loweredAlpha = false;
-								}
-								Column.renderPiece(columnTopBatch,tx.colTop1, c.columnX, c.columnY, C.visible, c.alpha, C);
-								break;
-							case 2:
-								if (C.visible) {
-									c.loweredAlpha = false;
-								}
 
-								Column.renderPiece(columnTopBatch,tx.colTop2, c.columnX, c.columnY, C.visible, c.alpha, C);
-								break;
-							case 3:
-								if (C.visible) {
-									c.loweredAlpha = false;
-								}
+					columnStemBatch.end();
+					}
+				}
 
-								Column.renderPiece(columnTopBatch,tx.colTop3, c.columnX, c.columnY, C.visible, c.alpha, C);
-								break;
-							case 10:
-								if (C.visible) {
-									c.loweredAlpha = false;
-								}
+		}
+		for (Column C : columns) {
+			for (ColumnPiece c : C.columnPieces) {
+				objectBounds.set(
+						c.columnX,
+						c.columnY,
+						16,
+						16
+				);
+				if (cameraBounds.overlaps(objectBounds)) {
+					columnTopBatch.begin();
+					if (!c.loweredAlpha) {
+						c.loweredAlpha = true;
+						Timer.schedule(new Timer.Task() {
+							@Override
+							public void run() {
+								if (!C.visible) {
+									if (c.alpha > 35) {
+										c.loweredAlpha = false;
+									}
+									//r.loweredAlpha = true;
 
-								Column.renderPiece(columnTopBatch,tx.colTop4, c.columnX, c.columnY, C.visible, c.alpha, C);
-								break;
-							case 11:
-								if (C.visible) {
-									c.loweredAlpha = false;
-								}
+									if (c.alpha >= 0)
+										c.alpha--;
+									c.alpha--;
+									c.alpha--;
+								} else {
+									if (c.alpha < 100 && c.alpha > 0) {
+										c.loweredAlpha = false;
+										c.alpha++;
+										c.alpha++;
+									} else if (c.alpha < 0) {
 
-								Column.renderPiece(columnTopBatch,tx.colTop5, c.columnX, c.columnY, C.visible, c.alpha, C);
-								break;
-						}
+										c.alpha = 15;
+										c.loweredAlpha = true;
+									}
+								}
+							}
+						}, 0.001f);
+					}
+
+					switch (c.type) {
+						case 1:
+							if (C.visible) {
+								c.loweredAlpha = false;
+							}
+							Column.renderPiece(columnTopBatch, tx.colTop1, c.columnX, c.columnY, C.visible, c.alpha, C);
+							break;
+						case 2:
+							if (C.visible) {
+								c.loweredAlpha = false;
+							}
+
+							Column.renderPiece(columnTopBatch, tx.colTop2, c.columnX, c.columnY, C.visible, c.alpha, C);
+							break;
+						case 3:
+							if (C.visible) {
+								c.loweredAlpha = false;
+							}
+
+							Column.renderPiece(columnTopBatch, tx.colTop3, c.columnX, c.columnY, C.visible, c.alpha, C);
+							break;
+						case 10:
+							if (C.visible) {
+								c.loweredAlpha = false;
+							}
+
+							Column.renderPiece(columnTopBatch, tx.colTop4, c.columnX, c.columnY, C.visible, c.alpha, C);
+							break;
+						case 11:
+							if (C.visible) {
+								c.loweredAlpha = false;
+							}
+
+							Column.renderPiece(columnTopBatch, tx.colTop5, c.columnX, c.columnY, C.visible, c.alpha, C);
+							break;
+					}
 
 					columnTopBatch.end();
+						}
 					}
 
 			}
@@ -2262,58 +2483,65 @@ public class DungeonCrawler extends ApplicationAdapter {
 				flag_time += Gdx.graphics.getDeltaTime();
 				for (Flag f : flags) {
 
-					//shader variables passed into flag fragment shader
-					flagBatch.setShader(flagShader);
-					flagShader.setUniformf("u_swayIntensity", 0.05f);//0.03
-					flagShader.setUniformf("u_verticalDensity", 1f);
-					flagShader.setUniformf("u_time", flag_time + f.time);
-					flagShader.setUniformf("u_speed", 1.6f);
-					flagShader.setUniformf("u_alpha", f.alpha / 90);
+					objectBounds.set(
+							f.flagX,
+							f.flagY,
+							16,
+							16
+					);
+					if (cameraBounds.overlaps(objectBounds)) {
 
-					flagBatch.begin();
+						//shader variables passed into flag fragment shader
+
+						flagBatch.setShader(flagShader);
+						flagShader.setUniformf("u_swayIntensity", 0.05f);//0.03
+						flagShader.setUniformf("u_verticalDensity", 1f);
+						flagShader.setUniformf("u_time", flag_time + f.time);
+						flagShader.setUniformf("u_speed", 1.6f);
+						flagShader.setUniformf("u_alpha", f.alpha / 90);
 
 
+						flagBatch.begin();
 
-					if (!f.loweredAlpha) {
-						f.loweredAlpha = true;
-						Timer.schedule(new Timer.Task() {
-							@Override
-							public void run() {
-								if (!f.visible) {
-									if (f.alpha > 50) {
-										f.loweredAlpha = false;
-									}
-									//r.loweredAlpha = true;
 
-									if (f.alpha >= 0)
+						if (!f.loweredAlpha) {
+							f.loweredAlpha = true;
+							Timer.schedule(new Timer.Task() {
+								@Override
+								public void run() {
+									if (!f.visible) {
+										if (f.alpha > 50) {
+											f.loweredAlpha = false;
+										}
+										//r.loweredAlpha = true;
+
+										if (f.alpha >= 0)
+											f.alpha--;
 										f.alpha--;
 										f.alpha--;
-										f.alpha--;
-								} else {
-									if (f.alpha < 100 && f.alpha > 0) {
-										f.loweredAlpha = false;
-										f.alpha++;
-										f.alpha++;
-									} else if (f.alpha < 0) {
-										f.alpha = 15;
-										f.loweredAlpha = true;
+									} else {
+										if (f.alpha < 100 && f.alpha > 0) {
+											f.loweredAlpha = false;
+											f.alpha++;
+											f.alpha++;
+										} else if (f.alpha < 0) {
+											f.alpha = 15;
+											f.loweredAlpha = true;
+										}
 									}
 								}
-							}
-						}, 0.001f);
+							}, 0.001f);
+						}
+
+						if (f.visible) {
+							f.loweredAlpha = false;
+						}
+
+
+						Flag.renderFlag(flagBatch, tx.flag1, f.flagBody.getPosition().x - 4.5f, f.flagBody.getPosition().y - 8, 9, 16, f.visible, f);
+						flagBatch.end();
 					}
-
-					if (f.visible) {
-						f.loweredAlpha = false;
-					}
-
-
-
-					Flag.renderFlag(flagBatch, tx.flag1, f.flagBody.getPosition().x - 4.5f, f.flagBody.getPosition().y - 8, 9, 16, f.visible, f);
-					flagBatch.end();
 				}
-
-
 
 
 		for (Statue s : statues) {
@@ -2894,6 +3122,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 			enemyGhostBatch.setProjectionMatrix(camera.combined);
 			enemyEyeBatch.setProjectionMatrix(camera.combined);
 
+			potParticlesBatch.setProjectionMatrix(camera.combined);
+
 			lockBatch.setProjectionMatrix(camera.combined);
 			doorBatch.setProjectionMatrix(camera.combined);
 			potBatch.setProjectionMatrix(camera.combined);
@@ -3070,9 +3300,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 		}
 
 		//set camera zoom
-		if (!GenerateLevel.init.roomList.get(player.currentRoom).isShop && !debug) {
+		if (!GenerateLevel.init.roomList.get(player.currentRoom).isShop && !debug && !optionsMenu.fullscreen) {
 			//0.60
 			camera.zoom = 0.65f;//0.60f
+		} else if (optionsMenu.fullscreen && !debug) {
+			camera.zoom = 0.85f;
 		}
 		else if (!debug){
 			//camera.zoom = 0.8f;
@@ -3090,8 +3322,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 	@Override
 	public void dispose() {
+
 		playerBatch.dispose();
 		hud.stage.dispose();
+		inventoryBatch.dispose();
 		arrowBatch.dispose();
 		skullBatch.dispose();
 		boneBatch.dispose();
@@ -3110,15 +3344,26 @@ public class DungeonCrawler extends ApplicationAdapter {
 		cobBatch.dispose();
 		coinBatch.dispose();
 		lockBatch.dispose();
+		waterBatch.dispose();
+		sightFontBatch.dispose();
+		alertFontBatch.dispose();
+		raisedFloorBatch.dispose();
 		waveBatch.dispose();
 		flagBatch.dispose();
 		roofBatch.dispose();
 		doorBatch.dispose();
 		potBatch.dispose();
+		statueBatch.dispose();
 		potionBatch.dispose();
 		columnTopBatch.dispose();
 		columnStemBatch.dispose();
 		columnBaseBatch.dispose();
+		//potParticlesBatch.dispose();
+		columnBaseLowerBatch.dispose();
+		weaponBatch.dispose();
+		pedestalBatch.dispose();
+		rubbleBatch.dispose();
+		eyebeamBatch.dispose();
 		fireBatch.dispose();
 		rayHandler.dispose();
 		world.dispose();
@@ -3182,12 +3427,21 @@ public class DungeonCrawler extends ApplicationAdapter {
 				player.timeSinceMoved += Gdx.graphics.getDeltaTime();
 
 				float randomFootstepTime = Random.randomFloat(0.14f,0.14f);
+				float randomSploshTime = Random.randomFloat(1.4f,0.4f);
 				int randomFootstep = Random.randomInt(3,1);
+
+				if (player.timeSinceMoved > randomSploshTime & player.sploshing) {
+					player.sploshing = false;
+				}
 
 				String footstep = "Footstep" + randomFootstep;
 
-				if (player.timeSinceMoved > randomFootstepTime) {
+				if (player.timeSinceMoved > randomFootstepTime && !player.swimming) {
 					soundController.playSound(footstep,10,8,0.015f);
+					player.timeSinceMoved = 0;
+				} else if (player.swimming && !player.sploshing) {
+					player.sploshing = true;
+					soundController.playSound("WaterSplosh",8,6,0.03f);
 					player.timeSinceMoved = 0;
 				}
 			} else {

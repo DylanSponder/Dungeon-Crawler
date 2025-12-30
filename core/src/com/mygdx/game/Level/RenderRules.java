@@ -25,6 +25,10 @@ public class RenderRules {
             for (String i : levelLayer) {
                // (int i = 0; i < layerSize; i++)
                 switch (levelLayer.get(index)) {
+                    case "a":
+                        drawableLevelLayer.add(index, "airTile");
+                        index++;
+                        break;
                     case "f":
                         drawableLevelLayer.add(index, "middleFloorTile");
                         index++;
@@ -719,6 +723,56 @@ public class RenderRules {
                             break;
                         }
                          */
+
+                        else if (levelLayer.get(index).matches("[a].+")) {
+                            StringBuffer sbr = new StringBuffer(i);
+                            sbr.delete(0, 1);
+                            String strr = sbr.toString();
+                            //floor + columntop4 + fire
+
+                            if (strr.matches("([0-9])+")) {
+
+                                String roofr = strr;
+                                String strRoofExt = "0";
+
+                                StringBuffer sb3 = new StringBuffer(roofr);
+                                sb3.delete(1, 3);
+                                String strRoofType = sb3.toString();
+
+                                StringBuffer sb4 = new StringBuffer(strr);
+                                sb4.delete(0, 1);
+                                if (!sb4.toString().isEmpty()) {
+                                    strRoofExt = sb4.toString();
+                                }
+
+                                switch (strRoofType) {
+                                    case "1":
+                                        String roofFinal1;
+                                        roofFinal1 = "aroof1" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal1);
+                                        break;
+                                    case "2":
+                                        String roofFinal2;
+                                        roofFinal2 = "aroof2" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal2);
+                                        break;
+                                    case "3":
+                                        String roofFinal3;
+                                        roofFinal3 = "aroof3" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal3);
+                                        break;
+                                    case "4":
+                                        String roofFinal4;
+                                        roofFinal4 = "aroof4" + strRoofExt;
+                                        drawableLevelLayer.add(index, roofFinal4);
+                                        break;
+                                }
+                                index++;
+                            }
+                        }
+
+
+
                         else if (levelLayer.get(index).matches("[f].+")) {
                             StringBuffer sb = new StringBuffer(i);
                             sb.delete(0, 1);
@@ -835,6 +889,11 @@ public class RenderRules {
                                     break;
                                 }
                                 if (str.matches("(csldo[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cSldo[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
                                     break;
@@ -965,6 +1024,81 @@ public class RenderRules {
                                     break;
                                 }
                                 if (str.matches("(coldB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(colts[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(colis[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(colds[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coltS[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coliS[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coldS[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coltp[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coftp[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(csftp[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cSftp[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(colip[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coldp[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coltP[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coliP[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(coldP[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
                                     break;
@@ -1137,6 +1271,10 @@ public class RenderRules {
                             switch (str) {
                                 case "cand":
                                     drawableLevelLayer.add(index,"cand");
+                                    index++;
+                                    break;
+                                case "cand2":
+                                    drawableLevelLayer.add(index,"cand2");
                                     index++;
                                     break;
                                 case "cands":

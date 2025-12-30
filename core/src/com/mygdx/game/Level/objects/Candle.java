@@ -11,7 +11,7 @@ import com.mygdx.game.box2D.BodyFactory;
 public class Candle extends Light{
     public float candX, candY;
     private World world;
-    public Body candBody;
+    public Body candBody, candFlameBody;
     public Fixture obHitbox;
     public int type;
 
@@ -30,6 +30,7 @@ public class Candle extends Light{
         this.candBody = bodyFactory.createCandle(world, candX, candY);
 
         this.candBody.setUserData("Candle");
+
 
 
         return this.candBody;

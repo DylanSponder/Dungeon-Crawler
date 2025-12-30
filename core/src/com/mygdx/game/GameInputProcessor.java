@@ -23,7 +23,7 @@ public class GameInputProcessor implements InputProcessor {
     public boolean canAttack = true;
         @Override
         public boolean scrolled(float amountX, float amountY) {
-        if (DungeonCrawler.debug) {
+        if (DungeonCrawler.debug || optionsMenu.fullscreen) {
             //System.out.println(camera.zoom);
 
             if ((camera.zoom >= 0.1f && camera.zoom <= 24f)) {
@@ -285,6 +285,9 @@ public class GameInputProcessor implements InputProcessor {
             }
             if (keycode == Input.Keys.NUM_5) {
                 DungeonCrawler.PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED;
+            }
+            if (keycode == Input.Keys.NUM_6) {
+                DungeonCrawler.PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED + 10000;
             }
             if (keycode == Input.Keys.NUM_9) {
                 hud.inventory.addPotion();

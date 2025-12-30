@@ -26,7 +26,7 @@ public class Player {
     public boolean midAnimationFrame;
     public boolean hasGreekFire, hasShield, hasTorch, torchApplied, hasChisel;
     public int greekFireUses;
-    public boolean floorCleared, roomCleared, playerInput;
+    public boolean floorCleared, roomCleared, playerInput, sploshing;
     public float stateTime, timeSinceMoved;
     public PointLight playerLight;
 

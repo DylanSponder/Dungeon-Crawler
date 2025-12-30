@@ -2,11 +2,11 @@ a,a,a,a30,a,a,a,a,a,a,a,a,a,a,a
 tlw,tw,tw,tw,tw,toru,dtl,doortl,doortr,dtr,toru,tw,tw,tw,trw
 lw,f,f,f,f,f,fcsldo0,f,f,fcSldo0,f,f,f,f,f
 torl,f,f2,f2,f2,f2,f2,f2cands,f2,f2,f2,f2,f2,f,torr
-dlu,fcsldo0,f2,f,fcoltb1,f,fcoftb1,f,fcoftb1,f,fcoltb1,f,f2,fcSldo0,dru
+dlu,fcsldo0,f2,f,fcoltb1,f,fcoltb1,f,fcoltb1,f,fcoltb1,f,f2,fcSldo0,dru
 doorul,f,f2,f,dftl,dfu,dfu,dfu,dfu,dfu,dftr,f,f2cands,f,doorur
 doorll,f,f2cands,f,dfl,f,f,f,f,f,dfr,f,f2,f,doorlr
 dll,f,f2,f,dfbl,dfd,dfd,dfd,dfd,dfd,dfbr,f,f2,f,drl
 torl,fcsldo0,f2,f,fcoltb1,f,fcoftb1,f,fcoftb1,f,fcoltb1,f,f2,fcSldo0,torr
-lw,f,f2,f2,f2,f2,f2,f2cands,f2,f2,f2,f2,f2,f,rw
-lw,f,f,f,f,fcsldo0,f,f,fcSldo0,f,f,f,f,f,rw
+lwtr2,fped1fireoff,f2,f2,f2,f2,f2,f2cands,f2,f2,f2,f2,f2,fped1fireoff,rwtr2
+lw,f,f,f,f,fcsldo0,f,f,fcSldo0,fpot,f,fpot,f,f,rw
 blw,bw,bw,bw,tord,dbl,doorbl,doorbr,dbr,tord,bw,bw,bw,bw,brw

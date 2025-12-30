@@ -5,9 +5,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 
 public class CreateAssets {
 
@@ -48,6 +46,8 @@ public class CreateAssets {
     Texture playerWalkUpLeftAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkUpLeft.png"));
     Texture playerWalkUpRightAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/WalkUpRight.png"));
 
+    //Particle texture atlases
+    //public TextureAtlas potSherds = new TextureAtlas(Gdx.files.internal("HellasDungeon/Particles/Pot/PotSherds.atlas"));
 
     Texture playerAttackTexture = new Texture(Gdx.files.internal("HellasDungeon/Entity/Player/SeparateAnim/Attack.png"));
 
@@ -125,7 +125,13 @@ public class CreateAssets {
     Texture roof11x11 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/11x11.png"));
     Texture roof15x15 = new Texture(Gdx.files.internal("HellasDungeon/Level/Objects/Roofs/15x15.png"));
 
+    //particles
+
+
     Music level1Track = Gdx.audio.newMusic(Gdx.files.internal("HellasDungeon/Music/Level1Track.mp3"));
+
+    public Sound waterSplash = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/watersplash.mp3"));
+    public Sound waterSplosh = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/watersplosh.mp3"));
 
     public Sound potBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/potbreaking4.mp3"));
     public Sound skullBreaking = Gdx.audio.newSound(Gdx.files.internal("HellasDungeon/Sounds/skullbreaking.mp3"));
@@ -586,11 +592,18 @@ public class CreateAssets {
     public TextureRegion colBase3 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colBase4 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colBase5 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+
+    public TextureRegion colBase6 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion colBase7 = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+
     public TextureRegion colBaseLower = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colBase2Lower = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colBase3Lower = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colBase4Lower = new TextureRegion(columnsTextureSheet, 0,0,16,16);
     public TextureRegion colBase5Lower = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+
+    public TextureRegion colBase6Lower = new TextureRegion(columnsTextureSheet, 0,0,16,16);
+    public TextureRegion colBase7Lower = new TextureRegion(columnsTextureSheet, 0,0,16,16);
 
     public TextureRegion pedestal1 = new TextureRegion(columnsTextureSheet, 0,0,16,12);
     public TextureRegion pedestal1upper = new TextureRegion(columnsTextureSheet, 0,0,16,4);
@@ -1241,8 +1254,13 @@ public class CreateAssets {
         colBase2Lower.setRegion(16,48,16,11);
         colBase3Lower.setRegion(112,48,16,11);
         colBase4Lower.setRegion(128,55,16,4);
-        colBase5.setRegion(128, 32, 16, 16);
-        colBase5Lower.setRegion(128,55,16,4);
+        colBase5.setRegion(112, 32, 16, 16);
+        colBase5Lower.setRegion(112,48,16,11);
+
+        colBase6.setRegion(112, 0, 16, 16);
+        colBase6Lower.setRegion(112,21,16,11);
+        colBase7.setRegion(128, 0, 16, 16);
+        colBase7Lower.setRegion(128,21,16,11);
 
         pedestal1.setRegion(32, 36, 16, 12);
         pedestal1upper.setRegion(32, 32, 16, 4);

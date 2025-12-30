@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.OrderedMap;
@@ -42,6 +43,7 @@ public class GameContactListener implements ContactListener {
         //System.out.println(colliderStr + " " + collideeStr);
         if (colliderStr == "Water" && collidee.getUserData() == "PlayerBound") {
             player.swimming = true;
+            soundController.playSound("WaterSplash",5f,4f,0.10f);
             DungeonCrawler.PLAYER_SPEED_MULTI = 35f;
         }
 
@@ -62,6 +64,9 @@ public class GameContactListener implements ContactListener {
 
                                     soundController.playSound("PotSmash",5f,4f,0.05f);
                                     brokenPots.add(p);
+                                    //potParticleEffect.start();
+                                    //p.particleEffect.start();
+
                                 }
                             } else {
 
@@ -69,6 +74,9 @@ public class GameContactListener implements ContactListener {
                                     p.POT_HEALTH--;
                                     p.POT_HEALTH--;
                                     brokenPots.add(p);
+                                    //potParticleEffect.start();
+                                    //p.particleEffect.start();
+
                             }
                         }
                     }
@@ -1385,7 +1393,8 @@ public class GameContactListener implements ContactListener {
                     break;
                 case "Water":
                     if (collider.getUserData() == "PlayerBound") {
-                        System.out.println("SEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXQQQQ");
+                        soundController.playSound("WaterSplash",5f,4f,0.20f);
+                        System.out.println("Sound: Water Splash!");
                         player.swimming = true;
                         break;
                     }
