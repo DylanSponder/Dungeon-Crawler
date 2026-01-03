@@ -76,6 +76,12 @@ public class CreateAssets {
     Texture shieldTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Shield/Sprite.png"));
     Texture chiselTexture = new Texture(Gdx.files.internal("HellasDungeon/Weapons/Chisel/SpriteInHand.png"));
     Texture enemySkullTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySkull/SpriteSheet.png"));
+
+    Texture enemySkullUpAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySkull/SeparateAnim/Up.png"));
+    Texture enemySkullDownAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySkull/SeparateAnim/Down.png"));
+    Texture enemySkullLeftAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySkull/SeparateAnim/Left.png"));
+    Texture enemySkullRightAnimationSheet = new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySkull/SeparateAnim/Right.png"));
+
     Texture enemySpiderTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemySpider/SpriteSheet.png"));
     Texture enemyGhostTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemyGhost/SpriteSheet.png"));
     Texture enemyGhostAlertTexture =  new Texture(Gdx.files.internal("HellasDungeon/Entity/EnemyGhost/SpriteSheetAlerted.png"));
@@ -323,6 +329,42 @@ public class CreateAssets {
     public TextureRegion cobwebTexture = new TextureRegion(roomBackground,0,0,16,16);
 
     //animations
+    public TextureRegion enemySkullWalkUpAnimationTexture = new TextureRegion(enemySkullUpAnimationSheet,0,0,15,16);
+    public TextureRegion enemySkullWalkDownAnimationTexture = new TextureRegion(enemySkullDownAnimationSheet,0,0,15,16);
+    public TextureRegion enemySkullWalkLeftAnimationTexture = new TextureRegion(enemySkullLeftAnimationSheet,0,0,15,16);
+    public TextureRegion enemySkullWalkRightAnimationTexture = new TextureRegion(enemySkullRightAnimationSheet,0,0,15,16);
+
+    public Animation<TextureRegion> enemySkullUpAnimation = new Animation<TextureRegion>(0.75f, enemySkullWalkUpAnimationTexture);
+    public Animation<TextureRegion> enemySkullDownAnimation = new Animation<TextureRegion>(0.75f, enemySkullWalkDownAnimationTexture);
+    public Animation<TextureRegion> enemySkullLeftAnimation = new Animation<TextureRegion>(0.75f, enemySkullWalkLeftAnimationTexture);
+    public Animation<TextureRegion> enemySkullRightAnimation = new Animation<TextureRegion>(0.75f, enemySkullWalkRightAnimationTexture);
+
+    TextureRegion[][] enemySkullUpTextureArray = TextureRegion.split(enemySkullUpAnimationSheet,
+            enemySkullUpAnimationSheet.getWidth() / 1,
+            enemySkullUpAnimationSheet.getHeight() / 13);
+
+    TextureRegion[] enemySkullUpFrames = new TextureRegion[1 * 13];
+
+    TextureRegion[][] enemySkullDownTextureArray = TextureRegion.split(enemySkullDownAnimationSheet,
+            enemySkullDownAnimationSheet.getWidth() / 1,
+            enemySkullDownAnimationSheet.getHeight() / 13);
+
+    TextureRegion[] enemySkullDownFrames = new TextureRegion[1 * 13];
+
+    TextureRegion[][] enemySkullLeftTextureArray = TextureRegion.split(enemySkullLeftAnimationSheet,
+            enemySkullLeftAnimationSheet.getWidth() / 1,
+            enemySkullLeftAnimationSheet.getHeight() / 10);
+
+    TextureRegion[] enemySkullLeftFrames = new TextureRegion[1 * 10];
+
+    TextureRegion[][] enemySkullRightTextureArray = TextureRegion.split(enemySkullRightAnimationSheet,
+            enemySkullRightAnimationSheet.getWidth() / 1,
+            enemySkullRightAnimationSheet.getHeight() / 10);
+
+    TextureRegion[] enemySkullRightFrames = new TextureRegion[1 * 10];
+
+
+
     public TextureRegion minotaurWalkUpAnimationTexture = new TextureRegion(minotaurWalkUpAnimationSheet,0,0,32,64);
     public TextureRegion minotaurWalkDownAnimationTexture = new TextureRegion(minotaurWalkDownAnimationSheet,0,0,32,64);
     public TextureRegion minotaurWalkLeftAnimationTexture = new TextureRegion(minotaurWalkLeftAnimationSheet,0,0,32,64);
@@ -568,11 +610,9 @@ public class CreateAssets {
     TextureRegion[] flameOutFrames = new TextureRegion[3 * 4];
 
 
-    //TODO: this is lazy - find some way to refactor
-    //edit: my depravity knows no bounds
     int index = 0, index2 = 0, index3 = 0, index4 = 0, index5 = 0, index6 = 0, index7 = 0, index8 = 0, index9 = 0, index10 = 0;
     int index11 = 0, index12 = 0, index13 = 0, index14 = 0, index15 = 0, index16 = 0, index17 = 0, index18 = 0, index19 = 0, index20 = 0, index21 = 0;
-    int index22 = 0, index23 = 0, index24 = 0, index25 = 0, index26 = 0, index27 = 0;
+    int index22 = 0, index23 = 0, index24 = 0, index25 = 0, index26 = 0, index27 = 0, index28 = 0, index29 = 0, index30 = 0, index31 = 0;
 
     //Column textures
 
@@ -740,8 +780,13 @@ public class CreateAssets {
 
     //Enemy sprites
 
-    Sprite enemySkullSprite = new Sprite(enemySkullTexture,0,0,16,16);
-    Sprite enemySkullAlertedSprite = new Sprite(enemySkullTexture,16,0,16,16);
+    Sprite enemySkullSprite = new Sprite(enemySkullTexture,0,0,15,16);
+    Sprite enemySkullAlertedSprite = new Sprite(enemySkullTexture,15,0,15,16);
+
+    Sprite enemySkullDownSprite = new Sprite(enemySkullTexture,0,0,16,16);
+    Sprite enemySkullUpSprite = new Sprite(enemySkullTexture,15,0,16,16);
+    Sprite enemySkullLeftSprite = new Sprite(enemySkullTexture,0,16,16,16);
+    Sprite enemySkullRightSprite = new Sprite(enemySkullTexture,15,16,16,16);
 
     Sprite enemySpiderUpSprite = new Sprite(enemySpiderTexture,0,0,16,16);
     Sprite enemySpiderDownSprite = new Sprite(enemySpiderTexture,16,0,16,16);
@@ -998,6 +1043,41 @@ public class CreateAssets {
 
         // Initialize the Animation with the frame interval and array of frames
         stunAnimation = new Animation<TextureRegion>(0.25f, stunFrames);
+
+        //initialize enemy skull Animations
+        for (int g = 0; g < 13; g++) {
+            for (int w = 0; w < 1; w++) {
+                enemySkullUpFrames[index28++] = enemySkullUpTextureArray[g][w];
+            }
+        }
+
+        enemySkullUpAnimation = new Animation<TextureRegion>(playerWalkSpeed, enemySkullUpFrames);
+
+        for (int g = 0; g < 13; g++) {
+            for (int w = 0; w < 1; w++) {
+                enemySkullDownFrames[index29++] = enemySkullDownTextureArray[g][w];
+            }
+        }
+
+        enemySkullDownAnimation = new Animation<TextureRegion>(playerWalkSpeed, enemySkullDownFrames);
+
+
+        for (int g = 0; g < 10; g++) {
+            for (int w = 0; w < 1; w++) {
+                enemySkullLeftFrames[index30++] = enemySkullLeftTextureArray[g][w];
+            }
+        }
+
+        enemySkullLeftAnimation = new Animation<TextureRegion>(playerWalkSpeed, enemySkullLeftFrames);
+
+        for (int g = 0; g < 10; g++) {
+            for (int w = 0; w < 1; w++) {
+                enemySkullRightFrames[index31++] = enemySkullRightTextureArray[g][w];
+            }
+        }
+
+        enemySkullRightAnimation = new Animation<TextureRegion>(playerWalkSpeed, enemySkullRightFrames);
+
 
         //initialize minotaur Animations
         for (int g = 0; g < 1; g++) {

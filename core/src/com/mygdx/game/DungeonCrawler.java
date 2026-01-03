@@ -52,8 +52,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch bossMinotaurBatch, statueBatch, flagBatch, waveBatch, waterBatch, waterfallBatch, raisedFloorBatch, rubbleBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch, roofBatch, columnBaseLowerBatch, heartBatch, pedestalUpperBatch;
 	public static SpriteBatch trapBatch, playerBatch, weaponBatch;
-	public SpriteBatch potParticlesBatch;
-	public static ParticleEffect potParticleEffect;
+	public SpriteBatch potParticlesBatch, boneParticlesBatch;
+	public static ParticleEffect potParticleEffect, boneParticleEffect;
 	public static World world;
 	public static Viewport vp;
 	public static Skin skin;
@@ -272,6 +272,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		pots = new ArrayList<>();
 		potParticlesBatch = new SpriteBatch();
 		potParticleEffect = new ParticleEffect();
+		boneParticlesBatch = new SpriteBatch();
+		boneParticleEffect = new ParticleEffect();
 		brokenPots = new ArrayList<>();
 		potArrayMap = new ArrayMap<>();
 		torches = new ArrayList<>();
@@ -434,7 +436,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		potParticleEffect.load(Gdx.files.internal("HellasDungeon/Particles/Pot/Pot.p"),Gdx.files.internal("HellasDungeon/Particles/Pot/"));
 
-		potParticleEffect.start();
+		boneParticleEffect.load(Gdx.files.internal("HellasDungeon/Particles/Bone/Bone.p"),Gdx.files.internal("HellasDungeon/Particles/Bone/"));
 
 
 		if (!debug) {
@@ -912,6 +914,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 				for (OrderedMap.Entry<Body, Pot> potEntry : potArrayMap.entries()) {
 					Pot value = potEntry.value;
 
+					//value.particleEffect.setPosition(potEntry.key.getPosition().x, potEntry.key.getPosition().y);
 /*
 					//value.particleEffect.start();
 					potParticlesBatch.begin();
@@ -920,7 +923,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					potParticlesBatch.end();
 						value.particleEffect.update(value.particleTime);
 						value.particleTime += Gdx.graphics.getDeltaTime();
-						value.particleEffect.setPosition(potEntry.key.getPosition().x, potEntry.key.getPosition().y);
+
 						//p.particleEffect.draw(potParticlesBatch, p.particleTime);
 
 
@@ -1496,14 +1499,78 @@ public class DungeonCrawler extends ApplicationAdapter {
 				enemySkullBatch.begin();
 				if (!e.alerted) {
 					e.skullLight.setActive(false);
-					enemySkullBatch.draw(tx.enemySkullSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+					//enemySkullBatch.draw(tx.enemySkullSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+
+					if (e.facing == "Up") {
+					//	currentFrame = tx.enemySkullUpAlertedAnimation.getKeyFrame(stateTime, true);
+
+						enemySkullBatch.draw(tx.enemySkullUpSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+					} else if (e.facing == "Down") {
+					//	currentFrame = tx.enemySkullDownAlertedAnimation.getKeyFrame(stateTime, true);
+
+						enemySkullBatch.draw(tx.enemySkullDownSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+					} else if (e.facing == "Left") {
+					//	currentFrame = tx.enemySkullLeftAlertedAnimation.getKeyFrame(stateTime, true);
+
+						enemySkullBatch.draw(tx.enemySkullLeftSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+					} else if (e.facing == "Right") {
+					//	currentFrame = tx.enemySkullUpAlertedAnimation.getKeyFrame(stateTime, true);
+
+						enemySkullBatch.draw(tx.enemySkullRightSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+					} else {
+					//	currentFrame = tx.enemySkullDownAlertedAnimation.getKeyFrame(stateTime, true);
+
+						enemySkullBatch.draw(tx.enemySkullDownSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+					}
+
 				} else if (e.timeSinceAlerted >= 1) {
 					e.skullLight.setActive(true);
-					enemySkullBatch.draw(tx.enemySkullAlertedSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+
+					if (e.facing == "Up") {
+						currentFrame = tx.enemySkullUpAnimation.getKeyFrame(stateTime, true);
+
+						enemySkullBatch.draw(currentFrame, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+					} else if (e.facing == "Down") {
+						currentFrame = tx.enemySkullDownAnimation.getKeyFrame(stateTime, true);
+
+						enemySkullBatch.draw(currentFrame, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+					} else if (e.facing == "Left") {
+						currentFrame = tx.enemySkullLeftAnimation.getKeyFrame(stateTime, true);
+
+						enemySkullBatch.draw(currentFrame, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+					} else if (e.facing == "Right") {
+						currentFrame = tx.enemySkullRightAnimation.getKeyFrame(stateTime, true);
+
+						enemySkullBatch.draw(currentFrame, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+					} else {
+						currentFrame = tx.enemySkullDownAnimation.getKeyFrame(stateTime, true);
+
+						enemySkullBatch.draw(currentFrame, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+					}
+
+
+					//enemySkullBatch.draw(tx.enemySkullAlertedSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
 				} else {
 					e.skullLight.setActive(false);
-					enemySkullBatch.draw(tx.enemySkullSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+					enemySkullBatch.draw(tx.enemySkullDownSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
 				}
+				/*
+								if (e2.facing == "Up") {
+					enemySpiderBatch.draw(tx.enemySpiderUpSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
+				} else if (e2.facing == "Down") {
+					enemySpiderBatch.draw(tx.enemySpiderDownSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
+				} else if (e2.facing == "Left") {
+					enemySpiderBatch.draw(tx.enemySpiderLeftSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
+				} else if (e2.facing == "Right") {
+					enemySpiderBatch.draw(tx.enemySpiderRightSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
+				} else {
+					enemySpiderBatch.draw(tx.enemySpiderDownSprite, e2.enemyBody.getPosition().x - 8f, e2.enemyBody.getPosition().y - 7f, 16, 16);
+				}
+
+
+				 */
+
+
 				enemySkullBatch.end();
 			}
 
@@ -1930,11 +1997,18 @@ public class DungeonCrawler extends ApplicationAdapter {
 			if (boneIt.hasNext()) {
 				Body boneBody = boneIt.next();
 				if (boneArrayMap.containsKey(boneBody)) {
+					Bone b = boneArrayMap.get(boneBody);
+					b.particleEffect.setPosition(b.boneBody.getPosition().x, b.boneBody.getPosition().y);
+					b.particleEffect.reset();
+					b.particleEffect.scaleEffect(0.16f);
+					b.particleEffect.start();
+
 					soundController.playSound("Bone", 9, 8, 0.1f);
 					boneArrayMap.removeKey(boneBody);
 					world.destroyBody(boneBody);
 					boneIt.remove();
 					bones.remove(boneBody);
+
 				}
 			}
 		}
@@ -2249,18 +2323,27 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 
 
-		potParticleEffect.setPosition(camera.position.x, camera.position.y - 20);
+		//potParticleEffect.setPosition(camera.position.x, camera.position.y - 20);
 		//potParticleEffect.update(potTime);
-
+		boneParticlesBatch.begin();
+		boneParticleEffect.draw(boneParticlesBatch, Gdx.graphics.getDeltaTime());
+		boneParticlesBatch.end();
 
 		potParticlesBatch.begin();
-		potParticleEffect.draw(potParticlesBatch, potTime);
+		potParticleEffect.draw(potParticlesBatch, Gdx.graphics.getDeltaTime());
+		potParticlesBatch.end();
 
 
+		/*
+		potParticlesBatch.begin();
+
+		for (Pot p : pots) {
+			Pot.renderParticles(potParticlesBatch, p.potBody.getPosition().x, p.potBody.getPosition().y, p.particleEffect, p.particleTime);
+		}
 
 		potParticlesBatch.end();
 
-		System.out.println(potParticleEffect.isComplete());
+		 */
 
 		//potParticleEffect.reset();
 
@@ -2270,9 +2353,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 				@Override
 				public void run() {
 					//potTime += Gdx.graphics.getDeltaTime();
-					potTime = Gdx.graphics.getDeltaTime();
+					//potTime = Gdx.graphics.getDeltaTime();
 					//potParticleEffect.update(potTime);
-					potTimeUpdate = false;
+					//potTimeUpdate = false;
 
 				}
 			}, 0.1f);
@@ -2283,10 +2366,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 				Timer.schedule(new Timer.Task() {
 					@Override
 					public void run() {
+
 						potTime = 0;
 						potReset = false;
-						potParticleEffect.reset();
-						potParticleEffect.scaleEffect(0.16f);
+
+						//potParticleEffect.reset();
+
+
+
 					}
 				}, 0.4f);
 			}
@@ -3123,6 +3210,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			enemyEyeBatch.setProjectionMatrix(camera.combined);
 
 			potParticlesBatch.setProjectionMatrix(camera.combined);
+			boneParticlesBatch.setProjectionMatrix(camera.combined);
 
 			lockBatch.setProjectionMatrix(camera.combined);
 			doorBatch.setProjectionMatrix(camera.combined);

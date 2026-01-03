@@ -1,5 +1,6 @@
 package com.mygdx.game.entity.behaviours.fsm.projectiles;
 
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -12,8 +13,7 @@ import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.box2D.Box2DSteeringUtils;
 
-import static com.mygdx.game.DungeonCrawler.boneBodiesCollided;
-import static com.mygdx.game.DungeonCrawler.world;
+import static com.mygdx.game.DungeonCrawler.*;
 
 public class Bone {
     public Body boneBody;
@@ -25,6 +25,10 @@ public class Bone {
     public Vector2 outVector;
     public float vecMulti, orientation;
     public boolean aimed;
+    public float particleTime;
+    public ParticleEffect particleEffect;
+
+
 
     public Bone(World world, Body skullBody, float x, float y, boolean multiplied, boolean aimed, Vector2 orientation) {
         this.boneX = x;
@@ -49,6 +53,8 @@ public class Bone {
     }
 
     public Body createBone() {
+        this.particleEffect = boneParticleEffect;
+
         BodyFactory bodyFactory = new BodyFactory();
 
         this.boneBody = bodyFactory.createBoneBody(world, skullBody, boneX, boneY);

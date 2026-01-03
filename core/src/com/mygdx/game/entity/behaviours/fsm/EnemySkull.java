@@ -32,6 +32,7 @@ public class EnemySkull extends Enemy {
     public EnemySkullBox2DSteeringEntity enemyAI;
     public PointLight skullLight;
     public boolean active;
+    public String facing;
 
     public EnemySkull(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
@@ -280,6 +281,25 @@ public class EnemySkull extends Enemy {
     }
 
     public void update (float delta) {
+        float x = this.enemyAI.getLinearVelocity().x;
+        float y = this.enemyAI.getLinearVelocity().y;
+
+        float xA = Math.abs(x);
+        float yA = Math.abs(y);
+
+            if (xA > yA) {
+                if (x < 0) {
+                    this.facing = "Left";
+                } else {
+                    this.facing = "Right";
+                }
+            } else {
+                if (y < 0) {
+                    this.facing = "Down";
+                } else {
+                    this.facing = "Up";
+                }
+            }
 
         stateMachine.update();
     }

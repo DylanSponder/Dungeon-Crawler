@@ -65,7 +65,11 @@ public class GameContactListener implements ContactListener {
                                     soundController.playSound("PotSmash",5f,4f,0.05f);
                                     brokenPots.add(p);
                                     //potParticleEffect.start();
-                                    //p.particleEffect.start();
+                                    p.particleEffect.setPosition(p.potBody.getPosition().x, p.potBody.getPosition().y);
+                                    p.particleEffect.reset();
+                                    //potParticleEffect.scaleEffect(0.16f);
+                                    p.particleEffect.scaleEffect(0.16f);
+                                    p.particleEffect.start();
 
                                 }
                             } else {
@@ -75,7 +79,11 @@ public class GameContactListener implements ContactListener {
                                     p.POT_HEALTH--;
                                     brokenPots.add(p);
                                     //potParticleEffect.start();
-                                    //p.particleEffect.start();
+                                    p.particleEffect.setPosition(p.potBody.getPosition().x, p.potBody.getPosition().y);
+                                    p.particleEffect.reset();
+                                    //potParticleEffect.scaleEffect(0.16f);
+                                    p.particleEffect.scaleEffect(0.16f);
+                                    p.particleEffect.start();
 
                             }
                         }
