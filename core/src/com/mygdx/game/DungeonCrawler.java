@@ -1232,7 +1232,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			}
 		}
 			//render the player sprite on the player body
-			Player.renderPlayer(playerBatch, tx.playerTextureRegion, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 6f);
+			Player.renderPlayer(playerBatch, tx.playerTextureRegion, player.playerBody.getPosition().x - 7.5f, player.playerBody.getPosition().y - 6f);
 
 			playerBatch.end();
 
@@ -1265,14 +1265,14 @@ public class DungeonCrawler extends ApplicationAdapter {
 			playerBatch.begin();
 
 			if (!player.swimming) {
-				Player.renderPlayer(playerBatch, tx.playerTextureRegion, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 6f);
+				Player.renderPlayer(playerBatch, tx.playerTextureRegion, player.playerBody.getPosition().x - 7.5f, player.playerBody.getPosition().y - 6f);
 			}
 
 
 			if (player.facing == 3 && (playerMeleeAttacking || playerUsingChisel || playerRangedAttacking || playerShieldAttacking)) {
-				Player.renderPlayer(playerBatch, tx.playerHead, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 8f);
+				//Player.renderPlayer(playerBatch, tx.playerHead, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 8f);
 			} else {
-				Player.renderPlayer(playerBatch, tx.playerHead, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 6f);
+				//Player.renderPlayer(playerBatch, tx.playerHead, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 6f);
 			}
 
 			playerBatch.end();

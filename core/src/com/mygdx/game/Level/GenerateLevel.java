@@ -152,7 +152,7 @@ public class GenerateLevel {
                      if (roomsIndex == numRooms - 1) {
                         newRoom.roomNum = 13;
                     } else {
-                        newRoom.roomNum = 18;//random
+                        newRoom.roomNum = 16;//random
                         System.out.println("ROOM NUMBER: " + random);
                     }
                 }
