@@ -1,0 +1,16 @@
+a,,,,,,,,,,,,,,a
+tlw,dtl,doortl,doortr,dtr,tw,tw,tw,tw,tw,tw,tw,tw,tw,trw
+lw,f,f,f,f,f,f,f,f,f,f,f,f,f,dru
+lw,f,fped1fireb,f,f21,f,f,fcands,f,f,f,f,fped1fireb,f,doorur
+lw,f,f,pu1,pu1,pu1,pu1,pu1,pu1,pu1,pu1,pu1,f,f,doorlr
+lw,f,f,pl,prub1r,pd,pd,pd,pd,pd,prub1r,pr,f,f,drl
+lw,f,f,pl,prub1r,f,f,fcand2,f,f,prub1r,pr,f,f,rw
+lw,f,f,pl,prub1r,fcoltu1,f,fenemy,f,fcoltu1,prub1r,pr,f,f,rw
+lw,f,fcands,pl,prub1r,fcand2,f,fped3heal,f,fcand2,prub1r,pr,fcands,f,rw
+lw,f,f,pl,prub1r,f,f,f,f,f,prub1r,pr,f,f,rw
+lw,f,f,pl,prub1r,fcoltu1,f,fcand2,f,fcoltu1,prub1r,pr,f,f,rw
+dlu,f,f,pl,p,prub1r,prub1r,prub1r,prub1r,prub1r,p,pr,f,f,rw
+doorul,f,f,pd,pd,pd,pd,pd,pd,pd,pd,pd,f,f,rw
+doorll,f,fped1fireb,f,f,f,f,fcands,f,f,f,f,fped1fireb,f,rw
+dll,f,f,f,f,f,f,f,f,f,f,f,f,f,rw
+blw,bw,bw,bw,bw,bw,bw,bw,bw,bw,dbl,doorbl,doorbr,dbr,bw

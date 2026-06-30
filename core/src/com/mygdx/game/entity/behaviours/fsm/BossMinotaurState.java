@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.CreateAssets;
 import com.mygdx.game.DungeonCrawler;
+import com.mygdx.game.HUD;
 
 import java.util.Iterator;
 
@@ -21,6 +22,11 @@ public enum BossMinotaurState implements State<BossMinotaur> {
         public void enter(BossMinotaur enemy) {
             enemy.enemyAI.setBehaviour(null);
             enemy.alerted = true;
+
+            if (!enemy.bossActivated) {
+                HUD.showBossBar("Minotaur");
+                enemy.bossActivated = true;
+            }
 
             Arrive seekPlayer = enemy.arriveAtPlayer();
 
@@ -151,6 +157,8 @@ public enum BossMinotaurState implements State<BossMinotaur> {
         final CreateAssets tx = CreateAssets.getInstance();
         @Override
         public void enter (BossMinotaur enemy){
+
+            HUD.clearBossBar();
 
             Iterator<BossMinotaur> enemyIt = bossMinotaurs.iterator();
 

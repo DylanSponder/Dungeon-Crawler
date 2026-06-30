@@ -14,7 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.behaviours.fsm.EnemyCyclops;
-import com.mygdx.game.level.objects.Heart;
+import com.mygdx.game.level.objects.*;
 
 import static com.mygdx.game.DungeonCrawler.rayHandler;
 import static com.mygdx.game.DungeonCrawler.world;

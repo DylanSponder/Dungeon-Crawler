@@ -6,9 +6,8 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.behaviours.fsm.projectiles.Arrow;
-import com.mygdx.game.level.GenerateLevel;
-import com.mygdx.game.level.objects.Potion;
-import com.mygdx.game.level.objects.Text;
+import com.mygdx.game.level.*;
+import com.mygdx.game.level.objects.*;
 
 import static com.mygdx.game.DungeonCrawler.*;
 
@@ -159,7 +158,7 @@ public class GameInputProcessor implements InputProcessor {
                 arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y - 14f);
                 arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
                 arrowHitbox.setUserData("DownArrow");
-                arrowBody.setLinearVelocity(0, -400f);
+                arrowBody.setLinearVelocity(0, -ARROW_SPEED);
                 player.playerBody.applyForce(0,150000,0,0,true);
             } else if (moveUp || player.facing == 1) {
                 playerDirection = "Up";
@@ -168,7 +167,7 @@ public class GameInputProcessor implements InputProcessor {
                 arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y + 14f);
                 arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
                 arrowHitbox.setUserData("UpArrow");
-                arrowBody.setLinearVelocity(0, 400f);
+                arrowBody.setLinearVelocity(0, ARROW_SPEED);
                 player.playerBody.applyForce(0,-150000,0,0,true);
             } else if (moveLeft || player.facing == 4) {
                 playerDirection = "Left";
@@ -177,7 +176,7 @@ public class GameInputProcessor implements InputProcessor {
                 arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 14f, player.playerBody.getPosition().y+1);
                 arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
                 arrowHitbox.setUserData("LeftArrow");
-                arrowBody.setLinearVelocity(-400f, 0);
+                arrowBody.setLinearVelocity(-ARROW_SPEED, 0);
                 player.playerBody.applyForce(150000,0,0,0,true);
             } else if (moveRight || player.facing == 2) {
                 playerDirection = "Right";
@@ -186,7 +185,7 @@ public class GameInputProcessor implements InputProcessor {
                 arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x + 14f, player.playerBody.getPosition().y+1);
                 arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
                 arrowHitbox.setUserData("RightArrow");
-                arrowBody.setLinearVelocity(400f, 0);
+                arrowBody.setLinearVelocity(ARROW_SPEED, 0);
                 player.playerBody.applyForce(-150000,0,0,0,true);
             }
             //only triggers if the player hasn't moved at all yet - player starts facing down
@@ -197,7 +196,7 @@ public class GameInputProcessor implements InputProcessor {
                 arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y - 14f);
                 arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
                 arrowHitbox.setUserData("DownArrow");
-                arrowBody.setLinearVelocity(0, -400f);
+                arrowBody.setLinearVelocity(0, -ARROW_SPEED);
                 player.playerBody.applyForce(0,150000,0,0,true);
             }
             //pause player in place while attacking (attacks must be timed correctly!)
@@ -281,7 +280,7 @@ public class GameInputProcessor implements InputProcessor {
                 hud.updateGold(20,true);
             }
             if (keycode == Input.Keys.NUM_4) {
-                DungeonCrawler.PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED + 100;
+                DungeonCrawler.TIME_SCALE += 0.5f;
             }
             if (keycode == Input.Keys.NUM_5) {
                 DungeonCrawler.PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED;
@@ -356,6 +355,12 @@ public class GameInputProcessor implements InputProcessor {
                             hud.addItem(5);
                             break;
                         }
+                        case "WINGS": {
+                            player.hasWings = true;
+                            player.removeCollisionFilter((short) 4);
+                            hud.addItem(6);
+                            break;
+                        }
                     }
 
                     //int moneyAfterPurchase = money - item.cost;
@@ -367,8 +372,8 @@ public class GameInputProcessor implements InputProcessor {
                     player.shopkeeper.inventoryText.remove(0);
                     player.shopkeeper.inventoryText.remove(0);
 
-                    Text t1 = player.shopkeeper.Stock(item.kind, item.index);
-                    Text t2 = player.shopkeeper.DescribeStock(item.kind,item.index,item.cost);
+                    DisplayText t1 = player.shopkeeper.Stock(item.kind, item.index);
+                    DisplayText t2 = player.shopkeeper.DescribeStock(item.kind,item.index,item.cost);
                 }
             }
 
@@ -422,6 +427,12 @@ public class GameInputProcessor implements InputProcessor {
                             hud.addItem(5);
                             break;
                         }
+                        case "WINGS": {
+                            player.hasWings = true;
+                            hud.addItem(6);
+                            player.removeCollisionFilter((short) 4);
+                            break;
+                        }
                     }
                     //int moneyAfterPurchase = money - item.cost;
 
@@ -440,8 +451,8 @@ public class GameInputProcessor implements InputProcessor {
                     }
 
 
-                    Text t1 = player.shopkeeper.Stock(item.kind, item.index);
-                    Text t2 = player.shopkeeper.DescribeStock(item.kind,item.index,item.cost);
+                    DisplayText t1 = player.shopkeeper.Stock(item.kind, item.index);
+                    DisplayText t2 = player.shopkeeper.DescribeStock(item.kind,item.index,item.cost);
                 }
             }
 
@@ -481,6 +492,12 @@ public class GameInputProcessor implements InputProcessor {
                             hud.addItem(1);
                             break;
                         }
+                        case "WINGS": {
+                            player.hasWings = true;
+                            hud.addItem(6);
+                            player.removeCollisionFilter((short) 4);
+                            break;
+                        }
                         case "CHISEL": {
                             player.hasChisel = true;
                             hud.addItem(3);
@@ -514,8 +531,8 @@ public class GameInputProcessor implements InputProcessor {
                         player.shopkeeper.inventoryText.remove(4);
                     }
 
-                    Text t1 = player.shopkeeper.Stock(item.kind, item.index);
-                    Text t2 = player.shopkeeper.DescribeStock(item.kind,item.index,item.cost);
+                    DisplayText t1 = player.shopkeeper.Stock(item.kind, item.index);
+                    DisplayText t2 = player.shopkeeper.DescribeStock(item.kind,item.index,item.cost);
                 }
             }
         }
@@ -806,7 +823,7 @@ public class GameInputProcessor implements InputProcessor {
                 arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y - 14f);
                 arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
                 arrowHitbox.setUserData("DownArrow");
-                arrowBody.setLinearVelocity(0, -400f);
+                arrowBody.setLinearVelocity(0, -ARROW_SPEED);
 
                 player.playerBody.applyForce(0,150000,0,0,true);
             } else if (moveUp || player.facing == 1) {
@@ -816,7 +833,7 @@ public class GameInputProcessor implements InputProcessor {
                 arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y + 14f);
                 arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
                 arrowHitbox.setUserData("UpArrow");
-                arrowBody.setLinearVelocity(0, 400f);
+                arrowBody.setLinearVelocity(0, ARROW_SPEED);
 
                 player.playerBody.applyForce(0,-150000,0,0,true);
 
@@ -827,7 +844,7 @@ public class GameInputProcessor implements InputProcessor {
                 arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 14f, player.playerBody.getPosition().y+1);
                 arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
                 arrowHitbox.setUserData("LeftArrow");
-                arrowBody.setLinearVelocity(-400f, 0);
+                arrowBody.setLinearVelocity(-ARROW_SPEED, 0);
 
                 player.playerBody.applyForce(150000,0,0,0,true);
 
@@ -838,7 +855,7 @@ public class GameInputProcessor implements InputProcessor {
                 arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x + 14f, player.playerBody.getPosition().y+1);
                 arrowHitbox = Arrow.createArrowHitbox(arrowBody, false);
                 arrowHitbox.setUserData("RightArrow");
-                arrowBody.setLinearVelocity(400f, 0);
+                arrowBody.setLinearVelocity(ARROW_SPEED, 0);
 
                 player.playerBody.applyForce(-150000,0,0,0,true);
             }
@@ -850,7 +867,7 @@ public class GameInputProcessor implements InputProcessor {
                 arrowBody = Arrow.createArrowBody(world, player.playerBody.getPosition().x - 2f, player.playerBody.getPosition().y - 14f);
                 arrowHitbox = Arrow.createArrowHitbox(arrowBody, true);
                 arrowHitbox.setUserData("DownArrow");
-                arrowBody.setLinearVelocity(0, -400f);
+                arrowBody.setLinearVelocity(0, -ARROW_SPEED);
 
                 player.playerBody.applyForce(0,150000,0,0,true);
             }

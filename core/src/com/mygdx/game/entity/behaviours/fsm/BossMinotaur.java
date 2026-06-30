@@ -1,11 +1,9 @@
 package com.mygdx.game.entity.behaviours.fsm;
 
-import box2dLight.ChainLight;
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.badlogic.gdx.ai.steer.behaviors.Arrive;
 import com.badlogic.gdx.ai.steer.behaviors.Face;
-import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -13,17 +11,17 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.BossHealthbar;
 import com.mygdx.game.DungeonCrawler;
+import com.mygdx.game.HUD;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.utils.BossMinotaurBox2DSteeringEntity;
 import com.mygdx.game.entity.utils.ChargeBox2DSteeringEntity;
-import com.mygdx.game.level.objects.Text;
+import com.mygdx.game.level.objects.DisplayText;
 
 import static com.mygdx.game.DungeonCrawler.camera;
-import static com.mygdx.game.DungeonCrawler.rayHandler;
 
 public class BossMinotaur extends Enemy {
 
@@ -31,20 +29,22 @@ public class BossMinotaur extends Enemy {
     public int enemyID;
     public BossMinotaurBox2DSteeringEntity enemyAI;
     public String facing;
-    public boolean active, enraged, charging, locked;
+    public boolean active, enraged, charging, locked, bossActivated;
     public float stateTime, enrageTime, chargeTime;
-    public int enragedSpeed, chargingSpeed, MAX_HEALTH, chargeThreshold;
+    public int enragedSpeed, chargingSpeed, chargeThreshold;
+    public static int MAX_HEALTH;
     public Body chargeBody;
     public ChargeBox2DSteeringEntity chargeEntity;
+    public BossHealthbar minoHealthbar;
 
     public BossMinotaur(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
 
         this.shapeRenderer = new ShapeRenderer();
 
-        this.alertMessage = new Text(DungeonCrawler.defaultFont3,"!", Color.RED,true,1f,0.0045f,false, false, null, 0);
+        this.alertMessage = new DisplayText(DungeonCrawler.defaultFont3,"!", Color.RED,true,1f,0.0045f,false, false, null, 0);
 
-        this.lostSightMessage = new Text(DungeonCrawler.defaultFont4,"?", Color.YELLOW,true,1f,0.0045f,false, false, null, 0);
+        this.lostSightMessage = new DisplayText(DungeonCrawler.defaultFont4,"?", Color.YELLOW,true,1f,0.0045f,false, false, null, 0);
 
         this.rayCastable = false;
 
@@ -56,17 +56,20 @@ public class BossMinotaur extends Enemy {
 
         this.ENEMY_HEALTH = 30;
         //40
+        //30
 
         this.MAX_HEALTH = this.ENEMY_HEALTH;
 
+        this.minoHealthbar = new BossHealthbar(this.MAX_HEALTH, 1);
+
         this.playerInRange = false;
 
-        this.defaultSpeed = 22;
+        this.defaultSpeed = 14;
         //24
 
-        this.enragedSpeed = 30;
+        this.enragedSpeed = 24;
 
-        this.chargingSpeed = 80;
+        this.chargingSpeed = 60;
 
         this.chargeThreshold = 5;
 

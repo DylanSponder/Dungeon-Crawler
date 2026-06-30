@@ -17,10 +17,15 @@ public class BodyFactory {
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(x + 8, y + 8);
         bodyDef.fixedRotation = true;
-        body = world.createBody(bodyDef);
+
+        FixtureDef def = new FixtureDef();
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(8, 8);
-        body.createFixture(shape, 1.0f);
+        def.shape = shape;
+        //def.filter.categoryBits = 1;
+        //def.filter.maskBits = 1;
+
+        body = world.createBody(bodyDef).createFixture(def).getBody();
         shape.dispose();
         return body;
     }
@@ -71,6 +76,44 @@ public class BodyFactory {
         shape.dispose();
         return body;
     }
+
+    public Body createVineHitbox(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 4.5f, y + 8);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(5, 8);
+        Fixture temp = body.createFixture(shape, 1.0f);
+        temp.setSensor(true);
+        temp.setUserData("Vine");
+        shape.dispose();
+        return body;
+    }
+
+    public Body createPit(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 8, y + 8);
+        bodyDef.fixedRotation = true;
+
+        FixtureDef def = new FixtureDef();
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(8, 8);
+        def.shape = shape;
+        def.filter.categoryBits = 4;
+        short maskBits;
+        maskBits = 1 | 3;
+        def.filter.maskBits = maskBits;
+
+        body = world.createBody(bodyDef).createFixture(def).getBody();
+        shape.dispose();
+        return body;
+    }
+
     public Body createRubbleHitbox(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
@@ -103,6 +146,22 @@ public class BodyFactory {
         return body;
     }
 
+    public Body createVenusDeMiloHitbox(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 4.5f, y + 8);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(7.5f, 24f);
+        Fixture temp = body.createFixture(shape, 1.0f);
+        temp.setSensor(true);
+        temp.setUserData("Statue");
+        shape.dispose();
+        return body;
+    }
+
     public Body createStatuePedestalHitbox(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
@@ -114,7 +173,7 @@ public class BodyFactory {
         shape.setAsBox(7.5f, 3f);
         Fixture temp = body.createFixture(shape, 1.0f);
         temp.setSensor(true);
-        temp.setUserData("Wall");
+        temp.setUserData("Pedestal");
         shape.dispose();
         return body;
     }
@@ -188,6 +247,23 @@ public class BodyFactory {
         body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
         int hy = 8 * (size + 1);
+        shape.setAsBox(5, hy);
+        Fixture temp = body.createFixture(shape, 1.0f);
+        temp.setSensor(true);
+        temp.setUserData("Stem");
+        shape.dispose();
+        return body;
+    }
+
+    public Body createBrokenBaseHitbox(World world, float x, float y, int size, boolean bigbase) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 8, y + 11);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        int hy = 1;
         shape.setAsBox(5, hy);
         Fixture temp = body.createFixture(shape, 1.0f);
         temp.setSensor(true);
@@ -271,7 +347,7 @@ public class BodyFactory {
         return body;
     }
 
-    public Body createFireBody(World world, float x, float y) {
+    public Body createFireBody(World world, float x, float y, boolean extinguish) {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -292,18 +368,38 @@ public class BodyFactory {
         PolygonShape shape = new PolygonShape();
         if (direction == 1) {
             shape.setAsBox(4.5f, 8f);
-            bodyDef.position.set(x + 8, y + 4f);
+            bodyDef.position.set(x + 7.5f, y + 5f);
         } else if (direction == 2) {
             shape.setAsBox(8f, 4.5f);
-            bodyDef.position.set(x + 8, y + 4.5f);
+            bodyDef.position.set(x + 5, y - 7.5f);
         }
             else if (direction == 3) {
             shape.setAsBox(4.5f, 8f);
-            bodyDef.position.set(x - 7.5f, y - 6);
+            bodyDef.position.set(x - 7.5f, y - 5);
         }
             else if (direction == 4) {
             shape.setAsBox(8f, 4.5f);
-            bodyDef.position.set(x + 7, y + 4.5f);
+            bodyDef.position.set(x - 5, y + 7.5f);
+        }
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+
+
+        Fixture fix = body.createFixture(shape, 1.0f);
+        shape.dispose();
+        fix.setSensor(true);
+        return body;
+    }
+
+    public Body createBrazierBody(World world, float x, float y, int direction) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        PolygonShape shape = new PolygonShape();
+        if (direction == 1) {
+            shape.setAsBox(6f, 4f);
+            bodyDef.position.set(x + 7.5f, y + 5f);
         }
         bodyDef.type = BodyDef.BodyType.StaticBody;
 
@@ -452,10 +548,10 @@ public class BodyFactory {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
         if (upDown) {
-            bodyDef.position.set(x + 8, y);
+            bodyDef.position.set(x + 14, y);
 
         } else {
-            bodyDef.position.set(x + 16, y + 8);
+            bodyDef.position.set(x + 16, y + 14);
         }
 
         bodyDef.fixedRotation = true;
@@ -467,9 +563,9 @@ public class BodyFactory {
     public Fixture createDoorHitbox(Body body, boolean upDown) {
         PolygonShape shape = new PolygonShape();
         if (upDown) {
-            shape.setAsBox(8, 16);
+            shape.setAsBox(16, 16);
         } else {
-            shape.setAsBox(16, 8);
+            shape.setAsBox(16, 16);
         }
         Fixture fixture = body.createFixture(shape, 1.0f);
         shape.dispose();
@@ -502,17 +598,121 @@ public class BodyFactory {
         return body;
     }
 
-    public static Body createObstacle(World world, float x, float y) {
+    public static Body createObstacle(World world, float x, float y, int type) {
         Body body;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(x + 8f, y + 8.5f);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
-        CircleShape shape = new CircleShape();
-        shape.setRadius(8.4f);
-        body.createFixture(shape, 1.0f);
-        shape.dispose();
+        if (type > 3) {
+            if (type == 5 || type == 6) {
+                PolygonShape shape = new PolygonShape();
+                shape.setAsBox(8, 4);
+                body.createFixture(shape, 1.0f);
+                shape.dispose();
+            } else if (type == 7) {
+                CircleShape tempShape = new CircleShape();
+                tempShape.setRadius(0);
+                Vector2 vec1 = new Vector2(tempShape.getPosition().x,tempShape.getPosition().y + 40);
+                tempShape.setPosition(vec1);
+
+                PolygonShape shape2 = new PolygonShape();
+                Vector2 vec2 = new Vector2(tempShape.getPosition().x,tempShape.getPosition().y-40.6f);
+                shape2.setAsBox(4, 7.8f,vec2,0);
+                body.createFixture(shape2, 1.0f);
+
+                PolygonShape shape = new PolygonShape();
+
+                Vector2 vec = new Vector2(tempShape.getPosition().x,tempShape.getPosition().y-36.5f);
+                shape.setAsBox(8f, 4f,vec,0);
+               // shape.setAsBox(8, 4);
+                body.createFixture(shape, 1.0f);
+                shape.dispose();
+                shape2.dispose();
+                tempShape.dispose();
+
+
+                /*
+        PolygonShape minoShape1 = new PolygonShape();
+        PolygonShape minoShape2 = new PolygonShape();
+        PolygonShape minoShape3 = new PolygonShape();
+        PolygonShape minoHitboxShape = new PolygonShape();
+        CircleShape minoCornerShape1 = new CircleShape();
+        CircleShape minoCornerShape2 = new CircleShape();
+        CircleShape minoCornerShape3 = new CircleShape();
+        CircleShape minoCornerShape4 = new CircleShape();
+        minoCornerShape1.setRadius(3);
+        minoCornerShape2.setRadius(3);
+        minoCornerShape3.setRadius(3);
+        minoCornerShape4.setRadius(3);
+        Vector2 vec1 = new Vector2(minoCornerShape1.getPosition().x+7,minoCornerShape1.getPosition().y+3);
+        Vector2 vec2 = new Vector2(minoCornerShape1.getPosition().x-7,minoCornerShape1.getPosition().y-3);
+        Vector2 vec3 = new Vector2(minoCornerShape1.getPosition().x-7,minoCornerShape1.getPosition().y+3);
+        Vector2 vec4 = new Vector2(minoCornerShape1.getPosition().x+7,minoCornerShape1.getPosition().y-3);
+        minoCornerShape1.setPosition(vec1);
+        minoCornerShape2.setPosition(vec2);
+        minoCornerShape3.setPosition(vec3);
+        minoCornerShape4.setPosition(vec4);
+        Fixture minoCornerHitbox1 = body.createFixture(minoCornerShape1,1.0f);
+        Fixture minoCornerHitbox2 = body.createFixture(minoCornerShape2,1.0f);
+        Fixture minoCornerHitbox3 = body.createFixture(minoCornerShape3,1.0f);
+        Fixture minoCornerHitbox4 = body.createFixture(minoCornerShape4,1.0f);
+
+        minoShape1.setAsBox(8f, 5.98f);
+        minoShape2.setAsBox(10f, 4f);
+        minoShape3.setAsBox(4f, 4f);
+
+        Vector2 vec5 = new Vector2(minoCornerShape1.getPosition().x-7,minoCornerShape1.getPosition().y+2);
+        minoHitboxShape.setAsBox(12f, 12f,vec5,0);
+
+
+        Fixture minoHitbox = body.createFixture(minoShape1, 1.0f);
+        Fixture minoHitbox2 = body.createFixture(minoShape2, 1.0f);
+        Fixture minoBoundHitbox = body.createFixture(minoShape3, 1.0f);
+
+        Fixture minoDamageHitbox = body.createFixture(minoHitboxShape, 1.0f);
+
+        minoDamageHitbox.setSensor(true);
+
+        //minoBoundHitbox.setSensor(true);
+
+        //PolygonShape minoBottomSlope = new PolygonShape();
+        //minoBottomSlope.set(new float[]{-9,-6,0,-9,9,-6,-9,-6});
+        //Fixture minoB = body.createFixture(minoBottomSlope, 1.0f);
+        //minoB.setUserData("BossMinotaur");
+
+        body.setUserData("Enemy");
+        minoDamageHitbox.setUserData("BossMinotaur");
+        minoCornerHitbox1.setUserData("BossMinotaur");
+        minoCornerHitbox2.setUserData("BossMinotaur");
+        minoCornerHitbox3.setUserData("BossMinotaur");
+        minoCornerHitbox4.setUserData("BossMinotaur");
+        minoHitbox.setUserData("BossMinotaur");
+        minoHitbox2.setUserData("BossMinotaur");
+        minoBoundHitbox.setUserData("Enemy");
+        minoHitboxShape.dispose();
+        minoCornerShape1.dispose();
+        minoCornerShape2.dispose();
+        minoCornerShape3.dispose();
+        minoCornerShape4.dispose();
+        minoShape1.dispose();
+        minoShape2.dispose();
+        minoShape3.dispose();
+                 */
+            }
+            else {
+                PolygonShape shape = new PolygonShape();
+                shape.setAsBox(4, 8);
+                body.createFixture(shape, 1.0f);
+                shape.dispose();
+            }
+        } else {
+            CircleShape shape = new CircleShape();
+            shape.setRadius(8.4f);
+            body.createFixture(shape, 1.0f);
+            shape.dispose();
+        }
         return body;
     }
 
@@ -576,13 +776,24 @@ public class BodyFactory {
 
     public Fixture createModularWaterFixture(Body body, int height, int width) {
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(8 * height - 11, 8 * width - 8);
+        shape.setAsBox(8 * height - 9, 8 * width - 7);
         Fixture waterFixture = body.createFixture(shape, 1.0f);
         waterFixture.setUserData("Water");
         waterFixture.setSensor(true);
         shape.dispose();
         return waterFixture;
     }
+    /*
+        public Fixture createModularWaterFixture(Body body, int height, int width) {
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(8 * height - 11, 8 * width - 7);
+        Fixture waterFixture = body.createFixture(shape, 1.0f);
+        waterFixture.setUserData("Water");
+        waterFixture.setSensor(true);
+        shape.dispose();
+        return waterFixture;
+    }
+     */
 
     public static Body createImpassableCobweb(World world, float x, float y) {
         Body body2;
@@ -891,12 +1102,39 @@ public class BodyFactory {
         return minoBoundHitbox;
     }
 
+    public Body createEnemyBody(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(x,y);
+        bodyDef.fixedRotation = true;
+
+        body = world.createBody(bodyDef);
+        return body;
+    }
+
+
+
     public Fixture createEnemyHitbox(Body body, float r){
         CircleShape enemyShape = new CircleShape();
         enemyShape.setRadius(r);
         Fixture enemyHitbox = body.createFixture(enemyShape, 1.0f);
         enemyShape.dispose();
         enemyHitbox.setUserData("EnemyHitbox");
+
+        FixtureDef def = new FixtureDef();
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(8, 8);
+        def.shape = shape;
+
+        short maskBits;
+        maskBits = 1 | 2 | 4;
+
+        Filter fil = new Filter();
+        fil.categoryBits = 3;
+        fil.maskBits = maskBits;
+        enemyHitbox.setFilterData(fil);
+
         return enemyHitbox;
     }
 
@@ -969,7 +1207,7 @@ public class BodyFactory {
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         PolygonShape roomShape = new PolygonShape();
-        roomShape.setAsBox(w, h);
+        roomShape.setAsBox(w - 8, h);
         Fixture roomHitbox = body.createFixture(roomShape, 1.0f);
         roomShape.dispose();
         body.setUserData("Room-"+roomIndex);
@@ -1013,6 +1251,8 @@ public class BodyFactory {
         //player bounds for room door locking
         playerShape3.setAsBox(6.2f, 6.2f);
 
+
+
         Fixture playerHitbox = body.createFixture(playerShape1, 1.0f);
         Fixture playerHitbox2 = body.createFixture(playerShape2, 1.0f);
 
@@ -1023,6 +1263,14 @@ public class BodyFactory {
         Fixture playerCornerHitbox2 = body.createFixture(playerCornerShape2,1.0f);
         Fixture playerCornerHitbox3 = body.createFixture(playerCornerShape3,1.0f);
         Fixture playerCornerHitbox4 = body.createFixture(playerCornerShape4,1.0f);
+
+        short maskBits;
+        maskBits = 1 | 3 | 4;
+        //with wings 1 | 3
+
+        Filter fil = new Filter();
+        fil.categoryBits = 2;
+        fil.maskBits = maskBits;
 
         //the whole body
         body.setUserData("Player");
@@ -1038,6 +1286,14 @@ public class BodyFactory {
 
         //just the outer box
         playerBoundHitbox.setUserData("PlayerBound");
+
+        playerHitbox.setFilterData(fil);
+        playerHitbox2.setFilterData(fil);
+        playerBoundHitbox.setFilterData(fil);
+        playerCornerHitbox1.setFilterData(fil);
+        playerCornerHitbox2.setFilterData(fil);
+        playerCornerHitbox3.setFilterData(fil);
+        playerCornerHitbox4.setFilterData(fil);
 
         playerCornerShape1.dispose();
         playerCornerShape2.dispose();

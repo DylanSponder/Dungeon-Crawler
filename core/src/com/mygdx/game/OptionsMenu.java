@@ -13,7 +13,7 @@ public class OptionsMenu {
 
     public static Table optionsMenuContainer;
     public static VerticalGroup optionsMenuGroup;
-    public TextButton fullscreenOffButton, fullscreenOnButton, backButton;
+    public TextButton fullscreenOffButton, fullscreenOnButton, backButton, shadersOffButton, shadersOnButton;
     public boolean fullscreen, volumeSliding;
     public float volume;
     public Slider slider;
@@ -104,21 +104,21 @@ public class OptionsMenu {
         optionsMenuGroup.addActor(volumeButton);
 
         //optionsMenuClosed = true;
-        Label off = new Label("FULLSCREEN: OFF", skin);
-        Label on = new Label("FULLSCREEN: ON", skin);
+        Label fsoff = new Label("FULLSCREEN: OFF", skin);
+        Label fson = new Label("FULLSCREEN: ON", skin);
         TextButton fullscreenOffButton = new TextButton("", skin, "default");
-        fullscreenOffButton.setLabel(off);
+        fullscreenOffButton.setLabel(fsoff);
 
         fullscreenOffButton.addListener(new ClickListener() {
             @Override
             public void clicked (InputEvent event, float x, float y) {
                 if (fullscreen) {
                     fullscreen = false;
-                    fullscreenOffButton.setLabel(off);
+                    fullscreenOffButton.setLabel(fsoff);
                     Gdx.graphics.setWindowedMode(600,900);
                 } else {
                     fullscreen = true;
-                    fullscreenOffButton.setLabel(on);
+                    fullscreenOffButton.setLabel(fson);
                     Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
                 }
 
@@ -134,6 +134,34 @@ public class OptionsMenu {
 
 
 
+        Label shon = new Label("SHADERS: ON", skin);
+        Label shoff = new Label("SHADERS: OFF", skin);
+        TextButton shadersOnButton = new TextButton("", skin, "default");
+        shadersOnButton.setLabel(shon);
+
+        shadersOnButton.addListener(new ClickListener() {
+            @Override
+            public void clicked (InputEvent event, float x, float y) {
+                if (shadersEnabled) {
+                    shadersEnabled = false;
+                    shadersOnButton.setLabel(shoff);
+                } else {
+                    shadersEnabled = true;
+                    shadersOnButton.setLabel(shon);
+                }
+
+                //Difficulty
+                //Fullscreen
+                //Shaders
+                //Sound
+                // Called when player clicks on Options button
+            }
+        });
+        shadersOnButton.padLeft(6.5f);
+        optionsMenuGroup.addActor(shadersOnButton);
+
+
+
 
         Label easy = new Label("DIFFICULTY: EASY", skin);
         Label normal = new Label("DIFFICULTY: NORMAL", skin);
@@ -146,10 +174,13 @@ public class OptionsMenu {
             public void clicked (InputEvent event, float x, float y) {
                 if (difficultyButton.getLabel().getText().toString().equals("DIFFICULTY: EASY")) {
                     difficultyButton.setLabel(normal);
+                    DungeonCrawler.difficulty = 2;
                 } else if ((difficultyButton.getLabel().getText().toString().equals("DIFFICULTY: NORMAL"))) {
                     difficultyButton.setLabel(hard);
+                    DungeonCrawler.difficulty = 3;
                 } else if ((difficultyButton.getLabel().getText().toString().equals("DIFFICULTY: HARD"))) {
                     difficultyButton.setLabel(easy);
+                    DungeonCrawler.difficulty = 1;
                 }
 
                 //Shaders

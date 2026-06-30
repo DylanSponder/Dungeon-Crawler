@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.ArrayMap;
 import com.mygdx.game.CreateAssets;
 import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
-import com.mygdx.game.level.objects.Text;
+import com.mygdx.game.level.objects.DisplayText;
 
 import java.util.ArrayList;
 
@@ -16,14 +16,14 @@ public class Shopkeeper {
     public Body shopBody, shopDetectionBody, shopSellBody;
     public Fixture shopHitbox;
     public Fixture shopDetectionRadius, shopSellRadius;
-    public Text message, listing;
-    public ArrayList<Text> messages;
-    public ArrayList<Text> inventoryText;
+    public DisplayText message, listing;
+    public ArrayList<DisplayText> messages;
+    public ArrayList<DisplayText> inventoryText;
     public ArrayMap inventory;
     public float posX, posY;
     public boolean scaledText;
 
-    public Shopkeeper(World world, float x, float y, Text shopMessage) {
+    public Shopkeeper(World world, float x, float y, DisplayText shopMessage) {
 
         BodyFactory bodyFactory = new BodyFactory();
 
@@ -31,7 +31,7 @@ public class Shopkeeper {
 
         this.inventory = new ArrayMap();
 
-        this.inventoryText = new ArrayList<Text>();
+        this.inventoryText = new ArrayList<DisplayText>();
         this.shopBody = bodyFactory.createShopBody(world, x, y);
         this.posX = x;
         this.posY = y;
@@ -53,121 +53,105 @@ public class Shopkeeper {
         this.shopDetectionRadius.setUserData("ShopRadius");
     }
 
-    public Text Stock(String kind, int index) {
+    public DisplayText Stock(String kind, int index) {
         final CreateAssets tx = CreateAssets.getInstance();
 
         switch (kind) {
             case "WINE": {
                 String msg = (index + 1) + ".   WINE";
-                Text t = new Text(DungeonCrawler.defaultFont2, msg, Color.WHITE, false,100, 0.1f, false, true, tx.potionItemSprite, 6.5f);
+                DisplayText t = new DisplayText(DungeonCrawler.defaultFont2, msg, Color.WHITE, false,100, 0.1f, false, true, tx.potionItemSprite, 6.5f);
                 this.inventoryText.add(t);
                 break;
             }
             case "SHIELD": {
                 String msg = (index + 1) + ".   SHIELD";
-                Text t = new Text(DungeonCrawler.defaultFont2, msg, Color.WHITE, false,100, 0.1f, false, true,  tx.shieldItemSprite, 5f);
+                DisplayText t = new DisplayText(DungeonCrawler.defaultFont2, msg, Color.WHITE, false,100, 0.1f, false, true,  tx.shieldItemSprite, 5f);
                 this.inventoryText.add(t);
                 break;
             }
             case "GREEK FIRE": {
                 String msg = (index + 1) + ".   GREEK FIRE";
-                Text t = new Text(DungeonCrawler.defaultFont2, msg, Color.WHITE, false,100, 0.1f, false, true,  tx.greekfireItemSprite, 1.75f);
+                DisplayText t = new DisplayText(DungeonCrawler.defaultFont2, msg, Color.WHITE, false,100, 0.1f, false, true,  tx.greekfireItemSprite, 1.75f);
                 this.inventoryText.add(t);
                 break;
             }
             case "TORCH": {
                 String msg = (index + 1) + ".   TORCH";
-                Text t = new Text(DungeonCrawler.defaultFont2, msg, Color.WHITE, false,100, 0.1f, false, true,  tx.torchItemSprite, 5f);
+                DisplayText t = new DisplayText(DungeonCrawler.defaultFont2, msg, Color.WHITE, false,100, 0.1f, false, true,  tx.torchItemSprite, 5f);
+                this.inventoryText.add(t);
+                break;
+            }
+            case "WINGS": {
+                String msg = (index + 1) + ".   WINGS";
+                DisplayText t = new DisplayText(DungeonCrawler.defaultFont2, msg, Color.WHITE, false,100, 0.1f, false, true,  tx.wingsItemSprite, 5f);
                 this.inventoryText.add(t);
                 break;
             }
             case "BELT": {
                 String msg = (index + 1) + ".   BACCHUS BELT";
-                Text t = new Text(DungeonCrawler.defaultFont2, msg, Color.WHITE, false,100, 0.1f, false, true,  tx.beltItemSprite, 2.5f);
+                DisplayText t = new DisplayText(DungeonCrawler.defaultFont2, msg, Color.WHITE, false,100, 0.1f, false, true,  tx.beltItemSprite, 2.5f);
                 this.inventoryText.add(t);
                 break;
             }
             case "CHISEL": {
                 String msg = (index + 1) + ".   CHISEL";
-                Text t = new Text(DungeonCrawler.defaultFont2, msg, Color.WHITE, false,100, 0.1f, false, true,  tx.chiselItemSprite, 3.25f);
+                DisplayText t = new DisplayText(DungeonCrawler.defaultFont2, msg, Color.WHITE, false,100, 0.1f, false, true,  tx.chiselItemSprite, 3.25f);
                 this.inventoryText.add(t);
                 break;
             }
-            case "CAPE": {
-                String msg = (index + 1) + ".   CAPE";
-                Text t = new Text(DungeonCrawler.defaultFont2, msg, Color.WHITE, false,100, 0.1f, false, true,  tx.capeSprite, 3.25f);
-                this.inventoryText.add(t);
-                break;
-            }
-            case "LANCE": {
-                String msg = (index + 1) + ".   LANCE";
-                Text t = new Text(DungeonCrawler.defaultFont2, msg, Color.WHITE, false,100, 0.1f, false, false,  tx.coinHUDSprite, 6f);
-                this.inventoryText.add(t);
-                break;
-            }
-            case "HELM": {
-                String msg = (index + 1) + ".   HELM OF HADES";
-                Text t = new Text(DungeonCrawler.defaultFont2, msg, Color.WHITE, false,100, 0.1f, false, false,  tx.coinHUDSprite, 6f);
-                this.inventoryText.add(t);
-                break;
-            }
+
         }
         return inventoryText.get(index);
      // this.inventoryText.add(item);
     }
 
-    public Text DescribeStock(String kind, int index, int cost) {
+    public DisplayText DescribeStock(String kind, int index, int cost) {
         final CreateAssets tx = CreateAssets.getInstance();
 
         switch (kind) {
             case "WINE": {
                 String desc = "[  " + cost + "] HEAL 1.5 HEARTS (E)";
-                Text t = new Text(DungeonCrawler.defaultFont2, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinHUDSprite, -1f);
+                DisplayText t = new DisplayText(DungeonCrawler.defaultFont2, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinHUDSprite, -1f);
                 this.inventoryText.add(t);
                 break;
             }
             case "SHIELD": {
                 String desc = "[  " + cost + "] BLOCK (SHIFT)";
-                Text t = new Text(DungeonCrawler.defaultFont2, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinHUDSprite, -1f);
+                DisplayText t = new DisplayText(DungeonCrawler.defaultFont2, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinHUDSprite, -1f);
                 this.inventoryText.add(t);
                 break;
             }
             case "GREEK FIRE": {
                 String desc = "[  " + cost + "] FLAMING ARROWS";
-                Text t = new Text(DungeonCrawler.defaultFont2, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinHUDSprite, -0.5f);
+                DisplayText t = new DisplayText(DungeonCrawler.defaultFont2, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinHUDSprite, -0.5f);
                 this.inventoryText.add(t);
                 break;
             }
             case "TORCH": {
                 String desc = "[  " + cost + "] MORE LIGHT";
-                Text t = new Text(DungeonCrawler.defaultFont2, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinHUDSprite, -0.5f);
+                DisplayText t = new DisplayText(DungeonCrawler.defaultFont2, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinHUDSprite, -0.5f);
+                this.inventoryText.add(t);
+                break;
+            }
+            case "WINGS": {
+                String desc = "[  " + cost + "] FLY OVER PITS";
+                DisplayText t = new DisplayText(DungeonCrawler.defaultFont2, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinHUDSprite, -0.5f);
                 this.inventoryText.add(t);
                 break;
             }
             case "BELT": {
                 String desc = "[  " + cost + "] SPACE + 1 (WINE)";
-                Text t = new Text(DungeonCrawler.defaultFont2, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinHUDSprite, -0.5f);
+                DisplayText t = new DisplayText(DungeonCrawler.defaultFont2, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinHUDSprite, -0.5f);
                 this.inventoryText.add(t);
                 break;
             }
             case "CHISEL": {
                 String desc = "[  " + cost + "] BREAK ROCKS (C)";
-                Text t = new Text(DungeonCrawler.defaultFont2, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinHUDSprite, -0.5f);
+                DisplayText t = new DisplayText(DungeonCrawler.defaultFont2, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinHUDSprite, -0.5f);
                 this.inventoryText.add(t);
                 break;
             }
-            case "LANCE": {
-                String desc = "  " + cost + " MELEE RANGE UP";
-                Text t = new Text(DungeonCrawler.defaultFont2, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinHUDSprite, -0.5f);
-                this.inventoryText.add(t);
-                break;
-            }
-            case "HELM": {
-                String desc = "  " + cost + " INVISIBILITY (10 SECONDS PER ROOM)";
-                Text t = new Text(DungeonCrawler.defaultFont2, desc, Color.WHITE, false,100, 0.1f, false, true, tx.coinHUDSprite, -0.5f);
-                this.inventoryText.add(t);
-                break;
-            }
+
         }
         return inventoryText.get(index);
     }

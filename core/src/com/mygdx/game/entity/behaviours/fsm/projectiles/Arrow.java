@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 
+import static com.mygdx.game.DungeonCrawler.TIME_SCALE;
 import static com.mygdx.game.DungeonCrawler.rayHandler;
 
 public class Arrow {
@@ -48,6 +49,7 @@ public class Arrow {
         bodyDef.position.set(x, y);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
+        body.setLinearDamping(0);
         return body;
     }
 

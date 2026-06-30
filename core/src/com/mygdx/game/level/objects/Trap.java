@@ -1,0 +1,561 @@
+package com.mygdx.game.level.objects;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Timer;
+import com.mygdx.game.CreateAssets;
+import com.mygdx.game.DungeonCrawler;
+import com.mygdx.game.box2D.BodyFactory;
+
+import static com.mygdx.game.DungeonCrawler.*;
+
+public class Trap {
+
+    //There are 3 types of Traps
+    // Spinning, pole spike trap (animation is by rotation only, not sprite work)
+    // Classic floor spike trap (animation by sprite movement up and then down)
+    // Arrow trap - appears like a Greek theatre tragedy mask
+    //Standing arrow trap - appears like a Greek automata/ballista
+
+    public int type;
+    public Body trapBody, trapArea;
+    public float trapX, trapY;
+    public World world;
+    public int direction;
+    public boolean active;
+    public float trapDelay, trapSoundDelay, trapResetDelay;
+
+    public Trap(World world, float x, float y, int type, int direction) {
+        this.world = world;
+        this.type = type;
+        this.trapX = x;
+        this.trapY = y;
+        this.direction = direction;
+    }
+
+    public void createTrap() {
+
+        BodyFactory bodyFactory = new BodyFactory();
+
+        this.trapBody = bodyFactory.createSimpleStaticBody(world, trapX, trapY);
+
+        this.trapArea = bodyFactory.createTrapArea(world, trapX, trapY, direction);
+        this.trapBody.setUserData("Trap");
+        this.trapArea.setUserData("TrapArea");
+    }
+
+    public static void renderTrap(SpriteBatch batch, int direction, float x, float y, int type) {
+
+        CreateAssets tx = CreateAssets.getInstance();
+        if (type == 1) {
+            switch (direction) {
+                case 1:
+                    batch.draw(tx.arrowTrap,x,y,0,0,16,16,1,1,0);
+                    break;
+                case 2:
+                    batch.draw(tx.arrowTrap,x,y,0,0,16,16,1,1,270);
+                    break;
+                case 3:
+                    batch.draw(tx.arrowTrap,x,y + 16,0,0,16,16,1,1,180);
+                    break;
+                case 4:
+                    batch.draw(tx.arrowTrap,x + 16,y,0,0,16,16,1,1,90);
+                    break;
+            }
+        } else if (type == 2) {
+            switch (direction) {
+                case 1:
+                    batch.draw(tx.fireArrowTrap,x,y,0,0,16,21,1,1,0);
+                    break;
+                case 2:
+                    batch.draw(tx.fireArrowTrap,x,y - 0.5f,0,0,16,21,1,1,270);
+                    break;
+                case 3:
+                    batch.draw(tx.fireArrowTrap,x,y + 16,0,0,16,21,1,1,180);
+                    break;
+                case 4:
+                    batch.draw(tx.fireArrowTrap,x + 16,y - 1.5f,0,0,16,21,1,1,90);
+                    break;
+            }
+        }
+        else if (type == 3) {
+            switch (direction) {
+                case 1:
+                    batch.draw(tx.arrowTrap,x,y,0,0,16,16,1,1,0);
+                    break;
+                case 2:
+                    batch.draw(tx.arrowTrap,x,y,0,0,16,16,1,1,270);
+                    break;
+                case 3:
+                    batch.draw(tx.arrowTrap,x,y + 16,0,0,16,16,1,1,180);
+                    break;
+                case 4:
+                    batch.draw(tx.arrowTrap,x + 16,y,0,0,16,16,1,1,90);
+                    break;
+            }
+        }else if (type == 4) {
+            switch (direction) {
+                case 1:
+                    batch.draw(tx.fireArrowTrap,x,y,0,0,16,21,1,1,0);
+                    break;
+                case 2:
+                    batch.draw(tx.fireArrowTrap,x,y,0,0,16,21,1,1,270);
+                    break;
+                case 3:
+                    batch.draw(tx.fireArrowTrap,x,y + 16,0,0,16,21,1,1,180);
+                    break;
+                case 4:
+                    batch.draw(tx.fireArrowTrap,x + 16,y,0,0,16,21,1,1,90);
+                    break;
+            }
+        }
+
+    }
+
+    public static void renderTrapActive(SpriteBatch batch, int direction, float x, float y, int type) {
+
+        CreateAssets tx = CreateAssets.getInstance();
+        if (type == 1) {
+            switch (direction) {
+                case 1:
+                    batch.draw(tx.arrowTrapActivated,x,y-1,0,0,16,17,1,1,0);
+                    break;
+                case 2:
+                    batch.draw(tx.arrowTrapActivated,x-1,y,0,0,16,17,1,1,270);
+                    break;
+                case 3:
+                    batch.draw(tx.arrowTrapActivated,x,y + 17,0,0,16,17,1,1,180);
+                    break;
+                case 4:
+                    batch.draw(tx.arrowTrapActivated,x + 17,y,0,0,16,17,1,1,90);
+                    break;
+            }
+        } else if (type == 2) {
+            switch (direction) {
+                case 1:
+                    batch.draw(tx.fireArrowTrapActivated,x-1,y-1,0,0,16,22,1,1,0);
+                    break;
+                case 2:
+                    batch.draw(tx.fireArrowTrapActivated,x-1,y + 0.5f,0,0,16,22,1,1,270);
+                    break;
+                case 3:
+                    batch.draw(tx.fireArrowTrapActivated,x + 1,y + 17,0,0,16,22,1,1,180);
+                    break;
+                case 4:
+                    batch.draw(tx.fireArrowTrapActivated,x + 17,y - 2.5f,0,0,16,22,1,1,90);
+                    break;
+            }
+        } else if (type == 3) {
+            switch (direction) {
+                case 1:
+                    batch.draw(tx.arrowTrapActivated,x,y-1,0,0,16,17,1,1,0);
+                    break;
+                case 2:
+                    batch.draw(tx.arrowTrapActivated,x-1,y,0,0,16,17,1,1,270);
+                    break;
+                case 3:
+                    batch.draw(tx.arrowTrapActivated,x,y + 17,0,0,16,17,1,1,180);
+                    break;
+                case 4:
+                    batch.draw(tx.arrowTrapActivated,x + 17,y,0,0,16,17,1,1,90);
+                    break;
+            }
+        } else if (type == 4) {
+            switch (direction) {
+                case 1:
+                    batch.draw(tx.fireArrowTrapActivated,x-1,y-1,0,0,16,22,1,1,0);
+                    break;
+                case 2:
+                    batch.draw(tx.fireArrowTrapActivated,x-1,y + 1,0,0,16,22,1,1,270);
+                    break;
+                case 3:
+                    batch.draw(tx.fireArrowTrapActivated,x + 1,y + 17,0,0,16,22,1,1,180);
+                    break;
+                case 4:
+                    batch.draw(tx.fireArrowTrapActivated,x + 17,y - 1,0,0,16,22,1,1,90);
+                    break;
+            }
+        }
+
+    }
+
+    public void fireArrow(float x, float y, int type) {
+        trapSoundDelay = 1.1f;
+        trapDelay = 1.8f;
+        trapResetDelay = 3.3f;
+
+        if (trapsActive) {
+            soundController.playSound("TrapOpens", 9, 9,0.1f);
+            if (type == 1) {
+                switch (this.direction) {
+                    case 1:
+                        active = true;
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                soundController.playSound("Whoosh", 7, 6,0.1f);
+                            }
+                        }, trapSoundDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                arrowsToBeFired.put(Trap.this, 1);
+                            }
+                        }, trapDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                active = false;
+                                soundController.playSound("TrapCloses", 8, 8,0.1f);
+                            }
+                        }, trapResetDelay);
+                        break;
+                    case 2:
+                        active = true;
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                soundController.playSound("Whoosh", 7, 6,0.1f);
+                            }
+                        }, trapSoundDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                arrowsToBeFired.put(Trap.this, 2);
+                            }
+                        }, trapDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                active = false;
+                                soundController.playSound("TrapCloses", 8, 8,0.1f);
+                            }
+                        }, trapResetDelay);
+                        break;
+                    case 3:
+                        active = true;
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                soundController.playSound("Whoosh", 7, 6,0.1f);
+                            }
+                        }, trapSoundDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                arrowsToBeFired.put(Trap.this, 3);
+                            }
+                        }, trapDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                active = false;
+                                soundController.playSound("TrapCloses", 8, 8,0.1f);
+                            }
+                        }, trapResetDelay);
+                        break;
+                    case 4:
+                        active = true;
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                soundController.playSound("Whoosh", 7, 6,0.1f);
+                            }
+                        }, trapSoundDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                arrowsToBeFired.put(Trap.this, 4);
+                            }
+                        }, trapDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                active = false;
+                                soundController.playSound("TrapCloses", 8, 8,0.1f);
+                            }
+                        }, trapResetDelay);
+                        break;
+                }
+            } else if (type == 2) {
+                switch (this.direction) {
+                    case 1:
+                        active = true;
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                soundController.playSound("Whoosh", 7, 6,0.1f);
+                            }
+                        }, trapSoundDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                arrowsToBeFired.put(Trap.this, 5);
+                            }
+                        }, trapDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                active = false;
+                                soundController.playSound("TrapCloses", 8, 8,0.1f);
+                            }
+                        }, trapResetDelay);
+                        break;
+                    case 2:
+                        active = true;
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                soundController.playSound("Whoosh", 7, 6,0.1f);
+                            }
+                        }, trapSoundDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                arrowsToBeFired.put(Trap.this, 6);
+                            }
+                        }, trapDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                active = false;
+                                soundController.playSound("TrapCloses", 8, 8,0.1f);
+                            }
+                        }, trapResetDelay);
+                        break;
+                    case 3:
+                        active = true;
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                soundController.playSound("Whoosh", 7, 6,0.1f);
+                            }
+                        }, trapSoundDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                arrowsToBeFired.put(Trap.this, 7);
+                            }
+                        }, trapDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                active = false;
+                                soundController.playSound("TrapCloses", 8, 8,0.1f);
+                            }
+                        }, trapResetDelay);
+                        break;
+                    case 4:
+                        active = true;
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                soundController.playSound("Whoosh", 7, 6,0.1f);
+                            }
+                        }, trapSoundDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                arrowsToBeFired.put(Trap.this, 8);
+                            }
+                        }, trapDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                active = false;
+                                soundController.playSound("TrapCloses", 8, 8,0.1f);
+                            }
+                        }, trapResetDelay);
+                        break;
+                }
+            }
+            else if (type == 3) {
+                switch (this.direction) {
+                    case 1:
+                        active = true;
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                soundController.playSound("Whoosh", 7, 6,0.1f);
+                            }
+                        }, trapSoundDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                arrowsToBeFired.put(Trap.this, 9);
+                            }
+                        }, trapDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                active = false;
+                                soundController.playSound("TrapCloses", 8, 8,0.1f);
+                            }
+                        }, trapResetDelay);
+                        break;
+                    case 2:
+                        active = true;
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                soundController.playSound("Whoosh", 7, 6,0.1f);
+                            }
+                        }, trapSoundDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                arrowsToBeFired.put(Trap.this, 2);
+                            }
+                        }, trapDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                active = false;
+                                soundController.playSound("TrapCloses", 8, 8,0.1f);
+                            }
+                        }, trapResetDelay);
+                        break;
+                    case 3:
+                        active = true;
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                soundController.playSound("Whoosh", 7, 6,0.1f);
+                            }
+                        }, trapSoundDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                arrowsToBeFired.put(Trap.this, 3);
+                            }
+                        }, trapDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                active = false;
+                                soundController.playSound("TrapCloses", 8, 8,0.1f);
+                            }
+                        }, trapResetDelay);
+                        break;
+                    case 4:
+                        active = true;
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                soundController.playSound("Whoosh", 7, 6,0.1f);
+                            }
+                        }, trapSoundDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                arrowsToBeFired.put(Trap.this, 4);
+                            }
+                        }, trapDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                active = false;
+                                soundController.playSound("TrapCloses", 8, 8,0.1f);
+                            }
+                        }, trapResetDelay);
+                        break;
+                }
+            } else if (type == 4) {
+                switch (this.direction) {
+                    case 1:
+                        active = true;
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                soundController.playSound("Whoosh", 7, 6,0.1f);
+                            }
+                        }, trapSoundDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                arrowsToBeFired.put(Trap.this, 10);
+                            }
+                        }, trapDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                active = false;
+                                soundController.playSound("TrapCloses", 8, 8,0.1f);
+                            }
+                        }, trapResetDelay);
+                        break;
+                    case 2:
+                        active = true;
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                soundController.playSound("Whoosh", 7, 6,0.1f);
+                            }
+                        }, trapSoundDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                arrowsToBeFired.put(Trap.this, 6);
+                            }
+                        }, trapDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                active = false;
+                                soundController.playSound("TrapCloses", 8, 8,0.1f);
+                            }
+                        }, trapResetDelay);
+                        break;
+                    case 3:
+                        active = true;
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                soundController.playSound("Whoosh", 7, 6,0.1f);
+                            }
+                        }, trapSoundDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                arrowsToBeFired.put(Trap.this, 7);
+                            }
+                        }, trapDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                active = false;
+                                soundController.playSound("TrapCloses", 8, 8,0.1f);
+                            }
+                        }, trapResetDelay);
+                        break;
+                    case 4:
+                        active = true;
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                soundController.playSound("Whoosh", 7, 6,0.1f);
+                            }
+                        }, trapSoundDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                arrowsToBeFired.put(Trap.this, 8);
+                            }
+                        }, trapDelay);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                active = false;
+                                soundController.playSound("TrapCloses", 8, 8,0.1f);
+                            }
+                        }, trapResetDelay);
+                        break;
+                }
+            }
+        }
+
+
+
+    }
+}

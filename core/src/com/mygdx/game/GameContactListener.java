@@ -1,6 +1,5 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.OrderedMap;
@@ -43,8 +42,9 @@ public class GameContactListener implements ContactListener {
         //System.out.println(colliderStr + " " + collideeStr);
         if (colliderStr == "Water" && collidee.getUserData() == "PlayerBound") {
             player.swimming = true;
+            player.swimCount++;
             soundController.playSound("WaterSplash",5f,4f,0.10f);
-            DungeonCrawler.PLAYER_SPEED_MULTI = 35f;
+            DungeonCrawler.PLAYER_SPEED_MULTI = 17.5f;
         }
 
         if(((colliderStr == "Pot" && collideeStr == "Sword")
@@ -110,49 +110,49 @@ public class GameContactListener implements ContactListener {
                             switch (fbData) {
                                 case "DownSword":
                                    // e.loseHealth(2);
-                                    e.loseHealth(2);
+                                    e.loseEnemyHealth(2);
                                     if (e.enemyID != 5) {
                                         e.enemyBody.setLinearVelocity(velX, velY - 50);
                                     }
                                     break;
                                 case "UpSword":
-                                    e.loseHealth(2);
+                                    e.loseEnemyHealth(2);
                                     if (e.enemyID != 5) {
                                         e.enemyBody.setLinearVelocity(velX, velY + 50);
                                     }
                                     break;
                                 case "LeftSword":
-                                    e.loseHealth(2);
+                                    e.loseEnemyHealth(2);
                                     if (e.enemyID != 5) {
                                         e.enemyBody.setLinearVelocity(velX - 50, velY);
                                     }
                                     break;
                                 case "RightSword":
-                                    e.loseHealth(2);
+                                    e.loseEnemyHealth(2);
                                     if (e.enemyID != 5) {
                                         e.enemyBody.setLinearVelocity(velX + 50, velY);
                                     }
                                     break;
                                 case "DownArrow":
-                                    e.loseHealth(1);
+                                    e.loseEnemyHealth(1);
                                     if (e.enemyID != 5) {
                                         e.enemyBody.setLinearVelocity(velX, velY - 40);
                                     }
                                     break;
                                 case "UpArrow":
-                                    e.loseHealth(1);
+                                    e.loseEnemyHealth(1);
                                     if (e.enemyID != 5) {
                                         e.enemyBody.setLinearVelocity(velX, velY + 40);
                                     }
                                     break;
                                 case "LeftArrow":
-                                    e.loseHealth(1);
+                                    e.loseEnemyHealth(1);
                                     if (e.enemyID != 5) {
                                         e.enemyBody.setLinearVelocity(velX - 40, velY);
                                     }
                                     break;
                                 case "RightArrow":
-                                    e.loseHealth(1);
+                                    e.loseEnemyHealth(1);
                                     if (e.enemyID != 5) {
                                         e.enemyBody.setLinearVelocity(velX + 40, velY);
                                     }
@@ -172,6 +172,8 @@ public class GameContactListener implements ContactListener {
                                         } else {
                                             soundController.playSound("MinoHurt2",10f,8f,0.04f);
                                         }
+
+                                        boss1.minoHealthbar.setHealth(boss1.ENEMY_HEALTH);
 
                                         if (boss1.ENEMY_HEALTH < boss1.MAX_HEALTH / 2) {
                                             init.roomList.get(player.currentRoom).snuffTorches();
@@ -280,6 +282,16 @@ public class GameContactListener implements ContactListener {
                                         }
                                     }
                                 }
+                                else if (e.enemyID == 6) {
+
+                                    for (EnemyCrab e5 : enemyCrabs) {
+                                        if (e5.enemyBody == collider.getBody()) {
+                                            deadEnemyBodies.add(collider.getBody());
+                                            //soundController.playSound("SkullDeath",8.5f,7.5f,0.1f);
+                                            dyingCrabs.add(e5);
+                                        }
+                                    }
+                                }
                             }
 
                             //skullArrayMap.put();
@@ -330,49 +342,49 @@ public class GameContactListener implements ContactListener {
                         if (e.vulnerable) {
                             switch (faData) {
                                 case "DownSword":
-                                    e.loseHealth(2);
+                                    e.loseEnemyHealth(2);
                                     if (e.enemyID != 5) {
                                         e.enemyBody.setLinearVelocity(velX, velY - 50);
                                     }
                                     break;
                                 case "UpSword":
-                                    e.loseHealth(2);
+                                    e.loseEnemyHealth(2);
                                     if (e.enemyID != 5) {
                                         e.enemyBody.setLinearVelocity(velX, velY + 50);
                                     }
                                     break;
                                 case "LeftSword":
-                                    e.loseHealth(2);
+                                    e.loseEnemyHealth(2);
                                     if (e.enemyID != 5) {
                                         e.enemyBody.setLinearVelocity(velX - 50, velY);
                                     }
                                     break;
                                 case "RightSword":
-                                    e.loseHealth(2);
+                                    e.loseEnemyHealth(2);
                                     if (e.enemyID != 5) {
                                         e.enemyBody.setLinearVelocity(velX + 50, velY);
                                     }
                                     break;
                                 case "DownArrow":
-                                    e.loseHealth(1);
+                                    e.loseEnemyHealth(1);
                                     if (e.enemyID != 5) {
                                         e.enemyBody.setLinearVelocity(velX, velY - 40);
                                     }
                                     break;
                                 case "UpArrow":
-                                    e.loseHealth(1);
+                                    e.loseEnemyHealth(1);
                                     if (e.enemyID != 5) {
                                         e.enemyBody.setLinearVelocity(velX, velY + 40);
                                     }
                                     break;
                                 case "LeftArrow":
-                                    e.loseHealth(1);
+                                    e.loseEnemyHealth(1);
                                     if (e.enemyID != 5) {
                                         e.enemyBody.setLinearVelocity(velX - 40, velY);
                                     }
                                     break;
                                 case "RightArrow":
-                                    e.loseHealth(1);
+                                    e.loseEnemyHealth(1);
                                     if (e.enemyID != 5) {
                                         e.enemyBody.setLinearVelocity(velX + 40, velY);
                                     }
@@ -392,6 +404,8 @@ public class GameContactListener implements ContactListener {
                                         } else {
                                             soundController.playSound("MinoHurt2",10f,8f,0.04f);
                                         }
+
+                                        boss1.minoHealthbar.setHealth(boss1.ENEMY_HEALTH);
 
                                         if (boss1.ENEMY_HEALTH < boss1.MAX_HEALTH / 2) {
                                             init.roomList.get(player.currentRoom).snuffTorches();
@@ -492,6 +506,16 @@ public class GameContactListener implements ContactListener {
                                         }
                                     }
                                 }
+                                else if (e.enemyID == 6) {
+                                    for (EnemyCrab crab : enemyCrabs) {
+                                        if (crab.enemyBody == collidee.getBody()) {
+                                            deadEnemyBodies.add(collidee.getBody());
+                                            //soundController.playSound("",8.5f,7.5f,0.1f);
+                                            dyingCrabs.add(crab);
+
+                                        }
+                                    }
+                                }
                             }
 
                             //hud.updateGold(1, true);
@@ -560,6 +584,7 @@ public class GameContactListener implements ContactListener {
                             s.SKULL_HEALTH--;
                             if (s.SKULL_HEALTH <= 0) {
                                 brokenSkulls.add(s);
+                                s.broken = true;
                                 soundController.playSound("Skull",8.5f,7.5f,0.1f);
                             }
                             if (colliderStr.startsWith("Arrow")) {
@@ -690,7 +715,12 @@ public class GameContactListener implements ContactListener {
 
 
             else if (collideeStr == "Bone" && colliderStr == "Player") {
-                hud.healthBar.loseHealth(0.5f);
+                if (difficulty == 1 || difficulty == 2) {
+                    hud.healthBar.loseHealth(0.5f);
+                } else if (difficulty == 3) {
+                    hud.healthBar.loseHealth(1f);
+                }
+
                 if (collidee.getBody().getUserData() == "Bone") {
              //       player.playerBody.applyLinearImpulse(collider.getBody().getLinearVelocity().x * 500, collider.getBody().getLinearVelocity().y * 500, 0, 0, true);
                     if (!boneBodiesCollided.contains(collidee.getBody())) {
@@ -699,7 +729,11 @@ public class GameContactListener implements ContactListener {
                 }
 
             } else if (colliderStr == "Bone" && collideeStr == "Player") {
-                hud.healthBar.loseHealth(0.5f);
+                if (difficulty == 1 || difficulty == 2) {
+                    hud.healthBar.loseHealth(0.5f);
+                } else if (difficulty == 3) {
+                    hud.healthBar.loseHealth(1f);
+                }
             //    player.playerBody.applyLinearImpulse(collidee.getBody().getLinearVelocity().x * 500, collidee.getBody().getLinearVelocity().y * 500, 0, 0, true);
                 if (!boneBodiesCollided.contains(collider.getBody())) {
                     boneBodiesCollided.add(collider.getBody());
@@ -749,6 +783,11 @@ public class GameContactListener implements ContactListener {
                         for (EnemyCyclops e4 : enemyEyes) {
                             if (e4.enemyBody == collider.getBody() || e4.enemyBody == collidee.getBody()) {
                                 e4.playerInRange = true;
+                            }
+                        }
+                        for (EnemyCrab e5 : enemyCrabs) {
+                            if (e5.enemyBody == collider.getBody() || e5.enemyBody == collidee.getBody()) {
+                                e5.playerInRange = true;
                             }
                         }
                     }
@@ -923,7 +962,7 @@ public class GameContactListener implements ContactListener {
                             }
                         }
                     }
-                    else if (collideeStr == "Sword" || collideeStr == "Lance") {
+                    else if (collideeStr == "Sword" || collideeStr == "Lance" || collideeStr == "Bone") {
                         for (Fire f : fires) {
                             if (f.fireBody == collider.getBody()) {
                                 if (f.extinguish && (f.type == 1 || f.type == 3)) {
@@ -999,7 +1038,11 @@ public class GameContactListener implements ContactListener {
 
                 case "Arrow":
                     if (collidee.getUserData() == "PlayerBound") {
-                        hud.healthBar.loseHealth(0.5f);
+                        if (difficulty == 1 || difficulty == 2) {
+                            hud.healthBar.loseHealth(0.5f);
+                        } else if (difficulty == 3) {
+                            hud.healthBar.loseHealth(1f);
+                        }
                     }
 
                     if (((((collideeStr == "Enemy" && collidee.getUserData()!= "EnemyGhost") && collidee.getUserData() != "Proximity") && (collideeStr != "Cobweb" || collideeStr != "Water"))
@@ -1031,6 +1074,13 @@ public class GameContactListener implements ContactListener {
                         } else if (collidee.getUserData() == "EnemyCyclops") {
                             for (EnemyCyclops e4 : enemyEyes) {
                                 if (e4.enemyAI.getBody() == collidee.getBody()) {
+                                    //e4.getStateMachine().changeState(EnemyCyclopsState.GO_TO_PLAYER);
+                                    break;
+                                }
+                            }
+                        } else if (collidee.getUserData() == "EnemyCrab") {
+                            for (EnemyCrab e5 : enemyCrabs) {
+                                if (e5.enemyAI.getBody() == collidee.getBody()) {
                                     //e4.getStateMachine().changeState(EnemyCyclopsState.GO_TO_PLAYER);
                                     break;
                                 }
@@ -1161,7 +1211,7 @@ public class GameContactListener implements ContactListener {
                     }
 
                     if ((collideeStr == "Cobweb")) {
-                        DungeonCrawler.PLAYER_SPEED_MULTI = 15f;
+                        DungeonCrawler.PLAYER_SPEED_MULTI = 7.5f;
                         player.touchingCobweb = true;
                         break;
                     }
@@ -1169,6 +1219,7 @@ public class GameContactListener implements ContactListener {
                     if ((collideeStr == "Water")) {
                         //DungeonCrawler.PLAYER_SPEED_MULTI = 25f;
                         player.swimming = true;
+                        player.swimCount++;
                         break;
                     }
 
@@ -1203,6 +1254,14 @@ public class GameContactListener implements ContactListener {
                             hud.healthBar.loseHealth(0.5f);
                         }
                     }
+                    else if (collidee.getBody().getUserData() == "Enemy" && collidee.getUserData() != "Proximity" && (collidee.getUserData() == "EnemyCrab")) {
+                        for (EnemyCrab e : enemyCrabs) {
+                            if ((e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody())) {
+                                e.playerInRange = true;
+                            }
+                            hud.healthBar.loseHealth(0.5f);
+                        }
+                    }
                     else if (collidee.getBody().getUserData() == "Enemy" && collidee.getUserData() != "Proximity" && collidee.getUserData() == "BossMinotaur") {
 
                         if (collideeStr == "Enemy") {
@@ -1211,7 +1270,11 @@ public class GameContactListener implements ContactListener {
                                     //maybe make the minotaur stop before chasing the player again if too sudden
                                     if (b.stateMachine.getCurrentState() == BossMinotaurState.CHARGE_ATTACK)
                                         b.stunned = true;
+                                    if (difficulty == 1 || difficulty == 2) {
                                         hud.healthBar.loseHealth(0.5f);
+                                    } else if (difficulty == 3) {
+                                        hud.healthBar.loseHealth(1f);
+                                    }
                                         b.playerInRange = true;
                                         //b.stateMachine.changeState(BossMinotaurState.STOP);
                                         b.locked = true;
@@ -1402,15 +1465,15 @@ public class GameContactListener implements ContactListener {
                 case "Water":
                     if (collider.getUserData() == "PlayerBound") {
                         soundController.playSound("WaterSplash",5f,4f,0.20f);
-                        System.out.println("Sound: Water Splash!");
                         player.swimming = true;
+                        player.swimCount++;
                         break;
                     }
                     break;
 
                 case "Cobweb":
                     if (collider.getUserData() == "PlayerBound") {
-                       DungeonCrawler.PLAYER_SPEED_MULTI = 15f;
+                       DungeonCrawler.PLAYER_SPEED_MULTI = 7.5f;
                         player.touchingCobweb = true;
                        break;
                     }
@@ -1452,10 +1515,45 @@ public class GameContactListener implements ContactListener {
                             }
                         }
                     }
+                    if (colliderStr == "Vine") {
+                        for (Vine V : vines) {
+                            if (V.vineBody == collider.getBody()) {
+                                V.visible = false;
+                            }
+                        }
+                    }
                     if (colliderStr == "Statue") {
                         for (Statue S : statues) {
                             if (S.statueBody == collider.getBody()) {
                                 S.visible = false;
+                            }
+                        }
+                    }
+                    if (colliderStr == "Fire") {
+                        for (Fire F : fires) {
+                            if (F.fireBody == collider.getBody()) {
+                                F.visible = false;
+                            }
+                        }
+                    }
+                    if (colliderStr == "FireCannotExtinguish") {
+                        for (Fire F : fires) {
+                            if (F.fireBody == collider.getBody()) {
+                                F.visible = false;
+                            }
+                        }
+                    }
+                    if (colliderStr == "Brazier") {
+                        for (Brazier B : braziers) {
+                            if (B.brazierBody == collider.getBody()) {
+                                B.visible = false;
+                            }
+                        }
+                    }
+                    if (colliderStr == "Vase") {
+                        for (Vase V : vases) {
+                            if (V.vaseBody == collider.getBody()) {
+                                V.visible = false;
                             }
                         }
                     }
@@ -1482,7 +1580,11 @@ public class GameContactListener implements ContactListener {
                     break;
                 case "Arrow":
                     if (collider.getUserData() == "PlayerBound") {
-                        hud.healthBar.loseHealth(0.5f);
+                        if (difficulty == 1 || difficulty == 2) {
+                            hud.healthBar.loseHealth(0.5f);
+                        } else if (difficulty == 3) {
+                            hud.healthBar.loseHealth(1f);
+                        }
                     }
 
                     if (colliderStr.equals("Obstacle")) {
@@ -1629,8 +1731,16 @@ public class GameContactListener implements ContactListener {
                         e4.stateMachine.changeState(EnemyCyclopsState.WANDER);
                         e4.active = true;
                     }
+                    for (EnemyCrab e5 : init.roomList.get(player.currentRoom).enemyCrabs) {
+                        e5.rayCastable = true;
+                        e5.enemyAI.setMaxLinearSpeed(e5.defaultSpeed);
+                        e5.stateMachine.changeState(EnemyCrabState.WANDER);
+                        e5.active = true;
+                    }
 
                     player.touchingRoom = true;
+
+                    DungeonCrawler.trapsActive = true;
 
 
                     for (Roof r : init.roomList.get(player.currentRoom).roofs) {
@@ -1658,8 +1768,11 @@ public class GameContactListener implements ContactListener {
         String collideeAsString = collidee.getBody().getUserData().toString();
 
         if (colliderAsString == "Water" && collidee.getUserData() == "PlayerBound") {
-            player.swimming = false;
-            DungeonCrawler.PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED;
+            player.swimCount--;
+            if (player.swimCount == 0) {
+                player.swimming = false;
+                DungeonCrawler.PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED;
+            }
         }
 
         switch (colliderAsString) {
@@ -1704,12 +1817,65 @@ public class GameContactListener implements ContactListener {
 
                     break;
                 }
+            case "Vine":
+                if (collidee.getUserData() == "PlayerBound") {
+                    for (Vine V : vines) {
+                        if (V.vineBody == collider.getBody()) {
+                            V.visible = true;
+                        }
+                    }
+                    break;
+                }
             case "Statue":
                 if (collidee.getUserData() == "PlayerBound") {
 
                     for (Statue S : statues) {
                         if (S.statueBody == collider.getBody()) {
                             S.visible = true;
+                        }
+                    }
+
+                    break;
+                }
+            case "Fire":
+                if (collidee.getUserData() == "PlayerBound") {
+
+                    for (Fire F : fires) {
+                        if (F.fireBody == collider.getBody()) {
+                            F.visible = true;
+                        }
+                    }
+
+                    break;
+                }
+            case "FireCannotExtinguish":
+                if (collidee.getUserData() == "PlayerBound") {
+
+                    for (Fire F : fires) {
+                        if (F.fireBody == collider.getBody()) {
+                            F.visible = true;
+                        }
+                    }
+
+                    break;
+                }
+            case "Brazier":
+                if (collidee.getUserData() == "PlayerBound") {
+
+                    for (Brazier B : braziers) {
+                        if (B.brazierBody == collider.getBody()) {
+                            B.visible = true;
+                        }
+                    }
+
+                    break;
+                }
+            case "Vase":
+                if (collidee.getUserData() == "PlayerBound") {
+
+                    for (Vase V : vases) {
+                        if (V.vaseBody == collider.getBody()) {
+                            V.visible = true;
                         }
                     }
 
@@ -1724,7 +1890,11 @@ public class GameContactListener implements ContactListener {
                 break;
             case "Water":
                 if (collider.getUserData() == "PlayerBound") {
-                    player.swimming = false;
+                    player.swimCount--;
+                    if (player.swimCount == 0) {
+                        player.swimming = false;
+                        DungeonCrawler.PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED;
+                    }
                 }
                 break;
             case "Player":
@@ -1807,7 +1977,11 @@ public class GameContactListener implements ContactListener {
                 }
             case "Water":
                 if (collider.getUserData() == "PlayerBound") {
-                    player.swimming = false;
+                    player.swimCount--;
+                    if (player.swimCount == 0) {
+                        player.swimming = false;
+                        DungeonCrawler.PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED;
+                    }
                 }
                 break;
             case "Roof":
@@ -1879,6 +2053,14 @@ public class GameContactListener implements ContactListener {
                         e.getStateMachine().changeState(EnemyCyclopsState.WANDER);
                         }
                     }
+
+                for (EnemyCrab e : enemyCrabs) {
+                    if (e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody()){
+                        e.playerInRange = false;
+                        e.getStateMachine().changeState(EnemyCrabState.WANDER);
+                    }
+                }
+
                 }
             }
 
@@ -1892,6 +2074,10 @@ public class GameContactListener implements ContactListener {
                    // r.visible = true;
                 }
                 player.touchingRoom = false;
+
+                DungeonCrawler.cameraFading = true;
+                DungeonCrawler.roomTransition = true;
+
                 if (player.currentRoom < GenerateLevel.numRooms){ //TODO: Check for level progress before adding to current room
                         init.roomList.get(player.currentRoom).unlockDoor(world, init.roomList.get(player.currentRoom+1),false);
                 }

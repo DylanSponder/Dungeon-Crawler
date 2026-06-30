@@ -14,8 +14,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.HUD;
 import com.mygdx.game.entity.behaviours.fsm.drops.Skull;
-import com.mygdx.game.entity.utils.EnemySkullBox2DSteeringEntity;
-import com.mygdx.game.level.objects.Text;
+import com.mygdx.game.level.objects.*;
 
 public class Enemy {
 
@@ -47,22 +46,24 @@ public class Enemy {
     public HUD hud;
     public Skull skull;
     public int room;
-    public boolean playerSighted, alerted, playerInRange, rayCastable, inRespawnRange, lostSight, vulnerable, stunned;
+    public boolean playerSighted, alerted, playerInRange, rayCastable, inRespawnRange, lostSight, vulnerable, stunned, swimming;
     public Ray playerDetectionRay;
     public int sightCounter;
-    public Text alertMessage, lostSightMessage;
+    public DisplayText alertMessage, lostSightMessage;
     public float timeSinceAlerted;
     public SpriteBatch sightBatch;
-    public int defaultSpeed;
+    public int defaultSpeed, rotateTime;
 
 
     public void createEnemy(int enemyID, int defaultSpeed) {
         this.enemyID = enemyID;
         this.defaultSpeed = defaultSpeed;
         this.vulnerable = true;
+        this.rotateTime = 30;
+        this.swimming = true;
     }
 
-    public void loseHealth(int amount) {
+    public void loseEnemyHealth(int amount) {
         if (vulnerable) {
             this.ENEMY_HEALTH = this.ENEMY_HEALTH - amount;
             this.vulnerable = false;

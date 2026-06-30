@@ -21,7 +21,7 @@ import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.utils.EnemySkullBox2DSteeringEntity;
 import com.mygdx.game.entity.utils.EnemyBox2DRaycastCollisionDetector;
-import com.mygdx.game.level.objects.Text;
+import com.mygdx.game.level.objects.*;
 // import jdk.internal.jshell.tool.StopDetectingInputStream;
 
 import static com.mygdx.game.DungeonCrawler.*;
@@ -39,9 +39,9 @@ public class EnemySkull extends Enemy {
 
         this.shapeRenderer = new ShapeRenderer();
 
-        this.alertMessage = new Text(DungeonCrawler.defaultFont3,"!", Color.RED,true,1f,0.0045f,false, false, null, 0);
+        this.alertMessage = new DisplayText(DungeonCrawler.defaultFont3,"!", Color.RED,true,1f,0.0045f,false, false, null, 0);
 
-        this.lostSightMessage = new Text(DungeonCrawler.defaultFont4,"?", Color.YELLOW,true,1f,0.0045f,false, false, null, 0);
+        this.lostSightMessage = new DisplayText(DungeonCrawler.defaultFont4,"?", Color.YELLOW,true,1f,0.0045f,false, false, null, 0);
 
         this.rayCastable = false;
 
@@ -58,8 +58,8 @@ public class EnemySkull extends Enemy {
         this.playerInRange = false;
 
         //creates an enemy with a body, hitbox and steering entity
-        this.enemyBody = bodyFactory.createSimpleDynamicBody(world, x, y);
-        this.enemyDetectionBody = bodyFactory.createSimpleDynamicBody(world, x, y);
+        this.enemyBody = bodyFactory.createEnemyBody(world, x, y);
+        this.enemyDetectionBody = bodyFactory.createEnemyBody(world, x, y);
 
         this.enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 5.95f);
 
@@ -213,11 +213,17 @@ public class EnemySkull extends Enemy {
                                 && fixture.getBody().getUserData() != "Water"
                                 && fixture.getBody().getUserData() != "Stem"
                                 && fixture.getBody().getUserData() != "Statue"
-                                && fixture.getBody().getUserData() != "Pit") {
+                                && fixture.getBody().getUserData() != "Pedestal"
+                                && fixture.getBody().getUserData() != "Pit"
+                                && fixture.getBody().getUserData() != "Rubble"
+                                && fixture.getBody().getUserData() != "Flag"
+                                && fixture.getBody().getUserData() != "Potion"
+                                && fixture.getBody().getUserData() != "Coin") {
                             //sighted = true;
                             //System.out.println(fixture.getBody().getUserData());
                             sightCounter = 0;
                             playerSighted = false;
+
                             return 0;
                         } else if (fixture.getBody().getType() == BodyDef.BodyType.DynamicBody && !fixture.isSensor()) {// && fixture.getBody().getUserData() != "Enemy"
                             playerSighted = false;
@@ -290,14 +296,18 @@ public class EnemySkull extends Enemy {
             if (xA > yA) {
                 if (x < 0) {
                     this.facing = "Left";
+                    this.rotateTime = 10;
                 } else {
                     this.facing = "Right";
+                    this.rotateTime = 10;
                 }
             } else {
                 if (y < 0) {
                     this.facing = "Down";
+                    this.rotateTime = 10;
                 } else {
                     this.facing = "Up";
+                    this.rotateTime = 10;
                 }
             }
 

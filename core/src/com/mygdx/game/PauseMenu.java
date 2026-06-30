@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Align;
 
 import static com.mygdx.game.DungeonCrawler.optionsMenuStage;
 import static com.mygdx.game.DungeonCrawler.pauseMenuStage;
+import static com.mygdx.game.DungeonCrawler.bossHealthbarStage;
 import static com.mygdx.game.OptionsMenu.optionsMenuContainer;
 
 public class PauseMenu {

@@ -1,20 +1,20 @@
 package com.mygdx.game;
 
-import com.mygdx.game.level.objects.Text;
+import com.mygdx.game.level.objects.DisplayText;
 
 public class ShopItem {
 
     public int index, amount, cost;
     public String kind;
     public boolean purchased;
-    public Text desc;
+    public DisplayText desc;
 
     public void ShopInventory() {
 
 
     }
 
-    public void createItem(int index, String itemKind, int amount, int cost, Text desc) {
+    public void createItem(int index, String itemKind, int amount, int cost, DisplayText desc) {
         this.index = index;
         this.amount = amount;
         this.cost = cost;

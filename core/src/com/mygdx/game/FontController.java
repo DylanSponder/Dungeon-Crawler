@@ -2,40 +2,43 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.level.objects.Text;
+import com.mygdx.game.level.objects.DisplayText;
 
 public class FontController {
 
-    public static void drawInventoryFont(SpriteBatch inventoryBatch, BitmapFont font, float x, float y, Text text2) {
+    public static void drawInventoryFont(SpriteBatch inventoryBatch, BitmapFont font, float x, float y, DisplayText text2) {
         font.getData().setScale(0.6f);
         font.setUseIntegerPositions(false);
         font.draw(inventoryBatch, text2.message, x, y);
 
-        if (text2.hasSprite && text2.sprite == CreateAssets.getInstance().potionItemSprite){
-            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-10f,9,11,9,11,0.6f,0.6f,0);
+        if (text2.hasSprite && text2.sprite == CreateAssets.getInstance().potionHUDSprite){
+            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-10f,9,11,11,13,0.6f,0.6f,0);
         }
         else if((text2.hasSprite && text2.sprite == CreateAssets.getInstance().torchItemSprite)) {
-            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-11.5f,10,15,10,15,0.6f,0.6f,0);
+            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-11.5f,12,17,12,17,0.6f,0.6f,0);
+        }
+        else if((text2.hasSprite && text2.sprite == CreateAssets.getInstance().wingsItemSprite)) {
+            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-11.5f,14,13,14,13,0.6f,0.6f,0);
         }
         else if((text2.hasSprite && text2.sprite == CreateAssets.getInstance().shieldItemSprite)) {
-            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-10f,11,11,11,11,0.6f,0.6f,0);
+            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-10f,0,0,13,13,0.6f,0.6f,0);
         }
         else if((text2.hasSprite && text2.sprite == CreateAssets.getInstance().beltItemSprite)) {
-            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-10f,13,12,13,12,0.6f,0.6f,0);
+            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-10f,15,14,15,14,0.6f,0.6f,0);
         }
         else if((text2.hasSprite && text2.sprite == CreateAssets.getInstance().chiselItemSprite)) {
-            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-10f,13,13,13,13,0.6f,0.6f,0);
+            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-10f,15,15,15,15,0.6f,0.6f,0);
         }
         else if((text2.hasSprite && text2.sprite == CreateAssets.getInstance().greekfireItemSprite)) {
-            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-13f,14,15,14,15,0.6f,0.6f,0);
+            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-13f,16,17,16,17,0.6f,0.6f,0);
         }
         else if (text2.hasSprite && text2.sprite == CreateAssets.getInstance().coinHUDSprite) {
-            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-9.3f,10,10,9,9,0.6f,0.6f,0);
+            inventoryBatch.draw(text2.sprite,text2.textX+text2.offset,text2.textY-9.3f,11,11,11,11,0.6f,0.6f,0);
         }
 
     }
 
-    public static void drawFadingFont(SpriteBatch fontBatch, BitmapFont font2, float x, float y, Text text, float fontScale) {
+    public static void drawFadingFont(SpriteBatch fontBatch, BitmapFont font2, float x, float y, DisplayText text, float fontScale) {
             font2.getData().setScale(fontScale);
 
             font2.setColor(text.color);
@@ -60,7 +63,7 @@ public class FontController {
 
     }
 
-    public static void drawDriftingFont(SpriteBatch fontBatch, BitmapFont font2, float x, float y, Text text, int speed) {
+    public static void drawDriftingFont(SpriteBatch fontBatch, BitmapFont font2, float x, float y, DisplayText text, int speed) {
         //TODO: Finish implementation - this is meant for 'floating money leaving the players total money and disappearing after a shop purchase'
         int x2;
         int y2;

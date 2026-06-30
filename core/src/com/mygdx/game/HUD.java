@@ -12,20 +12,25 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.entity.behaviours.fsm.BossMinotaur;
 
-import static com.mygdx.game.DungeonCrawler.optionsMenuStage;
-import static com.mygdx.game.DungeonCrawler.pauseMenuStage;
+import static com.mygdx.game.DungeonCrawler.*;
 
 public class HUD {
   public Stage stage;
   public Stage subStage;
+  public Stage menuStage;
   public Group itemGroup, compassGroup;
   int topPadding;
   public HealthBar healthBar;
+  public BossHealthbar bossHealthbar;
   public PotionSlotInventory inventory;
   public VerticalGroup itemVerticalGroup, compassVerticalGroupSpacer, compassVerticalGroup;
-  private Label moneyAmount;
-  private Table moneyTable, itemTable;
+  private Label moneyAmount, bossName;
+  private Table moneyTable;
+    private Table itemTable;
+    private static Table bossNameTable;
+    private static Table bossHealthTable;
   private Container compassSpacerContainer, compassContainer;
   public static RotateByAction rotateArrow;
   public static RepeatAction repeatAction;
@@ -35,10 +40,10 @@ public class HUD {
   public Label winWords, startWords, roomWords;
   private float hudFade;
   public static TextureRegionDrawable compassDrawable, compassArrowDrawable;
-  public static TextureRegionDrawable torchSlot, beltSlot, shieldSlot, greekfireSlot, chiselSlot;
-  public static TextureRegionDrawable torchItem, beltItem, shieldItem, greekfireItem, chiselItem;
-  public static Image torchSlotImage, beltSlotImage, shieldSlotImage, greekfireSlotImage, chiselSlotImage;
-  public static Image torchItemImage, beltItemImage, shieldItemImage, greekfireItemImage, chiselItemImage;
+  public static TextureRegionDrawable torchSlot, beltSlot, shieldSlot, greekfireSlot, chiselSlot, wingsSlot;
+  public static TextureRegionDrawable torchItem, beltItem, shieldItem, greekfireItem, chiselItem, wingsItem;
+  public static Image torchSlotImage, beltSlotImage, shieldSlotImage, greekfireSlotImage, chiselSlotImage, wingsSlotImage;
+  public static Image torchItemImage, beltItemImage, shieldItemImage, greekfireItemImage, chiselItemImage, wingsItemImage;
   //private CreateTexture tx;
 
   public HUD(Viewport vp, SpriteBatch sb) {
@@ -88,6 +93,9 @@ public class HUD {
     beltSlotImage = new Image(beltSlot);
     itemVerticalGroup.addActor(beltSlotImage);
 
+    wingsSlot = new TextureRegionDrawable(tx.wingsSlotSprite);
+    wingsSlotImage = new Image(wingsSlot);
+    itemVerticalGroup.addActor(wingsSlotImage);
 
     table.add(itemGroup);
 
@@ -96,14 +104,16 @@ public class HUD {
     Sprite healthSymbolEmpty = new Sprite(tx.heartHUDTexture, 64, 0, 16, 16);
     //Health slots
     healthBar = new HealthBar(3f, healthSymbol, healthSymbolHalf, healthSymbolEmpty, 60);
+
+    //bossHealthbar = bossMinotaurs.get(0).minoHealthbar;
     
     moneyTable = new Table();
-    moneyAmount = new Label(totalGoldAsString, new LabelStyle(DungeonCrawler.defaultFont, Color.GOLD));
+    moneyAmount = new Label(totalGoldAsString, new LabelStyle(DungeonCrawler.defaultFont2, Color.GOLD));
     moneyTable.add(moneyAmount).padTop(5);
-    moneySymbol = new Image(new Sprite(tx.coinHUDTexture, 10, 10));
+    moneySymbol = new Image(new Sprite(tx.coinHUDTexture, 12, 12));
     moneyTable.add(moneySymbol).padBottom(0);
 
-    Sprite potionSymbol = new Sprite(tx.potionItemTexture, 9, 11);
+    Sprite potionSymbol = new Sprite(tx.potionHUDTexture, 11, 13);
     Sprite emptySlotSymbol = new Sprite(tx.potionSlotTexture, 9, 11);
     //Potion slots
     inventory = new PotionSlotInventory(potionSymbol, emptySlotSymbol, 1, 150);
@@ -112,6 +122,21 @@ public class HUD {
     table.add(healthBar);
     table.add(inventory).padLeft(spacing-(potionSymbol.getWidth()*3)).padRight(spacing);//.align(Align.top);//.spaceLeft(spacing-potionSymbol.getWidth());
     table.add(moneyTable);
+
+    //create the boss healtbar with name above
+
+      bossName = new Label("MINOTAUR", new LabelStyle(DungeonCrawler.defaultFont2, Color.WHITE));
+      bossNameTable = new Table();
+      bossNameTable.bottom();
+      bossNameTable.padBottom(4);
+      bossNameTable.setFillParent(true);
+      bossNameTable.add(bossName);
+
+      bossHealthTable = new Table();
+      bossHealthTable.bottom();
+      bossHealthTable.padRight(14);
+      bossHealthTable.setFillParent(true);
+      bossHealthTable.add(bossHealthbar);
 
     //create the compass that guides players to the exit door for that room
 
@@ -163,7 +188,24 @@ public class HUD {
 
     pauseMenuStage.addActor(table);
     optionsMenuStage.addActor(table);
+
+
+
+
+    bossHealthbarStage.clear();
+
   }
+
+  public static void showBossBar(String bossName) {
+
+      bossHealthbarStage.addActor(bossHealthTable);
+      bossHealthbarStage.addActor(bossNameTable);
+  }
+
+    public static void clearBossBar() {
+
+        bossHealthbarStage.clear();
+    }
 
   public void addItem(int type) {
 
@@ -209,6 +251,13 @@ public class HUD {
         itemVerticalGroup.swapActor(beltSlotImage, beltItemImage);
         itemVerticalGroup.removeActor(beltSlotImage);
         break;
+        case 6:
+            wingsItem = new TextureRegionDrawable(tx.wingsItemSprite);
+            wingsItemImage = new Image(wingsItem);
+            itemVerticalGroup.addActor(wingsItemImage);
+            itemVerticalGroup.swapActor(wingsSlotImage, wingsItemImage);
+            itemVerticalGroup.removeActor(wingsSlotImage);
+            break;
     }
   }
 
@@ -217,7 +266,12 @@ public class HUD {
     Table startTable = new Table();
     startTable.center();
     startTable.setFillParent(true);
-    startWords = new Label("j LEVEL ONE j", new LabelStyle(DungeonCrawler.defaultFont, Color.WHITE));
+    if (modifiersAllowed && DungeonCrawler.curse.enabled) {
+        startWords = new Label(curse.message.message, new LabelStyle(DungeonCrawler.defaultFont, curse.message.color));
+    } else {
+        startWords = new Label("Ω HELLAS DUNGEON Ω", new LabelStyle(DungeonCrawler.defaultFont, Color.WHITE));
+    }
+
     startTable.add(startWords);
     subStage.addActor(startTable);
   }
@@ -257,7 +311,7 @@ public class HUD {
             }
             subStage.clear();
           } else {
-            hudFade = hudFade - 0.0045f;
+            hudFade = hudFade - 0.0025f;
             words.setColor(1f,1f,1f,hudFade);
           }
       }
@@ -273,9 +327,9 @@ public class HUD {
      }
 
     totalGoldAsString  = String.valueOf(totalGold);
-    moneyAmount = new Label(totalGoldAsString, new LabelStyle(DungeonCrawler.defaultFont, Color.GOLD));
+    moneyAmount = new Label(totalGoldAsString, new LabelStyle(DungeonCrawler.defaultFont2, Color.GOLD));
     moneyTable.add(moneyAmount).padTop(5);
-    moneySymbol = new Image(new Sprite(tx.coinHUDTexture, 10, 10));
+    moneySymbol = new Image(new Sprite(tx.coinHUDTexture, 12, 12));
     moneyTable.add(moneySymbol).padBottom(0);
   }
 

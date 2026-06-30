@@ -21,7 +21,7 @@ import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.utils.EnemyGhostBox2DSteeringEntity;
 import com.mygdx.game.entity.utils.EnemyBox2DRaycastCollisionDetector;
-import com.mygdx.game.level.objects.Text;
+import com.mygdx.game.level.objects.DisplayText;
 
 import static com.mygdx.game.DungeonCrawler.*;
 
@@ -36,9 +36,9 @@ public class EnemyGhost extends Enemy {
         BodyFactory bodyFactory = new BodyFactory();
         this.shapeRenderer = new ShapeRenderer();
 
-        this.alertMessage = new Text(DungeonCrawler.defaultFont3,"!", Color.RED,true,1f,0.0045f,false, false, null, 0);
+        this.alertMessage = new DisplayText(DungeonCrawler.defaultFont3,"!", Color.RED,true,1f,0.0045f,false, false, null, 0);
 
-        this.lostSightMessage = new Text(DungeonCrawler.defaultFont4,"?", Color.YELLOW,true,1f,0.0045f,false, false, null, 0);
+        this.lostSightMessage = new DisplayText(DungeonCrawler.defaultFont4,"?", Color.YELLOW,true,1f,0.0045f,false, false, null, 0);
 
         this.rayCastable = false;
 
@@ -53,8 +53,8 @@ public class EnemyGhost extends Enemy {
         this.playerInRange = false;
 
         //creates an enemy with a body, hitbox and steering entity
-        this.enemyBody = bodyFactory.createSimpleDynamicBody(world, x, y);
-        this.enemyDetectionBody = bodyFactory.createSimpleDynamicBody(world, x, y);
+        this.enemyBody = bodyFactory.createEnemyBody(world, x, y);
+        this.enemyDetectionBody = bodyFactory.createEnemyBody(world, x, y);
 
         this.enemyHitbox = bodyFactory.createEnemyHitbox(enemyBody, 5.95f);
 

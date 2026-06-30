@@ -1,0 +1,15 @@
+tlw,dtl,doortl,doortr,dtr,tw,tw,tw,tw,tw,tw,tw,tw,tw,trw
+lw,fped1,f,f,f,f,f,f,f,f,f,f,f,fped1,dru
+lw,f,fcands,f,f21,f,f,fcands,f,f,f,f,fcands,f,doorur
+lw,f,f,pu1,pu1,pu1,pu1,pu1,pu1,pu1,pu1,pu1,f,f,doorlr
+lw,f,f,pl,prub1r,pd,pd,pd,pd,pd,prub1r,pr,f,f,drl
+lw,f,f,pl,prub1r,f,f,fcand2,f,f,prub1r,pr,f,f,rw
+lw,f,f,pl,prub1r,fcoltu1,f,fenemy,f,fcoltu1,prub1r,pr,f,f,rw
+lw,f,fcands,pl,prub1r,fcand2,f,fped3heal,f,fcand2,prub1r,pr,fcands,f,rw
+lw,f,f,pl,prub1r,f,f,f,f,f,prub1r,pr,f,f,rw
+lw,f,f,pl,prub1r,fcoltu1,f,fcand2,f,fcoltu1,prub1r,pr,f,f,rw
+dlu,f,f,pl,p,prub1r,prub1r,prub1r,prub1r,prub1r,p,pr,f,f,rw
+doorul,f,f,pd,pd,pd,pd,pd,pd,pd,pd,pd,f,f,rw
+doorll,f,fcands,f,f,f,f,fcands,f,f,f,f,fcands,f,rw
+dll,fped1,f,f,f,f,f,f,f,f,f,f,f,fped1,rw
+blw,bw,bw,bw,bw,bw,bw,bw,bw,bw,dbl,doorbl,doorbr,dbr,bw

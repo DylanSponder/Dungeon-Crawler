@@ -9,15 +9,14 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.box2D.BodyFactory;
-import com.mygdx.game.level.objects.Fire;
-import com.mygdx.game.level.objects.Room;
+import com.mygdx.game.level.objects.*;
 
 public class Skull {
 
     public Body skullBody;
     public Fixture skullHitbox;
     public float skullX, skullY;
-    public boolean skullCreated;
+    public boolean skullCreated, broken;
     public float SKULL_HEALTH;
     public float iFrames = 0.66f;
     public boolean skullIFrame;
@@ -89,15 +88,38 @@ public class Skull {
             //get nearest spawner by checking vector equation coords
             //send a ray to each spawner, if it collides with the spawner radius, ignore.
 
+
+
             world.rayCast((fixture, point, normal, fraction) -> {
                 if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody){
 
+                    System.out.println(fixture.getBody().getUserData());
+
                     //TODO: We need this to ignore the Player and not look for fires out of range
 
-                    if (fixture.getUserData() == "Spawner" || fixture.getBody().getUserData() == "Spawner") {
+                    /*\
+
+                            && fixture.getBody().getUserData() == "Candle"
+                            && fixture.getBody().getUserData() == "Cobweb"
+                            && fixture.getBody().getUserData() == "Roof"
+                            && fixture.getBody().getUserData() == "TrapArea"
+                            && fixture.getBody().getUserData() == "Water"
+                            && fixture.getBody().getUserData() == "Stem"
+                            && fixture.getBody().getUserData() == "Statue"
+                            && fixture.getBody().getUserData() == "Pit"
+                            && fixture.getBody().getUserData() == "Rubble"
+                            && fixture.getBody().getUserData() == "Flag"
+                            && fixture.getBody().getUserData() == "Potion"
+                            && fixture.getBody().getUserData() == "Coin"
+                            && fixture.getBody().getUserData() == "Pedestal"
+                     */
+
+                    if (fixture.getBody().getUserData() == "Wall" || fixture.getBody().getUserData() == "Obstacle" ||
+                    fixture.getUserData() == "Spawner" || fixture.getBody().getUserData() == "Spawner") {
+
                         return 0;
                     }
-                    else if (fixture.getUserData() == "Fire" || fixture.getBody().getUserData() == "Fire") {
+                    else  {
                         rayResult = true;
                         return 0;
                     }
@@ -110,4 +132,6 @@ public class Skull {
 
         return rayResult;
     }
+
+
 }

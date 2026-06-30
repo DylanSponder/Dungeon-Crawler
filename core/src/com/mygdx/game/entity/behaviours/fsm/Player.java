@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.Random;
@@ -22,9 +23,10 @@ public class Player {
     public Shopkeeper shopkeeper;
     public int currentRoom;
     public int facing;
+    public int swimCount;
     public boolean touchingRoom, touchingDoor, touchingCobweb, swimming;
     public boolean midAnimationFrame;
-    public boolean hasGreekFire, hasShield, hasTorch, torchApplied, hasChisel;
+    public boolean hasGreekFire, hasShield, hasTorch, torchApplied, hasChisel, hasWings;
     public int greekFireUses;
     public boolean floorCleared, roomCleared, playerInput, sploshing;
     public float stateTime, timeSinceMoved;
@@ -41,6 +43,7 @@ public class Player {
         hasTorch = false;
         torchApplied = false;
         hasChisel = false;
+        hasWings = false;
     }
 
     public Body createPlayer(World world, float PLAYER_X, float PLAYER_Y, RayHandler rayHandler){
@@ -60,6 +63,17 @@ public class Player {
         this.playerBody.setUserData("Player");
 
         return playerBody;
+    }
+
+    public void removeCollisionFilter(short filter) {
+
+        for (Fixture fixture : this.playerBody.getFixtureList()) {
+            Filter filterOld = fixture.getFilterData();
+            Filter filterNew = new Filter();
+            filterNew.maskBits = (short) (filterOld.maskBits - filter);
+            fixture.setFilterData(filterNew);
+        }
+
     }
 
     public static void renderPlayer(SpriteBatch batch, TextureRegion playerSprite, float x, float y) {
