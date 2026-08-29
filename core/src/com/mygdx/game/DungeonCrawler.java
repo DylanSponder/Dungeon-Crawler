@@ -1,7 +1,6 @@
 package com.mygdx.game;
 import java.util.*;
 
-import box2dLight.ConeLight;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -12,6 +11,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
@@ -22,7 +22,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.physics.bullet.collision._btMprSimplex_t;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.*;
@@ -48,7 +47,7 @@ import static com.mygdx.game.OptionsMenu.optionsMenuContainer;
 import static com.mygdx.game.PauseMenu.pauseMenuContainer;
 
 public class DungeonCrawler extends ApplicationAdapter {
-	private SpriteBatch arrowBatch, enemySkullBatch, enemySpiderBatch, enemyGhostBatch, enemyEyeBatch, enemyCrabBatch, potBatch, hudBatch, tutoBatch, alertFontBatch, inventoryBatch, sightFontBatch;
+	private SpriteBatch arrowBatch, enemySkullBatch, enemySpiderBatch, enemyGhostBatch, enemyEyeBatch, enemyCrabBatch, enemyGryphonBatch, potBatch, hudBatch, tutoBatch, alertFontBatch, inventoryBatch, sightFontBatch;
 	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, coinBatch, obstacleBatch, fireBatch, flameBatch, webBatch, cobBatch, candleBatch, lampBatch, brazierBatch, eyebeamBatch;
 	private SpriteBatch bossMinotaurBatch, statueBatch, flagBatch, vineBatch, waveBatch, waterBatch, waterfallBatch, raisedFloorBatch, rubbleBatch, drainBatch, rippleBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch, roofBatch, columnBaseLowerBatch, heartBatch, pedestalUpperBatch, firePitBatch, vaseBatch;
@@ -67,7 +66,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ShapeRenderer maskRenderer;
     public float cameraShapeAlpha;
     public static boolean roomTransition, cameraFading, loweredCameraAlpha;
-	public static boolean debug, pauseMenuClosed, optionsMenuClosed, allowPlayerInput, modifiersAllowed, shadersEnabled;
+	public static boolean debug, pauseMenuClosed, optionsMenuClosed, allowPlayerInput, inputHeld, modifiersAllowed, shadersEnabled;
 	public FPSLogger fpsLogger;
 	public GameInputProcessor gip;
 	private Box2DDebugRenderer b2dr;
@@ -103,6 +102,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<EnemyGhost> enemyGhosts, dyingGhosts;
 	public static ArrayList<EnemyCyclops> enemyEyes, dyingEyes;
     public static ArrayList<EnemyCrab> enemyCrabs, dyingCrabs;
+    public static ArrayList<EnemyGryphon> enemyGryphons, dyingGryphons;
 	public static ArrayList<BossMinotaur> bossMinotaurs, dyingMinotaurs;
 	public static ArrayList<Skull> skulls, brokenSkulls;
 	public static ArrayList<Fire> extinguishedRespawnFires;
@@ -138,8 +138,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Water> water;
 	public static ArrayList<Statue> statues;
 	public static ArrayList<Roof> roofs;
-	public static float PLAYER_HORIZONTAL_SPEED = 0f;
-	public static float PLAYER_VERTICAL_SPEED = 0f;
+	public static float PLAYER_HORIZONTAL_SPEED_PERCENTAGE = 0f;
+	public static float PLAYER_VERTICAL_SPEED_PERCENTAGE = 0f;
+    public static float PLAYER_HORIZONTAL_SPEED = 0f;
+    public static float PLAYER_VERTICAL_SPEED = 0f;
 	public static float PLAYER_X = 0f;
 	public static float PLAYER_Y = 0f;
 	public static float PLAYER_SPEED_MULTI;
@@ -160,6 +162,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public TextureRegion currentFrame;
 	public ShaderProgram flagShader, waveShader, vineShader, fireShader, waterfallShader;
 	public float flag_time, ocean_time, ocean2_time, vine_time, fire_time, waterfall_time;
+    public FrameBuffer fboWater;
 
 
 	public static boolean leanDown = false, leanUp = false, leanLeft = false, leanRight = false, leanUpLeft = false, leanUpRight = false;
@@ -191,6 +194,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 		menuRenderer = new ShapeRenderer();
         cameraShapeRenderer = new ShapeRenderer();
         cameraShapeAlpha = 0;
+
+
+
 		playerBatch = new SpriteBatch();
 		weaponBatch = new SpriteBatch();
         torchBatch = new SpriteBatch();
@@ -201,6 +207,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		enemyGhostBatch = new SpriteBatch();
 		enemyEyeBatch = new SpriteBatch();
         enemyCrabBatch = new SpriteBatch();
+        enemyGryphonBatch = new SpriteBatch();
 		arrowBatch = new SpriteBatch();
 		skullBatch = new SpriteBatch();
 		boneBatch = new SpriteBatch();
@@ -295,6 +302,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		enemyGhosts = new ArrayList<>();
 		enemyEyes = new ArrayList<>();
         enemyCrabs = new ArrayList<>();
+        enemyGryphons = new ArrayList<>();
 		bossMinotaurs = new ArrayList<>();
 		deadEnemyBodies = new ArrayList<>();
 		dyingSkulls = new ArrayList<>();
@@ -302,6 +310,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		dyingGhosts = new ArrayList<>();
 		dyingEyes = new ArrayList<>();
         dyingCrabs = new ArrayList<>();
+        dyingGryphons = new ArrayList<>();
 		dyingMinotaurs = new ArrayList<>();
 		skulls = new ArrayList<>();
 		brokenSkulls = new ArrayList<>();
@@ -411,6 +420,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		vp = new ExtendViewport(camera.viewportWidth, camera.viewportHeight);
 
+        fboWater = new FrameBuffer(Pixmap.Format.RGBA8888, 16,16, false);
+        fboWater.getColorBufferTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 		//create a menu stage which uses the same viewport as the camera
 		pauseMenuStage = new Stage(DungeonCrawler.vp);
 		optionsMenuStage = new Stage(DungeonCrawler.vp);
@@ -433,7 +444,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		//create the Box2D ray handler
 		rayHandler = new RayHandler(world);
-		rayHandler.setAmbientLight(0f, 0f, 0f, 0.1f);//0.013
+		rayHandler.setAmbientLight(0f, 0f, 0f, 0.013f);//0.013
 		//0.013
 		//fullbright if in debug mode
 		if (debug) {
@@ -556,6 +567,23 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 		boneParticleEffect.load(Gdx.files.internal("HellasDungeon/Particles/Bone/Bone.p"),Gdx.files.internal("HellasDungeon/Particles/Bone/"));
 
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                if (enemyCrabs != null) {
+                    for (EnemyCrab c : enemyCrabs) {
+                        for (Body b: c.boxes) {
+                            world.destroyBody(b);
+                        }
+                    }
+                }
+            }
+        }, 1f);
+
+
+
+
+
 
 		if (!debug) {
 			//set the window mode to fullscreen and hide the cursor when in the game window
@@ -565,7 +593,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 		}
 
 		//phone screen style resolution
-		Gdx.graphics.setWindowedMode(600,900);
+		Gdx.graphics.setWindowedMode(740,1110);
+        //Gdx.graphics.setWindowedMode(600,900);
 	}
 
 	@Override
@@ -894,47 +923,51 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			raisedFloorBatch.begin();
 
-			if (raf.time < raf.raiseTime) {
-				raf.time = raf.time + (Gdx.graphics.getDeltaTime() * TIME_SCALE);
-				//System.out.println(raf.time);
 
-			} else if (raf.raising) {
+                if (raf.time < raf.raiseTime) {
+                    raf.time = raf.time + (Gdx.graphics.getDeltaTime() * TIME_SCALE);
+                    //System.out.println(raf.time);
 
-				if (!(raf.rafBody.getPosition().y >= raf.rafY + 12)) {
-					//raf.topY += Gdx.graphics.getDeltaTime() * 8;
-					raf.rafBody.setLinearVelocity(0, 10);
-				} else {
-					raf.rafBody.setLinearVelocity(0, 0);
-					raf.lowering = false;
-					Timer.schedule(new Timer.Task() {
-						@Override
-						public void run() {
-								raf.lowering = true;
-								raf.raising = false;
+                } else if (raf.raising && raf.active
+                ) {
 
-						}
-					}, 0.5f);
-				}
-			} else if (raf.lowering) {
-				if (!(raf.rafBody.getPosition().y <= raf.rafY + 4)) {
-					//raf.topY -= Gdx.graphics.getDeltaTime() * 8;
-					raf.rafBody.setLinearVelocity(0, -10);
-				} else {
-					raf.rafBody.setLinearVelocity(0, 0);
-					raf.lowered = true;
-					raf.lowering = false;
-					Timer.schedule(new Timer.Task() {
-						@Override
-						public void run() {
-							if (!raf.entityColliding) {
-								raf.lowered = false;
-								raf.raising = true;
-							}
-						}
-					}, 1f);
+                    if (!(raf.rafBody.getPosition().y >= raf.rafY + 12)) {//12
+                        //raf.topY += Gdx.graphics.getDeltaTime() * 8;
+                        raf.rafBody.setLinearVelocity(0, 10);
+                    } else {
+                        raf.rafBody.setLinearVelocity(0, 0);
+                        raf.lowering = false;
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                raf.lowering = true;
+                                raf.raising = false;
 
-				}
-			}
+                            }
+                        }, 0.5f);
+                    }
+                } else if (raf.lowering) {
+                    if (!(raf.rafBody.getPosition().y <= raf.rafY + 4.1f)) {
+                        //raf.topY -= Gdx.graphics.getDeltaTime() * 8;
+                        raf.rafBody.setLinearVelocity(0, -10);
+                    } else {
+                        raf.rafBody.setLinearVelocity(0, 0);
+                        raf.lowered = true;
+                        raf.lowering = false;
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                if (!raf.entityColliding) {
+                                    raf.lowered = false;
+                                    raf.raising = true;
+                                }
+                            }
+                        }, 1f);
+
+                    }
+                }
+
+
 
 			Rectangle clipBounds = new Rectangle(raf.rafX, raf.rafY, 16, 16);
 			RaisedFloor.renderRaisedFloor(raisedFloorBatch, clipBounds, tx.raisedFloorSprite, raf.rafBody.getPosition().x - 8, raf.rafBody.getPosition().y - 12);
@@ -1089,7 +1122,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			for (Pot p : pots) {
 				if (!p.potCreated) {
-					potArrayMap.put(p.createPot(potArrayMap), p);
+					potArrayMap.put(p.createPot(potArrayMap, p.linkedFloor), p);
 				}
 			}
 
@@ -1199,31 +1232,40 @@ public class DungeonCrawler extends ApplicationAdapter {
 						int min = 1;
 						int max = 100;
 						int lootChance = Random.randomInt(100,1);
+                        if (pot.onRaisedFloor) {
+                            Timer.schedule(new Timer.Task() {
+                                @Override
+                                public void run() {
+                                    pot.linkedFloor.active = true;
+                                }
+                            }, 0.5f);
 
-						//5% chance to get a Potion
-						if (lootChance >= 97 && lootChance <= 100) {
-							//create potion object
-							Potion potion = new Potion(world, pot.potBody.getPosition().x, pot.potBody.getPosition().y, 1);
-							potion.createPotion(potionArrayMap, rayHandler);
-							potions.add(potion);
-							potionArrayMap.put(potion.potionBody, potion);
+                        } else {
+                            //5% chance to get a Potion
+                            if (lootChance >= 97 && lootChance <= 100) {
+                                //create potion object
+                                Potion potion = new Potion(world, pot.potBody.getPosition().x, pot.potBody.getPosition().y, 1);
+                                potion.createPotion(potionArrayMap, rayHandler);
+                                potions.add(potion);
+                                potionArrayMap.put(potion.potionBody, potion);
 
-						//25% chance to get a Coin
-						} else if (lootChance >= 1 && lootChance <= 25) {
-							Coin coin = new Coin(world, pot.potBody.getPosition().x, pot.potBody.getPosition().y);
-							coin.createCoin(coinArrayMap, rayHandler);
-							coins.add(coin);
-							coinArrayMap.put(coin.coinBody, coin);
+                                //25% chance to get a Coin
+                            } else if (lootChance >= 1 && lootChance <= 25) {
+                                Coin coin = new Coin(world, pot.potBody.getPosition().x, pot.potBody.getPosition().y);
+                                coin.createCoin(coinArrayMap, rayHandler);
+                                coins.add(coin);
+                                coinArrayMap.put(coin.coinBody, coin);
 
-						//10% chance to get a Heart
-						} else if (lootChance >= 26 && lootChance <= 36) {
-							//create heart object
-							int heartType = Random.randomInt(2,1);
-							Heart heart = new Heart(world, pot.potBody.getPosition().x, pot.potBody.getPosition().y, heartType);
-							heart.createHeart(heartArrayMap, rayHandler);
-							hearts.add(heart);
-							heartArrayMap.put(heart.heartBody, heart);
-						}
+                                //10% chance to get a Heart
+                            } else if (lootChance >= 26 && lootChance <= 36) {
+                                //create heart object
+                                int heartType = Random.randomInt(2, 1);
+                                Heart heart = new Heart(world, pot.potBody.getPosition().x, pot.potBody.getPosition().y, heartType);
+                                heart.createHeart(heartArrayMap, rayHandler);
+                                hearts.add(heart);
+                                heartArrayMap.put(heart.heartBody, heart);
+                            }
+                        }
 						pots.remove(pot);
 						potArrayMap.removeKey(pot.potBody);
 						world.destroyBody(pot.potBody);
@@ -1318,9 +1360,23 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 
 		for (Fire f : fires) {
+            if (shadersEnabled) {
+                flameBatch.setShader(fireShader);
+                fireShader.setUniformf("u_swayIntensity", 0.1f);//0.03
+                fireShader.setUniformf("u_verticalDensity", 10.000f);//10
+                fireShader.setUniformf("u_time", fire_time + f.time);
+                fireShader.setUniformf("u_speed", 6.0f);
+                fireShader.setUniformf("u_alpha", f.alpha / 90f);
+                fireShader.setUniformf("u_fixedBasePosY",0.3f);
+            }
 			if (f.type == 3 || f.type == 5 || f.type == 6) {
 				if (!f.blue) {
-					currentFrame = tx.flameAnimation.getKeyFrame(stateTime, f.active);
+                    if (f.type == 6) {
+                        currentFrame = tx.candleFlameAnimation.getKeyFrame(stateTime, f.active);
+                    } else {
+                        currentFrame = tx.flameAnimation.getKeyFrame(stateTime, f.active);
+                    }
+
 				} else {
 					currentFrame = tx.blueFlameAnimation.getKeyFrame(stateTime, f.active);
 				}
@@ -1461,21 +1517,73 @@ public class DungeonCrawler extends ApplicationAdapter {
 			currentFrame = tx.waterAnimation.getKeyFrame(w.stateTime, true);
 			w.stateTime += (Gdx.graphics.getDeltaTime() * TIME_SCALE);
 
-			//GenerateLevel.init.roomList.get(r.index).roomHitbox.getBody().getPosition().x;
+            waterBatch.begin();
+            Water.renderWater(waterBatch, currentFrame, w.waterX, w.waterY, 16, 16, 1);
+            waterBatch.end();
 
-			//shader variables passed into flag fragment shader
-			/*
-			waveBatch.setShader(waveShader);
-			waveShader.setUniformf("u_swayIntensity", 0.05f);//0.03
-			waveShader.setUniformf("u_verticalDensity", 1f);
-			waveShader.setUniformf("u_time", flag_time + w.time);
-			waveShader.setUniformf("u_speed", 1.6f);
 
-										Fire.renderFire(fireBatch, currentFrame, f.fireX, f.fireY, f.smoking, true);
-			 */
-			waterBatch.begin();
-			Water.renderWater(waterBatch, currentFrame, w.waterX, w.waterY, 16, 16, 1);
-			waterBatch.end();
+/*
+
+            if (shadersEnabled) {
+                waterBatch.setShader(flagShader);
+                waveShader.setUniformf("u_swayIntensity", 0.05f);//0.03
+                waveShader.setUniformf("u_verticalDensity", 1f);
+                waveShader.setUniformf("u_time", w.stateTime);
+                waveShader.setUniformf("u_speed", 1.6f);
+            }
+            else {
+                waterBatch.setShader(null);
+            }
+
+*/
+
+
+
+
+/*
+
+            fboWater.begin();
+
+            Gdx.gl.glClearColor(1,1,1,1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+            waterBatch.setProjectionMatrix(
+                    new Matrix4().setToOrtho2D(0,0,16,16)
+            );
+            waterBatch.setColor(1, 1, 1, 0.8f);
+            waterBatch.begin();
+
+            waterBatch.draw(currentFrame,0,0);
+
+            waterBatch.end();
+
+            fboWater.end();
+
+
+            TextureRegion waterRegion =
+                    new TextureRegion(fboWater.getColorBufferTexture());
+
+            waterRegion.flip(false,true);
+
+            waterBatch.setProjectionMatrix(camera.combined);
+
+            waterBatch.begin();
+
+            waterBatch.draw(
+                    waterRegion,
+                    w.waterX,
+                    w.waterY,
+                    16,
+                    16
+            );
+
+            waterBatch.end();
+
+
+
+ */
+
+
 		}
 
 		//headBatch.begin();
@@ -1494,7 +1602,7 @@ public class DungeonCrawler extends ApplicationAdapter {
                 if (leanLeft) {
                     Player.renderPlayer(playerBatch, tx.playerHead, player.playerBody.getPosition().x - 6.5f, player.playerBody.getPosition().y - 6f);
                 } else {
-                    Player.renderPlayer(playerBatch, tx.playerHead, player.playerBody.getPosition().x - 7.5f, player.playerBody.getPosition().y - 4f);
+                    Player.renderPlayer(playerBatch, tx.playerHead, player.playerBody.getPosition().x - 7.5f, player.playerBody.getPosition().y - 5f);
                 }
             }
             else if (player.facing == 1) {
@@ -1506,11 +1614,9 @@ public class DungeonCrawler extends ApplicationAdapter {
                 Player.renderPlayer(playerBatch, tx.playerHead, player.playerBody.getPosition().x - 8.5f, player.playerBody.getPosition().y - 6f);
             }
             else if (player.facing == 4) {
-                if (leanLeft) {
-                    Player.renderPlayer(playerBatch, tx.playerHead, player.playerBody.getPosition().x - 7.5f, player.playerBody.getPosition().y - 7f);
-                } else {
-                    Player.renderPlayer(playerBatch, tx.playerHead, player.playerBody.getPosition().x - 6.5f, player.playerBody.getPosition().y - 5f);
-                }
+
+                    Player.renderPlayer(playerBatch, tx.playerHead, player.playerBody.getPosition().x - 7.5f, player.playerBody.getPosition().y - 6f);
+
                 //Player.renderPlayer(playerBatch, tx.playerHead, player.playerBody.getPosition().x - 8f, player.playerBody.getPosition().y - 8f);
 
             }
@@ -1852,23 +1958,23 @@ public class DungeonCrawler extends ApplicationAdapter {
 					if (e.facing == "Up") {
 					//	currentFrame = tx.enemySkullUpAlertedAnimation.getKeyFrame(stateTime, true);
 
-						enemySkullBatch.draw(tx.enemySkullUpSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+						enemySkullBatch.draw(tx.enemySkullUpSprite, e.enemyBody.getPosition().x - 7.5f, e.enemyBody.getPosition().y - 7.5f, 16, 16);
 					} else if (e.facing == "Down") {
 					//	currentFrame = tx.enemySkullDownAlertedAnimation.getKeyFrame(stateTime, true);
 
-						enemySkullBatch.draw(tx.enemySkullDownSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+						enemySkullBatch.draw(tx.enemySkullDownSprite, e.enemyBody.getPosition().x - 7.5f, e.enemyBody.getPosition().y - 7.5f, 16, 16);
 					} else if (e.facing == "Left") {
 					//	currentFrame = tx.enemySkullLeftAlertedAnimation.getKeyFrame(stateTime, true);
 
-						enemySkullBatch.draw(tx.enemySkullLeftSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+						enemySkullBatch.draw(tx.enemySkullLeftSprite, e.enemyBody.getPosition().x - 7.5f, e.enemyBody.getPosition().y - 7f, 16, 16);
 					} else if (e.facing == "Right") {
 					//	currentFrame = tx.enemySkullUpAlertedAnimation.getKeyFrame(stateTime, true);
 
-						enemySkullBatch.draw(tx.enemySkullRightSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+						enemySkullBatch.draw(tx.enemySkullRightSprite, e.enemyBody.getPosition().x - 7.5f, e.enemyBody.getPosition().y - 7f, 16, 16);
 					} else {
 					//	currentFrame = tx.enemySkullDownAlertedAnimation.getKeyFrame(stateTime, true);
 
-						enemySkullBatch.draw(tx.enemySkullDownSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+                        enemySkullBatch.draw(tx.enemySkullDownSprite, e.enemyBody.getPosition().x - 7.5f, e.enemyBody.getPosition().y - 7.5f, 16, 16);
 					}
 
 				} else if (e.timeSinceAlerted >= 1) {
@@ -1877,30 +1983,51 @@ public class DungeonCrawler extends ApplicationAdapter {
 					if (e.facing == "Up") {
 						currentFrame = tx.enemySkullUpAnimation.getKeyFrame(stateTime, true);
 
-						enemySkullBatch.draw(currentFrame, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+						enemySkullBatch.draw(currentFrame, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7.5f, 16, 16);
 					} else if (e.facing == "Down") {
 						currentFrame = tx.enemySkullDownAnimation.getKeyFrame(stateTime, true);
 
-						enemySkullBatch.draw(currentFrame, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+						enemySkullBatch.draw(currentFrame, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7.5f, 16, 16);
 					} else if (e.facing == "Left") {
 						currentFrame = tx.enemySkullLeftAnimation.getKeyFrame(stateTime, true);
 
-						enemySkullBatch.draw(currentFrame, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+						enemySkullBatch.draw(currentFrame, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7.5f, 16, 16);
 					} else if (e.facing == "Right") {
 						currentFrame = tx.enemySkullRightAnimation.getKeyFrame(stateTime, true);
 
-						enemySkullBatch.draw(currentFrame, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+						enemySkullBatch.draw(currentFrame, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7.5f, 16, 16);
 					} else {
 						currentFrame = tx.enemySkullDownAnimation.getKeyFrame(stateTime, true);
 
-						enemySkullBatch.draw(currentFrame, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+						enemySkullBatch.draw(currentFrame, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7.5f, 16, 16);
 					}
 
 
 					//enemySkullBatch.draw(tx.enemySkullAlertedSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
 				} else {
 					e.skullLight.setActive(false);
-					enemySkullBatch.draw(tx.enemySkullDownSprite, e.enemyBody.getPosition().x - 8f, e.enemyBody.getPosition().y - 7f, 16, 16);
+
+                    if (e.facing == "Up") {
+                        //	currentFrame = tx.enemySkullUpAlertedAnimation.getKeyFrame(stateTime, true);
+
+                        enemySkullBatch.draw(tx.enemySkullUpSprite, e.enemyBody.getPosition().x - 7.5f, e.enemyBody.getPosition().y - 7.5f, 16, 16);
+                    } else if (e.facing == "Down") {
+                        //	currentFrame = tx.enemySkullDownAlertedAnimation.getKeyFrame(stateTime, true);
+
+                        enemySkullBatch.draw(tx.enemySkullDownSprite, e.enemyBody.getPosition().x - 7.5f, e.enemyBody.getPosition().y - 7.5f, 16, 16);
+                    } else if (e.facing == "Left") {
+                        //	currentFrame = tx.enemySkullLeftAlertedAnimation.getKeyFrame(stateTime, true);
+
+                        enemySkullBatch.draw(tx.enemySkullLeftSprite, e.enemyBody.getPosition().x - 7.5f, e.enemyBody.getPosition().y - 7f, 16, 16);
+                    } else if (e.facing == "Right") {
+                        //	currentFrame = tx.enemySkullUpAlertedAnimation.getKeyFrame(stateTime, true);
+
+                        enemySkullBatch.draw(tx.enemySkullRightSprite, e.enemyBody.getPosition().x - 7.5f, e.enemyBody.getPosition().y - 7f, 16, 16);
+                    } else {
+                        //	currentFrame = tx.enemySkullDownAlertedAnimation.getKeyFrame(stateTime, true);
+
+                        enemySkullBatch.draw(tx.enemySkullUpSprite, e.enemyBody.getPosition().x - 7.5f, e.enemyBody.getPosition().y - 7.5f, 16, 16);
+                    }
 				}
 				/*
 								if (e2.facing == "Up") {
@@ -2333,11 +2460,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 
                 enemyCrabBatch.draw(currentFrame, e5.enemyBody.getPosition().x - 8f, e5.enemyBody.getPosition().y - 7f, 16, 16);
             } else if (e5.facing == "Left") {
-                currentFrame = tx.enemyCrabLeftAnimation.getKeyFrame(stateTime, true);
+                currentFrame = tx.enemyCrabRightAnimation.getKeyFrame(stateTime, true);
 
                 enemyCrabBatch.draw(currentFrame, e5.enemyBody.getPosition().x - 8f, e5.enemyBody.getPosition().y - 7f, 16, 16);
             } else if (e5.facing == "Right") {
-                currentFrame = tx.enemyCrabRightAnimation.getKeyFrame(stateTime, true);
+                currentFrame = tx.enemyCrabLeftAnimation.getKeyFrame(stateTime, true);
 
                 enemyCrabBatch.draw(currentFrame, e5.enemyBody.getPosition().x - 8f, e5.enemyBody.getPosition().y - 7f, 16, 16);
             } else {
@@ -2355,6 +2482,62 @@ public class DungeonCrawler extends ApplicationAdapter {
         }
         dyingCrabs.clear();
 
+        //render enemy crab sprites
+        for (EnemyGryphon e6 : enemyGryphons) {
+            if (e6.rayCastable) {
+                e6.detectPlayer();
+            }
+            //check to see if the player is both in sight and in range
+            if ((e6.playerSighted && e6.playerInRange) && (pauseMenuClosed && optionsMenuClosed)){
+                //after a specified delay once the player has been spotted, shoot a projectile with some offset at the player
+
+
+
+                e6.getStateMachine().changeState(EnemyGryphonState.GO_TO_PLAYER);
+
+
+            } else if (!e6.playerSighted) {
+
+                e6.alerted = false;
+                susMessages.remove(e6.alertMessage);
+                if (!e6.lostSight) {
+                    e6.lostSightMessage.fadeTiming = 1f;
+                    e6.lostSight = true;
+                    e6.lostSightMessage.showing = true;
+                    //e.lostSightMessage.fade = true;
+                    e6.lostSightMessage.textX = e6.enemyAI.getBody().getPosition().x - 2f;
+                    e6.lostSightMessage.textY = e6.enemyAI.getBody().getPosition().y + 8f;
+                    susMessages.add(e6.lostSightMessage);
+                }
+                if (e6.timeSinceAlerted > 50) {
+                    e6.timeSinceAlerted = e6.timeSinceAlerted - 50;
+                }
+
+            }
+            enemyGryphonBatch.begin();
+
+             if (e6.facing == "Left") {
+                currentFrame = tx.enemyGryphonLeftAnimation.getKeyFrame(stateTime, true);
+
+                enemyGryphonBatch.draw(currentFrame, e6.enemyBody.getPosition().x - 8f, e6.enemyBody.getPosition().y - 7f, 16, 16);
+            } else if (e6.facing == "Right") {
+                currentFrame = tx.enemyGryphonRightAnimation.getKeyFrame(stateTime, true);
+
+                 enemyGryphonBatch.draw(currentFrame, e6.enemyBody.getPosition().x - 8f, e6.enemyBody.getPosition().y - 7f, 16, 16);
+            } else {
+                currentFrame = tx.enemyGryphonLeftAnimation.getKeyFrame(stateTime, true);
+
+                 enemyGryphonBatch.draw(currentFrame, e6.enemyBody.getPosition().x - 8f, e6.enemyBody.getPosition().y - 7f, 16, 16);
+            }
+
+            enemyGryphonBatch.end();
+        }
+
+        for (EnemyGryphon deadGryphon : dyingGryphons) {
+                deadGryphon.getStateMachine().changeState(EnemyGryphonState.DIE);
+            enemies.remove(deadGryphon);
+        }
+        dyingGryphons.clear();
 
         for (Vase v : vases) {
 
@@ -2497,7 +2680,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 										if (c.alpha >= 0)
 											c.alpha--;
-										c.alpha--;
+										    c.alpha--;
 									} else {
 										if (c.alpha < 100 && c.alpha > 0) {
 											c.loweredAlpha = false;
@@ -2761,7 +2944,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 					//render each individual arrow
 					arrowBatch.begin();
-					flameBatch.begin();
+					//flameBatch.begin();
 					if (value.onFire) {
 						TextureRegion flameFrame = tx.flameAnimation.getKeyFrame(value.stateTime2,true);
 						TextureRegion currentFrame = tx.arrowAnimation.getKeyFrame(value.stateTime, true);
@@ -2772,7 +2955,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						Arrow.renderArrow(arrowBatch, currentFrame, arrowEntry.value.direction, key.getPosition().x, key.getPosition().y);
 					}
 
-					flameBatch.end();
+					//flameBatch.end();
 					arrowBatch.end();
 				}
 
@@ -2931,7 +3114,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 									if (c.alpha >= 0)
 										c.alpha--;
-									c.alpha--;
+									    c.alpha--;
 								} else {
 									if (c.alpha < 100 && c.alpha > 0) {
 										c.loweredAlpha = false;
@@ -2976,8 +3159,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 									if (c.alpha >= 0)
 										c.alpha--;
-									c.alpha--;
-									c.alpha--;
+									    c.alpha--;
 								} else {
 									if (c.alpha < 100 && c.alpha > 0) {
 										c.loweredAlpha = false;
@@ -3092,8 +3274,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 										if (f.alpha >= 0)
 											f.alpha--;
-										f.alpha--;
-										f.alpha--;
+										    f.alpha--;
 									} else {
 										if (f.alpha < 100 && f.alpha > 0) {
 											f.loweredAlpha = false;
@@ -3161,6 +3342,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 											v.alpha--;
 										v.alpha--;
 										v.alpha--;
+                                        v.alpha--;
 									} else {
 										if (v.alpha < 100 && v.alpha > 0) {
 											v.loweredAlpha = false;
@@ -3206,6 +3388,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 								s.alpha--;
 							s.alpha--;
 							s.alpha--;
+                            s.alpha--;
+                            s.alpha--;
 						} else {
 							if (s.alpha < 100 && s.alpha > 0) {
 								s.loweredAlpha = false;
@@ -3550,6 +3734,8 @@ public class DungeonCrawler extends ApplicationAdapter {
 								if (r.alpha >= 0)
 								r.alpha--;
 								r.alpha--;
+                                r.alpha--;
+                                r.alpha--;
 							} else {
 								if (r.alpha < 100 && r.alpha > 0) {
 										r.loweredAlpha = false;
@@ -3968,6 +4154,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			rayHandler.setCombinedMatrix(camera);
 
 
+        roomTransition = false;
 
         if (roomTransition) {
             Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -3987,32 +4174,20 @@ public class DungeonCrawler extends ApplicationAdapter {
             Gdx.gl.glDisable(GL20.GL_BLEND);
         }
 
-        if (cameraFading && roomTransition && !loweredCameraAlpha) {
+        if (cameraFading && roomTransition && !loweredCameraAlpha && !debug) {
             loweredCameraAlpha = true;
 
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
-                    cameraShapeAlpha++;
-                    cameraShapeAlpha++;
-                    cameraShapeAlpha++;
-                    loweredCameraAlpha = false;
-                }
-            }, 0.001f);
-            if (cameraShapeAlpha >= 100) {
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        String doorUpperLeft = (GenerateLevel.init.roomList.get(0).doorLocations.get("TopLeft"));
-                        String[] doorUpperLeftXY = doorUpperLeft.split(",");
-                        String doorUpperLeftX = doorUpperLeftXY[0].toString();
+                    if (cameraShapeAlpha >= 100) {
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
 
-                        double doorUpperLeftXAsDouble = Float.parseFloat(doorUpperLeftX) * 1.65;
-                        String test = String.valueOf(doorUpperLeftXAsDouble);
-                        float doorUpperLeftXAsFloat = Float.parseFloat(test);
-                        //player.playerBody.setTransform(player.playerBody.getPosition().x+20,player.playerBody.getPosition().y,0);
+                                //System.out.println("CURRENT PATH: " + GenerateLevel.path.get(player.currentRoom));
 
-                        System.out.println("PLAYER ROOM FOR TRANSITION: " + player.currentRoom);
+                                // + path.get(roomsIndex)
 
                         /*
 
@@ -4024,22 +4199,115 @@ public class DungeonCrawler extends ApplicationAdapter {
 
                          */
 
-                        //player.playerBody.setTransform((doorUpperLeftXAsFloat * 10) + 20,player.playerBody.getPosition().y,0);
+                                //player.playerBody.setTransform((doorUpperLeftXAsFloat * 10) + 20,player.playerBody.getPosition().y,0);
 
-                        Timer.schedule(new Timer.Task() {
-                            @Override
-                            public void run() {
-                                cameraFading = false;
-                                loweredCameraAlpha = false;
+                                Timer.schedule(new Timer.Task() {
+                                    @Override
+                                    public void run() {
+                                        System.out.println("PLAYER ROOM FOR TRANSITION: " + player.currentRoom);
+                                        //System.out.println("PLAYER ROOM FOR TRANSITION: " + player.currentRoom);
+
+                                        //GenerateLevel.init.roomList.get()
+
+
+                                        int currentPathDirection = GenerateLevel.path.get(player.currentRoom + 1);
+
+                                        if (currentPathDirection == 1) {
+                                            String doorBottomLeft = GenerateLevel.init.roomList.get(player.currentRoom).doorLocations.get("BottomLeft");
+
+                                            String[] doorBottomLeftXY = doorBottomLeft.split(",");
+                                            String doorBottomLeftX = doorBottomLeftXY[0].toString();
+                                            String doorBottomLeftY = doorBottomLeftXY[1].toString();
+
+                                            double doorBottomLeftXAsDouble = Float.parseFloat(doorBottomLeftX) * 1.65;
+                                            String test = String.valueOf(doorBottomLeftXAsDouble);
+                                            float doorBottomLeftXAsFloat = Float.parseFloat(test);
+
+                                            double doorBottomLeftYAsDouble = Float.parseFloat(doorBottomLeftY) * 1.65;
+                                            String test2 = String.valueOf(doorBottomLeftYAsDouble);
+                                            float doorBottomLeftYAsFloat = Float.parseFloat(test2);
+
+                                            player.playerBody.setTransform((doorBottomLeftXAsFloat * 10),(doorBottomLeftYAsFloat * 10),0);
+                                        } else if (currentPathDirection == 2) {
+                                            String doorUpperLeft = GenerateLevel.init.roomList.get(player.currentRoom + 1).doorLocations.get("UpperLeft");
+                                            String[] doorUpperLeftXY = doorUpperLeft.split(",");
+                                            String doorUpperLeftX = doorUpperLeftXY[0].toString();
+                                            String doorUpperLeftY = doorUpperLeftXY[1].toString();
+
+                                            double doorUpperLeftXAsDouble = Float.parseFloat(doorUpperLeftX) * 1.65;
+                                            String test = String.valueOf(doorUpperLeftXAsDouble);
+                                            float doorUpperLeftXAsFloat = Float.parseFloat(test);
+
+                                            double doorUpperLeftYAsDouble = Float.parseFloat(doorUpperLeftY) * 1.65;
+                                            String test2 = String.valueOf(doorUpperLeftYAsDouble);
+                                            float doorUpperLeftYAsFloat = Float.parseFloat(test2);
+
+                                            player.playerBody.setTransform((doorUpperLeftXAsFloat * 10) + 36,(doorUpperLeftYAsFloat * 10) - 240,0);
+
+                                        } else if (currentPathDirection == 3) {
+                                            String doorTopLeft = GenerateLevel.init.roomList.get(player.currentRoom).doorLocations.get("TopLeft");
+
+                                            String[] doorTopLeftXY = doorTopLeft.split(",");
+                                            String doorTopLeftX = doorTopLeftXY[0].toString();
+                                            String doorTopLeftY = doorTopLeftXY[1].toString();
+
+                                            double doorTopLeftXAsDouble = Float.parseFloat(doorTopLeftX) * 1.65;
+                                            String test = String.valueOf(doorTopLeftXAsDouble);
+                                            float doorTopLeftXAsFloat = Float.parseFloat(test);
+
+                                            double doorTopLeftYAsDouble = Float.parseFloat(doorTopLeftY) * 1.65;
+                                            String test2 = String.valueOf(doorTopLeftYAsDouble);
+                                            float doorTopLeftYAsFloat = Float.parseFloat(test2);
+
+                                            player.playerBody.setTransform((doorTopLeftXAsFloat * 10) + 8,(doorTopLeftYAsFloat * 10),0);
+
+                                        } else if (currentPathDirection == 4) {
+                                            String doorUpperRight = GenerateLevel.init.roomList.get(player.currentRoom).doorLocations.get("UpperRight");
+
+                                            String[] doorUpperRightXY = doorUpperRight.split(",");
+                                            String doorUpperRightX = doorUpperRightXY[0].toString();
+                                            String doorUpperRightY = doorUpperRightXY[1].toString();
+
+                                            double doorUpperRightXAsDouble = Float.parseFloat(doorUpperRightX) * 1.65;
+                                            String test = String.valueOf(doorUpperRightXAsDouble);
+                                            float doorUpperRightXAsFloat = Float.parseFloat(test);
+
+                                            double doorUpperRightYAsDouble = Float.parseFloat(doorUpperRightY) * 1.65;
+                                            String test2 = String.valueOf(doorUpperRightYAsDouble);
+                                            float doorUpperRightYAsFloat = Float.parseFloat(test2);
+
+                                            player.playerBody.setTransform((doorUpperRightXAsFloat * 10) + 8,(doorUpperRightYAsFloat * 10),0);
+
+
+                                        }
+
+
+
+                                        cameraFading = false;
+                                        loweredCameraAlpha = false;
+                                    }
+                                },0.1f);
+
                             }
-                        },0.1f);
+                        }, 0.01f);
+                    } else {
+                        cameraShapeAlpha++;
+                        cameraShapeAlpha++;
+                        cameraShapeAlpha++;
+                        cameraShapeAlpha++;
+                        loweredCameraAlpha = false;
 
                     }
-                }, 0.01f);
-            }
+                }
+            }, 0.001f);
+
 
         } else if (!cameraFading && roomTransition && !loweredCameraAlpha){
+
+
             loweredCameraAlpha = true;
+
+
 
             Timer.schedule(new Timer.Task() {
                 @Override
@@ -4053,6 +4321,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
             if (cameraShapeAlpha <= 0) {
                 roomTransition = false;
+
             }
         }
 
@@ -4100,6 +4369,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			enemyGhostBatch.setProjectionMatrix(camera.combined);
 			enemyEyeBatch.setProjectionMatrix(camera.combined);
             enemyCrabBatch.setProjectionMatrix(camera.combined);
+            enemyGryphonBatch.setProjectionMatrix(camera.combined);
 
 			potParticlesBatch.setProjectionMatrix(camera.combined);
 			boneParticlesBatch.setProjectionMatrix(camera.combined);
@@ -4246,6 +4516,21 @@ public class DungeonCrawler extends ApplicationAdapter {
                 }
             }
 
+                for (EnemyGryphon e6 : enemyGryphons) {
+                if (e6.active){
+                    e6.enemyAI.update(GdxAI.getTimepiece().getTime());
+                    if (e6.rotateTime <= 0) {
+                        e6.update(GdxAI.getTimepiece().getTime());
+                    } else {
+                        e6.rotateTime -= (Gdx.graphics.getDeltaTime() * TIME_SCALE);
+                    }
+
+                }
+                if (e6.playerInRange){
+                    e6.detectPlayer();
+                }
+            }
+
 			for (BossMinotaur b1 : bossMinotaurs) {
 				b1.enemyAI.update(GdxAI.getTimepiece().getTime());
 				b1.update(GdxAI.getTimepiece().getTime());
@@ -4333,6 +4618,11 @@ public class DungeonCrawler extends ApplicationAdapter {
 		if (!playerPaused) {
 			inputUpdate();
 		}
+
+
+
+
+
 	}
 
 	@Override
@@ -4351,6 +4641,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		enemyGhostBatch.dispose();
 		enemyEyeBatch.dispose();
         enemyCrabBatch.dispose();
+        enemyGryphonBatch.dispose();
 		bossMinotaurBatch.dispose();
 		heartBatch.dispose();
 		trapBatch.dispose();
@@ -4412,14 +4703,21 @@ public class DungeonCrawler extends ApplicationAdapter {
 			tx.playerHead = tx.playerHeadRight;
 		}
 
-		moveUp = false;
-		moveDown = false;
-		moveLeft = false;
-		moveRight = false;
+
+        moveUp = false;
+        moveDown = false;
+        moveLeft = false;
+        moveRight = false;
+
+		PLAYER_HORIZONTAL_SPEED_PERCENTAGE = 0;
+        PLAYER_VERTICAL_SPEED_PERCENTAGE = 0;
 
 
-		PLAYER_HORIZONTAL_SPEED = 0;
-		PLAYER_VERTICAL_SPEED = 0;
+
+
+
+      //  player.playerBody
+
 
 		if (debug) {
 			if (Gdx.input.isKeyPressed(Keys.NUM_8)) {
@@ -4430,231 +4728,311 @@ public class DungeonCrawler extends ApplicationAdapter {
 		//move playerSprite Sprite by delta speed according to button WASD press
 		if (allowPlayerInput) {
 
-			if (player.playerBody.getLinearVelocity().x > 0 ||
-			player.playerBody.getLinearVelocity().y > 0
-			|| player.playerBody.getLinearVelocity().x < 0
-			|| player.playerBody.getLinearVelocity().y < 0) {
+            if (player.playerBody.getLinearVelocity().x > 0 ||
+                    player.playerBody.getLinearVelocity().y > 0
+                    || player.playerBody.getLinearVelocity().x < 0
+                    || player.playerBody.getLinearVelocity().y < 0) {
 
 
-				if (!Compass.moving && Compass.showing) {
-					Compass.fixRotation();
-				}
+                if (!Compass.moving && Compass.showing) {
+                    Compass.fixRotation();
+                }
 
-				//create footstep sounds after set delays
-				player.timeSinceMoved += (Gdx.graphics.getDeltaTime() * TIME_SCALE);
+                //create footstep sounds after set delays
+                player.timeSinceMoved += (Gdx.graphics.getDeltaTime() * TIME_SCALE);
 
-				float randomFootstepTime = Random.randomFloat(0.14f,0.14f);
-				float randomSploshTime = Random.randomFloat(1.4f,0.4f);
-				int randomFootstep = Random.randomInt(3,1);
+                float randomFootstepTime = Random.randomFloat(0.14f, 0.14f);
+                float randomSploshTime = Random.randomFloat(1.4f, 0.4f);
+                int randomFootstep = Random.randomInt(3, 1);
 
-				if (player.timeSinceMoved > randomSploshTime & player.sploshing) {
-					player.sploshing = false;
-				}
+                if (player.timeSinceMoved > randomSploshTime & player.sploshing) {
+                    player.sploshing = false;
+                }
 
-				String footstep = "Footstep" + randomFootstep;
+                String footstep = "Footstep" + randomFootstep;
 
-				if (player.timeSinceMoved > randomFootstepTime && !player.swimming) {
-					soundController.playSound(footstep,10,8,0.015f);
-					player.timeSinceMoved = 0;
-				} else if (player.swimming && !player.sploshing) {
-					player.sploshing = true;
-					soundController.playSound("WaterSplosh",8,6,0.03f);
-					player.timeSinceMoved = 0;
-				}
-			} else {
-				player.timeSinceMoved = 0;
-			}
+                if (player.timeSinceMoved > randomFootstepTime && !player.swimming) {
+                    soundController.playSound(footstep, 10, 8, 0.015f);
+                    player.timeSinceMoved = 0;
+                } else if (player.swimming && !player.sploshing) {
+                    player.sploshing = true;
+                    soundController.playSound("WaterSplosh", 8, 6, 0.03f);
+                    player.timeSinceMoved = 0;
+                }
+            } else {
+                player.timeSinceMoved = 0;
+            }
 
-			//player movement controls and animation walk cycles
+            //player movement controls and animation walk cycles
 
-			if ((Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP))) {
-				PLAYER_VERTICAL_SPEED = 1f;
-				leanUp = true;
-				moveUp = true;
-				player.facing = 1;
-				if (player.playerBody.getLinearVelocity().x > 0.01 ||
-						player.playerBody.getLinearVelocity().y > 0.01
-						|| player.playerBody.getLinearVelocity().x < -0.01
-						|| player.playerBody.getLinearVelocity().y < -0.01) {
-					if (leanLeft){
-						PLAYER_HORIZONTAL_SPEED = -1f;
-						currentFrame = tx.playerWalkUpLeftAnimation.getKeyFrame(stateTime3, true);
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadUpLeft;
-					} else if (leanRight) {
-						PLAYER_HORIZONTAL_SPEED = 1f;
-						currentFrame = tx.playerWalkUpRightAnimation.getKeyFrame(stateTime3, true);
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadUpRight;
 
-					}
-					else {
-						currentFrame = tx.playerWalkUpAnimation.getKeyFrame(stateTime3, true);
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadUp;
-					}
 
-				} else {
-					if (leanLeft){
-						PLAYER_HORIZONTAL_SPEED = -1f;
-						currentFrame = tx.playerUpLeftLean;
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadUpLeft;
 
-					} else if (leanRight) {
-						PLAYER_HORIZONTAL_SPEED = 1f;
-						currentFrame = tx.playerUpRightLean;
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadUpRight;
-					}
-					else {
-						currentFrame = tx.playerUp;
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadUp;
-					}
-				}
-			}
+                if ((Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP))) {
+                    PLAYER_VERTICAL_SPEED_PERCENTAGE = 1f;
+                    leanUp = true;
+                    moveUp = true;
+                    player.facing = 1;
+                    if (player.playerBody.getLinearVelocity().x > 0.01 ||
+                            player.playerBody.getLinearVelocity().y > 0.01
+                            || player.playerBody.getLinearVelocity().x < -0.01
+                            || player.playerBody.getLinearVelocity().y < -0.01) {
+                        if (leanLeft) {
+                            PLAYER_HORIZONTAL_SPEED_PERCENTAGE = -1f;
+                            currentFrame = tx.playerWalkUpLeftAnimation.getKeyFrame(stateTime3, true);
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadUpLeft;
+                        } else if (leanRight) {
+                            PLAYER_HORIZONTAL_SPEED_PERCENTAGE = 1f;
+                            currentFrame = tx.playerWalkUpRightAnimation.getKeyFrame(stateTime3, true);
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadUpRight;
 
-			if ((Gdx.input.isKeyPressed(Keys.A)||Gdx.input.isKeyPressed(Keys.LEFT))) {
-				PLAYER_HORIZONTAL_SPEED = -1f;
-				leanLeft = true;
-				moveLeft = true;
-				player.facing = 4;
-				if (player.playerBody.getLinearVelocity().x > 0.01 ||
-						player.playerBody.getLinearVelocity().y > 0.01
-						|| player.playerBody.getLinearVelocity().x < -0.01
-						|| player.playerBody.getLinearVelocity().y < -0.01) {
-					if (leanDown) {
-						PLAYER_VERTICAL_SPEED = -1f;
-						currentFrame = tx.playerWalkDownLeftAnimation.getKeyFrame(stateTime3, true);
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadDownLeft;
-					} else if (leanUp) {
-						PLAYER_VERTICAL_SPEED = 1f;
-						currentFrame = tx.playerWalkUpLeftAnimation.getKeyFrame(stateTime3, true);
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadUpLeft;
-					} else {
-						currentFrame = tx.playerWalkLeftAnimation.getKeyFrame(stateTime3, true);
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadLeft;
-					}
-				} else {
-					if (leanDown) {
-						PLAYER_VERTICAL_SPEED = -1f;
-						currentFrame = tx.playerDownLeftLean;
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadDownLeft;
-					} else if (leanUp) {
-						PLAYER_VERTICAL_SPEED = 1f;
-						currentFrame = tx.playerUpLeftLean;
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadUpLeft;
-					} else {
-						currentFrame = tx.playerLeft;
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadLeft;
-					}
-				}
-			}
+                        } else {
+                            currentFrame = tx.playerWalkUpAnimation.getKeyFrame(stateTime3, true);
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadUp;
+                        }
 
-			if ((Gdx.input.isKeyPressed(Keys.S)||Gdx.input.isKeyPressed(Keys.DOWN))) {
-				PLAYER_VERTICAL_SPEED = -1f;
-				leanDown = true;
-				moveDown = true;
-				player.facing = 3;
-				if (player.playerBody.getLinearVelocity().x > 0.01 ||
-						player.playerBody.getLinearVelocity().y > 0.01
-						|| player.playerBody.getLinearVelocity().x < -0.01
-						|| player.playerBody.getLinearVelocity().y < -0.01) {
-					if (leanLeft) {
-						PLAYER_HORIZONTAL_SPEED = -1f;
-						currentFrame = tx.playerWalkDownLeftAnimation.getKeyFrame(stateTime3, true);
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadDownLeft;
-					} else if (leanRight) {
-						PLAYER_HORIZONTAL_SPEED = 1f;
-						currentFrame = tx.playerWalkDownRightAnimation.getKeyFrame(stateTime3, true);
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadDownRight;
-					} else {
-						currentFrame = tx.playerWalkDownAnimation.getKeyFrame(stateTime3, true);
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadDown;
-					}
-				} else {
-					if (leanLeft) {
-						PLAYER_HORIZONTAL_SPEED = -1f;
-						currentFrame = tx.playerDownLeftLean;
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadDownLeft;
-					} else if (leanRight) {
-						PLAYER_HORIZONTAL_SPEED = 1f;
-						currentFrame = tx.playerDownRightLean;
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadDownRight;
-					} else {
-						currentFrame = tx.playerDown;
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadDown;
-					}
-				}
-			}
-			if (Gdx.input.isKeyPressed(Keys.D)||Gdx.input.isKeyPressed(Keys.RIGHT)) {
-				PLAYER_HORIZONTAL_SPEED = 1f;
-				leanRight = true;
-				moveRight = true;
-				player.facing = 2;
-				if (player.playerBody.getLinearVelocity().x > 0.01 ||
-						player.playerBody.getLinearVelocity().y > 0.01
-						|| player.playerBody.getLinearVelocity().x < -0.01
-						|| player.playerBody.getLinearVelocity().y < -0.01) {
-					if (leanDown) {
-						PLAYER_VERTICAL_SPEED = -1f;
-						currentFrame = tx.playerWalkDownRightAnimation.getKeyFrame(stateTime3, true);
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadDownRight;
-					} else if (leanUp) {
-						PLAYER_VERTICAL_SPEED = 1f;
-						currentFrame = tx.playerWalkUpRightAnimation.getKeyFrame(stateTime3, true);
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadUpRight;
-					} else {
-						currentFrame = tx.playerWalkRightAnimation.getKeyFrame(stateTime3, true);
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadRight;
-					}
-				} else {
-					if (leanDown) {
-						PLAYER_VERTICAL_SPEED = -1f;
-						currentFrame = tx.playerDownRightLean;
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadDownRight;
-					} else if (leanUp) {
-						PLAYER_VERTICAL_SPEED = 1f;
-						currentFrame = tx.playerUpRightLean;
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadUpRight;
-					} else {
-						currentFrame = tx.playerRight;
-						tx.playerTextureRegion = currentFrame;
-						tx.playerHead = tx.playerHeadRight;
-					}
-				}
+                    } else {
+                        if (leanLeft) {
+                            PLAYER_HORIZONTAL_SPEED_PERCENTAGE = -1f;
+                            currentFrame = tx.playerUpLeftLean;
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadUpLeft;
 
-			}
-			stateTime3 += (Gdx.graphics.getDeltaTime() * TIME_SCALE);
-		}
+                        } else if (leanRight) {
+                            PLAYER_HORIZONTAL_SPEED_PERCENTAGE = 1f;
+                            currentFrame = tx.playerUpRightLean;
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadUpRight;
+                        } else {
+                            currentFrame = tx.playerUp;
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadUp;
+                        }
+                    }
+                }
+                /*
+                else if (!(Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP))) {
+                    //System.out.println(PLAYER_VERTICAL_SPEED + "vvvuuu");
+                    moveUp = false;
+                        if (player.playerBody.getLinearVelocity().y == 0) {
 
-		//create a player movement vector and normalize it for diagonal movement
-		Vector2 vec = new Vector2(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
-		vec.nor();
+                        }
+                        else
+                        if (player.playerBody.getLinearVelocity().y > 0 && !(PLAYER_VERTICAL_SPEED_PERCENTAGE <= 0)) {
+                            System.out.println(PLAYER_VERTICAL_SPEED_PERCENTAGE + "VVVUUU");
+                            PLAYER_VERTICAL_SPEED_PERCENTAGE = PLAYER_VERTICAL_SPEED_PERCENTAGE - 0.1f;
+                        }
+                }
 
-		//multiply to get desired speed
-		PLAYER_HORIZONTAL_SPEED = vec.x * PLAYER_SPEED_MULTI;
-		PLAYER_VERTICAL_SPEED = vec.y * PLAYER_SPEED_MULTI;
+                 */
 
-		player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
+                if ((Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT))) {
+                    PLAYER_HORIZONTAL_SPEED_PERCENTAGE = -1f;
+                    leanLeft = true;
+                    moveLeft = true;
+                    player.facing = 4;
+                    if (player.playerBody.getLinearVelocity().x > 0.01 ||
+                            player.playerBody.getLinearVelocity().y > 0.01
+                            || player.playerBody.getLinearVelocity().x < -0.01
+                            || player.playerBody.getLinearVelocity().y < -0.01) {
+                        if (leanDown) {
+                            PLAYER_VERTICAL_SPEED_PERCENTAGE = -1f;
+                            currentFrame = tx.playerWalkDownLeftAnimation.getKeyFrame(stateTime3, true);
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadDownLeft;
+                        } else if (leanUp) {
+                            PLAYER_VERTICAL_SPEED_PERCENTAGE = 1f;
+                            currentFrame = tx.playerWalkUpLeftAnimation.getKeyFrame(stateTime3, true);
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadUpLeft;
+                        } else {
+                            currentFrame = tx.playerWalkLeftAnimation.getKeyFrame(stateTime3, true);
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadLeft;
+                        }
+                    } else {
+                        if (leanDown) {
+                            PLAYER_VERTICAL_SPEED_PERCENTAGE = -1f;
+                            currentFrame = tx.playerDownLeftLean;
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadDownLeft;
+                        } else if (leanUp) {
+                            PLAYER_VERTICAL_SPEED_PERCENTAGE = 1f;
+                            currentFrame = tx.playerUpLeftLean;
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadUpLeft;
+                        } else {
+                            currentFrame = tx.playerLeft;
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadLeft;
+                        }
+                    }
+                }
+                /*
+                else if (!(Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT))) {
+                    //System.out.println(PLAYER_HORIZONTAL_SPEED + "hhhlll");
+                    moveLeft = false;
+                    if (player.playerBody.getLinearVelocity().x == 0) {
+
+                    }
+                    else
+                    if (player.playerBody.getLinearVelocity().x < 0 && !(PLAYER_VERTICAL_SPEED_PERCENTAGE > 0)) {
+                        System.out.println(PLAYER_HORIZONTAL_SPEED_PERCENTAGE + "HHHLLL");
+                        PLAYER_HORIZONTAL_SPEED_PERCENTAGE = PLAYER_HORIZONTAL_SPEED_PERCENTAGE + 0.1f;
+                    }
+                }
+
+                 */
+
+                if ((Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DOWN))) {
+                    PLAYER_VERTICAL_SPEED_PERCENTAGE = -1f;
+                    if (!(playerMeleeAttacking || playerShieldAttacking || playerRangedAttacking)) {
+
+
+                    leanDown = true;
+                    moveDown = true;
+                    player.facing = 3;
+                    if (player.playerBody.getLinearVelocity().x > 0.01 ||
+                            player.playerBody.getLinearVelocity().y > 0.01
+                            || player.playerBody.getLinearVelocity().x < -0.01
+                            || player.playerBody.getLinearVelocity().y < -0.01) {
+                        if (leanLeft) {
+                            PLAYER_HORIZONTAL_SPEED_PERCENTAGE = -1f;
+                            currentFrame = tx.playerWalkDownLeftAnimation.getKeyFrame(stateTime3, true);
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadDownLeft;
+                        } else if (leanRight) {
+                            PLAYER_HORIZONTAL_SPEED_PERCENTAGE = 1f;
+                            currentFrame = tx.playerWalkDownRightAnimation.getKeyFrame(stateTime3, true);
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadDownRight;
+                        } else {
+                            currentFrame = tx.playerWalkDownAnimation.getKeyFrame(stateTime3, true);
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadDown;
+                        }
+                    } else {
+                        if (leanLeft) {
+                            PLAYER_HORIZONTAL_SPEED_PERCENTAGE = -1f;
+                            currentFrame = tx.playerDownLeftLean;
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadDownLeft;
+                        } else if (leanRight) {
+                            PLAYER_HORIZONTAL_SPEED_PERCENTAGE = 1f;
+                            currentFrame = tx.playerDownRightLean;
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadDownRight;
+                        } else {
+                            currentFrame = tx.playerDown;
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadDown;
+                        }
+                    }
+                    }
+                }
+                /*
+                else if (!(Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DOWN))) {
+                    //System.out.println(PLAYER_VERTICAL_SPEED + "vvvddd");
+                    moveDown = false;
+                    if (player.playerBody.getLinearVelocity().y == 0) {
+
+                    }
+                    else
+                    if (player.playerBody.getLinearVelocity().y < 0 && !(PLAYER_VERTICAL_SPEED_PERCENTAGE >= 0)) {
+                        System.out.println(PLAYER_VERTICAL_SPEED_PERCENTAGE + "VVVDDD");
+                        PLAYER_VERTICAL_SPEED_PERCENTAGE = PLAYER_VERTICAL_SPEED_PERCENTAGE + 0.1f;
+                    }
+                }
+
+                 */
+
+                if ((Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT))) {
+                    PLAYER_HORIZONTAL_SPEED_PERCENTAGE = 1f;
+                    if (!(playerMeleeAttacking || playerShieldAttacking || playerRangedAttacking)) {
+                        leanRight = true;
+                        moveRight = true;
+                        player.facing = 2;
+                    }
+
+                    if (player.playerBody.getLinearVelocity().x > 0.01 ||
+                            player.playerBody.getLinearVelocity().y > 0.01
+                            || player.playerBody.getLinearVelocity().x < -0.01
+                            || player.playerBody.getLinearVelocity().y < -0.01) {
+                        if (leanDown) {
+                            PLAYER_VERTICAL_SPEED_PERCENTAGE = -1f;
+                            currentFrame = tx.playerWalkDownRightAnimation.getKeyFrame(stateTime3, true);
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadDownRight;
+                        } else if (leanUp) {
+                            PLAYER_VERTICAL_SPEED_PERCENTAGE = 1f;
+                            currentFrame = tx.playerWalkUpRightAnimation.getKeyFrame(stateTime3, true);
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadUpRight;
+                        } else {
+                            currentFrame = tx.playerWalkRightAnimation.getKeyFrame(stateTime3, true);
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadRight;
+                        }
+                    } else {
+                        if (leanDown) {
+                            PLAYER_VERTICAL_SPEED_PERCENTAGE = -1f;
+                            currentFrame = tx.playerDownRightLean;
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadDownRight;
+                        } else if (leanUp) {
+                            PLAYER_VERTICAL_SPEED_PERCENTAGE = 1f;
+                            currentFrame = tx.playerUpRightLean;
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadUpRight;
+                        } else {
+                            currentFrame = tx.playerRight;
+                            tx.playerTextureRegion = currentFrame;
+                            tx.playerHead = tx.playerHeadRight;
+                        }
+                    }
+
+                }
+                /*
+                else if (!(Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT))) {
+                    //System.out.println(PLAYER_HORIZONTAL_SPEED + "hhhrrr");
+                    moveRight = false;
+                    if (player.playerBody.getLinearVelocity().x == 0) {
+
+                    }
+                    else if (player.playerBody.getLinearVelocity().x > 0 && !(PLAYER_HORIZONTAL_SPEED_PERCENTAGE <= 0)) {
+                        System.out.println(PLAYER_HORIZONTAL_SPEED_PERCENTAGE + "HHHRRR");
+                        PLAYER_HORIZONTAL_SPEED_PERCENTAGE = PLAYER_HORIZONTAL_SPEED_PERCENTAGE - 0.1f;
+                    }
+                }
+
+                 */
+                stateTime3 += (Gdx.graphics.getDeltaTime() * TIME_SCALE);
+            }
+
+            //create a player movement vector and normalize it for diagonal movement
+            Vector2 vec = new Vector2(PLAYER_HORIZONTAL_SPEED_PERCENTAGE, PLAYER_VERTICAL_SPEED_PERCENTAGE);
+            vec.nor();
+
+            //multiply to get desired speed
+            //PLAYER_HORIZONTAL_SPEED = (PLAYER_SPEED_MULTI * vec.x) * PLAYER_HORIZONTAL_SPEED_PERCENTAGE;
+            //PLAYER_VERTICAL_SPEED = (PLAYER_SPEED_MULTI * vec.y) * PLAYER_VERTICAL_SPEED_PERCENTAGE;
+            PLAYER_HORIZONTAL_SPEED = vec.x * PLAYER_SPEED_MULTI;
+            PLAYER_VERTICAL_SPEED = vec.y * PLAYER_SPEED_MULTI;
+
+            //PLAYER_VERTICAL_SPEED *= 10;
+            //PLAYER_HORIZONTAL_SPEED *= 10;
+
+                player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
+
+
+            //player.playerBody.applyLinearImpulse(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED,0,0,true);
+
+
+
+		//player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
 
 		//start the level by showing the level start message
 		if (!player.playerInput) {

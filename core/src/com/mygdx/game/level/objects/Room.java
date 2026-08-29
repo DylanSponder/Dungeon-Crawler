@@ -26,6 +26,7 @@ public class Room {
     public ArrayList<EnemyGhost> enemyGhosts;
     public ArrayList<EnemyCyclops> enemyEyes;
     public ArrayList<EnemyCrab> enemyCrabs;
+    public ArrayList<EnemyGryphon> enemyGryphons;
     public ArrayList<BossMinotaur> bossMinotaurs;
     public ArrayList<Fire> spawners;
     public ArrayList<Roof> roofs;
@@ -46,6 +47,7 @@ public class Room {
         enemyGhosts = new ArrayList<EnemyGhost>();
         enemyEyes = new ArrayList<EnemyCyclops>();
         enemyCrabs = new ArrayList<EnemyCrab>();
+        enemyGryphons = new ArrayList<EnemyGryphon>();
         spawners = new ArrayList<Fire>();
         bossMinotaurs = new ArrayList<BossMinotaur>();
         roofs = new ArrayList<Roof>();

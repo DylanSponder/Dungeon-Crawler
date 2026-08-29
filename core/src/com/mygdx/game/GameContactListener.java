@@ -39,6 +39,16 @@ public class GameContactListener implements ContactListener {
 
         }
 
+        if (colliderStr == "Water" && collideeStr == "Enemy") {
+            if (collidee.getUserData() != "Proximity") {
+            for (Enemy e : enemies) {
+                if (e.enemyBody == collidee.getBody()) {
+                    e.swimming = true;
+                }
+            }
+        }
+    }
+
         //System.out.println(colliderStr + " " + collideeStr);
         if (colliderStr == "Water" && collidee.getUserData() == "PlayerBound") {
             player.swimming = true;
@@ -88,6 +98,13 @@ public class GameContactListener implements ContactListener {
                             }
                         }
                     }
+                }
+                if (colliderStr.startsWith("Arrow")) {
+
+                    if (!arrowBodiesCollided.contains(collider.getBody())) {
+                        arrowBodiesCollided.add(collider.getBody());
+                    }
+
                 }
             }
         }
@@ -289,6 +306,16 @@ public class GameContactListener implements ContactListener {
                                             deadEnemyBodies.add(collider.getBody());
                                             //soundController.playSound("SkullDeath",8.5f,7.5f,0.1f);
                                             dyingCrabs.add(e5);
+                                        }
+                                    }
+                                }
+                                else if (e.enemyID == 7) {
+
+                                    for (EnemyGryphon e6 : enemyGryphons) {
+                                        if (e6.enemyBody == collider.getBody()) {
+                                            deadEnemyBodies.add(collider.getBody());
+                                            //soundController.playSound("SkullDeath",8.5f,7.5f,0.1f);
+                                            dyingGryphons.add(e6);
                                         }
                                     }
                                 }
@@ -513,6 +540,15 @@ public class GameContactListener implements ContactListener {
                                             //soundController.playSound("",8.5f,7.5f,0.1f);
                                             dyingCrabs.add(crab);
 
+                                        }
+                                    }
+                                }
+                                else if (e.enemyID == 7) {
+                                    for (EnemyGryphon gryphon : enemyGryphons) {
+                                        if (gryphon.enemyBody == collidee.getBody()) {
+                                            deadEnemyBodies.add(collidee.getBody());
+                                            //soundController.playSound("",8.5f,7.5f,0.1f);
+                                            dyingGryphons.add(gryphon);
                                         }
                                     }
                                 }
@@ -788,6 +824,11 @@ public class GameContactListener implements ContactListener {
                         for (EnemyCrab e5 : enemyCrabs) {
                             if (e5.enemyBody == collider.getBody() || e5.enemyBody == collidee.getBody()) {
                                 e5.playerInRange = true;
+                            }
+                        }
+                        for (EnemyGryphon e6 : enemyGryphons) {
+                            if (e6.enemyBody == collider.getBody() || e6.enemyBody == collidee.getBody()) {
+                                e6.playerInRange = true;
                             }
                         }
                     }
@@ -1085,6 +1126,13 @@ public class GameContactListener implements ContactListener {
                                     break;
                                 }
                             }
+                        } else if (collidee.getUserData() == "EnemyGryphon") {
+                            for (EnemyGryphon e6 : enemyGryphons) {
+                                if (e6.enemyAI.getBody() == collidee.getBody()) {
+                                    //e4.getStateMachine().changeState(EnemyCyclopsState.GO_TO_PLAYER);
+                                    break;
+                                }
+                            }
                         }
 
 
@@ -1194,6 +1242,12 @@ public class GameContactListener implements ContactListener {
                                 //e.getStateMachine().changeState(EnemySkullState.GO_TO_PLAYER);
                             }
                         }
+                    } else if (collideeStr == "Water" || colliderStr == "Water") {
+                        for (Enemy e : enemies) {
+                            if (e.enemyBody == collidee.getBody() || e.enemyBody == collider.getBody()) {
+                                e.swimming = true;
+                            }
+                        }
                     }
                     break;
                 case "Player":
@@ -1256,6 +1310,14 @@ public class GameContactListener implements ContactListener {
                     }
                     else if (collidee.getBody().getUserData() == "Enemy" && collidee.getUserData() != "Proximity" && (collidee.getUserData() == "EnemyCrab")) {
                         for (EnemyCrab e : enemyCrabs) {
+                            if ((e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody())) {
+                                e.playerInRange = true;
+                            }
+                            hud.healthBar.loseHealth(0.5f);
+                        }
+                    }
+                    else if (collidee.getBody().getUserData() == "Enemy" && collidee.getUserData() != "Proximity" && (collidee.getUserData() == "EnemyGryphon")) {
+                        for (EnemyGryphon e : enemyGryphons) {
                             if ((e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody())) {
                                 e.playerInRange = true;
                             }
@@ -1468,8 +1530,16 @@ public class GameContactListener implements ContactListener {
                         player.swimming = true;
                         player.swimCount++;
                         break;
+                    } else if (collider.getUserData() == "Enemy") {
+                        for (Enemy e : enemies) {
+                            if (e.enemyBody == collider.getBody()) {
+                                e.swimming = true;
+                            }
+                        }
                     }
                     break;
+
+
 
                 case "Cobweb":
                     if (collider.getUserData() == "PlayerBound") {
@@ -1737,6 +1807,12 @@ public class GameContactListener implements ContactListener {
                         e5.stateMachine.changeState(EnemyCrabState.WANDER);
                         e5.active = true;
                     }
+                    for (EnemyGryphon e6 : init.roomList.get(player.currentRoom).enemyGryphons) {
+                        e6.rayCastable = true;
+                        e6.enemyAI.setMaxLinearSpeed(e6.defaultSpeed);
+                        e6.stateMachine.changeState(EnemyGryphonState.WANDER);
+                        e6.active = true;
+                    }
 
                     player.touchingRoom = true;
 
@@ -1774,6 +1850,18 @@ public class GameContactListener implements ContactListener {
                 DungeonCrawler.PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED;
             }
         }
+
+        if (colliderAsString == "Water" && collideeAsString == "Enemy") {
+            if (collidee.getUserData() != "Proximity") {
+            for (Enemy e : enemies) {
+                if (e.enemyBody == collidee.getBody()) {
+                    e.swimming = false;
+                }
+            }
+        }
+    }
+
+
 
         switch (colliderAsString) {
             case "RafWall":
@@ -1907,15 +1995,17 @@ public class GameContactListener implements ContactListener {
             case "Enemy":
                 if (collider.getUserData() != "Proximity") {
                     if (collidee.getUserData() == "Spawner") {
-                 //       System.out.println("out of range");
+                        //       System.out.println("out of range");
                         for (EnemySkull e : enemySkulls) {
                             if (e.enemyBody == collider.getBody()) {
                                 e.inRespawnRange = false;
                             }
                         }
                     }
+                }
+
                 break;
-            }
+
             case "Spawner":
                 if (collideeAsString == "Enemy") {
                 if (collidee.getUserData() != "Proximity") {
@@ -1983,7 +2073,18 @@ public class GameContactListener implements ContactListener {
                         DungeonCrawler.PLAYER_SPEED_MULTI = PLAYER_DEFAULT_SPEED;
                     }
                 }
+
+                /*
+                else if (collider.getUserData() == "Enemy") {
+                    for (Enemy e : enemies) {
+                        if (e.enemyBody == collider.getBody()) {
+                            e.swimming = false;
+                        }
+                    }
+                }
+                 */
                 break;
+
             case "Roof":
                 if (collider.getUserData() == "PlayerBound") {
                     for (Roof r : roofs) {
@@ -2061,6 +2162,13 @@ public class GameContactListener implements ContactListener {
                     }
                 }
 
+                for (EnemyGryphon e : enemyGryphons) {
+                    if (e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody()){
+                        e.playerInRange = false;
+                        e.getStateMachine().changeState(EnemyGryphonState.WANDER);
+                    }
+                }
+
                 }
             }
 
@@ -2077,8 +2185,10 @@ public class GameContactListener implements ContactListener {
 
                 DungeonCrawler.cameraFading = true;
                 DungeonCrawler.roomTransition = true;
+                if(player.currentRoom == GenerateLevel.numRooms - 1) {
 
-                if (player.currentRoom < GenerateLevel.numRooms){ //TODO: Check for level progress before adding to current room
+                }
+                else if (player.currentRoom < GenerateLevel.numRooms){ //TODO: Check for level progress before adding to current room
                         init.roomList.get(player.currentRoom).unlockDoor(world, init.roomList.get(player.currentRoom+1),false);
                 }
             }

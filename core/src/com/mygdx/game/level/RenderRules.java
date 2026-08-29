@@ -41,6 +41,10 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "raisedFloorTile");
                         index++;
                         break;
+                    case "rafpot":
+                        drawableLevelLayer.add(index, "raisedFloorTileWithPot");
+                        index++;
+                        break;
                     case "waf":
                         drawableLevelLayer.add(index, "waterFloorTile");
                         index++;
@@ -116,6 +120,28 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "middleFloor3Tile");
                         index++;
                         break;
+                    case "f32":
+                        drawableLevelLayer.add(index, "middleFloor3Tile2");
+                        index++;
+                        break;
+                    case "f3r":
+                        drawableLevelLayer.add(index, "middleFloor3TileRandom");
+                        index++;
+                        break;
+                    case "f4":
+                        drawableLevelLayer.add(index, "middleFloor4Tile");
+                        index++;
+                        break;
+                    case "f42":
+                        drawableLevelLayer.add(index, "middleFloor4Tile2");
+                        index++;
+                        break;
+                    case "f4r":
+                        drawableLevelLayer.add(index, "middleFloor4TileRandom");
+                        index++;
+                        break;
+
+
                     case "dfu":
                         drawableLevelLayer.add(index, "decorFloorUpTile");
                         index++;
@@ -149,7 +175,7 @@ public class RenderRules {
                         index++;
                         break;
                     case "mosgrif":
-                        drawableLevelLayer.add(index, "mosaicGriffin");
+                        drawableLevelLayer.add(index, "mosaicGryphon");
                         index++;
                         break;
                     case "moslyre":
@@ -168,8 +194,16 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "mosaicTrident");
                         index++;
                         break;
+                    case "mospartan":
+                        drawableLevelLayer.add(index, "mosaicSpartan");
+                        index++;
+                        break;
                     case "p":
                         drawableLevelLayer.add(index, "pit");
+                        index++;
+                        break;
+                    case "penemy6":
+                        drawableLevelLayer.add(index, "pitGryphon");
                         index++;
                         break;
                     case "pu1":
@@ -186,6 +220,14 @@ public class RenderRules {
                         break;
                     case "pd":
                         drawableLevelLayer.add(index, "pitDown");
+                        index++;
+                        break;
+                    case "pdl":
+                        drawableLevelLayer.add(index, "pitDownLeft");
+                        index++;
+                        break;
+                    case "pdr":
+                        drawableLevelLayer.add(index, "pitDownRight");
                         index++;
                         break;
                     case "pl":
@@ -814,6 +856,57 @@ public class RenderRules {
                             index++;
                             break;
                         }
+                        else if (levelLayer.get(index).matches("(Wf1[0-9]+)")) {
+                            StringBuffer sbw = new StringBuffer(i);
+                            sbw.delete(0, 3);
+                            String strw = sbw.toString();
+
+                            String water = strw;
+                            StringBuffer sb3 = new StringBuffer(water);
+
+                            strw = "Wf1" + strw;
+
+                            //sb3.delete(1, 3);
+                            //String strRoofType = sb3.toString();
+
+                            drawableLevelLayer.add(index, strw);
+                            index++;
+                            break;
+                        }
+                        else if (levelLayer.get(index).matches("(Wf3[0-9]+)")) {
+                            StringBuffer sbw = new StringBuffer(i);
+                            sbw.delete(0, 3);
+                            String strw = sbw.toString();
+
+                            String water = strw;
+                            StringBuffer sb3 = new StringBuffer(water);
+
+                            strw = "Wf3" + strw;
+
+                            //sb3.delete(1, 3);
+                            //String strRoofType = sb3.toString();
+
+                            drawableLevelLayer.add(index, strw);
+                            index++;
+                            break;
+                        }
+                        else if (levelLayer.get(index).matches("(Wf4[0-9]+)")) {
+                            StringBuffer sbw = new StringBuffer(i);
+                            sbw.delete(0, 3);
+                            String strw = sbw.toString();
+
+                            String water = strw;
+                            StringBuffer sb3 = new StringBuffer(water);
+
+                            strw = "Wf4" + strw;
+
+                            //sb3.delete(1, 3);
+                            //String strRoofType = sb3.toString();
+
+                            drawableLevelLayer.add(index, strw);
+                            index++;
+                            break;
+                        }
                         else if (levelLayer.get(index).matches("(wstlt[0-9]+)")) {
                             StringBuffer sbw = new StringBuffer(i);
                             sbw.delete(0, 5);
@@ -872,14 +965,13 @@ public class RenderRules {
                         }
                          */
 
-                        else if (levelLayer.get(index).matches("[a].+")) {
+                        else if (levelLayer.get(index).matches("[ar].+")) {
                             StringBuffer sbr = new StringBuffer(i);
-                            sbr.delete(0, 1);
+                            sbr.delete(0, 2);
                             String strr = sbr.toString();
                             //floor + columntop4 + fire
 
-                            if (strr.matches("([0-9])+")) {
-
+                            if (strr.matches("\\d{2}")) {
                                 String roofr = strr;
                                 String strRoofExt = "0";
 
@@ -927,8 +1019,9 @@ public class RenderRules {
                             String str = sb.toString();
                             //floor + columntop4 + fire
 
-                            if (str.matches("([0-9])+")) {
-
+                            //\\d{2}
+                            //([0-9])+
+                            if (str.matches("\\d{2}")) {
                                 String roof = str;
                                 String strRoofExt = "0";
 
@@ -976,6 +1069,11 @@ public class RenderRules {
                                         break;
 
                             }
+                                if (str.matches("(f3coltu[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
                                 if (str.matches("(coldo[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
@@ -1026,7 +1124,22 @@ public class RenderRules {
                                     index++;
                                     break;
                                 }
+                                if (str.matches("(f3cfltb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
                                 if (str.matches("(cfltb[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cfltS[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cflts[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
                                     break;
@@ -1232,6 +1345,16 @@ public class RenderRules {
                                     index++;
                                     break;
                                 }
+                                if (str.matches("(csftP[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cSftP[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
                                 if (str.matches("(cSftp[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
@@ -1337,6 +1460,11 @@ public class RenderRules {
                                     index++;
                                     break;
                                 }
+                                if (str.matches("(cottp[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
                                 if (str.matches("(cotdb[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
@@ -1393,6 +1521,11 @@ public class RenderRules {
                                     break;
                                 }
                                 if (str.matches("(cfftB[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cfftp[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
                                     break;
@@ -1511,6 +1644,10 @@ public class RenderRules {
                                     drawableLevelLayer.add(index, "enemyCrab");
                                     index++;
                                     break;
+                                case "enemy6":
+                                    drawableLevelLayer.add(index, "enemyGryphon");
+                                    index++;
+                                    break;
                                 case "2enemy":
                                     drawableLevelLayer.add(index, "enemySkull2");
                                     index++;
@@ -1525,6 +1662,14 @@ public class RenderRules {
                                     break;
                                 case "2enemy4":
                                     drawableLevelLayer.add(index, "enemyCyclops2");
+                                    index++;
+                                    break;
+                                case "3enemy":
+                                    drawableLevelLayer.add(index, "enemySkull3");
+                                    index++;
+                                    break;
+                                case "3enemy5":
+                                    drawableLevelLayer.add(index, "enemyCrab3");
                                     index++;
                                     break;
                                 case "boss1":
@@ -1548,6 +1693,14 @@ public class RenderRules {
                                     break;
                                 case "pot2":
                                     drawableLevelLayer.add(index, "pot2");
+                                    index++;
+                                    break;
+                                case "pot3":
+                                    drawableLevelLayer.add(index, "pot3");
+                                    index++;
+                                    break;
+                                case "f2pot":
+                                    drawableLevelLayer.add(index, "f2pot");
                                     index++;
                                     break;
                                 case "coin":
@@ -1635,6 +1788,22 @@ public class RenderRules {
                                     drawableLevelLayer.add(index, "fped4fireoff");
                                     index++;
                                     break;
+                                case "2ped1fire":
+                                    drawableLevelLayer.add(index, "f2ped1fire");
+                                    index++;
+                                    break;
+                                case "3ped1statue1":
+                                    drawableLevelLayer.add(index, "f3ped1statue1");
+                                    index++;
+                                    break;
+                                case "3ped1statue2":
+                                    drawableLevelLayer.add(index, "f3ped1statue2");
+                                    index++;
+                                    break;
+                                case "3ped4fire":
+                                    drawableLevelLayer.add(index, "f3ped4fire");
+                                    index++;
+                                    break;
                                     //obstacles
                                 case "ob":
                                     drawableLevelLayer.add(index, "obstacle");
@@ -1687,6 +1856,14 @@ public class RenderRules {
                                     break;
                                 case "wrr":
                                     drawableLevelLayer.add(index,"waterRimRight");
+                                    index++;
+                                    break;
+                                case "wrt":
+                                    drawableLevelLayer.add(index,"waterRimTop");
+                                    index++;
+                                    break;
+                                case "wrb":
+                                    drawableLevelLayer.add(index,"waterRimBottom");
                                     index++;
                                     break;
 
@@ -2693,9 +2870,9 @@ public class RenderRules {
 
 
                     }
-                        else if (levelLayer.get(index).matches("t+l+f+.+")) {
+                        else if (levelLayer.get(index).matches("t+l+f+r+.+")) {
                             StringBuffer sb2 = new StringBuffer(i);
-                            sb2.delete(0, 3);
+                            sb2.delete(0, 4);
                             String str = sb2.toString();
 
                             //    drawableLevelLayer.add(index, "topLeftWallTile");

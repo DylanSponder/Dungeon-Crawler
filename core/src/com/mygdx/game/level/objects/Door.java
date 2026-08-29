@@ -70,7 +70,7 @@ public class Door {
             //    batch.draw(tx.doorRightLowerOpenTexture,x,y,0,0,16,16,1,1,0);
             //}
             if (doorName == "UpperLeft") {
-                batch.draw(tx.doorLeftUpperTexture,x,y-16,0,0,31,32,1,1,0);
+                batch.draw(tx.doorLeftUpperTexture,x - 1,y-16,0,0,32,32,1,1,0);
             }
             //if (doorName == "LowerLeft") {
             //    batch.draw(tx.doorLeftLowerOpenTexture,x,y,0,0,16,16,1,1,0);

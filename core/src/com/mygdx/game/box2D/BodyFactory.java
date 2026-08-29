@@ -2,11 +2,12 @@ package com.mygdx.game.box2D;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.mygdx.game.entity.behaviours.fsm.projectiles.Eyebeam;
 
-import static com.mygdx.game.DungeonCrawler.arrowBody;
-import static com.mygdx.game.DungeonCrawler.chiselHitbox;
+import java.util.ArrayList;
+
+import static com.mygdx.game.DungeonCrawler.*;
 
 public class BodyFactory {
 
@@ -776,7 +777,7 @@ public class BodyFactory {
 
     public Fixture createModularWaterFixture(Body body, int height, int width) {
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(8 * height - 9, 8 * width - 7);
+        shape.setAsBox(8 * height - 9, 8 * width - 6.9f);
         Fixture waterFixture = body.createFixture(shape, 1.0f);
         waterFixture.setUserData("Water");
         waterFixture.setSensor(true);
@@ -816,8 +817,10 @@ public class BodyFactory {
         bodyDef.position.set(x + 8f, y + 8f);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
-        CircleShape shape = new CircleShape();
-        shape.setRadius(8f);
+        //CircleShape shape = new CircleShape();
+        //shape.setRadius(8f);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(8f, 8f);
         body.createFixture(shape, 1.0f);
         shape.dispose();
         return body;
@@ -1110,6 +1113,7 @@ public class BodyFactory {
         bodyDef.fixedRotation = true;
 
         body = world.createBody(bodyDef);
+        //body.setUserData("Enemy");
         return body;
     }
 
@@ -1136,6 +1140,206 @@ public class BodyFactory {
         enemyHitbox.setFilterData(fil);
 
         return enemyHitbox;
+    }
+
+    public Fixture createEnemyGryphonHitbox(Body body, float r){
+        CircleShape enemyShape = new CircleShape();
+        enemyShape.setRadius(r);
+        Fixture enemyHitbox = body.createFixture(enemyShape, 1.0f);
+        enemyShape.dispose();
+        enemyHitbox.setUserData("EnemyHitbox");
+
+        FixtureDef def = new FixtureDef();
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(8, 8);
+        def.shape = shape;
+
+        short maskBits;
+        maskBits = 1 | 2;
+
+        Filter fil = new Filter();
+        fil.categoryBits = 3;
+        fil.maskBits = maskBits;
+        enemyHitbox.setFilterData(fil);
+
+        return enemyHitbox;
+    }
+
+    //        //this.leftScuttleHitbox
+    //        //this.rightScuttleHitbox
+    //        //this.upScuttleHitbox
+    //        //this.downScuttleHitbox
+
+
+    public ArrayList<Body> createCrabContainmentBoxes(Body enemyBody){
+        ArrayList<Body> boxes = new ArrayList<Body>();
+
+        Body body1;
+        BodyDef bodyDef1 = new BodyDef();
+        bodyDef1.type = BodyDef.BodyType.StaticBody;
+        bodyDef1.position.set(enemyBody.getPosition().x + 12f, enemyBody.getPosition().y + 12f);
+        bodyDef1.fixedRotation = true;
+        body1 = world.createBody(bodyDef1);
+        //CircleShape shape = new CircleShape();
+        //shape.setRadius(8f);
+        PolygonShape shape1 = new PolygonShape();
+        shape1.setAsBox(8f, 8f);
+        body1.createFixture(shape1, 1.0f);
+        body1.setUserData("Contain");
+        boxes.add(body1);
+        shape1.dispose();
+
+        Body body2;
+        BodyDef bodyDef2 = new BodyDef();
+        bodyDef2.type = BodyDef.BodyType.StaticBody;
+        bodyDef2.position.set(enemyBody.getPosition().x - 12f, enemyBody.getPosition().y - 12f);
+        bodyDef2.fixedRotation = true;
+        body2 = world.createBody(bodyDef2);
+        //CircleShape shape = new CircleShape();
+        //shape.setRadius(8f);
+        PolygonShape shape2 = new PolygonShape();
+        shape2.setAsBox(8f, 8f);
+        body2.createFixture(shape2, 1.0f);
+        body2.setUserData("Contain");
+        boxes.add(body2);
+        shape2.dispose();
+
+        Body body3;
+        BodyDef bodyDef3 = new BodyDef();
+        bodyDef3.type = BodyDef.BodyType.StaticBody;
+        bodyDef3.position.set(enemyBody.getPosition().x + 12f, enemyBody.getPosition().y - 12f);
+        bodyDef3.fixedRotation = true;
+        body3 = world.createBody(bodyDef3);
+        //CircleShape shape = new CircleShape();
+        //shape.setRadius(8f);
+        PolygonShape shape3 = new PolygonShape();
+        shape3.setAsBox(8f, 8f);
+        body3.createFixture(shape3, 1.0f);
+        body3.setUserData("Contain");
+        boxes.add(body3);
+        shape3.dispose();
+
+        Body body4;
+        BodyDef bodyDef4 = new BodyDef();
+        bodyDef4.type = BodyDef.BodyType.StaticBody;
+        bodyDef4.position.set(enemyBody.getPosition().x - 12f, enemyBody.getPosition().y + 12f);
+        bodyDef4.fixedRotation = true;
+        body4 = world.createBody(bodyDef4);
+        //CircleShape shape = new CircleShape();
+        //shape.setRadius(8f);
+        PolygonShape shape4 = new PolygonShape();
+        shape4.setAsBox(8f, 8f);
+        body4.createFixture(shape4, 1.0f);
+        body4.setUserData("Contain");
+        boxes.add(body4);
+        shape4.dispose();
+
+        return boxes;
+    }
+
+    public Body createCrabScuttleBody(World world){
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.fixedRotation = true;
+        bodyDef.position.set(0, 0);
+        body = world.createBody(bodyDef);
+        Body scuttleBody = world.createBody(bodyDef);
+        scuttleBody.setUserData("Scuttle");
+        //bindBody.
+        return body;
+    }
+
+    public Fixture createCrabScuttleBoxUp(Body enemyBody, Body scuttleBody){
+        PolygonShape enemyShape = new PolygonShape();
+        enemyShape.setAsBox(4, 32);
+        Fixture enemyDetectionHitbox = scuttleBody.createFixture(enemyShape, 0.15f);
+        enemyShape.dispose();
+        enemyDetectionHitbox.setSensor(true);
+        enemyDetectionHitbox.setUserData("ScuttleUp");
+
+        RevoluteJointDef jointDef = new RevoluteJointDef();
+        jointDef.collideConnected = false; // Prevent them from bumping into each other
+        jointDef.bodyA = enemyBody;  // The rotating body
+        jointDef.bodyB = scuttleBody; // The non-moving/non-rotating body
+
+        // Force the joint to anchor exactly at the center of both bodies
+        jointDef.localAnchorA.set(0, 0);
+        jointDef.localAnchorB.set(0, -32);
+
+
+        world.createJoint(jointDef);
+
+        return enemyDetectionHitbox;
+    }
+
+    public Fixture createCrabScuttleBoxDown(Body enemyBody, Body scuttleBody){
+        PolygonShape enemyShape = new PolygonShape();
+        enemyShape.setAsBox(4, 32);
+        Fixture enemyDetectionHitbox = scuttleBody.createFixture(enemyShape, 0.15f);
+        enemyShape.dispose();
+        enemyDetectionHitbox.setSensor(true);
+        enemyDetectionHitbox.setUserData("ScuttleDown");
+
+        RevoluteJointDef jointDef = new RevoluteJointDef();
+        jointDef.collideConnected = false; // Prevent them from bumping into each other
+        jointDef.bodyA = enemyBody;  // The rotating body
+        jointDef.bodyB = scuttleBody; // The non-moving/non-rotating body
+
+        // Force the joint to anchor exactly at the center of both bodies
+        jointDef.localAnchorA.set(0, 0);
+        jointDef.localAnchorB.set(0, 32);
+
+
+        world.createJoint(jointDef);
+
+        return enemyDetectionHitbox;
+    }
+
+    public Fixture createCrabScuttleBoxLeft(Body enemyBody, Body scuttleBody){
+        PolygonShape enemyShape = new PolygonShape();
+        enemyShape.setAsBox(32, 4);
+        Fixture enemyDetectionHitbox = scuttleBody.createFixture(enemyShape, 0.15f);
+        enemyShape.dispose();
+        enemyDetectionHitbox.setSensor(true);
+        enemyDetectionHitbox.setUserData("ScuttleLeft");
+
+        RevoluteJointDef jointDef = new RevoluteJointDef();
+        jointDef.collideConnected = false; // Prevent them from bumping into each other
+        jointDef.bodyA = enemyBody;  // The rotating body
+        jointDef.bodyB = scuttleBody; // The non-moving/non-rotating body
+
+        // Force the joint to anchor exactly at the center of both bodies
+        jointDef.localAnchorA.set(0, 0);
+        jointDef.localAnchorB.set(32, 0);
+
+
+        world.createJoint(jointDef);
+
+        return enemyDetectionHitbox;
+    }
+
+    public Fixture createCrabScuttleBoxRight(Body enemyBody, Body scuttleBody){
+        PolygonShape enemyShape = new PolygonShape();
+        enemyShape.setAsBox(32, 4);
+        Fixture enemyDetectionHitbox = scuttleBody.createFixture(enemyShape, 0.15f);
+        enemyShape.dispose();
+        enemyDetectionHitbox.setSensor(true);
+        enemyDetectionHitbox.setUserData("ScuttleRight");
+
+        RevoluteJointDef jointDef = new RevoluteJointDef();
+        jointDef.collideConnected = false; // Prevent them from bumping into each other
+        jointDef.bodyA = enemyBody;  // The rotating body
+        jointDef.bodyB = scuttleBody; // The non-moving/non-rotating body
+
+        // Force the joint to anchor exactly at the center of both bodies
+        jointDef.localAnchorA.set(0, 0);
+        jointDef.localAnchorB.set(-32, 0);
+
+
+        world.createJoint(jointDef);
+
+        return enemyDetectionHitbox;
     }
 
     public Fixture createEnemyDetectionRadius(Body body, float r){

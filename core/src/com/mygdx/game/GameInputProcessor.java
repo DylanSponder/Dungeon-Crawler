@@ -102,9 +102,9 @@ public class GameInputProcessor implements InputProcessor {
 
             //pause player in place while attacking (attacks must be timed correctly!)
             playerPaused = true;
-            PLAYER_HORIZONTAL_SPEED = 0;
-            PLAYER_VERTICAL_SPEED = 0;
-            player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
+            PLAYER_HORIZONTAL_SPEED_PERCENTAGE = 0;
+            PLAYER_VERTICAL_SPEED_PERCENTAGE = 0;
+            player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED_PERCENTAGE, PLAYER_VERTICAL_SPEED_PERCENTAGE);
 
             boolean swing = Random.randomBoolean();
 
@@ -212,15 +212,30 @@ public class GameInputProcessor implements InputProcessor {
             soundController.playSound("BowAttack3", 10,6,0.1f);
 
             playerPaused = true;
-            PLAYER_HORIZONTAL_SPEED = 0;
-            PLAYER_VERTICAL_SPEED = 0;
-            player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
+            PLAYER_HORIZONTAL_SPEED_PERCENTAGE = 0;
+            PLAYER_VERTICAL_SPEED_PERCENTAGE = 0;
+            player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED_PERCENTAGE, PLAYER_VERTICAL_SPEED_PERCENTAGE);
 
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
                     //resume player movement after a short delay and remove swordBody hitbox
                     playerPaused = false;
+                    //reset playerSprite to before the attack input
+                    if (playerDirection == "Down") {
+                        tx.playerTextureRegion = tx.playerDown;
+                        tx.playerHead = tx.playerHeadDown;
+                    } else if (playerDirection == "Up") {
+                        tx.playerTextureRegion = tx.playerUp;
+                        tx.playerHead = tx.playerHeadUp;
+                    } else if (playerDirection == "Left") {
+                        tx.playerTextureRegion = tx.playerLeft;
+                        tx.playerHead = tx.playerHeadLeft;
+                    } else if (playerDirection == "Right") {
+                        tx.playerTextureRegion = tx.playerRight;
+                        tx.playerHead = tx.playerHeadRight;
+                    }
+/*
                     //reset playerSprite to before the attack input
                     if (tx.playerTextureRegion.equals(tx.playerAttackDown)) {
                         tx.playerTextureRegion = tx.playerDown;
@@ -235,6 +250,7 @@ public class GameInputProcessor implements InputProcessor {
                         tx.playerTextureRegion = tx.playerRight;
                         tx.playerHead = tx.playerHeadRight;
                     }
+ */
                     playerRangedAttacking = false;
                 }
             }, playerRangedAttackSpeedInSeconds);
@@ -592,9 +608,9 @@ public class GameInputProcessor implements InputProcessor {
 
             //pause player in place while attacking (attacks must be timed correctly!)
             playerPaused = true;
-            PLAYER_HORIZONTAL_SPEED = 0;
-            PLAYER_VERTICAL_SPEED = 0;
-            player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
+            PLAYER_HORIZONTAL_SPEED_PERCENTAGE = 0;
+            PLAYER_VERTICAL_SPEED_PERCENTAGE = 0;
+            player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED_PERCENTAGE, PLAYER_VERTICAL_SPEED_PERCENTAGE);
             
 
 
@@ -664,9 +680,9 @@ public class GameInputProcessor implements InputProcessor {
 
             //pause player in place while attacking (attacks must be timed correctly!)
             playerPaused = true;
-            PLAYER_HORIZONTAL_SPEED = 0;
-            PLAYER_VERTICAL_SPEED = 0;
-            player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
+            PLAYER_HORIZONTAL_SPEED_PERCENTAGE = 0;
+            PLAYER_VERTICAL_SPEED_PERCENTAGE = 0;
+            player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED_PERCENTAGE, PLAYER_VERTICAL_SPEED_PERCENTAGE);
 
             Timer.schedule(new Timer.Task() {
                 @Override
@@ -696,7 +712,7 @@ public class GameInputProcessor implements InputProcessor {
         }
 
         //pressing '6' shows some debug data
-        if (keycode == 13) {
+        if (keycode == 13 && !(player.currentRoom == GenerateLevel.numRooms - 1)) {
             //System.out.println("PLAYER X: " + player.playerBody.getPosition().x);
             //System.out.println(" PLAYER Y: " + player.playerBody.getPosition().y);
             System.out.println("Current room X" + GenerateLevel.init.roomList.get(player.currentRoom).x1);
@@ -762,9 +778,9 @@ public class GameInputProcessor implements InputProcessor {
 
             //pause player in place while attacking (attacks must be timed correctly!)
             playerPaused = true;
-            PLAYER_HORIZONTAL_SPEED = 0;
-            PLAYER_VERTICAL_SPEED = 0;
-            player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
+            PLAYER_HORIZONTAL_SPEED_PERCENTAGE = 0;
+            PLAYER_VERTICAL_SPEED_PERCENTAGE = 0;
+            player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED_PERCENTAGE, PLAYER_VERTICAL_SPEED_PERCENTAGE);
 
             boolean swing = Random.randomBoolean();
 
@@ -886,9 +902,9 @@ public class GameInputProcessor implements InputProcessor {
 
 
             playerPaused = true;
-            PLAYER_HORIZONTAL_SPEED = 0;
-            PLAYER_VERTICAL_SPEED = 0;
-            player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED, PLAYER_VERTICAL_SPEED);
+            PLAYER_HORIZONTAL_SPEED_PERCENTAGE = 0;
+            PLAYER_VERTICAL_SPEED_PERCENTAGE = 0;
+            player.playerBody.setLinearVelocity(PLAYER_HORIZONTAL_SPEED_PERCENTAGE, PLAYER_VERTICAL_SPEED_PERCENTAGE);
 
             Timer.schedule(new Timer.Task() {
                 @Override

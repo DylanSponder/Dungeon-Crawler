@@ -32,16 +32,16 @@ public class Lock {
         final CreateAssets tx = CreateAssets.getInstance();
 
             if (direction == 3){
-                batch.draw(tx.lockDownTexture,x - 8,y-8,0,0,32,19,1,1,0);
+                batch.draw(tx.lockDownTexture,x - 8,y-2,0,0,32,22,1,1,0);
             }
             else if (direction == 1){
-                batch.draw(tx.lockUpTexture,x - 8,y-8,0,0,32,19,1,1,0);
+                batch.draw(tx.lockUpTexture,x - 8,y - 2,0,0,32,22,1,1,0);
             }
             else if (direction == 4){
-                batch.draw(tx.lockLeftTexture,x + 2,y-24,0,0,19,32,1,1,0);
+                batch.draw(tx.lockLeftTexture,x - 5,y-24,0,0,22,32,1,1,0);
             }
             else if (direction == 2){
-                batch.draw(tx.lockRightTexture,x-8,y-24,0,0,19,32,1,1,0);
+                batch.draw(tx.lockRightTexture,x-4,y-24,0,0,22,32,1,1,0);
         }
     }
 }

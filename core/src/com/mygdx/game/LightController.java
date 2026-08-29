@@ -23,7 +23,7 @@ public class LightController {
                 light.lightTimeElapsed = 0;
                 if (light.type == 1) {
                     //fires
-                    light.randLightLevel = Random.randomInt(700,550);
+                    light.randLightLevel = Random.randomInt(800,650);
                 }
                 if (light.type == 2) {
                     //spawner flames

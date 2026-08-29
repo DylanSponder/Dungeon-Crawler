@@ -8,6 +8,10 @@ public class CreateCell {
     public TiledMapTileLayer.Cell middleFloorTile2;
     public TiledMapTileLayer.Cell middleFloor2Tile;
     public TiledMapTileLayer.Cell middleFloor3Tile;
+    public TiledMapTileLayer.Cell middleFloor3Tile2;
+    public TiledMapTileLayer.Cell middleFloor4Tile;
+    public TiledMapTileLayer.Cell middleFloor4Tile2;
+
     public TiledMapTileLayer.Cell decorFloorUpTile;
     public TiledMapTileLayer.Cell decorFloorDownTile;
     public TiledMapTileLayer.Cell decorFloorLeftTile;
@@ -40,6 +44,18 @@ public class CreateCell {
 
     public TiledMapTileLayer.Cell mosaicTridentTile;
     public TiledMapTileLayer.Cell mosaicBullTile;
+    public TiledMapTileLayer.Cell mosaicGryphonTile;
+    public TiledMapTileLayer.Cell mosaicSpartanTile;
+    public TiledMapTileLayer.Cell mosaicLyreTile;
+
+    public TiledMapTileLayer.Cell floorTile;
+    public TiledMapTileLayer.Cell sunkenFloorTile;
+    public TiledMapTileLayer.Cell darkFloorTile;
+    public TiledMapTileLayer.Cell darkSunkenFloorTile;
+    public TiledMapTileLayer.Cell keyTile;
+    public TiledMapTileLayer.Cell key2Tile;
+
+
     //
     //
     //
@@ -52,6 +68,8 @@ public class CreateCell {
     public TiledMapTileLayer.Cell pitLeftTile;
     public TiledMapTileLayer.Cell pitRightTile;
     public TiledMapTileLayer.Cell pitBottomTile;
+    public TiledMapTileLayer.Cell pitBottomLeftTile;
+    public TiledMapTileLayer.Cell pitBottomRightTile;
 
     public TiledMapTileLayer.Cell innerWallTLCornerTile;
     public TiledMapTileLayer.Cell innerWallTRCornerTile;
@@ -197,6 +215,10 @@ public class CreateCell {
         middleFloorTile2 = new TiledMapTileLayer.Cell();
         middleFloor2Tile = new TiledMapTileLayer.Cell();
         middleFloor3Tile = new TiledMapTileLayer.Cell();
+        middleFloor3Tile2 = new TiledMapTileLayer.Cell();
+        middleFloor4Tile = new TiledMapTileLayer.Cell();
+        middleFloor4Tile2 = new TiledMapTileLayer.Cell();
+
         decorFloorUpTile = new TiledMapTileLayer.Cell();
         decorFloorDownTile = new TiledMapTileLayer.Cell();
         decorFloorLeftTile = new TiledMapTileLayer.Cell();
@@ -208,6 +230,16 @@ public class CreateCell {
 
         mosaicTridentTile = new TiledMapTileLayer.Cell();
         mosaicBullTile = new TiledMapTileLayer.Cell();
+        mosaicGryphonTile = new TiledMapTileLayer.Cell();
+        mosaicSpartanTile = new TiledMapTileLayer.Cell();
+        mosaicLyreTile = new TiledMapTileLayer.Cell();
+
+        floorTile = new TiledMapTileLayer.Cell();
+        sunkenFloorTile = new TiledMapTileLayer.Cell();
+        darkFloorTile = new TiledMapTileLayer.Cell();
+        darkSunkenFloorTile = new TiledMapTileLayer.Cell();
+        keyTile = new TiledMapTileLayer.Cell();
+        key2Tile = new TiledMapTileLayer.Cell();
 
         pitTile = new TiledMapTileLayer.Cell();
         pitFloorTile = new TiledMapTileLayer.Cell();
@@ -216,6 +248,8 @@ public class CreateCell {
         pitLeftTile = new TiledMapTileLayer.Cell();
         pitRightTile = new TiledMapTileLayer.Cell();
         pitBottomTile = new TiledMapTileLayer.Cell();
+        pitBottomLeftTile = new TiledMapTileLayer.Cell();
+        pitBottomRightTile = new TiledMapTileLayer.Cell();
 
         largeWallUpTile = new TiledMapTileLayer.Cell();
         largeWallDownTile = new TiledMapTileLayer.Cell();

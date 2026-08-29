@@ -105,7 +105,7 @@ public class HUD {
     //Health slots
     healthBar = new HealthBar(3f, healthSymbol, healthSymbolHalf, healthSymbolEmpty, 60);
 
-    //bossHealthbar = bossMinotaurs.get(0).minoHealthbar;
+    bossHealthbar = bossMinotaurs.get(0).minoHealthbar;
     
     moneyTable = new Table();
     moneyAmount = new Label(totalGoldAsString, new LabelStyle(DungeonCrawler.defaultFont2, Color.GOLD));

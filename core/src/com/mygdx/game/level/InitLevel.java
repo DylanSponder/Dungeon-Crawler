@@ -53,6 +53,10 @@ public class InitLevel {
         cr.middleFloorTile2.setTile(new StaticTiledMapTile(tx.roomFloorTexture2));
         cr.middleFloor2Tile.setTile(new StaticTiledMapTile(tx.roomFloor2Texture));
         cr.middleFloor3Tile.setTile(new StaticTiledMapTile(tx.roomFloor3Texture));
+        cr.middleFloor3Tile2.setTile(new StaticTiledMapTile(tx.roomFloor3Texture2));
+        cr.middleFloor4Tile.setTile(new StaticTiledMapTile(tx.roomFloor4Texture));
+        cr.middleFloor4Tile2.setTile(new StaticTiledMapTile(tx.roomFloor4Texture2));
+
         cr.decorFloorUpTile.setTile(new StaticTiledMapTile(tx.roomDecorativeFloorUpTexture));
         cr.decorFloorDownTile.setTile(new StaticTiledMapTile(tx.roomDecorativeFloorDownTexture));
         cr.decorFloorLeftTile.setTile(new StaticTiledMapTile(tx.roomDecorativeFloorLeftTexture));
@@ -64,6 +68,16 @@ public class InitLevel {
 
         cr.mosaicTridentTile.setTile(new StaticTiledMapTile(tx.mosaicTrident));
         cr.mosaicBullTile.setTile(new StaticTiledMapTile(tx.mosaicBull));
+        cr.mosaicGryphonTile.setTile(new StaticTiledMapTile(tx.mosaicGryphon));
+        cr.mosaicSpartanTile.setTile(new StaticTiledMapTile(tx.mosaicSpartan));
+        cr.mosaicLyreTile.setTile(new StaticTiledMapTile(tx.mosaicLyre));
+
+        cr.floorTile.setTile(new StaticTiledMapTile(tx.floorTile));
+        cr.sunkenFloorTile.setTile(new StaticTiledMapTile(tx.sunkenFloorTile));
+        cr.darkFloorTile.setTile(new StaticTiledMapTile(tx.darkFloorTile));
+        cr.darkSunkenFloorTile.setTile(new StaticTiledMapTile(tx.darkSunkenFloorTile));
+        cr.keyTile.setTile(new StaticTiledMapTile(tx.keyTile));
+        cr.key2Tile.setTile(new StaticTiledMapTile(tx.key2Tile));
 
         cr.pitTile.setTile(new StaticTiledMapTile(tx.pit));
         cr.pitFloorTile.setTile(new StaticTiledMapTile(tx.pitFloor1));
@@ -72,6 +86,9 @@ public class InitLevel {
         cr.pitLeftTile.setTile(new StaticTiledMapTile(tx.pitLeft));
         cr.pitRightTile.setTile(new StaticTiledMapTile(tx.pitRight));
         cr.pitBottomTile.setTile(new StaticTiledMapTile(tx.pitBottom));
+
+        cr.pitBottomLeftTile.setTile(new StaticTiledMapTile(tx.pitBottomLeft));
+        cr.pitBottomRightTile.setTile(new StaticTiledMapTile(tx.pitBottomRight));
 
         cr.largeWallUpTile.setTile(new StaticTiledMapTile(tx.largeWallUp));
         cr.largeWallDownTile.setTile(new StaticTiledMapTile(tx.largeWallDown));

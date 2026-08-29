@@ -60,7 +60,6 @@ public class Enemy {
         this.defaultSpeed = defaultSpeed;
         this.vulnerable = true;
         this.rotateTime = 30;
-        this.swimming = true;
     }
 
     public void loseEnemyHealth(int amount) {

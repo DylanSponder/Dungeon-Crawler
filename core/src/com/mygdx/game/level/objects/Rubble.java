@@ -37,15 +37,15 @@ public class Rubble {
         //generate a random number for x and y offsets
 
         if (type == 1) {
-
+            batch.draw(rubbleSprite,x + 6,y - 12,0,0,11,11,1,1,0);
         }
         if (type == 2) {
-
+            batch.draw(rubbleSprite,x + 5f,y - 14,0,0,13,16,1,1,0);
         }
         if (type == 3) {
-
+            batch.draw(rubbleSprite,x + 6,y - 12,0,0,11,11,1,1,0);
         }
 
-        batch.draw(rubbleSprite,x + 6,y - 12,0,0,11,11,1,1,0);
+
     }
 }

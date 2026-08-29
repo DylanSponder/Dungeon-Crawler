@@ -169,7 +169,12 @@ public enum EnemyCrabState implements State<EnemyCrab> {
 
             if (enemyIt.hasNext()) {
                 //enemy.die(enemy.enemyBody.getPosition().x, enemy.enemyBody.getPosition().y);
+                enemy.scuttleBodyUp.destroyFixture(enemy.upScuttleHitbox);
+                enemy.scuttleBodyDown.destroyFixture(enemy.downScuttleHitbox);
+                enemy.scuttleBodyLeft.destroyFixture(enemy.leftScuttleHitbox);
+                enemy.scuttleBodyRight.destroyFixture(enemy.rightScuttleHitbox);
                 enemyCrabs.remove(enemy);
+
                 //Crab.createCrab();
             }
 

@@ -25,6 +25,7 @@ public class RaisedFloor {
     public Rectangle scissors2;
     public boolean raising, lowering, entityColliding, lowered;
     public Rectangle clipBounds;
+    public boolean active;
 
     public RaisedFloor(World world, float x, float y) {
         this.world = world;

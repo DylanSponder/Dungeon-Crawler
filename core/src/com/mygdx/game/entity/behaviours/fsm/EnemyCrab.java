@@ -14,7 +14,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -23,6 +25,8 @@ import com.mygdx.game.box2D.BodyFactory;
 import com.mygdx.game.entity.utils.EnemyBox2DRaycastCollisionDetector;
 import com.mygdx.game.entity.utils.EnemyCrabBox2DSteeringEntity;
 import com.mygdx.game.level.objects.DisplayText;
+
+import java.util.ArrayList;
 
 import static com.mygdx.game.DungeonCrawler.*;
 
@@ -33,6 +37,9 @@ public class EnemyCrab extends Enemy {
     public PointLight CrabLight;
     public boolean active;
     public String facing;
+    public Fixture leftScuttleHitbox,rightScuttleHitbox,upScuttleHitbox,downScuttleHitbox;
+    public Body scuttleBody,scuttleBodyUp,scuttleBodyDown,scuttleBodyLeft,scuttleBodyRight;
+    public ArrayList<Body> boxes;
 
     public EnemyCrab(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
@@ -65,6 +72,7 @@ public class EnemyCrab extends Enemy {
 
         this.enemyDetectionRadius = bodyFactory.createEnemyDetectionRadius(enemyBody, 100f);
 
+
         //enemyDetectionRadius.setSensor(true);
 
         this.enemyAI = new EnemyCrabBox2DSteeringEntity(enemyBody, 10);
@@ -74,6 +82,31 @@ public class EnemyCrab extends Enemy {
         stateMachine.changeState(EnemyCrabState.STOP);
         this.enemyBody.setUserData("Enemy");
         this.enemyHitbox.setUserData("EnemyCrab");
+
+
+        this.scuttleBodyUp = bodyFactory.createCrabScuttleBody(world);
+        this.scuttleBodyDown = bodyFactory.createCrabScuttleBody(world);
+        this.scuttleBodyLeft = bodyFactory.createCrabScuttleBody(world);
+        this.scuttleBodyRight = bodyFactory.createCrabScuttleBody(world);
+
+        this.boxes = bodyFactory.createCrabContainmentBoxes(enemyBody);
+
+        //this.leftScuttleHitbox = bodyFactory.createCrabScuttleBoxLeft(enemyBody);
+        //this.rightScuttleHitbox= bodyFactory.createCrabScuttleBoxRight(enemyBody);
+        this.upScuttleHitbox = bodyFactory.createCrabScuttleBoxUp(enemyBody, scuttleBodyUp);
+        this.downScuttleHitbox = bodyFactory.createCrabScuttleBoxDown(enemyBody, scuttleBodyDown);
+        this.leftScuttleHitbox = bodyFactory.createCrabScuttleBoxLeft(enemyBody, scuttleBodyLeft);
+        this.rightScuttleHitbox = bodyFactory.createCrabScuttleBoxRight(enemyBody, scuttleBodyRight);
+        //this.downScuttleHitbox= bodyFactory.createCrabScuttleBoxDown(enemyBody);
+
+        this.scuttleBodyUp.setUserData("ScuttleBodyUp");
+        this.scuttleBodyDown.setUserData("ScuttleBodyDown");
+        this.scuttleBodyLeft.setUserData("ScuttleBodyLeft");
+        this.scuttleBodyRight.setUserData("ScuttleBodyRight");
+        this.upScuttleHitbox.setUserData("ScuttleUp");
+        this.downScuttleHitbox.setUserData("ScuttleDown");
+        this.leftScuttleHitbox.setUserData("ScuttleLeft");
+        this.rightScuttleHitbox.setUserData("ScuttleRight");
 
         this.debug = false;
 /*

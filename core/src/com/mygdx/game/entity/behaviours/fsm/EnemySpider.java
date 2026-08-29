@@ -183,6 +183,15 @@ public class EnemySpider extends Enemy {
                                 && fixture.getBody().getUserData() != "Cobweb"
                                 && fixture.getBody().getUserData() != "Roof"
                                 && fixture.getBody().getUserData() != "TrapArea"
+                                && fixture.getBody().getUserData() != "Water"
+                                && fixture.getBody().getUserData() != "Stem"
+                                && fixture.getBody().getUserData() != "Statue"
+                                && fixture.getBody().getUserData() != "Pedestal"
+                                && fixture.getBody().getUserData() != "Pit"
+                                && fixture.getBody().getUserData() != "Rubble"
+                                && fixture.getBody().getUserData() != "Flag"
+                                && fixture.getBody().getUserData() != "Potion"
+                                && fixture.getBody().getUserData() != "Coin"
                         ) {
                             sightCounter = 0;
                             playerSighted = false;

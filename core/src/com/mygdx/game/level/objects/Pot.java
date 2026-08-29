@@ -10,6 +10,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.mygdx.game.box2D.BodyFactory;
 
+import java.util.ArrayList;
+
 import static com.mygdx.game.DungeonCrawler.potParticleEffect;
 
 public class Pot {
@@ -22,6 +24,9 @@ public class Pot {
         public int type;
         public float particleTime;
         public ParticleEffect particleEffect;
+        public ArrayList<RaisedFloor> linkedFloorList;
+        public RaisedFloor linkedFloor;
+        public boolean onRaisedFloor;
 
         public Pot(World world, float x, float y, int type) {
             this.type = type;
@@ -34,7 +39,7 @@ public class Pot {
             this.particleTime = Gdx.graphics.getDeltaTime();
         }
 
-        public Body createPot(ArrayMap<Body, Pot> potArrayMap) {
+        public Body createPot(ArrayMap<Body, Pot> potArrayMap, RaisedFloor raf) {
             //this.particleEffect = new ParticleEffect();
             this.particleEffect = potParticleEffect;
             //this.particleEffect.load(Gdx.files.internal("HellasDungeon/Particles/Pot/Pot.p"),Gdx.files.internal("HellasDungeon/Particles/Pot/"));

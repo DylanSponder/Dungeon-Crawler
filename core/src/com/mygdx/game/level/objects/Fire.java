@@ -71,7 +71,7 @@ public class Fire extends Light{
             this.torchLight = torchLight;
         }
 
-        this.light = new PointLight(rayHandler,400, color,65, fireX + 8, fireY + 8);
+        this.light = new PointLight(rayHandler,400, color,80, fireX + 8, fireY + 8);//distance was 65
         this.light.setXray(true);
 
         this.smoking = false;

@@ -53,8 +53,8 @@ public class EnemyCrabBox2DSteeringEntity implements Steerable<Vector2> {
 
         if (steeringOutput.angular != 0) {
             // this method internally scales the torque by deltaTime
-            body.applyTorque(steeringOutput.angular, true);
-            anyAccelerations = true;
+         //   body.applyTorque(steeringOutput.angular, true);
+         anyAccelerations = true;
         }
         else {
             Vector2 linVel = getLinearVelocity();

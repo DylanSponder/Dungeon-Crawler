@@ -5,7 +5,7 @@ llw,a,stdl,std,std,stutr,wf114,stutl,std,std,stdr,lrw,
 llw,a,iwd,iwd,iwtrt,stl,f,str,iwtlt,iwd,iwd,lrw,
 llw,a,iwu,iwu,iwbrt,stl,f,str,iwblt,iwu,iwu,lrw,
 llw,a,stu,stu,stu,stubr,f,stubl,stu,stu,stu,lrw,
-doorul,a,wf192,f,fcovib0,f,f,f,fcovib0,f,f,doorur,
-doorll,a,f,fcovio0,f,f,fped1fire,f,f,fcovio0,f,doorlr,
+doorul,a,wf192,f,fcovio0,f,f,f,fcovio0,f,f,doorur,f
+doorll,a,f,fcovio0,f,f,f,f,f,fcovio0,f,doorlr,f
 ,a,a,a,a,a,a,a,a,a,a,,
-lblw,,lbw,lbw,lbwtr,doorbl,doorbr,lbw,lbwtr,lbw,lbw,lbrw,
+lblw,,lbw,lbw,lbwtr,lbw,tord,lbw,lbwtr,doorbl,doorbr,lbrw,
