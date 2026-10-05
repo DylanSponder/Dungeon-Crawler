@@ -42,18 +42,20 @@ import com.mygdx.game.level.objects.*;
 import com.mygdx.game.level.objects.Trap;
 
 
+import javax.swing.text.SimpleAttributeSet;
+
 import static com.mygdx.game.HUD.compassArrowImage;
 import static com.mygdx.game.OptionsMenu.optionsMenuContainer;
 import static com.mygdx.game.PauseMenu.pauseMenuContainer;
 
 public class DungeonCrawler extends ApplicationAdapter {
 	private SpriteBatch arrowBatch, enemySkullBatch, enemySpiderBatch, enemyGhostBatch, enemyEyeBatch, enemyCrabBatch, enemyGryphonBatch, potBatch, hudBatch, tutoBatch, alertFontBatch, inventoryBatch, sightFontBatch;
-	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, coinBatch, obstacleBatch, fireBatch, flameBatch, webBatch, cobBatch, candleBatch, lampBatch, brazierBatch, eyebeamBatch;
-	private SpriteBatch bossMinotaurBatch, statueBatch, flagBatch, vineBatch, waveBatch, waterBatch, waterfallBatch, raisedFloorBatch, rubbleBatch, drainBatch, rippleBatch;
+	private SpriteBatch skullBatch, boneBatch, lockBatch, doorBatch, potionBatch, coinBatch, obstacleBatch, fireBatch, flameBatch, webBatch, cobBatch, candleBatch, lampBatch, brazierBatch, eyebeamBatch, bridgeBatch;
+	private SpriteBatch bossMinotaurBatch, statueBatch, flagBatch, vineBatch, vasePlantBatch, waveBatch, waterBatch, waterfallBatch, raisedFloorBatch, rubbleBatch, drainBatch, rippleBatch;
 	private SpriteBatch columnBaseBatch, columnStemBatch, columnTopBatch, pedestalBatch, roofBatch, columnBaseLowerBatch, heartBatch, pedestalUpperBatch, firePitBatch, vaseBatch;
 	public static SpriteBatch trapBatch, playerBatch, weaponBatch, torchBatch;
-	public SpriteBatch potParticlesBatch, boneParticlesBatch;
-	public static ParticleEffect potParticleEffect, boneParticleEffect;
+	public SpriteBatch potParticlesBatch, boneParticlesBatch, gryphonParticlesBatch;
+	public static ParticleEffect potParticleEffect, boneParticleEffect, gryphonParticleEffect1, gryphonParticleEffect2;
 	public static World world;
 	public static Viewport vp;
 	public static Skin skin;
@@ -119,6 +121,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<Coin> coins, collectedCoins;
 	public static ArrayList<Heart> hearts, collectedHearts;
 	public static ArrayList<Torch> torches;
+    public static ArrayList<Bridge> bridges;
 	public static ArrayList<Obstacle> obstacles;
 	public static ArrayList<Candle> candles;
     public static ArrayList<OilLamp> lamps;
@@ -133,6 +136,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static ArrayList<RaisedFloor> raisedFloors;
 	public static ArrayList<Flag> flags;
     public static ArrayList<Vine> vines;
+    public static ArrayList<VasePlant> vasePlants;
 	public static ArrayList<Wave> waves;
 	public static ArrayList<Water> ocean;
 	public static ArrayList<Water> water;
@@ -161,7 +165,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 	public static float stateTime, stateTime2, stateTime3, stateTime4, stateTime5, potTime;
 	public TextureRegion currentFrame;
 	public ShaderProgram flagShader, waveShader, vineShader, fireShader, waterfallShader;
-	public float flag_time, ocean_time, ocean2_time, vine_time, fire_time, waterfall_time;
+	public float flag_time, ocean_time, ocean2_time, vine_time, fire_time, waterfall_time, vaseplant_time;
     public FrameBuffer fboWater;
 
 
@@ -220,6 +224,7 @@ public class DungeonCrawler extends ApplicationAdapter {
         waterfallBatch = new SpriteBatch();
 		flagBatch = new SpriteBatch();
         vineBatch = new SpriteBatch();
+        vasePlantBatch = new SpriteBatch();
 		waterBatch = new SpriteBatch();
 		waveBatch = new SpriteBatch();
         fireBatch = new SpriteBatch();
@@ -265,6 +270,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		waves = new ArrayList<>();
 		water = new ArrayList<>();
 		eyebeamBatch = new SpriteBatch();
+        bridgeBatch = new SpriteBatch();
 		webBatch = new SpriteBatch();
 		doorBatch = new SpriteBatch();
 		lockBatch = new SpriteBatch();
@@ -327,9 +333,15 @@ public class DungeonCrawler extends ApplicationAdapter {
 		potParticleEffect = new ParticleEffect();
 		boneParticlesBatch = new SpriteBatch();
 		boneParticleEffect = new ParticleEffect();
+
+        gryphonParticleEffect1 = new ParticleEffect();
+        gryphonParticleEffect2 = new ParticleEffect();
+
+        gryphonParticlesBatch = new SpriteBatch();
 		brokenPots = new ArrayList<>();
 		potArrayMap = new ArrayMap<>();
 		torches = new ArrayList<>();
+        bridges = new ArrayList<>();
 		potions = new ArrayList<>();
 		coins = new ArrayList<>();
 		hearts = new ArrayList<>();
@@ -340,6 +352,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 		fires = new ArrayList<>();
 		flags = new ArrayList<>();
         vines = new ArrayList<>();
+        vasePlants = new ArrayList<>();
 		extinguishedRespawnFires = new ArrayList<>();
 		collectedPotions = new ArrayList<Potion>();
 		collectedCoins = new ArrayList<Coin>();
@@ -475,6 +488,10 @@ public class DungeonCrawler extends ApplicationAdapter {
         vine.createVineHitbox(0,0, world);
         vines.add(vine);
 
+        VasePlant vasePlant = new VasePlant(world, 0,0, 3);
+        vasePlant.createVasePlantHitbox(0,0, world);
+        vasePlants.add(vasePlant);
+
         Waterfall waterfall = new Waterfall(world, 0,0);
         waterfall.createWaterfall();
         waterfalls.add(waterfall);
@@ -566,6 +583,9 @@ public class DungeonCrawler extends ApplicationAdapter {
 		potParticleEffect.load(Gdx.files.internal("HellasDungeon/Particles/Pot/Pot.p"),Gdx.files.internal("HellasDungeon/Particles/Pot/"));
 
 		boneParticleEffect.load(Gdx.files.internal("HellasDungeon/Particles/Bone/Bone.p"),Gdx.files.internal("HellasDungeon/Particles/Bone/"));
+
+        gryphonParticleEffect1.load(Gdx.files.internal("HellasDungeon/Particles/Gryphon/Gryphon1.p"),Gdx.files.internal("HellasDungeon/Particles/Gryphon/"));
+        gryphonParticleEffect2.load(Gdx.files.internal("HellasDungeon/Particles/Gryphon/Gryphon2.p"),Gdx.files.internal("HellasDungeon/Particles/Gryphon/"));
 
         Timer.schedule(new Timer.Task() {
             @Override
@@ -733,7 +753,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 					if (r.type == 1) {
 						Rubble.renderRubble(rubbleBatch, tx.pitPot,r.rubBody.getPosition().x - 12, r.rubBody.getPosition().y + 6, 1);
 					} else if (r.type == 2) {
-						Rubble.renderRubble(rubbleBatch, tx.pitColumn,r.rubBody.getPosition().x - 12, r.rubBody.getPosition().y + 6,2);
+						Rubble.renderRubble(rubbleBatch, tx.pitColumn,r.rubBody.getPosition().x - 11.5f, r.rubBody.getPosition().y + 6,2);
 					} else if (r.type == 3) {
 						Rubble.renderRubble(rubbleBatch, tx.pitSkull,r.rubBody.getPosition().x - 11, r.rubBody.getPosition().y + 6,3);
 					}
@@ -808,6 +828,13 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 				}
 			}
+
+        for (Bridge br : bridges) {
+            bridgeBatch.begin();
+            Bridge.renderBridge(bridgeBatch,br.bridgeBody.getPosition().x - 8,br.bridgeBody.getPosition().y - 8, br.type,br.upDown);
+            bridgeBatch.end();
+        }
+
 
 			//adds all skulls that have been created to the array map for manipulation
 			for (Skull s : skulls) {
@@ -1881,13 +1908,16 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 						//susMessages.remove(e.lostSightMessage);
 
-						e.enemyAI.setMaxLinearSpeed(10);
+						e.enemyAI.setMaxLinearSpeed(0);
+                        e.enemyBody.setLinearVelocity(0,0);
+                        e.enemyBody.setAngularVelocity(0);
+                        e.rotateTime = 45;
 
 						Vector2 vec1 = new Vector2(e.enemyBody.getPosition());
 						Vector2 vec2 = new Vector2(Player.playerBody.getPosition());
 
 						float x = MathUtils.atan2(vec2.y - vec1.y, vec2.x - vec1.x);
-						float randomOffset = Random.randomFloat(1.5f,0.5f);
+						float randomOffset = Random.randomFloat(1f,0.5f);
 						randomOffset = randomOffset / 10;
 						boolean random = Random.randomBoolean();
 						Vector2 finalX = new Vector2((float)Math.cos(x),(float)Math.sin(x));
@@ -1900,6 +1930,31 @@ public class DungeonCrawler extends ApplicationAdapter {
 							finalX.y = finalX.y - randomOffset;
 						}
 
+                        //e.stateMachine.changeState(EnemySkullState.STOP);
+
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                if ((e.playerSighted && e.playerInRange) && (pauseMenuClosed && optionsMenuClosed)) {
+                                    //e.stateMachine.changeState(EnemySkullState.GO_TO_PLAYER);
+                                    //e.enemyAI.setMaxLinearSpeed(e.defaultSpeed);
+                                } else {
+                                    //e.stateMachine.changeState(EnemySkullState.WANDER);
+                                    //e.enemyAI.setMaxLinearSpeed(e.defaultSpeed);
+                                }
+                            }
+                        }, 3f);
+
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+
+                                e.enemyAI.setMaxLinearSpeed(e.defaultSpeed);
+                            }
+                        }, 0.75f);
+
+
+
 						Bone bone = new Bone(world, e.enemyBody, e.enemyBody.getPosition().x, e.enemyBody.getPosition().y, false,  true, finalX);
 						bone.createBone();
 						bones.add(bone);
@@ -1908,12 +1963,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 						soundController.playSound("Whoosh", 7, 6,0.1f);
 
 					} else {
-						Timer.schedule(new Timer.Task() {
-							@Override
-							public void run() {
-								e.enemyAI.setMaxLinearSpeed(e.defaultSpeed);
-							}
-						}, 0.5f);
+
 						e.timeSinceAlerted = e.timeSinceAlerted + (Gdx.graphics.getDeltaTime() * TIME_SCALE);
 
 						if (!e.alerted) {
@@ -2429,7 +2479,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 
 
-                e5.getStateMachine().changeState(EnemyCrabState.GO_TO_PLAYER);
+             //   e5.getStateMachine().changeState(EnemyCrabState.GO_TO_PLAYER);
 
             } else if (!e5.playerSighted) {
 
@@ -2484,6 +2534,24 @@ public class DungeonCrawler extends ApplicationAdapter {
 
         //render enemy crab sprites
         for (EnemyGryphon e6 : enemyGryphons) {
+
+            if (!e6.gryphonReset && e6.particleEffect1.isComplete()) {
+
+                e6.gryphonReset = true;
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+
+                        e6.particleTime = 0;
+                        e6.gryphonReset = false;
+                        //potParticleEffect.reset();
+
+                    }
+                }, 0.4f);
+            }
+
+
+
             if (e6.rayCastable) {
                 e6.detectPlayer();
             }
@@ -2533,53 +2601,24 @@ public class DungeonCrawler extends ApplicationAdapter {
             enemyGryphonBatch.end();
         }
 
+
+
         for (EnemyGryphon deadGryphon : dyingGryphons) {
-                deadGryphon.getStateMachine().changeState(EnemyGryphonState.DIE);
+            deadGryphon.getStateMachine().changeState(EnemyGryphonState.DIE);
+            deadGryphon.particleEffect1.setPosition(deadGryphon.enemyBody.getPosition().x, deadGryphon.enemyBody.getPosition().y);
+            deadGryphon.particleEffect1.reset();
+            deadGryphon.particleEffect1.scaleEffect(0.16f);
+            deadGryphon.particleEffect1.start();
+
+            deadGryphon.particleEffect2.setPosition(deadGryphon.enemyBody.getPosition().x, deadGryphon.enemyBody.getPosition().y);
+            deadGryphon.particleEffect2.reset();
+            deadGryphon.particleEffect2.scaleEffect(0.16f);
+            deadGryphon.particleEffect2.start();
             enemies.remove(deadGryphon);
         }
         dyingGryphons.clear();
 
-        for (Vase v : vases) {
 
-            vaseBatch.begin();
-
-            if (!v.loweredAlpha) {
-                v.loweredAlpha = true;
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        if (!v.visible) {
-                            if (v.alpha > 50) {
-                                v.loweredAlpha = false;
-                            }
-                            //r.loweredAlpha = true;
-
-                            if (v.alpha >= 0)
-                                v.alpha--;
-                            v.alpha--;
-                            v.alpha--;
-                        } else {
-                            if (v.alpha < 100 && v.alpha > 0) {
-                                v.loweredAlpha = false;
-                                v.alpha++;
-                                v.alpha++;
-                            } else if (v.alpha < 0) {
-                                v.alpha = 15;
-                                v.loweredAlpha = true;
-                            }
-                        }
-                    }
-                }, 0.001f);
-            }
-
-            if (v.visible) {
-                v.loweredAlpha = false;
-            }
-
-            //vaseBatch.draw(tx.vaseSprite, v.vaseBody.getPosition().x - 8f, v.vaseBody.getPosition().y - 8f, 16, 16);
-            Vase.renderVase(vaseBatch, tx.vaseSprite, v.vaseBody.getPosition().x - 8f, v.vaseBody.getPosition().y - 8f, 16, 16,v.visible,v,v.alpha);
-            vaseBatch.end();
-        }
 
 
 
@@ -3001,7 +3040,18 @@ public class DungeonCrawler extends ApplicationAdapter {
 		potParticlesBatch.end();
 
 
-		/*
+        for (EnemyGryphon e : enemyGryphons) {
+            gryphonParticlesBatch.begin();
+            gryphonParticleEffect1.draw(gryphonParticlesBatch, (Gdx.graphics.getDeltaTime() * TIME_SCALE) / 1f);
+            gryphonParticleEffect2.draw(gryphonParticlesBatch, (Gdx.graphics.getDeltaTime() * TIME_SCALE) / 1f);
+            //e.particleEffect1.draw(gryphonParticlesBatch, (Gdx.graphics.getDeltaTime() * TIME_SCALE));
+            //EnemyGryphon.renderParticles(gryphonParticlesBatch,e.enemyBody.getPosition().x, e.enemyBody.getPosition().y,e.particleEffect1,e.particleTime);
+            gryphonParticlesBatch.end();
+        }
+
+
+
+		/*d
 		potParticlesBatch.begin();
 
 		for (Pot p : pots) {
@@ -3299,6 +3349,48 @@ public class DungeonCrawler extends ApplicationAdapter {
 					//}
 				}
 
+            for (Vase v : vases) {
+
+                vaseBatch.begin();
+
+                if (!v.loweredAlpha) {
+                    v.loweredAlpha = true;
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            if (!v.visible) {
+                                if (v.alpha > 50) {
+                                    v.loweredAlpha = false;
+                                }
+                                //r.loweredAlpha = true;
+
+                                if (v.alpha >= 0)
+                                    v.alpha--;
+                                v.alpha--;
+                                v.alpha--;
+                            } else {
+                                if (v.alpha < 100 && v.alpha > 0) {
+                                    v.loweredAlpha = false;
+                                    v.alpha++;
+                                    v.alpha++;
+                                } else if (v.alpha < 0) {
+                                    v.alpha = 15;
+                                    v.loweredAlpha = true;
+                                }
+                            }
+                        }
+                    }, 0.001f);
+                }
+
+                if (v.visible) {
+                    v.loweredAlpha = false;
+                }
+
+                //vaseBatch.draw(tx.vaseSprite, v.vaseBody.getPosition().x - 8f, v.vaseBody.getPosition().y - 8f, 16, 16);
+                Vase.renderVase(vaseBatch, tx.vaseSprite, v.vaseBody.getPosition().x - 8f, v.vaseBody.getPosition().y - 8f, 16, 16,v.visible,v,v.alpha);
+                vaseBatch.end();
+            }
+
 
 				vine_time += (Gdx.graphics.getDeltaTime() * TIME_SCALE);
 				for (Vine v : vines) {
@@ -3362,11 +3454,10 @@ public class DungeonCrawler extends ApplicationAdapter {
 						}
 
 
-						Vine.renderVine(vineBatch, tx.vine1, v.vineBody.getPosition().x - 8f, v.vineBody.getPosition().y - 8, 16, 14, v.visible, v, v.alpha);
+						Vine.renderVine(vineBatch, tx.vine1, v.vineBody.getPosition().x - 9f, v.vineBody.getPosition().y - 8, 19, 14, v.visible, v, v.alpha);
 						vineBatch.end();
 					}
 				}
-
 
 
 
@@ -3601,6 +3692,74 @@ public class DungeonCrawler extends ApplicationAdapter {
             waterfallBatch.begin();
             Waterfall.renderWater(waterfallBatch,currentFrame,wf.waterfallX,wf.waterfallY,16,16, wf.alpha);
             waterfallBatch.end();
+        }
+
+        vaseplant_time += (Gdx.graphics.getDeltaTime() * TIME_SCALE);
+        for (VasePlant v : vasePlants) {
+
+            objectBounds.set(
+                    v.vasePlantX,
+                    v.vasePlantY,
+                    16,
+                    16
+            );
+            if (cameraBounds.overlaps(objectBounds)) {
+
+                //shader variables passed into vine fragment shader
+                if (shadersEnabled) {
+                    vasePlantBatch.setShader(vineShader);
+                    vineShader.setUniformf("u_swayIntensity", 0.015f);//0.03
+                    vineShader.setUniformf("u_speed", 0.35f);//0.03
+                    //vineShader.setUniformf("u_verticalDensity", 1f);
+                    vineShader.setUniformf("u_time", vaseplant_time + v.time);
+                    //vineShader.setUniformf("u_speed", 1.6f);
+                    vineShader.setUniformf("u_alpha", v.alpha / 90);
+                }
+                else {
+                    vasePlantBatch.setShader(null);
+                }
+
+
+                vasePlantBatch.begin();
+
+
+                if (!v.loweredAlpha) {
+                    v.loweredAlpha = true;
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            if (!v.visible) {
+                                if (v.alpha > 50) {
+                                    v.loweredAlpha = false;
+                                }
+
+                                if (v.alpha >= 0)
+                                    v.alpha--;
+                                v.alpha--;
+                                v.alpha--;
+                                v.alpha--;
+                            } else {
+                                if (v.alpha < 100 && v.alpha > 0) {
+                                    v.loweredAlpha = false;
+                                    v.alpha++;
+                                    v.alpha++;
+                                } else if (v.alpha < 0) {
+                                    v.alpha = 15;
+                                    v.loweredAlpha = true;
+                                }
+                            }
+                        }
+                    }, 0.001f);
+                }
+
+                if (v.visible) {
+                    v.loweredAlpha = false;
+                }
+
+
+                VasePlant.renderVasePlant(vasePlantBatch, tx.vasePlant1, v.vasePlantBody.getPosition().x - 9f, v.vasePlantBody.getPosition().y - 8, 20, 14, v.visible, v, v.alpha);
+                vasePlantBatch.end();
+            }
         }
 
 		for (BossMinotaur b1 : bossMinotaurs) {
@@ -4071,6 +4230,24 @@ public class DungeonCrawler extends ApplicationAdapter {
 					}
 				}
 
+                for (EnemyCrab enemyCrab : enemyCrabs) {
+                    if (enemyCrab.rayCastable) {
+                        //renders ray cast rays
+
+                        enemyCrab.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+                        enemyCrab.shapeRenderer.setProjectionMatrix(camera.combined);
+                        enemyCrab.shapeRenderer.setColor(1, 0, 0, 1);
+
+                        //render player rayCasts to Enemies
+                        if (enemyCrab.rayCastable) {
+                            enemyCrab.tmp3.set((Vector2) enemyCrab.playerDetectionRay.start);
+                            enemyCrab.tmp4.set((Vector2) enemyCrab.playerDetectionRay.end);
+                            enemyCrab.shapeRenderer.line(enemyCrab.tmp3, enemyCrab.tmp4);
+                        }
+                        enemyCrab.shapeRenderer.end();
+                    }
+                }
+
 
 
                         /*
@@ -4340,6 +4517,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			waveBatch.setProjectionMatrix(camera.combined);
 			trapBatch.setProjectionMatrix(camera.combined);
             drainBatch.setProjectionMatrix(camera.combined);
+            bridgeBatch.setProjectionMatrix(camera.combined);
             rippleBatch.setProjectionMatrix(camera.combined);
             waterfallBatch.setProjectionMatrix(camera.combined);
 			raisedFloorBatch.setProjectionMatrix(camera.combined);
@@ -4363,6 +4541,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 			statueBatch.setProjectionMatrix(camera.combined);
 			flagBatch.setProjectionMatrix(camera.combined);
             vineBatch.setProjectionMatrix(camera.combined);
+            vasePlantBatch.setProjectionMatrix(camera.combined);
 			eyebeamBatch.setProjectionMatrix(camera.combined);
 			enemySkullBatch.setProjectionMatrix(camera.combined);
 			enemySpiderBatch.setProjectionMatrix(camera.combined);
@@ -4373,6 +4552,7 @@ public class DungeonCrawler extends ApplicationAdapter {
 
 			potParticlesBatch.setProjectionMatrix(camera.combined);
 			boneParticlesBatch.setProjectionMatrix(camera.combined);
+            gryphonParticlesBatch.setProjectionMatrix(camera.combined);
 
 			lockBatch.setProjectionMatrix(camera.combined);
 			doorBatch.setProjectionMatrix(camera.combined);
@@ -4509,6 +4689,45 @@ public class DungeonCrawler extends ApplicationAdapter {
                     } else {
                         e5.rotateTime -= (Gdx.graphics.getDeltaTime() * TIME_SCALE);
                     }
+
+                    if (e5.enemyBody.getLinearVelocity().x < 0) {
+                        e5.absoluteSpeedX = e5.enemyBody.getLinearVelocity().x * -1;
+                    } else {
+                        e5.absoluteSpeedX = e5.enemyBody.getLinearVelocity().x;
+                    }
+
+                    if (e5.enemyBody.getLinearVelocity().y < 0) {
+                        e5.absoluteSpeedY = e5.enemyBody.getLinearVelocity().y * -1;
+                    } else {
+                        e5.absoluteSpeedY = e5.enemyBody.getLinearVelocity().y;
+                    }
+
+                    if (e5.absoluteSpeedX < 2f && e5.absoluteSpeedY < 2f) {
+                        e5.timeStoodStill += Gdx.graphics.getDeltaTime();
+                    } else {
+                        System.out.println(e5.enemyBody.getLinearVelocity().x);
+                        System.out.println(e5.enemyBody.getLinearVelocity().y);
+                        e5.timeStoodStill = 0;
+                    }
+                    
+                    e5.timeSinceDirectionChange += Gdx.graphics.getDeltaTime();
+
+
+                    if (e5.timeStoodStill > 2f) {
+                        e5.pickNewDirection = true;
+                        e5.choseADirection = true;
+                    }
+
+                    //e5.timeSinceDirectionChange > 2f ||
+
+                    if (((e5.choseADirection && e5.pickNewDirection) && ((e5.timeStoodStill > 0.3f) || e5.timeSinceDirectionChange > 2.5f)) && e5.wandering) {
+                        e5.pickNewDirection = false;
+                            e5.timeStoodStill = 0f;
+                            e5.timeSinceDirectionChange = 0f;
+                            e5.choseADirection = false;
+                           // e5.pickNewDirection = true;
+                    }
+
 
                 }
                 if (e5.playerInRange){

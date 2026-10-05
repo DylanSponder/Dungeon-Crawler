@@ -30,7 +30,7 @@ public class BossMinotaur extends Enemy {
     public BossMinotaurBox2DSteeringEntity enemyAI;
     public String facing;
     public boolean active, enraged, charging, locked, bossActivated;
-    public float stateTime, enrageTime, chargeTime;
+    public float stateTime, enrageTime, chargeTime, updatedSpeed;
     public int enragedSpeed, chargingSpeed, chargeThreshold;
     public static int MAX_HEALTH;
     public Body chargeBody;
@@ -64,7 +64,7 @@ public class BossMinotaur extends Enemy {
 
         this.playerInRange = false;
 
-        this.defaultSpeed = 14;
+        this.defaultSpeed = 12;
         //24
 
         this.enragedSpeed = 24;
@@ -95,7 +95,7 @@ public class BossMinotaur extends Enemy {
 
         this.debug = false;
 
-        //this.eyeLight = new ChainLight(rayHandler, 60, new Color(0.3f,0,1f,0.5f),50,1,new float[]{0,0,0,40,20,40,20,0,0,0});
+        //this.eyeLight = new ChainLight(rayHandler, 60, new Color(0.3f,0,1f,0.5f),50,1,new float[]{0,0,0,40,20,40,20,0,0,0});p
 
     }
 
@@ -109,7 +109,6 @@ public class BossMinotaur extends Enemy {
 
     public Arrive<Vector2> chargeAtWall(World world) {
         BodyFactory bodyFactory = new BodyFactory();
-
 
         if (this.facing == "Up") {
             chargeBody = bodyFactory.createSimpleStaticBody(world,enemyBody.getPosition().x,enemyBody.getPosition().y + 10000);

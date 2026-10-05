@@ -12,6 +12,18 @@ public class CreateCell {
     public TiledMapTileLayer.Cell middleFloor4Tile;
     public TiledMapTileLayer.Cell middleFloor4Tile2;
 
+    public TiledMapTileLayer.Cell middleFloor5Tile;
+    public TiledMapTileLayer.Cell middleFloor5Tile2;
+    public TiledMapTileLayer.Cell middleFloor5Tile3;
+    public TiledMapTileLayer.Cell middleFloor5Tile4;
+    public TiledMapTileLayer.Cell middleFloor5Tile5;
+
+    public TiledMapTileLayer.Cell middleFloor6Tile;
+    public TiledMapTileLayer.Cell middleFloor6Tile2;
+    public TiledMapTileLayer.Cell middleFloor6Tile3;
+    public TiledMapTileLayer.Cell middleFloor6Tile4;
+    public TiledMapTileLayer.Cell middleFloor6Tile5;
+
     public TiledMapTileLayer.Cell decorFloorUpTile;
     public TiledMapTileLayer.Cell decorFloorDownTile;
     public TiledMapTileLayer.Cell decorFloorLeftTile;
@@ -218,6 +230,18 @@ public class CreateCell {
         middleFloor3Tile2 = new TiledMapTileLayer.Cell();
         middleFloor4Tile = new TiledMapTileLayer.Cell();
         middleFloor4Tile2 = new TiledMapTileLayer.Cell();
+
+        middleFloor5Tile = new TiledMapTileLayer.Cell();
+        middleFloor5Tile2 = new TiledMapTileLayer.Cell();
+        middleFloor5Tile3 = new TiledMapTileLayer.Cell();
+        middleFloor5Tile4 = new TiledMapTileLayer.Cell();
+        middleFloor5Tile5 = new TiledMapTileLayer.Cell();
+
+        middleFloor6Tile = new TiledMapTileLayer.Cell();
+        middleFloor6Tile2 = new TiledMapTileLayer.Cell();
+        middleFloor6Tile3 = new TiledMapTileLayer.Cell();
+        middleFloor6Tile4 = new TiledMapTileLayer.Cell();
+        middleFloor6Tile5 = new TiledMapTileLayer.Cell();
 
         decorFloorUpTile = new TiledMapTileLayer.Cell();
         decorFloorDownTile = new TiledMapTileLayer.Cell();

@@ -72,6 +72,13 @@ public class CreateAssets {
 
     Texture stairsTexture = new Texture(Gdx.files.internal("HellasDungeon/level/Objects/Stairs/Stairs.png"));
 
+    Texture horBridgeTexture = new Texture(Gdx.files.internal("HellasDungeon/level/Objects/Bridges/Horizontal.png"));
+
+    Texture bridgeLeftEndTexture = new Texture(Gdx.files.internal("HellasDungeon/level/Objects/Bridges/BridgeLeftEnd.png"));
+    Texture bridgeRightEndTexture = new Texture(Gdx.files.internal("HellasDungeon/level/Objects/Bridges/BridgeRightEnd.png"));
+
+    Texture verBridgeTexture = new Texture(Gdx.files.internal("HellasDungeon/level/Objects/Bridges/Vertical.png"));
+
     Texture firePitTexture = new Texture(Gdx.files.internal("HellasDungeon/level/Objects/Fire/FirePit.png"));
 
     Texture drainTexture = new Texture(Gdx.files.internal("HellasDungeon/level/Objects/Drain.png"));
@@ -194,6 +201,7 @@ public class CreateAssets {
 
     Texture flagTexture = new Texture(Gdx.files.internal("HellasDungeon/level/Objects/Flag.png"));
     Texture vinesTexture = new Texture(Gdx.files.internal("HellasDungeon/level/Objects/Vines.png"));
+    Texture vasePlantTexture = new Texture(Gdx.files.internal("HellasDungeon/level/Objects/VasePlant.png"));
     Texture blocksTexture = new Texture(Gdx.files.internal("HellasDungeon/level/Objects/Blocks.png"));
 
     Texture wallsTexture = new Texture(Gdx.files.internal("HellasDungeon/level/Objects/Walls.png"));
@@ -283,6 +291,18 @@ public class CreateAssets {
     public TextureRegion roomFloor3Texture2 = new TextureRegion(floorsTexture, 82, 22, 16, 16);
     public TextureRegion roomFloor4Texture = new TextureRegion(floorsTexture, 102, 2, 16, 16);
     public TextureRegion roomFloor4Texture2 = new TextureRegion(floorsTexture, 102, 22, 16, 16);
+
+    public TextureRegion roomFloor5Texture = new TextureRegion(floorsTexture, 122, 2, 16, 16);
+    public TextureRegion roomFloor5Texture2 = new TextureRegion(floorsTexture, 142, 2, 16, 16);
+    public TextureRegion roomFloor5Texture3 = new TextureRegion(floorsTexture, 162, 2, 16, 16);
+    public TextureRegion roomFloor5Texture4 = new TextureRegion(floorsTexture, 182, 2, 16, 16);
+    public TextureRegion roomFloor5Texture5 = new TextureRegion(floorsTexture, 202, 2, 16, 16);
+
+    public TextureRegion roomFloor6Texture = new TextureRegion(floorsTexture, 122, 22, 16, 16);
+    public TextureRegion roomFloor6Texture2 = new TextureRegion(floorsTexture, 142, 22, 16, 16);
+    public TextureRegion roomFloor6Texture3 = new TextureRegion(floorsTexture, 162, 22, 16, 16);
+    public TextureRegion roomFloor6Texture4 = new TextureRegion(floorsTexture, 182, 22, 16, 16);
+    public TextureRegion roomFloor6Texture5 = new TextureRegion(floorsTexture, 202, 22, 16, 16);
 
     public TextureRegion roomDecorativeFloorUpTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
     public TextureRegion roomDecorativeFloorDownTexture = new TextureRegion(roomBackground, 0, 0, 16, 16);
@@ -424,6 +444,62 @@ public class CreateAssets {
     public TextureRegion waterRimRight = new TextureRegion(stairsTexture, 0,0,16,16);
 
     public TextureRegion drain = new TextureRegion(drainTexture, 0,0,24,28);
+
+    //Bridge textures
+
+    //Horizontal
+
+    public TextureRegion horBridge1 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge2 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge3 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge4 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge5 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge6 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge7 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge8 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge9 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge10 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge11 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge12 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge13 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+
+
+    public TextureRegion horBridgeLeftEnd = new TextureRegion(bridgeLeftEndTexture, 0,0,16,16);
+    public TextureRegion horBridgeRightEnd = new TextureRegion(bridgeRightEndTexture, 0,0,16,16);
+
+
+    public TextureRegion horBridge14 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge15 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge16 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge17 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge18 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge19 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge20 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge21 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge22 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge23 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion horBridge24 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+
+    //Vertical
+    public TextureRegion verBridge1 = new TextureRegion(verBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge2 = new TextureRegion(verBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge3 = new TextureRegion(verBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge4 = new TextureRegion(verBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge5 = new TextureRegion(verBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge6 = new TextureRegion(verBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge7 = new TextureRegion(verBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge8 = new TextureRegion(verBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge9 = new TextureRegion(verBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge10 = new TextureRegion(verBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge11 = new TextureRegion(verBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge12 = new TextureRegion(verBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge13 = new TextureRegion(verBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge14 = new TextureRegion(verBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge15 = new TextureRegion(verBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge16 = new TextureRegion(verBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge17 = new TextureRegion(verBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge18 = new TextureRegion(verBridgeTexture, 0,0,16,16);
+
 
     //Fence textures
 
@@ -777,7 +853,7 @@ public class CreateAssets {
 
     public Animation<TextureRegion> flameAnimation = new Animation<TextureRegion>(0.14f, flame1,flame2,flame3,flame4,flame5,flame6);
 
-    public Animation<TextureRegion> candleFlameAnimation = new Animation<TextureRegion>(0.28f, candleFlame1,candleFlame2,candleFlame3,candleFlame4,candleFlame5,candleFlame6);
+    public Animation<TextureRegion> candleFlameAnimation = new Animation<TextureRegion>(0.28f, candleFlame1,candleFlame2,candleFlame3,candleFlame4,candleFlame5);
 /*
     public TextureRegion waterfall1 = new TextureRegion(waterfall1Texture,0,0,16,16);
     public TextureRegion waterfall2 = new TextureRegion(waterfall2Texture,0,0,16,16);
@@ -917,7 +993,8 @@ public class CreateAssets {
     public TextureRegion statue2 = new TextureRegion(columnsTextureSheet, 0,0,15,19);
 
     public TextureRegion flag1 = new TextureRegion(flagTexture, 0,0,11,16);
-    public TextureRegion vine1 = new TextureRegion(vinesTexture, 0,0,16,14);
+    public TextureRegion vine1 = new TextureRegion(vinesTexture, 0,0,19,14);
+    public TextureRegion vasePlant1 = new TextureRegion(vasePlantTexture, 0,0,20,14);
 
     //Roof textures
 
@@ -1635,6 +1712,19 @@ public class CreateAssets {
         roomFloor3Texture2.setRegion(82, 22, 16, 16);
         roomFloor4Texture.setRegion(102, 2, 16, 16);
         roomFloor4Texture2.setRegion(102, 22, 16, 16);
+
+        roomFloor5Texture.setRegion(122, 2, 16, 16);
+        roomFloor5Texture2.setRegion(142, 2, 16, 16);
+        roomFloor5Texture3.setRegion(162, 2, 16, 16);
+        roomFloor5Texture4.setRegion(182, 2, 16, 16);
+        roomFloor5Texture5.setRegion(202, 2, 16, 16);
+
+        roomFloor6Texture.setRegion(122, 22, 16, 16);
+        roomFloor6Texture2.setRegion(142, 22, 16, 16);
+        roomFloor6Texture3.setRegion(162, 22, 16, 16);
+        roomFloor6Texture4.setRegion(182, 22, 16, 16);
+        roomFloor6Texture5.setRegion(202, 22, 16, 16);
+
         roomDecorativeFloorRightTexture.setRegion(240, 48, 16, 16);
         roomDecorativeFloorUpTexture.setRegion(224, 32, 16, 16);
         roomDecorativeFloorDownTexture.setRegion(208, 48, 16, 16);
@@ -1775,6 +1865,82 @@ public class CreateAssets {
         waterRimRight.setRegion(80,96,16,16);
 
         drain.setRegion(0,0,24,28);
+
+
+        //Horizontal bridge textures
+
+        horBridge1.setRegion(1,1,16,16);
+        horBridge2.setRegion(19,1,16,16);
+        horBridge3.setRegion(37,1,16,16);
+        horBridge4.setRegion(55,1,16,16);
+        horBridge5.setRegion(73,1,16,16);
+        horBridge6.setRegion(91,1,16,16);
+        horBridge7.setRegion(109,1,16,16);
+        horBridge8.setRegion(1,19,16,16);
+        horBridge9.setRegion(19,19,16,16);
+        horBridge10.setRegion(37,19,16,16);
+        horBridge11.setRegion(55,19,16,16);
+        horBridge12.setRegion(73,19,16,16);
+        horBridge13.setRegion(91,19,16,16);
+
+
+        horBridge14.setRegion(109,19,16,16);
+        horBridge15.setRegion(109,19,16,16);
+        horBridge16.setRegion(127,19,16,16);
+        horBridge17.setRegion(1,37,16,16);
+        horBridge18.setRegion(19,37,16,16);
+        horBridge19.setRegion(37,37,16,16);
+        horBridge20.setRegion(55,37,16,16);
+        horBridge21.setRegion(73,37,16,16);
+        horBridge22.setRegion(91,37,16,16);
+        horBridge23.setRegion(109,37,16,16);
+        horBridge24.setRegion(127,37,16,16);
+
+        //Vertical bridge textures
+        verBridge1.setRegion(1,1,16,16);
+        verBridge2.setRegion(19,1,16,16);
+        verBridge3.setRegion(37,1,16,16);
+        verBridge4.setRegion(1,19,16,16);
+        verBridge5.setRegion(19,19,16,16);
+        verBridge6.setRegion(37,19,16,16);
+        verBridge7.setRegion(1,37,16,16);
+        verBridge8.setRegion(19,37,16,16);
+        verBridge9.setRegion(37,37,16,16);
+        verBridge10.setRegion(1,55,16,16);
+        verBridge11.setRegion(19,55,16,16);
+        verBridge12.setRegion(37,55,16,16);
+        verBridge13.setRegion(1,73,16,16);
+        verBridge14.setRegion(19,73,16,16);
+        verBridge15.setRegion(37,73,16,16);
+        verBridge16.setRegion(1,91,16,16);
+        verBridge17.setRegion(19,91,16,16);
+        verBridge18.setRegion(37,91,16,16);
+
+
+
+        /*
+
+
+    //Vertical
+    public TextureRegion verBridge1 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge2 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge3 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge4 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge5 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge6 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge7 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge8 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge9 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge10 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge11 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge12 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge13 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge14 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge15 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge16 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge17 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+    public TextureRegion verBridge18 = new TextureRegion(horBridgeTexture, 0,0,16,16);
+         */
 
         colTop1.setRegion(0, 0, 16, 16);
         colTop2.setRegion(16, 0, 16, 16);

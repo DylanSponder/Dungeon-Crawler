@@ -1,11 +1,11 @@
 ltlw,a,ltw,ltw,doortl,doortr,toru,ltw,ltw,ltw,toru,ltw,ltw,ltw,ltw,ltrw,a
-llw,a,fped4fire,f,fob7,f,f,f,fob7,f,f,f,fob7,f,fped4fire,lrw,
-llw,a,f,f,fob4,f,f,f,fob4,f,f,f,fob4,f,f,lrw,
+llw,a,fped4fire,f5,fob7,f,f,f,fob7,f,f,f,fob7,f5,fped4fire,lrw,
+llw,a,f5,f5,fob4,f,f,f,fob4,f,f,f,fob4,f5,f5,lrw,
 dlu,a,f,f,fbrcol1,fpot,fenemy,fpot,fbrcol1,fpot,fenemy,fpot,fbrcol1,f,f,dru,
 doorul,f,f,pu1,pu1,pu1,pu1,pu1,pu1,pu1,pu1,pu1,pu1,pu1,fenemy6,doorur,f
 doorll,f,f,pd,pd,pd,pd,pd,pd,pd,pd,pd,pd,pd,fenemy6,doorlr,f
 dll,a,f,f,fob7,f,f,f,fob7,f,f,f,fob7,f,f,drl,
-llw,a,f,f,fob4,f,f,f,fob4,f,f,f,fob4,f,f,lrw,
-llw,a,fped4fire,f,fbrcol1,fpot,fenemy,fpot,fbrcol1,fpot,fenemy,fpot,fbrcol1,f,fped4fire,lrw,
+llw,a,f5,f5,fob4,f,f,f,fob4,f,f,f,fob4,f5,f5,lrw,
+llw,a,fped4fire,f5,fbrcol1,fpot,fenemy,fpot,fbrcol1,fpot,fenemy,fpot,fbrcol1,f5,fped4fire,lrw,
 ,a,a,a,a,a,a,a,a,a,a,a,a,a,a,lrw,
 lblw,,lbw,doorbl,doorbr,lbw,tord,lbw,lbw,lbw,tord,lbw,lbw,lbw,lbw,lbrw,

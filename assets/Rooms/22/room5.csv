@@ -1,11 +1,11 @@
 ltlw,a,ltw,ltw,toru,ltw,ltwtr,ltw,toru,ltw,ltw,ltrw,a
-llw,a,stl,f1wdrainwf,stubl,stu,stu,stu,stubr,f1wdrainwf,str,lrw,
-torl,a,stl,wf111,wf151,fenemy,fenemy,fenemy,f,wf111,str,torr,
-llw,a,stdl,std,std,stutr,wf114,stutl,std,std,stdr,lrw,
+llw,a,stl,f1wdrainwf,stubl,stu,stu,stu,stubr,f1wdrainwf,str,doorur,f
+llw,a,stl,wf111,wf151,fenemy5,fenemy,fenemy5,f,wf111,str,doorlr,f
+torl,a,stdl,std,std,stutr,wf114,stutl,std,std,stdr,torr,
 llw,a,iwd,iwd,iwtrt,stl,f,str,iwtlt,iwd,iwd,lrw,
 llw,a,iwu,iwu,iwbrt,stl,f,str,iwblt,iwu,iwu,lrw,
 llw,a,stu,stu,stu,stubr,f,stubl,stu,stu,stu,lrw,
-doorul,a,wf192,f,fcovio0,f,f,f,fcovio0,f,f,doorur,f
-doorll,a,f,fcovio0,f,f,f,f,f,fcovio0,f,doorlr,f
+doorul,a,wf192,f,fcovio0,f,f,f,fcovio0,f,f,lrw,
+doorll,a,f,fcovio0,f,f,f,f,f,fcovio0,f,lrw,
 ,a,a,a,a,a,a,a,a,a,a,,
 lblw,,lbw,lbw,lbwtr,lbw,tord,lbw,lbwtr,doorbl,doorbr,lbrw,

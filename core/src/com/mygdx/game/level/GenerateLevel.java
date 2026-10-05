@@ -93,8 +93,17 @@ public class GenerateLevel {
         path.add(2);
         path.add(2);
         path.add(2);
-        path.add(1);
-        path.add(1);
+        path.add(2);
+        path.add(2);
+        path.add(2);
+        path.add(2);
+        path.add(2);
+        path.add(2);
+        path.add(2);
+        path.add(2);
+        path.add(2);
+
+        /*
         path.add(2);
         path.add(2);
         path.add(2);
@@ -102,6 +111,12 @@ public class GenerateLevel {
         path.add(1);
         path.add(2);
         path.add(2);
+        path.add(2);
+        path.add(1);
+        path.add(1);
+        path.add(2);
+        path.add(2);
+         */
 
         boolean temp;
         temp = attemptLevelGen(1);
@@ -1185,6 +1200,12 @@ for (int i = 0; i < layerSize; i++) {
         case "middleFloor4Tile2":
             currentCell = init.cr.middleFloor4Tile2;
             break;
+        case "middleFloor5Tile":
+            currentCell = init.cr.middleFloor5Tile;
+            break;
+        case "middleFloor6Tile":
+            currentCell = init.cr.middleFloor6Tile;
+            break;
         case "mosaicTrident":
             currentCell = init.cr.mosaicTridentTile;
             break;
@@ -1271,6 +1292,40 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.upBottomRightStairTile;
             break;
 
+        case "bridgeHorPitRandom":
+            currentCell = init.cr.pitTile;
+            int typebrhpr = Random.randomInt(13,1);
+            Bridge brhpr = new Bridge(world, ((roomX + i) * 16) + 16 * 16 - 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 - 8,typebrhpr, false);
+            brhpr.createBridge();
+            bridges.add(brhpr);
+            break;
+        case "bridgeLeftEnd":
+            currentCell = init.cr.pitTile;
+            Bridge brle = new Bridge(world, ((roomX + i) * 16) + 16 * 16 - 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 - 8,14, false);
+            brle.createBridge();
+            bridges.add(brle);
+            break;
+        case "bridgeRightEnd":
+            currentCell = init.cr.pitTile;
+            Bridge brre = new Bridge(world, ((roomX + i) * 16) + 16 * 16 - 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 - 8,15, false);
+            brre.createBridge();
+            bridges.add(brre);
+            break;
+        case "bridgeVerPitRandom":
+            currentCell = init.cr.pitTile;
+            int typevrhpr = Random.randomInt(18,1);
+            Bridge brvpr = new Bridge(world, ((roomX + i) * 16) + 16 * 16 - 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 - 8,typevrhpr, true);
+            brvpr.createBridge();
+            bridges.add(brvpr);
+            break;
+        case "bridgeVerPitDown1Random":
+            currentCell = init.cr.pitFloorTile;
+            int typevrhpu1r = Random.randomInt(18,1);
+            Bridge brvpu1r = new Bridge(world, ((roomX + i) * 16) + 16 * 16 - 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 - 8,typevrhpu1r, true);
+            brvpu1r.createBridge();
+            bridges.add(brvpu1r);
+            break;
+
         case "raisedFloorTile":
             currentCell = init.cr.middleFloorTile2;
             RaisedFloor raf = new RaisedFloor(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16);
@@ -1350,7 +1405,7 @@ for (int i = 0; i < layerSize; i++) {
             break;
         case "pitRubble2":
             currentCell = init.cr.pitTile;
-            Rubble pitRubble2 = new Rubble(world, ((roomX + i) * 16) + 16 * 16 + 0.5f, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 2);
+            Rubble pitRubble2 = new Rubble(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 2);
             pitRubble2.createRubble();
             rubble.add(pitRubble2);
             break;
@@ -2592,12 +2647,12 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.middleFloorTile;
             Candle newCandles = new Candle(world, ((roomX + i) * 16) + 16 * 16 + 1, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 1.5f, 2);
             Body candsBody = newCandles.createCandle();
-            Fire fCans = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 5f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 1f, true,0f, 6, false, 0);
+            Fire fCans = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 3f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 2f, true,0f, 6, false, 0);
             fires.add(fCans);
             lights.add(fCans);
             fCans.createFire(new Color(0.30f,0.12f,0,0.5f),20, null);
 
-            Fire fCans2 = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 8f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 5f, false,0f, 6, false, 0);
+            Fire fCans2 = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 7 - 8f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 6f, false,0f, 6, false, 0);
             fires.add(fCans2);
             lights.add(fCans2);
             fCans2.createFire(new Color(0.30f,0.12f,0,0.5f),30, null);
@@ -2607,7 +2662,7 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.middleFloor2Tile;
             Candle new2Candle = new Candle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, 1);
             Body candBody2 = new2Candle.createCandle();
-            Fire f2Can = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 5.5f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 3.5f, false,0f, 6, false, 0);
+            Fire f2Can = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 6f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 3.5f, false,0f, 6, false, 0);
             fires.add(f2Can);
             f2Can.createFire(new Color(0.30f,0.12f,0,0.65f),30, null);
             candles.add(new2Candle);
@@ -2626,6 +2681,16 @@ for (int i = 0; i < layerSize; i++) {
             lights.add(fCans222);
             fCans222.createFire(new Color(0.30f,0.12f,0,0.5f),30, null);
             candles.add(newCandles2);
+            break;
+        case "3cand":
+            currentCell = init.cr.middleFloor3Tile;
+            Candle new3Candle = new Candle(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 13.5f, 1);
+            Body candBody3 = new3Candle.createCandle();
+            Fire f3Can = new Fire(world,rayHandler,(((roomX + i) * 16) + 16 * 16) + 6 - 6f,(levelY * 16 + Gdx.graphics.getHeight() / 30 - 16) + 8 - 1f, false,0f, 6, false, 0);
+            fires.add(f3Can);
+            f3Can.createFire(new Color(0.30f,0.12f,0,0.65f),30, null);
+            candles.add(new3Candle);
+            lights.add(f3Can);
             break;
         //tutorial in starting room
         case "tuto":
@@ -2875,11 +2940,17 @@ for (int i = 0; i < layerSize; i++) {
             Pot p2 = new Pot(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, randOb2);
             pots.add(p2);
             break;
-        case "pot3":
+        case "f3pot":
             currentCell = init.cr.middleFloor3Tile;
             int randOb3 = Random.randomInt(9,1);
             Pot p3 = new Pot(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, randOb3);
             pots.add(p3);
+            break;
+        case "f4pot":
+            currentCell = init.cr.middleFloor4Tile;
+            int randOb4 = Random.randomInt(9,1);
+            Pot p4 = new Pot(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, randOb4);
+            pots.add(p4);
             break;
         case "coin":
             currentCell = init.cr.middleFloorTile;
@@ -2892,6 +2963,16 @@ for (int i = 0; i < layerSize; i++) {
             currentCell = init.cr.middleFloorTile;
             Skull skull = new Skull(world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
             skulls.add(skull);
+            break;
+        case "f4skull":
+            currentCell = init.cr.middleFloor4Tile;
+            Skull skull4 = new Skull(world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
+            skulls.add(skull4);
+            break;
+        case "f6skull":
+            currentCell = init.cr.middleFloor6Tile;
+            Skull skull6 = new Skull(world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
+            skulls.add(skull6);
             break;
         case "cobweb":
             currentCell = init.cr.middleFloorTile;
@@ -2989,7 +3070,7 @@ for (int i = 0; i < layerSize; i++) {
             EnemyCrab enemy5 = new EnemyCrab(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
             init.roomList.get(roomIndex).enemyCounter++;
             init.roomList.get(roomIndex).enemyCrabs.add(enemy5);
-            enemy5.createEnemy(6, 12);
+            enemy5.createEnemy(6, 0);//speed was 12
             enemies.add(enemy5);
             enemy5.room = roomIndex;
             enemyCrabs.add(enemy5);
@@ -2999,10 +3080,20 @@ for (int i = 0; i < layerSize; i++) {
             EnemyCrab enemy53 = new EnemyCrab(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
             init.roomList.get(roomIndex).enemyCounter++;
             init.roomList.get(roomIndex).enemyCrabs.add(enemy53);
-            enemy53.createEnemy(6, 12);
+            enemy53.createEnemy(6, 0);
             enemies.add(enemy53);
             enemy53.room = roomIndex;
             enemyCrabs.add(enemy53);
+            break;
+        case "enemyCrab5":
+            currentCell = init.cr.middleFloor5Tile;
+            EnemyCrab enemy55 = new EnemyCrab(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
+            init.roomList.get(roomIndex).enemyCounter++;
+            init.roomList.get(roomIndex).enemyCrabs.add(enemy55);
+            enemy55.createEnemy(6, 0);
+            enemies.add(enemy55);
+            enemy55.room = roomIndex;
+            enemyCrabs.add(enemy55);
             break;
         case "pitGryphon":
             currentCell = init.cr.pitTile;
@@ -3028,6 +3119,16 @@ for (int i = 0; i < layerSize; i++) {
             enemies.add(enemy6);
             enemy6.room = roomIndex;
             enemyGryphons.add(enemy6);
+            break;
+        case "enemyGryphon3":
+            currentCell = init.cr.middleFloor3Tile;
+            EnemyGryphon enemy63 = new EnemyGryphon(DungeonCrawler.world, ((roomX + i) * 16) + 16 * 16 + 8, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 8);
+            init.roomList.get(roomIndex).enemyCounter++;
+            init.roomList.get(roomIndex).enemyGryphons.add(enemy63);
+            enemy63.createEnemy(7, 14);
+            enemies.add(enemy63);
+            enemy63.room = roomIndex;
+            enemyGryphons.add(enemy63);
             break;
         case "enemySkull2":
             currentCell = init.cr.middleFloor2Tile;
@@ -3207,6 +3308,9 @@ for (int i = 0; i < layerSize; i++) {
             fireped3.createFire(new Color(0.30f,0.12f,0,0.75f), 60, null);
             fires.add(fireped3);
             lights.add(fireped3);
+            FirePit fp3 = new FirePit(world, ((roomX + i) * 16) + 16 * 16 + 8f, levelY * 16 + Gdx.graphics.getHeight() / 30 - 1f);
+            fp3.createFirepit();
+            firepits.add(fp3);
             break;
         case "fped3heal":
             currentCell = init.cr.middleFloorTile;
@@ -3232,7 +3336,7 @@ for (int i = 0; i < layerSize; i++) {
             lights.add(fireped4);
             break;
         case "f3ped4fire":
-            currentCell = init.cr.floorTile;
+            currentCell = init.cr.middleFloor3Tile;
             ColumnPiece f3ped4fire = new ColumnPiece(world,((roomX + i) * 16) + 16 * 16,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16,17);
             f3ped4fire.createPedestal();
             Fire f3fireped4 = new Fire(world, rayHandler, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 2 + 1, true, 0f, 1, false, 0);
@@ -3434,7 +3538,7 @@ for (int i = 0; i < layerSize; i++) {
                 String colExt = String.valueOf(strRoof.charAt(0));
                 Integer colExt2 = Integer.parseInt(colExt);
 
-                currentCell = init.cr.floorTile;
+                currentCell = init.cr.middleFloor3Tile;
 
                 generateColumn(colExt2, strRoof, i,world, roomX, levelY, 2,4,7,70,false,false,0,false,0, false, 0, false, 0);
             }
@@ -3606,6 +3710,21 @@ for (int i = 0; i < layerSize; i++) {
                 currentCell = init.cr.middleFloorTile;
                 generateColumn(colExt2, strRoof, i,world, roomX, levelY, 2,4,60,760,true,true,1,false,0, false, 0,false, 0);
             }
+            if (levelTextures.get(i).matches("cfltP.+")) {//tuscan with circular base on podium with fire
+
+                Column coltu = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+                generateColumn(colExt2, strRoof, i,world, roomX, levelY, 2,4,70,770,true,true,1,false,0, false, 0,false, 0);
+            }
             if (levelTextures.get(i).matches("csftp.+")) {//tuscan with male statue and squared base on podium
 
                 Column coltu = new Column();
@@ -3713,6 +3832,22 @@ for (int i = 0; i < layerSize; i++) {
 
                 generateColumn(colExt2, strRoof, i,world, roomX, levelY, 3,4,40,740,false,false,0,false,0, false, 0, false, 0);
             }
+            if (levelTextures.get(i).matches("covds.+")) {//doric with squared base and vines
+
+                Column coltu = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+
+                generateColumn(colExt2, strRoof, i,world, roomX, levelY, 3,4,40,740,false,false,0,true,2, false, 0, false, 0);
+            }
             if (levelTextures.get(i).matches("coldP.+")) {//tuscan with circular base on podium
 
                 Column coldo = new Column();
@@ -3727,6 +3862,21 @@ for (int i = 0; i < layerSize; i++) {
 
                 currentCell = init.cr.middleFloorTile;
                 generateColumn(colExt2, strRoof, i,world, roomX, levelY, 3,4,70,770,true,false,0,false,0, false, 0,false, 0);
+            }
+            if (levelTextures.get(i).matches("covdP.+")) {//tuscan with circular base and vines on podium
+
+                Column coldo = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+                generateColumn(colExt2, strRoof, i,world, roomX, levelY, 3,4,70,770,true,false,0,true,2, false, 0,false, 0);
             }
             if (levelTextures.get(i).matches("cofdo.+")) {//doric with flag
                 Column coltu = new Column();
@@ -3923,6 +4073,21 @@ for (int i = 0; i < layerSize; i++) {
                 generateColumn(colExt2, strRoof, i,world, roomX, levelY, 3,4,7,70,false,true,0,false,0, false, 0, false,0);
 
             }
+            if (levelTextures.get(i).matches("cfldP.+")) {//doric with fire and circular base on podium
+                Column coltu = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+                generateColumn(colExt2, strRoof, i,world, roomX, levelY, 3,4,70,770,true,true,0,false,0, false, 0, false,0);
+
+            }
             if (levelTextures.get(i).matches("cflio.+")) {//ionic with fire
                 Column coltu = new Column();
 
@@ -4005,7 +4170,7 @@ for (int i = 0; i < layerSize; i++) {
                 String colExt = String.valueOf(strRoof.charAt(0));
                 Integer colExt2 = Integer.parseInt(colExt);
 
-                currentCell = init.cr.floorTile;
+                currentCell = init.cr.middleFloor3Tile;
 
                 generateColumn(colExt2, strRoof, i,world, roomX, levelY, 2,4,18,71,true,true,0,false,0, false, 0, false,0);
             }
@@ -4293,6 +4458,35 @@ for (int i = 0; i < layerSize; i++) {
                 currentCell = init.cr.middleFloorTile;
                 generateColumn(colExt2, strRoof, i,world, roomX, levelY, 1,4,7,70,false,false,0,true,2, false,0, false,0);
             }
+            if (levelTextures.get(i).matches("cVvio.+")) {//ionic with vines and vase with plant
+                Column coltu = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+                generateColumn(colExt2, strRoof, i,world, roomX, levelY, 1,4,7,70,false,false,0,true,2, true,3, false,0);
+            }
+            if (levelTextures.get(i).matches("cVvdP.+")) {//tuscan with circular base and vines on podium
+
+                Column coldo = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+                generateColumn(colExt2, strRoof, i,world, roomX, levelY, 3,4,70,770,true,false,0,true,2, true, 3,false, 0);
+            }
             if (levelTextures.get(i).matches("cotib.+")) {//ionic with full circular base and trap
                 Column coltu = new Column();
 
@@ -4390,6 +4584,20 @@ for (int i = 0; i < layerSize; i++) {
 
                 currentCell = init.cr.middleFloorTile;
                 generateColumn(colExt2, strRoof, i,world, roomX, levelY, 3,4,7,70,false,true,0,true,1, false,0, false,0);
+            }
+            if (levelTextures.get(i).matches("covdo.+")) {//doric with vines
+                Column coltu = new Column();
+
+                String colStr = levelTextures.get(i);
+                StringBuffer sb = new StringBuffer(colStr);
+                sb.delete(0, 5);
+                String strRoof = sb.toString();
+
+                String colExt = String.valueOf(strRoof.charAt(0));
+                Integer colExt2 = Integer.parseInt(colExt);
+
+                currentCell = init.cr.middleFloorTile;
+                generateColumn(colExt2, strRoof, i,world, roomX, levelY, 3,4,7,70,false,false,0,true,2, false,0, false,0);
             }
             if (levelTextures.get(i).matches("cffib.+")) {//ionic with fire and full circular base and flag
                 Column coltu = new Column();
@@ -4976,8 +5184,8 @@ for (int i = 0; i < layerSize; i++) {
                                int fireType,
                                boolean shaderObject,
                                int shaderObjectType,
-                               boolean statue,
-                               int statueType,
+                               boolean topObject,
+                               int topObjectType,
                                boolean trap,
                                int trapType) {
 
@@ -5012,9 +5220,16 @@ for (int i = 0; i < layerSize; i++) {
                     flag2.createFlagHitbox(((roomX + i) * 16) + 16 * 16 + 3.5f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16, world);
                     flags.add(flag2);
                 } else {
-                    Vine vine1 = new Vine(world, ((roomX + i) * 16) + 16 * 16 + 3.5f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 4.5f);
-                    vine1.createVineHitbox(((roomX + i) * 16) + 16 * 16 + 3.5f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 4.5f, world);
-                    vines.add(vine1);
+                    if (lowerBaseType == 760 || lowerBaseType == 770) {
+                        Vine vine1 = new Vine(world, ((roomX + i) * 16) + 16 * 16 + 3.5f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6.5f);
+                        vine1.createVineHitbox(((roomX + i) * 16) + 16 * 16 + 3.5f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 6.5f, world);
+                        vines.add(vine1);
+                    } else {
+                        Vine vine1 = new Vine(world, ((roomX + i) * 16) + 16 * 16 + 3.5f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 4.5f);
+                        vine1.createVineHitbox(((roomX + i) * 16) + 16 * 16 + 3.5f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 4.5f, world);
+                        vines.add(vine1);
+                    }
+
                 }
             }
             if (trap) {
@@ -5022,16 +5237,30 @@ for (int i = 0; i < layerSize; i++) {
                 colTrap.createTrap();
                 traps.add(colTrap);
             }
-            if (statue) {
-                if (statueType == 2) {
-                    Statue statTu = new Statue(world, ((roomX + i) * 16) + 16 * 16 + 1, levelY * 16 + Gdx.graphics.getHeight() / 30 + 11,statueType);
-                    statTu.createStatueHitbox(((roomX + i) * 16) + 16 * 16 + 3f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 27.5f, world);
-                    statues.add(statTu);
-                } else {
-                    Statue statTu = new Statue(world, ((roomX + i) * 16) + 16 * 16 + 1, levelY * 16 + Gdx.graphics.getHeight() / 30 + 11,statueType);
+            if (topObject) {
+                if (topObjectType == 1) {
+                    Statue statTu = new Statue(world, ((roomX + i) * 16) + 16 * 16 + 1, levelY * 16 + Gdx.graphics.getHeight() / 30 + 11,topObjectType);
                     statTu.createStatueHitbox(((roomX + i) * 16) + 16 * 16 + 4f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 27.5f, world);
                     statues.add(statTu);
                 }
+                if (topObjectType == 2) {
+                    Statue statTu = new Statue(world, ((roomX + i) * 16) + 16 * 16 + 1, levelY * 16 + Gdx.graphics.getHeight() / 30 + 11,topObjectType);
+                    statTu.createStatueHitbox(((roomX + i) * 16) + 16 * 16 + 3f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 27.5f, world);
+                    statues.add(statTu);
+                }
+                if (topObjectType == 3) {
+                    Vase vase = new Vase(world, ((roomX + i) * 16) + 16 * 16 + 0.5f, levelY * 16 + Gdx.graphics.getHeight() / 30 + 13);
+                    vase.createVase();
+                    vases.add(vase);
+
+                    VasePlant vasePlant = new VasePlant(world, ((roomX + i) * 16) + 16 * 16 + 1, levelY * 16 + Gdx.graphics.getHeight() / 30 + 11,topObjectType);
+                    vasePlant.createVasePlantHitbox(((roomX + i) * 16) + 16 * 16 + 2.5f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 31f + (colExte * 16), world);
+                    vasePlants.add(vasePlant);
+                }
+                else {
+
+                }
+
             }
         } else {
             //extend the column by the extension amount
@@ -5057,19 +5286,38 @@ for (int i = 0; i < layerSize; i++) {
                 } else {
                     for (int e = 0; e <= colExte; e++) {//(16 + (e - 5)))
                         if (e == 0) {
-                            Vine vine1 = new Vine(world, ((roomX + i) * 16) + 16 * 16 + 1,levelY * 16 + Gdx.graphics.getHeight() / 30 - 10);
-                            vine1.createVineHitbox(((roomX + i) * 16) + 16 * 16 + 3.5f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 10, world);
-                            vines.add(vine1);
-                        } else if (e == colExte) {
-                            Vine vine1 = new Vine(world, ((roomX + i) * 16) + 16 * 16 + 1,levelY * 16 + Gdx.graphics.getHeight() / 30 - 11 + (e * 16));
-                            vine1.createVineHitbox(((roomX + i) * 16) + 16 * 16 + 3.5f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 11 + (e * 16), world);
-                            vines.add(vine1);
-                        } else {
-                            Vine vine1 = new Vine(world, ((roomX + i) * 16) + 16 * 16 + 1,levelY * 16 + Gdx.graphics.getHeight() / 30 - 10 + (e * 16));
-                            vine1.createVineHitbox(((roomX + i) * 16) + 16 * 16 + 3.5f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 10 + (e * 16), world);
-                            vines.add(vine1);
-                        }
+                            if (lowerBaseType == 760 || lowerBaseType == 770) {
+                                Vine vine1 = new Vine(world, ((roomX + i) * 16) + 16 * 16 + 1,levelY * 16 + Gdx.graphics.getHeight() / 30 - 8);
+                                vine1.createVineHitbox(((roomX + i) * 16) + 16 * 16 + 3.5f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 8, world);
+                                vines.add(vine1);
+                            } else {
+                                Vine vine1 = new Vine(world, ((roomX + i) * 16) + 16 * 16 + 1,levelY * 16 + Gdx.graphics.getHeight() / 30 - 10);
+                                vine1.createVineHitbox(((roomX + i) * 16) + 16 * 16 + 3.5f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 10, world);
+                                vines.add(vine1);
+                            }
 
+                        } else if (e == colExte) {
+                            if (lowerBaseType == 760 || lowerBaseType == 770) {
+                                Vine vine1 = new Vine(world, ((roomX + i) * 16) + 16 * 16 + 1,levelY * 16 + Gdx.graphics.getHeight() / 30 - 9 + (e * 16));
+                                vine1.createVineHitbox(((roomX + i) * 16) + 16 * 16 + 3.5f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 9 + (e * 16), world);
+                                vines.add(vine1);
+                            } else {
+                                Vine vine1 = new Vine(world, ((roomX + i) * 16) + 16 * 16 + 1,levelY * 16 + Gdx.graphics.getHeight() / 30 - 11 + (e * 16));
+                                vine1.createVineHitbox(((roomX + i) * 16) + 16 * 16 + 3.5f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 11 + (e * 16), world);
+                                vines.add(vine1);
+                            }
+
+                        } else {
+                            if (lowerBaseType == 760 || lowerBaseType == 770) {
+                                Vine vine1 = new Vine(world, ((roomX + i) * 16) + 16 * 16 + 1,levelY * 16 + Gdx.graphics.getHeight() / 30 - 8 + (e * 16));
+                                vine1.createVineHitbox(((roomX + i) * 16) + 16 * 16 + 3.5f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 8 + (e * 16), world);
+                                vines.add(vine1);
+                            } else {
+                                Vine vine1 = new Vine(world, ((roomX + i) * 16) + 16 * 16 + 1,levelY * 16 + Gdx.graphics.getHeight() / 30 - 10 + (e * 16));
+                                vine1.createVineHitbox(((roomX + i) * 16) + 16 * 16 + 3.5f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 10 + (e * 16), world);
+                                vines.add(vine1);
+                            }
+                        }
                     }
                 }
             }
@@ -5078,15 +5326,28 @@ for (int i = 0; i < layerSize; i++) {
                 colTrap.createTrap();
                 traps.add(colTrap);
             }
-            if (statue) {
-                if (statueType == 1) {
-                    Statue statTu = new Statue(world, ((roomX + i) * 16) + 16 * 16 + 1, levelY * 16 + Gdx.graphics.getHeight() / 30 + 11 + (colExte * 16),statueType);
+            if (topObject) {
+                if (topObjectType == 1) {
+                    Statue statTu = new Statue(world, ((roomX + i) * 16) + 16 * 16 + 1, levelY * 16 + Gdx.graphics.getHeight() / 30 + 11 + (colExte * 16),topObjectType);
                     statTu.createStatueHitbox(((roomX + i) * 16) + 16 * 16 + 4f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 27.5f + (colExte * 16), world);
                     statues.add(statTu);
-                } else {
-                    Statue statTu = new Statue(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 + 11 + (colExte * 16),statueType);
+                }
+                if (topObjectType == 2) {
+                    Statue statTu = new Statue(world, ((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 + 11 + (colExte * 16),topObjectType);
                     statTu.createStatueHitbox(((roomX + i) * 16) + 16 * 16 + 3f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 27.5f + (colExte * 16), world);
                     statues.add(statTu);
+                }
+                if (topObjectType == 3) {
+                    Vase vase = new Vase(world,((roomX + i) * 16) + 16 * 16 + 0.5f, levelY * 16 + Gdx.graphics.getHeight() / 30 + 13 + (colExte * 16));
+                    vase.createVase();
+                    vases.add(vase);
+
+                    VasePlant vasePlant = new VasePlant(world,((roomX + i) * 16) + 16 * 16, levelY * 16 + Gdx.graphics.getHeight() / 30 + 11 + (colExte * 16),topObjectType);
+                    vasePlant.createVasePlantHitbox(((roomX + i) * 16) + 16 * 16 + 2.50f,levelY * 16 + Gdx.graphics.getHeight() / 30 - 16 + 31f + (colExte * 16), world);
+                    vasePlants.add(vasePlant);
+                }
+                else {
+
                 }
 
             }

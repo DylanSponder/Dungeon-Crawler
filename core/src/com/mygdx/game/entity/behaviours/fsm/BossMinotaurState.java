@@ -40,6 +40,7 @@ public enum BossMinotaurState implements State<BossMinotaur> {
             if (enemy.enemyAI.getLinearVelocity().x < 0.5 && enemy.enemyAI.getLinearVelocity().y < 0.5){
 
             }
+            enemy.enemyAI.setMaxLinearSpeed(enemy.defaultSpeed + ((enemy.minoHealthbar.maxHealth - enemy.minoHealthbar.currentHealth) / 2));
         }
 
         @Override
@@ -120,11 +121,17 @@ public enum BossMinotaurState implements State<BossMinotaur> {
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
+                        if (enemy.stateMachine.isInState(CHARGE_ATTACK)) {
+                            enemy.enemyAI.setMaxLinearSpeed(enemy.chargingSpeed + (enemy.minoHealthbar.maxHealth - enemy.minoHealthbar.currentHealth));
+                        }
+
+                        /*
                         if (enemy.ENEMY_HEALTH < enemy.MAX_HEALTH / 2 ) {
                             enemy.enemyAI.setMaxLinearSpeed(enemy.chargingSpeed + 30);
                         } else {
                             enemy.enemyAI.setMaxLinearSpeed(enemy.chargingSpeed);
                         }
+                         */
                     }
                 }, 1.1f);
 
@@ -142,7 +149,7 @@ public enum BossMinotaurState implements State<BossMinotaur> {
 
         @Override
         public void exit(BossMinotaur enemy) {
-            enemy.enemyAI.setMaxLinearSpeed(enemy.defaultSpeed);
+            enemy.enemyAI.setMaxLinearSpeed(enemy.updatedSpeed);
             enemy.charging = false;
             System.out.println("EXIT CHARGE");
         }

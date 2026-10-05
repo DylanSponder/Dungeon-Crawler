@@ -53,6 +53,27 @@ public class RenderRules {
                         drawableLevelLayer.add(index, "venusDeMilo");
                         index++;
                         break;
+                    case "brhpr":
+                        drawableLevelLayer.add(index, "bridgeHorPitRandom");
+                        index++;
+                        break;
+                    case "brvpr":
+                        drawableLevelLayer.add(index, "bridgeVerPitRandom");
+                        index++;
+                        break;
+                    case "brvpu1r":
+                        drawableLevelLayer.add(index, "bridgeVerPitDown1Random");
+                        index++;
+                        break;
+                    case "brle":
+                        drawableLevelLayer.add(index, "bridgeLeftEnd");
+                        index++;
+                        break;
+                    case "brre":
+                        drawableLevelLayer.add(index, "bridgeRightEnd");
+                        index++;
+                        break;
+
                     case "stlt":
                         drawableLevelLayer.add(index, "topLeftStairTile");
                         index++;
@@ -138,6 +159,24 @@ public class RenderRules {
                         break;
                     case "f4r":
                         drawableLevelLayer.add(index, "middleFloor4TileRandom");
+                        index++;
+                        break;
+
+                    case "f5":
+                        drawableLevelLayer.add(index, "middleFloor5Tile");
+                        index++;
+                        break;
+                    case "f5r":
+                        drawableLevelLayer.add(index, "middleFloor5TileRandom");
+                        index++;
+                        break;
+
+                    case "f6":
+                        drawableLevelLayer.add(index, "middleFloor6Tile");
+                        index++;
+                        break;
+                    case "f6r":
+                        drawableLevelLayer.add(index, "middleFloor6TileRandom");
                         index++;
                         break;
 
@@ -1109,6 +1148,11 @@ public class RenderRules {
                                     index++;
                                     break;
                                 }
+                                if (str.matches("(cfldP[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
                                 if (str.matches("(cfltu[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
@@ -1310,6 +1354,11 @@ public class RenderRules {
                                     index++;
                                     break;
                                 }
+                                if (str.matches("(covds[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
                                 if (str.matches("(coltS[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
@@ -1331,6 +1380,11 @@ public class RenderRules {
                                     break;
                                 }
                                 if (str.matches("(cfltp[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cfltP[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
                                     break;
@@ -1385,6 +1439,16 @@ public class RenderRules {
                                     index++;
                                     break;
                                 }
+                                if (str.matches("(covdP[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cVvdP[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
                                 if (str.matches("(csldB[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
@@ -1421,6 +1485,16 @@ public class RenderRules {
                                     break;
                                 }
                                 if (str.matches("(covio[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(covdo[0-9]+)")) {
+                                    drawableLevelLayer.add(index, str);
+                                    index++;
+                                    break;
+                                }
+                                if (str.matches("(cVvio[0-9]+)")) {
                                     drawableLevelLayer.add(index, str);
                                     index++;
                                     break;
@@ -1591,6 +1665,10 @@ public class RenderRules {
                                     drawableLevelLayer.add(index,"2cands");
                                     index++;
                                     break;
+                                case "3cand":
+                                    drawableLevelLayer.add(index,"3cand");
+                                    index++;
+                                    break;
                                 case "drain":
                                     drawableLevelLayer.add(index,"drain");
                                     index++;
@@ -1672,6 +1750,14 @@ public class RenderRules {
                                     drawableLevelLayer.add(index, "enemyCrab3");
                                     index++;
                                     break;
+                                case "3enemy6":
+                                    drawableLevelLayer.add(index, "enemyGryphon3");
+                                    index++;
+                                    break;
+                                case "5enemy5":
+                                    drawableLevelLayer.add(index, "enemyCrab5");
+                                    index++;
+                                    break;
                                 case "boss1":
                                     drawableLevelLayer.add(index, "bossMinotaur");
                                     index++;
@@ -1699,8 +1785,16 @@ public class RenderRules {
                                     drawableLevelLayer.add(index, "pot3");
                                     index++;
                                     break;
-                                case "f2pot":
+                                case "2pot":
                                     drawableLevelLayer.add(index, "f2pot");
+                                    index++;
+                                    break;
+                                case "3pot":
+                                    drawableLevelLayer.add(index, "f3pot");
+                                    index++;
+                                    break;
+                                case "4pot":
+                                    drawableLevelLayer.add(index, "f4pot");
                                     index++;
                                     break;
                                 case "coin":
@@ -1709,6 +1803,14 @@ public class RenderRules {
                                     break;
                                 case "skull":
                                     drawableLevelLayer.add(index, "skull");
+                                    index++;
+                                    break;
+                                case "4skull":
+                                    drawableLevelLayer.add(index, "f4skull");
+                                    index++;
+                                    break;
+                                case "6skull":
+                                    drawableLevelLayer.add(index, "f6skull");
                                     index++;
                                     break;
                                     //pedestals
@@ -2302,6 +2404,10 @@ public class RenderRules {
                                         break;
                                     case "2cands":
                                         drawableLevelLayer.add(index,"2cands");
+                                        index++;
+                                        break;
+                                    case "3cand":
+                                        drawableLevelLayer.add(index,"3cand");
                                         index++;
                                         break;
                                     case "cob":

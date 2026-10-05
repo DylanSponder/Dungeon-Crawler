@@ -1,6 +1,7 @@
 package com.mygdx.game.entity.behaviours.fsm;
 
 import box2dLight.PointLight;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.badlogic.gdx.ai.steer.SteeringBehavior;
@@ -11,6 +12,8 @@ import com.badlogic.gdx.ai.steer.utils.rays.RayConfigurationBase;
 import com.badlogic.gdx.ai.utils.Ray;
 import com.badlogic.gdx.ai.utils.RaycastCollisionDetector;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -33,6 +36,9 @@ public class EnemyGryphon extends Enemy {
     public PointLight GryphonLight;
     public boolean active, flyingUp, swapFlyingDirection;
     public String facing;
+    public ParticleEffect particleEffect1, particleEffect2;
+    public boolean gryphonReset;
+    public float particleTime;
 
     public EnemyGryphon(World world, float x, float y) {
         BodyFactory bodyFactory = new BodyFactory();
@@ -44,6 +50,13 @@ public class EnemyGryphon extends Enemy {
         this.lostSightMessage = new DisplayText(DungeonCrawler.defaultFont4,"?", Color.YELLOW,true,1f,0.0045f,false, false, null, 0);
 
         this.rayCastable = false;
+
+        this.particleEffect1 = new ParticleEffect();
+        this.particleEffect2 = new ParticleEffect();
+
+        this.particleEffect1 = gryphonParticleEffect1;
+        this.particleEffect2 = gryphonParticleEffect2;
+
 
         //enemyID = 1;
 
@@ -208,7 +221,9 @@ public class EnemyGryphon extends Enemy {
 
                         boolean sighted = false;
 
-                        if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody && fixture.getBody().getUserData() != "Gryphon" && fixture.getBody().getUserData() != "Fire"
+                        if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody && fixture.getBody().getUserData() != "Gryphon"
+                                && fixture.getBody().getUserData() != "Fire"
+                                && fixture.getBody().getUserData() != "Skull"
                                 && fixture.getBody().getUserData() != "Candle"
                                 && fixture.getBody().getUserData() != "Cobweb"
                                 && fixture.getBody().getUserData() != "Roof"
@@ -222,6 +237,9 @@ public class EnemyGryphon extends Enemy {
                                 && fixture.getBody().getUserData() != "Flag"
                                 && fixture.getBody().getUserData() != "Potion"
                                 && fixture.getBody().getUserData() != "Coin"
+                                && fixture.getBody().getUserData() != "Bridge"
+                                && fixture.getBody().getUserData() != "Vine"
+                                && fixture.getBody().getUserData() != "FireCannotExtinguish"
                         ) {
                             //sighted = true;
                             //System.out.println(fixture.getBody().getUserData());
@@ -317,6 +335,15 @@ public class EnemyGryphon extends Enemy {
 
         stateMachine.update();
     }
+
+    public static void renderParticles(SpriteBatch batch, float x, float y, ParticleEffect particleEffect, float particleTime) {
+        particleEffect.draw(batch, (Gdx.graphics.getDeltaTime() * TIME_SCALE));
+        //particleEffect.draw(batch, particleTime);
+    }
+
+
+
+
     public StateMachine<EnemyGryphon, EnemyGryphonState> getStateMachine () {
         return stateMachine;
     }

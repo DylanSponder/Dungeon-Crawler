@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.DungeonCrawler;
 import com.mygdx.game.box2D.BodyFactory;
+import com.mygdx.game.entity.utils.ChargeBox2DSteeringEntity;
 import com.mygdx.game.entity.utils.EnemyBox2DRaycastCollisionDetector;
 import com.mygdx.game.entity.utils.EnemyCrabBox2DSteeringEntity;
 import com.mygdx.game.level.objects.DisplayText;
@@ -35,10 +36,13 @@ public class EnemyCrab extends Enemy {
     public int enemyID;
     public EnemyCrabBox2DSteeringEntity enemyAI;
     public PointLight CrabLight;
-    public boolean active;
+    public boolean active, choseADirection, pickNewDirection, wandering;
+    public int currentDirection;
+    public float timeSinceDirectionChange, timeStoodStill, absoluteSpeedX, absoluteSpeedY;
     public String facing;
     public Fixture leftScuttleHitbox,rightScuttleHitbox,upScuttleHitbox,downScuttleHitbox;
     public Body scuttleBody,scuttleBodyUp,scuttleBodyDown,scuttleBodyLeft,scuttleBodyRight;
+    public ChargeBox2DSteeringEntity scuttleEntity;
     public ArrayList<Body> boxes;
 
     public EnemyCrab(World world, float x, float y) {
@@ -52,9 +56,15 @@ public class EnemyCrab extends Enemy {
 
         this.rayCastable = false;
 
+        this.pickNewDirection = true;
+
         //enemyID = 1;
 
         this.sightCounter = 0;
+
+        this.timeSinceDirectionChange = 0;
+
+        this.wandering = true;
 
         this.alerted = false;
 
@@ -76,10 +86,11 @@ public class EnemyCrab extends Enemy {
         //enemyDetectionRadius.setSensor(true);
 
         this.enemyAI = new EnemyCrabBox2DSteeringEntity(enemyBody, 10);
+        this.currentDirection = 0;
         //playerDetectionRay = new EnemyBox2DSteeringEntity(enemyBody,10);
 
         stateMachine = new DefaultStateMachine<EnemyCrab, EnemyCrabState>(this, EnemyCrabState.WANDER);
-        stateMachine.changeState(EnemyCrabState.STOP);
+        //stateMachine.changeState(EnemyCrabState.STOP);
         this.enemyBody.setUserData("Enemy");
         this.enemyHitbox.setUserData("EnemyCrab");
 
@@ -99,7 +110,17 @@ public class EnemyCrab extends Enemy {
         this.rightScuttleHitbox = bodyFactory.createCrabScuttleBoxRight(enemyBody, scuttleBodyRight);
         //this.downScuttleHitbox= bodyFactory.createCrabScuttleBoxDown(enemyBody);
 
-        this.scuttleBodyUp.setUserData("ScuttleBodyUp");
+        this.scuttleBodyUp.setUserData("Scuttle");
+        this.scuttleBodyDown.setUserData("Scuttle");
+        this.scuttleBodyLeft.setUserData("Scuttle");
+        this.scuttleBodyRight.setUserData("Scuttle");
+        this.upScuttleHitbox.setUserData("Up");
+        this.downScuttleHitbox.setUserData("Down");
+        this.leftScuttleHitbox.setUserData("Left");
+        this.rightScuttleHitbox.setUserData("Right");
+
+        /*
+                this.scuttleBodyUp.setUserData("ScuttleBodyUp");
         this.scuttleBodyDown.setUserData("ScuttleBodyDown");
         this.scuttleBodyLeft.setUserData("ScuttleBodyLeft");
         this.scuttleBodyRight.setUserData("ScuttleBodyRight");
@@ -107,6 +128,7 @@ public class EnemyCrab extends Enemy {
         this.downScuttleHitbox.setUserData("ScuttleDown");
         this.leftScuttleHitbox.setUserData("ScuttleLeft");
         this.rightScuttleHitbox.setUserData("ScuttleRight");
+         */
 
         this.debug = false;
 /*
@@ -203,6 +225,53 @@ public class EnemyCrab extends Enemy {
         return arriveSB;
     }
 
+    public Arrive<Vector2> scuttle(World world) {
+        BodyFactory bodyFactory = new BodyFactory();
+
+
+        if (this.facing == "Up") {
+            scuttleBody = bodyFactory.createSimpleStaticBody(world,enemyBody.getPosition().x,enemyBody.getPosition().y + 10000);
+
+            this.scuttleEntity = new ChargeBox2DSteeringEntity(scuttleBody, 1);
+
+            arriveSB = new Arrive<Vector2>(enemyAI,scuttleEntity)
+                    .setTimeToTarget(0.03f)
+                    .setArrivalTolerance(16f)
+                    .setDecelerationRadius(8f);
+        }
+        if (this.facing == "Down") {
+            scuttleBody = bodyFactory.createSimpleStaticBody(world,enemyBody.getPosition().x,enemyBody.getPosition().y - 10000);
+
+            this.scuttleEntity = new ChargeBox2DSteeringEntity(scuttleBody, 1);
+
+            arriveSB = new Arrive<Vector2>(enemyAI,scuttleEntity)
+                    .setTimeToTarget(0.03f)
+                    .setArrivalTolerance(16f)
+                    .setDecelerationRadius(8f);
+        }
+        if (this.facing == "Left") {
+            scuttleBody = bodyFactory.createSimpleStaticBody(world,enemyBody.getPosition().x - 10000,enemyBody.getPosition().y);
+
+            this.scuttleEntity = new ChargeBox2DSteeringEntity(scuttleBody, 1);
+
+            arriveSB = new Arrive<Vector2>(enemyAI,scuttleEntity)
+                    .setTimeToTarget(0.03f)
+                    .setArrivalTolerance(16f)
+                    .setDecelerationRadius(8f);
+        }
+        if (this.facing == "Right") {
+            scuttleBody = bodyFactory.createSimpleStaticBody(world,enemyBody.getPosition().x + 10000,enemyBody.getPosition().y);
+
+            this.scuttleEntity = new ChargeBox2DSteeringEntity(scuttleBody, 1);
+
+            arriveSB = new Arrive<Vector2>(enemyAI,scuttleEntity)
+                    .setTimeToTarget(0.03f)
+                    .setArrivalTolerance(16f)
+                    .setDecelerationRadius(8f);
+        }
+        return arriveSB;
+    }
+
     public RaycastObstacleAvoidance avoidObstacle(){
 
         RayConfigurationBase<Vector2>[] localRayConfigurations = new RayConfigurationBase[] {
@@ -219,7 +288,6 @@ public class EnemyCrab extends Enemy {
 
     public RaycastObstacleAvoidance detectPlayer(){
         if (this.rayCastable) {
-
         Vector2 translatedCoords = new Vector2();
         translatedCoords.x = this.enemyAI.getPosition().x;
         translatedCoords.y = this.enemyAI.getPosition().y;
@@ -233,7 +301,8 @@ public class EnemyCrab extends Enemy {
 
                         boolean sighted = false;
 
-                        if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody && fixture.getBody().getUserData() != "Crab" && fixture.getBody().getUserData() != "Fire"
+                        if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody && fixture.getBody().getUserData() != "Crab"
+                                && fixture.getBody().getUserData() != "Fire"
                                 && fixture.getBody().getUserData() != "Candle"
                                 && fixture.getBody().getUserData() != "Cobweb"
                                 && fixture.getBody().getUserData() != "Roof"
@@ -241,12 +310,12 @@ public class EnemyCrab extends Enemy {
                                 && fixture.getBody().getUserData() != "Water"
                                 && fixture.getBody().getUserData() != "Stem"
                                 && fixture.getBody().getUserData() != "Statue"
-                                && fixture.getBody().getUserData() != "Pedestal"
                                 && fixture.getBody().getUserData() != "Pit"
                                 && fixture.getBody().getUserData() != "Rubble"
                                 && fixture.getBody().getUserData() != "Flag"
                                 && fixture.getBody().getUserData() != "Potion"
-                                && fixture.getBody().getUserData() != "Coin") {
+                                && fixture.getBody().getUserData() != "Coin"
+                                && fixture.getBody().getUserData() != "Scuttle") {
                             //sighted = true;
                             //System.out.println(fixture.getBody().getUserData());
                             sightCounter = 0;

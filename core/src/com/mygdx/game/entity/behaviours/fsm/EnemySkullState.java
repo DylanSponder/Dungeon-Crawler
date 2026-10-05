@@ -136,9 +136,9 @@ public enum EnemySkullState implements State<EnemySkull> {
         @Override
         public void enter (EnemySkull enemy){
             enemy.enemyAI.setMaxLinearSpeed(0);
-            enemy.enemyAI.setMaxAngularSpeed(0);
-            enemy.enemyAI.setMaxAngularAcceleration(0);
-            enemy.enemyAI.setBehaviour(null);
+            //enemy.enemyAI.setMaxAngularSpeed(0);
+            //enemy.enemyAI.setMaxAngularAcceleration(0);
+            //enemy.enemyAI.setBehaviour(null);
         }
         @Override
         public void update(EnemySkull enemy) {
@@ -147,7 +147,9 @@ public enum EnemySkullState implements State<EnemySkull> {
 
         @Override
         public void exit(EnemySkull enemy) {
-
+            //enemy.enemyAI.setMaxLinearSpeed(200);
+            //enemy.enemyAI.setMaxAngularSpeed(1000);
+            //enemy.enemyAI.setMaxAngularAcceleration(1000);
         }
 
         @Override

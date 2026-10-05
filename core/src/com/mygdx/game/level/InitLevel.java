@@ -57,6 +57,18 @@ public class InitLevel {
         cr.middleFloor4Tile.setTile(new StaticTiledMapTile(tx.roomFloor4Texture));
         cr.middleFloor4Tile2.setTile(new StaticTiledMapTile(tx.roomFloor4Texture2));
 
+        cr.middleFloor5Tile.setTile(new StaticTiledMapTile(tx.roomFloor5Texture));
+        cr.middleFloor5Tile2.setTile(new StaticTiledMapTile(tx.roomFloor5Texture2));
+        cr.middleFloor5Tile3.setTile(new StaticTiledMapTile(tx.roomFloor5Texture3));
+        cr.middleFloor5Tile4.setTile(new StaticTiledMapTile(tx.roomFloor5Texture4));
+        cr.middleFloor5Tile5.setTile(new StaticTiledMapTile(tx.roomFloor5Texture5));
+
+        cr.middleFloor6Tile.setTile(new StaticTiledMapTile(tx.roomFloor6Texture));
+        cr.middleFloor6Tile2.setTile(new StaticTiledMapTile(tx.roomFloor6Texture2));
+        cr.middleFloor6Tile3.setTile(new StaticTiledMapTile(tx.roomFloor6Texture3));
+        cr.middleFloor6Tile4.setTile(new StaticTiledMapTile(tx.roomFloor6Texture4));
+        cr.middleFloor6Tile5.setTile(new StaticTiledMapTile(tx.roomFloor6Texture5));
+
         cr.decorFloorUpTile.setTile(new StaticTiledMapTile(tx.roomDecorativeFloorUpTexture));
         cr.decorFloorDownTile.setTile(new StaticTiledMapTile(tx.roomDecorativeFloorDownTexture));
         cr.decorFloorLeftTile.setTile(new StaticTiledMapTile(tx.roomDecorativeFloorLeftTexture));

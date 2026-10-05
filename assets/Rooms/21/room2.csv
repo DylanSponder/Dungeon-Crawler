@@ -4,10 +4,10 @@ llw,a,pu1,pu1,pu1,pu1,pu1,f4,f4,pu1,pu1,pu1,pu1,pu1,lrw
 llw,a,pl,p,penemy6,p,pdr,f4,f4,pdl,p,penemy6,p,pr,lrw
 llw,a,pl,p,pd,stutl,std,std,std,std,stutr,pd,p,pr,lrw
 torl,a,pl,pr,stutl,stdr,fcolds1,f,f,fcolds1,stdl,stutr,pl,pr,torr
-dlu,a,pdl,pdr,str,fcolds1,f,f,fcands,f,fcolds1,stl,pl,pr,dru
+dlu,a,pdl,pdr,str,fcovds1,fcands,f,f,fcands,fcovds1,stl,pl,pr,dru
 doorul,f,f4,f4,str,f,f,a,a,f,f,stl,pl,pr,doorur
 doorll,f,f4,f4,str,f,f,moslyre,a,f,f,stl,pl,pr,doorlr
-dll,a,pu1,pu1,str,fcolds1,f,fcands,f,f,fcolds1,stl,pl,pr,drl
+dll,a,pu1,pu1,str,fcovds1,fcands,f,f,fcands,fcovds1,stl,pl,pr,drl
 torl,a,pl,pr,stubl,strt,fcolds1,f,f,fcolds1,stlt,stubr,pl,pr,torr
 llw,a,pl,p,pu1,stubl,stu,stu,stu,stu,stubr,pu1,p,pr,lrw
 llw,a,pl,p,penemy6,pu1,pu1,pu1,pu1,pu1,pu1,penemy6,p,pr,lrw

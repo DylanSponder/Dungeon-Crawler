@@ -94,6 +94,22 @@ public class BodyFactory {
         return body;
     }
 
+    public Body createVasePlantHitbox(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 4.5f, y + 8);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(5, 8);
+        Fixture temp = body.createFixture(shape, 1.0f);
+        temp.setSensor(true);
+        temp.setUserData("VasePlant");
+        shape.dispose();
+        return body;
+    }
+
     public Body createPit(World world, float x, float y) {
         Body body;
         BodyDef bodyDef = new BodyDef();
@@ -127,6 +143,22 @@ public class BodyFactory {
         Fixture temp = body.createFixture(shape, 1.0f);
         temp.setSensor(true);
         temp.setUserData("Rubble");
+        shape.dispose();
+        return body;
+    }
+
+    public Body createBridgeHitbox(World world, float x, float y) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(x + 16, y + 16);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(8f, 8f);
+        Fixture temp = body.createFixture(shape, 1.0f);
+        temp.setSensor(true);
+        temp.setUserData("Bridge");
         shape.dispose();
         return body;
     }

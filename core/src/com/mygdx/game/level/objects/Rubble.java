@@ -27,7 +27,7 @@ public class Rubble {
     public void createRubble() {
         BodyFactory bodyFactory = new BodyFactory();
 
-        this.rubBody = bodyFactory.createRubbleHitbox(world, rubX, rubY);
+        this.rubBody = bodyFactory.createPit(world, rubX, rubY);
         this.rubBody.setUserData("Rubble");
     }
 

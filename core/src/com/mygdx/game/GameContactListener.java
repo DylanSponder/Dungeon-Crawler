@@ -32,6 +32,20 @@ public class GameContactListener implements ContactListener {
         String colliderStr = collider.getBody().getUserData().toString();
         String collideeStr = collidee.getBody().getUserData().toString();
 
+        if ((collideeStr == "Enemy" || colliderStr == "Enemy")
+                && (colliderStr == "Wall" || collideeStr == "Wall")) {
+            for (EnemyCrab e : enemyCrabs) {
+                if ((e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody())
+                        && (collider.getUserData() == "EnemyCrab" || collidee.getUserData() == "EnemyCrab")
+                ){
+                    e.timeSinceDirectionChange = 0f;
+                    e.timeStoodStill = 0;
+                    e.choseADirection = false;
+                    e.pickNewDirection = true;
+                }
+            }
+        }
+
         if ((colliderStr == "Sword" && collideeStr == "Fire" && collidee.getUserData() != "Spawner")
         || (collideeStr == "Sword" && colliderStr == "Fire" && collider.getUserData() != "Spawner"))
         {
@@ -195,7 +209,9 @@ public class GameContactListener implements ContactListener {
                                         if (boss1.ENEMY_HEALTH < boss1.MAX_HEALTH / 2) {
                                             init.roomList.get(player.currentRoom).snuffTorches();
                                             boss1.chargeThreshold = 3;
-                                            boss1.defaultSpeed = boss1.enragedSpeed;
+                                            boss1.enemyAI.setMaxLinearSpeed((int) (boss1.defaultSpeed + ((boss1.minoHealthbar.maxHealth - boss1.minoHealthbar.currentHealth))));
+                                            boss1.updatedSpeed = boss1.enemyAI.getMaxLinearSpeed();
+                                            //boss1.defaultSpeed = boss1.enragedSpeed;
 
                                         //the minotaur speeds up after getting hit for a brief period
                                             /*
@@ -835,6 +851,42 @@ public class GameContactListener implements ContactListener {
                 }
             }
 
+        if (((colliderStr == "Player" && collideeStr == "Scuttle")
+                    || (colliderStr == "Scuttle" && collideeStr == "Player"))
+        ) {
+
+
+            for (EnemyCrab e5 : enemyCrabs) {
+                if (e5.scuttleBodyUp == collider.getBody() || e5.scuttleBodyUp == collidee.getBody()) {
+                    if (e5.playerSighted) {
+                        e5.wandering = false;
+                        e5.enemyBody.setLinearVelocity(0,15);
+                    }
+                }
+                if (e5.scuttleBodyDown == collider.getBody() || e5.scuttleBodyDown == collidee.getBody()) {
+                    if (e5.playerSighted) {
+                        e5.wandering = false;
+                        e5.enemyBody.setLinearVelocity(0, -15);
+                    }
+
+                }
+                if (e5.scuttleBodyLeft == collider.getBody() || e5.scuttleBodyLeft == collidee.getBody()) {
+                    if (e5.playerSighted) {
+                    e5.wandering = false;
+                    e5.enemyBody.setLinearVelocity(-15,0);
+                    }
+
+                }
+                if (e5.scuttleBodyRight == collider.getBody() || e5.scuttleBodyRight == collidee.getBody()) {
+                    if (e5.playerSighted) {
+                        e5.wandering = false;
+                        e5.enemyBody.setLinearVelocity(15, 0);
+                    }
+
+                }
+            }
+        }
+
         if (collider.getUserData() == "Spawner") {
 
           //  System.out.println("in range");
@@ -892,6 +944,23 @@ public class GameContactListener implements ContactListener {
                 }
             }
 
+        }
+
+        if ((collideeStr == "Skull" && colliderStr == "Enemy")) {
+                for (BossMinotaur b : bossMinotaurs) {
+                    if (b.enemyBody == collider.getBody()) {
+                        //maybe make the minotaur stop before chasing the player again if too sudden
+                        if (b.stateMachine.isInState(BossMinotaurState.CHARGE_ATTACK)) {
+                            for (Skull s : skulls) {
+                                if (s.skullBody == collidee.getBody() && !s.broken) {
+                                    brokenSkulls.add(s);
+                                    s.broken = true;
+                                    soundController.playSound("Skull",8.5f,7.5f,0.1f);
+                                }
+                            }
+                        }
+                    }
+                }
         }
 
             switch (colliderStr) {
@@ -955,6 +1024,7 @@ public class GameContactListener implements ContactListener {
                     if (collideeStr == "Skull") {
 
                     }
+
 
                     break;
                 case "Column":
@@ -1054,7 +1124,7 @@ public class GameContactListener implements ContactListener {
                             if (b.enemyBody == collidee.getBody()) {
                                 //maybe make the minotaur stop before chasing the player again if too sudden
 
-                                if (b.stateMachine.getCurrentState() == BossMinotaurState.CHARGE_ATTACK)
+                                if (b.stateMachine.getCurrentState() == BossMinotaurState.CHARGE_ATTACK) {
                                     b.stunned = true;
                                     Timer.schedule(new Timer.Task() {
                                         @Override
@@ -1065,6 +1135,7 @@ public class GameContactListener implements ContactListener {
 
                                         }
                                     }, 2.2f);
+                                }
                             }
                         }
                     }
@@ -1192,7 +1263,7 @@ public class GameContactListener implements ContactListener {
                             if (b.enemyBody == collidee.getBody()) {
                                 //maybe make the minotaur stop before chasing the player again if too sudden
 
-                                if (b.stateMachine.getCurrentState() == BossMinotaurState.CHARGE_ATTACK)
+                                if (b.stateMachine.getCurrentState() == BossMinotaurState.CHARGE_ATTACK) {
                                     b.stunned = true;
                                     Timer.schedule(new Timer.Task() {
                                         @Override
@@ -1202,7 +1273,7 @@ public class GameContactListener implements ContactListener {
                                             b.stateMachine.changeState(BossMinotaurState.GO_TO_PLAYER);
                                         }
                                     }, 2.2f);
-
+                                }
                             }
                         }
                     }
@@ -1592,6 +1663,13 @@ public class GameContactListener implements ContactListener {
                             }
                         }
                     }
+                    if (colliderStr == "VasePlant") {
+                        for (VasePlant V : vasePlants) {
+                            if (V.vasePlantBody == collider.getBody()) {
+                                V.visible = false;
+                            }
+                        }
+                    }
                     if (colliderStr == "Statue") {
                         for (Statue S : statues) {
                             if (S.statueBody == collider.getBody()) {
@@ -1861,7 +1939,30 @@ public class GameContactListener implements ContactListener {
         }
     }
 
+        if (((colliderAsString == "Player" && collideeAsString == "Scuttle")
+                || (colliderAsString == "Scuttle" && collideeAsString == "Player"))
+        ) {
 
+
+            for (EnemyCrab e5 : enemyCrabs) {
+                if (e5.scuttleBodyUp == collider.getBody() || e5.scuttleBodyUp == collidee.getBody()) {
+                        e5.wandering = true;
+                }
+                if (e5.scuttleBodyDown == collider.getBody() || e5.scuttleBodyDown == collidee.getBody()) {
+                        e5.wandering = true;
+
+                }
+                if (e5.scuttleBodyLeft == collider.getBody() || e5.scuttleBodyLeft == collidee.getBody()) {
+                        e5.wandering = true;
+
+
+                }
+                if (e5.scuttleBodyRight == collider.getBody() || e5.scuttleBodyRight == collidee.getBody()) {
+                        e5.wandering = true;
+
+                }
+            }
+        }
 
         switch (colliderAsString) {
             case "RafWall":
@@ -1909,6 +2010,15 @@ public class GameContactListener implements ContactListener {
                 if (collidee.getUserData() == "PlayerBound") {
                     for (Vine V : vines) {
                         if (V.vineBody == collider.getBody()) {
+                            V.visible = true;
+                        }
+                    }
+                    break;
+                }
+            case "VasePlant":
+                if (collidee.getUserData() == "PlayerBound") {
+                    for (VasePlant V : vasePlants) {
+                        if (V.vasePlantBody == collider.getBody()) {
                             V.visible = true;
                         }
                     }
@@ -2100,6 +2210,34 @@ public class GameContactListener implements ContactListener {
         }
 
 
+        /*
+        if ((collideeAsString == "Enemy" || colliderAsString == "Enemy")
+        && (colliderAsString == "Wall" || collideeAsString == "Wall")) {
+            for (EnemyCrab e : enemyCrabs) {
+                if ((e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody())
+                && (collider.getUserData() == "EnemyCrab" || collidee.getUserData() == "EnemyCrab")
+                ){
+                    System.out.println("CRABABBABABABABABABABABFBFBFBFBFB");
+                    e.justHitAWall = true;
+                    e.choseADirection = false;
+                    e.pickNewDirection = true;
+                }
+            }
+        }
+
+         */
+        /*
+        (((collideeAsString != "ScuttleBodyUp" ||
+                    collideeAsString != "ScuttleBodyDown" ||
+                    collideeAsString != "ScuttleBodyRight" ||
+                    collideeAsString != "ScuttleBodyLeft"))
+                ||
+                        ((colliderAsString != "ScuttleBodyUp" ||
+                                colliderAsString != "ScuttleBodyDown" ||
+                                colliderAsString != "ScuttleBodyRight" ||
+                                colliderAsString != "ScuttleBodyLeft")))
+         */
+
         if (    (colliderAsString == "Player" && collideeAsString == "Enemy")
                 ||(colliderAsString == "Enemy" && collideeAsString == "Player")
         ){
@@ -2158,7 +2296,9 @@ public class GameContactListener implements ContactListener {
                 for (EnemyCrab e : enemyCrabs) {
                     if (e.enemyBody == collider.getBody() || e.enemyBody == collidee.getBody()){
                         e.playerInRange = false;
-                        e.getStateMachine().changeState(EnemyCrabState.WANDER);
+                        if (!(e.getStateMachine().isInState(EnemyCrabState.WANDER))) {
+                            e.getStateMachine().changeState(EnemyCrabState.WANDER);
+                        }
                     }
                 }
 

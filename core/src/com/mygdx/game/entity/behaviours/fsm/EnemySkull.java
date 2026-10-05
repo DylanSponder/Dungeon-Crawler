@@ -205,7 +205,9 @@ public class EnemySkull extends Enemy {
 
                         boolean sighted = false;
 
-                        if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody && fixture.getBody().getUserData() != "Skull" && fixture.getBody().getUserData() != "Fire"
+                        if (fixture.getBody().getType() == BodyDef.BodyType.StaticBody
+                                && fixture.getBody().getUserData() != "Skull"
+                                && fixture.getBody().getUserData() != "Fire"
                                 && fixture.getBody().getUserData() != "Candle"
                                 && fixture.getBody().getUserData() != "Cobweb"
                                 && fixture.getBody().getUserData() != "Roof"
@@ -218,7 +220,11 @@ public class EnemySkull extends Enemy {
                                 && fixture.getBody().getUserData() != "Rubble"
                                 && fixture.getBody().getUserData() != "Flag"
                                 && fixture.getBody().getUserData() != "Potion"
-                                && fixture.getBody().getUserData() != "Coin") {
+                                && fixture.getBody().getUserData() != "Coin"
+                                && fixture.getBody().getUserData() != "Bridge"
+                                && fixture.getBody().getUserData() != "Vine"
+                                && fixture.getBody().getUserData() != "FireCannotExtinguish"
+                        ) {
                             //sighted = true;
                             //System.out.println(fixture.getBody().getUserData());
                             sightCounter = 0;
